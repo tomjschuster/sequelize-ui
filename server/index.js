@@ -18,5 +18,6 @@ const indexHtmlPath = path.join(__dirname, '..', 'public', 'index.html');
 
 app.get('*', (req, res, next) => res.sendFile(indexHtmlPath));
 
+
 app.listen(PORT, () =>
   console.log(chalk.italic.magenta(`Server listening on ${PORT}...`)));
