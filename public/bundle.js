@@ -29198,6 +29198,46 @@
 	
 	var _Card = __webpack_require__(549);
 	
+	var _List = __webpack_require__(566);
+	
+	var _Subheader = __webpack_require__(513);
+	
+	var _Subheader2 = _interopRequireDefault(_Subheader);
+	
+	var _Divider = __webpack_require__(544);
+	
+	var _Divider2 = _interopRequireDefault(_Divider);
+	
+	var _Avatar = __webpack_require__(555);
+	
+	var _Avatar2 = _interopRequireDefault(_Avatar);
+	
+	var _IconButton = __webpack_require__(454);
+	
+	var _IconButton2 = _interopRequireDefault(_IconButton);
+	
+	var _IconMenu = __webpack_require__(568);
+	
+	var _IconMenu2 = _interopRequireDefault(_IconMenu);
+	
+	var _MenuItem = __webpack_require__(529);
+	
+	var _MenuItem2 = _interopRequireDefault(_MenuItem);
+	
+	var _moreVert = __webpack_require__(581);
+	
+	var _moreVert2 = _interopRequireDefault(_moreVert);
+	
+	var _modeEdit = __webpack_require__(582);
+	
+	var _modeEdit2 = _interopRequireDefault(_modeEdit);
+	
+	var _deleteForever = __webpack_require__(583);
+	
+	var _deleteForever2 = _interopRequireDefault(_deleteForever);
+	
+	var _colors = __webpack_require__(402);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -29218,37 +29258,32 @@
 	
 	
 	// import DropDownMenu from 'material-ui/DropDownMenu';
-	// import IconMenu from 'material-ui/IconMenu';
-	// import IconButton from 'material-ui/IconButton';
-	// import MenuItem from 'material-ui/MenuItem';
 	// import AutoComplete from 'material-ui/AutoComplete';
 	// import FloatingActionButton from 'material-ui/FloatingActionButton';
 	// import ContentAdd from 'material-ui/svg-icons/content/add';
 	// import ContentRemove from 'material-ui/svg-icons/content/remove';
-	// import Subheader from 'material-ui/Subheader';
-	// import {List, ListItem} from 'material-ui/List';
-	// import Divider from 'material-ui/Divider';
 	
 	/*----------  CONSTANTS AND HELPER FUNCTIONS  ----------*/
 	
-	var initialState = {
-	  model: {
-	    name: '',
-	    fields: [{
-	      name: '',
-	      type: ''
-	    }]
-	  },
-	  dialogs: {
+	var trash = [];
+	
+	var getInitialDialogs = function getInitialDialogs() {
+	  return {
 	    modelValidation: {
 	      open: false,
 	      message: ''
 	    }
-	  }
+	  };
+	};
+	
+	var getInitialModel = function getInitialModel() {
+	  return { idx: -1, name: '', fields: [{ name: '', type: '' }] };
 	};
 	
 	var getInitialState = function getInitialState() {
-	  return Object.assign({}, initialState);
+	  var model = getInitialModel();
+	  var dialogs = getInitialDialogs();
+	  return { model: model, dialogs: dialogs };
 	};
 	
 	var makeDialogState = function makeDialogState(key, open, message) {
@@ -29311,9 +29346,12 @@
 	    _this.closeDialogWindow = _this.closeDialogWindow.bind(_this);
 	    _this.updateModelName = _this.updateModelName.bind(_this);
 	    _this.addField = _this.addField.bind(_this);
-	    _this.removeField = _this.removeField.bind(_this);
 	    _this.updateField = _this.updateField.bind(_this);
+	    _this.deleteField = _this.deleteField.bind(_this);
 	    _this.createModel = _this.createModel.bind(_this);
+	    _this.getModel = _this.getModel.bind(_this);
+	    _this.saveModel = _this.saveModel.bind(_this);
+	    _this.deleteModel = _this.deleteModel.bind(_this);
 	    return _this;
 	  }
 	
@@ -29333,38 +29371,38 @@
 	    key: 'updateModelName',
 	    value: function updateModelName(evt) {
 	      var name = evt.target.value;
-	      this.setState({ model: { name: name, fields: this.state.model.fields } });
+	      var model = Object.assign({}, this.state.model, { name: name });
+	      this.setState({ model: model });
 	    }
 	  }, {
 	    key: 'addField',
 	    value: function addField() {
 	      var fields = [].concat(_toConsumableArray(this.state.model.fields), [{ name: '', type: '' }]);
-	      var name = this.state.model.name;
-	
-	      this.setState({ model: { name: name, fields: fields } });
-	    }
-	  }, {
-	    key: 'removeField',
-	    value: function removeField(idx) {
-	      var fields = [].concat(_toConsumableArray(this.state.model.fields));
-	      fields.splice(idx, 1);
-	      this.setState({ model: { name: this.state.model.name, fields: fields } });
+	      var model = Object.assign({}, this.state.model, { fields: fields });
+	      this.setState({ model: model });
 	    }
 	  }, {
 	    key: 'updateField',
 	    value: function updateField(key, val, idx) {
 	      var fields = [].concat(_toConsumableArray(this.state.model.fields));
 	      fields[idx][key] = val;
-	      this.setState({ fields: fields });
+	      var model = Object.assign({}, this.state.model, { fields: fields });
+	      this.setState({ model: model });
 	    }
 	  }, {
-	    key: 'createModel',
-	    value: function createModel() {
-	      var model = this.state.model;
-	
+	    key: 'deleteField',
+	    value: function deleteField(idx) {
+	      var fields = [].concat(_toConsumableArray(this.state.model.fields));
+	      fields.splice(idx, 1);
+	      var model = Object.assign({}, this.state.model, { fields: fields });
+	      this.setState({ model: model });
+	    }
+	  }, {
+	    key: 'validateModel',
+	    value: function validateModel(model) {
 	      if (!model.name) {
 	        this.openDialogWindow('modelValidation', messages.reqModelName);
-	        return;
+	        return false;
 	      }
 	      var _iteratorNormalCompletion2 = true;
 	      var _didIteratorError2 = false;
@@ -29376,10 +29414,10 @@
 	
 	          if (!field.name) {
 	            this.openDialogWindow('modelValidation', messages.reqFieldName);
-	            return;
+	            return false;
 	          } else if (!field.type) {
 	            this.openDialogWindow('modelValidation', messages.reqFieldType);
-	            return;
+	            return false;
 	          }
 	        }
 	      } catch (err) {
@@ -29397,19 +29435,63 @@
 	        }
 	      }
 	
-	      this.props.addModel(model);
-	      this.setState(getInitialState());
-	      _axios2.default.post('/api', { models: [this.state.model] });
+	      return true;
+	    }
+	  }, {
+	    key: 'createModel',
+	    value: function createModel() {
+	      var model = this.state.model;
+	
+	      if (!this.validateModel(model)) return;
+	      var newModel = Object.assign({}, model);
+	      delete newModel.idx;
+	      this.props.addModel(newModel);
+	      this.setState({ model: getInitialModel() });
+	      _axios2.default.post('/api', { models: [newModel] });
+	    }
+	  }, {
+	    key: 'getModel',
+	    value: function getModel(model, idx) {
+	      if (trash.indexOf(model) === -1) {
+	        var newModel = Object.assign({}, model, { idx: idx });
+	        this.setState({ model: newModel });
+	      }
+	    }
+	  }, {
+	    key: 'saveModel',
+	    value: function saveModel(model) {
+	      console.log(this.props.models, model);
+	      if (model.idx + 1) {
+	        var newModel = Object.assign({}, model);
+	        delete newModel.idx;
+	        this.props.updateModel(newModel, model.idx);
+	        this.setState({ model: getInitialModel() });
+	      }
+	    }
+	  }, {
+	    key: 'deleteModel',
+	    value: function deleteModel(model, idx) {
+	      trash.push(model);
+	      this.props.removeModel(idx);
+	      this.setState({ model: getInitialModel() });
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate(prevProps, prevState) {
+	      console.log(prevState.model, this.state.model);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var addField = this.addField,
-	          removeField = this.removeField,
-	          updateField = this.updateField,
+	      var closeDialogWindow = this.closeDialogWindow,
 	          updateModelName = this.updateModelName,
+	          addField = this.addField,
+	          updateField = this.updateField,
+	          deleteField = this.deleteField,
 	          createModel = this.createModel,
-	          closeDialogWindow = this.closeDialogWindow;
+	          getModel = this.getModel,
+	          saveModel = this.saveModel,
+	          deleteModel = this.deleteModel;
 	      var _state = this.state,
 	          model = _state.model,
 	          dialogs = _state.dialogs;
@@ -29422,21 +29504,49 @@
 	          'div',
 	          { className: 'your-models' },
 	          _react2.default.createElement(
-	            'h3',
-	            null,
-	            'Your Models'
-	          ),
-	          _react2.default.createElement(
-	            _Paper2.default,
-	            null,
-	            models.map(function (model, modelIdx) {
-	              var fieldString = convertFields(model.fields);
-	              return _react2.default.createElement(
-	                _Card.Card,
-	                { key: modelIdx },
-	                _react2.default.createElement(_Card.CardHeader, { title: model.name, subtitle: 'Fields: ' + fieldString })
-	              );
-	            })
+	            'div',
+	            { className: 'row' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col s12 m6 push-m3' },
+	              _react2.default.createElement(
+	                _List.List,
+	                null,
+	                _react2.default.createElement(
+	                  'div',
+	                  null,
+	                  _react2.default.createElement(
+	                    'h5',
+	                    { className: 'center-align', style: { color: _colors.darkBlack } },
+	                    models.length ? 'Your Models' : 'You have no models...'
+	                  ),
+	                  _react2.default.createElement(
+	                    _Subheader2.default,
+	                    { className: 'center-align' },
+	                    models.length ? 'Click to edit' : 'Create one below'
+	                  )
+	                ),
+	                models.map(function (model, modelIdx) {
+	                  var fieldString = convertFields(model.fields);
+	                  return _react2.default.createElement(
+	                    'div',
+	                    { key: modelIdx },
+	                    _react2.default.createElement(_List.ListItem, {
+	                      rightIconButton: _react2.default.createElement(_deleteForever2.default, { onClick: function onClick() {
+	                          return deleteModel(model, modelIdx);
+	                        } }),
+	                      primaryText: model.name,
+	                      secondaryText: 'Fields: ' + fieldString,
+	                      secondaryTextLines: 1,
+	                      onClick: function onClick() {
+	                        return getModel(model, modelIdx);
+	                      }
+	                    }),
+	                    _react2.default.createElement(_Divider2.default, { inset: true })
+	                  );
+	                })
+	              )
+	            )
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -29459,7 +29569,10 @@
 	                    onChange: updateModelName,
 	                    hintText: 'Model Name' })
 	                ),
-	                _react2.default.createElement(_Toolbar.ToolbarSeparator, null)
+	                _react2.default.createElement(_Toolbar.ToolbarSeparator, null),
+	                model.idx + 1 ? _react2.default.createElement(_RaisedButton2.default, { label: 'Save', primary: true, onClick: function onClick() {
+	                    return saveModel(model);
+	                  } }) : _react2.default.createElement(_RaisedButton2.default, { label: 'Create', onClick: createModel })
 	              )
 	            ),
 	            _react2.default.createElement(
@@ -29478,32 +29591,36 @@
 	              _react2.default.createElement(
 	                _GridList.GridList,
 	                null,
-	                (0, _lodash.times)(model.fields.length, function (fieldIdx) {
+	                model.fields.map(function (field, fieldIdx) {
 	                  return _react2.default.createElement(
 	                    _GridList.GridTile,
 	                    { key: fieldIdx },
 	                    _react2.default.createElement(
 	                      _Paper2.default,
 	                      { rounded: false },
-	                      _react2.default.createElement(_TextField2.default, { value: model.fields[fieldIdx].name,
+	                      _react2.default.createElement(_TextField2.default, { value: field.name,
 	                        onChange: function onChange(evt) {
 	                          return updateField('name', evt.target.value, fieldIdx);
 	                        },
 	                        type: 'text', hintText: 'Field Name' }),
-	                      _react2.default.createElement(_DataTypeDropDown2.default, { currType: model.fields[fieldIdx].type,
+	                      _react2.default.createElement(_DataTypeDropDown2.default, { currType: field.type,
 	                        idx: fieldIdx,
 	                        onClick: updateField }),
-	                      _react2.default.createElement(_Checkbox2.default, { onCheck: function onCheck(evt, isChecked) {
+	                      _react2.default.createElement(_Checkbox2.default, { label: 'UNIQUE',
+	                        checked: Boolean(field.unique),
+	                        onCheck: function onCheck(evt, isChecked) {
 	                          return updateField('unique', isChecked, fieldIdx);
-	                        }, label: 'UNIQUE' }),
-	                      _react2.default.createElement(_Checkbox2.default, { onCheck: function onCheck(evt, isChecked) {
+	                        } }),
+	                      _react2.default.createElement(_Checkbox2.default, { label: 'NOT NULL',
+	                        checked: field.allowNull === false,
+	                        onCheck: function onCheck(evt, isChecked) {
 	                          return updateField('allowNull', !isChecked, fieldIdx);
-	                        }, label: 'NOT NULL' })
+	                        } })
 	                    ),
 	                    _react2.default.createElement(_FlatButton2.default, { label: 'DELETE FIELD',
 	                      secondary: true,
 	                      onClick: function onClick() {
-	                        return removeField(fieldIdx);
+	                        return deleteField(fieldIdx);
 	                      } })
 	                  );
 	                })
@@ -29544,9 +29661,17 @@
 	  return { models: models };
 	};
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return { addModel: function addModel(model) {
+	  return {
+	    addModel: function addModel(model) {
 	      return dispatch((0, _models.addModel)(model));
-	    } };
+	    },
+	    removeModel: function removeModel(idx) {
+	      return dispatch((0, _models.removeModel)(idx));
+	    },
+	    updateModel: function updateModel(model, idx) {
+	      return dispatch((0, _models.updateModel)(model, idx));
+	    }
+	  };
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CreateModel);
@@ -48077,6 +48202,7 @@
 	var ADD_MODEL = 'ADD_MODEL';
 	var REMOVE_MODEL = 'REMOVE_MODEL';
 	var RESET_MODELS = 'RESET_MODELS';
+	var UPDATE_MODEL = 'UPDATE_MODEL';
 	
 	/*----------  ACTION CREATORS  ----------*/
 	var receiveModels = exports.receiveModels = function receiveModels(models) {
@@ -48093,10 +48219,18 @@
 	  };
 	};
 	
-	var removeModel = exports.removeModel = function removeModel(model) {
+	var updateModel = exports.updateModel = function updateModel(model, idx) {
+	  return {
+	    type: UPDATE_MODEL,
+	    idx: idx,
+	    model: model
+	  };
+	};
+	
+	var removeModel = exports.removeModel = function removeModel(idx) {
 	  return {
 	    type: REMOVE_MODEL,
-	    model: model
+	    idx: idx
 	  };
 	};
 	
@@ -48114,15 +48248,21 @@
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
 	  var action = arguments[1];
 	
+	  var models = [].concat(_toConsumableArray(state));
 	  switch (action.type) {
 	    case RECEIVE_MODELS:
 	      return action.models;
 	    case ADD_MODEL:
 	      return [].concat(_toConsumableArray(state), [action.model]);
+	    case UPDATE_MODEL:
+	      if (action.idx >= 0 && action.idx < models.length) {
+	        models[action.idx] = action.model;
+	      }
+	      return models;
 	    case REMOVE_MODEL:
-	      var models = [].concat(_toConsumableArray(state));
-	      var idx = models.indexOf(action.model);
-	      if (idx === -1) models.splice(idx, 1);
+	      if (action.idx >= 0 && action.idx < models.length) {
+	        models.splice(action.idx, 1);
+	      }
 	      return models;
 	    case RESET_MODELS:
 	      return [];
@@ -66195,8 +66335,100 @@
 /* 541 */,
 /* 542 */,
 /* 543 */,
-/* 544 */,
-/* 545 */,
+/* 544 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = undefined;
+	
+	var _Divider = __webpack_require__(545);
+	
+	var _Divider2 = _interopRequireDefault(_Divider);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = _Divider2.default;
+
+/***/ },
+/* 545 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends2 = __webpack_require__(447);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _objectWithoutProperties2 = __webpack_require__(452);
+	
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+	
+	var _simpleAssign = __webpack_require__(453);
+	
+	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Divider = function Divider(props, context) {
+	  var inset = props.inset;
+	  var style = props.style;
+	  var other = (0, _objectWithoutProperties3.default)(props, ['inset', 'style']);
+	  var _context$muiTheme = context.muiTheme;
+	  var baseTheme = _context$muiTheme.baseTheme;
+	  var prepareStyles = _context$muiTheme.prepareStyles;
+	
+	
+	  var styles = {
+	    root: {
+	      margin: 0,
+	      marginTop: -1,
+	      marginLeft: inset ? 72 : 0,
+	      height: 1,
+	      border: 'none',
+	      backgroundColor: baseTheme.palette.borderColor
+	    }
+	  };
+	
+	  return _react2.default.createElement('hr', (0, _extends3.default)({}, other, { style: prepareStyles((0, _simpleAssign2.default)(styles.root, style)) }));
+	};
+	
+	Divider.muiName = 'Divider';
+	
+	process.env.NODE_ENV !== "production" ? Divider.propTypes = {
+	  /**
+	   * If true, the `Divider` will be indented.
+	   */
+	  inset: _react.PropTypes.bool,
+	  /**
+	   * Override the inline-styles of the root element.
+	   */
+	  style: _react.PropTypes.object
+	} : void 0;
+	
+	Divider.defaultProps = {
+	  inset: false
+	};
+	
+	Divider.contextTypes = {
+	  muiTheme: _react.PropTypes.object.isRequired
+	};
+	
+	exports.default = Divider;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
 /* 546 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -68625,8 +68857,206 @@
 
 /***/ },
 /* 565 */,
-/* 566 */,
-/* 567 */,
+/* 566 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = exports.makeSelectable = exports.ListItem = exports.List = undefined;
+	
+	var _List2 = __webpack_require__(512);
+	
+	var _List3 = _interopRequireDefault(_List2);
+	
+	var _ListItem2 = __webpack_require__(525);
+	
+	var _ListItem3 = _interopRequireDefault(_ListItem2);
+	
+	var _makeSelectable2 = __webpack_require__(567);
+	
+	var _makeSelectable3 = _interopRequireDefault(_makeSelectable2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.List = _List3.default;
+	exports.ListItem = _ListItem3.default;
+	exports.makeSelectable = _makeSelectable3.default;
+	exports.default = _List3.default;
+
+/***/ },
+/* 567 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.makeSelectable = undefined;
+	
+	var _extends2 = __webpack_require__(447);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _objectWithoutProperties2 = __webpack_require__(452);
+	
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+	
+	var _getPrototypeOf = __webpack_require__(302);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _classCallCheck2 = __webpack_require__(328);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(329);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(333);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(380);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	var _simpleAssign = __webpack_require__(453);
+	
+	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _colorManipulator = __webpack_require__(400);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var makeSelectable = exports.makeSelectable = function makeSelectable(MyComponent) {
+	  var _class, _temp2;
+	
+	  return _temp2 = _class = function (_Component) {
+	    (0, _inherits3.default)(_class, _Component);
+	
+	    function _class() {
+	      var _ref;
+	
+	      var _temp, _this, _ret;
+	
+	      (0, _classCallCheck3.default)(this, _class);
+	
+	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	        args[_key] = arguments[_key];
+	      }
+	
+	      return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = _class.__proto__ || (0, _getPrototypeOf2.default)(_class)).call.apply(_ref, [this].concat(args))), _this), _this.hasSelectedDescendant = function (previousValue, child) {
+	        if (_react2.default.isValidElement(child) && child.props.nestedItems && child.props.nestedItems.length > 0) {
+	          return child.props.nestedItems.reduce(_this.hasSelectedDescendant, previousValue);
+	        }
+	        return previousValue || _this.isChildSelected(child, _this.props);
+	      }, _this.handleItemTouchTap = function (event, item) {
+	        var itemValue = item.props.value;
+	
+	        if (itemValue !== _this.props.value) {
+	          _this.props.onChange(event, itemValue);
+	        }
+	      }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+	    }
+	
+	    (0, _createClass3.default)(_class, [{
+	      key: 'extendChild',
+	      value: function extendChild(child, styles, selectedItemStyle) {
+	        var _this2 = this;
+	
+	        if (child && child.type && child.type.muiName === 'ListItem') {
+	          var selected = this.isChildSelected(child, this.props);
+	          var selectedChildrenStyles = void 0;
+	          if (selected) {
+	            selectedChildrenStyles = (0, _simpleAssign2.default)({}, styles, selectedItemStyle);
+	          }
+	
+	          var mergedChildrenStyles = (0, _simpleAssign2.default)({}, child.props.style, selectedChildrenStyles);
+	
+	          this.keyIndex += 1;
+	
+	          return _react2.default.cloneElement(child, {
+	            onTouchTap: function onTouchTap(event) {
+	              _this2.handleItemTouchTap(event, child);
+	              if (child.props.onTouchTap) {
+	                child.props.onTouchTap(event);
+	              }
+	            },
+	            key: this.keyIndex,
+	            style: mergedChildrenStyles,
+	            nestedItems: child.props.nestedItems.map(function (child) {
+	              return _this2.extendChild(child, styles, selectedItemStyle);
+	            }),
+	            initiallyOpen: this.isInitiallyOpen(child)
+	          });
+	        } else {
+	          return child;
+	        }
+	      }
+	    }, {
+	      key: 'isInitiallyOpen',
+	      value: function isInitiallyOpen(child) {
+	        if (child.props.initiallyOpen) {
+	          return child.props.initiallyOpen;
+	        }
+	        return this.hasSelectedDescendant(false, child);
+	      }
+	    }, {
+	      key: 'isChildSelected',
+	      value: function isChildSelected(child, props) {
+	        return props.value === child.props.value;
+	      }
+	    }, {
+	      key: 'render',
+	      value: function render() {
+	        var _this3 = this;
+	
+	        var _props = this.props;
+	        var children = _props.children;
+	        var selectedItemStyle = _props.selectedItemStyle;
+	        var other = (0, _objectWithoutProperties3.default)(_props, ['children', 'selectedItemStyle']);
+	
+	
+	        this.keyIndex = 0;
+	        var styles = {};
+	
+	        if (!selectedItemStyle) {
+	          var textColor = this.context.muiTheme.baseTheme.palette.textColor;
+	          styles.backgroundColor = (0, _colorManipulator.fade)(textColor, 0.2);
+	        }
+	
+	        return _react2.default.createElement(
+	          MyComponent,
+	          (0, _extends3.default)({}, other, this.state),
+	          _react.Children.map(children, function (child) {
+	            return _this3.extendChild(child, styles, selectedItemStyle);
+	          })
+	        );
+	      }
+	    }]);
+	    return _class;
+	  }(_react.Component), _class.propTypes = {
+	    children: _react.PropTypes.node,
+	    onChange: _react.PropTypes.func,
+	    selectedItemStyle: _react.PropTypes.object,
+	    value: _react.PropTypes.any
+	  }, _class.contextTypes = {
+	    muiTheme: _react.PropTypes.object.isRequired
+	  }, _temp2;
+	};
+	
+	exports.default = makeSelectable;
+
+/***/ },
 /* 568 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -70968,6 +71398,117 @@
 	} : void 0;
 	exports.default = AutoLockScrolling;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
+/* 581 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _pure = __webpack_require__(480);
+	
+	var _pure2 = _interopRequireDefault(_pure);
+	
+	var _SvgIcon = __webpack_require__(489);
+	
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var NavigationMoreVert = function NavigationMoreVert(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _react2.default.createElement('path', { d: 'M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z' })
+	  );
+	};
+	NavigationMoreVert = (0, _pure2.default)(NavigationMoreVert);
+	NavigationMoreVert.displayName = 'NavigationMoreVert';
+	NavigationMoreVert.muiName = 'SvgIcon';
+	
+	exports.default = NavigationMoreVert;
+
+/***/ },
+/* 582 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _pure = __webpack_require__(480);
+	
+	var _pure2 = _interopRequireDefault(_pure);
+	
+	var _SvgIcon = __webpack_require__(489);
+	
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var EditorModeEdit = function EditorModeEdit(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _react2.default.createElement('path', { d: 'M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z' })
+	  );
+	};
+	EditorModeEdit = (0, _pure2.default)(EditorModeEdit);
+	EditorModeEdit.displayName = 'EditorModeEdit';
+	EditorModeEdit.muiName = 'SvgIcon';
+	
+	exports.default = EditorModeEdit;
+
+/***/ },
+/* 583 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _pure = __webpack_require__(480);
+	
+	var _pure2 = _interopRequireDefault(_pure);
+	
+	var _SvgIcon = __webpack_require__(489);
+	
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ActionDeleteForever = function ActionDeleteForever(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _react2.default.createElement('path', { d: 'M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z' })
+	  );
+	};
+	ActionDeleteForever = (0, _pure2.default)(ActionDeleteForever);
+	ActionDeleteForever.displayName = 'ActionDeleteForever';
+	ActionDeleteForever.muiName = 'SvgIcon';
+	
+	exports.default = ActionDeleteForever;
 
 /***/ }
 /******/ ]);
