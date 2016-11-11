@@ -3,6 +3,35 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { times } from 'lodash';
 import { addModel } from '../redux/models';
+import DataTypeDropDown from './DataTypeDropDown';
+import ValidationDialog from './ValidationDialog'
+
+import TextField from 'material-ui/TextField';
+import Paper from 'material-ui/Paper';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import {GridList, GridTile} from 'material-ui/GridList';
+import Checkbox from 'material-ui/Checkbox';
+import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+
+// import DropDownMenu from 'material-ui/DropDownMenu';
+// import IconMenu from 'material-ui/IconMenu';
+// import IconButton from 'material-ui/IconButton';
+// import MenuItem from 'material-ui/MenuItem';
+// import AutoComplete from 'material-ui/AutoComplete';
+// import FloatingActionButton from 'material-ui/FloatingActionButton';
+// import ContentAdd from 'material-ui/svg-icons/content/add';
+// import ContentRemove from 'material-ui/svg-icons/content/remove';
+// import Subheader from 'material-ui/Subheader';
+// import {List, ListItem} from 'material-ui/List';
+// import Divider from 'material-ui/Divider';
+
+const convertFields = fields => {
+  let output = '';
+  for (let field of fields) output += field.name + ', ';
+  return output.slice(0, -2);
+}
 
 export class CreateModel extends Component {
   constructor(props) {
@@ -12,95 +41,166 @@ export class CreateModel extends Component {
         name: '',
         fields: [{
           name: '',
-          type: 'STRING'
+          type: '',
+          unique: false,
+          allowNull: true
         }]
+      },
+      validationDialog: {
+        open: false,
+        message: ''
       }
     };
-    this.onAddField = this.onAddField.bind(this);
-    this.onRemoveField = this.onRemoveField.bind(this);
-    this.onModelNameChange = this.onModelNameChange.bind(this);
-    this.onFieldNameChange = this.onFieldNameChange.bind(this);
-    this.onFieldTypeChange = this.onFieldTypeChange.bind(this);
+    this.updateModelName = this.updateModelName.bind(this);
+    this.addField = this.addField.bind(this);
+    this.removeField = this.removeField.bind(this);
+    this.updateField = this.updateField.bind(this);
     this.createModel = this.createModel.bind(this);
+    this.closeValidationDialog = this.closeValidationDialog.bind(this);
   }
 
-  onAddField() {
-    let { model } = this.state;
-    this.setState({model: {name: model.name, fields: [...model.fields, {name: '', type: 'STRING'}]}});
+  updateModelName(evt) {
+    let name = evt.target.value;
+    this.setState({model: {name, fields: this.state.model.fields}});
   }
 
-  onRemoveField(idx) {
+  addField() {
+    let fields = [...this.state.model.fields, {name: '', type: ''}];
+    let { name } = this.state.model;
+    this.setState({ model: { name, fields } });
+  }
+
+  removeField(idx) {
+    console.log('click');
     let fields = [...this.state.model.fields];
     fields.splice(idx, 1);
     this.setState({model: {name: this.state.model.name, fields}});
   }
 
-  onModelNameChange(evt) {
-    let name = evt.target.value;
-    this.setState({model: {name, fields: this.state.model.fields}});
-  }
-
-  onFieldNameChange(val, idx) {
+  updateField(key, val, idx) {
     let fields = [...this.state.model.fields];
-    fields[idx].name = val;
+    fields[idx][key] = val;
     this.setState({fields});
   }
 
-  onFieldTypeChange(val, idx) {
-    let fields = [...this.state.model.fields];
-    fields[idx].type = val;
-    this.setState({fields});
+  closeValidationDialog() {
+    this.setState({validationDialog: {open: false, message: ''}});
   }
 
   createModel() {
-    this.props.addModel(this.state.model);
+    let { model } = this.state;
+    if (!model.name) {
+      this.setState(
+          {
+            validationDialog: {
+              open: true,
+              message: 'Please give your model a name.'
+            }
+          }
+        );
+      return;
+    }
+    for (let field of model.fields) {
+      console.log('looping');
+      if (!field.name || !field.type) {
+        this.setState(
+          {
+            validationDialog: {
+              open: true,
+              message: 'Every field must have a name and data type.'
+            }
+          }
+        );
+        return;
+      }
+    }
+    this.props.addModel(model);
     this.setState({
       model: {
         name: '',
         fields: [
           {
             name: '',
-            type: 'STRING'
+            type: ''
           }
         ]
-      }
+      },
+      dialogOpen: false
     });
-    // axios.post('/api', {models: [this.state.model]});
+    axios.post('/api', {models: [this.state.model]});
   }
 
   render() {
-    let { onAddField,
-          onRemoveField,
-          onModelNameChange,
-          onFieldNameChange,
-          onFieldTypeChange,
-          createModel } = this;
+    let { addField,
+          removeField,
+          updateField,
+          updateModelName,
+          createModel,
+          closeValidationDialog } = this;
+    let { open, message } = this.state.validationDialog;
     let { name,
           fields } = this.state.model;
     let { models } = this.props;
     return (
       <div>
-        <div>
-          <div><input onChange={onModelNameChange} value={name} type="text" placeholder="model name"/></div>
-          { times(fields.length, idx => (
-            <div key={idx}>
-              <input onChange={evt => onFieldNameChange(evt.target.value, idx)} value={fields[idx].name} type="text" placeholder="field name"/>
-              <select defaultValue="STRING"
-                      onChange={evt => onFieldTypeChange(evt.target.value, idx)}>
-                <option value="STRING">String</option>
-                <option value="TEXT">Text</option>
-                <option value="BOOLEAN">Boolean</option>
-                <option value="INTEGER">Integer</option>
-                <option value="DECIMAL">Decimal</option>
-                <option value="FLOAT">Float</option>
-                <option value="ARRAY">Array</option>
-                <option value="DATE">Date</option>
-              </select>
-              <input type="button" value="x" onClick={() => onRemoveField(idx)} />
-            </div>
-            ))}
-          <div><input type="button" onClick={createModel} value="Create Model"/><input type="button" value="add field" onClick={onAddField} /></div>
+        <div className="your-models-header">
+            <h3>Your Models</h3>
+            <Paper>
+              { models.map((model, modelIdx) => {
+                let fieldString = convertFields(model.fields);
+                return (
+                  <Card key={modelIdx}>
+                    <CardHeader title={model.name} subtitle={`Fields: ${fieldString}`}/>
+                  </Card>
+                );
+              })
+              }
+            </Paper>
         </div>
+            <Paper>
+              <Toolbar>
+                  <ToolbarGroup firstChild={true}>
+                  <ToolbarSeparator/>
+                  <div className="model-name-input">
+                    <TextField value={name}
+                             onChange={updateModelName}
+                             hintText="Model Name"/>
+                  </div>
+                  <ToolbarSeparator/>
+                  </ToolbarGroup>
+                </Toolbar>
+                <div className="create-field-grid">
+                <div className="create-field-header">
+                  <span className="create-field-title">Fields</span>
+                  <RaisedButton primary={true} label="+ ADD" onClick={addField} />
+                </div>
+                  <GridList>
+                    { times(fields.length, fieldIdx => (
+                      <GridTile key={fieldIdx}>
+                        <Paper rounded={false}>
+                            <TextField value={fields[fieldIdx].name}
+                                       onChange={evt => updateField('name', evt.target.value, fieldIdx)}
+                                       type="text" hintText="Field Name"/>
+                            <DataTypeDropDown currType={fields[fieldIdx].type}
+                                              idx={fieldIdx}
+                                              onClick={updateField}/>
+                            <Checkbox onCheck={(evt, isChecked) => updateField('unique', isChecked, fieldIdx)} label="UNIQUE" />
+                            <Checkbox onCheck={(evt, isChecked) => updateField('allowNull', !isChecked, fieldIdx)} label="NOT NULL" />
+                        </Paper>
+                        <FlatButton label="DELETE FIELD"
+                                    secondary={true}
+                                    onClick={() => removeField(fieldIdx)}/>
+                      </GridTile>
+                    ))}
+                  </GridList>
+                </div>
+                <Toolbar>
+                  <ToolbarGroup firstChild={true}>
+                  <RaisedButton label="Create Model" onClick={createModel} />
+                  </ToolbarGroup>
+                </Toolbar>
+          </Paper>
+          <ValidationDialog open={open} message={message} handleClose={closeValidationDialog}/>
         <div>
           { models.map((model, idx) => (
             <div key={idx}>
@@ -112,6 +212,8 @@ export class CreateModel extends Component {
                   <tr>
                     <th>Field Name</th>
                     <th>Data Type</th>
+                    <th>Unique</th>
+                    <th>Null</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -119,6 +221,8 @@ export class CreateModel extends Component {
                       <tr key={idx}>
                         <td>{field.name}</td>
                         <td>{field.type}</td>
+                        <td>{field.unique ? 'Yes' : 'No'}</td>
+                        <td>{field.allowNull === false ? 'No' : 'Yes'}</td>
                       </tr>
                       )) }
                 </tbody>

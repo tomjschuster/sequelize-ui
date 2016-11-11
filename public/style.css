@@ -1,0 +1,26 @@
+body {
+  font-family: 'Roboto';
+}
+
+.your-models-header {
+  margin: 0;
+}
+
+.model-name-input {
+  margin-left: 5%;
+}
+
+.create-field-grid {
+  margin: 0 5%;
+}
+
+.create-field-header {
+  margin: 2% 0;
+}
+
+.create-field-title {
+  font-size: 1.5em;
+  padding-right: 1em;
+}
+
+

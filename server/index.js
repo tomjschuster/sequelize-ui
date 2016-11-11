@@ -12,6 +12,8 @@ app.use(bodyParser.json())
    .use(bodyParser.urlencoded({ extended: false }))
    .use(morgan('dev'))
    .use(express.static(path.join(__dirname, '..', 'public')))
+   .use('/materialize-css',
+      express.static(path.join(__dirname, '..', 'node_modules', 'materialize-css', 'dist')))
    .use('/api', require('./api'));
 
 const indexHtmlPath = path.join(__dirname, '..', 'public', 'index.html');

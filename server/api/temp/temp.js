@@ -1,7 +1,8 @@
 const Sequelize = require('sequelize');
 const db = require('./_db');
 
-const Thing = db.define('thing', {
-	number: Sequelize.INTEGER,
-	sometext: Sequelize.TEXT,
+const Asdff = db.define('asdff', {
+	asdfasdf: Sequelize.DECIMAL,
+	asdff: Sequelize.DECIMAL,
+	aqwefax: Sequelize.INTEGER,
 })

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import AppBar from 'material-ui/AppBar';
+import ActionHome from 'material-ui/svg-icons/action/home';
 
 export class App extends Component {
   render() {
+    console.log(this.props.children);
     return (
       <div>
-        <div id="navbar">
-          <h4>Nav Bar</h4>
-        </div>
+          <AppBar showMenuIconButton={false} />
         <div id="main">
           { this.props.children }
         </div>
