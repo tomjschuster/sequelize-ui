@@ -6,6 +6,7 @@ const RECEIVE_MODELS = 'RECEIVE_MODELS';
 const ADD_MODEL = 'ADD_MODEL';
 const REMOVE_MODEL = 'REMOVE_MODEL';
 const RESET_MODELS = 'RESET_MODELS';
+const UPDATE_MODEL = 'UPDATE_MODEL';
 
 /*----------  ACTION CREATORS  ----------*/
 export const receiveModels = models  => ({
@@ -18,9 +19,15 @@ export const addModel = model => ({
   model
 });
 
-export const removeModel = model => ({
-  type: REMOVE_MODEL,
+export const updateModel = (model, idx) => ({
+  type: UPDATE_MODEL,
+  idx,
   model
+});
+
+export const removeModel = idx => ({
+  type: REMOVE_MODEL,
+  idx
 });
 
 export const resetModels = () => ({
@@ -31,19 +38,25 @@ export const resetModels = () => ({
 
 /*----------  REDUCER  ----------*/
 export default (state = initialState, action) => {
+  let models = [...state];
   switch (action.type) {
     case RECEIVE_MODELS:
       return action.models;
     case ADD_MODEL:
       return [...state, action.model];
+    case UPDATE_MODEL:
+      if ((action.idx >= 0) && (action.idx < models.length)) {
+        models[action.idx] = action.model;
+      }
+      return models;
     case REMOVE_MODEL:
-      let models = [...state];
-      let idx = models.indexOf(action.model);
-      if (idx === -1) models.splice(idx, 1);
+      if ((action.idx >= 0) && (action.idx < models.length)) {
+        models.splice(action.idx, 1);
+      }
       return models;
     case RESET_MODELS:
       return [];
     default:
       return state;
   }
-}
+};

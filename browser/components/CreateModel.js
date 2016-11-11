@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { times } from 'lodash';
+import { find, findIndex } from 'lodash';
 import axios from 'axios';
 
 /*----------  ACTION/THUNK CREATORS  ----------*/
-import { addModel } from '../redux/models';
+import { addModel, removeModel, updateModel } from '../redux/models';
 
 /*----------  LOCAL COMPONENTS  ----------*/
 import DataTypeDropDown from './DataTypeDropDown';
@@ -19,40 +19,47 @@ import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui
 import {GridList, GridTile} from 'material-ui/GridList';
 import Checkbox from 'material-ui/Checkbox';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+import Divider from 'material-ui/Divider';
+import Avatar from 'material-ui/Avatar';
+import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import ModeEditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
+
+import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 
 // import DropDownMenu from 'material-ui/DropDownMenu';
-// import IconMenu from 'material-ui/IconMenu';
-// import IconButton from 'material-ui/IconButton';
-// import MenuItem from 'material-ui/MenuItem';
 // import AutoComplete from 'material-ui/AutoComplete';
 // import FloatingActionButton from 'material-ui/FloatingActionButton';
 // import ContentAdd from 'material-ui/svg-icons/content/add';
 // import ContentRemove from 'material-ui/svg-icons/content/remove';
-// import Subheader from 'material-ui/Subheader';
-// import {List, ListItem} from 'material-ui/List';
-// import Divider from 'material-ui/Divider';
 
 /*----------  CONSTANTS AND HELPER FUNCTIONS  ----------*/
 
-const initialState = {
-  model: {
-    name: '',
-    fields: [
-      {
-        name: '',
-        type: ''
-      }
-    ]
-  },
-  dialogs: {
+const trash = [];
+
+const getInitialDialogs = () => {
+  return {
     modelValidation: {
       open: false,
       message: ''
     }
-  }
+  };
 };
 
-const getInitialState = () => Object.assign({}, initialState);
+const getInitialModel = () => {
+  return { idx: -1, name: '', fields: [{name: '', type: ''}] };
+};
+
+const getInitialState = () => {
+  let model = getInitialModel();
+  let dialogs = getInitialDialogs();
+  return {model, dialogs};
+};
 
 const makeDialogState = (key, open, message) => {
   let state = {};
@@ -85,9 +92,12 @@ export class CreateModel extends Component {
     this.closeDialogWindow = this.closeDialogWindow.bind(this);
     this.updateModelName = this.updateModelName.bind(this);
     this.addField = this.addField.bind(this);
-    this.removeField = this.removeField.bind(this);
     this.updateField = this.updateField.bind(this);
+    this.deleteField = this.deleteField.bind(this);
     this.createModel = this.createModel.bind(this);
+    this.getModel = this.getModel.bind(this);
+    this.saveModel = this.saveModel.bind(this);
+    this.deleteModel = this.deleteModel.bind(this);
   }
 
   openDialogWindow(key, message) {
@@ -102,71 +112,127 @@ export class CreateModel extends Component {
 
   updateModelName(evt) {
     let name = evt.target.value;
-    this.setState({model: {name, fields: this.state.model.fields}});
+    let model = Object.assign({}, this.state.model, { name });
+    this.setState({model});
   }
 
   addField() {
     let fields = [...this.state.model.fields, {name: '', type: ''}];
-    let { name } = this.state.model;
-    this.setState({ model: { name, fields } });
-  }
-
-  removeField(idx) {
-    let fields = [...this.state.model.fields];
-    fields.splice(idx, 1);
-    this.setState({model: {name: this.state.model.name, fields}});
+    let model = Object.assign({}, this.state.model, {fields});
+    this.setState({ model });
   }
 
   updateField(key, val, idx) {
     let fields = [...this.state.model.fields];
     fields[idx][key] = val;
-    this.setState({fields});
+    let model = Object.assign({}, this.state.model, {fields});
+    this.setState({model});
   }
 
-  createModel() {
-    let { model } = this.state;
+  deleteField(idx) {
+    let fields = [...this.state.model.fields];
+    fields.splice(idx, 1);
+    let model = Object.assign({}, this.state.model, {fields});
+    this.setState({ model });
+  }
+
+  validateModel(model) {
     if (!model.name) {
       this.openDialogWindow('modelValidation', messages.reqModelName);
-      return;
+      return false;
     }
     for (let field of model.fields) {
       if (!field.name) {
         this.openDialogWindow('modelValidation', messages.reqFieldName);
-        return;
+        return false;
       } else if (!field.type) {
         this.openDialogWindow('modelValidation', messages.reqFieldType);
-        return;
+        return false;
       }
     }
-    this.props.addModel(model);
-    this.setState(getInitialState());
-    axios.post('/api', {models: [this.state.model]});
+    return true;
+  }
+
+  createModel() {
+    let { model } = this.state;
+    if (!this.validateModel(model)) return;
+    let newModel = Object.assign({}, model);
+    delete newModel.idx;
+    this.props.addModel(newModel);
+    this.setState({model: getInitialModel()});
+    axios.post('/api', {models: [newModel]});
+  }
+
+  getModel(model, idx) {
+    if (trash.indexOf(model) === -1) {
+      let newModel = Object.assign({}, model, {idx});
+      this.setState({model: newModel});
+    }
+  }
+
+  saveModel(model) {
+    console.log(this.props.models, model);
+    if (model.idx + 1) {
+      let newModel = Object.assign({}, model);
+      delete newModel.idx;
+      this.props.updateModel(newModel, model.idx);
+      this.setState({model: getInitialModel()});
+    }
+  }
+
+  deleteModel(model, idx) {
+    trash.push(model);
+    this.props.removeModel(idx);
+    this.setState({model: getInitialModel()});
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log(prevState.model, this.state.model);
   }
 
   render() {
-    let { addField,
-          removeField,
-          updateField,
+    let { closeDialogWindow,
           updateModelName,
+          addField,
+          updateField,
+          deleteField,
           createModel,
-          closeDialogWindow } = this;
+          getModel,
+          saveModel,
+          deleteModel } = this;
     let { model, dialogs } = this.state;
     let { models } = this.props;
     return (
       <div>
         <div className="your-models">
-            <h3>Your Models</h3>
-            <Paper>
-              { models.map((model, modelIdx) => {
-                let fieldString = convertFields(model.fields);
-                return (
-                  <Card key={modelIdx}>
-                    <CardHeader title={model.name} subtitle={`Fields: ${fieldString}`}/>
-                  </Card>
-                );
-              })
-              }
-            </Paper>
+            <div className="row">
+            <div className="col s12 m6 push-m3">
+              <List>
+                <div>
+                  <h5 className="center-align" style={{color: darkBlack}}>
+                    {models.length ? 'Your Models' : 'You have no models...'}
+                  </h5>
+                <Subheader className="center-align">{models.length ? 'Click to edit' : 'Create one below'}</Subheader>
+                </div>
+                { models.map((model, modelIdx) => {
+                  let fieldString = convertFields(model.fields);
+                  return (
+                    <div key={modelIdx}>
+                    <ListItem
+                      rightIconButton={<DeleteForeverIcon onClick={() => deleteModel(model, modelIdx)}/>}
+                      primaryText={model.name}
+                      secondaryText={`Fields: ${fieldString}`}
+                      secondaryTextLines={1}
+                      onClick={() => getModel(model, modelIdx)}
+                    />
+                    <Divider inset={true} />
+                    </div>
+                  );
+                })
+                }
+              </List>
+              </div>
+            </div>
         </div>
         <div className="field-definitions">
           <Paper>
@@ -179,6 +245,10 @@ export class CreateModel extends Component {
                          hintText="Model Name"/>
               </div>
               <ToolbarSeparator/>
+              { model.idx + 1 ?
+                <RaisedButton label="Save" primary={true} onClick={() => saveModel(model)} /> :
+                <RaisedButton label="Create" onClick={createModel} />
+              }
               </ToolbarGroup>
             </Toolbar>
             <div className="create-field-grid">
@@ -187,21 +257,25 @@ export class CreateModel extends Component {
               <RaisedButton primary={true} label="+ ADD" onClick={addField} />
             </div>
               <GridList>
-                { times(model.fields.length, fieldIdx => (
+                { model.fields.map( (field, fieldIdx) => (
                   <GridTile key={fieldIdx}>
                     <Paper rounded={false}>
-                        <TextField value={model.fields[fieldIdx].name}
+                        <TextField value={field.name}
                                    onChange={evt => updateField('name', evt.target.value, fieldIdx)}
                                    type="text" hintText="Field Name"/>
-                        <DataTypeDropDown currType={model.fields[fieldIdx].type}
+                        <DataTypeDropDown currType={field.type}
                                           idx={fieldIdx}
                                           onClick={updateField}/>
-                        <Checkbox onCheck={(evt, isChecked) => updateField('unique', isChecked, fieldIdx)} label="UNIQUE" />
-                        <Checkbox onCheck={(evt, isChecked) => updateField('allowNull', !isChecked, fieldIdx)} label="NOT NULL" />
+                        <Checkbox label="UNIQUE"
+                                  checked={Boolean(field.unique)}
+                                  onCheck={(evt, isChecked) => updateField('unique', isChecked, fieldIdx)}/>
+                        <Checkbox label="NOT NULL"
+                                  checked={field.allowNull === false}
+                                  onCheck={(evt, isChecked) => updateField('allowNull', !isChecked, fieldIdx)}/>
                     </Paper>
                     <FlatButton label="DELETE FIELD"
                                 secondary={true}
-                                onClick={() => removeField(fieldIdx)}/>
+                                onClick={() => deleteField(fieldIdx)}/>
                   </GridTile>
                 ))}
               </GridList>
@@ -226,7 +300,11 @@ export class CreateModel extends Component {
 
 /*----------  CONNECT TO STORE  ----------*/
 const mapStateToProps = ({ models }) => ({ models });
-const mapDispatchToProps = dispatch => ({ addModel: model => dispatch(addModel(model))});
+const mapDispatchToProps = dispatch => ({
+  addModel: model => dispatch(addModel(model)),
+  removeModel: (idx) => dispatch(removeModel(idx)),
+  updateModel: (model, idx) => dispatch(updateModel(model, idx))
+});
 
 export default connect(
   mapStateToProps,
