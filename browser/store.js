@@ -4,4 +4,4 @@ import thunkMiddleware from 'redux-thunk';
 
 import reducer from './redux';
 
-export default createStore(reducer, applyMiddleware(createLogger(), thunkMiddleware));
+export default createStore(reducer, applyMiddleware(thunkMiddleware, createLogger()));

@@ -23208,7 +23208,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	exports.default = (0, _redux.createStore)(_redux3.default, (0, _redux.applyMiddleware)((0, _reduxLogger2.default)(), _reduxThunk2.default));
+	exports.default = (0, _redux.createStore)(_redux3.default, (0, _redux.applyMiddleware)(_reduxThunk2.default, (0, _reduxLogger2.default)()));
 
 /***/ },
 /* 203 */
@@ -24109,12 +24109,15 @@
 	
 	var _redux = __webpack_require__(179);
 	
-	exports.default = function (state, action) {
-	  switch (action.type) {
-	    default:
-	      return state;
-	  }
-	};
+	var _models = __webpack_require__(294);
+	
+	var _models2 = _interopRequireDefault(_models);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = (0, _redux.combineReducers)({
+	  models: _models2.default
+	});
 
 /***/ },
 /* 211 */
@@ -29132,6 +29135,8 @@
 	
 	var _lodash = __webpack_require__(293);
 	
+	var _models = __webpack_require__(294);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -29155,7 +29160,7 @@
 	        name: '',
 	        fields: [{
 	          name: '',
-	          type: ''
+	          type: 'STRING'
 	        }]
 	      }
 	    };
@@ -29164,7 +29169,7 @@
 	    _this.onModelNameChange = _this.onModelNameChange.bind(_this);
 	    _this.onFieldNameChange = _this.onFieldNameChange.bind(_this);
 	    _this.onFieldTypeChange = _this.onFieldTypeChange.bind(_this);
-	    _this.generateModel = _this.generateModel.bind(_this);
+	    _this.createModel = _this.createModel.bind(_this);
 	    return _this;
 	  }
 	
@@ -29173,15 +29178,13 @@
 	    value: function onAddField() {
 	      var model = this.state.model;
 	
-	      this.setState({ model: { name: model.name, fields: [].concat(_toConsumableArray(model.fields), [{ name: '', type: '' }]) } });
+	      this.setState({ model: { name: model.name, fields: [].concat(_toConsumableArray(model.fields), [{ name: '', type: 'STRING' }]) } });
 	    }
 	  }, {
 	    key: 'onRemoveField',
 	    value: function onRemoveField(idx) {
 	      var fields = [].concat(_toConsumableArray(this.state.model.fields));
-	      console.log(fields);
 	      fields.splice(idx, 1);
-	      console.log(fields);
 	      this.setState({ model: { name: this.state.model.name, fields: fields } });
 	    }
 	  }, {
@@ -29205,9 +29208,19 @@
 	      this.setState({ fields: fields });
 	    }
 	  }, {
-	    key: 'generateModel',
-	    value: function generateModel() {
-	      _axios2.default.post('/api', { models: [this.state.model] });
+	    key: 'createModel',
+	    value: function createModel() {
+	      this.props.addModel(this.state.model);
+	      this.setState({
+	        model: {
+	          name: '',
+	          fields: [{
+	            name: '',
+	            type: 'STRING'
+	          }]
+	        }
+	      });
+	      // axios.post('/api', {models: [this.state.model]});
 	    }
 	  }, {
 	    key: 'render',
@@ -29217,10 +29230,11 @@
 	          onModelNameChange = this.onModelNameChange,
 	          onFieldNameChange = this.onFieldNameChange,
 	          onFieldTypeChange = this.onFieldTypeChange,
-	          generateModel = this.generateModel;
+	          createModel = this.createModel;
 	      var _state$model = this.state.model,
 	          name = _state$model.name,
 	          fields = _state$model.fields;
+	      var models = this.props.models;
 	
 	      return _react2.default.createElement(
 	        'div',
@@ -29228,28 +29242,155 @@
 	        _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement('input', { onChange: onModelNameChange, value: name, type: 'text', placeholder: 'model name' })
-	        ),
-	        (0, _lodash.times)(fields.length, function (idx) {
-	          return _react2.default.createElement(
+	          _react2.default.createElement(
 	            'div',
-	            { key: idx },
-	            _react2.default.createElement('input', { onChange: function onChange(evt) {
-	                return onFieldNameChange(evt.target.value, idx);
-	              }, value: fields[idx].name, type: 'text', placeholder: 'field name' }),
-	            _react2.default.createElement('input', { onChange: function onChange(evt) {
-	                return onFieldTypeChange(evt.target.value, idx);
-	              }, value: fields[idx].type, type: 'text', placeholder: 'field type' }),
-	            fields.length > 1 && _react2.default.createElement('input', { type: 'button', value: 'remove field', onClick: function onClick() {
-	                return onRemoveField(idx);
-	              } }),
-	            idx + 1 === fields.length && _react2.default.createElement('input', { type: 'button', value: 'add field', onClick: onAddField })
-	          );
-	        }),
+	            null,
+	            _react2.default.createElement('input', { onChange: onModelNameChange, value: name, type: 'text', placeholder: 'model name' })
+	          ),
+	          (0, _lodash.times)(fields.length, function (idx) {
+	            return _react2.default.createElement(
+	              'div',
+	              { key: idx },
+	              _react2.default.createElement('input', { onChange: function onChange(evt) {
+	                  return onFieldNameChange(evt.target.value, idx);
+	                }, value: fields[idx].name, type: 'text', placeholder: 'field name' }),
+	              _react2.default.createElement(
+	                'select',
+	                { defaultValue: 'STRING',
+	                  onChange: function onChange(evt) {
+	                    return onFieldTypeChange(evt.target.value, idx);
+	                  } },
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: 'STRING' },
+	                  'String'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: 'TEXT' },
+	                  'Text'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: 'BOOLEAN' },
+	                  'Boolean'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: 'INTEGER' },
+	                  'Integer'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: 'DECIMAL' },
+	                  'Decimal'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: 'FLOAT' },
+	                  'Float'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: 'ARRAY' },
+	                  'Array'
+	                ),
+	                _react2.default.createElement(
+	                  'option',
+	                  { value: 'DATE' },
+	                  'Date'
+	                )
+	              ),
+	              _react2.default.createElement('input', { type: 'button', value: 'x', onClick: function onClick() {
+	                  return onRemoveField(idx);
+	                } })
+	            );
+	          }),
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement('input', { type: 'button', onClick: createModel, value: 'Create Model' }),
+	            _react2.default.createElement('input', { type: 'button', value: 'add field', onClick: onAddField })
+	          )
+	        ),
 	        _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement('input', { type: 'button', onClick: generateModel, value: 'Create Model' })
+	          models.map(function (model, idx) {
+	            return _react2.default.createElement(
+	              'div',
+	              { key: idx },
+	              _react2.default.createElement(
+	                'table',
+	                null,
+	                _react2.default.createElement(
+	                  'thead',
+	                  null,
+	                  _react2.default.createElement(
+	                    'tr',
+	                    null,
+	                    _react2.default.createElement(
+	                      'th',
+	                      null,
+	                      model.name
+	                    )
+	                  ),
+	                  _react2.default.createElement(
+	                    'tr',
+	                    null,
+	                    _react2.default.createElement(
+	                      'th',
+	                      null,
+	                      'Field Name'
+	                    ),
+	                    _react2.default.createElement(
+	                      'th',
+	                      null,
+	                      'Data Type'
+	                    )
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  'tbody',
+	                  null,
+	                  model.fields.map(function (field, idx) {
+	                    return _react2.default.createElement(
+	                      'tr',
+	                      { key: idx },
+	                      _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        field.name
+	                      ),
+	                      _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        field.type
+	                      )
+	                    );
+	                  })
+	                ),
+	                _react2.default.createElement(
+	                  'tfoot',
+	                  null,
+	                  _react2.default.createElement(
+	                    'tr',
+	                    null,
+	                    _react2.default.createElement(
+	                      'td',
+	                      null,
+	                      _react2.default.createElement('input', { type: 'button', value: 'Delete Model' })
+	                    ),
+	                    _react2.default.createElement(
+	                      'td',
+	                      null,
+	                      _react2.default.createElement('input', { type: 'button', value: 'Edit Model' })
+	                    )
+	                  )
+	                )
+	              )
+	            );
+	          })
 	        )
 	      );
 	    }
@@ -29258,11 +29399,14 @@
 	  return CreateModel;
 	}(_react.Component);
 	
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {};
+	var mapStateToProps = function mapStateToProps(_ref) {
+	  var models = _ref.models;
+	  return { models: models };
 	};
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {};
+	  return { addModel: function addModel(model) {
+	      return dispatch((0, _models.addModel)(model));
+	    } };
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CreateModel);
@@ -47772,6 +47916,80 @@
 	}.call(this));
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(193)(module)))
+
+/***/ },
+/* 294 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	/*----------  INITIAL STATE  ----------*/
+	var initialState = [];
+	
+	/*----------  ACTION TYPES  ----------*/
+	var RECEIVE_MODELS = 'RECEIVE_MODELS';
+	var ADD_MODEL = 'ADD_MODEL';
+	var REMOVE_MODEL = 'REMOVE_MODEL';
+	var RESET_MODELS = 'RESET_MODELS';
+	
+	/*----------  ACTION CREATORS  ----------*/
+	var receiveModels = exports.receiveModels = function receiveModels(models) {
+	  return {
+	    type: RECEIVE_MODELS,
+	    models: models
+	  };
+	};
+	
+	var addModel = exports.addModel = function addModel(model) {
+	  return {
+	    type: ADD_MODEL,
+	    model: model
+	  };
+	};
+	
+	var removeModel = exports.removeModel = function removeModel(model) {
+	  return {
+	    type: REMOVE_MODEL,
+	    model: model
+	  };
+	};
+	
+	var resetModels = exports.resetModels = function resetModels() {
+	  return {
+	    type: RESET_MODELS
+	  };
+	};
+	
+	/*----------  THUNKS  ----------*/
+	
+	/*----------  REDUCER  ----------*/
+	
+	exports.default = function () {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case RECEIVE_MODELS:
+	      return action.models;
+	    case ADD_MODEL:
+	      return [].concat(_toConsumableArray(state), [action.model]);
+	    case REMOVE_MODEL:
+	      var models = [].concat(_toConsumableArray(state));
+	      var idx = models.indexOf(action.model);
+	      if (idx === -1) models.splice(idx, 1);
+	      return models;
+	    case RESET_MODELS:
+	      return [];
+	    default:
+	      return state;
+	  }
+	};
 
 /***/ }
 /******/ ]);

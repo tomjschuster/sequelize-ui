@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
+import models from './models';
 
-export default (state, action) => {
-  switch (action.type) {
-    default: return state;
-  }
-};
+export default combineReducers({
+  models
+});
