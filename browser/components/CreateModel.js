@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import { times } from 'lodash';
+import axios from 'axios';
+
+/*----------  ACTION/THUNK CREATORS  ----------*/
 import { addModel } from '../redux/models';
+
+/*----------  LOCAL COMPONENTS  ----------*/
 import DataTypeDropDown from './DataTypeDropDown';
 import ValidationDialog from './ValidationDialog'
 
+/*----------  LIBRARY COMPONENTS  ----------*/
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
@@ -27,36 +32,72 @@ import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 // import {List, ListItem} from 'material-ui/List';
 // import Divider from 'material-ui/Divider';
 
+/*----------  CONSTANTS AND HELPER FUNCTIONS  ----------*/
+
+const initialState = {
+  model: {
+    name: '',
+    fields: [
+      {
+        name: '',
+        type: ''
+      }
+    ]
+  },
+  dialogs: {
+    modelValidation: {
+      open: false,
+      message: ''
+    }
+  }
+};
+
+const getInitialState = () => Object.assign({}, initialState);
+
+const makeDialogState = (key, open, message) => {
+  let state = {};
+  state[key] = {};
+  state[key].open = open;
+  state[key].message = message;
+  return state;
+};
+
+const messages = {
+  reqModelName: 'Please give your model a name.',
+  reqFieldName: 'Every field must have a name.',
+  reqFieldType: 'Every field must have a data type.'
+};
+
 const convertFields = fields => {
   let output = '';
   for (let field of fields) output += field.name + ', ';
   return output.slice(0, -2);
-}
+};
 
+/*----------  COMPONENT  ----------*/
 export class CreateModel extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      model: {
-        name: '',
-        fields: [{
-          name: '',
-          type: '',
-          unique: false,
-          allowNull: true
-        }]
-      },
-      validationDialog: {
-        open: false,
-        message: ''
-      }
-    };
+    this.state = getInitialState();
+
+    /*----------  BIND INSTANCE METHODS  ----------*/
+    this.openDialogWindow = this.openDialogWindow.bind(this);
+    this.closeDialogWindow = this.closeDialogWindow.bind(this);
     this.updateModelName = this.updateModelName.bind(this);
     this.addField = this.addField.bind(this);
     this.removeField = this.removeField.bind(this);
     this.updateField = this.updateField.bind(this);
     this.createModel = this.createModel.bind(this);
-    this.closeValidationDialog = this.closeValidationDialog.bind(this);
+  }
+
+  openDialogWindow(key, message) {
+    let dialogs = Object.assign({}, this.state.dialogs, makeDialogState(key, true, message));
+    this.setState({dialogs});
+  }
+
+  closeDialogWindow(key) {
+    let dialogs = Object.assign({}, this.state.dialogs, makeDialogState(key, false, ''));
+    this.setState({dialogs});
   }
 
   updateModelName(evt) {
@@ -71,7 +112,6 @@ export class CreateModel extends Component {
   }
 
   removeField(idx) {
-    console.log('click');
     let fields = [...this.state.model.fields];
     fields.splice(idx, 1);
     this.setState({model: {name: this.state.model.name, fields}});
@@ -83,50 +123,23 @@ export class CreateModel extends Component {
     this.setState({fields});
   }
 
-  closeValidationDialog() {
-    this.setState({validationDialog: {open: false, message: ''}});
-  }
-
   createModel() {
     let { model } = this.state;
     if (!model.name) {
-      this.setState(
-          {
-            validationDialog: {
-              open: true,
-              message: 'Please give your model a name.'
-            }
-          }
-        );
+      this.openDialogWindow('modelValidation', messages.reqModelName);
       return;
     }
     for (let field of model.fields) {
-      console.log('looping');
-      if (!field.name || !field.type) {
-        this.setState(
-          {
-            validationDialog: {
-              open: true,
-              message: 'Every field must have a name and data type.'
-            }
-          }
-        );
+      if (!field.name) {
+        this.openDialogWindow('modelValidation', messages.reqFieldName);
+        return;
+      } else if (!field.type) {
+        this.openDialogWindow('modelValidation', messages.reqFieldType);
         return;
       }
     }
     this.props.addModel(model);
-    this.setState({
-      model: {
-        name: '',
-        fields: [
-          {
-            name: '',
-            type: ''
-          }
-        ]
-      },
-      dialogOpen: false
-    });
+    this.setState(getInitialState());
     axios.post('/api', {models: [this.state.model]});
   }
 
@@ -136,14 +149,12 @@ export class CreateModel extends Component {
           updateField,
           updateModelName,
           createModel,
-          closeValidationDialog } = this;
-    let { open, message } = this.state.validationDialog;
-    let { name,
-          fields } = this.state.model;
+          closeDialogWindow } = this;
+    let { model, dialogs } = this.state;
     let { models } = this.props;
     return (
       <div>
-        <div className="your-models-header">
+        <div className="your-models">
             <h3>Your Models</h3>
             <Paper>
               { models.map((model, modelIdx) => {
@@ -157,84 +168,55 @@ export class CreateModel extends Component {
               }
             </Paper>
         </div>
-            <Paper>
-              <Toolbar>
-                  <ToolbarGroup firstChild={true}>
-                  <ToolbarSeparator/>
-                  <div className="model-name-input">
-                    <TextField value={name}
-                             onChange={updateModelName}
-                             hintText="Model Name"/>
-                  </div>
-                  <ToolbarSeparator/>
-                  </ToolbarGroup>
-                </Toolbar>
-                <div className="create-field-grid">
-                <div className="create-field-header">
-                  <span className="create-field-title">Fields</span>
-                  <RaisedButton primary={true} label="+ ADD" onClick={addField} />
-                </div>
-                  <GridList>
-                    { times(fields.length, fieldIdx => (
-                      <GridTile key={fieldIdx}>
-                        <Paper rounded={false}>
-                            <TextField value={fields[fieldIdx].name}
-                                       onChange={evt => updateField('name', evt.target.value, fieldIdx)}
-                                       type="text" hintText="Field Name"/>
-                            <DataTypeDropDown currType={fields[fieldIdx].type}
-                                              idx={fieldIdx}
-                                              onClick={updateField}/>
-                            <Checkbox onCheck={(evt, isChecked) => updateField('unique', isChecked, fieldIdx)} label="UNIQUE" />
-                            <Checkbox onCheck={(evt, isChecked) => updateField('allowNull', !isChecked, fieldIdx)} label="NOT NULL" />
-                        </Paper>
-                        <FlatButton label="DELETE FIELD"
-                                    secondary={true}
-                                    onClick={() => removeField(fieldIdx)}/>
-                      </GridTile>
-                    ))}
-                  </GridList>
-                </div>
-                <Toolbar>
-                  <ToolbarGroup firstChild={true}>
-                  <RaisedButton label="Create Model" onClick={createModel} />
-                  </ToolbarGroup>
-                </Toolbar>
-          </Paper>
-          <ValidationDialog open={open} message={message} handleClose={closeValidationDialog}/>
-        <div>
-          { models.map((model, idx) => (
-            <div key={idx}>
-              <table>
-                <thead>
-                  <tr>
-                    <th>{model.name}</th>
-                  </tr>
-                  <tr>
-                    <th>Field Name</th>
-                    <th>Data Type</th>
-                    <th>Unique</th>
-                    <th>Null</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    { model.fields.map((field, idx) => (
-                      <tr key={idx}>
-                        <td>{field.name}</td>
-                        <td>{field.type}</td>
-                        <td>{field.unique ? 'Yes' : 'No'}</td>
-                        <td>{field.allowNull === false ? 'No' : 'Yes'}</td>
-                      </tr>
-                      )) }
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td><input type="button" value="Delete Model"/></td>
-                    <td><input type="button" value="Edit Model"/></td>
-                  </tr>
-                </tfoot>
-              </table>
+        <div className="field-definitions">
+          <Paper>
+            <Toolbar>
+              <ToolbarGroup firstChild={true}>
+              <ToolbarSeparator/>
+              <div className="model-name-input">
+                <TextField value={model.name}
+                         onChange={updateModelName}
+                         hintText="Model Name"/>
+              </div>
+              <ToolbarSeparator/>
+              </ToolbarGroup>
+            </Toolbar>
+            <div className="create-field-grid">
+            <div className="create-field-header">
+              <span className="create-field-title">Fields</span>
+              <RaisedButton primary={true} label="+ ADD" onClick={addField} />
             </div>
-            ))}
+              <GridList>
+                { times(model.fields.length, fieldIdx => (
+                  <GridTile key={fieldIdx}>
+                    <Paper rounded={false}>
+                        <TextField value={model.fields[fieldIdx].name}
+                                   onChange={evt => updateField('name', evt.target.value, fieldIdx)}
+                                   type="text" hintText="Field Name"/>
+                        <DataTypeDropDown currType={model.fields[fieldIdx].type}
+                                          idx={fieldIdx}
+                                          onClick={updateField}/>
+                        <Checkbox onCheck={(evt, isChecked) => updateField('unique', isChecked, fieldIdx)} label="UNIQUE" />
+                        <Checkbox onCheck={(evt, isChecked) => updateField('allowNull', !isChecked, fieldIdx)} label="NOT NULL" />
+                    </Paper>
+                    <FlatButton label="DELETE FIELD"
+                                secondary={true}
+                                onClick={() => removeField(fieldIdx)}/>
+                  </GridTile>
+                ))}
+              </GridList>
+            </div>
+            <Toolbar>
+              <ToolbarGroup firstChild={true}>
+              <RaisedButton label="Create Model" onClick={createModel} />
+              </ToolbarGroup>
+            </Toolbar>
+          </Paper>
+        </div>
+        <div className="dialogs">
+          <ValidationDialog open={dialogs.modelValidation.open}
+                            message={dialogs.modelValidation.message}
+                            handleClose={() => closeDialogWindow('modelValidation')}/>
         </div>
       </div>
     );
@@ -242,6 +224,7 @@ export class CreateModel extends Component {
 }
 
 
+/*----------  CONNECT TO STORE  ----------*/
 const mapStateToProps = ({ models }) => ({ models });
 const mapDispatchToProps = dispatch => ({ addModel: model => dispatch(addModel(model))});
 

@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+
+/*----------  LIBRARY COMPONENTS  ----------*/
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import FlatButton from 'material-ui/FlatButton';
 
+/*----------  CONSTANTS  ----------*/
 const sequelizeDataTypes = [
   {textKey: 'String', valueKey: 'STRING'},
   {textKey: 'Text', valueKey: 'TEXT'},
@@ -20,7 +23,7 @@ const dataSourceConfig = {
   value: 'valueKey',
 };
 
-
+/*----------  COMPONENT  ----------*/
 export class DataTypeDropDown extends Component {
   render() {
     let { currType, idx, onClick } = this.props;
@@ -35,12 +38,12 @@ export class DataTypeDropDown extends Component {
                     onClick={() => onClick('type', dataType.valueKey, idx)} />
           ))}
     </IconMenu>
-
     );
   }
 }
 
 
+/*----------  CONNECT  ----------*/
 const mapStateToProps = state => ({ });
 const mapDispatchToProps = dispatch => ({ });
 

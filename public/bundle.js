@@ -29156,11 +29156,11 @@
 	
 	var _reactRedux = __webpack_require__(172);
 	
+	var _lodash = __webpack_require__(293);
+	
 	var _axios = __webpack_require__(268);
 	
 	var _axios2 = _interopRequireDefault(_axios);
-	
-	var _lodash = __webpack_require__(293);
 	
 	var _models = __webpack_require__(294);
 	
@@ -29208,6 +29208,15 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	/*----------  ACTION/THUNK CREATORS  ----------*/
+	
+	
+	/*----------  LOCAL COMPONENTS  ----------*/
+	
+	
+	/*----------  LIBRARY COMPONENTS  ----------*/
+	
+	
 	// import DropDownMenu from 'material-ui/DropDownMenu';
 	// import IconMenu from 'material-ui/IconMenu';
 	// import IconButton from 'material-ui/IconButton';
@@ -29219,6 +29228,42 @@
 	// import Subheader from 'material-ui/Subheader';
 	// import {List, ListItem} from 'material-ui/List';
 	// import Divider from 'material-ui/Divider';
+	
+	/*----------  CONSTANTS AND HELPER FUNCTIONS  ----------*/
+	
+	var initialState = {
+	  model: {
+	    name: '',
+	    fields: [{
+	      name: '',
+	      type: ''
+	    }]
+	  },
+	  dialogs: {
+	    modelValidation: {
+	      open: false,
+	      message: ''
+	    }
+	  }
+	};
+	
+	var getInitialState = function getInitialState() {
+	  return Object.assign({}, initialState);
+	};
+	
+	var makeDialogState = function makeDialogState(key, open, message) {
+	  var state = {};
+	  state[key] = {};
+	  state[key].open = open;
+	  state[key].message = message;
+	  return state;
+	};
+	
+	var messages = {
+	  reqModelName: 'Please give your model a name.',
+	  reqFieldName: 'Every field must have a name.',
+	  reqFieldType: 'Every field must have a data type.'
+	};
 	
 	var convertFields = function convertFields(fields) {
 	  var output = '';
@@ -29249,6 +29294,8 @@
 	  return output.slice(0, -2);
 	};
 	
+	/*----------  COMPONENT  ----------*/
+	
 	var CreateModel = exports.CreateModel = function (_Component) {
 	  _inherits(CreateModel, _Component);
 	
@@ -29257,31 +29304,32 @@
 	
 	    var _this = _possibleConstructorReturn(this, (CreateModel.__proto__ || Object.getPrototypeOf(CreateModel)).call(this, props));
 	
-	    _this.state = {
-	      model: {
-	        name: '',
-	        fields: [{
-	          name: '',
-	          type: '',
-	          unique: false,
-	          allowNull: true
-	        }]
-	      },
-	      validationDialog: {
-	        open: false,
-	        message: ''
-	      }
-	    };
+	    _this.state = getInitialState();
+	
+	    /*----------  BIND INSTANCE METHODS  ----------*/
+	    _this.openDialogWindow = _this.openDialogWindow.bind(_this);
+	    _this.closeDialogWindow = _this.closeDialogWindow.bind(_this);
 	    _this.updateModelName = _this.updateModelName.bind(_this);
 	    _this.addField = _this.addField.bind(_this);
 	    _this.removeField = _this.removeField.bind(_this);
 	    _this.updateField = _this.updateField.bind(_this);
 	    _this.createModel = _this.createModel.bind(_this);
-	    _this.closeValidationDialog = _this.closeValidationDialog.bind(_this);
 	    return _this;
 	  }
 	
 	  _createClass(CreateModel, [{
+	    key: 'openDialogWindow',
+	    value: function openDialogWindow(key, message) {
+	      var dialogs = Object.assign({}, this.state.dialogs, makeDialogState(key, true, message));
+	      this.setState({ dialogs: dialogs });
+	    }
+	  }, {
+	    key: 'closeDialogWindow',
+	    value: function closeDialogWindow(key) {
+	      var dialogs = Object.assign({}, this.state.dialogs, makeDialogState(key, false, ''));
+	      this.setState({ dialogs: dialogs });
+	    }
+	  }, {
 	    key: 'updateModelName',
 	    value: function updateModelName(evt) {
 	      var name = evt.target.value;
@@ -29298,7 +29346,6 @@
 	  }, {
 	    key: 'removeField',
 	    value: function removeField(idx) {
-	      console.log('click');
 	      var fields = [].concat(_toConsumableArray(this.state.model.fields));
 	      fields.splice(idx, 1);
 	      this.setState({ model: { name: this.state.model.name, fields: fields } });
@@ -29311,22 +29358,12 @@
 	      this.setState({ fields: fields });
 	    }
 	  }, {
-	    key: 'closeValidationDialog',
-	    value: function closeValidationDialog() {
-	      this.setState({ validationDialog: { open: false, message: '' } });
-	    }
-	  }, {
 	    key: 'createModel',
 	    value: function createModel() {
 	      var model = this.state.model;
 	
 	      if (!model.name) {
-	        this.setState({
-	          validationDialog: {
-	            open: true,
-	            message: 'Please give your model a name.'
-	          }
-	        });
+	        this.openDialogWindow('modelValidation', messages.reqModelName);
 	        return;
 	      }
 	      var _iteratorNormalCompletion2 = true;
@@ -29337,14 +29374,11 @@
 	        for (var _iterator2 = model.fields[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	          var field = _step2.value;
 	
-	          console.log('looping');
-	          if (!field.name || !field.type) {
-	            this.setState({
-	              validationDialog: {
-	                open: true,
-	                message: 'Every field must have a name and data type.'
-	              }
-	            });
+	          if (!field.name) {
+	            this.openDialogWindow('modelValidation', messages.reqFieldName);
+	            return;
+	          } else if (!field.type) {
+	            this.openDialogWindow('modelValidation', messages.reqFieldType);
 	            return;
 	          }
 	        }
@@ -29364,16 +29398,7 @@
 	      }
 	
 	      this.props.addModel(model);
-	      this.setState({
-	        model: {
-	          name: '',
-	          fields: [{
-	            name: '',
-	            type: ''
-	          }]
-	        },
-	        dialogOpen: false
-	      });
+	      this.setState(getInitialState());
 	      _axios2.default.post('/api', { models: [this.state.model] });
 	    }
 	  }, {
@@ -29384,13 +29409,10 @@
 	          updateField = this.updateField,
 	          updateModelName = this.updateModelName,
 	          createModel = this.createModel,
-	          closeValidationDialog = this.closeValidationDialog;
-	      var _state$validationDial = this.state.validationDialog,
-	          open = _state$validationDial.open,
-	          message = _state$validationDial.message;
-	      var _state$model = this.state.model,
-	          name = _state$model.name,
-	          fields = _state$model.fields;
+	          closeDialogWindow = this.closeDialogWindow;
+	      var _state = this.state,
+	          model = _state.model,
+	          dialogs = _state.dialogs;
 	      var models = this.props.models;
 	
 	      return _react2.default.createElement(
@@ -29398,7 +29420,7 @@
 	        null,
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'your-models-header' },
+	          { className: 'your-models' },
 	          _react2.default.createElement(
 	            'h3',
 	            null,
@@ -29418,181 +29440,94 @@
 	          )
 	        ),
 	        _react2.default.createElement(
-	          _Paper2.default,
-	          null,
+	          'div',
+	          { className: 'field-definitions' },
 	          _react2.default.createElement(
-	            _Toolbar.Toolbar,
+	            _Paper2.default,
 	            null,
 	            _react2.default.createElement(
-	              _Toolbar.ToolbarGroup,
-	              { firstChild: true },
-	              _react2.default.createElement(_Toolbar.ToolbarSeparator, null),
+	              _Toolbar.Toolbar,
+	              null,
 	              _react2.default.createElement(
-	                'div',
-	                { className: 'model-name-input' },
-	                _react2.default.createElement(_TextField2.default, { value: name,
-	                  onChange: updateModelName,
-	                  hintText: 'Model Name' })
-	              ),
-	              _react2.default.createElement(_Toolbar.ToolbarSeparator, null)
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'create-field-grid' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'create-field-header' },
-	              _react2.default.createElement(
-	                'span',
-	                { className: 'create-field-title' },
-	                'Fields'
-	              ),
-	              _react2.default.createElement(_RaisedButton2.default, { primary: true, label: '+ ADD', onClick: addField })
+	                _Toolbar.ToolbarGroup,
+	                { firstChild: true },
+	                _react2.default.createElement(_Toolbar.ToolbarSeparator, null),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'model-name-input' },
+	                  _react2.default.createElement(_TextField2.default, { value: model.name,
+	                    onChange: updateModelName,
+	                    hintText: 'Model Name' })
+	                ),
+	                _react2.default.createElement(_Toolbar.ToolbarSeparator, null)
+	              )
 	            ),
 	            _react2.default.createElement(
-	              _GridList.GridList,
-	              null,
-	              (0, _lodash.times)(fields.length, function (fieldIdx) {
-	                return _react2.default.createElement(
-	                  _GridList.GridTile,
-	                  { key: fieldIdx },
-	                  _react2.default.createElement(
-	                    _Paper2.default,
-	                    { rounded: false },
-	                    _react2.default.createElement(_TextField2.default, { value: fields[fieldIdx].name,
-	                      onChange: function onChange(evt) {
-	                        return updateField('name', evt.target.value, fieldIdx);
-	                      },
-	                      type: 'text', hintText: 'Field Name' }),
-	                    _react2.default.createElement(_DataTypeDropDown2.default, { currType: fields[fieldIdx].type,
-	                      idx: fieldIdx,
-	                      onClick: updateField }),
-	                    _react2.default.createElement(_Checkbox2.default, { onCheck: function onCheck(evt, isChecked) {
-	                        return updateField('unique', isChecked, fieldIdx);
-	                      }, label: 'UNIQUE' }),
-	                    _react2.default.createElement(_Checkbox2.default, { onCheck: function onCheck(evt, isChecked) {
-	                        return updateField('allowNull', !isChecked, fieldIdx);
-	                      }, label: 'NOT NULL' })
-	                  ),
-	                  _react2.default.createElement(_FlatButton2.default, { label: 'DELETE FIELD',
-	                    secondary: true,
-	                    onClick: function onClick() {
-	                      return removeField(fieldIdx);
-	                    } })
-	                );
-	              })
-	            )
-	          ),
-	          _react2.default.createElement(
-	            _Toolbar.Toolbar,
-	            null,
+	              'div',
+	              { className: 'create-field-grid' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'create-field-header' },
+	                _react2.default.createElement(
+	                  'span',
+	                  { className: 'create-field-title' },
+	                  'Fields'
+	                ),
+	                _react2.default.createElement(_RaisedButton2.default, { primary: true, label: '+ ADD', onClick: addField })
+	              ),
+	              _react2.default.createElement(
+	                _GridList.GridList,
+	                null,
+	                (0, _lodash.times)(model.fields.length, function (fieldIdx) {
+	                  return _react2.default.createElement(
+	                    _GridList.GridTile,
+	                    { key: fieldIdx },
+	                    _react2.default.createElement(
+	                      _Paper2.default,
+	                      { rounded: false },
+	                      _react2.default.createElement(_TextField2.default, { value: model.fields[fieldIdx].name,
+	                        onChange: function onChange(evt) {
+	                          return updateField('name', evt.target.value, fieldIdx);
+	                        },
+	                        type: 'text', hintText: 'Field Name' }),
+	                      _react2.default.createElement(_DataTypeDropDown2.default, { currType: model.fields[fieldIdx].type,
+	                        idx: fieldIdx,
+	                        onClick: updateField }),
+	                      _react2.default.createElement(_Checkbox2.default, { onCheck: function onCheck(evt, isChecked) {
+	                          return updateField('unique', isChecked, fieldIdx);
+	                        }, label: 'UNIQUE' }),
+	                      _react2.default.createElement(_Checkbox2.default, { onCheck: function onCheck(evt, isChecked) {
+	                          return updateField('allowNull', !isChecked, fieldIdx);
+	                        }, label: 'NOT NULL' })
+	                    ),
+	                    _react2.default.createElement(_FlatButton2.default, { label: 'DELETE FIELD',
+	                      secondary: true,
+	                      onClick: function onClick() {
+	                        return removeField(fieldIdx);
+	                      } })
+	                  );
+	                })
+	              )
+	            ),
 	            _react2.default.createElement(
-	              _Toolbar.ToolbarGroup,
-	              { firstChild: true },
-	              _react2.default.createElement(_RaisedButton2.default, { label: 'Create Model', onClick: createModel })
+	              _Toolbar.Toolbar,
+	              null,
+	              _react2.default.createElement(
+	                _Toolbar.ToolbarGroup,
+	                { firstChild: true },
+	                _react2.default.createElement(_RaisedButton2.default, { label: 'Create Model', onClick: createModel })
+	              )
 	            )
 	          )
 	        ),
-	        _react2.default.createElement(_ValidationDialog2.default, { open: open, message: message, handleClose: closeValidationDialog }),
 	        _react2.default.createElement(
 	          'div',
-	          null,
-	          models.map(function (model, idx) {
-	            return _react2.default.createElement(
-	              'div',
-	              { key: idx },
-	              _react2.default.createElement(
-	                'table',
-	                null,
-	                _react2.default.createElement(
-	                  'thead',
-	                  null,
-	                  _react2.default.createElement(
-	                    'tr',
-	                    null,
-	                    _react2.default.createElement(
-	                      'th',
-	                      null,
-	                      model.name
-	                    )
-	                  ),
-	                  _react2.default.createElement(
-	                    'tr',
-	                    null,
-	                    _react2.default.createElement(
-	                      'th',
-	                      null,
-	                      'Field Name'
-	                    ),
-	                    _react2.default.createElement(
-	                      'th',
-	                      null,
-	                      'Data Type'
-	                    ),
-	                    _react2.default.createElement(
-	                      'th',
-	                      null,
-	                      'Unique'
-	                    ),
-	                    _react2.default.createElement(
-	                      'th',
-	                      null,
-	                      'Null'
-	                    )
-	                  )
-	                ),
-	                _react2.default.createElement(
-	                  'tbody',
-	                  null,
-	                  model.fields.map(function (field, idx) {
-	                    return _react2.default.createElement(
-	                      'tr',
-	                      { key: idx },
-	                      _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        field.name
-	                      ),
-	                      _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        field.type
-	                      ),
-	                      _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        field.unique ? 'Yes' : 'No'
-	                      ),
-	                      _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        field.allowNull === false ? 'No' : 'Yes'
-	                      )
-	                    );
-	                  })
-	                ),
-	                _react2.default.createElement(
-	                  'tfoot',
-	                  null,
-	                  _react2.default.createElement(
-	                    'tr',
-	                    null,
-	                    _react2.default.createElement(
-	                      'td',
-	                      null,
-	                      _react2.default.createElement('input', { type: 'button', value: 'Delete Model' })
-	                    ),
-	                    _react2.default.createElement(
-	                      'td',
-	                      null,
-	                      _react2.default.createElement('input', { type: 'button', value: 'Edit Model' })
-	                    )
-	                  )
-	                )
-	              )
-	            );
-	          })
+	          { className: 'dialogs' },
+	          _react2.default.createElement(_ValidationDialog2.default, { open: dialogs.modelValidation.open,
+	            message: dialogs.modelValidation.message,
+	            handleClose: function handleClose() {
+	              return closeDialogWindow('modelValidation');
+	            } })
 	        )
 	      );
 	    }
@@ -29600,6 +29535,9 @@
 	
 	  return CreateModel;
 	}(_react.Component);
+	
+	/*----------  CONNECT TO STORE  ----------*/
+	
 	
 	var mapStateToProps = function mapStateToProps(_ref) {
 	  var models = _ref.models;
@@ -69164,12 +69102,18 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	/*----------  LIBRARY COMPONENTS  ----------*/
+	
+	
+	/*----------  CONSTANTS  ----------*/
 	var sequelizeDataTypes = [{ textKey: 'String', valueKey: 'STRING' }, { textKey: 'Text', valueKey: 'TEXT' }, { textKey: 'Boolean', valueKey: 'BOOLEAN' }, { textKey: 'Integer', valueKey: 'INTEGER' }, { textKey: 'Decimal', valueKey: 'DECIMAL' }, { textKey: 'Float', valueKey: 'FLOAT' }, { textKey: 'Array', valueKey: 'ARRAY' }, { textKey: 'Date', valueKey: 'DATE' }];
 	
 	var dataSourceConfig = {
 	  text: 'textKey',
 	  value: 'valueKey'
 	};
+	
+	/*----------  COMPONENT  ----------*/
 	
 	var DataTypeDropDown = exports.DataTypeDropDown = function (_Component) {
 	  _inherits(DataTypeDropDown, _Component);
@@ -69207,6 +69151,9 @@
 	
 	  return DataTypeDropDown;
 	}(_react.Component);
+	
+	/*----------  CONNECT  ----------*/
+	
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {};
@@ -70097,12 +70044,6 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	/**
-	 * Dialog with action buttons. The actions are passed in as an array of React objects,
-	 * in this example [FlatButtons](/#/components/flat-button).
-	 *
-	 * You can also close this dialog by clicking outside the dialog, or with the 'Esc' key.
-	 */
 	var ValidationDialog = function (_Component) {
 	  _inherits(ValidationDialog, _Component);
 	
@@ -70113,11 +70054,6 @@
 	  }
 	
 	  _createClass(ValidationDialog, [{
-	    key: 'componentDidUpdate',
-	    value: function componentDidUpdate(prevProps, prevState) {
-	      if (prevProps.open !== this.props.open) console.log('before: ' + prevProps.open + ', after: ' + this.props.open);
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var actions = [_react2.default.createElement(_FlatButton2.default, {
