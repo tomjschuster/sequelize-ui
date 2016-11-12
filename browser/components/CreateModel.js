@@ -8,7 +8,7 @@ import { addModel, removeModel, updateModel } from '../redux/models';
 
 /*----------  LOCAL COMPONENTS  ----------*/
 import DataTypeDropDown from './DataTypeDropDown';
-import ValidationDialog from './ValidationDialog'
+import ValidationDialog from './ValidationDialog';
 
 /*----------  LIBRARY COMPONENTS  ----------*/
 import TextField from 'material-ui/TextField';
@@ -16,10 +16,8 @@ import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import {GridList, GridTile} from 'material-ui/GridList';
 import Checkbox from 'material-ui/Checkbox';
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
-import {List, ListItem} from 'material-ui/List';
+import {List, ListItem, makeSelectable} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
@@ -32,14 +30,17 @@ import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
 
 import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 
+// import {GridList, GridTile} from 'material-ui/GridList';
+// import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 // import DropDownMenu from 'material-ui/DropDownMenu';
 // import AutoComplete from 'material-ui/AutoComplete';
 // import FloatingActionButton from 'material-ui/FloatingActionButton';
 // import ContentAdd from 'material-ui/svg-icons/content/add';
 // import ContentRemove from 'material-ui/svg-icons/content/remove';
 
-/*----------  CONSTANTS AND HELPER FUNCTIONS  ----------*/
+let SelectableList = makeSelectable(List);
 
+/*----------  CONSTANTS AND HELPER FUNCTIONS  ----------*/
 const trash = [];
 
 const getInitialDialogs = () => {
@@ -52,13 +53,13 @@ const getInitialDialogs = () => {
 };
 
 const getInitialModel = () => {
-  return { idx: -1, name: '', fields: [{name: '', type: ''}] };
+  return { idx: -1, name: '', fields: [] };
 };
 
 const getInitialState = () => {
   let model = getInitialModel();
   let dialogs = getInitialDialogs();
-  return {model, dialogs};
+  return {model, dialogs, selectedIdx: null};
 };
 
 const makeDialogState = (key, open, message) => {
@@ -72,7 +73,8 @@ const makeDialogState = (key, open, message) => {
 const messages = {
   reqModelName: 'Please give your model a name.',
   reqFieldName: 'Every field must have a name.',
-  reqFieldType: 'Every field must have a data type.'
+  reqFieldType: 'Every field must have a data type.',
+  dupFieldName: 'Table name already exists. Please select another name.',
 };
 
 const convertFields = fields => {
@@ -80,6 +82,7 @@ const convertFields = fields => {
   for (let field of fields) output += field.name + ', ';
   return output.slice(0, -2);
 };
+
 
 /*----------  COMPONENT  ----------*/
 export class CreateModel extends Component {
@@ -137,6 +140,12 @@ export class CreateModel extends Component {
   }
 
   validateModel(model) {
+    let { models } = this.props;
+    let storeModel = find(models, {name: model.name});
+    if (storeModel && storeModel.id !== model.id) {
+      this.openDialogWindow('modelValidation', messages.dupFieldName);
+      return false;
+    }
     if (!model.name) {
       this.openDialogWindow('modelValidation', messages.reqModelName);
       return false;
@@ -159,35 +168,27 @@ export class CreateModel extends Component {
     let newModel = Object.assign({}, model);
     delete newModel.idx;
     this.props.addModel(newModel);
-    this.setState({model: getInitialModel()});
+    this.setState({model: getInitialModel(), selectedIdx: null});
     axios.post('/api', {models: [newModel]});
   }
 
-  getModel(model, idx) {
+  getModel(model, selectedIdx) {
     if (trash.indexOf(model) === -1) {
-      let newModel = Object.assign({}, model, {idx});
-      this.setState({model: newModel});
+      this.setState({model, selectedIdx});
     }
   }
 
-  saveModel(model) {
-    console.log(this.props.models, model);
-    if (model.idx + 1) {
-      let newModel = Object.assign({}, model);
-      delete newModel.idx;
-      this.props.updateModel(newModel, model.idx);
-      this.setState({model: getInitialModel()});
-    }
+  saveModel(savedModel) {
+    let { model } = this.state;
+    if (!this.validateModel(model)) return;
+    this.props.updateModel(savedModel);
+    this.setState({model: getInitialModel(), selectedIdx: null});
   }
 
-  deleteModel(model, idx) {
+  deleteModel(model) {
     trash.push(model);
-    this.props.removeModel(idx);
+    this.props.removeModel(model);
     this.setState({model: getInitialModel()});
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    console.log(prevState.model, this.state.model);
   }
 
   render() {
@@ -200,19 +201,21 @@ export class CreateModel extends Component {
           getModel,
           saveModel,
           deleteModel } = this;
-    let { model, dialogs } = this.state;
+    let { model, dialogs, selectedIdx } = this.state;
     let { models } = this.props;
     return (
       <div>
         <div className="your-models">
             <div className="row">
             <div className="col s12 m6 push-m3">
-              <List>
+              <SelectableList>
                 <div>
                   <h5 className="center-align" style={{color: darkBlack}}>
                     {models.length ? 'Your Models' : 'You have no models...'}
                   </h5>
-                <Subheader className="center-align">{models.length ? 'Click to edit' : 'Create one below'}</Subheader>
+                <Subheader className="center-align">
+                  {models.length ? 'Click to edit' : 'Create one below'}
+                </Subheader>
                 </div>
                 { models.map((model, modelIdx) => {
                   let fieldString = convertFields(model.fields);
@@ -220,6 +223,9 @@ export class CreateModel extends Component {
                     <div key={modelIdx}>
                     <ListItem
                       rightIconButton={<DeleteForeverIcon onClick={() => deleteModel(model, modelIdx)}/>}
+                      innerDivStyle={{
+                        backgroundColor: selectedIdx === modelIdx && grey400
+                      }}
                       primaryText={model.name}
                       secondaryText={`Fields: ${fieldString}`}
                       secondaryTextLines={1}
@@ -230,7 +236,7 @@ export class CreateModel extends Component {
                   );
                 })
                 }
-              </List>
+              </SelectableList>
               </div>
             </div>
         </div>
@@ -241,50 +247,55 @@ export class CreateModel extends Component {
               <ToolbarSeparator/>
               <div className="model-name-input">
                 <TextField value={model.name}
-                         onChange={updateModelName}
-                         hintText="Model Name"/>
+                           style={{
+                             fontSize: '1.5em'
+                           }}
+                           onChange={updateModelName}
+                           hintText="Model Name"
+                           hintStyle={{color: '#555'}}/>
               </div>
               <ToolbarSeparator/>
-              { model.idx + 1 ?
+              { model.id ?
                 <RaisedButton label="Save" primary={true} onClick={() => saveModel(model)} /> :
                 <RaisedButton label="Create" onClick={createModel} />
               }
               </ToolbarGroup>
             </Toolbar>
             <div className="create-field-grid">
-            <div className="create-field-header">
-              <span className="create-field-title">Fields</span>
-              <RaisedButton primary={true} label="+ ADD" onClick={addField} />
-            </div>
-              <GridList>
+              <div className="create-field-header">
+                <span className="create-field-title">Fields</span>
+                <RaisedButton primary={true} label="+ ADD" onClick={addField} />
+              </div>
+              <div className="row">
                 { model.fields.map( (field, fieldIdx) => (
-                  <GridTile key={fieldIdx}>
+                  <div className="col m12 l6" key={fieldIdx}>
                     <Paper rounded={false}>
-                        <TextField value={field.name}
-                                   onChange={evt => updateField('name', evt.target.value, fieldIdx)}
-                                   type="text" hintText="Field Name"/>
-                        <DataTypeDropDown currType={field.type}
-                                          idx={fieldIdx}
-                                          onClick={updateField}/>
-                        <Checkbox label="UNIQUE"
-                                  checked={Boolean(field.unique)}
-                                  onCheck={(evt, isChecked) => updateField('unique', isChecked, fieldIdx)}/>
-                        <Checkbox label="NOT NULL"
-                                  checked={field.allowNull === false}
-                                  onCheck={(evt, isChecked) => updateField('allowNull', !isChecked, fieldIdx)}/>
+                      <div className="field-box">
+                        <div className="row">
+                          <TextField value={field.name}
+                                     onChange={evt => updateField('name', evt.target.value, fieldIdx)}
+                                     type="text" hintText="Field Name"/>
+                          <DataTypeDropDown currType={field.type}
+                                            idx={fieldIdx}
+                                            onClick={updateField}/>
+                          <Checkbox label="UNIQUE"
+                                    checked={Boolean(field.unique)}
+                                    onCheck={(evt, isChecked) => updateField('unique', isChecked, fieldIdx)}/>
+                          <Checkbox label="NOT NULL"
+                                    checked={field.allowNull === false}
+                                    onCheck={(evt, isChecked) => updateField('allowNull', !isChecked, fieldIdx)}/>
+                        </div>
+                        <div className="row">
+                          <FlatButton label="DELETE FIELD"
+                                      secondary={true}
+                                      onClick={() => deleteField(fieldIdx)}/>
+                        </div>
+                      </div>
                     </Paper>
-                    <FlatButton label="DELETE FIELD"
-                                secondary={true}
-                                onClick={() => deleteField(fieldIdx)}/>
-                  </GridTile>
+                  </div>
                 ))}
-              </GridList>
+              </div>
             </div>
-            <Toolbar>
-              <ToolbarGroup firstChild={true}>
-              <RaisedButton label="Create Model" onClick={createModel} />
-              </ToolbarGroup>
-            </Toolbar>
           </Paper>
         </div>
         <div className="dialogs">
@@ -302,8 +313,8 @@ export class CreateModel extends Component {
 const mapStateToProps = ({ models }) => ({ models });
 const mapDispatchToProps = dispatch => ({
   addModel: model => dispatch(addModel(model)),
-  removeModel: (idx) => dispatch(removeModel(idx)),
-  updateModel: (model, idx) => dispatch(updateModel(model, idx))
+  removeModel: (model) => dispatch(removeModel(model)),
+  updateModel: (model) => dispatch(updateModel(model))
 });
 
 export default connect(

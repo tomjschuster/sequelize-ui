@@ -19,15 +19,14 @@ export const addModel = model => ({
   model
 });
 
-export const updateModel = (model, idx) => ({
+export const updateModel = model => ({
   type: UPDATE_MODEL,
-  idx,
   model
 });
 
-export const removeModel = idx => ({
+export const removeModel = model => ({
   type: REMOVE_MODEL,
-  idx
+  model
 });
 
 export const resetModels = () => ({
@@ -43,16 +42,18 @@ export default (state = initialState, action) => {
     case RECEIVE_MODELS:
       return action.models;
     case ADD_MODEL:
-      return [...state, action.model];
+      let id = models.reduce((prev, curr) => prev < curr.id ? curr.id : prev, 1) + 1;
+      let model = Object.assign({}, action.model, {id});
+      return [...state, model];
     case UPDATE_MODEL:
-      if ((action.idx >= 0) && (action.idx < models.length)) {
-        models[action.idx] = action.model;
-      }
+      models.forEach((model, idx) => {
+        if (model.id === action.model.id) models[idx] = action.model;
+      });
       return models;
     case REMOVE_MODEL:
-      if ((action.idx >= 0) && (action.idx < models.length)) {
-        models.splice(action.idx, 1);
-      }
+      let idx = models.reduce((prev, curr, i) =>
+        prev === -1 && curr.id === action.model.id ? curr.id : prev, -1);
+      if (idx !== -1) models.splice(action.idx, 1);
       return models;
     case RESET_MODELS:
       return [];

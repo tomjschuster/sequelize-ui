@@ -23,4 +23,6 @@ body {
   padding-right: 1em;
 }
 
-
+.field-box {
+  padding: 3% 3% 0;
+}
