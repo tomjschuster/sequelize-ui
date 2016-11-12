@@ -29589,39 +29589,51 @@
 	                _react2.default.createElement(_RaisedButton2.default, { primary: true, label: '+ ADD', onClick: addField })
 	              ),
 	              _react2.default.createElement(
-	                _GridList.GridList,
-	                null,
+	                'div',
+	                { className: 'row' },
 	                model.fields.map(function (field, fieldIdx) {
 	                  return _react2.default.createElement(
-	                    _GridList.GridTile,
-	                    { key: fieldIdx },
+	                    'div',
+	                    { className: 'col m12 l6', key: fieldIdx },
 	                    _react2.default.createElement(
 	                      _Paper2.default,
 	                      { rounded: false },
-	                      _react2.default.createElement(_TextField2.default, { value: field.name,
-	                        onChange: function onChange(evt) {
-	                          return updateField('name', evt.target.value, fieldIdx);
-	                        },
-	                        type: 'text', hintText: 'Field Name' }),
-	                      _react2.default.createElement(_DataTypeDropDown2.default, { currType: field.type,
-	                        idx: fieldIdx,
-	                        onClick: updateField }),
-	                      _react2.default.createElement(_Checkbox2.default, { label: 'UNIQUE',
-	                        checked: Boolean(field.unique),
-	                        onCheck: function onCheck(evt, isChecked) {
-	                          return updateField('unique', isChecked, fieldIdx);
-	                        } }),
-	                      _react2.default.createElement(_Checkbox2.default, { label: 'NOT NULL',
-	                        checked: field.allowNull === false,
-	                        onCheck: function onCheck(evt, isChecked) {
-	                          return updateField('allowNull', !isChecked, fieldIdx);
-	                        } })
-	                    ),
-	                    _react2.default.createElement(_FlatButton2.default, { label: 'DELETE FIELD',
-	                      secondary: true,
-	                      onClick: function onClick() {
-	                        return deleteField(fieldIdx);
-	                      } })
+	                      _react2.default.createElement(
+	                        'div',
+	                        { className: 'field-box' },
+	                        _react2.default.createElement(
+	                          'div',
+	                          { className: 'row' },
+	                          _react2.default.createElement(_TextField2.default, { value: field.name,
+	                            onChange: function onChange(evt) {
+	                              return updateField('name', evt.target.value, fieldIdx);
+	                            },
+	                            type: 'text', hintText: 'Field Name' }),
+	                          _react2.default.createElement(_DataTypeDropDown2.default, { currType: field.type,
+	                            idx: fieldIdx,
+	                            onClick: updateField }),
+	                          _react2.default.createElement(_Checkbox2.default, { label: 'UNIQUE',
+	                            checked: Boolean(field.unique),
+	                            onCheck: function onCheck(evt, isChecked) {
+	                              return updateField('unique', isChecked, fieldIdx);
+	                            } }),
+	                          _react2.default.createElement(_Checkbox2.default, { label: 'NOT NULL',
+	                            checked: field.allowNull === false,
+	                            onCheck: function onCheck(evt, isChecked) {
+	                              return updateField('allowNull', !isChecked, fieldIdx);
+	                            } })
+	                        ),
+	                        _react2.default.createElement(
+	                          'div',
+	                          { className: 'row' },
+	                          _react2.default.createElement(_FlatButton2.default, { label: 'DELETE FIELD',
+	                            secondary: true,
+	                            onClick: function onClick() {
+	                              return deleteField(fieldIdx);
+	                            } })
+	                        )
+	                      )
+	                    )
 	                  );
 	                })
 	              )

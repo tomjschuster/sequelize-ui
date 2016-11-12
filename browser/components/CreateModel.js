@@ -256,29 +256,35 @@ export class CreateModel extends Component {
               <span className="create-field-title">Fields</span>
               <RaisedButton primary={true} label="+ ADD" onClick={addField} />
             </div>
-              <GridList>
+              <div className="row">
                 { model.fields.map( (field, fieldIdx) => (
-                  <GridTile key={fieldIdx}>
+                  <div className="col m12 l6" key={fieldIdx}>
                     <Paper rounded={false}>
-                        <TextField value={field.name}
-                                   onChange={evt => updateField('name', evt.target.value, fieldIdx)}
-                                   type="text" hintText="Field Name"/>
-                        <DataTypeDropDown currType={field.type}
-                                          idx={fieldIdx}
-                                          onClick={updateField}/>
-                        <Checkbox label="UNIQUE"
-                                  checked={Boolean(field.unique)}
-                                  onCheck={(evt, isChecked) => updateField('unique', isChecked, fieldIdx)}/>
-                        <Checkbox label="NOT NULL"
-                                  checked={field.allowNull === false}
-                                  onCheck={(evt, isChecked) => updateField('allowNull', !isChecked, fieldIdx)}/>
+                      <div className="field-box">
+                        <div className="row">
+                          <TextField value={field.name}
+                                     onChange={evt => updateField('name', evt.target.value, fieldIdx)}
+                                     type="text" hintText="Field Name"/>
+                          <DataTypeDropDown currType={field.type}
+                                            idx={fieldIdx}
+                                            onClick={updateField}/>
+                          <Checkbox label="UNIQUE"
+                                    checked={Boolean(field.unique)}
+                                    onCheck={(evt, isChecked) => updateField('unique', isChecked, fieldIdx)}/>
+                          <Checkbox label="NOT NULL"
+                                    checked={field.allowNull === false}
+                                    onCheck={(evt, isChecked) => updateField('allowNull', !isChecked, fieldIdx)}/>
+                        </div>
+                        <div className="row">
+                          <FlatButton label="DELETE FIELD"
+                                      secondary={true}
+                                      onClick={() => deleteField(fieldIdx)}/>
+                        </div>
+                      </div>
                     </Paper>
-                    <FlatButton label="DELETE FIELD"
-                                secondary={true}
-                                onClick={() => deleteField(fieldIdx)}/>
-                  </GridTile>
+                  </div>
                 ))}
-              </GridList>
+              </div>
             </div>
             <Toolbar>
               <ToolbarGroup firstChild={true}>
