@@ -28,7 +28,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import ModeEditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
 
-import {grey400, darkBlack, lightBlack, red400, white} from 'material-ui/styles/colors';
+import {grey400, darkBlack, lightBlack, red400, white, blueGrey200} from 'material-ui/styles/colors';
 
 // import {GridList, GridTile} from 'material-ui/GridList';
 // import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
@@ -263,6 +263,8 @@ export class CreateModel extends Component {
                                           backgroundColor={red400}
                                   onClick={() => deleteModel(model)} /> }
               { !model.id && <RaisedButton label="Create"
+                                           disabled={!model.name}
+                                           disabledBackgroundColor={blueGrey200}
                                            secondary={true}
                                            onClick={createModel} /> }
               </ToolbarGroup>
