@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 /*----------  INITIAL STATE  ----------*/
 const initialState = [];
 
@@ -34,6 +36,10 @@ export const resetModels = () => ({
 });
 
 /*----------  THUNKS  ----------*/
+
+/*----------  FUNCTIONS  ----------*/
+export const requestModelDownload = models =>  axios.post('/api', {models});
+
 
 /*----------  REDUCER  ----------*/
 export default (state = initialState, action) => {
