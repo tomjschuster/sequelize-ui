@@ -28,7 +28,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import ModeEditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
 
-import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import {grey400, darkBlack, lightBlack, red400, white} from 'material-ui/styles/colors';
 
 // import {GridList, GridTile} from 'material-ui/GridList';
 // import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
@@ -255,10 +255,16 @@ export class CreateModel extends Component {
                            hintStyle={{color: '#555'}}/>
               </div>
               <ToolbarSeparator/>
-              { model.id ?
-                <RaisedButton label="Save" primary={true} onClick={() => saveModel(model)} /> :
-                <RaisedButton label="Create" onClick={createModel} />
-              }
+              { model.id && <RaisedButton label="Save"
+                                          primary={true}
+                                          onClick={() => saveModel(model)} /> }
+              { model.id && <RaisedButton label="Delete"
+                                          labelColor={white}
+                                          backgroundColor={red400}
+                                  onClick={() => deleteModel(model)} /> }
+              { !model.id && <RaisedButton label="Create"
+                                           secondary={true}
+                                           onClick={createModel} /> }
               </ToolbarGroup>
             </Toolbar>
             <div className="create-field-grid">
@@ -287,7 +293,7 @@ export class CreateModel extends Component {
                         </div>
                         <div className="row">
                           <FlatButton label="DELETE FIELD"
-                                      secondary={true}
+                                      labelStyle={{color: red400}}
                                       onClick={() => deleteField(fieldIdx)}/>
                         </div>
                       </div>

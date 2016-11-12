@@ -11,13 +11,12 @@ import store from './store';
 import Routes from './Routes';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import indigoTealTheme from './themes/indigoTeal';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 
-const muiTheme = getMuiTheme({
-});
 
 render(
-  <MuiThemeProvider>
+  <MuiThemeProvider muiTheme={getMuiTheme(indigoTealTheme)}>
     <Provider store={store}>
       <Routes />
     </Provider>
