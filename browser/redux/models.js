@@ -43,7 +43,9 @@ export default (state = initialState, action) => {
     case RECEIVE_MODELS:
       return action.models;
     case ADD_MODEL:
-      return [...state, action.model];
+      let id = models.reduce((prev, curr) => prev < curr.id ? curr.id : prev, 1) + 1;
+      let model = Object.assign({}, action.model, {id});
+      return [...state, model];
     case UPDATE_MODEL:
       if ((action.idx >= 0) && (action.idx < models.length)) {
         models[action.idx] = action.model;

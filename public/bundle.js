@@ -48265,7 +48265,11 @@
 	    case RECEIVE_MODELS:
 	      return action.models;
 	    case ADD_MODEL:
-	      return [].concat(_toConsumableArray(state), [action.model]);
+	      var id = models.reduce(function (prev, curr) {
+	        return prev < curr.id ? curr.id : prev;
+	      }, 1) + 1;
+	      var model = Object.assign({}, action.model, { id: id });
+	      return [].concat(_toConsumableArray(state), [model]);
 	    case UPDATE_MODEL:
 	      if (action.idx >= 0 && action.idx < models.length) {
 	        models[action.idx] = action.model;
