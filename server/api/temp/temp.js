@@ -1,29 +1,14 @@
 const Sequelize = require('sequelize');
 const db = require('./_db');
 
-const Abc = db.define('abc', {
-  poiu: {
-    type: Sequelize.BOOLEAN,
+const Awejffks = db.define('awejffks', {
+  aseflis'vjkj: {
+    type: Sequelize.DATE,
     allowNull: false,
     tunique: true,
   },
-  wero: {
-    type: Sequelize.DATE,
+  0uilkj: {
+    type: Sequelize.INTEGER,
     tunique: true,
   }
-})
-
-const Badf = db.define('badf', {
-
-})
-
-const Awerff = db.define('awerff', {
-  ewqrqwr: {
-    type: Sequelize.DECIMAL,
-    tunique: true,
-  },
-  jlkjlk: {
-    type: Sequelize.STRING,
-    tunique: true,
-  }
-})
+});

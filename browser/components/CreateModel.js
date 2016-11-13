@@ -27,11 +27,12 @@ import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import ModeEditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
+import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card';
+import Toggle from 'material-ui/Toggle';
 
 import {grey400, darkBlack, lightBlack, red400, white, blueGrey200} from 'material-ui/styles/colors';
 
 // import {GridList, GridTile} from 'material-ui/GridList';
-// import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 // import DropDownMenu from 'material-ui/DropDownMenu';
 // import AutoComplete from 'material-ui/AutoComplete';
 // import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -59,7 +60,7 @@ const getInitialModel = () => {
 const getInitialState = () => {
   let model = getInitialModel();
   let dialogs = getInitialDialogs();
-  return {model, dialogs, selectedIdx: null};
+  return {model, dialogs, selectedIdx: null, expandedFields: []};
 };
 
 const makeDialogState = (key, open, message) => {
@@ -83,6 +84,16 @@ const convertFields = fields => {
   return output.slice(0, -2);
 };
 
+const isNumber = (type) => {
+  switch (type) {
+    case 'INTEGER':
+    case 'FLOAT':
+    case 'REAL':
+    case 'DOUBLE':
+    case 'DECIMAL': return true;
+    default: return false;
+  }
+}
 
 /*----------  COMPONENT  ----------*/
 export class CreateModel extends Component {
@@ -93,15 +104,18 @@ export class CreateModel extends Component {
     /*----------  BIND INSTANCE METHODS  ----------*/
     this.openDialogWindow = this.openDialogWindow.bind(this);
     this.closeDialogWindow = this.closeDialogWindow.bind(this);
+    this.toggleFieldState = this.toggleFieldState.bind(this);
     this.updateModelName = this.updateModelName.bind(this);
     this.addField = this.addField.bind(this);
     this.updateField = this.updateField.bind(this);
+    this.updateValidation = this.updateValidation.bind(this);
     this.deleteField = this.deleteField.bind(this);
     this.createModel = this.createModel.bind(this);
     this.getModel = this.getModel.bind(this);
     this.saveModel = this.saveModel.bind(this);
     this.deleteModel = this.deleteModel.bind(this);
   }
+
 
   /*----------  MANAGE DIALOG WiNDOW STATE  ----------*/
   openDialogWindow(key, message) {
@@ -114,6 +128,14 @@ export class CreateModel extends Component {
     this.setState({dialogs});
   }
 
+  /*----------  MANAGE FIELD OPEN STATE  ----------*/
+  toggleFieldState(idx) {
+    console.log(this.state.expandedFields);
+    let expandedFields = [...this.state.expandedFields];
+    expandedFields[idx] = !expandedFields[idx];
+    this.setState({expandedFields});
+  }
+
   /*----------  EDIT SELECTED MODEL  ----------*/
   updateModelName(evt) {
     let name = evt.target.value;
@@ -124,7 +146,8 @@ export class CreateModel extends Component {
   addField() {
     let fields = [...this.state.model.fields, {name: '', type: ''}];
     let model = Object.assign({}, this.state.model, {fields});
-    this.setState({ model });
+    let expandedFields = [...this.state.expandedFields, false];
+    this.setState({ model, expandedFields });
   }
 
   updateField(key, val, idx) {
@@ -134,11 +157,21 @@ export class CreateModel extends Component {
     this.setState({model});
   }
 
+  updateValidation(key, val, idx) {
+    let fields = [...this.state.model.fields];
+    fields[idx].validate = fields[idx].validate || {};
+    fields[idx].validate[key] = val;
+    let model = Object.assign({}, this.state.model, {fields});
+    this.setState({model});
+  }
+
   deleteField(idx) {
     let fields = [...this.state.model.fields];
+    let expandedFields = [...this.state.expandedFields];
     fields.splice(idx, 1);
+    expandedFields.splice(idx, 1);
     let model = Object.assign({}, this.state.model, {fields});
-    this.setState({ model });
+    this.setState({ model, expandedFields });
   }
 
   /*----------  VALIDATE MODEL BEFORE CREATE/SAVE  ----------*/
@@ -172,7 +205,7 @@ export class CreateModel extends Component {
     let newModel = Object.assign({}, model);
     delete newModel.idx;
     this.props.addModel(newModel);
-    this.setState({model: getInitialModel(), selectedIdx: null});
+    this.setState({model: getInitialModel(), selectedIdx: null, expandedFields: []});
     axios.post('/api', {models: [newModel]});
   }
 
@@ -186,7 +219,7 @@ export class CreateModel extends Component {
     let { model } = this.state;
     if (!this.validateModel(model)) return;
     this.props.updateModel(savedModel);
-    this.setState({model: getInitialModel(), selectedIdx: null});
+    this.setState({model: getInitialModel(), selectedIdx: null, expandedFields: []});
   }
 
   deleteModel(model) {
@@ -198,15 +231,17 @@ export class CreateModel extends Component {
   /*----------  RENDER COMPONENT  ----------*/
   render() {
     let { closeDialogWindow,
+          toggleFieldState,
           updateModelName,
           addField,
           updateField,
+          updateValidation,
           deleteField,
           createModel,
           getModel,
           saveModel,
           deleteModel } = this;
-    let { model, dialogs, selectedIdx } = this.state;
+    let { model, dialogs, selectedIdx, expandedFields } = this.state;
     let { models } = this.props;
     return (
       <div>
@@ -282,29 +317,181 @@ export class CreateModel extends Component {
               <div className="row">
                 { model.fields.map( (field, fieldIdx) => (
                   <div className="col m12 l6" key={fieldIdx}>
-                    <Paper rounded={false}>
-                      <div className="field-box">
-                        <div className="row">
-                          <TextField value={field.name}
-                                     onChange={evt => updateField('name', evt.target.value, fieldIdx)}
-                                     type="text" hintText="Field Name"/>
-                          <DataTypeDropDown currType={field.type}
-                                            idx={fieldIdx}
-                                            onClick={updateField}/>
-                          <Checkbox label="UNIQUE"
-                                    checked={Boolean(field.unique)}
-                                    onCheck={(evt, isChecked) => updateField('unique', isChecked, fieldIdx)}/>
-                          <Checkbox label="NOT NULL"
-                                    checked={field.allowNull === false}
-                                    onCheck={(evt, isChecked) => updateField('allowNull', !isChecked, fieldIdx)}/>
-                        </div>
-                        <div className="row">
-                          <FlatButton label="DELETE FIELD"
-                                      labelStyle={{color: red400}}
-                                      onClick={() => deleteField(fieldIdx)}/>
-                        </div>
-                      </div>
-                    </Paper>
+                    <Card expanded={expandedFields[fieldIdx]}
+                          style={{
+                            marginBottom: '5%'
+                          }}>
+                          <CardActions>
+                            <TextField value={field.name}
+                                       onChange={evt => updateField('name', evt.target.value, fieldIdx)}
+                                       type="text" hintText="Field Name"/>
+                            <DataTypeDropDown currType={field.type}
+                                              idx={fieldIdx}
+                                              onClick={updateField}/>
+                            <FlatButton label="DELETE FIELD"
+                                        labelStyle={{color: red400}}
+                                        onClick={() => deleteField(fieldIdx)}/>
+                            <Toggle onToggle={() => toggleFieldState(fieldIdx)}
+                                    label="More Options"
+                                    labelPosition="right"/>
+                          </CardActions>
+                          <CardActions expandable={true}>
+                            <div className="row">
+                              <div className="col 4">
+                                <ul>
+                                  <li>
+                                  <Checkbox label="UNIQUE"
+                                            checked={Boolean(field.unique)}
+                                            onCheck={(evt, isChecked) =>
+                                              updateField('unique', isChecked, fieldIdx)}/>
+                                  </li>
+                                  {model.fields[fieldIdx].unique && (
+                                    <li>
+                                      <TextField value={field.uniqueKey}
+                                               style={{
+                                                 fontSize: '0.8em',
+                                                 width: '100%',
+                                                 marginTop: -10,
+                                                 marginBottom: -10
+                                               }}
+                                               onChange={evt =>
+                                                 updateField('uniqueKey', evt.target.value, fieldIdx)}
+                                               type="text"
+                                               hintText="Unique Key"/>
+                                  </li>
+                                  )}
+                                  <li>
+                                    <Checkbox label="NOT NULL"
+                                              checked={field.allowNull === false}
+                                              onCheck={(evt, isChecked) =>
+                                                updateField('allowNull', !isChecked, fieldIdx)}/>
+                                  </li>
+                                  <li>
+                                    <Checkbox label="PRIMARY KEY"
+                                              checked={field.primaryKey}
+                                              onCheck={(evt, isChecked) =>
+                                                updateField('primaryKey', isChecked, fieldIdx)}/>
+                                  </li>
+                                  <li>
+                                    <Checkbox label="AUTOINCREMENT"
+                                              checked={field.autoIncrement}
+                                              onCheck={(evt, isChecked) =>
+                                                updateField('autoIncrement', isChecked, fieldIdx)}/>
+                                  </li>
+                                </ul>
+                              </div>
+                              <div className="col 4">
+                                <ul>
+                                  <li>
+                                    <TextField value={field.default}
+                                               style={{
+                                                 fontSize: '0.8em',
+                                                 width: '100%',
+                                                 marginTop: -10,
+                                                 marginBottom: -10
+                                               }}
+                                               onChange={evt =>
+                                                 updateField('default', evt.target.value, fieldIdx)}
+                                               type="text" hintText="Default Value"/>
+                                  </li>
+                                  <li>
+                                    <TextField value={field.comment}
+                                               style={{
+                                                 fontSize: '0.8em',
+                                                 width: '100%',
+                                                 marginTop: -10,
+                                                 marginBottom: -10
+                                               }}
+                                               onChange={evt =>
+                                                 updateField('comment', evt.target.value, fieldIdx)}
+                                               type="text" hintText="Comment"/>
+                                  </li>
+                                  <li>
+                                    <TextField value={field.field}
+                                               style={{
+                                                 fontSize: '0.8em',
+                                                 width: '100%',
+                                                 marginTop: -10,
+                                                 marginBottom: -10
+                                               }}
+                                               onChange={evt =>
+                                                 updateField('field', evt.target.value, fieldIdx)}
+                                               type="text" hintText="Field Name"/>
+                                  </li>
+                                </ul>
+                              </div>
+                              <div className="col 4">
+                                <ul>
+                                  <li>Validation</li>
+                                  <li>
+                                      <TextField value={field.validate && field.validate.is}
+                                                 style={{
+                                                   fontSize: '0.8em',
+                                                   width: '100%',
+                                                   marginTop: -10,
+                                                   marginBottom: -10
+                                                 }}
+                                                 onChange={evt =>
+                                                   updateValidation('is', evt.target.value, fieldIdx)}
+                                                 type="text"
+                                                 hintText="is (RegExp)"/>
+                                  </li>
+                                  <li>
+                                      <TextField value={field.validate && field.validate.contains}
+                                                 style={{
+                                                   fontSize: '0.8em',
+                                                   width: '100%',
+                                                   marginTop: -10,
+                                                   marginBottom: -10
+                                                 }}
+                                                 onChange={evt =>
+                                                   updateValidation('contains', evt.target.value, fieldIdx)}
+                                                 type="text"
+                                                 hintText="contains"/>
+                                  </li>
+                                  { field.type === 'STRING' &&
+                                    <li>
+                                      <Checkbox label="isEmail"
+                                                checked={field.validate && field.validate.isEmail}
+                                                onCheck={(evt, isChecked) =>
+                                                  updateValidation('isEmail', isChecked, fieldIdx)}/>
+                                      <Checkbox label="isUrl"
+                                                checked={field.validate && field.validate.isUrl}
+                                                onCheck={(evt, isChecked) =>
+                                                  updateValidation('isUrl', isChecked, fieldIdx)}/>
+                                    </li>
+                                  }
+                                  { isNumber(field.type) && (
+                                    <li>
+                                      <TextField value={field.validate && field.validate.min}
+                                                 style={{
+                                                   fontSize: '0.8em',
+                                                   width: '33%',
+                                                   marginTop: -10,
+                                                   marginBottom: -10
+                                                 }}
+                                                 onChange={evt =>
+                                                   updateValidation('min', evt.target.value, fieldIdx)}
+                                                 type="text"
+                                                 hintText="min"/>
+                                      <TextField value={field.validate && field.validate.max}
+                                                 style={{
+                                                   fontSize: '0.8em',
+                                                   width: '33%',
+                                                   marginTop: -10,
+                                                   marginBottom: -10
+                                                 }}
+                                                 onChange={evt =>
+                                                   updateValidation('max', evt.target.value, fieldIdx)}
+                                                 type="text"
+                                                 hintText="max"/>
+                                    </li>
+                                  )}
+                                </ul>
+                              </div>
+                            </div>
+                          </CardActions>
+                    </Card>
                   </div>
                 ))}
               </div>
