@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { requestModelDownload } from '../redux/models';
+
+/*----------  LIBRARY COMPONENTS  ----------*/
 import AppBar from 'material-ui/AppBar';
-import ActionHome from 'material-ui/svg-icons/action/home';
 import FlatButton from 'material-ui/FlatButton';
 
-
+/*----------  COMPONENT  ----------*/
 export class App extends Component {
   render() {
     let { children, models } = this.props;
@@ -23,6 +24,7 @@ export class App extends Component {
 }
 
 
+/*----------  CONNECT  ----------*/
 const mapStateToProps = ({ models }) => ({ models });
 const mapDispatchToProps = () => ({});
 

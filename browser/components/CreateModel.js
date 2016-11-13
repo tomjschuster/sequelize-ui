@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { find, findIndex } from 'lodash';
+import { find } from 'lodash';
 import axios from 'axios';
 
 /*----------  ACTION/THUNK CREATORS  ----------*/
 import { addModel, removeModel, updateModel } from '../redux/models';
 
 /*----------  LOCAL COMPONENTS  ----------*/
-import DataTypeDropDown from './DataTypeDropDown';
-import ValidationDialog from './ValidationDialog';
+import ConfirmDialog from './ConfirmDialog';
+import Field from './Field';
 
 /*----------  LIBRARY COMPONENTS  ----------*/
 import TextField from 'material-ui/TextField';
@@ -16,19 +16,10 @@ import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import Checkbox from 'material-ui/Checkbox';
 import {List, ListItem, makeSelectable} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-import Avatar from 'material-ui/Avatar';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import ModeEditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
-import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card';
-import Toggle from 'material-ui/Toggle';
 
 import {grey400, darkBlack, lightBlack, red400, white, blueGrey200} from 'material-ui/styles/colors';
 
@@ -46,8 +37,9 @@ const trash = [];
 
 const getInitialDialogs = () => {
   return {
-    modelValidation: {
+    confirm: {
       open: false,
+      title: '',
       message: ''
     }
   };
@@ -63,10 +55,11 @@ const getInitialState = () => {
   return {model, dialogs, selectedIdx: null, expandedFields: []};
 };
 
-const makeDialogState = (key, open, message) => {
+const makeDialogState = (key, open, title, message) => {
   let state = {};
   state[key] = {};
   state[key].open = open;
+  state[key].title = title;
   state[key].message = message;
   return state;
 };
@@ -83,17 +76,6 @@ const convertFields = fields => {
   for (let field of fields) output += field.name + ', ';
   return output.slice(0, -2);
 };
-
-const isNumber = (type) => {
-  switch (type) {
-    case 'INTEGER':
-    case 'FLOAT':
-    case 'REAL':
-    case 'DOUBLE':
-    case 'DECIMAL': return true;
-    default: return false;
-  }
-}
 
 /*----------  COMPONENT  ----------*/
 export class CreateModel extends Component {
@@ -118,13 +100,13 @@ export class CreateModel extends Component {
 
 
   /*----------  MANAGE DIALOG WiNDOW STATE  ----------*/
-  openDialogWindow(key, message) {
-    let dialogs = Object.assign({}, this.state.dialogs, makeDialogState(key, true, message));
+  openDialogWindow(key, title, message) {
+    let dialogs = Object.assign({}, this.state.dialogs, makeDialogState(key, true, title, message));
     this.setState({dialogs});
   }
 
   closeDialogWindow(key) {
-    let dialogs = Object.assign({}, this.state.dialogs, makeDialogState(key, false, ''));
+    let dialogs = Object.assign({}, this.state.dialogs, makeDialogState(key, false, '', ''));
     this.setState({dialogs});
   }
 
@@ -179,19 +161,19 @@ export class CreateModel extends Component {
     let { models } = this.props;
     let storeModel = find(models, {name: model.name});
     if (storeModel && storeModel.id !== model.id) {
-      this.openDialogWindow('modelValidation', messages.dupFieldName);
+      this.openDialogWindow('confirm', 'Validation Error', messages.dupFieldName);
       return false;
     }
     if (!model.name) {
-      this.openDialogWindow('modelValidation', messages.reqModelName);
+      this.openDialogWindow('confirm', 'Validation Error', messages.reqModelName);
       return false;
     }
     for (let field of model.fields) {
       if (!field.name) {
-        this.openDialogWindow('modelValidation', messages.reqFieldName);
+        this.openDialogWindow('confirm', 'Validation Error', messages.reqFieldName);
         return false;
       } else if (!field.type) {
-        this.openDialogWindow('modelValidation', messages.reqFieldType);
+        this.openDialogWindow('confirm', 'Validation Error', messages.reqFieldType);
         return false;
       }
     }
@@ -316,192 +298,23 @@ export class CreateModel extends Component {
               </div>
               <div className="row">
                 { model.fields.map( (field, fieldIdx) => (
-                  <div className="col m12 l6" key={fieldIdx}>
-                    <Card expanded={expandedFields[fieldIdx]}
-                          style={{
-                            marginBottom: '5%'
-                          }}>
-                          <CardActions>
-                            <TextField value={field.name}
-                                       onChange={evt => updateField('name', evt.target.value, fieldIdx)}
-                                       type="text" hintText="Field Name"/>
-                            <DataTypeDropDown currType={field.type}
-                                              idx={fieldIdx}
-                                              onClick={updateField}/>
-                            <FlatButton label="DELETE FIELD"
-                                        labelStyle={{color: red400}}
-                                        onClick={() => deleteField(fieldIdx)}/>
-                            <Toggle onToggle={() => toggleFieldState(fieldIdx)}
-                                    label="More Options"
-                                    labelPosition="right"/>
-                          </CardActions>
-                          <CardActions expandable={true}>
-                            <div className="row">
-                              <div className="col 4">
-                                <ul>
-                                  <li>
-                                  <Checkbox label="UNIQUE"
-                                            checked={Boolean(field.unique)}
-                                            onCheck={(evt, isChecked) =>
-                                              updateField('unique', isChecked, fieldIdx)}/>
-                                  </li>
-                                  {model.fields[fieldIdx].unique && (
-                                    <li>
-                                      <TextField value={field.uniqueKey}
-                                               style={{
-                                                 fontSize: '0.8em',
-                                                 width: '100%',
-                                                 marginTop: -10,
-                                                 marginBottom: -10
-                                               }}
-                                               onChange={evt =>
-                                                 updateField('uniqueKey', evt.target.value, fieldIdx)}
-                                               type="text"
-                                               hintText="Unique Key"/>
-                                  </li>
-                                  )}
-                                  <li>
-                                    <Checkbox label="NOT NULL"
-                                              checked={field.allowNull === false}
-                                              onCheck={(evt, isChecked) =>
-                                                updateField('allowNull', !isChecked, fieldIdx)}/>
-                                  </li>
-                                  <li>
-                                    <Checkbox label="PRIMARY KEY"
-                                              checked={field.primaryKey}
-                                              onCheck={(evt, isChecked) =>
-                                                updateField('primaryKey', isChecked, fieldIdx)}/>
-                                  </li>
-                                  <li>
-                                    <Checkbox label="AUTOINCREMENT"
-                                              checked={field.autoIncrement}
-                                              onCheck={(evt, isChecked) =>
-                                                updateField('autoIncrement', isChecked, fieldIdx)}/>
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="col 4">
-                                <ul>
-                                  <li>
-                                    <TextField value={field.default}
-                                               style={{
-                                                 fontSize: '0.8em',
-                                                 width: '100%',
-                                                 marginTop: -10,
-                                                 marginBottom: -10
-                                               }}
-                                               onChange={evt =>
-                                                 updateField('default', evt.target.value, fieldIdx)}
-                                               type="text" hintText="Default Value"/>
-                                  </li>
-                                  <li>
-                                    <TextField value={field.comment}
-                                               style={{
-                                                 fontSize: '0.8em',
-                                                 width: '100%',
-                                                 marginTop: -10,
-                                                 marginBottom: -10
-                                               }}
-                                               onChange={evt =>
-                                                 updateField('comment', evt.target.value, fieldIdx)}
-                                               type="text" hintText="Comment"/>
-                                  </li>
-                                  <li>
-                                    <TextField value={field.field}
-                                               style={{
-                                                 fontSize: '0.8em',
-                                                 width: '100%',
-                                                 marginTop: -10,
-                                                 marginBottom: -10
-                                               }}
-                                               onChange={evt =>
-                                                 updateField('field', evt.target.value, fieldIdx)}
-                                               type="text" hintText="Field Name"/>
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="col 4">
-                                <ul>
-                                  <li>Validation</li>
-                                  <li>
-                                      <TextField value={field.validate && field.validate.is}
-                                                 style={{
-                                                   fontSize: '0.8em',
-                                                   width: '100%',
-                                                   marginTop: -10,
-                                                   marginBottom: -10
-                                                 }}
-                                                 onChange={evt =>
-                                                   updateValidation('is', evt.target.value, fieldIdx)}
-                                                 type="text"
-                                                 hintText="is (RegExp)"/>
-                                  </li>
-                                  <li>
-                                      <TextField value={field.validate && field.validate.contains}
-                                                 style={{
-                                                   fontSize: '0.8em',
-                                                   width: '100%',
-                                                   marginTop: -10,
-                                                   marginBottom: -10
-                                                 }}
-                                                 onChange={evt =>
-                                                   updateValidation('contains', evt.target.value, fieldIdx)}
-                                                 type="text"
-                                                 hintText="contains"/>
-                                  </li>
-                                  { field.type === 'STRING' &&
-                                    <li>
-                                      <Checkbox label="isEmail"
-                                                checked={field.validate && field.validate.isEmail}
-                                                onCheck={(evt, isChecked) =>
-                                                  updateValidation('isEmail', isChecked, fieldIdx)}/>
-                                      <Checkbox label="isUrl"
-                                                checked={field.validate && field.validate.isUrl}
-                                                onCheck={(evt, isChecked) =>
-                                                  updateValidation('isUrl', isChecked, fieldIdx)}/>
-                                    </li>
-                                  }
-                                  { isNumber(field.type) && (
-                                    <li>
-                                      <TextField value={field.validate && field.validate.min}
-                                                 style={{
-                                                   fontSize: '0.8em',
-                                                   width: '33%',
-                                                   marginTop: -10,
-                                                   marginBottom: -10
-                                                 }}
-                                                 onChange={evt =>
-                                                   updateValidation('min', evt.target.value, fieldIdx)}
-                                                 type="text"
-                                                 hintText="min"/>
-                                      <TextField value={field.validate && field.validate.max}
-                                                 style={{
-                                                   fontSize: '0.8em',
-                                                   width: '33%',
-                                                   marginTop: -10,
-                                                   marginBottom: -10
-                                                 }}
-                                                 onChange={evt =>
-                                                   updateValidation('max', evt.target.value, fieldIdx)}
-                                                 type="text"
-                                                 hintText="max"/>
-                                    </li>
-                                  )}
-                                </ul>
-                              </div>
-                            </div>
-                          </CardActions>
-                    </Card>
-                  </div>
+                  <Field field={field}
+                         idx={fieldIdx}
+                         expandedFields={expandedFields}
+                         updateField={updateField}
+                         deleteField={deleteField}
+                         toggleFieldState={toggleFieldState}
+                         updateValidation={updateValidation}/>
                 ))}
               </div>
             </div>
           </Paper>
         </div>
         <div className="dialogs">
-          <ValidationDialog open={dialogs.modelValidation.open}
-                            message={dialogs.modelValidation.message}
-                            handleClose={() => closeDialogWindow('modelValidation')}/>
+          <ConfirmDialog open={dialogs.confirm.open}
+                         title={dialogs.confirm.title}
+                         message={dialogs.confirm.message}
+                         handleClose={() => closeDialogWindow('confirm')}/>
         </div>
       </div>
     );
