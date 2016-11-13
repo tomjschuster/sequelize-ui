@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Ace from './Ace';
 
 export class NotFound extends Component {
   render() {
     return (
-      <h3>404 Not Found</h3>
+       <Ace />
     );
   }
 }
