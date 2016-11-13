@@ -10,12 +10,18 @@ import FlatButton from 'material-ui/FlatButton';
 const sequelizeDataTypes = [
   {textKey: 'String', valueKey: 'STRING'},
   {textKey: 'Text', valueKey: 'TEXT'},
-  {textKey: 'Boolean', valueKey: 'BOOLEAN'},
   {textKey: 'Integer', valueKey: 'INTEGER'},
-  {textKey: 'Decimal', valueKey: 'DECIMAL'},
   {textKey: 'Float', valueKey: 'FLOAT'},
-  {textKey: 'Array', valueKey: 'ARRAY'},
+  {textKey: 'Real', valueKey: 'REAL'},
+  {textKey: 'Double', valueKey: 'DOUBLE'},
+  {textKey: 'Decimal', valueKey: 'DECIMAL'},
   {textKey: 'Date', valueKey: 'DATE'},
+  {textKey: 'Date (without time)', valueKey: 'DATEONLY'},
+  {textKey: 'Boolean', valueKey: 'BOOLEAN'},
+  {textKey: 'Array', valueKey: 'ARRAY'},
+  {textKey: 'JSON', valueKey: 'JSON'},
+  {textKey: 'BLOB', valueKey: 'BLOB'},
+  {textKey: 'UUID', valueKey: 'UUID'},
 ];
 
 const dataSourceConfig = {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-export default class ValidationDialog extends Component {
+export default class ConfirmDialog extends Component {
   render() {
     const actions = [
       <FlatButton
@@ -16,7 +16,7 @@ export default class ValidationDialog extends Component {
     return (
       <div>
         <Dialog
-          title="Validation Error"
+          title={this.props.title}
           actions={actions}
           modal={false}
           open={this.props.open}

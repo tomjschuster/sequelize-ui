@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { find, findIndex } from 'lodash';
+import { find } from 'lodash';
 import axios from 'axios';
 
 /*----------  ACTION/THUNK CREATORS  ----------*/
 import { addModel, removeModel, updateModel } from '../redux/models';
 
 /*----------  LOCAL COMPONENTS  ----------*/
-import DataTypeDropDown from './DataTypeDropDown';
-import ValidationDialog from './ValidationDialog';
+import ConfirmDialog from './ConfirmDialog';
+import Field from './Field';
 
 /*----------  LIBRARY COMPONENTS  ----------*/
 import TextField from 'material-ui/TextField';
@@ -16,22 +16,14 @@ import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import Checkbox from 'material-ui/Checkbox';
 import {List, ListItem, makeSelectable} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-import Avatar from 'material-ui/Avatar';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import ModeEditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
 
 import {grey400, darkBlack, lightBlack, red400, white, blueGrey200} from 'material-ui/styles/colors';
 
 // import {GridList, GridTile} from 'material-ui/GridList';
-// import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 // import DropDownMenu from 'material-ui/DropDownMenu';
 // import AutoComplete from 'material-ui/AutoComplete';
 // import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -45,8 +37,9 @@ const trash = [];
 
 const getInitialDialogs = () => {
   return {
-    modelValidation: {
+    confirm: {
       open: false,
+      title: '',
       message: ''
     }
   };
@@ -59,13 +52,14 @@ const getInitialModel = () => {
 const getInitialState = () => {
   let model = getInitialModel();
   let dialogs = getInitialDialogs();
-  return {model, dialogs, selectedIdx: null};
+  return {model, dialogs, selectedIdx: null, expandedFields: []};
 };
 
-const makeDialogState = (key, open, message) => {
+const makeDialogState = (key, open, title, message) => {
   let state = {};
   state[key] = {};
   state[key].open = open;
+  state[key].title = title;
   state[key].message = message;
   return state;
 };
@@ -83,7 +77,6 @@ const convertFields = fields => {
   return output.slice(0, -2);
 };
 
-
 /*----------  COMPONENT  ----------*/
 export class CreateModel extends Component {
   constructor(props) {
@@ -93,9 +86,11 @@ export class CreateModel extends Component {
     /*----------  BIND INSTANCE METHODS  ----------*/
     this.openDialogWindow = this.openDialogWindow.bind(this);
     this.closeDialogWindow = this.closeDialogWindow.bind(this);
+    this.toggleFieldState = this.toggleFieldState.bind(this);
     this.updateModelName = this.updateModelName.bind(this);
     this.addField = this.addField.bind(this);
     this.updateField = this.updateField.bind(this);
+    this.updateValidation = this.updateValidation.bind(this);
     this.deleteField = this.deleteField.bind(this);
     this.createModel = this.createModel.bind(this);
     this.getModel = this.getModel.bind(this);
@@ -103,15 +98,24 @@ export class CreateModel extends Component {
     this.deleteModel = this.deleteModel.bind(this);
   }
 
+
   /*----------  MANAGE DIALOG WiNDOW STATE  ----------*/
-  openDialogWindow(key, message) {
-    let dialogs = Object.assign({}, this.state.dialogs, makeDialogState(key, true, message));
+  openDialogWindow(key, title, message) {
+    let dialogs = Object.assign({}, this.state.dialogs, makeDialogState(key, true, title, message));
     this.setState({dialogs});
   }
 
   closeDialogWindow(key) {
-    let dialogs = Object.assign({}, this.state.dialogs, makeDialogState(key, false, ''));
+    let dialogs = Object.assign({}, this.state.dialogs, makeDialogState(key, false, '', ''));
     this.setState({dialogs});
+  }
+
+  /*----------  MANAGE FIELD OPEN STATE  ----------*/
+  toggleFieldState(idx) {
+    console.log(this.state.expandedFields);
+    let expandedFields = [...this.state.expandedFields];
+    expandedFields[idx] = !expandedFields[idx];
+    this.setState({expandedFields});
   }
 
   /*----------  EDIT SELECTED MODEL  ----------*/
@@ -124,7 +128,8 @@ export class CreateModel extends Component {
   addField() {
     let fields = [...this.state.model.fields, {name: '', type: ''}];
     let model = Object.assign({}, this.state.model, {fields});
-    this.setState({ model });
+    let expandedFields = [...this.state.expandedFields, false];
+    this.setState({ model, expandedFields });
   }
 
   updateField(key, val, idx) {
@@ -134,11 +139,21 @@ export class CreateModel extends Component {
     this.setState({model});
   }
 
+  updateValidation(key, val, idx) {
+    let fields = [...this.state.model.fields];
+    fields[idx].validate = fields[idx].validate || {};
+    fields[idx].validate[key] = val;
+    let model = Object.assign({}, this.state.model, {fields});
+    this.setState({model});
+  }
+
   deleteField(idx) {
     let fields = [...this.state.model.fields];
+    let expandedFields = [...this.state.expandedFields];
     fields.splice(idx, 1);
+    expandedFields.splice(idx, 1);
     let model = Object.assign({}, this.state.model, {fields});
-    this.setState({ model });
+    this.setState({ model, expandedFields });
   }
 
   /*----------  VALIDATE MODEL BEFORE CREATE/SAVE  ----------*/
@@ -146,19 +161,19 @@ export class CreateModel extends Component {
     let { models } = this.props;
     let storeModel = find(models, {name: model.name});
     if (storeModel && storeModel.id !== model.id) {
-      this.openDialogWindow('modelValidation', messages.dupFieldName);
+      this.openDialogWindow('confirm', 'Validation Error', messages.dupFieldName);
       return false;
     }
     if (!model.name) {
-      this.openDialogWindow('modelValidation', messages.reqModelName);
+      this.openDialogWindow('confirm', 'Validation Error', messages.reqModelName);
       return false;
     }
     for (let field of model.fields) {
       if (!field.name) {
-        this.openDialogWindow('modelValidation', messages.reqFieldName);
+        this.openDialogWindow('confirm', 'Validation Error', messages.reqFieldName);
         return false;
       } else if (!field.type) {
-        this.openDialogWindow('modelValidation', messages.reqFieldType);
+        this.openDialogWindow('confirm', 'Validation Error', messages.reqFieldType);
         return false;
       }
     }
@@ -172,7 +187,7 @@ export class CreateModel extends Component {
     let newModel = Object.assign({}, model);
     delete newModel.idx;
     this.props.addModel(newModel);
-    this.setState({model: getInitialModel(), selectedIdx: null});
+    this.setState({model: getInitialModel(), selectedIdx: null, expandedFields: []});
     axios.post('/api', {models: [newModel]});
   }
 
@@ -186,7 +201,7 @@ export class CreateModel extends Component {
     let { model } = this.state;
     if (!this.validateModel(model)) return;
     this.props.updateModel(savedModel);
-    this.setState({model: getInitialModel(), selectedIdx: null});
+    this.setState({model: getInitialModel(), selectedIdx: null, expandedFields: []});
   }
 
   deleteModel(model) {
@@ -198,15 +213,17 @@ export class CreateModel extends Component {
   /*----------  RENDER COMPONENT  ----------*/
   render() {
     let { closeDialogWindow,
+          toggleFieldState,
           updateModelName,
           addField,
           updateField,
+          updateValidation,
           deleteField,
           createModel,
           getModel,
           saveModel,
           deleteModel } = this;
-    let { model, dialogs, selectedIdx } = this.state;
+    let { model, dialogs, selectedIdx, expandedFields } = this.state;
     let { models } = this.props;
     return (
       <div>
@@ -281,40 +298,23 @@ export class CreateModel extends Component {
               </div>
               <div className="row">
                 { model.fields.map( (field, fieldIdx) => (
-                  <div className="col m12 l6" key={fieldIdx}>
-                    <Paper rounded={false}>
-                      <div className="field-box">
-                        <div className="row">
-                          <TextField value={field.name}
-                                     onChange={evt => updateField('name', evt.target.value, fieldIdx)}
-                                     type="text" hintText="Field Name"/>
-                          <DataTypeDropDown currType={field.type}
-                                            idx={fieldIdx}
-                                            onClick={updateField}/>
-                          <Checkbox label="UNIQUE"
-                                    checked={Boolean(field.unique)}
-                                    onCheck={(evt, isChecked) => updateField('unique', isChecked, fieldIdx)}/>
-                          <Checkbox label="NOT NULL"
-                                    checked={field.allowNull === false}
-                                    onCheck={(evt, isChecked) => updateField('allowNull', !isChecked, fieldIdx)}/>
-                        </div>
-                        <div className="row">
-                          <FlatButton label="DELETE FIELD"
-                                      labelStyle={{color: red400}}
-                                      onClick={() => deleteField(fieldIdx)}/>
-                        </div>
-                      </div>
-                    </Paper>
-                  </div>
+                  <Field field={field}
+                         idx={fieldIdx}
+                         expandedFields={expandedFields}
+                         updateField={updateField}
+                         deleteField={deleteField}
+                         toggleFieldState={toggleFieldState}
+                         updateValidation={updateValidation}/>
                 ))}
               </div>
             </div>
           </Paper>
         </div>
         <div className="dialogs">
-          <ValidationDialog open={dialogs.modelValidation.open}
-                            message={dialogs.modelValidation.message}
-                            handleClose={() => closeDialogWindow('modelValidation')}/>
+          <ConfirmDialog open={dialogs.confirm.open}
+                         title={dialogs.confirm.title}
+                         message={dialogs.confirm.message}
+                         handleClose={() => closeDialogWindow('confirm')}/>
         </div>
       </div>
     );
