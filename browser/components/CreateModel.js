@@ -103,6 +103,7 @@ export class CreateModel extends Component {
     this.deleteModel = this.deleteModel.bind(this);
   }
 
+  /*----------  MANAGE DIALOG WiNDOW STATE  ----------*/
   openDialogWindow(key, message) {
     let dialogs = Object.assign({}, this.state.dialogs, makeDialogState(key, true, message));
     this.setState({dialogs});
@@ -113,6 +114,7 @@ export class CreateModel extends Component {
     this.setState({dialogs});
   }
 
+  /*----------  EDIT SELECTED MODEL  ----------*/
   updateModelName(evt) {
     let name = evt.target.value;
     let model = Object.assign({}, this.state.model, { name });
@@ -139,6 +141,7 @@ export class CreateModel extends Component {
     this.setState({ model });
   }
 
+  /*----------  VALIDATE MODEL BEFORE CREATE/SAVE  ----------*/
   validateModel(model) {
     let { models } = this.props;
     let storeModel = find(models, {name: model.name});
@@ -162,6 +165,7 @@ export class CreateModel extends Component {
     return true;
   }
 
+  /*----------  MODEL CRUD  ----------*/
   createModel() {
     let { model } = this.state;
     if (!this.validateModel(model)) return;
@@ -191,6 +195,7 @@ export class CreateModel extends Component {
     this.setState({model: getInitialModel()});
   }
 
+  /*----------  RENDER COMPONENT  ----------*/
   render() {
     let { closeDialogWindow,
           updateModelName,
