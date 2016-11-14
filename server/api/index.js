@@ -75,6 +75,10 @@ const _db = 'const Sequelize = require(\'sequelize\');\n' +
 
 router.get('/download/:key', function(req, res) {
   res.type('application/zip').download(path.join(__dirname, 'temp', req.params.key, 'db.zip'));
+  const del = require('del');
+  del([path.join(__dirname, 'temp', req.params.key)]).then(paths => {
+      console.log('Deleted files and folders:\n', paths.join('\n'));
+  });
 });
 
 
