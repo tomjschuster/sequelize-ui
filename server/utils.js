@@ -31,12 +31,39 @@ const printField = field => {
   return output;
   };
 
+const printMethods = methods => {
+  let output = '';
+  for (let key in methods) {
+    if (methods[key]) output += `  ${key}: {\n    //Write methods here\n  },\n`;
+  }
+  return output;
+};
+
+const printConfig = config => {
+  let output = '';
+  output += config.tableName ? `  tableName: '${config.tableName}',\n` : '';
+  if (config.singular && config.plural) {
+    output += `  name: { singular: '${config.singular}', plural: '${config.plural}' },\n`;
+  } else if (config.singular) {
+    output += `  name: { singular: '${config.singular}' },\n`;
+  } else if (config.plural) {
+    output += `  name: { plural: '${config.plural}' },\n`;
+  }
+  output += config.timestamps === false ? '  timestamps: false,\n' : '';
+  output += config.freezeTableNames ? '  freezeTableNames: true,\n' : '';
+  output += config.underscored ? '  underscored: true,\n' : '';
+  output += config.underscoredAll ? '  underscoredAll: true,\n' : '';
+  return output;
+};
 
 const makeModelFile = model => {
   let output = modelHeader;
   output += `const ${upperCamelCase(model.name)} = db.define('${model.name}', {\n`;
   let fields = model.fields.length ? model.fields.map(printField).join(',\n') : '';
   output += fields;
+  output += '\n},\n{\n';
+  output += printMethods(model.methods);
+  output += printConfig(model.config);
   output +=  '\n});\n\n';
   output += `module.exports = ${upperCamelCase(model.name)};`;
   return output;

@@ -18,7 +18,7 @@ export const getInitialModel = () => {
              singular: '',
              plural: '',
              timestamps: true,
-             freezetablenames: false,
+             freezeTableNames: false,
              underscored: false,
              underscoredAll: false
            },

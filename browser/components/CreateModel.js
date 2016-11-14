@@ -28,6 +28,10 @@ import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
 
 /*----------  COLORS  ----------*/
 import {grey400,
+        grey200,
+        grey100,
+        teal200,
+        teal100,
         darkBlack,
         red400,
         white,
@@ -231,7 +235,9 @@ export class CreateModel extends Component {
                     <ListItem
                       rightIconButton={<DeleteForeverIcon onClick={() => deleteModel(model, modelIdx)}/>}
                       innerDivStyle={{
-                        backgroundColor: selectedIdx === modelIdx && grey400
+                        color: 'black',
+                        backgroundColor: selectedIdx === modelIdx ? teal200 : grey200,
+                        opacity: selectedIdx === modelIdx ? 0.95 : 0.85
                       }}
                       primaryText={model.name}
                       secondaryText={`Fields: ${fieldString}`}

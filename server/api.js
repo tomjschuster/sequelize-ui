@@ -17,7 +17,7 @@ router.get('/download/:key', function(req, res, next) {
       next(err);
     } else {
       res.type('application/zip').download(path.join(__dirname, 'temp', req.params.key, 'db.zip'),
-                                           'db.zip', next);
+                                           'db.zip', err => { if (err) next(err); });
 
       del([path.join(__dirname, 'temp', req.params.key)]).then(paths => {
           console.log('Deleted files and folders:\n', paths.join('\n'));

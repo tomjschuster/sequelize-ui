@@ -4,6 +4,23 @@ body {
 
 .your-models {
   margin: 0;
+  min-height: 300px;
+  display: block;
+  position: relative;
+}
+
+.your-models::after {
+  content: "";
+  background:url('/sequelize-ui.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.25;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
 }
 
 .model-name-input {
@@ -30,4 +47,22 @@ body {
 
 .configuration {
   padding: 1%;
+}
+
+
+@media (max-width: 600px) {
+
+}
+
+@media (max-width: 992px) {
+
+}
+
+@media (min-width: 993px) {
+  .product-item:nth-child(2n+1) {
+    clear:left;
+  }
+  .product-item:nth-child(2n) {
+    clear:right;
+  }
 }
