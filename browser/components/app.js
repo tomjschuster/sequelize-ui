@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { requestModelDownload } from '../redux/models';
+import { requestDbDownload } from '../redux/models';
 
 /*----------  LIBRARY COMPONENTS  ----------*/
 import AppBar from 'material-ui/AppBar';
@@ -20,8 +20,8 @@ export class App extends Component {
       <div>
           <AppBar title="Sequelize UI"
                   iconElementLeft={<IconButton><NewFolder /></IconButton>}
-                  iconElementRight={<FlatButton label="Download Model"/>}
-                  onRightIconButtonTouchTap={() => requestModelDownload(models)}/>
+                  iconElementRight={<FlatButton label="Download Models"/>}
+                  onRightIconButtonTouchTap={() => requestDbDownload(models)}/>
         <div id="main">
           { children }
         </div>

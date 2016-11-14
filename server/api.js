@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const randomstring = require('randomstring');
 const mkdirp = require('mkdirp');
+const del = require('del');
 const router = require('express').Router();
 
 module.exports = router;
@@ -10,15 +11,35 @@ module.exports = router;
 let { _db, makeModelFile, makeAssociationFile } = require('./utils');
 
 
-router.get('/download/:key', function(req, res) {
-  res.type('application/zip').download(path.join(__dirname, 'temp', req.params.key, 'db.zip'));
-  const del = require('del');
-  del([path.join(__dirname, 'temp', req.params.key)]).then(paths => {
-      console.log('Deleted files and folders:\n', paths.join('\n'));
+router.get('/download/:key', function(req, res, next) {
+  fs.lstat(path.join(__dirname, 'temp', req.params.key, 'db.zip'), (err, stat) => {
+    if (err) {
+      next(err);
+    } else {
+      res.type('application/zip').download(path.join(__dirname, 'temp', req.params.key, 'db.zip'),
+                                           'db.zip', next);
+
+      del([path.join(__dirname, 'temp', req.params.key)]).then(paths => {
+          console.log('Deleted files and folders:\n', paths.join('\n'));
+      }).catch(next);
+    }
   });
 });
 
-router.post('/create', (req, res, next) => {
+router.post('/create/model', (req, res, next) => {
+  let key = randomstring.generate();
+  mkdirp(path.join(__dirname, 'temp', `${key}`), (err) => {
+    if (err) next(err);
+    fs.writeFile(path.join(__dirname, 'temp', `${key}`, `${req.body.model.name}.js`),
+                 makeModelFile(req.body.model),
+                 err => {
+                  if (err) next(err);
+                  res.send(key);
+                 });
+  });
+});
+
+router.post('/create/db', (req, res, next) => {
   let key = randomstring.generate();
   mkdirp(path.join(__dirname, 'temp', `${key}`), (err) => {
     if (err) next(err);

@@ -38,7 +38,7 @@ export const resetModels = () => ({
 /*----------  THUNKS  ----------*/
 
 /*----------  FUNCTIONS  ----------*/
-export const requestModelDownload = models =>  axios.post('/api/create', {models}).then(res => {
+export const requestDbDownload = models =>  axios.post('/api/create/db', {models}).then(res => {
   console.log(res.data);
   window.location.replace(`/api/download/${res.data}`);
 }).catch(console.error);

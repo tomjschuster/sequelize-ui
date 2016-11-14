@@ -378,12 +378,6 @@ export class CreateModel extends Component {
                   </Paper>
                 </div>
               </Tab>
-              <Tab label="Export Model">
-                  <Paper>
-                  <div className="container">
-                  </div>
-                  </Paper>
-              </Tab>
             </Tabs>
           </Paper>
         </div>
