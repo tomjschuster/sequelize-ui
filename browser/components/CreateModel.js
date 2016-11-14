@@ -9,7 +9,6 @@ import { addModel, removeModel, updateModel } from '../redux/models';
 /*----------  LOCAL COMPONENTS  ----------*/
 import ConfirmDialog from './ConfirmDialog';
 import Field from './Field';
-import Ace from './Ace';
 
 /*----------  LIBRARY COMPONENTS  ----------*/
 import TextField from 'material-ui/TextField';
@@ -21,76 +20,30 @@ import {List, ListItem, makeSelectable} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card';
 import Checkbox from 'material-ui/Checkbox';
-
 
 
 /*----------  ICONS  ----------*/
 import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
-import ContentInbox from 'material-ui/svg-icons/content/inbox';
 
 /*----------  COLORS  ----------*/
 import {grey400,
         darkBlack,
-        lightBlack,
         red400,
         white,
         blueGrey200} from 'material-ui/styles/colors';
 
-// import {GridList, GridTile} from 'material-ui/GridList';
-// import DropDownMenu from 'material-ui/DropDownMenu';
-// import AutoComplete from 'material-ui/AutoComplete';
-// import FloatingActionButton from 'material-ui/FloatingActionButton';
-// import ContentAdd from 'material-ui/svg-icons/content/add';
-// import ContentRemove from 'material-ui/svg-icons/content/remove';
 
 let SelectableList = makeSelectable(List);
 
 /*----------  CONSTANTS AND HELPER FUNCTIONS  ----------*/
 const trash = [];
+import { getInitialModel,
+         getInitialState,
+         makeDialogState,
+         messages,
+         convertFields } from '../utils';
 
-const getInitialDialogs = () => {
-  return {
-    confirm: {
-      open: false,
-      title: '',
-      message: ''
-    }
-  };
-};
-
-const getInitialModel = () => {
-  return { idx: -1, name: '', fields: [] };
-};
-
-const getInitialState = () => {
-  let model = getInitialModel();
-  let dialogs = getInitialDialogs();
-  return {model, dialogs, selectedIdx: null, expandedFields: []};
-};
-
-const makeDialogState = (key, open, title, message) => {
-  let state = {};
-  state[key] = {};
-  state[key].open = open;
-  state[key].title = title;
-  state[key].message = message;
-  return state;
-};
-
-const messages = {
-  reqModelName: 'Please give your model a name.',
-  reqFieldName: 'Every field must have a name.',
-  reqFieldType: 'Every field must have a data type.',
-  dupFieldName: 'Table name already exists. Please select another name.',
-};
-
-const convertFields = fields => {
-  let output = '';
-  for (let field of fields) output += field.name + ', ';
-  return output.slice(0, -2);
-};
 
 /*----------  COMPONENT  ----------*/
 export class CreateModel extends Component {
