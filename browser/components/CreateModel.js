@@ -13,10 +13,9 @@ import Field from './Field';
 /*----------  LIBRARY COMPONENTS  ----------*/
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
-import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import {List, ListItem, makeSelectable} from 'material-ui/List';
+import { Toolbar, ToolbarGroup, ToolbarSeparator } from 'material-ui/Toolbar';
+import { List, ListItem, makeSelectable } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import {Tabs, Tab} from 'material-ui/Tabs';
@@ -27,11 +26,8 @@ import Checkbox from 'material-ui/Checkbox';
 import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
 
 /*----------  COLORS  ----------*/
-import {grey400,
-        grey200,
-        grey100,
+import {grey200,
         teal200,
-        teal100,
         darkBlack,
         red400,
         white,
