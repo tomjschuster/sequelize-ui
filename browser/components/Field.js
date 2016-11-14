@@ -69,16 +69,16 @@ export default class Field extends Component {
                       {field.unique && (
                         <li>
                           <TextField value={field.uniqueKey}
-                                   style={{
-                                     fontSize: '0.8em',
-                                     width: '100%',
-                                     marginTop: -10,
-                                     marginBottom: -10
-                                   }}
-                                   onChange={evt =>
-                                     updateField('uniqueKey', evt.target.value, idx)}
-                                   type="text"
-                                   hintText="Unique Key"/>
+                                     style={{
+                                       fontSize: '0.8em',
+                                       width: '100%',
+                                       marginTop: -10,
+                                       marginBottom: -10
+                                     }}
+                                     onChange={evt =>
+                                       updateField('uniqueKey', evt.target.value, idx)}
+                                     type="text"
+                                     hintText="Unique Key"/>
                       </li>
                       )}
                       <li>

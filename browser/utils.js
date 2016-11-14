@@ -1,5 +1,5 @@
 
-export const getInitialDialogs = () => {
+const getInitialDialogs = () => {
   return {
     confirm: {
       open: false,
@@ -10,7 +10,26 @@ export const getInitialDialogs = () => {
 };
 
 export const getInitialModel = () => {
-  return { idx: -1, name: '', fields: [] };
+  return { idx: -1,
+           name: '',
+           fields: [],
+           config: {
+             tableName: '',
+             singular: '',
+             plural: '',
+             timestamps: true,
+             freezetablenames: false,
+             underscored: false,
+             underscoredAll: false
+           },
+           methods: {
+             hooks: false,
+             getterMethods: false,
+             setterMethods: false,
+             instanceMethods: false,
+             classMethods: false
+           }
+         };
 };
 
 export const getInitialState = () => {

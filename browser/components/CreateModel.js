@@ -60,6 +60,8 @@ export class CreateModel extends Component {
     this.updateField = this.updateField.bind(this);
     this.updateValidation = this.updateValidation.bind(this);
     this.deleteField = this.deleteField.bind(this);
+    this.updateConfig = this.updateConfig.bind(this);
+    this.updateMethod = this.updateMethod.bind(this);
     this.createModel = this.createModel.bind(this);
     this.getModel = this.getModel.bind(this);
     this.saveModel = this.saveModel.bind(this);
@@ -124,6 +126,19 @@ export class CreateModel extends Component {
     this.setState({ model, expandedFields });
   }
 
+  updateConfig(key, val) {
+    let model = Object.assign({}, this.state.model);
+    model.config[key] = val;
+    this.setState({model});
+  }
+
+  updateMethod(key, val) {
+    let model = Object.assign({}, this.state.model);
+    model.methods[key] = val;
+    this.setState({model});
+  }
+
+
   /*----------  VALIDATE MODEL BEFORE CREATE/SAVE  ----------*/
   validateModel(model) {
     let { models } = this.props;
@@ -156,7 +171,6 @@ export class CreateModel extends Component {
     delete newModel.idx;
     this.props.addModel(newModel);
     this.setState({model: getInitialModel(), selectedIdx: null, expandedFields: []});
-    axios.post('/api', {models: [newModel]});
   }
 
   getModel(model, selectedIdx) {
@@ -178,6 +192,7 @@ export class CreateModel extends Component {
     this.setState({model: getInitialModel()});
   }
 
+
   /*----------  RENDER COMPONENT  ----------*/
   render() {
     let { closeDialogWindow,
@@ -187,6 +202,8 @@ export class CreateModel extends Component {
           updateField,
           updateValidation,
           deleteField,
+          updateConfig,
+          updateMethod,
           createModel,
           getModel,
           saveModel,
@@ -287,6 +304,7 @@ export class CreateModel extends Component {
                     <div className="row">
                       <div className="col s12 m6">
                         <TextField hintText="Table Name"
+                                   value={model.config.tableName}
                                    style={{
                                            fontSize: '0.8em',
                                            width: '50%',
@@ -294,8 +312,11 @@ export class CreateModel extends Component {
                                            marginBottom: -5,
                                            display: 'block',
                                            clear: 'right'
-                                         }}/>
+                                         }}
+                                   onChange={evt =>
+                                       updateConfig('tableName', evt.target.value)}/>
                         <TextField hintText="Singular Name"
+                                   value={model.config.singular}
                                    style={{
                                            fontSize: '0.8em',
                                            width: '50%',
@@ -303,30 +324,63 @@ export class CreateModel extends Component {
                                            marginBottom: -5,
                                            display: 'block',
                                            clear: 'right'
-                                         }}/>
+                                         }}
+                                   onChange={evt =>
+                                       updateConfig('singular', evt.target.value)}/>
                         <TextField hintText="Plural Name"
+                                   value={model.config.plural}
                                    style={{
                                            fontSize: '0.8em',
                                            width: '50%',
                                            marginTop: -5,
+                                           marginBottom: -5,
                                            display: 'block',
-                                           marginBottom: -5
-                                         }}/>
+                                           clear: 'right'
+                                         }}
+                                   onChange={evt =>
+                                       updateConfig('plural', evt.target.value)}/>
                       </div>
                       <div className="col s12 m6">
-                        <Checkbox label="No Timestamp Columns"/>
-                        <Checkbox label="Freeze Table Names"/>
-                        <Checkbox label="Underscore Column Names"/>
-                        <Checkbox label="Underscore Table Names"/>
+                        <Checkbox label="No Timestamp Columns"
+                                  checked={!model.config.timestamps}
+                                  onCheck={(evt, isChecked) =>
+                                    updateConfig('timestamps', !isChecked)}/>
+                        <Checkbox label="Freeze Table Names"
+                                  checked={model.config.freezeTableName}
+                                  onCheck={(evt, isChecked) =>
+                                    updateConfig('freezeTableName', isChecked)}/>
+                        <Checkbox label="Underscore Column Names"
+                                  checked={model.config.underscored}
+                                  onCheck={(evt, isChecked) =>
+                                    updateConfig('underscored', isChecked)}/>
+                        <Checkbox label="Underscore Table Names"
+                                  checked={model.config.underscoredAll}
+                                  onCheck={(evt, isChecked) =>
+                                    updateConfig('underscoredAll', isChecked)}/>
                       </div>
                   </div>
                   <Divider inset={true} />
                   <Subheader>Include Templates For:</Subheader>
-                  <Checkbox label="Hooks"/>
-                  <Checkbox label="Getter Methods"/>
-                  <Checkbox label="Setter Methods"/>
-                  <Checkbox label="Instance Methods"/>
-                  <Checkbox label="Class Methods"/>
+                  <Checkbox label="Hooks"
+                            checked={model.methods.hooks}
+                            onCheck={(evt, isChecked) =>
+                              updateMethod('hooks', isChecked)}/>
+                  <Checkbox label="Getter Methods"
+                            checked={model.methods.getterMethods}
+                            onCheck={(evt, isChecked) =>
+                              updateMethod('getterMethods', isChecked)}/>
+                  <Checkbox label="Setter Methods"
+                            checked={model.methods.setterMethods}
+                            onCheck={(evt, isChecked) =>
+                              updateMethod('setterMethods', isChecked)}/>
+                  <Checkbox label="Instance Methods"
+                            checked={model.methods.instanceMethods}
+                            onCheck={(evt, isChecked) =>
+                              updateMethod('instanceMethods', isChecked)}/>
+                  <Checkbox label="Class Methods"
+                            checked={model.methods.classMethods}
+                            onCheck={(evt, isChecked) =>
+                              updateMethod('classMethods', isChecked)}/>
                   </div>
                   </Paper>
                 </div>
