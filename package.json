@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack -w & nodemon server/index"
+    "build-watch": "webpack -w",
+    "start": "webpack & nodemon server/index"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +32,7 @@
     "materialize-css": "^0.97.8",
     "mkdirp": "^0.5.1",
     "morgan": "^1.7.0",
+    "nodemon": "^1.11.0",
     "path": "^0.12.7",
     "pg": "^6.1.0",
     "pg-hstore": "^2.3.2",
