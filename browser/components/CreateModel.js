@@ -9,6 +9,7 @@ import { addModel, removeModel, updateModel } from '../redux/models';
 /*----------  LOCAL COMPONENTS  ----------*/
 import ConfirmDialog from './ConfirmDialog';
 import Field from './Field';
+import Ace from './Ace';
 
 /*----------  LIBRARY COMPONENTS  ----------*/
 import TextField from 'material-ui/TextField';
@@ -19,10 +20,23 @@ import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui
 import {List, ListItem, makeSelectable} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card';
+import Checkbox from 'material-ui/Checkbox';
 
-import {grey400, darkBlack, lightBlack, red400, white, blueGrey200} from 'material-ui/styles/colors';
+
+
+/*----------  ICONS  ----------*/
+import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
+import ContentInbox from 'material-ui/svg-icons/content/inbox';
+
+/*----------  COLORS  ----------*/
+import {grey400,
+        darkBlack,
+        lightBlack,
+        red400,
+        white,
+        blueGrey200} from 'material-ui/styles/colors';
 
 // import {GridList, GridTile} from 'material-ui/GridList';
 // import DropDownMenu from 'material-ui/DropDownMenu';
@@ -313,6 +327,62 @@ export class CreateModel extends Component {
                 </div>
               </Tab>
               <Tab label="Configuration">
+                <div className="configuration container">
+                  <Paper>
+                  <div className="container">
+                  <Subheader>Table Options</Subheader>
+                    <div className="row">
+                      <div className="col s12 m6">
+                        <TextField hintText="Table Name"
+                                   style={{
+                                           fontSize: '0.8em',
+                                           width: '50%',
+                                           marginTop: -5,
+                                           marginBottom: -5,
+                                           display: 'block',
+                                           clear: 'right'
+                                         }}/>
+                        <TextField hintText="Singular Name"
+                                   style={{
+                                           fontSize: '0.8em',
+                                           width: '50%',
+                                           marginTop: -5,
+                                           marginBottom: -5,
+                                           display: 'block',
+                                           clear: 'right'
+                                         }}/>
+                        <TextField hintText="Plural Name"
+                                   style={{
+                                           fontSize: '0.8em',
+                                           width: '50%',
+                                           marginTop: -5,
+                                           display: 'block',
+                                           marginBottom: -5
+                                         }}/>
+                      </div>
+                      <div className="col s12 m6">
+                        <Checkbox label="No Timestamp Columns"/>
+                        <Checkbox label="Freeze Table Names"/>
+                        <Checkbox label="Underscore Column Names"/>
+                        <Checkbox label="Underscore Table Names"/>
+                      </div>
+                  </div>
+                  <Divider inset={true} />
+                  <Subheader>Include Templates For:</Subheader>
+                  <Checkbox label="Hooks"/>
+                  <Checkbox label="Getter Methods"/>
+                  <Checkbox label="Setter Methods"/>
+                  <Checkbox label="Instance Methods"/>
+                  <Checkbox label="Class Methods"/>
+                  </div>
+                  </Paper>
+                </div>
+              </Tab>
+              <Tab label="Export Model">
+                  <Paper>
+                  <div className="container">
+                  </div>
+                  </Paper>
               </Tab>
             </Tabs>
           </Paper>

@@ -5,6 +5,12 @@ import { requestModelDownload } from '../redux/models';
 /*----------  LIBRARY COMPONENTS  ----------*/
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
+
+/*----------  ICONS  ----------*/
+import GridOn from 'material-ui/svg-icons/image/grid-on';
+import NewFolder from 'material-ui/svg-icons/file/create-new-folder';
+
 
 /*----------  COMPONENT  ----------*/
 export class App extends Component {
@@ -12,7 +18,8 @@ export class App extends Component {
     let { children, models } = this.props;
     return (
       <div>
-          <AppBar showMenuIconButton={false}
+          <AppBar title="Sequelize UI"
+                  iconElementLeft={<IconButton><NewFolder /></IconButton>}
                   iconElementRight={<FlatButton label="Download Model"/>}
                   onRightIconButtonTouchTap={() => requestModelDownload(models)}/>
         <div id="main">

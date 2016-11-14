@@ -34,10 +34,12 @@ const printField = field => {
 
 
 const printModel = model => {
-  let output = `const ${upperCamelCase(model.name)} = db.define('${model.name}', {\n`;
+  let output = modelHeader;
+  output += `const ${upperCamelCase(model.name)} = db.define('${model.name}', {\n`;
   let fields = model.fields.length ? model.fields.map(printField).join(',\n') : '';
   output += fields;
-  output +=  '\n});';
+  output +=  '\n});\n\n';
+  output += `module.exports = ${upperCamelCase(model.name)}`;
   return output;
 };
 
@@ -48,4 +50,11 @@ const printModels = models => {
   return output;
 };
 
-module.exports = printModels;
+const importModels = models => {
+  let output = '';
+  models.forEach(model => {output += `const ${upperCamelCase(model.name)} = require('./model.name');\n`});
+  output += '\n//ASSOCIATIONS\n\n';
+  output += `module.exports = {${models.map(model => upperCamelCase(model.name)).join(', ')}};`;
+  return output;
+}
+module.exports = printModel;

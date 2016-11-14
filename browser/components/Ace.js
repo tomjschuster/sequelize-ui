@@ -18,6 +18,8 @@ export default class Ace extends Component {
           theme="cobalt"
           onChange={onChange}
           name="UNIQUE_ID_OF_DIV"
+          min-lines={3}
+          width="100%"
         />
       );
   }
