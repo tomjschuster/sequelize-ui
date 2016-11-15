@@ -5,6 +5,7 @@ const randomstring = require('randomstring');
 const mkdirp = require('mkdirp');
 const del = require('del');
 const router = require('express').Router();
+const camelCase = require('camelcase');
 
 module.exports = router;
 
@@ -17,7 +18,10 @@ router.get('/download/:key', function(req, res, next) {
       next(err);
     } else {
       res.type('application/zip').download(path.join(__dirname, 'temp', req.params.key, 'db.zip'),
-                                           'db.zip', err => { if (err) next(err); });
+                                           'db.zip', err => {
+                                              if (err) next(err);
+                                              console.log('Downloaded ', path.join(__dirname, 'temp', req.params.key, 'db.zip'));
+                                            });
 
       del([path.join(__dirname, 'temp', req.params.key)]).then(paths => {
           console.log('Deleted files and folders:\n', paths.join('\n'));
@@ -51,7 +55,7 @@ router.post('/create/db', (req, res, next) => {
     archive.pipe(output);
 
     archive.append(_db, { name: '_db.js'});
-    models.forEach(model => archive.append(makeModelFile(model), { name: `${model.name}.js`}));
+    models.forEach(model => archive.append(makeModelFile(model), { name: `${camelCase(model.name)}.js`}));
     archive.append(makeAssociationFile(models), { name: 'index.js'});
 
     archive.finalize((err, bytes) => {

@@ -347,7 +347,7 @@ export class CreateModel extends Component {
                                   checked={!model.config.timestamps}
                                   onCheck={(evt, isChecked) =>
                                     updateConfig('timestamps', !isChecked)}/>
-                        <Checkbox label="Freeze Table Names"
+                        <Checkbox label="Freeze Table Name"
                                   checked={model.config.freezeTableName}
                                   onCheck={(evt, isChecked) =>
                                     updateConfig('freezeTableName', isChecked)}/>

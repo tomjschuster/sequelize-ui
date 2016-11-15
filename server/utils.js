@@ -1,5 +1,6 @@
 const upperCamelCase = require('uppercamelcase');
 const camelCase = require('camelcase');
+const snakeCase = require('snake-case');
 
 const modelHeader = 'const Sequelize = require(\'sequelize\');\n' +
                     'const db = require(\'./_db\');\n\n';
@@ -12,7 +13,7 @@ const printField = field => {
   if (field.primaryKey !== undefined) output += `    primaryKey: ${field.primaryKey},\n`;
   if (field.autoIncrement !== undefined) output += `    autoIncrement: ${field.autoIncrement},\n`;
   if (field.defaultValue !== undefined) {
-    if (field.type === 'TEXT' || field.type === 'TEXT') field.defaultValue = `'${field.defaultValue}'`;
+    if (field.type === 'TEXT' || field.type === 'STRING') field.defaultValue = `'${field.defaultValue}'`;
     output += `    defaultValue: ${field.defaultValue},\n`;
   }
   if (field.comment !== undefined) output += `    comment: '${field.comment}',\n`;
@@ -58,7 +59,7 @@ const printConfig = config => {
 
 const makeModelFile = model => {
   let output = modelHeader;
-  output += `const ${upperCamelCase(model.name)} = db.define('${model.name}', {\n`;
+  output += `const ${upperCamelCase(model.name)} = db.define('${snakeCase(model.name)}', {\n`;
   let fields = model.fields.length ? model.fields.map(printField).join(',\n') : '';
   output += fields;
   output += '\n},\n{\n';

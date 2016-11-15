@@ -50,6 +50,7 @@
     "redux-logger": "^2.7.4",
     "redux-thunk": "^2.1.0",
     "sequelize": "^3.25.0",
+    "snake-case": "^2.1.0",
     "uppercamelcase": "^1.1.0",
     "webpack": "^1.13.3"
   }
