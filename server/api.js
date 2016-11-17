@@ -9,7 +9,7 @@ const del = require('del');
 const router = require('express').Router();
 const camelCase = require('camelcase');
 const utils = require('./utils');
-const _db = utils.db;
+const _db = utils._db;
 const makeModelFile = utils.makeModelFile;
 const makeAssociationFile = utils.makeAssociationFile;
 
