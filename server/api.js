@@ -6,10 +6,12 @@ const mkdirp = require('mkdirp');
 const del = require('del');
 const router = require('express').Router();
 const camelCase = require('camelcase');
+const utils = require('./utils');
+const _db = utils.db;
+const makeModelFile = utils.makeModelFile;
+const makeAssociationFile = utils.makeAssociationFile;
 
 module.exports = router;
-
-let { _db, makeModelFile, makeAssociationFile } = require('./utils');
 
 
 router.get('/download/:key', function(req, res, next) {
