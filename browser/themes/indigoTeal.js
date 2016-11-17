@@ -1,3 +1,5 @@
+'use strict';
+
 import {
   indigo500, indigo700,
   teal400,
