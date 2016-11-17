@@ -1,3 +1,5 @@
+'use strict';
+
 const upperCamelCase = require('uppercamelcase');
 const camelCase = require('camelcase');
 const snakeCase = require('snake-case');
