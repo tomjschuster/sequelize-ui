@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 
 /*----------  LOCAL COMPONENTS  ----------*/
-import DataTypeDropDown from './DataTypeDropDown';
+import DataTypeDropDown from './DataTypeDropdown';
 
 /*----------  LIBRARY COMPONENTS  ----------*/
 import TextField from 'material-ui/TextField';
