@@ -52,7 +52,7 @@ router.post('/create/db', (req, res, next) => {
   mkdirp(path.join(__dirname, 'temp', `${key}`), (err) => {
     if (err) next(err);
 
-    let { models } = req.body;
+    let models = req.body.models;
     let archive  = archiver('zip');
     let output = fs.createWriteStream(path.join(__dirname, 'temp', `${key}`, 'db.zip'));
 
