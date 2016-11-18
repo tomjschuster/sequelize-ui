@@ -1,18 +1,16 @@
 'use strict';
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-/*----------  LOCAL COMPONENTS  ----------*/
+import { updateField, deleteField, updateValidation } from '../redux/currentModel';
+
 import DataTypeDropDown from './DataTypeDropdown';
-
-/*----------  LIBRARY COMPONENTS  ----------*/
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import Checkbox from 'material-ui/Checkbox';
 import { Card, CardActions } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
-
-/*----------  COLORS  ----------*/
 import { red400 } from 'material-ui/styles/colors';
 
 /*----------  HELPER FUNCTIONS  ----------*/
@@ -27,15 +25,14 @@ const isNumber = (type) => {
   }
 };
 
-/*----------  COMPONENT  ----------*/
-export default class Field extends Component {
+class Field extends Component {
   render() {
     let { field,
           idx,
           expanded,
           updateField,
           deleteField,
-          toggleFieldState,
+          handleToggle,
           updateValidation } = this.props;
     return (
       <div className="col m12 l6" key={idx}>
@@ -53,7 +50,7 @@ export default class Field extends Component {
                 <FlatButton label="DELETE FIELD"
                             labelStyle={{color: red400}}
                             onClick={() => deleteField(idx)}/>
-                <Toggle onToggle={() => toggleFieldState(idx)}
+                <Toggle onToggle={() => handleToggle(idx)}
                         label="More Options"
                         labelPosition="right"/>
               </CardActions>
@@ -218,3 +215,17 @@ export default class Field extends Component {
     );
   }
 }
+
+
+/*----------  CONNECT TO STORE  ----------*/
+const mapStateToProps = ({ currentModel }) => ({ currentModel });
+const mapDispatchToProps = dispatch => ({
+  updateField: (key, val, idx) => dispatch(updateField(key, val, idx)),
+  deleteField: idx => dispatch(deleteField(idx)),
+  updateValidation: (key, val) => dispatch(updateValidation(key, val))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Field);

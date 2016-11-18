@@ -3,32 +3,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-/*----------  LIBRARY COMPONENTS  ----------*/
+import { removeModel } from '../redux/models';
+import { receiveModel, resetModel } from '../redux/currentModel';
+import { convertFields } from '../utils';
+
 import IconButton from 'material-ui/IconButton';
 import { List, ListItem, makeSelectable } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-
-
-/*----------  ICONS  ----------*/
 import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
-
-/*----------  COLORS  ----------*/
 import {grey200, teal200, darkBlack } from 'material-ui/styles/colors';
-
 
 let SelectableList = makeSelectable(List);
 
-/*----------  CONSTANTS AND HELPER FUNCTIONS  ----------*/
-import { convertFields } from '../utils';
-
-
-/*----------  COMPONENT  ----------*/
 export class ModelList extends Component {
   render() {
     let { models,
-          selectedIdx,
-          getModel,
+          currentModel,
+          receiveModel,
           deleteModel } = this.props;
     return (
       <SelectableList>
@@ -44,23 +36,23 @@ export class ModelList extends Component {
           let fieldString = convertFields(model.fields);
           return (
             <div key={modelIdx}>
-            <ListItem
-              rightIconButton={
-                <IconButton onClick={() => deleteModel(model, modelIdx)}>
-                  <DeleteForeverIcon/>
-                </IconButton>
-              }
-              innerDivStyle={{
-                color: 'black',
-                backgroundColor: selectedIdx === modelIdx ? teal200 : grey200,
-                opacity: selectedIdx === modelIdx ? 0.95 : 0.85
-              }}
-              primaryText={model.name}
-              secondaryText={`Fields: ${fieldString}`}
-              secondaryTextLines={1}
-              onClick={() => getModel(model, modelIdx)}
-            />
-            <Divider inset={true} />
+              <ListItem
+                rightIconButton={
+                  <IconButton onClick={() => deleteModel(model)}>
+                    <DeleteForeverIcon/>
+                  </IconButton>
+                }
+                innerDivStyle={{
+                  color: 'black',
+                  backgroundColor: model.id === currentModel.id ? teal200 : grey200,
+                  opacity: model.id === currentModel.id ? 0.95 : 0.85
+                }}
+                primaryText={model.name}
+                secondaryText={`Fields: ${fieldString}`}
+                secondaryTextLines={1}
+                onClick={() => receiveModel(model)}
+              />
+              <Divider inset={true} />
             </div>
           );
         })
@@ -70,10 +62,19 @@ export class ModelList extends Component {
   }
 }
 
+let lastDeleted = null;
 
-/*----------  CONNECT TO STORE  ----------*/
-const mapStateToProps = ({ models }) => ({ models });
-const mapDispatchToProps = dispatch => ({});
+const mapStateToProps = ({ models, currentModel }) => ({ models, currentModel });
+const mapDispatchToProps = dispatch => ({
+  deleteModel: model => {
+    dispatch(removeModel(model));
+    lastDeleted = model;
+    dispatch(resetModel());
+  },
+  receiveModel: model => {
+    if (model !== lastDeleted) dispatch(receiveModel(model));
+  }
+});
 
 export default connect(
   mapStateToProps,

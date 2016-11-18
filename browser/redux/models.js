@@ -1,6 +1,10 @@
 'use strict';
 
 import axios from 'axios';
+import { find } from 'lodash';
+import { openWindow, messages } from './dialog';
+import { resetModel } from './currentModel';
+import store from '../store';
 
 /*----------  INITIAL STATE  ----------*/
 const initialState = [];
@@ -38,6 +42,33 @@ export const resetModels = () => ({
 });
 
 /*----------  THUNKS  ----------*/
+export const saveModel = (model, isNew) => dispatch => {
+  let { models } = store.getState();
+  let storeModel = find(models, {name: model.name});
+  console.log('storeModel', storeModel);
+  if (storeModel && storeModel.id !== model.id) {
+    dispatch(openWindow('Validation Error', messages.dupFieldName));
+    return;
+  }
+
+  if (!model.name) {
+      dispatch(openWindow('Validation Error', messages.reqModelName));
+      return;
+  }
+
+  for (let field of model.fields) {
+      if (!field.name) {
+        dispatch(openWindow('Validation Error', messages.reqFieldName));
+        return;
+      } else if (!field.type) {
+        dispatch(openWindow('Validation Error', messages.reqFieldType));
+        return;
+      }
+    }
+    if (isNew) dispatch(addModel(model));
+    else dispatch(updateModel(model));
+    dispatch(resetModel());
+};
 
 /*----------  FUNCTIONS  ----------*/
 export const requestDbDownload = models =>  axios.post('/api/create/db', {models}).then(res => {
@@ -53,7 +84,7 @@ export default (state = initialState, action) => {
     case RECEIVE_MODELS:
       return action.models;
     case ADD_MODEL:
-      let id = models.reduce((prev, curr) => prev < curr.id ? curr.id : prev, 1) + 1;
+      let id = models.reduce((prev, curr) => prev < curr.id ? curr.id : prev, 0) + 1;
       let model = Object.assign({}, action.model, {id});
       return [...state, model];
     case UPDATE_MODEL:

@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { Router, Route, browserHistory, IndexRoute, Redirect } from 'react-router';
 import App from './components/App';
-import CreateModel from './components/CreateModel';
+import Main from './components/Main';
 import Ace from './components/Ace';
 
 export default class Routes extends Component {
@@ -12,7 +12,7 @@ export default class Routes extends Component {
     <Router history={browserHistory}>
       <Route path="/" component={App}>
         <Route path="ace" component={Ace}/>
-        <IndexRoute component={CreateModel}/>
+        <IndexRoute component={Main}/>
         <Redirect from="*" to="/"/>
       </Route>
     </Router>

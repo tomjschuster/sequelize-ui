@@ -1,73 +1,124 @@
 'use strict';
 
-import axios from 'axios';
+import { getInitialModel, copyModel } from '../utils';
 
 /*----------  INITIAL STATE  ----------*/
-const initialState = [];
+const initialState =  {
+  idx: -1,
+  name: '',
+  fields: [],
+  config: {
+    tableName: '',
+    singular: '',
+    plural: '',
+    timestamps: true,
+    freezeTableNames: false,
+    underscored: false,
+    underscoredAll: false
+  },
+  methods: {
+    hooks: false,
+    getterMethods: false,
+    setterMethods: false,
+    instanceMethods: false,
+    classMethods: false
+  }
+  }
 
 /*----------  ACTION TYPES  ----------*/
-const RECEIVE_MODELS = 'RECEIVE_MODELS';
-const ADD_MODEL = 'ADD_MODEL';
-const REMOVE_MODEL = 'REMOVE_MODEL';
-const RESET_MODELS = 'RESET_MODELS';
-const UPDATE_MODEL = 'UPDATE_MODEL';
+const RECEIVE_MODEL = 'RECEIVE_MODEL';
+const RESET_MODEL = 'RESET_MODEL';
+const UPDATE_MODEL_NAME = 'UPDATE_MODEL_NAME';
+const ADD_FIELD = 'ADD_FIELD';
+const UPDATE_FIELD = 'UPDATE_FIELD';
+const UPDATE_VALIDATION = 'UPDATE_VALIDATION';
+const DELETE_FIELD = 'DELETE_FIELD';
+const UPDATE_CONFIG = 'UPDATE_CONFIG';
+const UPDATE_METHOD = 'UPDATE_METHOD';
 
 /*----------  ACTION CREATORS  ----------*/
-export const receiveModels = models  => ({
-  type: RECEIVE_MODELS,
-  models
-});
-
-export const addModel = model => ({
-  type: ADD_MODEL,
+export const receiveModel = model => ({
+  type: RECEIVE_MODEL,
   model
 });
 
-export const updateModel = model => ({
-  type: UPDATE_MODEL,
-  model
+export const resetModel = () => ({
+  type: RESET_MODEL,
 });
 
-export const removeModel = model => ({
-  type: REMOVE_MODEL,
-  model
+export const updateModelName = name  => ({
+  type: UPDATE_MODEL_NAME,
+  name
 });
 
-export const resetModels = () => ({
-  type: RESET_MODELS
+export const addField = () => ({
+  type: ADD_FIELD
+});
+
+export const updateField = (key, val, idx) => ({
+  type: UPDATE_FIELD,
+  key,
+  val,
+  idx
+});
+
+export const updateValidation = (key, val, idx) => ({
+  type: UPDATE_VALIDATION,
+  key,
+  val,
+  idx
+});
+
+export const deleteField = idx => ({
+  type: DELETE_FIELD,
+  idx
+});
+
+export const updateConfig = (key, val) => ({
+  type: UPDATE_CONFIG,
+  key,
+  val
+});
+
+export const updateMethod = (key, val) => ({
+  type: UPDATE_METHOD,
+  key,
+  val
 });
 
 /*----------  THUNKS  ----------*/
 
-/*----------  FUNCTIONS  ----------*/
-export const requestDbDownload = models =>  axios.post('/api/create/db', {models}).then(res => {
-  console.log(res.data);
-  window.location.replace(`/api/download/${res.data}`);
-}).catch(console.error);
-
-
 /*----------  REDUCER  ----------*/
 export default (state = initialState, action) => {
-  let models = [...state];
+  let model = copyModel(state);
+  console.log('reducing', model.fields);
   switch (action.type) {
-    case RECEIVE_MODELS:
-      return action.models;
-    case ADD_MODEL:
-      let id = models.reduce((prev, curr) => prev < curr.id ? curr.id : prev, 1) + 1;
-      let model = Object.assign({}, action.model, {id});
-      return [...state, model];
-    case UPDATE_MODEL:
-      models.forEach((model, idx) => {
-        if (model.id === action.model.id) models[idx] = action.model;
-      });
-      return models;
-    case REMOVE_MODEL:
-      let idx = models.reduce((prev, curr, i) =>
-        prev === -1 && curr.id === action.model.id ? curr.id : prev, -1);
-      if (idx !== -1) models.splice(action.idx, 1);
-      return models;
-    case RESET_MODELS:
-      return [];
+    case RECEIVE_MODEL:
+      return copyModel(action.model);
+    case RESET_MODEL:
+      return getInitialModel();
+    case UPDATE_MODEL_NAME:
+      model.name = action.name;
+      return model;
+    case ADD_FIELD:
+      model.fields.push([{name: '', type: '', validate: {}}]);
+      return model;
+    case UPDATE_FIELD:
+      model.fields[action.idx][action.key] = action.val;
+      return model;
+    case UPDATE_VALIDATION:
+    console.log(action)
+      model.fields[action.idx].validate[action.key] = action.val;
+      return model;
+    case DELETE_FIELD:
+      model.fields.splice(action.idx, 1);
+      return model;
+    case UPDATE_CONFIG:
+      model.config[action.key] = action.val;
+      return model;
+    case UPDATE_METHOD:
+      model.methods[action.key] = action.val;
+      return model;
     default:
       return state;
   }

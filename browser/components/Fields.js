@@ -3,21 +3,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-/*----------  LOCAL COMPONENTS  ----------*/
+import { addField } from '../redux/currentModel';
 import Field from './Field';
-
-/*----------  LIBRARY COMPONENTS  ----------*/
 import RaisedButton from 'material-ui/RaisedButton';
 
 export class Fields extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { expanded: []};
+    this.toggleFieldExpansion = this.toggleFieldExpansion.bind(this);
+  }
+
+  toggleFieldExpansion(idx) {
+    let expanded = [...this.state.expanded];
+    expanded[idx] = !expanded[idx];
+    this.setState({expanded});
+  }
+
   render() {
-    let { model,
-          expandedFields,
-          toggleFieldState,
-          addField,
-          updateField,
-          updateValidation,
-          deleteField } = this.props;
+    let { currentModel, addField } = this.props;
     return (
       <div className="create-field-grid">
         <div className="create-field-header">
@@ -25,14 +29,11 @@ export class Fields extends Component {
           <RaisedButton primary={true} label="+ ADD" onClick={addField} />
         </div>
         <div className="row">
-          { model.fields.map( (field, fieldIdx) => (
+          { currentModel.fields.map( (field, idx) => (
             <Field field={field}
-                   idx={fieldIdx}
-                   expanded={expandedFields[fieldIdx]}
-                   updateField={updateField}
-                   deleteField={deleteField}
-                   toggleFieldState={toggleFieldState}
-                   updateValidation={updateValidation}/>
+                   idx={idx}
+                   expanded={this.state.expanded[idx]}
+                   handleToggle={this.toggleFieldExpansion}/>
           ))}
         </div>
       </div>
@@ -41,9 +42,10 @@ export class Fields extends Component {
 }
 
 
-/*----------  CONNECT TO STORE  ----------*/
-const mapStateToProps = ({ models }) => ({ models });
-const mapDispatchToProps = dispatch => ({});
+const mapStateToProps = ({ currentModel }) => ({ currentModel });
+const mapDispatchToProps = dispatch => ({
+  addField: field => dispatch(addField(field))
+});
 
 export default connect(
   mapStateToProps,

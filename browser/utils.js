@@ -1,58 +1,34 @@
 'use strict';
 
-const getInitialDialogs = () => {
-  return {
-    confirm: {
-      open: false,
-      title: '',
-      message: ''
-    }
-  };
-};
-
 export const getInitialModel = () => {
-  return { idx: -1,
-           name: '',
-           fields: [],
-           config: {
-             tableName: '',
-             singular: '',
-             plural: '',
-             timestamps: true,
-             freezeTableNames: false,
-             underscored: false,
-             underscoredAll: false
-           },
-           methods: {
-             hooks: false,
-             getterMethods: false,
-             setterMethods: false,
-             instanceMethods: false,
-             classMethods: false
-           }
-         };
+  return {
+   idx: -1,
+   name: '',
+   fields: [],
+   config: {
+     tableName: '',
+     singular: '',
+     plural: '',
+     timestamps: true,
+     freezeTableName: false,
+     underscored: false,
+     underscoredAll: false
+   },
+   methods: {
+     hooks: false,
+     getterMethods: false,
+     setterMethods: false,
+     instanceMethods: false,
+     classMethods: false
+   }
+ };
 };
 
-export const getInitialState = () => {
-  let model = getInitialModel();
-  let dialogs = getInitialDialogs();
-  return {model, dialogs, selectedIdx: null, expandedFields: [], tabIdx: 0};
-};
-
-export const makeDialogState = (key, open, title, message) => {
-  let state = {};
-  state[key] = {};
-  state[key].open = open;
-  state[key].title = title;
-  state[key].message = message;
-  return state;
-};
-
-export const messages = {
-  reqModelName: 'Please give your model a name.',
-  reqFieldName: 'Every field must have a name.',
-  reqFieldType: 'Every field must have a data type.',
-  dupFieldName: 'Table name already exists. Please select another name.',
+export const copyModel = model => {
+  let fields = [...model.fields];
+  let config = Object.assign({}, model.config);
+  let methods = Object.assign({}, model.methods);
+  return Object.assign({}, model, {fields, methods, config});
 };
 
 export const convertFields = fields => {

@@ -3,6 +3,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+/*----------  ACTION/THUNK CREATORS  ----------*/
+import { updateConfig, updateMethod } from '../redux/currentModel';
+
 /*----------  LIBRARY COMPONENTS  ----------*/
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
@@ -14,7 +17,7 @@ import Checkbox from 'material-ui/Checkbox';
 /*----------  COMPONENT  ----------*/
 export class Configuration extends Component {
   render() {
-    let { model,
+    let { currentModel,
           updateConfig,
           updateMethod } = this.props;
     return (
@@ -24,7 +27,7 @@ export class Configuration extends Component {
           <div className="row">
             <div className="col s12 m6">
               <TextField hintText="Table Name"
-                         value={model.config.tableName}
+                         value={currentModel.config.tableName}
                          style={{
                                  fontSize: '0.8em',
                                  width: '50%',
@@ -36,7 +39,7 @@ export class Configuration extends Component {
                          onChange={evt =>
                              updateConfig('tableName', evt.target.value)}/>
               <TextField hintText="Singular Name"
-                         value={model.config.singular}
+                         value={currentModel.config.singular}
                          style={{
                                  fontSize: '0.8em',
                                  width: '50%',
@@ -48,7 +51,7 @@ export class Configuration extends Component {
                          onChange={evt =>
                              updateConfig('singular', evt.target.value)}/>
               <TextField hintText="Plural Name"
-                         value={model.config.plural}
+                         value={currentModel.config.plural}
                          style={{
                                  fontSize: '0.8em',
                                  width: '50%',
@@ -62,19 +65,19 @@ export class Configuration extends Component {
             </div>
             <div className="col s12 m6">
               <Checkbox label="No Timestamp Columns"
-                        checked={!model.config.timestamps}
+                        checked={!currentModel.config.timestamps}
                         onCheck={(evt, isChecked) =>
                           updateConfig('timestamps', !isChecked)}/>
               <Checkbox label="Freeze Table Name"
-                        checked={model.config.freezeTableName}
+                        checked={currentModel.config.freezeTableName}
                         onCheck={(evt, isChecked) =>
                           updateConfig('freezeTableName', isChecked)}/>
               <Checkbox label="Underscore Column Names"
-                        checked={model.config.underscored}
+                        checked={currentModel.config.underscored}
                         onCheck={(evt, isChecked) =>
                           updateConfig('underscored', isChecked)}/>
               <Checkbox label="Underscore Table Names"
-                        checked={model.config.underscoredAll}
+                        checked={currentModel.config.underscoredAll}
                         onCheck={(evt, isChecked) =>
                           updateConfig('underscoredAll', isChecked)}/>
             </div>
@@ -82,23 +85,23 @@ export class Configuration extends Component {
         <Divider inset={true} />
         <Subheader>Include Templates For:</Subheader>
         <Checkbox label="Hooks"
-                  checked={model.methods.hooks}
+                  checked={currentModel.methods.hooks}
                   onCheck={(evt, isChecked) =>
                     updateMethod('hooks', isChecked)}/>
         <Checkbox label="Getter Methods"
-                  checked={model.methods.getterMethods}
+                  checked={currentModel.methods.getterMethods}
                   onCheck={(evt, isChecked) =>
                     updateMethod('getterMethods', isChecked)}/>
         <Checkbox label="Setter Methods"
-                  checked={model.methods.setterMethods}
+                  checked={currentModel.methods.setterMethods}
                   onCheck={(evt, isChecked) =>
                     updateMethod('setterMethods', isChecked)}/>
         <Checkbox label="Instance Methods"
-                  checked={model.methods.instanceMethods}
+                  checked={currentModel.methods.instanceMethods}
                   onCheck={(evt, isChecked) =>
                     updateMethod('instanceMethods', isChecked)}/>
         <Checkbox label="Class Methods"
-                  checked={model.methods.classMethods}
+                  checked={currentModel.methods.classMethods}
                   onCheck={(evt, isChecked) =>
                     updateMethod('classMethods', isChecked)}/>
         </div>
@@ -109,8 +112,11 @@ export class Configuration extends Component {
 
 
 /*----------  CONNECT TO STORE  ----------*/
-const mapStateToProps = ({}) => ({ });
-const mapDispatchToProps = dispatch => ({});
+const mapStateToProps = ({currentModel}) => ({currentModel});
+const mapDispatchToProps = dispatch => ({
+  updateConfig: (key, val) => dispatch(updateConfig(key, val)),
+  updateMethod: (key, val) => dispatch(updateMethod(key, val))
+});
 
 export default connect(
   mapStateToProps,

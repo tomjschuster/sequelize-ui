@@ -8,6 +8,6 @@ import reducer from './redux';
 
 const middleware = applyMiddleware(thunkMiddleware, createLogger());
 
-const enhancer = compose(middleware, persistState());
+const enhancer = compose(middleware, persistState('models'));
 
 export default createStore(reducer, enhancer);

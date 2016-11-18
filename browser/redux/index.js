@@ -2,7 +2,11 @@
 
 import { combineReducers } from 'redux';
 import models from './models';
+import currentModel from './currentModel';
+import dialog from './dialog';
 
 export default combineReducers({
-  models
+  models,
+  currentModel,
+  dialog
 });
