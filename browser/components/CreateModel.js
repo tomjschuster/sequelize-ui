@@ -3,48 +3,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { find } from 'lodash';
-import axios from 'axios';
 
 /*----------  ACTION/THUNK CREATORS  ----------*/
 import { addModel, removeModel, updateModel } from '../redux/models';
 
 /*----------  LOCAL COMPONENTS  ----------*/
 import ConfirmDialog from './ConfirmDialog';
-import Field from './Field';
-
-/*----------  LIBRARY COMPONENTS  ----------*/
-import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
-import { Toolbar, ToolbarGroup, ToolbarSeparator } from 'material-ui/Toolbar';
-import { List, ListItem, makeSelectable } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
-import Divider from 'material-ui/Divider';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import Checkbox from 'material-ui/Checkbox';
-
-
-/*----------  ICONS  ----------*/
-import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
-
-/*----------  COLORS  ----------*/
-import {grey200,
-        teal200,
-        darkBlack,
-        red400,
-        white,
-        blueGrey200} from 'material-ui/styles/colors';
-
-
-let SelectableList = makeSelectable(List);
+import ModelBuilder from './ModelBuilder';
+import ModelList from './ModelList';
 
 /*----------  CONSTANTS AND HELPER FUNCTIONS  ----------*/
 const trash = [];
 import { getInitialModel,
          getInitialState,
          makeDialogState,
-         messages,
-         convertFields } from '../utils';
+         messages } from '../utils';
 
 
 /*----------  COMPONENT  ----------*/
@@ -54,6 +27,7 @@ export class CreateModel extends Component {
     this.state = getInitialState();
 
     /*----------  BIND INSTANCE METHODS  ----------*/
+    this.setTabIdx = this.setTabIdx.bind(this);
     this.openDialogWindow = this.openDialogWindow.bind(this);
     this.closeDialogWindow = this.closeDialogWindow.bind(this);
     this.toggleFieldState = this.toggleFieldState.bind(this);
@@ -70,6 +44,10 @@ export class CreateModel extends Component {
     this.deleteModel = this.deleteModel.bind(this);
   }
 
+  /*----------  MANAGE TAB STATE  ----------*/
+  setTabIdx(tabIdx) {
+    this.setState({tabIdx});
+  }
 
   /*----------  MANAGE DIALOG WiNDOW STATE  ----------*/
   openDialogWindow(key, title, message) {
@@ -84,7 +62,6 @@ export class CreateModel extends Component {
 
   /*----------  MANAGE FIELD OPEN STATE  ----------*/
   toggleFieldState(idx) {
-    console.log(this.state.expandedFields);
     let expandedFields = [...this.state.expandedFields];
     expandedFields[idx] = !expandedFields[idx];
     this.setState({expandedFields});
@@ -197,7 +174,8 @@ export class CreateModel extends Component {
 
   /*----------  RENDER COMPONENT  ----------*/
   render() {
-    let { closeDialogWindow,
+    let { setTabIdx,
+          closeDialogWindow,
           toggleFieldState,
           updateModelName,
           addField,
@@ -210,187 +188,37 @@ export class CreateModel extends Component {
           getModel,
           saveModel,
           deleteModel } = this;
-    let { model, dialogs, selectedIdx, expandedFields } = this.state;
+    let { tabIdx, model, dialogs, selectedIdx, expandedFields } = this.state;
     let { models } = this.props;
     return (
       <div>
         <div className="your-models">
-            <div className="row">
+          <div className="row">
             <div className="col s12 m6 push-m3">
-              <SelectableList>
-                <div>
-                  <h5 className="center-align" style={{color: darkBlack}}>
-                    {models.length ? 'Your Models' : 'You have no models...'}
-                  </h5>
-                <Subheader className="center-align">
-                  {models.length ? 'Click to edit' : 'Create one below'}
-                </Subheader>
-                </div>
-                { models.map((model, modelIdx) => {
-                  let fieldString = convertFields(model.fields);
-                  return (
-                    <div key={modelIdx}>
-                    <ListItem
-                      rightIconButton={<DeleteForeverIcon onClick={() => deleteModel(model, modelIdx)}/>}
-                      innerDivStyle={{
-                        color: 'black',
-                        backgroundColor: selectedIdx === modelIdx ? teal200 : grey200,
-                        opacity: selectedIdx === modelIdx ? 0.95 : 0.85
-                      }}
-                      primaryText={model.name}
-                      secondaryText={`Fields: ${fieldString}`}
-                      secondaryTextLines={1}
-                      onClick={() => getModel(model, modelIdx)}
-                    />
-                    <Divider inset={true} />
-                    </div>
-                  );
-                })
-                }
-              </SelectableList>
-              </div>
+              <ModelList models={models}
+                         selectedIdx={selectedIdx}
+                         getModel={getModel}
+                         deleteModel={deleteModel}/>
             </div>
+          </div>
         </div>
         <div className="field-definitions">
-          <Paper>
-            <Toolbar>
-              <ToolbarGroup firstChild={true}>
-              <ToolbarSeparator/>
-              <div className="model-name-input">
-                <TextField value={model.name}
-                           style={{
-                             fontSize: '1.5em'
-                           }}
-                           onChange={updateModelName}
-                           hintText="Model Name"
-                           hintStyle={{color: '#555'}}/>
-              </div>
-              <ToolbarSeparator/>
-              { model.id && <RaisedButton label="Save"
-                                          primary={true}
-                                          onClick={() => saveModel(model)} /> }
-              { model.id && <RaisedButton label="Delete"
-                                          labelColor={white}
-                                          backgroundColor={red400}
-                                  onClick={() => deleteModel(model)} /> }
-              { !model.id && <RaisedButton label="Create"
-                                           disabled={!model.name}
-                                           disabledBackgroundColor={blueGrey200}
-                                           secondary={true}
-                                           onClick={createModel} /> }
-              </ToolbarGroup>
-            </Toolbar>
-            <Tabs>
-              <Tab label="Fields">
-                <div className="create-field-grid">
-                  <div className="create-field-header">
-                    <span className="create-field-title">Fields</span>
-                    <RaisedButton primary={true} label="+ ADD" onClick={addField} />
-                  </div>
-                  <div className="row">
-                    { model.fields.map( (field, fieldIdx) => (
-                      <Field field={field}
-                             idx={fieldIdx}
-                             expandedFields={expandedFields}
-                             updateField={updateField}
-                             deleteField={deleteField}
-                             toggleFieldState={toggleFieldState}
-                             updateValidation={updateValidation}/>
-                    ))}
-                  </div>
-                </div>
-              </Tab>
-              <Tab label="Configuration">
-                <div className="configuration container">
-                  <Paper>
-                  <div className="container">
-                  <Subheader>Table Options</Subheader>
-                    <div className="row">
-                      <div className="col s12 m6">
-                        <TextField hintText="Table Name"
-                                   value={model.config.tableName}
-                                   style={{
-                                           fontSize: '0.8em',
-                                           width: '50%',
-                                           marginTop: -5,
-                                           marginBottom: -5,
-                                           display: 'block',
-                                           clear: 'right'
-                                         }}
-                                   onChange={evt =>
-                                       updateConfig('tableName', evt.target.value)}/>
-                        <TextField hintText="Singular Name"
-                                   value={model.config.singular}
-                                   style={{
-                                           fontSize: '0.8em',
-                                           width: '50%',
-                                           marginTop: -5,
-                                           marginBottom: -5,
-                                           display: 'block',
-                                           clear: 'right'
-                                         }}
-                                   onChange={evt =>
-                                       updateConfig('singular', evt.target.value)}/>
-                        <TextField hintText="Plural Name"
-                                   value={model.config.plural}
-                                   style={{
-                                           fontSize: '0.8em',
-                                           width: '50%',
-                                           marginTop: -5,
-                                           marginBottom: -5,
-                                           display: 'block',
-                                           clear: 'right'
-                                         }}
-                                   onChange={evt =>
-                                       updateConfig('plural', evt.target.value)}/>
-                      </div>
-                      <div className="col s12 m6">
-                        <Checkbox label="No Timestamp Columns"
-                                  checked={!model.config.timestamps}
-                                  onCheck={(evt, isChecked) =>
-                                    updateConfig('timestamps', !isChecked)}/>
-                        <Checkbox label="Freeze Table Name"
-                                  checked={model.config.freezeTableName}
-                                  onCheck={(evt, isChecked) =>
-                                    updateConfig('freezeTableName', isChecked)}/>
-                        <Checkbox label="Underscore Column Names"
-                                  checked={model.config.underscored}
-                                  onCheck={(evt, isChecked) =>
-                                    updateConfig('underscored', isChecked)}/>
-                        <Checkbox label="Underscore Table Names"
-                                  checked={model.config.underscoredAll}
-                                  onCheck={(evt, isChecked) =>
-                                    updateConfig('underscoredAll', isChecked)}/>
-                      </div>
-                  </div>
-                  <Divider inset={true} />
-                  <Subheader>Include Templates For:</Subheader>
-                  <Checkbox label="Hooks"
-                            checked={model.methods.hooks}
-                            onCheck={(evt, isChecked) =>
-                              updateMethod('hooks', isChecked)}/>
-                  <Checkbox label="Getter Methods"
-                            checked={model.methods.getterMethods}
-                            onCheck={(evt, isChecked) =>
-                              updateMethod('getterMethods', isChecked)}/>
-                  <Checkbox label="Setter Methods"
-                            checked={model.methods.setterMethods}
-                            onCheck={(evt, isChecked) =>
-                              updateMethod('setterMethods', isChecked)}/>
-                  <Checkbox label="Instance Methods"
-                            checked={model.methods.instanceMethods}
-                            onCheck={(evt, isChecked) =>
-                              updateMethod('instanceMethods', isChecked)}/>
-                  <Checkbox label="Class Methods"
-                            checked={model.methods.classMethods}
-                            onCheck={(evt, isChecked) =>
-                              updateMethod('classMethods', isChecked)}/>
-                  </div>
-                  </Paper>
-                </div>
-              </Tab>
-            </Tabs>
-          </Paper>
+          <ModelBuilder tabIdx={tabIdx}
+                        model={model}
+                        expandedFields={expandedFields}
+                        setTabIdx={setTabIdx}
+                        toggleFieldState={toggleFieldState}
+                        updateModelName={updateModelName}
+                        addField={addField}
+                        updateField={updateField}
+                        updateValidation={updateValidation}
+                        deleteField={deleteField}
+                        updateConfig={updateConfig}
+                        updateMethod={updateMethod}
+                        createModel={createModel}
+                        saveModel={saveModel}
+                        deleteModel={deleteModel}/>
+
         </div>
         <div className="dialogs">
           <ConfirmDialog open={dialogs.confirm.open}

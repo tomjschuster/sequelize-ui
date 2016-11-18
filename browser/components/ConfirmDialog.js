@@ -11,7 +11,7 @@ export default class ConfirmDialog extends Component {
         label="OK"
         secondary={true}
         keyboardFocused={true}
-        onTouchTap={this.props.handleClose}
+        onClick={this.props.handleClose}
       />,
     ];
 

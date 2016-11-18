@@ -36,7 +36,7 @@ export const getInitialModel = () => {
 export const getInitialState = () => {
   let model = getInitialModel();
   let dialogs = getInitialDialogs();
-  return {model, dialogs, selectedIdx: null, expandedFields: []};
+  return {model, dialogs, selectedIdx: null, expandedFields: [], tabIdx: 0};
 };
 
 export const makeDialogState = (key, open, title, message) => {

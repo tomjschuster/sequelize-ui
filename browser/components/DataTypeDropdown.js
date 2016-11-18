@@ -33,17 +33,41 @@ const dataSourceConfig = {
 
 /*----------  COMPONENT  ----------*/
 export class DataTypeDropDown extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {open: false};
+    this.openMenu = this.openMenu.bind(this);
+    this.closeMenu = this.closeMenu.bind(this);
+  }
+
+  openMenu() {
+    this.setState({open: true});
+  }
+
+  closeMenu() {
+    this.setState({ open: false });
+  }
+
   render() {
     let { currType, idx, onClick } = this.props;
+    let { open } = this.state;
+    let { openMenu, closeMenu } = this;
     return (
     <IconMenu
-      iconButtonElement={<FlatButton label={currType || 'Data Type'}/>}
+      open={open}
+      iconButtonElement={
+        <FlatButton label={currType || 'Data Type'}
+                    onClick={openMenu}/>
+      }
       anchorOrigin={{horizontal: 'left', vertical: 'top'}}
       targetOrigin={{horizontal: 'left', vertical: 'top'}}>
         {sequelizeDataTypes.map((dataType, i) => (
           <MenuItem key={i}
                     primaryText={dataType.textKey}
-                    onClick={() => onClick('type', dataType.valueKey, idx)} />
+                    onClick={() => {
+                      closeMenu();
+                      onClick('type', dataType.valueKey, idx);
+                    }} />
           ))}
     </IconMenu>
     );

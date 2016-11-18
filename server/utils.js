@@ -74,7 +74,7 @@ const makeModelFile = model => {
 
 const makeAssociationFile = models => {
   let output = '';
-  models.forEach(model => output += `const ${upperCamelCase(model.name)} = require('./model.name');\n`);
+  models.forEach(model => output += `const ${upperCamelCase(model.name)} = require('./${model.name}');\n`);
   output += '\n//ASSOCIATIONS\n\n';
   output += `module.exports = {${models.map(model => upperCamelCase(model.name)).join(', ')}};`;
   return output;
