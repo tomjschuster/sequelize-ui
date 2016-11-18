@@ -8,13 +8,12 @@ import DataTypeDropDown from './DataTypeDropdown';
 /*----------  LIBRARY COMPONENTS  ----------*/
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/Checkbox';
-import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card';
+import { Card, CardActions } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
 
 /*----------  COLORS  ----------*/
-import {grey400, darkBlack, lightBlack, red400, white, blueGrey200} from 'material-ui/styles/colors';
+import { red400 } from 'material-ui/styles/colors';
 
 /*----------  HELPER FUNCTIONS  ----------*/
 const isNumber = (type) => {
@@ -33,14 +32,14 @@ export default class Field extends Component {
   render() {
     let { field,
           idx,
-          expandedFields,
+          expanded,
           updateField,
           deleteField,
           toggleFieldState,
           updateValidation } = this.props;
     return (
       <div className="col m12 l6" key={idx}>
-        <Card expanded={expandedFields[idx]}
+        <Card expanded={expanded}
               style={{
                 marginBottom: '5%'
               }}>

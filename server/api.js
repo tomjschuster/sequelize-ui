@@ -6,55 +6,43 @@ const path = require('path');
 const randomstring = require('randomstring');
 const mkdirp = require('mkdirp');
 const del = require('del');
-const router = require('express').Router();
 const camelCase = require('camelcase');
-const utils = require('./utils');
-const _db = utils._db;
-const makeModelFile = utils.makeModelFile;
-const makeAssociationFile = utils.makeAssociationFile;
+const { _db, makeModelFile, makeAssociationFile } = require('./utils');
 
-module.exports = router;
+const router = module.exports = require('express').Router();
 
 
 router.get('/download/:key', function(req, res, next) {
-  fs.lstat(path.join(__dirname, 'temp', req.params.key, 'db.zip'), (err, stat) => {
+  let folderPath = path.join(__dirname, 'temp', req.params.key);
+  let filePath = path.join(__dirname, 'temp', req.params.key, 'db.zip');
+  fs.lstat(filePath, (err, stat) => {
     if (err) {
       next(err);
     } else {
-      res.type('application/zip').download(path.join(__dirname, 'temp', req.params.key, 'db.zip'),
-                                           'db.zip', err => {
-                                              if (err) next(err);
-                                              console.log('Downloaded ', path.join(__dirname, 'temp', req.params.key, 'db.zip'));
-                                            });
+      res.type('application/zip')
+         .download(filePath, 'db.zip', err => {
+            if (err) next(err);
+            console.log(`Downloaded ${filePath}`);
+          });
 
-      del([path.join(__dirname, 'temp', req.params.key)]).then(paths => {
-          console.log('Deleted files and folders:\n', paths.join('\n'));
+      del([folderPath]).then(paths => {
+          console.log(`Deleted files and folders:\n ${paths.join('\n')}`);
       }).catch(next);
     }
   });
 });
 
-router.post('/create/model', (req, res, next) => {
-  let key = randomstring.generate();
-  mkdirp(path.join(__dirname, 'temp', `${key}`), (err) => {
-    if (err) next(err);
-    fs.writeFile(path.join(__dirname, 'temp', `${key}`, `${req.body.model.name}.js`),
-                 makeModelFile(req.body.model),
-                 err => {
-                  if (err) next(err);
-                  res.send(key);
-                 });
-  });
-});
-
 router.post('/create/db', (req, res, next) => {
   let key = randomstring.generate();
-  mkdirp(path.join(__dirname, 'temp', `${key}`), (err) => {
+  let folderPath = path.join(__dirname, 'temp', `${key}`);
+  let filePath = path.join(folderPath, 'db.zip');
+
+  mkdirp(folderPath, (err) => {
     if (err) next(err);
 
     let models = req.body.models;
     let archive  = archiver('zip');
-    let output = fs.createWriteStream(path.join(__dirname, 'temp', `${key}`, 'db.zip'));
+    let output = fs.createWriteStream(filePath);
 
     archive.pipe(output);
 
