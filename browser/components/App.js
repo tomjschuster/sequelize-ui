@@ -22,8 +22,7 @@ export class App extends Component {
       <div>
           <AppBar title="Sequelize UI"
                   iconElementLeft={<IconButton><NewFolder /></IconButton>}
-                  iconElementRight={<FlatButton label="Download Models"/>}
-                  onRightIconButtonTouchTap={() => requestDbDownload(models)}/>
+                  iconElementRight={<FlatButton onClick={() => requestDbDownload(models)} label="Download Models"/>}/>
         <div id="main">
           { children }
         </div>
