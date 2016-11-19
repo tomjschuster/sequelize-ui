@@ -10,4 +10,4 @@ const middleware = applyMiddleware(thunkMiddleware, createLogger());
 
 const enhancer = compose(middleware, persistState('models'));
 
-export default createStore(reducer, enhancer);
+export default createStore(reducer, middleware);

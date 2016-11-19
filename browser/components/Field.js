@@ -32,7 +32,7 @@ class Field extends Component {
           expanded,
           updateField,
           deleteField,
-          handleToggle,
+          toggleFieldExpansion,
           updateValidation } = this.props;
     return (
       <div className="col m12 l6" key={idx}>
@@ -50,7 +50,8 @@ class Field extends Component {
                 <FlatButton label="DELETE FIELD"
                             labelStyle={{color: red400}}
                             onClick={() => deleteField(idx)}/>
-                <Toggle onToggle={() => handleToggle(idx)}
+                <Toggle onToggle={evt => toggleFieldExpansion(idx)}
+                        isToggled={Boolean(expanded)}
                         label="More Options"
                         labelPosition="right"/>
               </CardActions>
@@ -221,8 +222,8 @@ class Field extends Component {
 const mapStateToProps = ({ currentModel }) => ({ currentModel });
 const mapDispatchToProps = dispatch => ({
   updateField: (key, val, idx) => dispatch(updateField(key, val, idx)),
-  deleteField: idx => dispatch(deleteField(idx)),
-  updateValidation: (key, val) => dispatch(updateValidation(key, val))
+  updateValidation: (key, val, idx) => dispatch(updateValidation(key, val, idx)),
+  deleteField: idx => dispatch(deleteField(idx))
 });
 
 export default connect(

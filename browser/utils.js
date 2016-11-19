@@ -2,7 +2,6 @@
 
 export const getInitialModel = () => {
   return {
-   idx: -1,
    name: '',
    fields: [],
    config: {
