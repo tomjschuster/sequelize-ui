@@ -32,7 +32,7 @@ class Field extends Component {
           expanded,
           updateField,
           deleteField,
-          handleToggle,
+          toggleFieldExpansion,
           updateValidation } = this.props;
     return (
       <div className="col m12 l6" key={idx}>
@@ -50,7 +50,8 @@ class Field extends Component {
                 <FlatButton label="DELETE FIELD"
                             labelStyle={{color: red400}}
                             onClick={() => deleteField(idx)}/>
-                <Toggle onToggle={() => handleToggle(idx)}
+                <Toggle onToggle={evt => toggleFieldExpansion(idx)}
+                        isToggled={Boolean(expanded)}
                         label="More Options"
                         labelPosition="right"/>
               </CardActions>
@@ -102,7 +103,7 @@ class Field extends Component {
                   <div className="col 4">
                     <ul>
                       <li>
-                        <TextField value={field.default}
+                        <TextField value={field.default || ''}
                                    style={{
                                      fontSize: '0.8em',
                                      width: '100%',
@@ -114,7 +115,7 @@ class Field extends Component {
                                    type="text" hintText="Default Value"/>
                       </li>
                       <li>
-                        <TextField value={field.comment}
+                        <TextField value={field.comment || ''}
                                    style={{
                                      fontSize: '0.8em',
                                      width: '100%',
@@ -126,7 +127,7 @@ class Field extends Component {
                                    type="text" hintText="Comment"/>
                       </li>
                       <li>
-                        <TextField value={field.field}
+                        <TextField value={field.field || ''}
                                    style={{
                                      fontSize: '0.8em',
                                      width: '100%',
@@ -143,7 +144,7 @@ class Field extends Component {
                     <ul>
                       <li>Validation</li>
                       <li>
-                          <TextField value={field.validate && field.validate.is}
+                          <TextField value={field.validate.is || ''}
                                      style={{
                                        fontSize: '0.8em',
                                        width: '100%',
@@ -156,7 +157,7 @@ class Field extends Component {
                                      hintText="is (/^[a-z]+$/i)"/>
                       </li>
                       <li>
-                          <TextField value={field.validate && field.validate.contains}
+                          <TextField value={field.validate.contains  || ''}
                                      style={{
                                        fontSize: '0.8em',
                                        width: '100%',
@@ -171,18 +172,18 @@ class Field extends Component {
                       { field.type === 'STRING' &&
                         <li>
                           <Checkbox label="isEmail"
-                                    checked={field.validate && field.validate.isEmail}
+                                    checked={field.validate.isEmail || false}
                                     onCheck={(evt, isChecked) =>
                                       updateValidation('isEmail', isChecked, idx)}/>
                           <Checkbox label="isUrl"
-                                    checked={field.validate && field.validate.isUrl}
+                                    checked={field.validate.isUrl || false}
                                     onCheck={(evt, isChecked) =>
                                       updateValidation('isUrl', isChecked, idx)}/>
                         </li>
                       }
                       { isNumber(field.type) && (
                         <li>
-                          <TextField value={field.validate && field.validate.min}
+                          <TextField value={field.validate.min || ''}
                                      style={{
                                        fontSize: '0.8em',
                                        width: '33%',
@@ -193,7 +194,7 @@ class Field extends Component {
                                        updateValidation('min', evt.target.value, idx)}
                                      type="text"
                                      hintText="min"/>
-                          <TextField value={field.validate && field.validate.max}
+                          <TextField value={field.validate.max || ''}
                                      style={{
                                        fontSize: '0.8em',
                                        width: '33%',
@@ -221,8 +222,8 @@ class Field extends Component {
 const mapStateToProps = ({ currentModel }) => ({ currentModel });
 const mapDispatchToProps = dispatch => ({
   updateField: (key, val, idx) => dispatch(updateField(key, val, idx)),
-  deleteField: idx => dispatch(deleteField(idx)),
-  updateValidation: (key, val) => dispatch(updateValidation(key, val))
+  updateValidation: (key, val, idx) => dispatch(updateValidation(key, val, idx)),
+  deleteField: idx => dispatch(deleteField(idx))
 });
 
 export default connect(

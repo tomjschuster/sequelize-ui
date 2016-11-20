@@ -79,7 +79,8 @@ export const requestDbDownload = models =>  axios.post('/api/create/db', {models
 
 /*----------  REDUCER  ----------*/
 export default (state = initialState, action) => {
-  let models = [...state];
+  let models = [];
+  state.forEach((model, idx) => { models[idx] = Object.assign({}, model); });
   switch (action.type) {
     case RECEIVE_MODELS:
       return action.models;

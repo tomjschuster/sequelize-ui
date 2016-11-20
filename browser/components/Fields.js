@@ -20,6 +20,10 @@ export class Fields extends Component {
     this.setState({expanded});
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.currentModel.id !== this.props.currentModel.id) this.setState( {expanded: []} );
+  }
+
   render() {
     let { currentModel, addField } = this.props;
     return (
@@ -30,10 +34,11 @@ export class Fields extends Component {
         </div>
         <div className="row">
           { currentModel.fields.map( (field, idx) => (
-            <Field field={field}
+            <Field key={idx}
+                   field={field}
                    idx={idx}
                    expanded={this.state.expanded[idx]}
-                   handleToggle={this.toggleFieldExpansion}/>
+                   toggleFieldExpansion={this.toggleFieldExpansion}/>
           ))}
         </div>
       </div>

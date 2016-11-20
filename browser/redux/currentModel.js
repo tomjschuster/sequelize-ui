@@ -106,7 +106,6 @@ export default (state = initialState, action) => {
       model.fields[action.idx][action.key] = action.val;
       return model;
     case UPDATE_VALIDATION:
-    console.log(action)
       model.fields[action.idx].validate[action.key] = action.val;
       return model;
     case DELETE_FIELD:
