@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { updateField, deleteField, updateValidation } from '../redux/currentModel';
+import { updateField, removeField, updateValidation } from '../redux/currentModel';
 
 import DataTypeDropDown from './DataTypeDropdown';
 import TextField from 'material-ui/TextField';
@@ -26,14 +26,30 @@ const isNumber = (type) => {
 };
 
 class Field extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { expanded: false };
+    this.toggleFieldExpansion = this.toggleFieldExpansion.bind(this);
+  }
+
+  toggleFieldExpansion() {
+    this.setState({ expanded: !this.state.expanded });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.currentModel.id !== this.props.currentModel.id) {
+      this.setState({ expanded: false});
+    }
+  }
+
   render() {
+    let { toggleFieldExpansion } = this;
     let { field,
           idx,
-          expanded,
-          updateField,
+          updateFieldProps,
           deleteField,
-          toggleFieldExpansion,
-          updateValidation } = this.props;
+          updateFieldValidation } = this.props;
+    let { expanded } = this.state;
     return (
       <div className="col m12 l6" key={idx}>
         <Card expanded={expanded}
@@ -42,16 +58,16 @@ class Field extends Component {
               }}>
               <CardActions>
                 <TextField value={field.name}
-                           onChange={evt => updateField('name', evt.target.value, idx)}
+                           onChange={evt => updateFieldProps('name', evt.target.value, idx)}
                            type="text" hintText="Field Name"/>
                 <DataTypeDropDown currType={field.type}
                                   idx={idx}
-                                  onClick={updateField}/>
+                                  onClick={updateFieldProps}/>
                 <FlatButton label="DELETE FIELD"
-                            labelStyle={{color: red400}}
+                            labelStyle={{ color: red400 }}
                             onClick={() => deleteField(idx)}/>
-                <Toggle onToggle={evt => toggleFieldExpansion(idx)}
-                        isToggled={Boolean(expanded)}
+                <Toggle onToggle={() => toggleFieldExpansion()}
+                        toggled={expanded}
                         label="More Options"
                         labelPosition="right"/>
               </CardActions>
@@ -63,7 +79,7 @@ class Field extends Component {
                       <Checkbox label="UNIQUE"
                                 checked={Boolean(field.unique)}
                                 onCheck={(evt, isChecked) =>
-                                  updateField('unique', isChecked, idx)}/>
+                                  updateFieldProps('unique', isChecked, idx)}/>
                       </li>
                       {field.unique && (
                         <li>
@@ -75,7 +91,7 @@ class Field extends Component {
                                        marginBottom: -10
                                      }}
                                      onChange={evt =>
-                                       updateField('uniqueKey', evt.target.value, idx)}
+                                       updateFieldProps('uniqueKey', evt.target.value, idx)}
                                      type="text"
                                      hintText="Unique Key"/>
                       </li>
@@ -84,19 +100,19 @@ class Field extends Component {
                         <Checkbox label="NOT NULL"
                                   checked={field.allowNull === false}
                                   onCheck={(evt, isChecked) =>
-                                    updateField('allowNull', !isChecked, idx)}/>
+                                    updateFieldProps('allowNull', !isChecked, idx)}/>
                       </li>
                       <li>
                         <Checkbox label="PRIMARY KEY"
                                   checked={field.primaryKey}
                                   onCheck={(evt, isChecked) =>
-                                    updateField('primaryKey', isChecked, idx)}/>
+                                    updateFieldProps('primaryKey', isChecked, idx)}/>
                       </li>
                       <li>
                         <Checkbox label="AUTOINCREMENT"
                                   checked={field.autoIncrement}
                                   onCheck={(evt, isChecked) =>
-                                    updateField('autoIncrement', isChecked, idx)}/>
+                                    updateFieldProps('autoIncrement', isChecked, idx)}/>
                       </li>
                     </ul>
                   </div>
@@ -111,7 +127,7 @@ class Field extends Component {
                                      marginBottom: -10
                                    }}
                                    onChange={evt =>
-                                     updateField('default', evt.target.value, idx)}
+                                     updateFieldProps('default', evt.target.value, idx)}
                                    type="text" hintText="Default Value"/>
                       </li>
                       <li>
@@ -123,7 +139,7 @@ class Field extends Component {
                                      marginBottom: -10
                                    }}
                                    onChange={evt =>
-                                     updateField('comment', evt.target.value, idx)}
+                                     updateFieldProps('comment', evt.target.value, idx)}
                                    type="text" hintText="Comment"/>
                       </li>
                       <li>
@@ -135,7 +151,7 @@ class Field extends Component {
                                      marginBottom: -10
                                    }}
                                    onChange={evt =>
-                                     updateField('field', evt.target.value, idx)}
+                                     updateFieldProps('field', evt.target.value, idx)}
                                    type="text" hintText="Field Name"/>
                       </li>
                     </ul>
@@ -152,7 +168,7 @@ class Field extends Component {
                                        marginBottom: -10
                                      }}
                                      onChange={evt =>
-                                       updateValidation('is', evt.target.value, idx)}
+                                       updateFieldValidation('is', evt.target.value, idx)}
                                      type="text"
                                      hintText="is (/^[a-z]+$/i)"/>
                       </li>
@@ -165,7 +181,7 @@ class Field extends Component {
                                        marginBottom: -10
                                      }}
                                      onChange={evt =>
-                                       updateValidation('contains', evt.target.value, idx)}
+                                       updateFieldValidation('contains', evt.target.value, idx)}
                                      type="text"
                                      hintText="contains"/>
                       </li>
@@ -174,11 +190,11 @@ class Field extends Component {
                           <Checkbox label="isEmail"
                                     checked={field.validate.isEmail || false}
                                     onCheck={(evt, isChecked) =>
-                                      updateValidation('isEmail', isChecked, idx)}/>
+                                      updateFieldValidation('isEmail', isChecked, idx)}/>
                           <Checkbox label="isUrl"
                                     checked={field.validate.isUrl || false}
                                     onCheck={(evt, isChecked) =>
-                                      updateValidation('isUrl', isChecked, idx)}/>
+                                      updateFieldValidation('isUrl', isChecked, idx)}/>
                         </li>
                       }
                       { isNumber(field.type) && (
@@ -191,7 +207,7 @@ class Field extends Component {
                                        marginBottom: -10
                                      }}
                                      onChange={evt =>
-                                       updateValidation('min', evt.target.value, idx)}
+                                       updateFieldValidation('min', evt.target.value, idx)}
                                      type="text"
                                      hintText="min"/>
                           <TextField value={field.validate.max || ''}
@@ -202,7 +218,7 @@ class Field extends Component {
                                        marginBottom: -10
                                      }}
                                      onChange={evt =>
-                                       updateValidation('max', evt.target.value, idx)}
+                                       updateFieldValidation('max', evt.target.value, idx)}
                                      type="text"
                                      hintText="max"/>
                         </li>
@@ -221,9 +237,9 @@ class Field extends Component {
 /*----------  CONNECT TO STORE  ----------*/
 const mapStateToProps = ({ currentModel }) => ({ currentModel });
 const mapDispatchToProps = dispatch => ({
-  updateField: (key, val, idx) => dispatch(updateField(key, val, idx)),
-  updateValidation: (key, val, idx) => dispatch(updateValidation(key, val, idx)),
-  deleteField: idx => dispatch(deleteField(idx))
+  updateFieldProps: (key, val, idx) => dispatch(updateField(key, val, idx)),
+  updateFieldValidation: (key, val, idx) => dispatch(updateValidation(key, val, idx)),
+  deleteField: idx => dispatch(removeField(idx))
 });
 
 export default connect(

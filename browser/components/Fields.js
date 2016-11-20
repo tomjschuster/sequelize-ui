@@ -8,37 +8,19 @@ import Field from './Field';
 import RaisedButton from 'material-ui/RaisedButton';
 
 export class Fields extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { expanded: []};
-    this.toggleFieldExpansion = this.toggleFieldExpansion.bind(this);
-  }
-
-  toggleFieldExpansion(idx) {
-    let expanded = [...this.state.expanded];
-    expanded[idx] = !expanded[idx];
-    this.setState({expanded});
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.currentModel.id !== this.props.currentModel.id) this.setState( {expanded: []} );
-  }
-
   render() {
-    let { currentModel, addField } = this.props;
+    let { currentModel, createField } = this.props;
     return (
       <div className="create-field-grid">
         <div className="create-field-header">
           <span className="create-field-title">Fields</span>
-          <RaisedButton primary={true} label="+ ADD" onClick={addField} />
+          <RaisedButton primary={true} label="+ ADD" onClick={createField} />
         </div>
         <div className="row">
           { currentModel.fields.map( (field, idx) => (
             <Field key={idx}
-                   field={field}
                    idx={idx}
-                   expanded={this.state.expanded[idx]}
-                   toggleFieldExpansion={this.toggleFieldExpansion}/>
+                   field={field}/>
           ))}
         </div>
       </div>
@@ -49,7 +31,7 @@ export class Fields extends Component {
 
 const mapStateToProps = ({ currentModel }) => ({ currentModel });
 const mapDispatchToProps = dispatch => ({
-  addField: field => dispatch(addField(field))
+  createField: field => dispatch(addField(field))
 });
 
 export default connect(

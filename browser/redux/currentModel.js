@@ -31,7 +31,7 @@ const UPDATE_MODEL_NAME = 'UPDATE_MODEL_NAME';
 const ADD_FIELD = 'ADD_FIELD';
 const UPDATE_FIELD = 'UPDATE_FIELD';
 const UPDATE_VALIDATION = 'UPDATE_VALIDATION';
-const DELETE_FIELD = 'DELETE_FIELD';
+const REMOVE_FIELD = 'REMOVE_FIELD';
 const UPDATE_CONFIG = 'UPDATE_CONFIG';
 const UPDATE_METHOD = 'UPDATE_METHOD';
 
@@ -68,8 +68,8 @@ export const updateValidation = (key, val, idx) => ({
   idx
 });
 
-export const deleteField = idx => ({
-  type: DELETE_FIELD,
+export const removeField = idx => ({
+  type: REMOVE_FIELD,
   idx
 });
 
@@ -107,7 +107,7 @@ export default (state = initialState, action) => {
     case UPDATE_VALIDATION:
       model.fields[action.idx].validate[action.key] = action.val;
       return model;
-    case DELETE_FIELD:
+    case REMOVE_FIELD:
       model.fields.splice(action.idx, 1);
       return model;
     case UPDATE_CONFIG:
