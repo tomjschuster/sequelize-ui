@@ -73,6 +73,7 @@ const mapDispatchToProps = dispatch => ({
   },
   receiveModel: model => {
     if (!lastDeleted || model.id !== lastDeleted.id) dispatch(receiveModel(model));
+    lastDeleted = null;
   }
 });
 
