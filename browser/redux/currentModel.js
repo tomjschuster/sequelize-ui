@@ -91,7 +91,6 @@ export const updateMethod = (key, val) => ({
 /*----------  REDUCER  ----------*/
 export default (state = initialState, action) => {
   let model = copyModel(state);
-  console.log('reducing', model.fields);
   switch (action.type) {
     case RECEIVE_MODEL:
       return copyModel(action.model);
@@ -101,7 +100,7 @@ export default (state = initialState, action) => {
       model.name = action.name;
       return model;
     case ADD_FIELD:
-      model.fields.push([{name: '', type: '', validate: {}}]);
+      model.fields.push({name: '', type: '', validate: {}});
       return model;
     case UPDATE_FIELD:
       model.fields[action.idx][action.key] = action.val;
