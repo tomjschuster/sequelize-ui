@@ -4,7 +4,6 @@ import { getInitialModel, copyModel } from '../utils';
 
 /*----------  INITIAL STATE  ----------*/
 const initialState =  {
-  idx: -1,
   name: '',
   fields: [],
   config: {
@@ -23,7 +22,7 @@ const initialState =  {
     instanceMethods: false,
     classMethods: false
   }
-  }
+};
 
 /*----------  ACTION TYPES  ----------*/
 const RECEIVE_MODEL = 'RECEIVE_MODEL';
