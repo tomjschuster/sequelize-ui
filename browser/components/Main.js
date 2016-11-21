@@ -11,19 +11,9 @@ export class Main extends Component {
   render() {
     return (
       <div>
-        <div className="your-models">
-          <div className="row">
-            <div className="col s12 m6 push-m3">
-              <ModelList/>
-            </div>
-          </div>
-        </div>
-        <div className="field-definitions">
-          <CurrentModel/>
-        </div>
-        <div className="dialogs">
-          <ConfirmDialog/>
-        </div>
+        <ModelList/>
+        <CurrentModel/>
+        <ConfirmDialog/>
       </div>
     );
   }

@@ -15,22 +15,28 @@ class ModelList extends Component {
   render() {
     let { models } = this.props;
     return (
-      <SelectableList>
-        <div>
-          <h5 className="center-align" style={{color: darkBlack}}>
-            {models.length ? 'Your Models' : 'You have no models...'}
-          </h5>
-          <Subheader className="center-align">
-            {models.length ? 'Click to edit' : 'Create one below'}
-          </Subheader>
+      <div className="your-models">
+        <div className="row">
+          <div className="col s12 m6 push-m3">
+            <SelectableList>
+              <div>
+                <h5 className="center-align" style={{color: darkBlack}}>
+                  {models.length ? 'Your Models' : 'You have no models...'}
+                </h5>
+                <Subheader className="center-align">
+                  {models.length ? 'Click to edit' : 'Create one below'}
+                </Subheader>
+              </div>
+              { models.map((model, idx) => {
+                console.log(model);
+                return (
+                    <ModelListItem key={idx} model={model}/>
+                );
+                })}
+            </SelectableList>
+          </div>
         </div>
-        { models.map((model, idx) => {
-          console.log(model);
-          return (
-              <ModelListItem key={idx} model={model}/>
-          );
-          })}
-      </SelectableList>
+      </div>
     );
   }
 }

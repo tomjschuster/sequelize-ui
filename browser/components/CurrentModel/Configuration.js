@@ -21,8 +21,8 @@ export class Configuration extends Component {
           updateConfig,
           updateMethod } = this.props;
     return (
-      <Paper>
-        <div className="container">
+      <Paper className="configuration-paper">
+        <div className="configuration container">
         <Subheader>Table Options</Subheader>
           <div className="row">
             <div className="col s12 m6">

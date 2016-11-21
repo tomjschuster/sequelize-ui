@@ -37,7 +37,7 @@ export class Associations extends Component {
           updateAssociationConfig,
           deleteAssociation } = this.props;
     return (
-      <Paper>
+      <Paper className="associations-paper">
         <div className="associations container">
         <Subheader>Model Associations</Subheader>
         <RaisedButton primary={true} label="+ ADD" onClick={createAssociation} />

@@ -27,14 +27,21 @@ export class CurrentModel extends Component {
     return (
       <Paper>
         <ModelToolBar />
-        <Tabs value={this.state.tabIdx}>
-          <Tab label="Fields" value={0} onClick={() => this.setTabIdx(0)}>
+        <Tabs id="current-model-tabs"
+              value={this.state.tabIdx}>
+          <Tab label="Fields"
+               value={0}
+               onClick={() => this.setTabIdx(0)}>
             <Fields/>
           </Tab>
-          <Tab label="Configuration" value={1} onClick={() => this.setTabIdx(1)}>
+          <Tab label="Configuration"
+               value={1}
+               onClick={() => this.setTabIdx(1)}>
             <Configuration/>
           </Tab>
-          <Tab label="Associations" value={2} onClick={() => this.setTabIdx(2)}>
+          <Tab label="Associations"
+               value={2}
+               onClick={() => this.setTabIdx(2)}>
             <Associations/>
           </Tab>
         </Tabs>
