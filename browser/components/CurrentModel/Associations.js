@@ -50,17 +50,15 @@ export class Associations extends Component {
                                     onClick={updateRelationship}/>
               <ModelDropDown idx={idx}
                              valueKey={currentModel.associations[idx].target}
-                             onClick={updateTarget}/>&nbsp;
+                             onClick={updateTarget}/>&nbsp;as&nbsp;
               <TextField value={currentModel.associations[idx].config.as}
                          className="as-field"
                          onChange={evt => updateAssociationConfig('as', evt.target.value, idx)}
-                         type="text"
-                         hintText="as"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                         type="text"/>&nbsp;through&nbsp;
               <TextField value={currentModel.associations[idx].config.through}
                          className="through-field"
                          onChange={evt => updateAssociationConfig('through', evt.target.value, idx)}
-                         type="text"
-                         hintText="through"/>
+                         type="text"/>
               <FlatButton label="DELETE"
                           labelStyle={{ color: red400 }}
                           onClick={() => deleteAssociation(idx)}/>
