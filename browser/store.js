@@ -6,7 +6,7 @@ import persistState from 'redux-localstorage';
 import reducer from './redux';
 
 
-const middleware = applyMiddleware(thunkMiddleware, createLogger());
+const middleware = applyMiddleware(thunkMiddleware);
 
 const enhancer = compose(middleware, persistState('models'));
 
