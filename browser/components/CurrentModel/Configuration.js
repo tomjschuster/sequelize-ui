@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 /*----------  ACTION/THUNK CREATORS  ----------*/
-import { updateConfig, updateMethod } from '../redux/currentModel';
+import { updateConfig, updateMethod } from '../../redux/currentModel';
 
 /*----------  LIBRARY COMPONENTS  ----------*/
 import TextField from 'material-ui/TextField';

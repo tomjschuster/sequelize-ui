@@ -57,17 +57,31 @@ export const saveModel = (model, isNew) => dispatch => {
   }
 
   for (let field of model.fields) {
-      if (!field.name) {
-        dispatch(openWindow('Validation Error', messages.reqFieldName));
-        return;
-      } else if (!field.type) {
-        dispatch(openWindow('Validation Error', messages.reqFieldType));
-        return;
-      }
+    if (!field.name) {
+      dispatch(openWindow('Validation Error', messages.reqFieldName));
+      return;
+    } else if (!field.type) {
+      dispatch(openWindow('Validation Error', messages.reqFieldType));
+      return;
     }
-    if (isNew) dispatch(addModel(model));
-    else dispatch(updateModel(model));
-    dispatch(resetModel());
+  }
+
+  for (let association of model.associations) {
+    if (!association.relationship) {
+      dispatch(openWindow('Validation Error', messages.reqAssociationRelationship));
+      return;
+    } else if (!association.target) {
+      dispatch(openWindow('Validation Error', messages.reqAssociationTarget));
+      return;
+    } else if (association.relationship === 'belongsToMany' && !association.through) {
+      dispatch(openWindow('Validation Error', messages.reqAssociationThrough));
+      return;
+    }
+  }
+
+  if (isNew) dispatch(addModel(model));
+  else dispatch(updateModel(model));
+  dispatch(resetModel());
 };
 
 /*----------  FUNCTIONS  ----------*/

@@ -6,7 +6,9 @@ import { connect } from 'react-redux';
 import ModelToolBar from './ModelToolBar';
 import Fields from './Fields';
 import Configuration from './Configuration';
+import Associations from './Associations';
 import Paper from 'material-ui/Paper';
+
 import {Tabs, Tab} from 'material-ui/Tabs';
 
 
@@ -31,6 +33,9 @@ export class CurrentModel extends Component {
           </Tab>
           <Tab label="Configuration" value={1} onClick={() => this.setTabIdx(1)}>
             <Configuration/>
+          </Tab>
+          <Tab label="Associations" value={2} onClick={() => this.setTabIdx(2)}>
+            <Associations/>
           </Tab>
         </Tabs>
       </Paper>

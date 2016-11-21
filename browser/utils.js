@@ -19,7 +19,8 @@ export const getInitialModel = () => {
      setterMethods: false,
      instanceMethods: false,
      classMethods: false
-   }
+   },
+   associations: []
  };
 };
 
@@ -27,7 +28,8 @@ export const copyModel = model => {
   let fields = [...model.fields];
   let config = Object.assign({}, model.config);
   let methods = Object.assign({}, model.methods);
-  return Object.assign({}, model, {fields, methods, config});
+  let associations = [...model.associations];
+  return Object.assign({}, model, {fields, methods, config, associations});
 };
 
 export const convertFields = fields => {

@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { addField } from '../redux/currentModel';
+import { addField } from '../../redux/currentModel';
 import Field from './Field';
 import RaisedButton from 'material-ui/RaisedButton';
 

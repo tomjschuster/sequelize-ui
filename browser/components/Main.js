@@ -3,9 +3,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import ModelList from './ModelList/ModelList';
+import CurrentModel from './CurrentModel/CurrentModel';
 import ConfirmDialog from './ConfirmDialog';
-import CurrentModel from './CurrentModel';
-import ModelList from './ModelList';
 
 export class Main extends Component {
   render() {

@@ -50,6 +50,22 @@ body {
 }
 
 
+.associations {
+  padding-bottom: 1%;
+}
+
+.as-field {
+  max-width: 7em;
+}
+
+.through-field {
+  max-width: 7em;
+}
+/*
+.association-item {
+  margin: 0 auto 0.5em;
+}*/
+
 @media (max-width: 600px) {
 
 }

@@ -3,9 +3,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { removeModel } from '../redux/models';
-import { receiveModel, resetModel } from '../redux/currentModel';
-import { convertFields } from '../utils';
+import { removeModel } from '../../redux/models';
+import { receiveModel, resetModel } from '../../redux/currentModel';
+import { convertFields } from '../../utils';
 
 import IconButton from 'material-ui/IconButton';
 import { ListItem } from 'material-ui/List';

@@ -3,9 +3,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { updateField, removeField, updateValidation } from '../redux/currentModel';
+import { updateField, removeField, updateValidation } from '../../redux/currentModel';
 
 import DataTypeDropDown from './DataTypeDropdown';
+
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import Checkbox from 'material-ui/Checkbox';

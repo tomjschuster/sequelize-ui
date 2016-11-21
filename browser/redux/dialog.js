@@ -4,6 +4,9 @@ export const messages = {
   reqModelName: 'Please give your model a name.',
   reqFieldName: 'Every field must have a name.',
   reqFieldType: 'Every field must have a data type.',
+  reqAssociationRelationship: 'Every association must have a relationship.',
+  reqAssociationTarget: 'Every association must have a target model.',
+  reqAssociationThrough: '\'belongsToMany\' associations must have a \'through\' table.',
   dupFieldName: 'Table name already exists. Please select another name.',
 };
 

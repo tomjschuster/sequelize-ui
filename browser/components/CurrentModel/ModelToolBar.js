@@ -3,8 +3,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { saveModel, removeModel } from '../redux/models';
-import { resetModel, updateModelName } from '../redux/currentModel';
+import { saveModel, removeModel } from '../../redux/models';
+import { resetModel, setModelName } from '../../redux/currentModel';
 
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -17,7 +17,6 @@ export class ModelToolBar extends Component {
     let { currentModel,
           updateModelName,
           saveModel,
-          updateModel,
           deleteModel } = this.props;
     return (
       <Toolbar>
@@ -55,7 +54,7 @@ export class ModelToolBar extends Component {
 const mapStateToProps = ({ currentModel }) => ({ currentModel });
 const mapDispatchToProps = dispatch => ({
   saveModel: (model, isNew) => dispatch(saveModel(model, isNew)),
-  updateModelName: name => dispatch(updateModelName(name)),
+  updateModelName: name => dispatch(setModelName(name)),
   deleteModel: model => {
     dispatch(removeModel(model));
     dispatch(resetModel());
