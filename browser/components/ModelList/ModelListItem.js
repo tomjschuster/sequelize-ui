@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { removeModel } from '../../redux/models';
 import { receiveModel, resetModel } from '../../redux/currentModel';
-import { convertFields } from '../../utils';
+import { modelSummary } from '../../utils';
 
 import IconButton from 'material-ui/IconButton';
 import { ListItem } from 'material-ui/List';
@@ -34,10 +34,9 @@ class ModelListItem extends Component {
             opacity: model.id === currentModel.id ? 0.95 : 0.85
           }}
           primaryText={model.name}
-          secondaryText={`Fields: ${convertFields(model.fields)}`}
+          secondaryText={modelSummary(model)}
           secondaryTextLines={1}
-          onClick={() => selectModel(model)}
-        />
+          onClick={() => selectModel(model)}/>
         <Divider inset={true} />
       </div>
     );

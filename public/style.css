@@ -70,14 +70,10 @@ body {
   padding-bottom: 1%;
 }
 
-.as-field {
+.as-field, .through-field {
   max-width: 7em;
+  margin: 0 0.5em;
 }
-
-.through-field {
-  max-width: 7em;
-}
-
 
 @media (max-width: 600px) {
 

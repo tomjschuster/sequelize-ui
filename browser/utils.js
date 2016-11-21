@@ -31,9 +31,21 @@ export const copyModel = model => {
   let associations = [...model.associations];
   return Object.assign({}, model, {fields, methods, config, associations});
 };
-
-export const convertFields = fields => {
-  let output = '';
-  for (let field of fields) output += field.name + ', ';
-  return output.slice(0, -2);
+const convertFields = fields => {
+  return `Fields: ${fields.map(({name}) => name).join(', ')}`;
 };
+
+const convertAssociations = associations => {
+  let unique = [];
+  associations.forEach(association => {
+    if (unique.indexOf(association.target) === -1) unique.push(association.target);
+  });
+  return `Associations: ${unique.join(', ')}`;
+};
+
+export const modelSummary = ({fields, associations}) => {
+  let output = [];
+  if (fields.length) output.push(convertFields(fields));
+  if (associations.length) output.push(convertAssociations(associations));
+  return output.join(' \t');
+  };

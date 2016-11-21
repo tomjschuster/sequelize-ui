@@ -74,8 +74,24 @@ const makeModelFile = model => {
 
 const makeAssociationFile = models => {
   let output = '';
-  models.forEach(model => output += `const ${upperCamelCase(model.name)} = require('./${model.name}');\n`);
-  output += '\n//ASSOCIATIONS\n\n';
+  models.forEach(model => {
+    output += `const ${upperCamelCase(model.name)} = require('./${model.name}');\n`;
+  });
+  output += '\n';
+  models.filter(model => model.associations.length).forEach(model => {
+    model.associations.forEach(association => {
+      let { relationship, target, config } = association;
+      output += `${upperCamelCase(model.name)}.${relationship}(${target}`;
+      let configKeys = Object.keys(config).filter(key => config[key]);
+      if (configKeys.length) {
+        output += ', { ';
+        output += configKeys.map(key => `${key}: '${config[key]}'`).join(', ');
+        output += ' }';
+      }
+      output += ');\n';
+    });
+    output += '\n';
+  });
   output += `module.exports = {${models.map(model => upperCamelCase(model.name)).join(', ')}};`;
   return output;
 };

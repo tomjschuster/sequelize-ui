@@ -73,7 +73,7 @@ export const saveModel = (model, isNew) => dispatch => {
     } else if (!association.target) {
       dispatch(openWindow('Validation Error', messages.reqAssociationTarget));
       return;
-    } else if (association.relationship === 'belongsToMany' && !association.through) {
+    } else if (association.relationship === 'belongsToMany' && !association.config.through) {
       dispatch(openWindow('Validation Error', messages.reqAssociationThrough));
       return;
     }

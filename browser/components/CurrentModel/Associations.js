@@ -43,25 +43,28 @@ export class Associations extends Component {
         <RaisedButton primary={true} label="+ ADD" onClick={createAssociation} />
       <List>
         { currentModel.associations.map((association, idx) => (
-        <ListItem key={idx} className="association-item">
-          { upperCamelCase(currentModel.name) || 'MODEL' }&nbsp;
-              <RelationshipDropDown idx={idx}
-                                    valueKey={currentModel.associations[idx].relationship}
-                                    onClick={updateRelationship}/>
-              <ModelDropDown idx={idx}
-                             valueKey={currentModel.associations[idx].target}
-                             onClick={updateTarget}/>&nbsp;as&nbsp;
-              <TextField value={currentModel.associations[idx].config.as}
-                         className="as-field"
-                         onChange={evt => updateAssociationConfig('as', evt.target.value, idx)}
-                         type="text"/>&nbsp;through&nbsp;
-              <TextField value={currentModel.associations[idx].config.through}
-                         className="through-field"
-                         onChange={evt => updateAssociationConfig('through', evt.target.value, idx)}
-                         type="text"/>
-              <FlatButton label="DELETE"
-                          labelStyle={{ color: red400 }}
-                          onClick={() => deleteAssociation(idx)}/>
+        <ListItem key={idx}
+                  hoverColor="#ffffff"
+                  className="association-item">
+          <RelationshipDropDown idx={idx}
+                                valueKey={currentModel.associations[idx].relationship}
+                                onClick={updateRelationship}/>
+          <ModelDropDown idx={idx}
+                         valueKey={currentModel.associations[idx].target}
+                         onClick={updateTarget}/>&nbsp;as&nbsp;
+          <TextField value={currentModel.associations[idx].config.as}
+                     className="as-field"
+                     inputStyle={{textAlign: 'center'}}
+                     onChange={evt => updateAssociationConfig('as', evt.target.value, idx)}
+                     type="text"/>&nbsp;through&nbsp;
+          <TextField value={currentModel.associations[idx].config.through}
+                     className="through-field"
+                     inputStyle={{textAlign: 'center'}}
+                     onChange={evt => updateAssociationConfig('through', evt.target.value, idx)}
+                     type="text"/>
+          <FlatButton label="DELETE"
+                      labelStyle={{ color: red400 }}
+                      onClick={() => deleteAssociation(idx)}/>
         </ListItem>
           ))}
       </List>
