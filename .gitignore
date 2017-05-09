@@ -4,3 +4,4 @@ node_modules
 */bundle.js
 */bundle.js.map
 */temp
+npm-debug.log
