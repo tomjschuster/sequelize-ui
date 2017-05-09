@@ -1,12 +1,8 @@
 {
-  "name": "build-sequelize",
+  "name": "sequelize-ui",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines": {
-    "node": "6.7.0",
-    "npm": "3.10.9"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-watch": "webpack -w",
