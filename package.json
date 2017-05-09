@@ -34,8 +34,6 @@
     "morgan": "^1.7.0",
     "nodemon": "^1.11.0",
     "path": "^0.12.7",
-    "pg": "^6.1.0",
-    "pg-hstore": "^2.3.2",
     "randomstring": "^1.1.5",
     "react": "^15.3.2",
     "react-ace": "^4.0.0",
@@ -48,7 +46,6 @@
     "redux-localstorage": "^0.4.1",
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.1.0",
-    "sequelize": "^3.25.0",
     "snake-case": "^2.1.0",
     "uppercamelcase": "^3.0.0",
     "webpack": "^2.5.1"
