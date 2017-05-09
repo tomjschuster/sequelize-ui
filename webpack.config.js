@@ -1,8 +1,3 @@
-
-'use strict';
-
-var webpack = require('webpack');
-
 module.exports = {
   entry: './browser/index.js',
   output: {
@@ -14,13 +9,13 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /js$/,
-        exclude: /node_modules/,
-        loader: 'babel',
+        test: /\.js$/,
+        exclude: '/node_modules',
+        loader: 'babel-loader',
         query: {
-          presets: ['react', 'es2015', 'stage-2']
+          presets: [ 'react', 'es2015', 'stage-0']
         }
       }
     ]
-  },
-};
+  }
+}
