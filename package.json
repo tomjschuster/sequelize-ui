@@ -52,5 +52,11 @@
     "snake-case": "^2.1.0",
     "uppercamelcase": "^3.0.0",
     "webpack": "^2.5.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint": "^3.19.0",
+    "eslint-config-fullstack": "^2.8.1",
+    "eslint-plugin-react": "^7.0.0"
   }
 }
