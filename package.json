@@ -20,7 +20,7 @@
     "build-watch": "webpack -w",
     "start:dev": "webpack -w & nodemon server",
     "start": "node server",
-    "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress"
+    "heroku-postbuild": "webpack -p --config ./webpack.prod.config.js --progress"
   },
   "keywords": ["sequelize", "orm", "sql", "schema", "model", "gui"],
   "dependencies": {
@@ -68,5 +68,7 @@
     "eslint-config-fullstack": "^2.8.1",
     "eslint-plugin-react": "^7.0.0"
   },
-  "engine": "node 7.8.0"
+  "engines": {
+    "node": "7.8.0"
+  }
 }
