@@ -19,7 +19,7 @@
     "build-watch": "webpack -w",
     "start": "webpack & nodemon server/index"
   },
-  "keywords": [],
+  "keywords": ["sequelize", "orm", "sql", "schema", "model", "gui"],
   "dependencies": {
     "archiver": "^1.2.0",
     "axios": "^0.16.1",
