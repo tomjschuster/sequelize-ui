@@ -16,8 +16,11 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
     "build-watch": "webpack -w",
-    "start": "webpack & nodemon server/index"
+    "start:dev": "webpack -w & nodemon server",
+    "start": "node server",
+    "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress"
   },
   "keywords": ["sequelize", "orm", "sql", "schema", "model", "gui"],
   "dependencies": {
