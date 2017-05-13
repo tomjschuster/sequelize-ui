@@ -1,7 +1,10 @@
 node_modules
+public/app.js
+public/app.js.map
 .DS_STORE
 */DS_STORE
 */bundle.js
 */bundle.js.map
 */temp
+
 npm-debug.log

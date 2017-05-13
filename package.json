@@ -1,24 +1,28 @@
 {
   "name": "sequelize-ui",
   "version": "1.0.0",
-  "description": "",
+  "description": "GUI for designing relational database schema and exporting as formatted Sequlize template.",
+  "homepage": "http://sequelizeui.herokuapp.com",
+  "bugs": {
+    "url": "https://github.com/tomjschuster/sequelize-ui/issues",
+    "email": "tomjschuster@gmail.com"
+  },
+  "license": "ISC",
+  "author": "Tom Schuster <tomjschuster@gmail.com> (https://github.com/tomjschuster)",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomjschuster/sequelize-ui"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-watch": "webpack -w",
     "start": "webpack & nodemon server/index"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "archiver": "^1.2.0",
     "axios": "^0.16.1",
-    "babel-core": "^6.18.2",
-    "babel-loader": "^7.0.0",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-react": "^6.16.0",
-    "babel-preset-stage-0": "^6.24.1",
     "body-parser": "^1.15.2",
     "brace": "^0.10.0",
     "camelcase": "^4.0.0",
@@ -47,13 +51,18 @@
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.1.0",
     "snake-case": "^2.1.0",
-    "uppercamelcase": "^3.0.0",
-    "webpack": "^2.5.1"
+    "uppercamelcase": "^3.0.0"
   },
   "devDependencies": {
+    "babel-core": "^6.18.2",
     "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-0": "^6.24.1",
     "eslint": "^3.19.0",
     "eslint-config-fullstack": "^2.8.1",
-    "eslint-plugin-react": "^7.0.0"
+    "eslint-plugin-react": "^7.0.0",
+    "webpack": "^2.5.1"
   }
 }
