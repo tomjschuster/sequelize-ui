@@ -1,6 +1,6 @@
 {
   "name": "sequelize-ui",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "GUI for designing relational database schema and exporting as formatted Sequlize template.",
   "homepage": "http://sequelizeui.herokuapp.com",
   "bugs": {
