@@ -18,7 +18,7 @@
     "deploy": "npm run build && git add dist/app.js && git commit -m 'build for deployment' && git push heroku master && git push origin master",
     "start": "NODE_ENV=prod node ./server",
     "build:dev": "NODE_ENV=dev webpack --config ./webpack.dev.config.js --progress --colors",
-    "start:dev": "npm run build:dev && NODE_ENV=dev nodemon ./server"
+    "start:dev": "npm run build:dev && NODE_ENV=dev nodemon --ignore dist --ignore src ./server"
   },
   "engines": {
     "node": "7.10.0"
