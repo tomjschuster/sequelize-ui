@@ -2,8 +2,8 @@ const server = require('./server.js')
 const port = (process.env.PORT || 8080)
 const app = server.app()
 
-console.log(process.env.NODE_ENV)
-if (process.env.NODE_ENV !== 'prod') {
+console.log('NODE_ENV:', process.env.NODE_ENV)
+if (process.env.NODE_ENV !== 'production') {
   const webpack = require('webpack')
   const webpackDevMiddleware = require('webpack-dev-middleware')
   const webpackHotMiddleware = require('webpack-hot-middleware')
