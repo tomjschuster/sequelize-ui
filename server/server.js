@@ -1,15 +1,15 @@
 const path = require('path')
-const express= require('express')
+const express = require('express')
 
 module.exports = {
   app: () => {
     const app = express()
-    const indexPath = path.join(__dirname, '../public/index.html')
-    const publicPath = express.static(path.resolve(__dirname, '..', 'public'))
-    const distPath = express.static(path.resolve(__dirname, '..', 'dist'))
+    const distPath = path.resolve(__dirname, '..', 'dist')
+    const publicPath = path.resolve(__dirname, '..', 'public')
+    const indexPath = path.join(distPath, 'index.html')
 
-    app.use(publicPath)
-    app.use(distPath)
+    app.use(express.static(distPath))
+    app.use(express.static(publicPath))
     app.get('/', (_, res) => res.sendFile(indexPath))
 
     return app

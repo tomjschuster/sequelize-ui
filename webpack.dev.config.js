@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   devtool: 'eval',
@@ -14,9 +15,20 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({
+      title: process.env.NODE_ENV === 'development' ?
+        'DEV - Sequelize UI' : 'Sequelize UI',
+      filename: 'index.html',
+      template: 'assets/index.hbs',
+      inject: false
+    })
   ],
   module: {
     rules: [
+      {
+        test: /\.hbs$/,
+        use: ['handlebars-loader']
+      },
       {
         test: /\.js$/,
         exclude: path.join(__dirname, 'node_modules'),
