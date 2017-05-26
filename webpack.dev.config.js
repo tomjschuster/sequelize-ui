@@ -10,17 +10,17 @@ module.exports = {
   ],
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'app.js',
+    filename: 'app.dev.js',
     publicPath: '/public/'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      title: process.env.NODE_ENV === 'development' ?
-        'DEV - Sequelize UI' : 'Sequelize UI',
-      filename: 'index.html',
+      title: 'DEV - Sequelize UI',
+      filename: 'index.dev.html',
       template: 'assets/index.hbs',
-      inject: false
+      inject: false,
+      appFilePath: '/app.dev.js'
     })
   ],
   module: {

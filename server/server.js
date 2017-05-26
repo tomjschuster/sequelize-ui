@@ -1,18 +1,23 @@
 const path = require('path')
 const express = require('express')
 
+const PATHS = {
+  dist: path.resolve(__dirname, '..', 'dist'),
+  public: path.resolve(__dirname, '..', 'public'),
+  index: path.resolve(
+    __dirname, '..', 'dist', process.env.NODE_ENV === 'production' ?
+      'index.html' : 'index.dev.html'
+  )
+}
+
 module.exports = {
   app: () => {
     const app = express()
-    const distPath = path.resolve(__dirname, '..', 'dist')
-    const publicPath = path.resolve(__dirname, '..', 'public')
-    const indexPath = path.join(distPath, 'index.html')
 
-    app.use(express.static(distPath))
-    app.use(express.static(publicPath))
-    app.get('/', (_, res) => res.sendFile(indexPath))
+    app.get('/', (_, res) => res.sendFile(PATHS.index))
+    app.use(express.static(PATHS.dist))
+    app.use(express.static(PATHS.public))
 
     return app
   }
 }
-

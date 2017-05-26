@@ -29,7 +29,8 @@ module.exports = {
       title: 'Sequelize UI',
       filename: 'index.html',
       template: 'assets/index.hbs',
-      inject: false
+      inject: false,
+      appFilePath: '/app.js'
     })
   ],
   module: {
