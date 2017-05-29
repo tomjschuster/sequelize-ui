@@ -1,6 +1,14 @@
 module.exports = {
   plugins: {
-    'postcss-cssnext': {}
+    'postcss-cssnext': {
+      features: {
+        customProperties: {
+          variables: {
+            primary: 'green'
+          }
+        }
+      }
+    }
   }
 }
 

@@ -5,3 +5,7 @@
 .test-class {
   color: var(--mainColor);
 }
+
+.primary-color {
+  color: var(--primary);
+}

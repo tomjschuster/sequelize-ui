@@ -6,6 +6,9 @@ export default class App extends Component {
     return (
       <div className={styles.testClass}>
         <h1>Sequelize UI</h1>
+        <p className={styles.primaryColor}>
+          The primary color  
+        </p>
       </div>
     )
   }
