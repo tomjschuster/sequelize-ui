@@ -34,6 +34,10 @@ module.exports = {
         exclude: path.join(__dirname, 'node_modules'),
         include: path.join(__dirname, 'src'),
         use: ['babel-loader']
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
       }
     ]
   }
