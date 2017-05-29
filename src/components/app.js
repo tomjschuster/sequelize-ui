@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import css from '../../assets/style.css'
-
+import styles from '../../assets/style.css'
+console.log(styles)
 export default class App extends Component {
   render () {
     return (
-      <div className='test-class'>
+      <div className={styles.testClass}>
         <h1>Sequelize UI</h1>
       </div>
     )

@@ -1,3 +1,7 @@
+:root {
+  --mainColor: blue;
+}
+
 .test-class {
-  color: red;
+  color: var(--mainColor);
 }
