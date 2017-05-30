@@ -1,0 +1,11 @@
+:root {
+  --mainColor: blue;
+}
+
+.test-class {
+  color: var(--mainColor);
+}
+
+.primary-color {
+  color: var(--primary);
+}
