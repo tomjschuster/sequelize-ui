@@ -15,7 +15,7 @@
   "main": "index.js",
   "scripts": {
     "build": "NODE_ENV=production webpack --config webpack.prod.config.js --progress --colors",
-    "deploy": "npm run build && git add dist && git commit -m 'build for deployment' && git push heroku master && git push origin master",
+    "deploy": "git push heroku master",
     "start": "NODE_ENV=production node server",
     "build:dev": "NODE_ENV=development webpack --config webpack.dev.config.js --progress --colors",
     "start:dev": "npm run build:dev && NODE_ENV=development nodemon --ignore dist --ignore src server"
