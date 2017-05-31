@@ -21,6 +21,8 @@ import Switch from 'react-toolbox/lib/switch'
 import { Tab, Tabs } from 'react-toolbox/lib/tabs'
 import Tooltip from 'react-toolbox/lib/tooltip'
 
+import successButtonStyle from './SuccessButton.css'
+
 const source = {
   'ES-es': 'Spain',
   'TH-th': 'Thailand',
@@ -231,7 +233,17 @@ export default class App extends Component {
                   <h2>Tooltip</h2>
                   <TooltipButton label='OK' tooltip='Click Me!' />
                 </Tab>
-                <Tab label='Custom'>Custom</Tab>
+                <Tab label='Custom'>
+                  <ul>
+                    <li>
+                      <Button label='Primary' primary raised />
+                    </li>
+                    <li />
+                    <li>
+                      <Button label='Success' theme={successButtonStyle} />
+                    </li>
+                  </ul>
+                </Tab>
               </Tabs>
 
             </div>
