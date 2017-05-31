@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styles from '../../assets/style.css'
 import AppBar from 'react-toolbox/lib/app_bar'
-import { Layout, Panel } from 'react-toolbox'
+import { Layout, Panel } from 'react-toolbox/lib/layout'
 import Autocomplete from 'react-toolbox/lib/autocomplete'
 import Avatar from 'react-toolbox/lib/avatar'
 import { Button, IconButton } from 'react-toolbox/lib/button'
@@ -9,6 +9,18 @@ import { Card, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card'
 import Chip from 'react-toolbox/lib/chip'
 import Checkbox from 'react-toolbox/lib/checkbox'
 import Dialog from 'react-toolbox/lib/dialog'
+import Dropdown from 'react-toolbox/lib/dropdown'
+import FontIcon from 'react-toolbox/lib/font_icon'
+import Input from 'react-toolbox/lib/input'
+import { List, ListItem, ListSubHeader, ListDivider, ListCheckbox } from 'react-toolbox/lib/list'
+import { Menu, IconMenu, MenuItem, MenuDivider } from 'react-toolbox/lib/menu'
+import ProgressBar from 'react-toolbox/lib/progress_bar'
+import { RadioGroup, RadioButton } from 'react-toolbox/lib/radio'
+import Slider from 'react-toolbox/lib/slider'
+import Snackbar from 'react-toolbox/lib/snackbar'
+import Switch from 'react-toolbox/lib/switch'
+import { Tab, Tabs } from 'react-toolbox/lib/tabs'
+import Tooltip from 'react-toolbox/lib/tooltip'
 
 const source = {
   'ES-es': 'Spain',
@@ -17,18 +29,47 @@ const source = {
   'EN-en': 'USA'
 }
 
+const countries = [
+  { value: 'EN-gb', label: 'England' },
+  { value: 'ES-es', label: 'Spain'},
+  { value: 'TH-th', label: 'Thailand' },
+  { value: 'EN-en', label: 'USA'}
+]
+
+const TooltipButton = Tooltip(Button)
+
 export default class App extends Component {
   state = {
     countries: ['ES-es', 'TH-th'],
-    active: false
+    active: false,
+    country: 'EN-gb',
+    slider: 0,
+    snackbar: false,
+    index: 0
   }
 
-  handleChange = (value) => {
-    this.setState({ countries: value });
+  handleChange = (countries) => {
+    this.setState({ countries })
+  }
+
+  handleDropDownChange = (country) => {
+    this.setState({ country })
   }
 
   handleToggle = () => {
     this.setState({ active: !this.state.active })
+  }
+
+  handleSnackbarToggle = (snackbar) => {
+    this.setState({ snackbar })
+  }
+
+  handleSliderChange = slider => {
+    this.setState({ slider })
+  }
+
+  handleTabChange = index => {
+    this.setState({ index })
   }
 
   actions = [
@@ -37,6 +78,7 @@ export default class App extends Component {
   ]
 
   render () {
+    console.log(this)
     return (
       <Layout>
         <Panel>
@@ -58,7 +100,7 @@ export default class App extends Component {
               />
               <h2>Button</h2>
               <Button icon='bookmark' label='Bookmark' />
-              <IconButton icon='bookmark' /> 
+              <IconButton icon='bookmark' />
               <h2>Card</h2>
               <Card>
                 <CardTitle
@@ -93,19 +135,106 @@ export default class App extends Component {
                 title='The Dialog'
               />
               <h2>Dropdown</h2>
+              <Dropdown
+                auto
+                onChange={this.handleDropdownChange}
+                source={countries}
+                value={this.state.country}
+              />
               <h2>Font Icon</h2>
+              <FontIcon value='star' />
               <h2>Input</h2>
-              <h2>Link</h2>
+              <Input 
+                type='text'
+                label='label'
+                hint='hint'
+                icon='folder'
+              />
               <h2>List</h2>
-              <h2>Menu</h2>
-              <h2>Navigation</h2>
+              <List selectable>
+                <ListSubHeader caption='List Sub Header Caption' />
+                <ListItem
+                  caption='List Item Caption'
+                  legent='List Item Legend'
+                  rightIcon='folder'
+                />
+                <ListDivider />
+                <ListCheckbox
+                  checked
+                  caption='List Checkbox Caption'
+                  legend='List Checkbox Legend'
+                />
+              </List>
+              <h2>Icon Menu</h2> 
+              <IconMenu
+                icon='more_vert'
+              >
+                <MenuItem
+                  value='download'
+                  icon='get_app'
+                  caption='Download'
+                />
+              </IconMenu>
               <h2>Progress Bar</h2>
+              <ProgressBar
+                type='circular'
+                mode='indeterminate'
+              />
+              <ProgressBar
+                type='circular'
+                mode='determinate'
+                value={75}
+              />
+              <ProgressBar
+                type='linear'
+                mode='indeterminate'
+              />
+              <ProgressBar
+                type='linear'
+                mode='determinate'
+                value={75}
+              />
               <h2>Radio Buttons</h2>
+              <RadioGroup name='Group Name'>
+                <RadioButton label='Button 1' />
+                <RadioButton label='Button 2' />
+              </RadioGroup>
               <h2>Slider</h2>
+              <Slider
+                value={this.state.slider}
+                onChange={this.handleSliderChange}
+                min={-10}
+                max={10}
+                pinned
+                step={0.01}
+              />
               <h2>Snackbar</h2>
+              <Button
+                label='Open Snackbar'
+                onClick={() => this.handleSnackbarToggle(true)}
+              /> 
+              <Snackbar
+                action='Action'
+                label='The label'
+                active={this.state.snackbar}
+                onClick={() => this.handleSnackbarToggle(false)}
+              />
               <h2>Switch</h2>
+              <Switch
+                checked
+                label='Label'
+              />
               <h2>Tabs</h2>
+              <Tabs
+                index={this.state.index}
+                onChange={this.handleTabChange}
+              >
+                <Tab label='One'>One Content</Tab>
+                <Tab label='Two'>Two Content</Tab>
+                <Tab label='Three'>Three Content</Tab>
+              </Tabs>
               <h2>Tooltip</h2>
+              <TooltipButton label='OK' tooltip='Click Me!'/>
             </div>
         </Panel>
       </Layout>
