@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import styles from '../../assets/style.css'
 import AppBar from 'react-toolbox/lib/app_bar'
 import { Layout, Panel } from 'react-toolbox/lib/layout'
 import Autocomplete from 'react-toolbox/lib/autocomplete'
@@ -13,7 +12,7 @@ import Dropdown from 'react-toolbox/lib/dropdown'
 import FontIcon from 'react-toolbox/lib/font_icon'
 import Input from 'react-toolbox/lib/input'
 import { List, ListItem, ListSubHeader, ListDivider, ListCheckbox } from 'react-toolbox/lib/list'
-import { Menu, IconMenu, MenuItem, MenuDivider } from 'react-toolbox/lib/menu'
+import { IconMenu, MenuItem } from 'react-toolbox/lib/menu'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { RadioGroup, RadioButton } from 'react-toolbox/lib/radio'
 import Slider from 'react-toolbox/lib/slider'
@@ -84,157 +83,157 @@ export default class App extends Component {
         <Panel>
           <AppBar title='Sequelize UI' />
             <div style={{ padding: '2%' }}>
-              <h2>Autocomplete</h2>
-              <Autocomplete
-                direction='down'
-                selectedPosition='above'
-                label='Choose countries'
-                onChange={this.handleChange}
-                source={source}
-                value={this.state.countries}
-              />
-              <h2>Avatar</h2>
-              <Avatar
-                title='folder'
-                icon='folder'
-              />
-              <h2>Button</h2>
-              <Button icon='bookmark' label='Bookmark' />
-              <IconButton icon='bookmark' />
-              <h2>Card</h2>
-              <Card>
-                <CardTitle
-                  title='Card'
-                  subtitle='Subtitle'
-                />
-                <CardText>
-                  The card text
-                </CardText>
-                <CardActions>
-                  <Button label='Action 1'/>
-                  <Button label='Action 2'/>
-                </CardActions>
-              </Card>
-              <h2>Chip</h2>
-              <Chip>Example chip</Chip>
-              <Chip deletable>Deletable Chip</Chip>
-              <h2>Checkbox</h2>
-              <Checkbox
-                label='Checked option'
-              />
-              <h2>Dialog</h2>
-              <Button
-                 label='Open Dialog'
-                 onClick={this.handleToggle}
-               />
-              <Dialog
-                actions={this.actions}
-                active={this.state.active}
-                onEscKeyDown={this.handleToggle}
-                onOverlayClick={this.handleToggle}
-                title='The Dialog'
-              />
-              <h2>Dropdown</h2>
-              <Dropdown
-                auto
-                onChange={this.handleDropdownChange}
-                source={countries}
-                value={this.state.country}
-              />
-              <h2>Font Icon</h2>
-              <FontIcon value='star' />
-              <h2>Input</h2>
-              <Input 
-                type='text'
-                label='label'
-                hint='hint'
-                icon='folder'
-              />
-              <h2>List</h2>
-              <List selectable>
-                <ListSubHeader caption='List Sub Header Caption' />
-                <ListItem
-                  caption='List Item Caption'
-                  legent='List Item Legend'
-                  rightIcon='folder'
-                />
-                <ListDivider />
-                <ListCheckbox
-                  checked
-                  caption='List Checkbox Caption'
-                  legend='List Checkbox Legend'
-                />
-              </List>
-              <h2>Icon Menu</h2> 
-              <IconMenu
-                icon='more_vert'
-              >
-                <MenuItem
-                  value='download'
-                  icon='get_app'
-                  caption='Download'
-                />
-              </IconMenu>
-              <h2>Progress Bar</h2>
-              <ProgressBar
-                type='circular'
-                mode='indeterminate'
-              />
-              <ProgressBar
-                type='circular'
-                mode='determinate'
-                value={75}
-              />
-              <ProgressBar
-                type='linear'
-                mode='indeterminate'
-              />
-              <ProgressBar
-                type='linear'
-                mode='determinate'
-                value={75}
-              />
-              <h2>Radio Buttons</h2>
-              <RadioGroup name='Group Name'>
-                <RadioButton label='Button 1' />
-                <RadioButton label='Button 2' />
-              </RadioGroup>
-              <h2>Slider</h2>
-              <Slider
-                value={this.state.slider}
-                onChange={this.handleSliderChange}
-                min={-10}
-                max={10}
-                pinned
-                step={0.01}
-              />
-              <h2>Snackbar</h2>
-              <Button
-                label='Open Snackbar'
-                onClick={() => this.handleSnackbarToggle(true)}
-              /> 
-              <Snackbar
-                action='Action'
-                label='The label'
-                active={this.state.snackbar}
-                onClick={() => this.handleSnackbarToggle(false)}
-              />
-              <h2>Switch</h2>
-              <Switch
-                checked
-                label='Label'
-              />
-              <h2>Tabs</h2>
               <Tabs
                 index={this.state.index}
                 onChange={this.handleTabChange}
               >
-                <Tab label='One'>One Content</Tab>
-                <Tab label='Two'>Two Content</Tab>
-                <Tab label='Three'>Three Content</Tab>
+                <Tab label='Demo'>>
+                  <h2>Autocomplete</h2>
+                  <Autocomplete
+                    direction='down'
+                    selectedPosition='above'
+                    label='Choose countries'
+                    onChange={this.handleChange}
+                    source={source}
+                    value={this.state.countries}
+                  />
+                  <h2>Avatar</h2>
+                  <Avatar
+                    title='folder'
+                    icon='folder'
+                  />
+                  <h2>Button</h2>
+                  <Button icon='bookmark' label='Bookmark' />
+                  <IconButton icon='bookmark' />
+                  <h2>Card</h2>
+                  <Card>
+                    <CardTitle
+                      title='Card'
+                      subtitle='Subtitle'
+                    />
+                    <CardText>
+                      The card text
+                    </CardText>
+                    <CardActions>
+                      <Button label='Action 1' />
+                      <Button label='Action 2' />
+                    </CardActions>
+                  </Card>
+                  <h2>Chip</h2>
+                  <Chip>Example chip</Chip>
+                  <Chip deletable>Deletable Chip</Chip>
+                  <h2>Checkbox</h2>
+                  <Checkbox
+                    label='Checked option'
+                  />
+                  <h2>Dialog</h2>
+                  <Button
+                     label='Open Dialog'
+                     onClick={this.handleToggle}
+                   />
+                  <Dialog
+                    actions={this.actions}
+                    active={this.state.active}
+                    onEscKeyDown={this.handleToggle}
+                    onOverlayClick={this.handleToggle}
+                    title='The Dialog'
+                  />
+                  <h2>Dropdown</h2>
+                  <Dropdown
+                    auto
+                    onChange={this.handleDropdownChange}
+                    source={countries}
+                    value={this.state.country}
+                  />
+                  <h2>Font Icon</h2>
+                  <FontIcon value='star' />
+                  <h2>Input</h2>
+                  <Input
+                    type='text'
+                    label='label'
+                    hint='hint'
+                    icon='folder'
+                  />
+                  <h2>List</h2>
+                  <List selectable>
+                    <ListSubHeader caption='List Sub Header Caption' />
+                    <ListItem
+                      caption='List Item Caption'
+                      legent='List Item Legend'
+                      rightIcon='folder'
+                    />
+                    <ListDivider />
+                    <ListCheckbox
+                      checked
+                      caption='List Checkbox Caption'
+                      legend='List Checkbox Legend'
+                    />
+                  </List>
+                  <h2>Icon Menu</h2>
+                  <IconMenu
+                    icon='more_vert'
+                  >
+                    <MenuItem
+                      value='download'
+                      icon='get_app'
+                      caption='Download'
+                    />
+                  </IconMenu>
+                  <h2>Progress Bar</h2>
+                  <ProgressBar
+                    type='circular'
+                    mode='indeterminate'
+                  />
+                  <ProgressBar
+                    type='circular'
+                    mode='determinate'
+                    value={75}
+                  />
+                  <ProgressBar
+                    type='linear'
+                    mode='indeterminate'
+                  />
+                  <ProgressBar
+                    type='linear'
+                    mode='determinate'
+                    value={75}
+                  />
+                  <h2>Radio Buttons</h2>
+                  <RadioGroup name='Group Name'>
+                    <RadioButton label='Button 1' />
+                    <RadioButton label='Button 2' />
+                  </RadioGroup>
+                  <h2>Slider</h2>
+                  <Slider
+                    value={this.state.slider}
+                    onChange={this.handleSliderChange}
+                    min={-10}
+                    max={10}
+                    pinned
+                    step={0.01}
+                  />
+                  <h2>Snackbar</h2>
+                  <Button
+                    label='Open Snackbar'
+                    onClick={() => this.handleSnackbarToggle(true)}
+                  />
+                  <Snackbar
+                    action='Action'
+                    label='The label'
+                    active={this.state.snackbar}
+                    onClick={() => this.handleSnackbarToggle(false)}
+                  />
+                  <h2>Switch</h2>
+                  <Switch
+                    checked
+                    label='Label'
+                  />
+                  <h2>Tooltip</h2>
+                  <TooltipButton label='OK' tooltip='Click Me!' />
+                </Tab>
+                <Tab label='Custom'>Custom</Tab>
               </Tabs>
-              <h2>Tooltip</h2>
-              <TooltipButton label='OK' tooltip='Click Me!'/>
+
             </div>
         </Panel>
       </Layout>
