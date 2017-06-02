@@ -79,7 +79,6 @@ export default class App extends Component {
   ]
 
   render () {
-    console.log(this)
     return (
       <Layout>
         <Panel>
@@ -89,7 +88,7 @@ export default class App extends Component {
                 index={this.state.index}
                 onChange={this.handleTabChange}
               >
-                <Tab label='Demo'>>
+                <Tab label='Demo'>
                   <h2>Autocomplete</h2>
                   <Autocomplete
                     direction='down'
@@ -238,9 +237,21 @@ export default class App extends Component {
                     <li>
                       <Button label='Primary' primary raised />
                     </li>
-                    <li />
                     <li>
-                      <Button label='Success' theme={successButtonStyle} />
+                      <Button
+                        label='Success'
+                        primary
+                        raised
+                        theme={successButtonStyle}
+                      />
+                    </li>
+                    <li>
+                      <Button
+                        label='Accent'
+                        accent
+                        raised
+                        theme={successButtonStyle}
+                      />
                     </li>
                   </ul>
                 </Tab>
