@@ -1,3 +1,4 @@
+'use strict'
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -12,6 +13,10 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: 'app.dev.js',
     publicPath: '/public/'
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.json', '.css', '.hbs'],
+    modules: [path.resolve(__dirname, 'src'), 'node_modules']
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -45,7 +50,7 @@ module.exports = {
               modules: true,
               sourceMap: true,
               importLoaders: 1,
-              localIdentName: "[name]--[local]--[hash:base64:8]",
+              localIdentName: '[name]--[local]--[hash:base64:8]',
               camelCase: true
             }
           },

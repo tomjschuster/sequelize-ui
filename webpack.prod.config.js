@@ -13,6 +13,10 @@ module.exports = {
     filename: 'app.js',
     publicPath: '/public/'
   },
+  resolve: {
+    extensions: ['.js', '.jsx', '.json', '.css', '.hbs'],
+    modules: [path.resolve(__dirname, 'src'), 'node_modules']
+  },
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
       minimize: true,
