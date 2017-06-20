@@ -16,6 +16,7 @@ const {
   brown500
 } = require('./material-design-colors')
 
+// eslint-disable-next-line no-unused-vars
 const defaultPalette = {
   colorDivider: grey200,
   colorBackground: white,
