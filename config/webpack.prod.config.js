@@ -4,14 +4,13 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  devtool: 'eval',
+  devtool: 'source-map',
   entry: [
-    'webpack-hot-middleware/client',
     './src/index'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'app.dev.js',
+    filename: 'app.js',
     publicPath: '/public/'
   },
   resolve: {
@@ -19,13 +18,23 @@ module.exports = {
     modules: [path.resolve(__dirname, 'src'), 'node_modules']
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      minimize: true,
+      compress: {
+        warnings: false
+      }
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    }),
     new HtmlWebpackPlugin({
-      title: 'DEV - Sequelize UI',
-      filename: 'index.dev.html',
+      title: 'Sequelize UI',
+      filename: 'index.html',
       template: 'assets/index.hbs',
       inject: false,
-      appFilePath: '/app.dev.js'
+      appFilePath: '/app.js'
     })
   ],
   module: {
@@ -36,9 +45,9 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: path.join(__dirname, 'node_modules'),
+        exclude: /node_modules/,
         include: path.join(__dirname, 'src'),
-        use: ['babel-loader']
+        use: ['babel-loader'],
       },
       {
         test: /\.css$/,
@@ -50,16 +59,11 @@ module.exports = {
               modules: true,
               sourceMap: true,
               importLoaders: 1,
-              localIdentName: '[name]--[local]--[hash:base64:8]',
+              localIdentName: "[name]--[local]--[hash:base64:8]",
               camelCase: true
             }
           },
-          {
-            loader: 'postcss-loader',
-            options: {
-              config: { path: path.join(__dirname, 'config', 'postcss.config.js') }
-            }
-          }
+          'postcss-loader'
         ]
       }
     ]

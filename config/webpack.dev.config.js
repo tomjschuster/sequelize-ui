@@ -7,7 +7,7 @@ module.exports = {
   devtool: 'eval',
   entry: [
     'webpack-hot-middleware/client',
-    './src/index'
+    '../src/index'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -56,8 +56,8 @@ module.exports = {
           },
           {
             loader: 'postcss-loader',
-            options: {
-              config: { path: path.join(__dirname, 'config', 'postcss.config.js') }
+            config: {
+              path: path.resolve('')
             }
           }
         ]
