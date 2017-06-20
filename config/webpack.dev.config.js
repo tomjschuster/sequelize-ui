@@ -7,16 +7,16 @@ module.exports = {
   devtool: 'eval',
   entry: [
     'webpack-hot-middleware/client',
-    '../src/index'
+    path.join(__dirname, '..', 'app', 'index')
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, '..', 'public'),
     filename: 'app.dev.js',
     publicPath: '/public/'
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.css', '.hbs'],
-    modules: [path.resolve(__dirname, 'src'), 'node_modules']
+    modules: [path.join(__dirname, '..', 'app'), 'node_modules']
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -36,9 +36,16 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: path.join(__dirname, 'node_modules'),
-        include: path.join(__dirname, 'src'),
-        use: ['babel-loader']
+        exclude: path.join(__dirname, '..', 'node_modules'),
+        include: path.join(__dirname, '..', 'app'),
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              extends: path.join(__dirname, '.babelrc')
+            }
+          }
+        ],
       },
       {
         test: /\.css$/,
@@ -56,8 +63,8 @@ module.exports = {
           },
           {
             loader: 'postcss-loader',
-            config: {
-              path: path.resolve('')
+            options: {
+              config: { path: path.join(__dirname, 'postcss.config.js') }
             }
           }
         ]

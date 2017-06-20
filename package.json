@@ -14,11 +14,16 @@
   },
   "main": "index.js",
   "scripts": {
-    "build": "NODE_ENV=production webpack --config webpack.prod.config.js --progress --colors",
+    "build": "NODE_ENV=production webpack --config ./config/webpack.prod.config.js --progress --colors",
     "deploy": "git push heroku master",
     "start": "NODE_ENV=production node server",
-    "build:dev": "NODE_ENV=development webpack --config webpack.dev.config.js --progress --colors",
+    "build:dev": "NODE_ENV=development webpack --config ./config/webpack.dev.config.js --progress --colors",
     "start:dev": "npm run build:dev && NODE_ENV=development nodemon --ignore dist --ignore src server"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./config/.eslintrc.json"
+    ]
   },
   "engines": {
     "node": "8.0.0"
