@@ -34,7 +34,7 @@ module.exports = {
       filename: 'index.html',
       template: 'assets/index.hbs',
       inject: false,
-      appFilePath: '/app.dev.js'
+      appFilePath: '/app.js'
     })
   ],
   module: {
