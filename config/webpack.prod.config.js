@@ -6,12 +6,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
   devtool: 'source-map',
   entry: [
-    './src/index'
+    path.join(__dirname, '..', 'app', 'index')
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, '..', 'public'),
     filename: 'app.js',
     publicPath: '/public/'
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.json', '.css', '.hbs'],
+    modules: [path.join(__dirname, '..', 'app'), 'node_modules']
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
@@ -41,9 +45,16 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: /node_modules/,
-        include: path.join(__dirname, 'src'),
-        use: ['babel-loader'],
+        exclude: path.join(__dirname, '..', 'node_modules'),
+        include: path.join(__dirname, '..', 'app'),
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              extends: path.join(__dirname, '.babelrc')
+            }
+          }
+        ],
       },
       {
         test: /\.css$/,
@@ -55,11 +66,16 @@ module.exports = {
               modules: true,
               sourceMap: true,
               importLoaders: 1,
-              localIdentName: "[name]--[local]--[hash:base64:8]",
+              localIdentName: '[name]--[local]--[hash:base64:8]',
               camelCase: true
             }
           },
-          'postcss-loader'
+          {
+            loader: 'postcss-loader',
+            options: {
+              config: { path: path.join(__dirname, 'postcss.config.js') }
+            }
+          }
         ]
       }
     ]

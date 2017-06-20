@@ -5,5 +5,5 @@ npm-debug.log
 */DS_STORE
 *.swp
 
-dist/app.dev.js
-dist/index.dev.html
+public/app.dev.js
+public/index.dev.html
