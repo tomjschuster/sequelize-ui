@@ -18,7 +18,7 @@
     "deploy": "git push heroku master",
     "start": "NODE_ENV=production node server",
     "build:dev": "NODE_ENV=development webpack --config ./config/webpack.dev.config.js --progress --colors",
-    "start:dev": "npm run build:dev && NODE_ENV=development nodemon --ignore dist --ignore src server",
+    "start:dev": "npm run build:dev && NODE_ENV=development nodemon --ignore public --ignore app server",
     "lint": "eslint ."
   },
   "eslintConfig": {
