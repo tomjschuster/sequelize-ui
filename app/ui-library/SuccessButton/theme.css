@@ -1,7 +1,7 @@
 .primary:not([disabled]) {
   &.raised,
   &.floating {
-    background: blue;
-    color: grey;
+    background: var(--green500);
+    color: var(--black);
   }
 }

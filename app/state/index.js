@@ -2,10 +2,10 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { connect } from 'react-redux'
 
-import counter, { actions as counterActions } from './counter'
+import demo, { actions as counterActions } from './demo'
 
 const branches = {
-  counter
+  demo
 }
 
 const actions = {
@@ -19,9 +19,10 @@ const createReducer = ({ initialState, handler }) =>
    handler[action.type] ? handler[action.type](state, action) : state
  )
 
-const rootReducer = Object.keys(branches).reduce((acc, branch) => ({
+const reducers = Object.keys(branches).reduce((acc, branch) => ({
   ...acc, [branch]: createReducer(branches[branch])
 }), {})
 
-export default createStore(combineReducers(rootReducer), applyMiddleware(thunk))
+const middlewares = applyMiddleware(thunk)
+export const store = createStore(combineReducers(reducers), middlewares)
 

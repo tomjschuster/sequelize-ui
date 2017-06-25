@@ -1,8 +1,7 @@
 import React from 'react'
 import { IconButton } from 'react-toolbox/lib/button'
-import { connectAll } from 'store'
 
-const Counter = ({ increment, decrement, reset, counter: { value } }) => (
+const Counter = ({ increment, decrement, reset, value }) => (
   <div>
     <h2>Counter</h2>
     <p>Value: {value}</p>
@@ -12,5 +11,5 @@ const Counter = ({ increment, decrement, reset, counter: { value } }) => (
   </div>
 )
 
-export default connectAll(Counter)
+export default Counter
 

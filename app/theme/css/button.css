@@ -1,7 +1,0 @@
-.accent:not([disabled]) {
-  &.raised,
-  &.floating {
-    background: purple;
-    color: grey;
-  }
-}
