@@ -1,30 +1,24 @@
 'use strict'
+const server = require('./server.js')
+const port = (process.env.PORT || 8080)
+const app = server.app()
 
-const express = require('express')
-const bodyParser = require('body-parser')
-const morgan = require('morgan')
-const path = require('path')
-const chalk = require('chalk')
 
-const app = express()
+if (process.env.NODE_ENV !== 'production') {
 
-const PORT = process.env.PORT || 3001
+  const webpack = require('webpack')
+  const config = require('../config/webpack.dev.config.js')
+  const compiler = webpack(config)
+  const devMiddlewareConfig = {
+    noInfo: true,
+    publicPath: config.output.publicPath
+  }
 
-app.use(bodyParser.json())
-   .use(bodyParser.urlencoded({ extended: false }))
-   .use(morgan('dev'))
-   .use(express.static(path.join(__dirname, '..', 'public')))
-   .use('/materialize-css',
-      express.static(path.join(__dirname, '..', 'node_modules', 'materialize-css', 'dist')))
-   .use('/api', require('./api'))
+  app.use(require('webpack-hot-middleware')(compiler))
+  app.use(require('webpack-dev-middleware')(compiler, devMiddlewareConfig))
 
-const indexHtmlPath = path.join(__dirname, '..', 'public', 'index.html')
+}
 
-app.get('*', (req, res, next) => res.sendFile(indexHtmlPath))
 
-app.use((err, req, res, next) => {
-  if (err) res.redirect('/')
-})
-
-app.listen(PORT, () =>
-  console.log(chalk.italic.magenta(`Server listening on ${PORT}...`)))
+console.log('NODE_ENV:', process.env.NODE_ENV)
+app.listen(port, () => console.log(`Listening on ${port}...`))
