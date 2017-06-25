@@ -11,9 +11,9 @@ const {
   darkContrast,
 
   // Custom Colors
-  lime700,
-  deepOrange900,
-  brown500
+  purple500,
+  purple700,
+  indigoA200,
 } = require('./material-design-colors')
 
 // eslint-disable-next-line no-unused-vars
@@ -34,10 +34,10 @@ const customPalette = {
   // colorBackground,
   // colorText,
   // colorTextSecondary,
-  colorPrimary: lime700,
-  colorPrimaryDark: deepOrange900,
-  colorAccent: brown500,
-  // colorAccentDark,
+  colorPrimary: purple500,
+  colorPrimaryDark: purple700,
+  colorAccent: indigoA200,
+  colorAccentDark: indigo700,
   // colorPrimaryContrast,
   // colorAccentContrast
 }
