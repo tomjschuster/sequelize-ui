@@ -26,6 +26,11 @@ module.exports = {
       template: 'assets/index.hbs',
       inject: false,
       appFilePath: '/app.dev.js'
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('development')
+      }
     })
   ],
   module: {
