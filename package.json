@@ -1,14 +1,16 @@
 {
   "name": "sequelize-ui",
   "version": "0.1.0",
-  "description": "GUI for designing relational database schema and exporting as formatted Sequlize template.",
+  "description":
+    "GUI for designing relational database schema and exporting as formatted Sequlize template.",
   "homepage": "http://sequelizeui.herokuapp.com",
   "bugs": {
     "url": "https://github.com/tomjschuster/sequelize-ui/issues",
     "email": "tomjschuster@gmail.com"
   },
   "license": "ISC",
-  "author": "Tom Schuster <tomjschuster@gmail.com> (https://github.com/tomjschuster)",
+  "author":
+    "Tom Schuster <tomjschuster@gmail.com> (https://github.com/tomjschuster)",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -20,16 +22,10 @@
     "build-watch": "webpack -w",
     "start:dev": "webpack -w & nodemon server",
     "start": "node server",
-    "heroku-postbuild": "webpack -p --config ./webpack.prod.config.js --progress"
+    "heroku-postbuild":
+      "webpack -p --config ./webpack.prod.config.js --progress"
   },
-  "keywords": [
-    "sequelize",
-    "orm",
-    "sql",
-    "schema",
-    "model",
-    "gui"
-  ],
+  "keywords": ["sequelize", "orm", "sql", "schema", "model", "gui"],
   "dependencies": {
     "archiver": "^1.2.0",
     "autoprefixer": "^7.2.6",

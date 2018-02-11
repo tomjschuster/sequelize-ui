@@ -1,10 +1,8 @@
-'use strict'
-
 import { getInitialModel, copyModel } from '../utils'
 import { findIndex, find } from 'lodash'
 
 /*----------  INITIAL STATE  ----------*/
-const initialState =  {
+const initialState = {
   name: '',
   fields: [],
   config: {
@@ -39,7 +37,7 @@ const UPDATE_METHOD = 'UPDATE_METHOD'
 const ADD_ASSOCIATION = 'ADD_ASSOCIATION'
 const UPDATE_TARGET = 'UPDATE_TARGET'
 const UPDATE_RELATIONSHIP = 'UPDATE_RELATIONSHIP'
-const UPDATE_ASSOCIATION_CONFIG  = 'UPDATE_ASSOCIATION_CONFIG'
+const UPDATE_ASSOCIATION_CONFIG = 'UPDATE_ASSOCIATION_CONFIG'
 const REMOVE_ASSOCIATION = 'REMOVE_ASSOCIATION'
 
 /*----------  ACTION CREATORS  ----------*/
@@ -49,10 +47,10 @@ export const receiveModel = model => ({
 })
 
 export const resetModel = () => ({
-  type: RESET_MODEL,
+  type: RESET_MODEL
 })
 
-export const setModelName = name  => ({
+export const setModelName = name => ({
   type: SET_MODEL_NAME,
   name
 })
@@ -137,7 +135,7 @@ export default (state = initialState, action) => {
       console.log('returning', model)
       return model
     case ADD_FIELD:
-      model.fields.push({name: '', type: '', validate: {}})
+      model.fields.push({ name: '', type: '', validate: {} })
       return model
     case UPDATE_FIELD:
       model.fields[action.idx][action.key] = action.val
@@ -155,8 +153,9 @@ export default (state = initialState, action) => {
       model.methods[action.key] = action.val
       return model
     case ADD_ASSOCIATION:
-      model.associations = [...model.associations,
-        {target: null, relationship: null, config: {} }
+      model.associations = [
+        ...model.associations,
+        { target: null, relationship: null, config: {} }
       ]
       return model
     case UPDATE_RELATIONSHIP:

@@ -1,5 +1,3 @@
-'use strict'
-
 import axios from 'axios'
 import { find } from 'lodash'
 import { openWindow, messages } from './dialog'
@@ -17,7 +15,7 @@ const RESET_MODELS = 'RESET_MODELS'
 const UPDATE_MODEL = 'UPDATE_MODEL'
 
 /*----------  ACTION CREATORS  ----------*/
-export const receiveModels = models  => ({
+export const receiveModels = models => ({
   type: RECEIVE_MODELS,
   models
 })
@@ -44,7 +42,7 @@ export const resetModels = () => ({
 /*----------  THUNKS  ----------*/
 export const saveModel = (model, isNew) => dispatch => {
   let { models } = store.getState()
-  let storeModel = find(models, {name: model.name})
+  let storeModel = find(models, { name: model.name })
   console.log('storeModel', storeModel)
   if (storeModel && storeModel.id !== model.id) {
     dispatch(openWindow('Validation Error', messages.dupFieldName))
@@ -52,8 +50,8 @@ export const saveModel = (model, isNew) => dispatch => {
   }
 
   if (!model.name) {
-      dispatch(openWindow('Validation Error', messages.reqModelName))
-      return
+    dispatch(openWindow('Validation Error', messages.reqModelName))
+    return
   }
 
   for (let field of model.fields) {
@@ -68,12 +66,17 @@ export const saveModel = (model, isNew) => dispatch => {
 
   for (let association of model.associations) {
     if (!association.relationship) {
-      dispatch(openWindow('Validation Error', messages.reqAssociationRelationship))
+      dispatch(
+        openWindow('Validation Error', messages.reqAssociationRelationship)
+      )
       return
     } else if (!association.target) {
       dispatch(openWindow('Validation Error', messages.reqAssociationTarget))
       return
-    } else if (association.relationship === 'belongsToMany' && !association.config.through) {
+    } else if (
+      association.relationship === 'belongsToMany' &&
+      !association.config.through
+    ) {
       dispatch(openWindow('Validation Error', messages.reqAssociationThrough))
       return
     }
@@ -85,22 +88,28 @@ export const saveModel = (model, isNew) => dispatch => {
 }
 
 /*----------  FUNCTIONS  ----------*/
-export const requestDbDownload = models =>  axios.post('/api/create/db', {models}).then(res => {
-  console.log(res.data)
-  window.location.replace(`/api/download/${res.data}`)
-}).catch(console.error)
-
+export const requestDbDownload = models =>
+  axios
+    .post('/api/create/db', { models })
+    .then(res => {
+      console.log(res.data)
+      window.location.replace(`/api/download/${res.data}`)
+    })
+    .catch(console.error)
 
 /*----------  REDUCER  ----------*/
 export default (state = initialState, action) => {
   let models = []
-  state.forEach((model, idx) => { models[idx] = Object.assign({}, model) })
+  state.forEach((model, idx) => {
+    models[idx] = Object.assign({}, model)
+  })
   switch (action.type) {
     case RECEIVE_MODELS:
       return action.models
     case ADD_MODEL:
-      let id = models.reduce((prev, curr) => prev < curr.id ? curr.id : prev, 0) + 1
-      let model = Object.assign({}, action.model, {id})
+      let id =
+        models.reduce((prev, curr) => (prev < curr.id ? curr.id : prev), 0) + 1
+      let model = Object.assign({}, action.model, { id })
       return [...state, model]
     case UPDATE_MODEL:
       models.forEach((model, idx) => {
@@ -108,8 +117,11 @@ export default (state = initialState, action) => {
       })
       return models
     case REMOVE_MODEL:
-      let idx = models.reduce((prev, curr, i) =>
-        prev === -1 && curr.id === action.model.id ? curr.id : prev, -1)
+      let idx = models.reduce(
+        (prev, curr, i) =>
+          prev === -1 && curr.id === action.model.id ? curr.id : prev,
+        -1
+      )
       if (idx !== -1) models.splice(action.idx, 1)
       return models
     case RESET_MODELS:

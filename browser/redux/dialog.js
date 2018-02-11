@@ -1,13 +1,12 @@
-'use strict'
-
 export const messages = {
   reqModelName: 'Please give your model a name.',
   reqFieldName: 'Every field must have a name.',
   reqFieldType: 'Every field must have a data type.',
   reqAssociationRelationship: 'Every association must have a relationship.',
   reqAssociationTarget: 'Every association must have a target model.',
-  reqAssociationThrough: '\'belongsToMany\' associations must have a \'through\' table.',
-  dupFieldName: 'Table name already exists. Please select another name.',
+  reqAssociationThrough:
+    "'belongsToMany' associations must have a 'through' table.",
+  dupFieldName: 'Table name already exists. Please select another name.'
 }
 
 /*----------  INITIAL STATE  ----------*/
@@ -23,14 +22,14 @@ const OPEN_WINDOW = 'OPEN_WINDOW'
 const CLOSE_WINDOW = 'CLOSE_WINDOW'
 
 /*----------  ACTION CREATORS  ----------*/
-export const openWindow = (title, message)  => ({
+export const openWindow = (title, message) => ({
   type: OPEN_WINDOW,
   title,
   message
 })
 
 export const closeWindow = () => ({
-  type: CLOSE_WINDOW,
+  type: CLOSE_WINDOW
 })
 
 /*----------  THUNKS  ----------*/

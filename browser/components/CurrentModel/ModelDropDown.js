@@ -1,5 +1,3 @@
-'use strict'
-
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import upperCamelCase from 'uppercamelcase'
@@ -13,13 +11,13 @@ import FlatButton from 'material-ui/FlatButton'
 export class ModelDropdown extends Component {
   constructor(props) {
     super(props)
-    this.state = {open: false, current: null}
+    this.state = { open: false, current: null }
     this.openMenu = this.openMenu.bind(this)
     this.closeMenu = this.closeMenu.bind(this)
   }
 
   openMenu() {
-    this.setState({open: true})
+    this.setState({ open: true })
   }
 
   closeMenu() {
@@ -31,43 +29,41 @@ export class ModelDropdown extends Component {
     let { open } = this.state
     let { openMenu, closeMenu, setCurrent } = this
     return (
-    <IconMenu
-      open={open}
-      iconButtonElement={
-        <FlatButton
-          label={valueKey || 'Select Model'}
-          onClick={openMenu}
-          labelStyle={{textTransform: 'none'}}
-        />
-      }
-      anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-      targetOrigin={{horizontal: 'left', vertical: 'top'}}
-    >
-      { modelList.map((model, modelIdx) => (
-        <MenuItem
-          key={modelIdx}
-          primaryText={model.valueKey}
-          onClick={() => {
-            closeMenu()
-            onClick(model.valueKey, idx)
-            setCurrent(model.valueKey)
-          }}
-        />
-      ))}
-    </IconMenu>
+      <IconMenu
+        open={open}
+        iconButtonElement={
+          <FlatButton
+            label={valueKey || 'Select Model'}
+            onClick={openMenu}
+            labelStyle={{ textTransform: 'none' }}
+          />
+        }
+        anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+        targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+      >
+        {modelList.map((model, modelIdx) => (
+          <MenuItem
+            key={modelIdx}
+            primaryText={model.valueKey}
+            onClick={() => {
+              closeMenu()
+              onClick(model.valueKey, idx)
+              setCurrent(model.valueKey)
+            }}
+          />
+        ))}
+      </IconMenu>
     )
   }
 }
 
-
 /*----------  CONNECT  ----------*/
 const mapStateToProps = ({ models }) => {
-  let modelList = models.map(model => ({valueKey: upperCamelCase(model.name)}))
+  let modelList = models.map(model => ({
+    valueKey: upperCamelCase(model.name)
+  }))
   return { modelList }
 }
-const mapDispatchToProps = dispatch => ({ })
+const mapDispatchToProps = dispatch => ({})
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ModelDropdown)
+export default connect(mapStateToProps, mapDispatchToProps)(ModelDropdown)

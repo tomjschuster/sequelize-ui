@@ -1,12 +1,16 @@
-'use strict'
-
 import {
-  indigo500, indigo700,
+  indigo500,
+  indigo700,
   teal400,
-  grey100, grey300, grey400, grey500,
-  white, darkBlack, fullBlack,
+  grey100,
+  grey300,
+  grey400,
+  grey500,
+  white,
+  darkBlack,
+  fullBlack
 } from 'material-ui/styles/colors'
-import {fade} from 'material-ui/utils/colorManipulator'
+import { fade } from 'material-ui/utils/colorManipulator'
 import spacing from 'material-ui/styles/spacing'
 
 export default {
@@ -27,8 +31,8 @@ export default {
     disabledColor: fade(darkBlack, 0.3),
     pickerHeaderColor: indigo500,
     clockCircleColor: fade(darkBlack, 0.07),
-    shadowColor: fullBlack,
-  },
+    shadowColor: fullBlack
+  }
 }
 
 // .dark-primary-color    { background: #303F9F }
