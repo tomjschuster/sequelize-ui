@@ -14,24 +14,27 @@ export class App extends Component {
     let { children, models } = this.props
     return (
       <div>
-          <AppBar title='Sequelize UI'
-                  iconElementLeft={<IconButton><NewFolder /></IconButton>}
-                  iconElementRight={
-                    <FlatButton onClick={() => requestDbDownload(models)} label='Download Models'/>
-                  }/>
-        <div id='main'>
-          { children }
-        </div>
+        <AppBar
+          title="Sequelize UI"
+          iconElementLeft={
+            <IconButton>
+              <NewFolder />
+            </IconButton>
+          }
+          iconElementRight={
+            <FlatButton
+              onClick={() => requestDbDownload(models)}
+              label="Download Models"
+            />
+          }
+        />
+        <div id="main">{children}</div>
       </div>
     )
   }
 }
 
-
 const mapStateToProps = ({ models }) => ({ models })
 const mapDispatchToProps = () => ({})
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)
