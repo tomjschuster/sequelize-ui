@@ -8,7 +8,7 @@ import ConfirmDialog from './ConfirmDialog'
 const Main = ({ models, currentModel }) => (
   <div>
     <ModelList models={models} currentModel={currentModel} />
-    <CurrentModel currentModel={currentModel} />
+    <CurrentModel models={models} currentModel={currentModel} />
     <ConfirmDialog />
   </div>
 )

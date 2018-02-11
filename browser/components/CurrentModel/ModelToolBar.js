@@ -7,6 +7,7 @@ import Input from 'react-toolbox/lib/input'
 import { Button } from 'react-toolbox/lib/button'
 
 const ModelToolBar = ({
+  models,
   currentModel,
   updateModelName,
   saveModel,
@@ -23,7 +24,7 @@ const ModelToolBar = ({
         label="Save"
         primary
         raised
-        onClick={() => saveModel(currentModel, false)}
+        onClick={() => saveModel(models, currentModel, false)}
       />
     )}
     {currentModel.id && (
@@ -40,14 +41,15 @@ const ModelToolBar = ({
         disabled={!currentModel.name}
         primary
         raised
-        onClick={() => saveModel(currentModel, true)}
+        onClick={() => saveModel(models, currentModel, true)}
       />
     )}
   </div>
 )
 
 const mapDispatchToProps = dispatch => ({
-  saveModel: (model, isNew) => dispatch(saveModel(model, isNew)),
+  saveModel: (models, model, isNew) =>
+    dispatch(saveModel(models, model, isNew)),
   updateModelName: name => dispatch(setModelName(name)),
   deleteModel: id => {
     dispatch(removeModel(id))

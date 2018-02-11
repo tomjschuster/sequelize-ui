@@ -18,7 +18,10 @@ export class CurrentModel extends Component {
   render() {
     return (
       <div>
-        <ModelToolBar currentModel={this.props.currentModel} />
+        <ModelToolBar
+          models={this.props.models}
+          currentModel={this.props.currentModel}
+        />
         <Tabs index={this.state.tabIdx} onChange={this.setTabIdx}>
           <Tab label="Fields">
             <Fields />

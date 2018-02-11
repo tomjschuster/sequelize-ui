@@ -1,8 +1,6 @@
 import axios from 'axios'
-import { find } from 'lodash'
 import { openWindow, messages } from './dialog'
-import { resetModel } from './currentModel'
-import store from '../store'
+import { resetModel as resetCurrentModel } from './currentModel'
 
 /*----------  INITIAL STATE  ----------*/
 const initialState = { nextId: 1, models: [] }
@@ -11,7 +9,7 @@ const initialState = { nextId: 1, models: [] }
 const RECEIVE_MODELS = 'RECEIVE_MODELS'
 const ADD_MODEL = 'ADD_MODEL'
 const REMOVE_MODEL = 'REMOVE_MODEL'
-const RESET_MODELS = 'RESET_MODELS'
+const RESET = 'RESET'
 const UPDATE_MODEL = 'UPDATE_MODEL'
 
 /*----------  ACTION CREATORS  ----------*/
@@ -35,56 +33,53 @@ export const removeModel = id => ({
   id
 })
 
-export const resetModels = () => ({
-  type: RESET_MODELS
+export const reset = () => ({
+  type: RESET
 })
 
 /*----------  THUNKS  ----------*/
-export const saveModel = (model, isNew) => dispatch => {
-  let { models } = store.getState()
-  let storeModel = find(models, { name: model.name })
-  console.log('storeModel', storeModel)
-  if (storeModel && storeModel.id !== model.id) {
+export const saveModel = (models, model, isNew) => dispatch => {
+  let isNameError = models.find(
+    ({ id, name }) => name === model.name && id !== model.id
+  )
+  if (isNameError) {
     dispatch(openWindow('Validation Error', messages.dupFieldName))
-    return
   }
 
   if (!model.name) {
-    dispatch(openWindow('Validation Error', messages.reqModelName))
-    return
+    return dispatch(openWindow('Validation Error', messages.reqModelName))
   }
 
   for (let field of model.fields) {
     if (!field.name) {
-      dispatch(openWindow('Validation Error', messages.reqFieldName))
-      return
+      return dispatch(openWindow('Validation Error', messages.reqFieldName))
     } else if (!field.type) {
-      dispatch(openWindow('Validation Error', messages.reqFieldType))
-      return
+      return dispatch(openWindow('Validation Error', messages.reqFieldType))
     }
   }
 
   for (let association of model.associations) {
     if (!association.relationship) {
-      dispatch(
+      return dispatch(
         openWindow('Validation Error', messages.reqAssociationRelationship)
       )
-      return
     } else if (!association.target) {
-      dispatch(openWindow('Validation Error', messages.reqAssociationTarget))
-      return
+      return dispatch(
+        openWindow('Validation Error', messages.reqAssociationTarget)
+      )
     } else if (
       association.relationship === 'belongsToMany' &&
       !association.config.through
     ) {
-      dispatch(openWindow('Validation Error', messages.reqAssociationThrough))
-      return
+      return dispatch(
+        openWindow('Validation Error', messages.reqAssociationThrough)
+      )
     }
   }
 
   if (isNew) dispatch(addModel(model))
   else dispatch(updateModel(model))
-  dispatch(resetModel())
+  dispatch(resetCurrentModel())
 }
 
 /*----------  FUNCTIONS  ----------*/
@@ -119,7 +114,7 @@ export default (state = initialState, action) => {
         ...state,
         models: state.models.filter(model => model.id !== action.id)
       }
-    case RESET_MODELS:
+    case RESET:
       return initialState
     default:
       return state
