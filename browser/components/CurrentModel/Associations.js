@@ -66,7 +66,10 @@ const Associations = ({
 )
 
 /*----------  CONNECT TO STORE  ----------*/
-const mapStateToProps = ({ currentModel, models }) => ({ currentModel, models })
+const mapStateToProps = ({ currentModel, models }) => ({
+  currentModel,
+  models: models.models
+})
 const mapDispatchToProps = dispatch => ({
   createAssociation: () => dispatch(addAssociation()),
   updateTarget: (target, idx) => dispatch(updateTarget(target, idx)),

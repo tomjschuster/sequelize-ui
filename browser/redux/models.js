@@ -5,7 +5,7 @@ import { resetModel } from './currentModel'
 import store from '../store'
 
 /*----------  INITIAL STATE  ----------*/
-const initialState = []
+const initialState = { nextId: 1, models: [] }
 
 /*----------  ACTION TYPES  ----------*/
 const RECEIVE_MODELS = 'RECEIVE_MODELS'
@@ -30,9 +30,9 @@ export const updateModel = model => ({
   model
 })
 
-export const removeModel = model => ({
+export const removeModel = id => ({
   type: REMOVE_MODEL,
-  model
+  id
 })
 
 export const resetModels = () => ({
@@ -91,41 +91,36 @@ export const saveModel = (model, isNew) => dispatch => {
 export const requestDbDownload = models =>
   axios
     .post('/api/create/db', { models })
-    .then(res => {
-      console.log(res.data)
-      window.location.replace(`/api/download/${res.data}`)
-    })
+    .then(res => window.location.replace(`/api/download/${res.data}`))
     .catch(console.error)
 
 /*----------  REDUCER  ----------*/
 export default (state = initialState, action) => {
-  let models = []
-  state.forEach((model, idx) => {
-    models[idx] = Object.assign({}, model)
-  })
   switch (action.type) {
     case RECEIVE_MODELS:
-      return action.models
+      return {
+        nextId: Math.max(...action.models.map(({ id }) => id)),
+        models: action.models
+      }
     case ADD_MODEL:
-      let id =
-        models.reduce((prev, curr) => (prev < curr.id ? curr.id : prev), 0) + 1
-      let model = Object.assign({}, action.model, { id })
-      return [...state, model]
+      return {
+        nextId: state.nextId + 1,
+        models: [...state.models, { ...action.model, id: state.nextId }]
+      }
     case UPDATE_MODEL:
-      models.forEach((model, idx) => {
-        if (model.id === action.model.id) models[idx] = action.model
-      })
-      return models
+      return {
+        ...state,
+        models: state.models.map(
+          model => (model.id === action.model.id ? action.model : model)
+        )
+      }
     case REMOVE_MODEL:
-      let idx = models.reduce(
-        (prev, curr, i) =>
-          prev === -1 && curr.id === action.model.id ? curr.id : prev,
-        -1
-      )
-      if (idx !== -1) models.splice(action.idx, 1)
-      return models
+      return {
+        ...state,
+        models: state.models.filter(model => model.id !== action.id)
+      }
     case RESET_MODELS:
-      return []
+      return initialState
     default:
       return state
   }

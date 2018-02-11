@@ -13,6 +13,9 @@ const Main = ({ models, currentModel }) => (
   </div>
 )
 
-const mapStateToProps = ({ models, currentModel }) => ({ models, currentModel })
+const mapStateToProps = ({ models, currentModel }) => ({
+  models: models.models,
+  currentModel
+})
 
 export default connect(mapStateToProps)(Main)

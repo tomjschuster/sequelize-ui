@@ -16,6 +16,6 @@ const App = ({ children, models }) => (
   </div>
 )
 
-const mapStateToProps = ({ models }) => ({ models })
+const mapStateToProps = ({ models }) => ({ models: models.models })
 
 export default connect(mapStateToProps)(App)

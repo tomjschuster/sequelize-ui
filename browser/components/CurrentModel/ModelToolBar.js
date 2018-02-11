@@ -31,7 +31,7 @@ const ModelToolBar = ({
         label="Delete"
         raised
         accent
-        onClick={() => deleteModel(currentModel)}
+        onClick={() => deleteModel(currentModel.id)}
       />
     )}
     {!currentModel.id && (
@@ -49,8 +49,8 @@ const ModelToolBar = ({
 const mapDispatchToProps = dispatch => ({
   saveModel: (model, isNew) => dispatch(saveModel(model, isNew)),
   updateModelName: name => dispatch(setModelName(name)),
-  deleteModel: model => {
-    dispatch(removeModel(model))
+  deleteModel: id => {
+    dispatch(removeModel(id))
     dispatch(resetModel())
   }
 })
