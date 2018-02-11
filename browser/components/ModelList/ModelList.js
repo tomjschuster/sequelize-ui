@@ -6,12 +6,6 @@ import { connect } from 'react-redux'
 import ModelListItem from './ModelListItem'
 import { List } from 'react-toolbox/lib/list'
 
-// import { List, makeSelectable } from 'material-ui/List'
-// import Subheader from 'material-ui/Subheader'
-// import { darkBlack } from 'material-ui/styles/colors'
-
-// let SelectableList = makeSelectable(List)
-
 class ModelList extends Component {
   render() {
     let { models } = this.props

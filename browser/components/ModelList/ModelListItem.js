@@ -34,6 +34,7 @@ class ModelListItem extends Component {
 let lastDeleted = null
 
 const mapStateToProps = ({ models, currentModel }) => ({ models, currentModel })
+
 const mapDispatchToProps = dispatch => ({
   deleteModel: model => {
     dispatch(removeModel(model))
