@@ -11,9 +11,9 @@ export class Main extends Component {
   render() {
     return (
       <div>
-        <ModelList/>
-        <CurrentModel/>
-        <ConfirmDialog/>
+        <ModelList />
+        <CurrentModel />
+        <ConfirmDialog />
       </div>
     )
   }
@@ -22,7 +22,4 @@ export class Main extends Component {
 const mapStateToProps = ({}) => ({})
 const mapDispatchToProps = dispatch => ({})
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Main)
+export default connect(mapStateToProps, mapDispatchToProps)(Main)
