@@ -16,7 +16,7 @@ const ModelToolBar = ({
     <Input
       value={currentModel.name}
       onChange={value => updateModelName(value)}
-      hint="Model Name"
+      label="Model Name"
     />
     {currentModel.id && (
       <Button
@@ -46,7 +46,6 @@ const ModelToolBar = ({
   </div>
 )
 
-const mapStateToProps = ({ currentModel }) => ({ currentModel })
 const mapDispatchToProps = dispatch => ({
   saveModel: (model, isNew) => dispatch(saveModel(model, isNew)),
   updateModelName: name => dispatch(setModelName(name)),
@@ -56,4 +55,4 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModelToolBar)
+export default connect(null, mapDispatchToProps)(ModelToolBar)

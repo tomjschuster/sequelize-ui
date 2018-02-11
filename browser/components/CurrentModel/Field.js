@@ -12,7 +12,7 @@ import DataTypeDropDown from './DataTypeDropdown'
 import { Button } from 'react-toolbox/lib/button'
 import Checkbox from 'react-toolbox/lib/checkbox'
 import Switch from 'react-toolbox/lib/switch'
-import { Card, CardActions } from 'react-toolbox/lib/card'
+import { Card } from 'react-toolbox/lib/card'
 import Input from 'react-toolbox/lib/input'
 
 /*----------  HELPER FUNCTIONS  ----------*/
@@ -57,184 +57,130 @@ class Field extends Component {
     } = this.props
     let { expanded } = this.state
     return (
-      <div className="col m12 l6" key={idx}>
-        <Card>
-          <CardActions>
+      <Card>
+        <div>
+          <Input
+            value={field.name}
+            onChange={value => updateFieldProps('name', value, idx)}
+            type="text"
+            label="Field Name"
+          />
+          <DataTypeDropDown
+            currType={field.type}
+            idx={idx}
+            onClick={updateFieldProps}
+          />
+          <Button label="DELETE FIELD" onClick={() => deleteField(idx)} />
+          <Switch
+            onChange={() => toggleFieldExpansion()}
+            checked={expanded}
+            label="More Options"
+          />
+        </div>
+        {expanded && (
+          <div>
+            <Checkbox
+              label="UNIQUE"
+              checked={Boolean(field.unique)}
+              onChange={isChecked => updateFieldProps('unique', isChecked, idx)}
+            />
+            {field.unique && (
+              <Input
+                value={field.uniqueKey}
+                onChange={value => updateFieldProps('uniqueKey', value, idx)}
+                type="text"
+                label="Unique Key"
+              />
+            )}
+            <Checkbox
+              label="NOT NULL"
+              checked={field.allowNull === false}
+              onChange={isChecked =>
+                updateFieldProps('allowNull', !isChecked, idx)
+              }
+            />
+            <Checkbox
+              label="PRIMARY KEY"
+              checked={field.primaryKey}
+              onChange={isChecked =>
+                updateFieldProps('primaryKey', isChecked, idx)
+              }
+            />
+            <Checkbox
+              label="AUTOINCREMENT"
+              checked={field.autoIncrement}
+              onChange={isChecked =>
+                updateFieldProps('autoIncrement', isChecked, idx)
+              }
+            />
             <Input
-              value={field.name}
-              onChange={value => updateFieldProps('name', value, idx)}
+              value={field.default || ''}
+              onChange={value => updateFieldProps('default', value, idx)}
               type="text"
-              hint="Field Name"
+              label="Default Value"
             />
-            <DataTypeDropDown
-              currType={field.type}
-              idx={idx}
-              onClick={updateFieldProps}
+            <Input
+              value={field.comment || ''}
+              onChange={value => updateFieldProps('comment', value, idx)}
+              type="text"
+              label="Comment"
             />
-            <Button label="DELETE FIELD" onClick={() => deleteField(idx)} />
-            <Switch
-              onChange={() => toggleFieldExpansion()}
-              checked={expanded}
-              label="More Options"
+            <Input
+              value={field.field || ''}
+              onChange={value => updateFieldProps('field', value, idx)}
+              type="text"
+              label="Field Name"
             />
-          </CardActions>
-          {expanded && (
-            <CardActions>
-              <div className="row">
-                <div className="col 4">
-                  <ul>
-                    <li>
-                      <Checkbox
-                        label="UNIQUE"
-                        checked={Boolean(field.unique)}
-                        onChange={isChecked =>
-                          updateFieldProps('unique', isChecked, idx)
-                        }
-                      />
-                    </li>
-                    {field.unique && (
-                      <li>
-                        <Input
-                          value={field.uniqueKey}
-                          onChange={value =>
-                            updateFieldProps('uniqueKey', value, idx)
-                          }
-                          type="text"
-                          hint="Unique Key"
-                        />
-                      </li>
-                    )}
-                    <li>
-                      <Checkbox
-                        label="NOT NULL"
-                        checked={field.allowNull === false}
-                        onChange={isChecked =>
-                          updateFieldProps('allowNull', !isChecked, idx)
-                        }
-                      />
-                    </li>
-                    <li>
-                      <Checkbox
-                        label="PRIMARY KEY"
-                        checked={field.primaryKey}
-                        onChange={isChecked =>
-                          updateFieldProps('primaryKey', isChecked, idx)
-                        }
-                      />
-                    </li>
-                    <li>
-                      <Checkbox
-                        label="AUTOINCREMENT"
-                        checked={field.autoIncrement}
-                        onChange={isChecked =>
-                          updateFieldProps('autoIncrement', isChecked, idx)
-                        }
-                      />
-                    </li>
-                  </ul>
-                </div>
-                <div className="col 4">
-                  <ul>
-                    <li>
-                      <Input
-                        value={field.default || ''}
-                        onChange={value =>
-                          updateFieldProps('default', value, idx)
-                        }
-                        type="text"
-                        hint="Default Value"
-                      />
-                    </li>
-                    <li>
-                      <Input
-                        value={field.comment || ''}
-                        onChange={value =>
-                          updateFieldProps('comment', value, idx)
-                        }
-                        type="text"
-                        hint="Comment"
-                      />
-                    </li>
-                    <li>
-                      <Input
-                        value={field.field || ''}
-                        onChange={value =>
-                          updateFieldProps('field', value, idx)
-                        }
-                        type="text"
-                        hint="Field Name"
-                      />
-                    </li>
-                  </ul>
-                </div>
-                <div className="col 4">
-                  <ul>
-                    <li>Validation</li>
-                    <li>
-                      <Input
-                        value={field.validate.is || ''}
-                        onChange={value =>
-                          updateFieldValidation('is', value, idx)
-                        }
-                        type="text"
-                        hint="is (/^[a-z]+$/i)"
-                      />
-                    </li>
-                    <li>
-                      <Input
-                        value={field.validate.contains || ''}
-                        onChange={value =>
-                          updateFieldValidation('contains', value, idx)
-                        }
-                        type="text"
-                        hint="contains"
-                      />
-                    </li>
-                    {field.type === 'STRING' && (
-                      <li>
-                        <Checkbox
-                          label="isEmail"
-                          checked={field.validate.isEmail || false}
-                          onChange={isChecked =>
-                            updateFieldValidation('isEmail', isChecked, idx)
-                          }
-                        />
-                        <Checkbox
-                          label="isUrl"
-                          checked={field.validate.isUrl || false}
-                          onChange={isChecked =>
-                            updateFieldValidation('isUrl', isChecked, idx)
-                          }
-                        />
-                      </li>
-                    )}
-                    {isNumber(field.type) && (
-                      <li>
-                        <Input
-                          value={field.validate.min || ''}
-                          onChange={value =>
-                            updateFieldValidation('min', value, idx)
-                          }
-                          type="text"
-                          hint="min"
-                        />
-                        <Input
-                          value={field.validate.max || ''}
-                          onChange={value =>
-                            updateFieldValidation('max', value, idx)
-                          }
-                          type="text"
-                          hint="max"
-                        />
-                      </li>
-                    )}
-                  </ul>
-                </div>
-              </div>
-            </CardActions>
-          )}
-        </Card>
-      </div>
+            <h4>Validation</h4>
+            <Input
+              value={field.validate.is || ''}
+              onChange={value => updateFieldValidation('is', value, idx)}
+              type="text"
+              label="is (/^[a-z]+$/i)"
+            />
+            <Input
+              value={field.validate.contains || ''}
+              onChange={value => updateFieldValidation('contains', value, idx)}
+              type="text"
+              label="contains"
+            />
+            {field.type === 'STRING' && (
+              <Checkbox
+                label="isEmail"
+                checked={field.validate.isEmail || false}
+                onChange={isChecked =>
+                  updateFieldValidation('isEmail', isChecked, idx)
+                }
+              />
+            )}
+            {field.type === 'STRING' && (
+              <Checkbox
+                label="isUrl"
+                checked={field.validate.isUrl || false}
+                onChange={isChecked =>
+                  updateFieldValidation('isUrl', isChecked, idx)
+                }
+              />
+            )}
+            {isNumber(field.type) && (
+              <Input
+                value={field.validate.min || ''}
+                onChange={value => updateFieldValidation('min', value, idx)}
+                type="text"
+                label="min"
+              />
+            )}
+            {isNumber(field.type) && (
+              <Input
+                value={field.validate.max || ''}
+                onChange={value => updateFieldValidation('max', value, idx)}
+                type="text"
+                label="max"
+              />
+            )}
+          </div>
+        )}
+      </Card>
     )
   }
 }

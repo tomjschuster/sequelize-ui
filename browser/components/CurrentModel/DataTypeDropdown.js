@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React from 'react'
 
 /*----------  LIBRARY COMPONENTS  ----------*/
 import Dropdown from 'react-toolbox/lib/dropdown'
@@ -23,27 +22,14 @@ const sequelizeDataTypes = [
 ]
 
 /*----------  COMPONENT  ----------*/
-export class DataTypeDropDown extends Component {
-  constructor(props) {
-    super(props)
-  }
+const DataTypeDropdown = ({ currType, idx, onClick }) => (
+  <Dropdown
+    auto
+    onChange={value => onClick('type', value, idx)}
+    source={sequelizeDataTypes}
+    value={currType}
+    label="Data Type"
+  />
+)
 
-  render() {
-    let { currType, idx, onClick } = this.props
-    return (
-      <Dropdown
-        auto
-        onChange={value => onClick('type', value, idx)}
-        source={sequelizeDataTypes}
-        value={currType}
-        label="Data Type"
-      />
-    )
-  }
-}
-
-/*----------  CONNECT  ----------*/
-const mapStateToProps = state => ({})
-const mapDispatchToProps = dispatch => ({})
-
-export default connect(mapStateToProps, mapDispatchToProps)(DataTypeDropDown)
+export default DataTypeDropdown

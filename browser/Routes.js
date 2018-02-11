@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
   Router,
   Route,
@@ -10,16 +10,14 @@ import App from './components/App'
 import Main from './components/Main'
 import Ace from './components/Ace'
 
-export default class Routes extends Component {
-  render() {
-    return (
-      <Router history={browserHistory}>
-        <Route path="/" component={App}>
-          <Route path="ace" component={Ace} />
-          <IndexRoute component={Main} />
-          <Redirect from="*" to="/" />
-        </Route>
-      </Router>
-    )
-  }
-}
+const Routes = () => (
+  <Router history={browserHistory}>
+    <Route path="/" component={App}>
+      <Route path="ace" component={Ace} />
+      <IndexRoute component={Main} />
+      <Redirect from="*" to="/" />
+    </Route>
+  </Router>
+)
+
+export default Routes

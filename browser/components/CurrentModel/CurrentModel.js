@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 
 import ModelToolBar from './ModelToolBar'
 import Fields from './Fields'
@@ -19,12 +18,8 @@ export class CurrentModel extends Component {
   render() {
     return (
       <div>
-        <ModelToolBar />
-        <Tabs
-          id="current-model-tabs"
-          index={this.state.tabIdx}
-          onChange={this.setTabIdx}
-        >
+        <ModelToolBar currentModel={this.props.currentModel} />
+        <Tabs index={this.state.tabIdx} onChange={this.setTabIdx}>
           <Tab label="Fields">
             <Fields />
           </Tab>
@@ -40,7 +35,4 @@ export class CurrentModel extends Component {
   }
 }
 
-const mapStateToProps = ({ models }) => ({ models })
-const mapDispatchToProps = dispatch => ({})
-
-export default connect(mapStateToProps, mapDispatchToProps)(CurrentModel)
+export default CurrentModel

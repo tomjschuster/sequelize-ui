@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 
 /*----------  ACTION/THUNK CREATORS  ----------*/
@@ -10,94 +10,63 @@ import {
   removeAssociation
 } from '../../redux/currentModel'
 
-import { List, ListItem } from 'material-ui/List'
-import RelationshipDropDown from './RelationshipDropDown'
-import ModelDropDown from './ModelDropDown'
-import RaisedButton from 'material-ui/RaisedButton'
-import FlatButton from 'material-ui/FlatButton'
+import RelationshipDropdown from './RelationshipDropDown'
+import ModelDropdown from './ModelDropDown'
 
 /*----------  LIBRARY COMPONENTS  ----------*/
-import Paper from 'material-ui/Paper'
-import Subheader from 'material-ui/Subheader'
-import TextField from 'material-ui/TextField'
-import { red400 } from 'material-ui/styles/colors'
+import Input from 'react-toolbox/lib/input'
+import { Button } from 'react-toolbox/lib/button'
+import { List, ListItem } from 'react-toolbox/lib/list'
 
 /*----------  COMPONENT  ----------*/
-export class Associations extends Component {
-  constructor(props) {
-    super(props)
-  }
-  render() {
-    let {
-      currentModel,
-      createAssociation,
-      updateRelationship,
-      updateTarget,
-      updateAssociationConfig,
-      deleteAssociation
-    } = this.props
-    return (
-      <Paper className="associations-paper">
-        <div className="associations container">
-          <Subheader>Model Associations</Subheader>
-          <RaisedButton
-            primary={true}
-            label="+ ADD"
-            onClick={createAssociation}
+const Associations = ({
+  currentModel,
+  models,
+  createAssociation,
+  updateRelationship,
+  updateTarget,
+  updateAssociationConfig,
+  deleteAssociation
+}) => (
+  <div>
+    <h3>Model Associations</h3>
+    <Button primary raised label="+ ADD" onClick={createAssociation} />
+    <List>
+      {currentModel.associations.map((association, idx) => (
+        <ListItem key={idx}>
+          <RelationshipDropdown
+            idx={idx}
+            value={currentModel.associations[idx].relationship}
+            onChange={updateRelationship}
           />
-          <List>
-            {currentModel.associations.map((association, idx) => (
-              <ListItem
-                key={idx}
-                hoverColor="#ffffff"
-                className="association-item"
-              >
-                <RelationshipDropDown
-                  idx={idx}
-                  valueKey={currentModel.associations[idx].relationship}
-                  onClick={updateRelationship}
-                />
-                <ModelDropDown
-                  idx={idx}
-                  valueKey={currentModel.associations[idx].target}
-                  onClick={updateTarget}
-                />
-                &nbspas&nbsp
-                <TextField
-                  value={currentModel.associations[idx].config.as}
-                  className="as-field"
-                  inputStyle={{ textAlign: 'center' }}
-                  onChange={evt =>
-                    updateAssociationConfig('as', evt.target.value, idx)
-                  }
-                  type="text"
-                />
-                &nbspthrough&nbsp
-                <TextField
-                  value={currentModel.associations[idx].config.through}
-                  className="through-field"
-                  inputStyle={{ textAlign: 'center' }}
-                  onChange={evt =>
-                    updateAssociationConfig('through', evt.target.value, idx)
-                  }
-                  type="text"
-                />
-                <FlatButton
-                  label="DELETE"
-                  labelStyle={{ color: red400 }}
-                  onClick={() => deleteAssociation(idx)}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </div>
-      </Paper>
-    )
-  }
-}
+          <ModelDropdown
+            idx={idx}
+            value={currentModel.associations[idx].target}
+            models={models}
+            onChange={updateTarget}
+          />
+          <Input
+            id="as-input"
+            value={currentModel.associations[idx].config.as || ''}
+            onChange={value => updateAssociationConfig('as', value, idx)}
+            type="text"
+          />
+          <span>through</span>
+          <Input
+            id="through-input"
+            value={currentModel.associations[idx].config.through || ''}
+            onChange={value => updateAssociationConfig('through', value, idx)}
+            type="text"
+          />
+          <Button label="DELETE" onClick={() => deleteAssociation(idx)} />
+        </ListItem>
+      ))}
+    </List>
+  </div>
+)
 
 /*----------  CONNECT TO STORE  ----------*/
-const mapStateToProps = ({ currentModel }) => ({ currentModel })
+const mapStateToProps = ({ currentModel, models }) => ({ currentModel, models })
 const mapDispatchToProps = dispatch => ({
   createAssociation: () => dispatch(addAssociation()),
   updateTarget: (target, idx) => dispatch(updateTarget(target, idx)),

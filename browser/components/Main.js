@@ -1,23 +1,18 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 
 import ModelList from './ModelList/ModelList'
 import CurrentModel from './CurrentModel/CurrentModel'
 import ConfirmDialog from './ConfirmDialog'
 
-export class Main extends Component {
-  render() {
-    return (
-      <div>
-        <ModelList />
-        <CurrentModel />
-        <ConfirmDialog />
-      </div>
-    )
-  }
-}
+const Main = ({ models, currentModel }) => (
+  <div>
+    <ModelList models={models} currentModel={currentModel} />
+    <CurrentModel currentModel={currentModel} />
+    <ConfirmDialog />
+  </div>
+)
 
-const mapStateToProps = ({}) => ({})
-const mapDispatchToProps = dispatch => ({})
+const mapStateToProps = ({ models, currentModel }) => ({ models, currentModel })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main)
+export default connect(mapStateToProps)(Main)

@@ -10,49 +10,43 @@ import Input from 'react-toolbox/lib/input'
 
 /*----------  COMPONENT  ----------*/
 const Configuration = ({ currentModel, updateConfig, updateMethod }) => (
-  <div className="configuration container">
+  <div>
     <h3>Table Options</h3>
-    <div className="row">
-      <div className="col s12 m6">
-        <Input
-          hint="Table Name"
-          value={currentModel.config.tableName}
-          onChange={evt => updateConfig('tableName', evt.target.value)}
-        />
-        <Input
-          hint="Singular Name"
-          value={currentModel.config.singular}
-          onChange={evt => updateConfig('singular', evt.target.value)}
-        />
-        <Input
-          hint="Plural Name"
-          value={currentModel.config.plural}
-          onChange={evt => updateConfig('plural', evt.target.value)}
-        />
-      </div>
-      <div className="col s12 m6">
-        <Checkbox
-          label="No Timestamp Columns"
-          checked={!currentModel.config.timestamps}
-          onChange={isChecked => updateConfig('timestamps', !isChecked)}
-        />
-        <Checkbox
-          label="Freeze Table Name"
-          checked={currentModel.config.freezeTableName}
-          onChange={isChecked => updateConfig('freezeTableName', isChecked)}
-        />
-        <Checkbox
-          label="Underscore Column Names"
-          checked={currentModel.config.underscored}
-          onChange={isChecked => updateConfig('underscored', isChecked)}
-        />
-        <Checkbox
-          label="Underscore Table Names"
-          checked={currentModel.config.underscoredAll}
-          onChange={isChecked => updateConfig('underscoredAll', isChecked)}
-        />
-      </div>
-    </div>
+    <Input
+      label="Table Name"
+      value={currentModel.config.tableName}
+      onChange={value => updateConfig('tableName', value)}
+    />
+    <Input
+      label="Singular Name"
+      value={currentModel.config.singular}
+      onChange={value => updateConfig('singular', value)}
+    />
+    <Input
+      label="Plural Name"
+      value={currentModel.config.plural}
+      onChange={value => updateConfig('plural', value)}
+    />
+    <Checkbox
+      label="No Timestamp Columns"
+      checked={!currentModel.config.timestamps}
+      onChange={isChecked => updateConfig('timestamps', !isChecked)}
+    />
+    <Checkbox
+      label="Freeze Table Name"
+      checked={currentModel.config.freezeTableName}
+      onChange={isChecked => updateConfig('freezeTableName', isChecked)}
+    />
+    <Checkbox
+      label="Underscore Column Names"
+      checked={currentModel.config.underscored}
+      onChange={isChecked => updateConfig('underscored', isChecked)}
+    />
+    <Checkbox
+      label="Underscore Table Names"
+      checked={currentModel.config.underscoredAll}
+      onChange={isChecked => updateConfig('underscoredAll', isChecked)}
+    />
     <h3>Include Templates For:</h3>
     <Checkbox
       label="Hooks"
