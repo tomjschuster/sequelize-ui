@@ -4,10 +4,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { requestDbDownload } from '../redux/models'
 
-import AppBar from 'material-ui/AppBar'
-import FlatButton from 'material-ui/FlatButton'
-import IconButton from 'material-ui/IconButton'
-import NewFolder from 'material-ui/svg-icons/file/create-new-folder'
+import AppBar from 'react-toolbox/lib/app_bar'
+import FontIcon from 'react-toolbox/lib/font_icon'
 
 export class App extends Component {
   render() {
@@ -16,17 +14,8 @@ export class App extends Component {
       <div>
         <AppBar
           title="Sequelize UI"
-          iconElementLeft={
-            <IconButton>
-              <NewFolder />
-            </IconButton>
-          }
-          iconElementRight={
-            <FlatButton
-              onClick={() => requestDbDownload(models)}
-              label="Download Models"
-            />
-          }
+          rightIcon={<FontIcon value="file_download" />}
+          onRightIconClick={() => requestDbDownload(models)}
         />
         <div id="main">{children}</div>
       </div>
