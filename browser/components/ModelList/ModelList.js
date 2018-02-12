@@ -10,8 +10,7 @@ const ModelList = ({ models, currentModel }) => (
   <div className="your-models">
     <List>
       <div>
-        <h3>{models.length ? 'Your Models' : 'You have no models...'}</h3>
-        <h4>{models.length ? 'Click to edit' : 'Create one below'}</h4>
+        <h3>{models.length > 0 && 'Your Models'}</h3>
       </div>
       {models.map(model => (
         <ModelListItem

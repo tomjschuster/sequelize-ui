@@ -79,7 +79,7 @@ export const saveModel = (models, model, isNew) => dispatch => {
 
   if (isNew) dispatch(addModel(model))
   else dispatch(updateModel(model))
-  dispatch(resetCurrentModel())
+  dispatch(resetCurrentModel(model.id + 1))
 }
 
 export const requestDbDownload = models => () =>
@@ -99,7 +99,7 @@ export default (state = initialState, action) => {
     case ADD_MODEL:
       return {
         nextId: state.nextId + 1,
-        models: [...state.models, { ...action.model, id: state.nextId }]
+        models: [...state.models, action.model]
       }
     case UPDATE_MODEL:
       return {

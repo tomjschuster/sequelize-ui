@@ -2,6 +2,7 @@ import { REMOVE_MODEL } from './models'
 
 /*----------  INITIAL STATE  ----------*/
 const initialState = {
+  id: 1,
   name: '',
   fields: [],
   config: {
@@ -45,8 +46,9 @@ export const receiveModel = model => ({
   model
 })
 
-export const resetModel = () => ({
-  type: RESET_CURRENT_MODEL
+export const resetModel = nextId => ({
+  type: RESET_CURRENT_MODEL,
+  nextId
 })
 
 export const setModelName = name => ({
@@ -125,7 +127,7 @@ export default (state = initialState, action) => {
     case RECEIVE_MODEL:
       return action.model.id === state.id ? state : action.model
     case RESET_CURRENT_MODEL:
-      return initialState
+      return { ...initialState, id: action.nextId }
     case SET_MODEL_NAME:
       return { ...state, name: action.name }
     case ADD_FIELD:

@@ -7,10 +7,10 @@ import CurrentModel from './CurrentModel/CurrentModel'
 import ConfirmDialog from './ConfirmDialog'
 
 /*----------  COMPONENT  ----------*/
-const Main = ({ models, currentModel }) => (
+const Main = ({ models, nextId, currentModel }) => (
   <div>
     <ModelList models={models} currentModel={currentModel} />
-    <CurrentModel models={models} currentModel={currentModel} />
+    <CurrentModel models={models} currentModel={currentModel} nextId={nextId} />
     <ConfirmDialog />
   </div>
 )
@@ -18,6 +18,7 @@ const Main = ({ models, currentModel }) => (
 /*----------  CONNECT  ----------*/
 const mapStateToProps = ({ models, currentModel }) => ({
   models: models.models,
+  nextId: models.nextId,
   currentModel
 })
 

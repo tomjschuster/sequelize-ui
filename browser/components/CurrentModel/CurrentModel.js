@@ -19,11 +19,18 @@ export class CurrentModel extends Component {
   setTabIdx = tabIdx => this.setState({ tabIdx })
 
   render() {
+    const isNew = !this.props.models.find(
+      ({ id }) => id === this.props.currentModel.id
+    )
+
     return (
-      <div>
+      <section>
+        <h3>Current Model</h3>
         <ModelToolBar
           models={this.props.models}
+          nextId={this.props.nextId}
           currentModel={this.props.currentModel}
+          isNew={isNew}
         />
         <Tabs index={this.state.tabIdx} onChange={this.setTabIdx}>
           <Tab label="Fields">
@@ -36,7 +43,7 @@ export class CurrentModel extends Component {
             <Associations />
           </Tab>
         </Tabs>
-      </div>
+      </section>
     )
   }
 }

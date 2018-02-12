@@ -12,10 +12,12 @@ import { Button } from 'react-toolbox/lib/button'
 /*----------  COMPONENT  ----------*/
 const ModelToolBar = ({
   models,
+  nextId,
   currentModel,
   updateModelName,
   saveModel,
-  deleteModel
+  deleteModel,
+  isNew
 }) => (
   <div>
     <Input
@@ -23,7 +25,7 @@ const ModelToolBar = ({
       onChange={value => updateModelName(value)}
       label="Model Name"
     />
-    {currentModel.id && (
+    {!isNew && (
       <Button
         label="Save"
         primary
@@ -31,15 +33,15 @@ const ModelToolBar = ({
         onClick={() => saveModel(models, currentModel, false)}
       />
     )}
-    {currentModel.id && (
+    {!isNew && (
       <Button
         label="Delete"
         raised
         accent
-        onClick={() => deleteModel(currentModel.id)}
+        onClick={() => deleteModel(currentModel.id, nextId)}
       />
     )}
-    {!currentModel.id && (
+    {isNew && (
       <Button
         label="Create"
         disabled={!currentModel.name}
@@ -56,9 +58,9 @@ const mapDispatchToProps = dispatch => ({
   saveModel: (models, model, isNew) =>
     dispatch(saveModel(models, model, isNew)),
   updateModelName: name => dispatch(setModelName(name)),
-  deleteModel: id => {
+  deleteModel: (id, nextId) => {
     dispatch(removeModel(id))
-    dispatch(resetModel())
+    dispatch(resetModel(nextId))
   }
 })
 
