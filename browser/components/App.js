@@ -21,7 +21,7 @@ const App = ({ children, models, downloadTemplate }) => (
 )
 
 /*----------  CONNECT  ----------*/
-const mapStateToProps = ({ models }) => ({ models: models.models })
+const mapStateToProps = ({ models }) => ({ models })
 
 const mapDispatchToProps = dispatch => ({
   downloadTemplate: models => dispatch(requestDbDownload(models))

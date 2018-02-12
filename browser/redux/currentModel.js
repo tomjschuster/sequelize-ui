@@ -1,8 +1,9 @@
 import { REMOVE_MODEL } from './models'
+import { guid } from '../utils'
 
 /*----------  INITIAL STATE  ----------*/
 const initialState = {
-  id: 1,
+  id: guid(),
   name: '',
   fields: [],
   config: {
@@ -26,7 +27,7 @@ const initialState = {
 
 /*----------  ACTION TYPES  ----------*/
 const RECEIVE_MODEL = 'RECEIVE_MODEL'
-const RESET_CURRENT_MODEL = 'RESET_CURRENT_MODEL'
+const RESET_MODEL = 'RESET_MODEL'
 const SET_MODEL_NAME = 'SET_MODEL_NAME'
 const ADD_FIELD = 'ADD_FIELD'
 const UPDATE_FIELD = 'UPDATE_FIELD'
@@ -46,9 +47,8 @@ export const receiveModel = model => ({
   model
 })
 
-export const resetModel = nextId => ({
-  type: RESET_CURRENT_MODEL,
-  nextId
+export const resetModel = () => ({
+  type: RESET_MODEL
 })
 
 export const setModelName = name => ({
@@ -126,8 +126,8 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case RECEIVE_MODEL:
       return action.model.id === state.id ? state : action.model
-    case RESET_CURRENT_MODEL:
-      return { ...initialState, id: action.nextId }
+    case RESET_MODEL:
+      return { ...initialState, id: guid() }
     case SET_MODEL_NAME:
       return { ...state, name: action.name }
     case ADD_FIELD:

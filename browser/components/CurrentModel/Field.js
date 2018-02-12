@@ -192,6 +192,7 @@ class Field extends Component {
 
 /*----------  CONNECT  ----------*/
 const mapStateToProps = ({ currentModel }) => ({ currentModel })
+
 const mapDispatchToProps = dispatch => ({
   updateFieldProps: (key, val, idx) => dispatch(updateField(key, val, idx)),
   updateFieldValidation: (key, val, idx) =>

@@ -3,7 +3,7 @@ import { openDialog, messages } from './dialog'
 import { resetModel as resetCurrentModel } from './currentModel'
 
 /*----------  INITIAL STATE  ----------*/
-const initialState = { nextId: 1, models: [] }
+const initialState = []
 
 /*----------  ACTION TYPES  ----------*/
 const RECEIVE_MODELS = 'RECEIVE_MODELS'
@@ -79,7 +79,7 @@ export const saveModel = (models, model, isNew) => dispatch => {
 
   if (isNew) dispatch(addModel(model))
   else dispatch(updateModel(model))
-  dispatch(resetCurrentModel(model.id + 1))
+  dispatch(resetCurrentModel())
 }
 
 export const requestDbDownload = models => () =>
@@ -92,27 +92,15 @@ export const requestDbDownload = models => () =>
 export default (state = initialState, action) => {
   switch (action.type) {
     case RECEIVE_MODELS:
-      return {
-        nextId: Math.max(...action.models.map(({ id }) => id)),
-        models: action.models
-      }
+      return [...action.models]
     case ADD_MODEL:
-      return {
-        nextId: state.nextId + 1,
-        models: [...state.models, action.model]
-      }
+      return [...state, action.model]
     case UPDATE_MODEL:
-      return {
-        ...state,
-        models: state.models.map(
-          model => (model.id === action.model.id ? action.model : model)
-        )
-      }
+      return state.map(
+        model => (model.id === action.model.id ? action.model : model)
+      )
     case REMOVE_MODEL:
-      return {
-        ...state,
-        models: state.models.filter(model => model.id !== action.id)
-      }
+      return state.filter(model => model.id !== action.id)
     case RESET_MODELS:
       return initialState
     default:

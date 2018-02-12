@@ -28,7 +28,6 @@ export class CurrentModel extends Component {
         <h3>Current Model</h3>
         <ModelToolBar
           models={this.props.models}
-          nextId={this.props.nextId}
           currentModel={this.props.currentModel}
           isNew={isNew}
         />
