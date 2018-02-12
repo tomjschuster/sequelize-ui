@@ -17,33 +17,34 @@ const initialState = {
 }
 
 /*----------  ACTION TYPES  ----------*/
-const OPEN_WINDOW = 'OPEN_WINDOW'
+const OPEN_DIALOG = 'OPEN_DIALOG'
 
-const CLOSE_WINDOW = 'CLOSE_WINDOW'
+const CLOSE_DIALOG = 'CLOSE_DIALOG'
 
 /*----------  ACTION CREATORS  ----------*/
-export const openWindow = (title, message) => ({
-  type: OPEN_WINDOW,
+export const openDialog = (title, message) => ({
+  type: OPEN_DIALOG,
   title,
   message
 })
 
-export const closeWindow = () => ({
-  type: CLOSE_WINDOW
+export const closeDialog = () => ({
+  type: CLOSE_DIALOG
 })
 
 /*----------  THUNKS  ----------*/
 
 /*----------  REDUCER  ----------*/
 export default (state = initialState, action) => {
-  let dialog = Object.assign({}, state)
   switch (action.type) {
-    case OPEN_WINDOW:
-      dialog.open = true
-      dialog.title = action.title
-      dialog.message = action.message
-      return dialog
-    case CLOSE_WINDOW:
+    case OPEN_DIALOG:
+      return {
+        ...state,
+        open: true,
+        title: action.title,
+        message: action.message
+      }
+    case CLOSE_DIALOG:
       return initialState
     default:
       return state

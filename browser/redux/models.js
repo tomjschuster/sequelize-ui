@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { openWindow, messages } from './dialog'
+import { openDialog, messages } from './dialog'
 import { resetModel as resetCurrentModel } from './currentModel'
 
 /*----------  INITIAL STATE  ----------*/
@@ -43,36 +43,36 @@ export const saveModel = (models, model, isNew) => dispatch => {
     ({ id, name }) => name === model.name && id !== model.id
   )
   if (isNameError) {
-    return dispatch(openWindow('Validation Error', messages.dupFieldName))
+    return dispatch(openDialog('Validation Error', messages.dupFieldName))
   }
 
   if (!model.name) {
-    return dispatch(openWindow('Validation Error', messages.reqModelName))
+    return dispatch(openDialog('Validation Error', messages.reqModelName))
   }
 
   for (let field of model.fields) {
     if (!field.name) {
-      return dispatch(openWindow('Validation Error', messages.reqFieldName))
+      return dispatch(openDialog('Validation Error', messages.reqFieldName))
     } else if (!field.type) {
-      return dispatch(openWindow('Validation Error', messages.reqFieldType))
+      return dispatch(openDialog('Validation Error', messages.reqFieldType))
     }
   }
 
   for (let association of model.associations) {
     if (!association.relationship) {
       return dispatch(
-        openWindow('Validation Error', messages.reqAssociationRelationship)
+        openDialog('Validation Error', messages.reqAssociationRelationship)
       )
     } else if (!association.target) {
       return dispatch(
-        openWindow('Validation Error', messages.reqAssociationTarget)
+        openDialog('Validation Error', messages.reqAssociationTarget)
       )
     } else if (
       association.relationship === 'belongsToMany' &&
       !association.config.through
     ) {
       return dispatch(
-        openWindow('Validation Error', messages.reqAssociationThrough)
+        openDialog('Validation Error', messages.reqAssociationThrough)
       )
     }
   }
