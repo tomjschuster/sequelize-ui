@@ -1,6 +1,3 @@
-import { getInitialModel, copyModel } from '../utils'
-import { findIndex, find } from 'lodash'
-
 /*----------  INITIAL STATE  ----------*/
 const initialState = {
   name: '',
@@ -26,7 +23,7 @@ const initialState = {
 
 /*----------  ACTION TYPES  ----------*/
 const RECEIVE_MODEL = 'RECEIVE_MODEL'
-const RESET_MODEL = 'RESET_MODEL'
+const RESET_CURRENT_MODEL = 'RESET_CURRENT_MODEL'
 const SET_MODEL_NAME = 'SET_MODEL_NAME'
 const ADD_FIELD = 'ADD_FIELD'
 const UPDATE_FIELD = 'UPDATE_FIELD'
@@ -47,7 +44,7 @@ export const receiveModel = model => ({
 })
 
 export const resetModel = () => ({
-  type: RESET_MODEL
+  type: RESET_CURRENT_MODEL
 })
 
 export const setModelName = name => ({
@@ -122,54 +119,95 @@ export const removeAssociation = idx => ({
 
 /*----------  REDUCER  ----------*/
 export default (state = initialState, action) => {
-  let model = copyModel(state)
-  let association, idx
   switch (action.type) {
     case RECEIVE_MODEL:
-      return copyModel(action.model)
-    case RESET_MODEL:
-      return getInitialModel()
+      return action.model
+    case RESET_CURRENT_MODEL:
+      return initialState
     case SET_MODEL_NAME:
-      console.log('reducing, setting name', action, model)
-      model.name = action.name
-      console.log('returning', model)
-      return model
+      return { ...state, name: action.name }
     case ADD_FIELD:
-      model.fields.push({ name: '', type: '', validate: {} })
-      return model
+      return {
+        ...state,
+        fields: [...state.fields, { name: '', type: '', validate: {} }]
+      }
     case UPDATE_FIELD:
-      model.fields[action.idx][action.key] = action.val
-      return model
+      return {
+        ...state,
+        fields: state.fields.map(
+          (field, idx) =>
+            idx === action.idx ? { ...field, [action.key]: action.val } : field
+        )
+      }
     case UPDATE_VALIDATION:
-      model.fields[action.idx].validate[action.key] = action.val
-      return model
+      return {
+        ...state,
+        fields: state.fields.map(
+          (field, idx) =>
+            idx === action.idx
+              ? {
+                  ...field,
+                  validate: { ...field.validate, [action.key]: action.val }
+                }
+              : field
+        )
+      }
     case REMOVE_FIELD:
-      model.fields.splice(action.idx, 1)
-      return model
+      return {
+        ...state,
+        fields: state.fields.filter((_, idx) => idx !== action.idx)
+      }
     case UPDATE_CONFIG:
-      model.config[action.key] = action.val
-      return model
+      return { ...state, config: { ...state.config, [action.key]: action.val } }
     case UPDATE_METHOD:
-      model.methods[action.key] = action.val
-      return model
+      return {
+        ...state,
+        methods: { ...state.methods, [action.key]: action.val }
+      }
     case ADD_ASSOCIATION:
-      model.associations = [
-        ...model.associations,
-        { target: null, relationship: null, config: {} }
-      ]
-      return model
+      return {
+        ...state,
+        associations: [
+          ...state.associations,
+          { target: null, relationship: null, config: {} }
+        ]
+      }
     case UPDATE_RELATIONSHIP:
-      model.associations[action.idx].relationship = action.relationship
-      return model
+      return {
+        ...state,
+        associations: state.associations.map(
+          (assoc, idx) =>
+            idx === action.idx
+              ? { ...assoc, relationship: action.relationship }
+              : assoc
+        )
+      }
     case UPDATE_TARGET:
-      model.associations[action.idx].target = action.target
-      return model
+      return {
+        ...state,
+        associations: state.associations.map(
+          (assoc, idx) =>
+            idx === action.idx ? { ...assoc, target: action.target } : assoc
+        )
+      }
     case UPDATE_ASSOCIATION_CONFIG:
-      model.associations[action.idx].config[action.key] = action.val
-      return model
+      return {
+        ...state,
+        associations: state.associations.map(
+          (assoc, idx) =>
+            idx === action.idx
+              ? {
+                  ...assoc,
+                  config: { ...assoc.config, [action.key]: action.val }
+                }
+              : assoc
+        )
+      }
     case REMOVE_ASSOCIATION:
-      if (action.idx + 1) model.associations.splice(action.idx, 1)
-      return model
+      return {
+        ...state,
+        associations: state.associations.filter((_, idx) => idx !== action.idx)
+      }
     default:
       return state
   }

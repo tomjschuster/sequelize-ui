@@ -15,6 +15,7 @@ const ModelList = ({ models, currentModel }) => (
           key={model.id}
           model={model}
           currentModel={currentModel}
+          isCurrent={model.id === currentModel.id}
         />
       ))}
     </List>

@@ -7,10 +7,10 @@ import { modelSummary } from '../../utils'
 import { ListItem } from 'react-toolbox/lib/list'
 import { IconButton } from 'react-toolbox/lib/button'
 
-const ModelListItem = ({ model, currentModel, selectModel, deleteModel }) => (
+const ModelListItem = ({ model, isCurrent, selectModel, deleteModel }) => (
   <ListItem
     rightIcon={
-      <IconButton icon="delete_forever" onClick={() => deleteModel(model)} />
+      <IconButton icon="delete_forever" onClick={() => deleteModel(model.id)} />
     }
     caption={model.name}
     legend={modelSummary(model)}

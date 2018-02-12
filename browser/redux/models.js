@@ -9,7 +9,7 @@ const initialState = { nextId: 1, models: [] }
 const RECEIVE_MODELS = 'RECEIVE_MODELS'
 const ADD_MODEL = 'ADD_MODEL'
 const REMOVE_MODEL = 'REMOVE_MODEL'
-const RESET = 'RESET'
+const RESET_MODELS = 'RESET_MODELS'
 const UPDATE_MODEL = 'UPDATE_MODEL'
 
 /*----------  ACTION CREATORS  ----------*/
@@ -34,7 +34,7 @@ export const removeModel = id => ({
 })
 
 export const reset = () => ({
-  type: RESET
+  type: RESET_MODELS
 })
 
 /*----------  THUNKS  ----------*/
@@ -43,7 +43,7 @@ export const saveModel = (models, model, isNew) => dispatch => {
     ({ id, name }) => name === model.name && id !== model.id
   )
   if (isNameError) {
-    dispatch(openWindow('Validation Error', messages.dupFieldName))
+    return dispatch(openWindow('Validation Error', messages.dupFieldName))
   }
 
   if (!model.name) {
@@ -114,7 +114,7 @@ export default (state = initialState, action) => {
         ...state,
         models: state.models.filter(model => model.id !== action.id)
       }
-    case RESET:
+    case RESET_MODELS:
       return initialState
     default:
       return state
