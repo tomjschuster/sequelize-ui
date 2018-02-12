@@ -8,7 +8,7 @@ const initialState = { nextId: 1, models: [] }
 /*----------  ACTION TYPES  ----------*/
 const RECEIVE_MODELS = 'RECEIVE_MODELS'
 const ADD_MODEL = 'ADD_MODEL'
-const REMOVE_MODEL = 'REMOVE_MODEL'
+export const REMOVE_MODEL = 'REMOVE_MODEL'
 const RESET_MODELS = 'RESET_MODELS'
 const UPDATE_MODEL = 'UPDATE_MODEL'
 
@@ -82,8 +82,7 @@ export const saveModel = (models, model, isNew) => dispatch => {
   dispatch(resetCurrentModel())
 }
 
-/*----------  FUNCTIONS  ----------*/
-export const requestDbDownload = models =>
+export const requestDbDownload = models => () =>
   axios
     .post('/api/create/db', { models })
     .then(res => window.location.replace(`/api/download/${res.data}`))

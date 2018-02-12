@@ -10,10 +10,11 @@ import {
   removeAssociation
 } from '../../redux/currentModel'
 
+/*----------  APP COMPONENTS  ----------*/
 import RelationshipDropdown from './RelationshipDropDown'
 import ModelDropdown from './ModelDropDown'
 
-/*----------  LIBRARY COMPONENTS  ----------*/
+/*----------  UI LIBRARY COMPONENTS  ----------*/
 import Input from 'react-toolbox/lib/input'
 import { Button } from 'react-toolbox/lib/button'
 import { List, ListItem } from 'react-toolbox/lib/list'
@@ -65,11 +66,12 @@ const Associations = ({
   </div>
 )
 
-/*----------  CONNECT TO STORE  ----------*/
+/*----------  CONNECT  ----------*/
 const mapStateToProps = ({ currentModel, models }) => ({
   currentModel,
   models: models.models
 })
+
 const mapDispatchToProps = dispatch => ({
   createAssociation: () => dispatch(addAssociation()),
   updateTarget: (target, idx) => dispatch(updateTarget(target, idx)),

@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 
+/*----------  APP COMPONENTS  ----------*/
 import ModelToolBar from './ModelToolBar'
 import Fields from './Fields'
 import Configuration from './Configuration'
 import Associations from './Associations'
 
+/*----------  UI LIBRARY COMPONENTS  ----------*/
 import { Tab, Tabs } from 'react-toolbox'
 
+/*----------  COMPONENT  ----------*/
 export class CurrentModel extends Component {
   constructor(props) {
     super(props)

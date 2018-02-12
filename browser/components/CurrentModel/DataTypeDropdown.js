@@ -1,6 +1,6 @@
 import React from 'react'
 
-/*----------  LIBRARY COMPONENTS  ----------*/
+/*----------  UI LIBRARY COMPONENTS  ----------*/
 import Dropdown from 'react-toolbox/lib/dropdown'
 
 /*----------  CONSTANTS  ----------*/

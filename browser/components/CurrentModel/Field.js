@@ -1,21 +1,25 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+/*----------  ACTION/THUNK CREATORS  ----------*/
+
 import {
   updateField,
   removeField,
   updateValidation
 } from '../../redux/currentModel'
 
+/*----------  APP COMPONENTS  ----------*/
 import DataTypeDropDown from './DataTypeDropdown'
 
+/*----------  UI LIBRARY COMPONENTS  ----------*/
 import { Button } from 'react-toolbox/lib/button'
 import Checkbox from 'react-toolbox/lib/checkbox'
 import Switch from 'react-toolbox/lib/switch'
 import { Card } from 'react-toolbox/lib/card'
 import Input from 'react-toolbox/lib/input'
 
-/*----------  HELPER FUNCTIONS  ----------*/
+/*----------  HELPERS  ----------*/
 const isNumber = type => {
   switch (type) {
     case 'INTEGER':
@@ -29,6 +33,7 @@ const isNumber = type => {
   }
 }
 
+/*----------  COMPONENT  ----------*/
 class Field extends Component {
   constructor(props) {
     super(props)
@@ -185,7 +190,7 @@ class Field extends Component {
   }
 }
 
-/*----------  CONNECT TO STORE  ----------*/
+/*----------  CONNECT  ----------*/
 const mapStateToProps = ({ currentModel }) => ({ currentModel })
 const mapDispatchToProps = dispatch => ({
   updateFieldProps: (key, val, idx) => dispatch(updateField(key, val, idx)),

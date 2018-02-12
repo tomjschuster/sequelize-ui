@@ -1,3 +1,5 @@
+import { REMOVE_MODEL } from './models'
+
 /*----------  INITIAL STATE  ----------*/
 const initialState = {
   name: '',
@@ -121,7 +123,7 @@ export const removeAssociation = idx => ({
 export default (state = initialState, action) => {
   switch (action.type) {
     case RECEIVE_MODEL:
-      return action.model
+      return action.model.id === state.id ? state : action.model
     case RESET_CURRENT_MODEL:
       return initialState
     case SET_MODEL_NAME:
@@ -208,6 +210,8 @@ export default (state = initialState, action) => {
         ...state,
         associations: state.associations.filter((_, idx) => idx !== action.idx)
       }
+    case REMOVE_MODEL:
+      return action.id === state.id ? initialState : state
     default:
       return state
   }

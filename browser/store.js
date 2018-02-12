@@ -4,8 +4,6 @@ import thunkMiddleware from 'redux-thunk'
 
 import reducer from './redux'
 
-
 const middleware = applyMiddleware(thunkMiddleware, createLogger())
-
 
 export default createStore(reducer, middleware)

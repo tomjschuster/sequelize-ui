@@ -1,8 +1,11 @@
 import React from 'react'
 
 import ModelListItem from './ModelListItem'
+
+/*----------  UI LIBRARY COMPONENTS  ----------*/
 import { List } from 'react-toolbox/lib/list'
 
+/*----------  COMPONENT  ----------*/
 const ModelList = ({ models, currentModel }) => (
   <div className="your-models">
     <List>

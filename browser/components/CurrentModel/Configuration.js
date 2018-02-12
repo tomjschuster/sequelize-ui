@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 /*----------  ACTION/THUNK CREATORS  ----------*/
 import { updateConfig, updateMethod } from '../../redux/currentModel'
 
-/*----------  LIBRARY COMPONENTS  ----------*/
+/*----------  UI LIBRARY COMPONENTS  ----------*/
 import Checkbox from 'react-toolbox/lib/checkbox'
 import Input from 'react-toolbox/lib/input'
 
@@ -76,8 +76,9 @@ const Configuration = ({ currentModel, updateConfig, updateMethod }) => (
   </div>
 )
 
-/*----------  CONNECT TO STORE  ----------*/
+/*----------  CONNECT  ----------*/
 const mapStateToProps = ({ currentModel }) => ({ currentModel })
+
 const mapDispatchToProps = dispatch => ({
   updateConfig: (key, val) => dispatch(updateConfig(key, val)),
   updateMethod: (key, val) => dispatch(updateMethod(key, val))

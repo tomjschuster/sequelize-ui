@@ -1,9 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
+/*----------  ACTION/THUNK CREATORS  ----------*/
 import { closeDialog } from '../redux/dialog'
 
+/*----------  UI LIBRARY COMPONENTS  ----------*/
 import Dialog from 'react-toolbox/lib/dialog'
 
+/*----------  COMPONENT  ----------*/
 const ConfirmDialog = ({ dialog: { open, title, message }, closeDialog }) => (
   <Dialog
     title={title}
@@ -15,8 +19,9 @@ const ConfirmDialog = ({ dialog: { open, title, message }, closeDialog }) => (
   </Dialog>
 )
 
-/*----------  CONNECT TO STORE  ----------*/
+/*----------  CONNECT  ----------*/
 const mapStateToProps = ({ dialog }) => ({ dialog })
+
 const mapDispatchToProps = dispatch => ({
   closeDialog: () => dispatch(closeDialog())
 })

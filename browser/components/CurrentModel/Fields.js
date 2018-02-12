@@ -11,7 +11,7 @@ const Fields = ({ currentModel, createField }) => (
     <Button label="+ ADD" onClick={createField} raised primary />
     <div>
       {currentModel.fields.map((field, idx) => (
-        <Field key={field.id} idx={idx} field={field} />
+        <Field key={idx} idx={idx} field={field} />
       ))}
     </div>
   </section>

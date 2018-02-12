@@ -1,6 +1,6 @@
 import React from 'react'
 
-/*----------  LIBRARY COMPONENTS  ----------*/
+/*----------  UI LIBRARY COMPONENTS  ----------*/
 import Dropdown from 'react-toolbox/lib/dropdown'
 
 /*----------  CONSTANTS  ----------*/
@@ -11,6 +11,7 @@ const relationships = [
   { label: 'Belongs To Many', value: 'belongsToMany' }
 ]
 
+/*----------  COMPONENT  ----------*/
 const RelationshipDropDown = ({ onChange, idx, value }) => (
   <Dropdown
     auto

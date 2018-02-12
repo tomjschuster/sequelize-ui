@@ -1,11 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+/*----------  ACTION/THUNK CREATORS  ----------*/
 import { saveModel, removeModel } from '../../redux/models'
 import { resetModel, setModelName } from '../../redux/currentModel'
+
+/*----------  UI LIBRARY COMPONENTS  ----------*/
 import Input from 'react-toolbox/lib/input'
 import { Button } from 'react-toolbox/lib/button'
 
+/*----------  COMPONENT  ----------*/
 const ModelToolBar = ({
   models,
   currentModel,
@@ -47,6 +51,7 @@ const ModelToolBar = ({
   </div>
 )
 
+/*----------  CONNECT  ----------*/
 const mapDispatchToProps = dispatch => ({
   saveModel: (models, model, isNew) =>
     dispatch(saveModel(models, model, isNew)),

@@ -1,8 +1,8 @@
 import React from 'react'
 
 /*----------  LIBRARY COMPONENTS  ----------*/
-
 import Dropdown from 'react-toolbox/lib/dropdown'
+
 /*----------  COMPONENT  ----------*/
 const ModelDropdown = ({ models, onChange, idx, value }) => (
   <Dropdown
