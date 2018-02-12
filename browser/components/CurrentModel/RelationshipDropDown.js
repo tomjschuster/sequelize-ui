@@ -12,13 +12,13 @@ const relationships = [
 ]
 
 /*----------  COMPONENT  ----------*/
-const RelationshipDropDown = ({ onChange, idx, value }) => (
+const RelationshipDropDown = ({ onChange, id, value }) => (
   <Dropdown
     auto
     label="Relationship"
     source={relationships}
     value={value}
-    onChange={value => onChange(value, idx)}
+    onChange={value => onChange(value, id)}
   />
 )
 export default RelationshipDropDown

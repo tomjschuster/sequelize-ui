@@ -33,33 +33,35 @@ const Associations = ({
     <h3>Model Associations</h3>
     <Button primary raised label="+ ADD" onClick={createAssociation} />
     <List>
-      {currentModel.associations.map((association, idx) => (
-        <ListItem key={idx}>
+      {currentModel.associations.map(assoc => (
+        <ListItem key={assoc.id}>
           <RelationshipDropdown
-            idx={idx}
-            value={currentModel.associations[idx].relationship}
+            id={assoc.id}
+            value={assoc.relationship}
             onChange={updateRelationship}
           />
           <ModelDropdown
-            idx={idx}
-            value={currentModel.associations[idx].target}
+            id={assoc.id}
+            value={assoc.target}
             models={models}
             onChange={updateTarget}
           />
           <Input
             id="as-input"
-            value={currentModel.associations[idx].config.as || ''}
-            onChange={value => updateAssociationConfig('as', value, idx)}
+            value={assoc.config.as || ''}
+            onChange={value => updateAssociationConfig('as', value, assoc.id)}
             type="text"
           />
           <span>through</span>
           <Input
             id="through-input"
-            value={currentModel.associations[idx].config.through || ''}
-            onChange={value => updateAssociationConfig('through', value, idx)}
+            value={assoc.config.through || ''}
+            onChange={value =>
+              updateAssociationConfig('through', value, assoc.id)
+            }
             type="text"
           />
-          <Button label="DELETE" onClick={() => deleteAssociation(idx)} />
+          <Button label="DELETE" onClick={() => deleteAssociation(assoc.id)} />
         </ListItem>
       ))}
     </List>
@@ -71,12 +73,12 @@ const mapStateToProps = ({ currentModel, models }) => ({ currentModel, models })
 
 const mapDispatchToProps = dispatch => ({
   createAssociation: () => dispatch(addAssociation()),
-  updateTarget: (target, idx) => dispatch(updateTarget(target, idx)),
-  updateRelationship: (relationship, idx) =>
-    dispatch(updateRelationship(relationship, idx)),
-  updateAssociationConfig: (key, val, idx) =>
-    dispatch(updateAssociationConfig(key, val, idx)),
-  deleteAssociation: idx => dispatch(removeAssociation(idx))
+  updateTarget: (target, id) => dispatch(updateTarget(target, id)),
+  updateRelationship: (relationship, id) =>
+    dispatch(updateRelationship(relationship, id)),
+  updateAssociationConfig: (key, val, id) =>
+    dispatch(updateAssociationConfig(key, val, id)),
+  deleteAssociation: id => dispatch(removeAssociation(id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Associations)

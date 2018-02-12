@@ -14,26 +14,39 @@ const fieldsText = fields => {
   return `Fields: ${fields.map(({ name }) => name).join(', ')}`
 }
 
-const associationsText = associations => {
+const associationsText = (associations, modelNameObj) => {
   const targets = associations.reduce(
     (acc, assoc) =>
-      acc[assoc.target] ? acc : { ...acc, [assoc.target]: true },
+      acc[assoc.target]
+        ? acc
+        : { ...acc, [assoc.target]: modelNameObj[assoc.target] },
     {}
   )
-  return `Associations: ${Object.keys(targets).join(', ')}`
+  return `Associations: ${Object.values(targets).join(', ')}`
 }
 
 /*----------  LOCAL COMPONENTS  ----------*/
-const ModelContent = ({ model: { name, fields, associations } }) => (
+const ModelContent = ({
+  model: { name, fields, associations },
+  modelNameObj
+}) => (
   <div>
     <h4>{name}</h4>
     {fields.length > 0 && <p>{fieldsText(fields)}</p>}
-    {associations.length > 0 && <p>{associationsText(associations)}</p>}
+    {associations.length > 0 && (
+      <p>{associationsText(associations, modelNameObj)}</p>
+    )}
   </div>
 )
 
 /*----------  COMPONENT  ----------*/
-const ModelListItem = ({ model, isCurrent, selectModel, deleteModel }) => (
+const ModelListItem = ({
+  model,
+  isCurrent,
+  selectModel,
+  deleteModel,
+  modelNameObj
+}) => (
   <ListItem
     className={isCurrent ? 'active' : ''}
     selectable
@@ -46,7 +59,7 @@ const ModelListItem = ({ model, isCurrent, selectModel, deleteModel }) => (
         }}
       />
     }
-    itemContent={<ModelContent model={model} />}
+    itemContent={<ModelContent model={model} modelNameObj={modelNameObj} />}
     onClick={() => selectModel(model)}
   />
 )

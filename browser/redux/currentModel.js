@@ -60,23 +60,23 @@ export const addField = () => ({
   type: ADD_FIELD
 })
 
-export const updateField = (key, val, idx) => ({
+export const updateField = (key, val, id) => ({
   type: UPDATE_FIELD,
   key,
   val,
-  idx
+  id
 })
 
-export const updateValidation = (key, val, idx) => ({
+export const updateValidation = (key, val, id) => ({
   type: UPDATE_VALIDATION,
   key,
   val,
-  idx
+  id
 })
 
-export const removeField = idx => ({
+export const removeField = id => ({
   type: REMOVE_FIELD,
-  idx
+  id
 })
 
 export const updateConfig = (key, val) => ({
@@ -95,28 +95,28 @@ export const addAssociation = () => ({
   type: ADD_ASSOCIATION
 })
 
-export const updateTarget = (target, idx) => ({
+export const updateTarget = (target, id) => ({
   type: UPDATE_TARGET,
   target,
-  idx
+  id
 })
 
-export const updateRelationship = (relationship, idx) => ({
+export const updateRelationship = (relationship, id) => ({
   type: UPDATE_RELATIONSHIP,
   relationship,
-  idx
+  id
 })
 
-export const updateAssociationConfig = (key, val, idx) => ({
+export const updateAssociationConfig = (key, val, id) => ({
   type: UPDATE_ASSOCIATION_CONFIG,
   key,
   val,
-  idx
+  id
 })
 
-export const removeAssociation = idx => ({
+export const removeAssociation = id => ({
   type: REMOVE_ASSOCIATION,
-  idx
+  id
 })
 
 /*----------  THUNKS  ----------*/
@@ -133,22 +133,27 @@ export default (state = initialState, action) => {
     case ADD_FIELD:
       return {
         ...state,
-        fields: [...state.fields, { name: '', type: '', validate: {} }]
+        fields: [
+          ...state.fields,
+          { id: guid(), name: '', type: '', validate: {} }
+        ]
       }
     case UPDATE_FIELD:
       return {
         ...state,
         fields: state.fields.map(
-          (field, idx) =>
-            idx === action.idx ? { ...field, [action.key]: action.val } : field
+          field =>
+            field.id === action.id
+              ? { ...field, [action.key]: action.val }
+              : field
         )
       }
     case UPDATE_VALIDATION:
       return {
         ...state,
         fields: state.fields.map(
-          (field, idx) =>
-            idx === action.idx
+          field =>
+            field.id === action.id
               ? {
                   ...field,
                   validate: { ...field.validate, [action.key]: action.val }
@@ -159,7 +164,7 @@ export default (state = initialState, action) => {
     case REMOVE_FIELD:
       return {
         ...state,
-        fields: state.fields.filter((_, idx) => idx !== action.idx)
+        fields: state.fields.filter(({ id }) => id !== action.id)
       }
     case UPDATE_CONFIG:
       return { ...state, config: { ...state.config, [action.key]: action.val } }
@@ -173,15 +178,15 @@ export default (state = initialState, action) => {
         ...state,
         associations: [
           ...state.associations,
-          { target: null, relationship: null, config: {} }
+          { id: guid(), target: null, relationship: null, config: {} }
         ]
       }
     case UPDATE_RELATIONSHIP:
       return {
         ...state,
         associations: state.associations.map(
-          (assoc, idx) =>
-            idx === action.idx
+          assoc =>
+            assoc.id === action.id
               ? { ...assoc, relationship: action.relationship }
               : assoc
         )
@@ -190,16 +195,16 @@ export default (state = initialState, action) => {
       return {
         ...state,
         associations: state.associations.map(
-          (assoc, idx) =>
-            idx === action.idx ? { ...assoc, target: action.target } : assoc
+          assoc =>
+            assoc.id === action.id ? { ...assoc, target: action.target } : assoc
         )
       }
     case UPDATE_ASSOCIATION_CONFIG:
       return {
         ...state,
         associations: state.associations.map(
-          (assoc, idx) =>
-            idx === action.idx
+          assoc =>
+            assoc.id === action.id
               ? {
                   ...assoc,
                   config: { ...assoc.config, [action.key]: action.val }
@@ -210,7 +215,7 @@ export default (state = initialState, action) => {
     case REMOVE_ASSOCIATION:
       return {
         ...state,
-        associations: state.associations.filter((_, idx) => idx !== action.idx)
+        associations: state.associations.filter(({ id }) => id !== action.id)
       }
     case REMOVE_MODEL:
       return action.id === state.id ? initialState : state

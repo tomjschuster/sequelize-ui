@@ -55,7 +55,6 @@ class Field extends Component {
     let { toggleFieldExpansion } = this
     let {
       field,
-      idx,
       updateFieldProps,
       deleteField,
       updateFieldValidation
@@ -66,16 +65,16 @@ class Field extends Component {
         <div>
           <Input
             value={field.name}
-            onChange={value => updateFieldProps('name', value, idx)}
+            onChange={value => updateFieldProps('name', value, field.id)}
             type="text"
             label="Field Name"
           />
           <DataTypeDropDown
             currType={field.type}
-            idx={idx}
+            id={field.id}
             onClick={updateFieldProps}
           />
-          <Button label="DELETE FIELD" onClick={() => deleteField(idx)} />
+          <Button label="DELETE FIELD" onClick={() => deleteField(field.id)} />
           <Switch
             onChange={() => toggleFieldExpansion()}
             checked={expanded}
@@ -87,12 +86,16 @@ class Field extends Component {
             <Checkbox
               label="UNIQUE"
               checked={Boolean(field.unique)}
-              onChange={isChecked => updateFieldProps('unique', isChecked, idx)}
+              onChange={isChecked =>
+                updateFieldProps('unique', isChecked, field.id)
+              }
             />
             {field.unique && (
               <Input
                 value={field.uniqueKey}
-                onChange={value => updateFieldProps('uniqueKey', value, idx)}
+                onChange={value =>
+                  updateFieldProps('uniqueKey', value, field.id)
+                }
                 type="text"
                 label="Unique Key"
               />
@@ -101,51 +104,53 @@ class Field extends Component {
               label="NOT NULL"
               checked={field.allowNull === false}
               onChange={isChecked =>
-                updateFieldProps('allowNull', !isChecked, idx)
+                updateFieldProps('allowNull', !isChecked, field.id)
               }
             />
             <Checkbox
               label="PRIMARY KEY"
               checked={field.primaryKey}
               onChange={isChecked =>
-                updateFieldProps('primaryKey', isChecked, idx)
+                updateFieldProps('primaryKey', isChecked, field.id)
               }
             />
             <Checkbox
               label="AUTOINCREMENT"
               checked={field.autoIncrement}
               onChange={isChecked =>
-                updateFieldProps('autoIncrement', isChecked, idx)
+                updateFieldProps('autoIncrement', isChecked, field.id)
               }
             />
             <Input
               value={field.default || ''}
-              onChange={value => updateFieldProps('default', value, idx)}
+              onChange={value => updateFieldProps('default', value, field.id)}
               type="text"
               label="Default Value"
             />
             <Input
               value={field.comment || ''}
-              onChange={value => updateFieldProps('comment', value, idx)}
+              onChange={value => updateFieldProps('comment', value, field.id)}
               type="text"
               label="Comment"
             />
             <Input
               value={field.field || ''}
-              onChange={value => updateFieldProps('field', value, idx)}
+              onChange={value => updateFieldProps('field', value, field.id)}
               type="text"
               label="Field Name"
             />
             <h4>Validation</h4>
             <Input
               value={field.validate.is || ''}
-              onChange={value => updateFieldValidation('is', value, idx)}
+              onChange={value => updateFieldValidation('is', value, field.id)}
               type="text"
               label="is (/^[a-z]+$/i)"
             />
             <Input
               value={field.validate.contains || ''}
-              onChange={value => updateFieldValidation('contains', value, idx)}
+              onChange={value =>
+                updateFieldValidation('contains', value, field.id)
+              }
               type="text"
               label="contains"
             />
@@ -154,7 +159,7 @@ class Field extends Component {
                 label="isEmail"
                 checked={field.validate.isEmail || false}
                 onChange={isChecked =>
-                  updateFieldValidation('isEmail', isChecked, idx)
+                  updateFieldValidation('isEmail', isChecked, field.id)
                 }
               />
             )}
@@ -163,14 +168,16 @@ class Field extends Component {
                 label="isUrl"
                 checked={field.validate.isUrl || false}
                 onChange={isChecked =>
-                  updateFieldValidation('isUrl', isChecked, idx)
+                  updateFieldValidation('isUrl', isChecked, field.id)
                 }
               />
             )}
             {isNumber(field.type) && (
               <Input
                 value={field.validate.min || ''}
-                onChange={value => updateFieldValidation('min', value, idx)}
+                onChange={value =>
+                  updateFieldValidation('min', value, field.id)
+                }
                 type="text"
                 label="min"
               />
@@ -178,7 +185,9 @@ class Field extends Component {
             {isNumber(field.type) && (
               <Input
                 value={field.validate.max || ''}
-                onChange={value => updateFieldValidation('max', value, idx)}
+                onChange={value =>
+                  updateFieldValidation('max', value, field.id)
+                }
                 type="text"
                 label="max"
               />
@@ -194,10 +203,10 @@ class Field extends Component {
 const mapStateToProps = ({ currentModel }) => ({ currentModel })
 
 const mapDispatchToProps = dispatch => ({
-  updateFieldProps: (key, val, idx) => dispatch(updateField(key, val, idx)),
-  updateFieldValidation: (key, val, idx) =>
-    dispatch(updateValidation(key, val, idx)),
-  deleteField: idx => dispatch(removeField(idx))
+  updateFieldProps: (key, val, id) => dispatch(updateField(key, val, id)),
+  updateFieldValidation: (key, val, id) =>
+    dispatch(updateValidation(key, val, id)),
+  deleteField: id => dispatch(removeField(id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Field)

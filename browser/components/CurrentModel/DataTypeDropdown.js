@@ -22,10 +22,10 @@ const sequelizeDataTypes = [
 ]
 
 /*----------  COMPONENT  ----------*/
-const DataTypeDropdown = ({ currType, idx, onClick }) => (
+const DataTypeDropdown = ({ currType, id, onClick }) => (
   <Dropdown
     auto
-    onChange={value => onClick('type', value, idx)}
+    onChange={value => onClick('type', value, id)}
     source={sequelizeDataTypes}
     value={currType}
     label="Data Type"
