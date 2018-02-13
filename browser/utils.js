@@ -1,11 +1,14 @@
-import * as JSZip from 'jszip'
+import JSZip from 'jszip'
 import Case from 'case'
+import { saveAs } from 'file-saver'
+
 const modelHeader =
-  "const Sequelize = require('sequelize')\n" + "const db = require('./_db')\n\n"
+  "const Sequelize = require('sequelize')\nconst db = require('./_db')\n\n"
 
 const printField = field => {
-  let output = `  ${Case.camel(field.name)}: {\n`
-  output += `    type: Sequelize.${field.type},\n`
+  let output = `  ${Case.camel(field.name)}: {\n    type: Sequelize.${
+    field.type
+  },\n`
 
   if (field.allowNull !== undefined) {
     output += `    allowNull: ${field.allowNull},\n`
@@ -163,10 +166,8 @@ export const guid = () =>
     ).toString(16)
   )
 
-import { saveAs } from 'file-saver'
-
 export const exportModel = models => {
-  const zip = new JSZip.default()
+  const zip = new JSZip()
   zip.file('_db.js', _db)
   zip.file('index.js', makeAssociationFile(models))
   models.forEach(model =>

@@ -1,7 +1,7 @@
-import axios from 'axios'
 import { openDialog, messages } from './dialog'
 import { resetModel as resetCurrentModel } from './currentModel'
 import { exportModel } from '../utils'
+
 /*----------  INITIAL STATE  ----------*/
 const initialState = []
 
