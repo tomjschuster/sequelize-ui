@@ -52,8 +52,6 @@
     "postcss-cssnext": "^3.1.0",
     "postcss-loader": "^2.1.0",
     "react": "^15.3.2",
-    "react-ace": "^4.0.0",
-    "react-ace-wrapper": "^1.0.1",
     "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "^15.3.2",
     "react-redux": "^5.0.4",
