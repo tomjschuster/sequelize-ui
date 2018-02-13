@@ -1,9 +1,16 @@
-import { createStore, applyMiddleware } from 'redux'
-import { createLogger } from 'redux-logger'
-import thunkMiddleware from 'redux-thunk'
+import { compose, createStore, applyMiddleware } from 'redux'
+import logger from 'redux-logger'
+import adapter from 'redux-localstorage/lib/adapters/localStorage'
+import persistState, { mergePersistedState } from 'redux-localstorage'
+import thunk from 'redux-thunk'
 
-import reducer from './redux'
+import rootReducer from './redux'
 
-const middleware = applyMiddleware(thunkMiddleware, createLogger())
+const reducer = compose(mergePersistedState())(rootReducer)
 
-export default createStore(reducer, middleware)
+const enhancer = compose(
+  applyMiddleware(logger, thunk),
+  persistState(adapter(window.localStorage), 'models')
+)
+
+export default createStore(reducer, enhancer)
