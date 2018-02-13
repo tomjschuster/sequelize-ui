@@ -13,7 +13,7 @@ const config = variables => ({
   }
 })
 
-const cssPath = path.join(__dirname, 'browser', 'theme', 'css')
+const cssPath = path.join(__dirname, 'src', 'theme', 'css')
 const cssFiles = fs
   .readdirSync(cssPath)
   .filter(file => file.match(/\.css/i))

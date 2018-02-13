@@ -13,18 +13,10 @@ app
   .use(bodyParser.urlencoded({ extended: false }))
   .use(morgan('dev'))
   .use(express.static(path.join(__dirname, 'public')))
-// .use('/api', require('./api'))
 
 const indexHtmlPath = path.join(__dirname, 'public', 'index.html')
 
-app.get('*', (req, res, next) => {
-  console.log('here')
-  res.sendFile(indexHtmlPath)
-})
-
-app.use((err, req, res, next) => {
-  if (err) res.redirect('/')
-})
+app.get('*', (req, res, next) => res.sendFile(indexHtmlPath))
 
 app.listen(PORT, () =>
   console.log(chalk.italic.magenta(`Server listening on ${PORT}...`))

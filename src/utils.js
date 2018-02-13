@@ -5,76 +5,73 @@ import { saveAs } from 'file-saver'
 const modelHeader =
   "const Sequelize = require('sequelize')\nconst db = require('./_db')\n\n"
 
-const printField = field => {
-  let output = `  ${Case.camel(field.name)}: {\n    type: Sequelize.${
-    field.type
-  },\n`
+const fieldType = field =>
+  `  ${Case.camel(field.name)}: {\n    type: Sequelize.${field.type},\n`
+const maybeAppendKey = (field, key, output) =>
+  field[key] !== undefined ? output + `    ${key}: '${field[key]}',\n` : output
 
-  if (field.allowNull !== undefined) {
-    output += `    allowNull: ${field.allowNull},\n`
-  }
-
+const maybeAppendUnique = (field, output) => {
   if (field.unique !== undefined) {
-    output += `    unique: ${
-      field.uniqueKey ? `'${field.uniqueKey}'` : field.unique
-    },\n`
+    return (
+      output +
+      `    unique: ${
+        field.uniqueKey ? `'${field.uniqueKey}'` : field.unique
+      },\n`
+    )
+  } else {
+    return output
   }
+}
 
-  if (field.primaryKey !== undefined) {
-    output += `    primaryKey: ${field.primaryKey},\n`
-  }
-
-  if (field.autoIncrement !== undefined) {
-    output += `    autoIncrement: ${field.autoIncrement},\n`
-  }
-
+const maybeAppendAllowNull = (field, output) => {
   if (field.defaultValue !== undefined) {
-    if (field.type === 'TEXT' || field.type === 'STRING') {
-      field.defaultValue = `'${field.defaultValue}'`
-    }
-    output += `    defaultValue: ${field.defaultValue},\n`
-  }
+    const defaultValue =
+      field.type === 'TEXT' || field.type === 'STRING'
+        ? `'${field.defaultValue}'`
+        : field.defaultValue
 
-  if (field.comment !== undefined) {
-    output += `    comment: '${field.comment}',\n`
+    return output + `    defaultValue: ${defaultValue},\n`
+  } else {
+    return output
   }
+}
 
-  if (field.field !== undefined) {
-    output += `    field: '${field.field}',\n`
-  }
+const maybeAppendStringValidation = (validate, key, output) =>
+  validate[key] !== undefined
+    ? output + `      ${key}: '${validate[key]}',\n`
+    : output
 
+const maybeAppendValidation = (validate, key, output) =>
+  validate[key] !== undefined
+    ? output + `      ${key}: ${validate[key]},\n`
+    : output
+
+const maybeAppendValidate = (field, output) => {
   if (field.validate) {
-    output += '    validate: {\n'
-
-    if (field.validate.is !== undefined) {
-      output += `      is: ${field.validate.is},\n`
-    }
-
-    if (field.validate.contains !== undefined) {
-      output += `      contains: '${field.validate.contains}',\n`
-    }
-
-    if (field.validate.min !== undefined) {
-      output += `      min: ${field.validate.min},\n`
-    }
-
-    if (field.validate.max !== undefined) {
-      output += `      max: ${field.validate.max},\n`
-    }
-
-    if (field.validate.isEmail !== undefined) {
-      output += `      isEmail: ${field.validate.isEmail},\n`
-    }
-
-    if (field.validate.isUrl !== undefined) {
-      output += `      isUrl: ${field.validate.isUrl},\n`
-    }
-
-    output += '    }\n'
+    output = output + '    validate: {\n'
+    output = maybeAppendStringValidation(field.validate, 'is', output)
+    output = maybeAppendStringValidation(field.validate, 'contains', output)
+    output = maybeAppendValidation(field.validate, 'min', output)
+    output = maybeAppendValidation(field.validate, 'max', output)
+    output = maybeAppendStringValidation(field.validate, 'isEmail', output)
+    output = maybeAppendStringValidation(field.validate, 'isUrl', output)
+    return output + '    }\n'
+  } else {
+    return output
   }
+}
 
-  output += `  }`
-  return output
+const printField = field => {
+  let output = fieldType(field)
+  output = maybeAppendKey(field, 'allowNull', output)
+  output = maybeAppendUnique(field, output)
+  output = maybeAppendKey(field, 'primaryKey', output)
+  output = maybeAppendKey(field, 'autoIncrement', output)
+  output = maybeAppendAllowNull(field, output)
+  output = maybeAppendKey(field, 'comment', output)
+  output = maybeAppendKey(field, 'field', output)
+  output = maybeAppendValidate(field, output)
+  return output + `  }`
 }
 
 const printMethods = methods => {
