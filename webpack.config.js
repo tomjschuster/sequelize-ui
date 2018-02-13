@@ -2,7 +2,7 @@ module.exports = {
   entry: './browser/index.js',
   output: {
     path: __dirname,
-    filename: './public/bundle.js'
+    filename: './public/app.js'
   },
   context: __dirname,
   devtool: 'eval',
@@ -24,7 +24,6 @@ module.exports = {
             loader: 'css-loader',
             options: {
               modules: true,
-              // sourceMap: true,
               importLoaders: 1,
               localIdentName: '[name]--[local]--[hash:base64:8]'
             }

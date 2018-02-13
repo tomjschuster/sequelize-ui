@@ -11,7 +11,8 @@
     "react/display-name": [0],
     "no-array-index-key": [0],
     "no-shadow": [0],
-    "no-confusing-arrow": [0]
+    "no-confusing-arrow": [0],
+    "no-bitwise": [0]
   },
   "parserOptions": {
     "ecmaVersion": 6,

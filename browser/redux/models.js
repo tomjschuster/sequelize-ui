@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { openDialog, messages } from './dialog'
 import { resetModel as resetCurrentModel } from './currentModel'
-
+import { exportModel } from '../utils'
 /*----------  INITIAL STATE  ----------*/
 const initialState = []
 
@@ -83,10 +83,7 @@ export const saveModel = (models, model, isNew) => dispatch => {
 }
 
 export const requestDbDownload = models => () =>
-  axios
-    .post('/api/create/db', { models })
-    .then(res => window.location.replace(`/api/download/${res.data}`))
-    .catch(console.error)
+  exportModel(models).catch(console.error)
 
 /*----------  REDUCER  ----------*/
 export default (state = initialState, action) => {
