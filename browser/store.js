@@ -9,7 +9,8 @@ import rootReducer from './redux'
 const reducer = compose(mergePersistedState())(rootReducer)
 
 const enhancer = compose(
-  applyMiddleware(logger, thunk),
+  // applyMiddleware(logger, thunk),
+  applyMiddleware(thunk),
   persistState(adapter(window.localStorage), 'models')
 )
 

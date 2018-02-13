@@ -104,7 +104,7 @@ const printConfig = config => {
   return output
 }
 
-const makeModelFile = model => {
+const modelContent = model => {
   let output = modelHeader
   output += `const ${Case.pascal(model.name)} = db.define('${Case.snake(
     model.name
@@ -120,8 +120,10 @@ const makeModelFile = model => {
   output += `module.exports = ${Case.pascal(model.name)}\n`
   return output
 }
+const modelFile = (zip, model) =>
+  zip.file(`${Case.camel(model.name)}.js`, modelContent(model))
 
-const makeAssociationFile = models => {
+const associationContent = models => {
   let output = ''
   models.forEach(model => {
     output += `const ${Case.pascal(model.name)} = require('./${model.name}')\n`
@@ -153,10 +155,28 @@ const makeAssociationFile = models => {
   return output
 }
 
-const _db =
+const associationFile = (zip, models) =>
+  zip.file('index.js', associationContent(models))
+
+const dbContent =
   "const Sequelize = require('sequelize')\n" +
   "const db = new Sequelize('postgres://user:pass@example.com:5432/dbname')\n" +
   'module.exports = db\n'
+
+const dbFile = zip => zip.file('_db.js', dbContent)
+
+const toZip = models => {
+  const zip = new JSZip()
+  dbFile(zip)
+  associationFile(zip, models)
+  for (let model of models) modelFile(zip, model)
+  return zip
+}
+
+export const exportModel = models =>
+  toZip(models)
+    .generateAsync({ type: 'blob' })
+    .then(blob => saveAs(blob, 'db.zip'))
 
 export const guid = () =>
   ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
@@ -165,15 +185,3 @@ export const guid = () =>
       (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
     ).toString(16)
   )
-
-export const exportModel = models => {
-  const zip = new JSZip()
-  zip.file('_db.js', _db)
-  zip.file('index.js', makeAssociationFile(models))
-  models.forEach(model =>
-    zip.file(`${Case.camel(model.name)}.js`, makeModelFile(model))
-  )
-  return zip
-    .generateAsync({ type: 'blob' })
-    .then(blob => saveAs(blob, 'db.zip'))
-}
