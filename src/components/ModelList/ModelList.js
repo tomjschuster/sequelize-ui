@@ -5,25 +5,25 @@ import ModelListItem from './ModelListItem'
 /*----------  UI LIBRARY COMPONENTS  ----------*/
 import { List } from 'react-toolbox/lib/list'
 
+/*----------  HELPERS  ----------*/
+const getModelNameObj = models =>
+  models.reduce((acc, m) => ({ ...acc, [m.id]: m.name }), {})
+
 /*----------  COMPONENT  ----------*/
-const ModelList = ({ models, currentModel }) => {
-  const modelNameObj = models.reduce(
-    (acc, model) => ({ ...acc, [model.id]: model.name }),
-    {}
-  )
+const ModelList = ({ models, currentId, receiveModel, removeModel }) => {
+  const modelNameObj = getModelNameObj(models)
   return (
     <div className="your-models">
       <List>
-        <div>
-          <h3>{models.length > 0 && 'Your Models'}</h3>
-        </div>
+        <h3>{models.length > 0 && 'Your Models'}</h3>
         {models.map(model => (
           <ModelListItem
             key={model.id}
             model={model}
-            currentModel={currentModel}
+            receiveModel={receiveModel}
+            removeModel={removeModel}
             modelNameObj={modelNameObj}
-            isCurrent={model.id === currentModel.id}
+            isCurrent={model.id === currentId}
           />
         ))}
       </List>

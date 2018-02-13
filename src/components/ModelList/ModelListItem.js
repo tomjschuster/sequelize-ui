@@ -1,9 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
-
-/*----------  ACTION/THUNK CREATORS  ----------*/
-import { removeModel } from '../../redux/models'
-import { receiveModel } from '../../redux/currentModel'
 
 /*----------  UI LIBRARY COMPONENTS  ----------*/
 import { ListItem } from 'react-toolbox/lib/list'
@@ -43,35 +38,25 @@ const ModelContent = ({
 const ModelListItem = ({
   model,
   isCurrent,
-  selectModel,
-  deleteModel,
+  receiveModel,
+  removeModel,
   modelNameObj
 }) => (
   <ListItem
     className={isCurrent ? 'active' : ''}
     selectable
+    itemContent={<ModelContent model={model} modelNameObj={modelNameObj} />}
     rightIcon={
       <IconButton
         icon="delete_forever"
         onClick={evt => {
           evt.stopPropagation()
-          deleteModel(model.id)
+          removeModel(model.id)
         }}
       />
     }
-    itemContent={<ModelContent model={model} modelNameObj={modelNameObj} />}
-    onClick={() => selectModel(model)}
+    onClick={() => receiveModel(model)}
   />
 )
 
-/*----------  CONNECT  ----------*/
-const mapDispatchToProps = dispatch => ({
-  deleteModel: id => {
-    dispatch(removeModel(id))
-  },
-  selectModel: model => {
-    dispatch(receiveModel(model))
-  }
-})
-
-export default connect(null, mapDispatchToProps)(ModelListItem)
+export default ModelListItem

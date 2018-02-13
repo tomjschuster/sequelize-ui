@@ -1,4 +1,4 @@
-import { openDialog, messages } from './dialog'
+import { openDialog, messages } from './ui'
 import { resetModel as resetCurrentModel } from './currentModel'
 import { exportModel } from '../utils'
 
@@ -6,11 +6,11 @@ import { exportModel } from '../utils'
 const initialState = []
 
 /*----------  ACTION TYPES  ----------*/
-const RECEIVE_MODELS = 'RECEIVE_MODELS'
-const ADD_MODEL = 'ADD_MODEL'
+export const RECEIVE_MODELS = 'RECEIVE_MODELS'
+export const ADD_MODEL = 'ADD_MODEL'
 export const REMOVE_MODEL = 'REMOVE_MODEL'
-const RESET_MODELS = 'RESET_MODELS'
-const UPDATE_MODEL = 'UPDATE_MODEL'
+export const RESET_MODELS = 'RESET_MODELS'
+export const UPDATE_MODEL = 'UPDATE_MODEL'
 
 /*----------  ACTION CREATORS  ----------*/
 export const receiveModels = models => ({

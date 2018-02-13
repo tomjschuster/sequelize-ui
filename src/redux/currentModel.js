@@ -26,8 +26,8 @@ const initialState = {
 }
 
 /*----------  ACTION TYPES  ----------*/
-const RECEIVE_MODEL = 'RECEIVE_MODEL'
-const RESET_MODEL = 'RESET_MODEL'
+export const RECEIVE_MODEL = 'RECEIVE_MODEL'
+export const RESET_MODEL = 'RESET_MODEL'
 const SET_MODEL_NAME = 'SET_MODEL_NAME'
 const ADD_FIELD = 'ADD_FIELD'
 const UPDATE_FIELD = 'UPDATE_FIELD'
