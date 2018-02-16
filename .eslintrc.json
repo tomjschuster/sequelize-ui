@@ -5,23 +5,22 @@
     "id-length": [0, { "properties": "never" }],
     "semi": [1, "never"],
     "complexity": [0],
-    "jsx-quotes": [1, "prefer-single"],
+    "jsx-quotes": [1, "prefer-double"],
     "new-cap": [0],
     "react/prop-types": [0],
     "react/display-name": [0],
     "no-array-index-key": [0],
-    "no-shadow": [0]
+    "no-shadow": [0],
+    "no-confusing-arrow": [0],
+    "no-bitwise": [0]
   },
   "parserOptions": {
-      "ecmaVersion": 6,
-      "sourceType": "module",
-      "ecmaFeatures": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
       "jsx": true,
       "experimentalObjectRestSpread": true
     }
   },
-  "plugins": [
-    "react"
-  ]
+  "plugins": ["react"]
 }
-
