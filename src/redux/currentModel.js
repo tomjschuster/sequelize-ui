@@ -95,23 +95,23 @@ export const addAssociation = () => ({
   type: ADD_ASSOCIATION
 })
 
-export const updateTarget = (target, id) => ({
+export const updateTarget = (id, target) => ({
   type: UPDATE_TARGET,
-  target,
-  id
+  id,
+  target
 })
 
-export const updateRelationship = (relationship, id) => ({
+export const updateRelationship = (id, relationship) => ({
   type: UPDATE_RELATIONSHIP,
-  relationship,
-  id
+  id,
+  relationship
 })
 
-export const updateAssociationConfig = (key, val, id) => ({
+export const updateAssociationConfig = (id, key, val) => ({
   type: UPDATE_ASSOCIATION_CONFIG,
+  id,
   key,
-  val,
-  id
+  val
 })
 
 export const removeAssociation = id => ({

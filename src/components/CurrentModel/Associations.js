@@ -1,14 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
-
-/*----------  ACTION/THUNK CREATORS  ----------*/
-import {
-  addAssociation,
-  updateTarget,
-  updateRelationship,
-  updateAssociationConfig,
-  removeAssociation
-} from '../../redux/currentModel'
 
 /*----------  APP COMPONENTS  ----------*/
 import RelationshipDropdown from './RelationshipDropDown'
@@ -21,64 +11,52 @@ import { List, ListItem } from 'react-toolbox/lib/list'
 
 /*----------  COMPONENT  ----------*/
 const Associations = ({
-  currentModel,
   models,
-  createAssociation,
-  updateRelationship,
+  currentModel,
+  addAssociation,
   updateTarget,
+  updateRelationship,
   updateAssociationConfig,
-  deleteAssociation
+  removeAssociation
 }) => (
   <div>
     <h3>Model Associations</h3>
-    <Button primary raised label="+ ADD" onClick={createAssociation} />
+    <Button primary raised label="+ ADD" onClick={addAssociation} />
     <List>
       {currentModel.associations.map(assoc => (
         <ListItem key={assoc.id}>
           <RelationshipDropdown
             id={assoc.id}
             value={assoc.relationship}
-            onChange={updateRelationship}
+            updateRelationship={updateRelationship.bind(null, assoc.id)}
           />
           <ModelDropdown
             id={assoc.id}
             value={assoc.target}
             models={models}
-            onChange={updateTarget}
+            updateTarget={updateTarget.bind(null, assoc.id)}
           />
           <Input
             id="as-input"
             value={assoc.config.as || ''}
-            onChange={value => updateAssociationConfig('as', value, assoc.id)}
+            onChange={updateAssociationConfig.bind(null, assoc.id, 'as')}
             type="text"
           />
           <span>through</span>
           <Input
             id="through-input"
             value={assoc.config.through || ''}
-            onChange={value =>
-              updateAssociationConfig('through', value, assoc.id)
-            }
+            onChange={updateAssociationConfig.bind(null, assoc.id, 'through')}
             type="text"
           />
-          <Button label="DELETE" onClick={() => deleteAssociation(assoc.id)} />
+          <Button
+            label="DELETE"
+            onClick={removeAssociation.bind(null, assoc.id)}
+          />
         </ListItem>
       ))}
     </List>
   </div>
 )
 
-/*----------  CONNECT  ----------*/
-const mapStateToProps = ({ currentModel, models }) => ({ currentModel, models })
-
-const mapDispatchToProps = dispatch => ({
-  createAssociation: () => dispatch(addAssociation()),
-  updateTarget: (target, id) => dispatch(updateTarget(target, id)),
-  updateRelationship: (relationship, id) =>
-    dispatch(updateRelationship(relationship, id)),
-  updateAssociationConfig: (key, val, id) =>
-    dispatch(updateAssociationConfig(key, val, id)),
-  deleteAssociation: id => dispatch(removeAssociation(id))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Associations)
+export default Associations

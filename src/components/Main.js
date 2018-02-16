@@ -8,7 +8,12 @@ import {
   addField,
   updateField,
   removeField,
-  updateValidation
+  updateValidation,
+  addAssociation,
+  updateTarget,
+  updateRelationship,
+  updateAssociationConfig,
+  removeAssociation
 } from '../redux/currentModel'
 import {
   closeDialog,
@@ -41,7 +46,12 @@ class Main extends Component {
       toggleField,
       updateField,
       updateValidation,
-      removeField
+      removeField,
+      addAssociation,
+      updateTarget,
+      updateRelationship,
+      updateAssociationConfig,
+      removeAssociation
     } = this.props
 
     return (
@@ -57,11 +67,16 @@ class Main extends Component {
           currentModel={currentModel}
           tabIdx={ui.currentModelTabIdx}
           fieldsToggle={ui.fieldsToggle}
-          setTabIdx={setCurrentModelTabIdx}
           addField={addField}
           updateField={updateField}
           updateValidation={updateValidation}
           removeField={removeField}
+          addAssociation={addAssociation}
+          updateTarget={updateTarget}
+          updateRelationship={updateRelationship}
+          updateAssociationConfig={updateAssociationConfig}
+          removeAssociation={removeAssociation}
+          setTabIdx={setCurrentModelTabIdx}
           toggleField={toggleField}
         />
         <ConfirmDialog dialog={ui.dialog} closeDialog={closeDialog} />
@@ -83,6 +98,11 @@ const mapDispatchToProps = {
   updateField,
   updateValidation,
   removeField,
+  addAssociation,
+  updateTarget,
+  updateRelationship,
+  updateAssociationConfig,
+  removeAssociation,
   closeAllFields,
   closeDialog,
   setCurrentModelTabIdx,
