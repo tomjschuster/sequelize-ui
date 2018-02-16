@@ -13,7 +13,7 @@ const getModelNameObj = models =>
   models.reduce((acc, m) => ({ ...acc, [m.id]: m.name }), {})
 
 /*----------  COMPONENT  ----------*/
-const ModelList = ({
+const Sidebar = ({
   models,
   menu,
   currentId,
@@ -63,4 +63,4 @@ const ModelList = ({
   )
 }
 
-export default ModelList
+export default Sidebar

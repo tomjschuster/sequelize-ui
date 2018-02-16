@@ -32,7 +32,7 @@ import {
 } from '../redux/ui'
 
 /*----------  APP COMPONENTS  ----------*/
-import ModelList from './ModelList/ModelList'
+import Sidebar from './Sidebar/Sidebar'
 import CurrentModel from './CurrentModel/CurrentModel'
 import ConfirmDialog from './ConfirmDialog'
 
@@ -96,7 +96,7 @@ class Main extends Component {
           setTabIdx={setCurrentModelTabIdx}
           toggleField={toggleField}
         />
-        <ModelList
+        <Sidebar
           models={models}
           menu={menu}
           currentId={currentModel.id}
