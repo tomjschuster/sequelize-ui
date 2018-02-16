@@ -4,7 +4,8 @@ import ModelListItem from './ModelListItem'
 
 /*----------  UI LIBRARY COMPONENTS  ----------*/
 import Drawer from 'react-toolbox/lib/drawer'
-import { List } from 'react-toolbox/lib/list'
+import { List, ListSubHeader } from 'react-toolbox/lib/list'
+import { Button } from 'react-toolbox/lib/button'
 
 /*----------  HELPERS  ----------*/
 const getModelNameObj = models =>
@@ -21,9 +22,10 @@ const ModelList = ({
 }) => {
   const modelNameObj = getModelNameObj(models)
   return (
-    <Drawer active={active} onOverlayClick={close}>
+    <Drawer active={active} type="left" onOverlayClick={close}>
+      <h2>Sequelize UI</h2>
       <List>
-        <h3>{models.length > 0 && 'Your Models'}</h3>
+        <ListSubHeader caption="Models" />
         {models.map(model => (
           <ModelListItem
             key={model.id}
@@ -34,6 +36,7 @@ const ModelList = ({
             isCurrent={model.id === currentId}
           />
         ))}
+        <Button icon="add" floating mini />
       </List>
     </Drawer>
   )

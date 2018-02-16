@@ -131,7 +131,6 @@ export default (state = initialState, action) => {
     case SET_MODEL_NAME:
       return { ...state, name: action.name }
     case ADD_FIELD:
-      console.log('hyah')
       return {
         ...state,
         fields: [

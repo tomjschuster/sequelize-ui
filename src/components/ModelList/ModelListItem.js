@@ -3,7 +3,6 @@ import React from 'react'
 /*----------  UI LIBRARY COMPONENTS  ----------*/
 import { ListItem } from 'react-toolbox/lib/list'
 import { IconButton } from 'react-toolbox/lib/button'
-
 /*----------  HELPERS  ----------*/
 const fieldsText = fields => {
   return `Fields: ${fields.map(({ name }) => name).join(', ')}`
@@ -43,19 +42,17 @@ const ModelListItem = ({
   modelNameObj
 }) => (
   <ListItem
+    ripple={false}
     className={isCurrent ? 'active' : ''}
-    selectable
     itemContent={<ModelContent model={model} modelNameObj={modelNameObj} />}
-    rightIcon={
+    rightActions={[
+      <IconButton key="edit-button" icon="edit" onClick={receiveModel} />,
       <IconButton
+        key="delete-button"
         icon="delete_forever"
-        onClick={evt => {
-          evt.stopPropagation()
-          removeModel()
-        }}
+        onClick={removeModel}
       />
-    }
-    onClick={receiveModel}
+    ]}
   />
 )
 

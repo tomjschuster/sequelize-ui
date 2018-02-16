@@ -127,8 +127,12 @@ export default (state = initialState, action) => {
     case REMOVE_MODEL:
     case RESET_MODELS:
     case UPDATE_MODEL:
-    case RECEIVE_MODEL:
     case RESET_MODEL:
+      return {
+        ...state,
+        fieldsToggle: initialFieldsToggle
+      }
+    case RECEIVE_MODEL:
       return {
         ...state,
         fieldsToggle: initialFieldsToggle,
