@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 /*----------  ACTION/THUNK CREATORS  ----------*/
-import { removeModel } from '../redux/models'
+import { saveModel, removeModel } from '../redux/models'
 import {
   receiveModel,
+  setModelName,
   addField,
   updateField,
   removeField,
@@ -42,6 +43,8 @@ class Main extends Component {
       ui,
       receiveModel,
       removeModel,
+      setModelName,
+      saveModel,
       addField,
       closeDialog,
       updateField,
@@ -71,6 +74,9 @@ class Main extends Component {
           currentModel={currentModel}
           tabIdx={ui.currentModelTabIdx}
           fieldsToggle={ui.fieldsToggle}
+          setModelName={setModelName}
+          saveModel={saveModel}
+          removeModel={removeModel}
           addField={addField}
           updateField={updateField}
           updateValidation={updateValidation}
@@ -98,8 +104,10 @@ const mapStateToProps = ({ models, currentModel, ui }) => ({
   ui
 })
 const mapDispatchToProps = {
-  removeModel,
   receiveModel,
+  removeModel,
+  setModelName,
+  saveModel,
   addField,
   updateField,
   updateValidation,

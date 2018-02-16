@@ -15,6 +15,9 @@ const CurrentModel = ({
   currentModel,
   tabIdx,
   fieldsToggle,
+  setModelName,
+  saveModel,
+  removeModel,
   addField,
   updateField,
   updateValidation,
@@ -35,6 +38,10 @@ const CurrentModel = ({
       models={models}
       currentModel={currentModel}
       isNew={!models.find(({ id }) => id === currentModel.id)}
+      setModelName={setModelName}
+      createModel={saveModel.bind(null, currentModel, models, true)}
+      saveModel={saveModel.bind(null, currentModel, models, false)}
+      removeModel={removeModel.bind(null, currentModel.id)}
     />
     <Tabs index={tabIdx} onChange={setTabIdx}>
       <Tab label="Fields">
