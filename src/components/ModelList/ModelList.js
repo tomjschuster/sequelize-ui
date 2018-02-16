@@ -4,6 +4,7 @@ import ModelListItem from './ModelListItem'
 
 /*----------  UI LIBRARY COMPONENTS  ----------*/
 import Drawer from 'react-toolbox/lib/drawer'
+import Input from 'react-toolbox/lib/input'
 import { List, ListSubHeader } from 'react-toolbox/lib/list'
 import { Button } from 'react-toolbox/lib/button'
 
@@ -14,11 +15,16 @@ const getModelNameObj = models =>
 /*----------  COMPONENT  ----------*/
 const ModelList = ({
   models,
+  menu,
   currentId,
   active,
   receiveModel,
   removeModel,
-  close
+  close,
+  addModel,
+  updateModelName,
+  cancelModel,
+  saveModel
 }) => {
   const modelNameObj = getModelNameObj(models)
   return (
@@ -36,7 +42,22 @@ const ModelList = ({
             isCurrent={model.id === currentId}
           />
         ))}
-        <Button icon="add" floating mini />
+        {menu.newModel && (
+          <div>
+            <Input
+              value={menu.newModel.name || ''}
+              onChange={updateModelName}
+            />
+            <Button
+              label="Create"
+              onClick={saveModel.bind(null, menu.newModel, models, true)}
+            />
+            <Button label="Cancel" onClick={cancelModel} />
+          </div>
+        )}
+        {!menu.newModel && (
+          <Button icon="add" floating mini onClick={addModel} />
+        )}
       </List>
     </Drawer>
   )

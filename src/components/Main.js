@@ -4,6 +4,12 @@ import { connect } from 'react-redux'
 /*----------  ACTION/THUNK CREATORS  ----------*/
 import { saveModel, removeModel } from '../redux/models'
 import {
+  closeMenu,
+  addMenuModel,
+  updateMenuModelName,
+  cancelMenuModel
+} from '../redux/menu'
+import {
   receiveModel,
   setModelName,
   addField,
@@ -22,8 +28,7 @@ import {
   closeDialog,
   closeAllFields,
   setCurrentModelTabIdx,
-  toggleField,
-  closeModelsList
+  toggleField
 } from '../redux/ui'
 
 /*----------  APP COMPONENTS  ----------*/
@@ -40,8 +45,13 @@ class Main extends Component {
   render() {
     const {
       models,
+      menu,
       currentModel,
       ui,
+      closeMenu,
+      addMenuModel,
+      updateMenuModelName,
+      cancelMenuModel,
       receiveModel,
       removeModel,
       setModelName,
@@ -59,8 +69,7 @@ class Main extends Component {
       updateConfig,
       updateMethod,
       setCurrentModelTabIdx,
-      toggleField,
-      closeModelsList
+      toggleField
     } = this.props
 
     return (
@@ -89,11 +98,16 @@ class Main extends Component {
         />
         <ModelList
           models={models}
+          menu={menu}
           currentId={currentModel.id}
-          active={ui.modelsListIsOpen}
+          addModel={addMenuModel}
+          updateModelName={updateMenuModelName}
+          cancelModel={cancelMenuModel}
+          saveModel={saveModel}
+          active={menu.isOpen}
           removeModel={removeModel}
           receiveModel={receiveModel}
-          close={closeModelsList}
+          close={closeMenu}
         />
         <ConfirmDialog dialog={ui.dialog} closeDialog={closeDialog} />
       </div>
@@ -102,12 +116,17 @@ class Main extends Component {
 }
 
 /*----------  CONNECT  ----------*/
-const mapStateToProps = ({ models, currentModel, ui }) => ({
+const mapStateToProps = ({ models, menu, currentModel, ui }) => ({
   models,
+  menu,
   currentModel,
   ui
 })
 const mapDispatchToProps = {
+  closeMenu,
+  addMenuModel,
+  updateMenuModelName,
+  cancelMenuModel,
   receiveModel,
   removeModel,
   setModelName,
@@ -126,8 +145,7 @@ const mapDispatchToProps = {
   updateMethod,
   setCurrentModelTabIdx,
   toggleField,
-  closeDialog,
-  closeModelsList
+  closeDialog
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main)

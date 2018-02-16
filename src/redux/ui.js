@@ -45,9 +45,6 @@ const CLOSE_DIALOG = 'CLOSE_DIALOG'
 const TOGGLE_FIELD = 'TOGGLE_FIELD'
 const CLOSE_ALL_FIELDS = 'CLOSE_ALL_FIELDS'
 const SET_CURRENT_MODEL_TAB_IDX = 'SET_CURRENT_MODEL_TAB_IDX'
-const OPEN_MODELS_LIST = 'OPEN_MODELS_LIST'
-const CLOSE_MODELS_LIST = 'CLOSE_MODELS_LIST'
-const TOGGLE_MENUS_LIST = 'TOGGLE_MENUS_LIST'
 
 /*----------  ACTION CREATORS  ----------*/
 export const resetUi = () => ({
@@ -77,17 +74,6 @@ export const setCurrentModelTabIdx = idx => ({
   idx
 })
 
-export const openModelsList = () => ({
-  type: OPEN_MODELS_LIST
-})
-
-export const closeModelsList = () => ({
-  type: CLOSE_MODELS_LIST
-})
-
-export const toggleMenusList = () => ({
-  type: TOGGLE_MENUS_LIST
-})
 /*----------  THUNKS  ----------*/
 
 /*----------  REDUCER  ----------*/
@@ -115,12 +101,6 @@ export default (state = initialState, action) => {
           [action.id]: !state.fieldsToggle[action.id]
         }
       }
-    case OPEN_MODELS_LIST:
-      return { ...state, modelsListIsOpen: true }
-    case CLOSE_MODELS_LIST:
-      return { ...state, modelsListIsOpen: false }
-    case TOGGLE_MENUS_LIST:
-      return { ...state, modelsListIsOpen: !state.modelsListIsOpen }
     case CLOSE_ALL_FIELDS:
     case RECEIVE_MODELS:
     case ADD_MODEL:

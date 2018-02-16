@@ -39,6 +39,7 @@ export const reset = () => ({
 
 /*----------  THUNKS  ----------*/
 export const saveModel = (model, models, isNew) => dispatch => {
+  console.log('we here', model, models, isNew)
   let isNameError = models.find(
     ({ id, name }) => name === model.name && id !== model.id
   )

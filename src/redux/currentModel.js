@@ -2,7 +2,7 @@ import { REMOVE_MODEL } from './models'
 import { guid } from '../utils'
 
 /*----------  INITIAL STATE  ----------*/
-const initialState = {
+export const initialState = {
   id: guid(),
   name: '',
   fields: [],
