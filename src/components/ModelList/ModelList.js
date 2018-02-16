@@ -20,8 +20,8 @@ const ModelList = ({ models, currentId, receiveModel, removeModel }) => {
           <ModelListItem
             key={model.id}
             model={model}
-            receiveModel={receiveModel}
-            removeModel={removeModel}
+            receiveModel={receiveModel.bind(null, model)}
+            removeModel={removeModel.bind(null, model.id)}
             modelNameObj={modelNameObj}
             isCurrent={model.id === currentId}
           />

@@ -51,11 +51,11 @@ const ModelListItem = ({
         icon="delete_forever"
         onClick={evt => {
           evt.stopPropagation()
-          removeModel(model.id)
+          removeModel()
         }}
       />
     }
-    onClick={() => receiveModel(model)}
+    onClick={receiveModel}
   />
 )
 
