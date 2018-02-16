@@ -13,7 +13,9 @@ import {
   updateTarget,
   updateRelationship,
   updateAssociationConfig,
-  removeAssociation
+  removeAssociation,
+  updateConfig,
+  updateMethod
 } from '../redux/currentModel'
 import {
   closeDialog,
@@ -42,8 +44,6 @@ class Main extends Component {
       removeModel,
       addField,
       closeDialog,
-      setCurrentModelTabIdx,
-      toggleField,
       updateField,
       updateValidation,
       removeField,
@@ -51,7 +51,11 @@ class Main extends Component {
       updateTarget,
       updateRelationship,
       updateAssociationConfig,
-      removeAssociation
+      removeAssociation,
+      updateConfig,
+      updateMethod,
+      setCurrentModelTabIdx,
+      toggleField
     } = this.props
 
     return (
@@ -76,6 +80,8 @@ class Main extends Component {
           updateRelationship={updateRelationship}
           updateAssociationConfig={updateAssociationConfig}
           removeAssociation={removeAssociation}
+          updateConfig={updateConfig}
+          updateMethod={updateMethod}
           setTabIdx={setCurrentModelTabIdx}
           toggleField={toggleField}
         />
@@ -106,7 +112,9 @@ const mapDispatchToProps = {
   closeAllFields,
   closeDialog,
   setCurrentModelTabIdx,
-  toggleField
+  toggleField,
+  updateConfig,
+  updateMethod
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main)

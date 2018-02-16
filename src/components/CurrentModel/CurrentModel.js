@@ -24,6 +24,8 @@ const CurrentModel = ({
   updateRelationship,
   updateAssociationConfig,
   removeAssociation,
+  updateConfig,
+  updateMethod,
   setTabIdx,
   toggleField
 }) => (
@@ -47,7 +49,11 @@ const CurrentModel = ({
         />
       </Tab>
       <Tab label="Configuration">
-        <Configuration />
+        <Configuration
+          currentModel={currentModel}
+          updateConfig={updateConfig}
+          updateMethod={updateMethod}
+        />
       </Tab>
       <Tab label="Associations">
         <Associations

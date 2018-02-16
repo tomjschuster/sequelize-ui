@@ -1,8 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
-
-/*----------  ACTION/THUNK CREATORS  ----------*/
-import { updateConfig, updateMethod } from '../../redux/currentModel'
 
 /*----------  UI LIBRARY COMPONENTS  ----------*/
 import Checkbox from 'react-toolbox/lib/checkbox'
@@ -15,73 +11,69 @@ const Configuration = ({ currentModel, updateConfig, updateMethod }) => (
     <Input
       label="Table Name"
       value={currentModel.config.tableName}
-      onChange={value => updateConfig('tableName', value)}
+      onChange={updateConfig.bind(null, 'tableName')}
     />
     <Input
       label="Singular Name"
       value={currentModel.config.singular}
-      onChange={value => updateConfig('singular', value)}
+      onChange={updateConfig.bind(null, 'singular')}
     />
     <Input
       label="Plural Name"
       value={currentModel.config.plural}
-      onChange={value => updateConfig('plural', value)}
+      onChange={updateConfig.bind(null, 'plural')}
     />
     <Checkbox
       label="No Timestamp Columns"
       checked={!currentModel.config.timestamps}
-      onChange={isChecked => updateConfig('timestamps', !isChecked)}
+      onChange={updateConfig.bind(
+        null,
+        'timestamps',
+        !currentModel.config.timestamps
+      )}
     />
     <Checkbox
       label="Freeze Table Name"
       checked={currentModel.config.freezeTableName}
-      onChange={isChecked => updateConfig('freezeTableName', isChecked)}
+      onChange={updateConfig.bind(null, 'freezeTableName')}
     />
     <Checkbox
       label="Underscore Column Names"
       checked={currentModel.config.underscored}
-      onChange={isChecked => updateConfig('underscored', isChecked)}
+      onChange={updateConfig.bind(null, 'underscored')}
     />
     <Checkbox
       label="Underscore Table Names"
       checked={currentModel.config.underscoredAll}
-      onChange={isChecked => updateConfig('underscoredAll', isChecked)}
+      onChange={updateConfig.bind(null, 'underscoredAll')}
     />
     <h3>Include Templates For:</h3>
     <Checkbox
       label="Hooks"
       checked={currentModel.methods.hooks}
-      onChange={isChecked => updateMethod('hooks', isChecked)}
+      onChange={updateMethod.bind(null, 'hooks')}
     />
     <Checkbox
       label="Getter Methods"
       checked={currentModel.methods.getterMethods}
-      onChange={isChecked => updateMethod('getterMethods', isChecked)}
+      onChange={updateMethod.bind(null, 'getterMethods')}
     />
     <Checkbox
       label="Setter Methods"
       checked={currentModel.methods.setterMethods}
-      onChange={isChecked => updateMethod('setterMethods', isChecked)}
+      onChange={updateMethod.bind(null, 'setterMethods')}
     />
     <Checkbox
       label="Instance Methods"
       checked={currentModel.methods.instanceMethods}
-      onChange={isChecked => updateMethod('instanceMethods', isChecked)}
+      onChange={updateMethod.bind(null, 'instanceMethods')}
     />
     <Checkbox
       label="Class Methods"
       checked={currentModel.methods.classMethods}
-      onChange={isChecked => updateMethod('classMethods', isChecked)}
+      onChange={updateMethod.bind(null, 'classMethods')}
     />
   </div>
 )
 
-/*----------  CONNECT  ----------*/
-const mapStateToProps = ({ currentModel }) => ({ currentModel })
-
-const mapDispatchToProps = dispatch => ({
-  updateConfig: (key, val) => dispatch(updateConfig(key, val)),
-  updateMethod: (key, val) => dispatch(updateMethod(key, val))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Configuration)
+export default Configuration
