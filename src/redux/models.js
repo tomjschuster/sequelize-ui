@@ -82,7 +82,7 @@ export const saveModel = (model, models, isNew) => dispatch => {
   dispatch(resetCurrentModel())
 }
 
-export const requestDbDownload = models => () =>
+export const downloadTemplate = models => () =>
   exportModel(models).catch(console.error)
 
 /*----------  REDUCER  ----------*/

@@ -22,7 +22,8 @@ import {
   closeDialog,
   closeAllFields,
   setCurrentModelTabIdx,
-  toggleField
+  toggleField,
+  closeModelsList
 } from '../redux/ui'
 
 /*----------  APP COMPONENTS  ----------*/
@@ -58,17 +59,12 @@ class Main extends Component {
       updateConfig,
       updateMethod,
       setCurrentModelTabIdx,
-      toggleField
+      toggleField,
+      closeModelsList
     } = this.props
 
     return (
       <div>
-        <ModelList
-          models={models}
-          currentId={currentModel.id}
-          removeModel={removeModel}
-          receiveModel={receiveModel}
-        />
         <CurrentModel
           models={models}
           currentModel={currentModel}
@@ -90,6 +86,14 @@ class Main extends Component {
           updateMethod={updateMethod}
           setTabIdx={setCurrentModelTabIdx}
           toggleField={toggleField}
+        />
+        <ModelList
+          models={models}
+          currentId={currentModel.id}
+          active={ui.modelsListIsOpen}
+          removeModel={removeModel}
+          receiveModel={receiveModel}
+          close={closeModelsList}
         />
         <ConfirmDialog dialog={ui.dialog} closeDialog={closeDialog} />
       </div>
@@ -118,11 +122,12 @@ const mapDispatchToProps = {
   updateAssociationConfig,
   removeAssociation,
   closeAllFields,
-  closeDialog,
+  updateConfig,
+  updateMethod,
   setCurrentModelTabIdx,
   toggleField,
-  updateConfig,
-  updateMethod
+  closeDialog,
+  closeModelsList
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main)
