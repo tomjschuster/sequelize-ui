@@ -10,7 +10,18 @@ import Associations from './Associations'
 import { Tab, Tabs } from 'react-toolbox'
 
 /*----------  COMPONENT  ----------*/
-const CurrentModel = ({ models, currentModel, tabIdx, setTabIdx }) => (
+const CurrentModel = ({
+  models,
+  currentModel,
+  tabIdx,
+  fieldsToggle,
+  addField,
+  updateField,
+  updateValidation,
+  removeField,
+  setTabIdx,
+  toggleField
+}) => (
   <section>
     <h3>Current Model</h3>
     <ModelToolBar
@@ -20,7 +31,15 @@ const CurrentModel = ({ models, currentModel, tabIdx, setTabIdx }) => (
     />
     <Tabs index={tabIdx} onChange={setTabIdx}>
       <Tab label="Fields">
-        <Fields />
+        <Fields
+          currentModel={currentModel}
+          fieldsToggle={fieldsToggle}
+          addField={addField}
+          updateField={updateField}
+          updateValidation={updateValidation}
+          removeField={removeField}
+          toggleField={toggleField}
+        />
       </Tab>
       <Tab label="Configuration">
         <Configuration />

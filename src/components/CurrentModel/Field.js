@@ -1,15 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
-
-/*----------  ACTION/THUNK CREATORS  ----------*/
-
-import {
-  updateField,
-  removeField,
-  updateValidation
-} from '../../redux/currentModel'
-
-import { toggleField } from '../../redux/ui'
 
 /*----------  APP COMPONENTS  ----------*/
 import DataTypeSelect from './DataTypeSelect'
@@ -38,9 +27,9 @@ const isNumber = type => {
 /*----------  COMPONENT  ----------*/
 const Field = ({
   field,
-  updateFieldProps,
+  updateField,
   deleteField,
-  updateFieldValidation,
+  updateValidation,
   toggleField,
   isOpen
 }) => (
@@ -48,35 +37,28 @@ const Field = ({
     <div>
       <Input
         value={field.name}
-        onChange={value => updateFieldProps('name', value, field.id)}
+        onChange={updateField.bind(null, 'name')}
         type="text"
         label="Field Name"
       />
       <DataTypeSelect
         currType={field.type}
-        id={field.id}
-        onClick={updateFieldProps}
+        updateDataType={updateField.bind(null, 'type')}
       />
-      <Button label="DELETE FIELD" onClick={() => deleteField(field.id)} />
-      <Switch
-        onChange={() => toggleField(field.id)}
-        checked={isOpen}
-        label="More Options"
-      />
+      <Button label="DELETE FIELD" onClick={deleteField} />
+      <Switch onChange={toggleField} checked={isOpen} label="More Options" />
     </div>
     {isOpen && (
       <div>
         <Checkbox
           label="UNIQUE"
           checked={Boolean(field.unique)}
-          onChange={isChecked =>
-            updateFieldProps('unique', isChecked, field.id)
-          }
+          onChange={updateField.bind(null, 'unique')}
         />
         {field.unique && (
           <Input
             value={field.uniqueKey}
-            onChange={value => updateFieldProps('uniqueKey', value, field.id)}
+            onChange={updateField.bind(null, 'uniqueKey')}
             type="text"
             label="Unique Key"
           />
@@ -84,52 +66,46 @@ const Field = ({
         <Checkbox
           label="NOT NULL"
           checked={field.allowNull === false}
-          onChange={isChecked =>
-            updateFieldProps('allowNull', !isChecked, field.id)
-          }
+          onChange={updateField.bind(null, 'allowNull')}
         />
         <Checkbox
           label="PRIMARY KEY"
           checked={field.primaryKey}
-          onChange={isChecked =>
-            updateFieldProps('primaryKey', isChecked, field.id)
-          }
+          onChange={updateField.bind(null, 'primaryKey')}
         />
         <Checkbox
           label="AUTOINCREMENT"
           checked={field.autoIncrement}
-          onChange={isChecked =>
-            updateFieldProps('autoIncrement', isChecked, field.id)
-          }
+          onChange={updateField.bind(null, 'autoIncrement')}
         />
         <Input
           value={field.default || ''}
-          onChange={value => updateFieldProps('default', value, field.id)}
+          onChange={updateField.bind(null, 'default')}
           type="text"
           label="Default Value"
         />
         <Input
           value={field.comment || ''}
-          onChange={value => updateFieldProps('comment', value, field.id)}
+          onChange={updateField.bind(null, 'comment')}
           type="text"
           label="Comment"
         />
         <Input
           value={field.field || ''}
-          onChange={value => updateFieldProps('field', value, field.id)}
+          onChange={updateField.bind(null, 'field')}
           type="text"
           label="Field Name"
         />
         <h4>Validation</h4>
         <Input
           value={field.validate.is || ''}
-          onChange={value => updateFieldValidation('is', value, field.id)}
+          onChange={updateValidation.bind(null, 'is')}
           type="text"
           label="is (/^[a-z]+$/i)"
         />
         <Input
           value={field.validate.contains || ''}
-          onChange={value => updateFieldValidation('contains', value, field.id)}
+          onChange={updateValidation.bind(null, 'contains')}
           type="text"
           label="contains"
         />
@@ -137,24 +113,20 @@ const Field = ({
           <Checkbox
             label="isEmail"
             checked={field.validate.isEmail || false}
-            onChange={isChecked =>
-              updateFieldValidation('isEmail', isChecked, field.id)
-            }
+            onChange={updateValidation.bind(null, 'isEmail')}
           />
         )}
         {field.type === 'STRING' && (
           <Checkbox
             label="isUrl"
             checked={field.validate.isUrl || false}
-            onChange={isChecked =>
-              updateFieldValidation('isUrl', isChecked, field.id)
-            }
+            onChange={updateValidation.bind(null, 'isUrl')}
           />
         )}
         {isNumber(field.type) && (
           <Input
             value={field.validate.min || ''}
-            onChange={value => updateFieldValidation('min', value, field.id)}
+            onChange={updateValidation.bind(null, 'min')}
             type="text"
             label="min"
           />
@@ -162,7 +134,7 @@ const Field = ({
         {isNumber(field.type) && (
           <Input
             value={field.validate.max || ''}
-            onChange={value => updateFieldValidation('max', value, field.id)}
+            onChange={updateValidation.bind(null, 'max')}
             type="text"
             label="max"
           />
@@ -172,21 +144,4 @@ const Field = ({
   </Card>
 )
 
-/*----------  CONNECT  ----------*/
-const mapStateToProps = ({ ui: { fieldsToggle } }) => ({ fieldsToggle })
-
-const mapDispatchToProps = dispatch => ({
-  updateFieldProps: (key, val, id) => dispatch(updateField(key, val, id)),
-  updateFieldValidation: (key, val, id) =>
-    dispatch(updateValidation(key, val, id)),
-  deleteField: id => dispatch(removeField(id)),
-  toggleField: id => dispatch(toggleField(id))
-})
-
-const mergeProps = ({ fieldsToggle }, dispatchProps, ownProps) => ({
-  ...dispatchProps,
-  ...ownProps,
-  isOpen: !!fieldsToggle[ownProps.field.id]
-})
-
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Field)
+export default Field

@@ -3,8 +3,19 @@ import { connect } from 'react-redux'
 
 /*----------  ACTION/THUNK CREATORS  ----------*/
 import { removeModel } from '../redux/models'
-import { receiveModel } from '../redux/currentModel'
-import { closeDialog, closeAllFields, setCurrentModelTabIdx } from '../redux/ui'
+import {
+  receiveModel,
+  addField,
+  updateField,
+  removeField,
+  updateValidation
+} from '../redux/currentModel'
+import {
+  closeDialog,
+  closeAllFields,
+  setCurrentModelTabIdx,
+  toggleField
+} from '../redux/ui'
 
 /*----------  APP COMPONENTS  ----------*/
 import ModelList from './ModelList/ModelList'
@@ -24,8 +35,13 @@ class Main extends Component {
       ui,
       receiveModel,
       removeModel,
+      addField,
       closeDialog,
-      setCurrentModelTabIdx
+      setCurrentModelTabIdx,
+      toggleField,
+      updateField,
+      updateValidation,
+      removeField
     } = this.props
 
     return (
@@ -40,7 +56,13 @@ class Main extends Component {
           models={models}
           currentModel={currentModel}
           tabIdx={ui.currentModelTabIdx}
+          fieldsToggle={ui.fieldsToggle}
           setTabIdx={setCurrentModelTabIdx}
+          addField={addField}
+          updateField={updateField}
+          updateValidation={updateValidation}
+          removeField={removeField}
+          toggleField={toggleField}
         />
         <ConfirmDialog dialog={ui.dialog} closeDialog={closeDialog} />
       </div>
@@ -57,9 +79,14 @@ const mapStateToProps = ({ models, currentModel, ui }) => ({
 const mapDispatchToProps = {
   removeModel,
   receiveModel,
+  addField,
+  updateField,
+  updateValidation,
+  removeField,
   closeAllFields,
   closeDialog,
-  setCurrentModelTabIdx
+  setCurrentModelTabIdx,
+  toggleField
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main)

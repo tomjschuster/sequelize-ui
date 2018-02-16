@@ -22,11 +22,11 @@ const source = {
 }
 
 /*----------  COMPONENT  ----------*/
-const DataTypeSelect = ({ currType, id, onClick }) => (
+const DataTypeSelect = ({ currType, updateDataType }) => (
   <Autocomplete
     direction="down"
     multiple={false}
-    onChange={value => onClick('type', value, id)}
+    onChange={updateDataType}
     source={source}
     value={currType}
     label="Data Type"

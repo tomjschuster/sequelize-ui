@@ -60,18 +60,18 @@ export const addField = () => ({
   type: ADD_FIELD
 })
 
-export const updateField = (key, val, id) => ({
+export const updateField = (id, key, val) => ({
   type: UPDATE_FIELD,
   key,
-  val,
-  id
+  id,
+  val
 })
 
-export const updateValidation = (key, val, id) => ({
+export const updateValidation = (id, key, val) => ({
   type: UPDATE_VALIDATION,
   key,
-  val,
-  id
+  id,
+  val
 })
 
 export const removeField = id => ({
@@ -131,6 +131,7 @@ export default (state = initialState, action) => {
     case SET_MODEL_NAME:
       return { ...state, name: action.name }
     case ADD_FIELD:
+      console.log('hyah')
       return {
         ...state,
         fields: [
