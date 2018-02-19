@@ -1,6 +1,9 @@
 import { Actions as Models } from './models'
+import {
+  Actions as CurrentModel,
+  initialState as currentModelInitialState
+} from './currentModel'
 import { guid } from '../utils'
-import { initialState as currentModelInitialState } from './currentModel'
 
 /* ----------  INITIAL STATE  ---------- */
 const initialState = { isOpen: false, newModel: null }
@@ -51,7 +54,8 @@ export default (state = initialState, action) => {
     case Actions.OPEN_MENU:
       return { ...state, isOpen: true }
     case Actions.CLOSE_MENU:
-      return { ...state, isOpen: false }
+    case CurrentModel.RECEIVE:
+      return { ...state, isOpen: false, newModel: null }
     case Actions.TOGGLE_MENU:
       return { ...state, isOpen: !state.isOpen }
     case Actions.ADD_MENU_MODEL:
