@@ -14,49 +14,53 @@ const getModelNameObj = models =>
 
 /* ----------  COMPONENT  ---------- */
 const Sidebar = ({
-  models,
-  menu,
+  // State
   currentId,
-  active,
-  receiveModel,
-  removeModel,
-  close,
-  addModel,
-  updateModelName,
-  cancelModel,
-  saveModel
+  menu,
+  models,
+  // Actions
+  menuActions: {
+    updateMenuModelName,
+    cancelMenuModel,
+    addMenuModel,
+    closeMenu
+  },
+  modelsActions: { removeModel },
+  currentModelActions: { receiveModel },
+  // Thunks
+  modelsThunks: { saveModel }
 }) => {
   const modelNameObj = getModelNameObj(models)
   return (
-    <Drawer active={active} type='left' onOverlayClick={close}>
+    <Drawer active={menu.isOpen} type='left' onOverlayClick={closeMenu}>
       <h2>Sequelize UI</h2>
       <List>
         <ListSubHeader caption='Models' />
         {models.map(model => (
           <ModelListItem
             key={model.id}
+            isCurrent={model.id === currentId}
+            modelNameObj={modelNameObj}
             model={model}
             receiveModel={receiveModel.bind(null, model)}
             removeModel={removeModel.bind(null, model.id)}
-            modelNameObj={modelNameObj}
-            isCurrent={model.id === currentId}
           />
         ))}
         {menu.newModel && (
           <div>
             <Input
               value={menu.newModel.name || ''}
-              onChange={updateModelName}
+              onChange={updateMenuModelName}
             />
             <Button
               label='Create'
               onClick={saveModel.bind(null, menu.newModel, models, true)}
             />
-            <Button label='Cancel' onClick={cancelModel} />
+            <Button label='Cancel' onClick={cancelMenuModel} />
           </div>
         )}
         {!menu.newModel && (
-          <Button icon='add' floating mini onClick={addModel} />
+          <Button icon='add' floating mini onClick={addMenuModel} />
         )}
       </List>
     </Drawer>

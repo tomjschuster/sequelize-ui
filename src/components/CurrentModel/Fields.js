@@ -9,19 +9,18 @@ import { Button } from 'react-toolbox/lib/button'
 /* ----------  COMPONENT  ---------- */
 
 const Fields = ({
-  currentModel,
+  // State
+  fields,
   fieldsToggle,
-  addField,
-  updateField,
-  updateValidation,
-  removeField,
-  toggleField
+  // Actions
+  currentModelActions: { addField, updateField, updateValidation, removeField },
+  uiActions: { toggleField }
 }) => (
   <section>
     <h3>Fields</h3>
     <Button label='+ ADD' onClick={addField} raised primary />
     <div>
-      {currentModel.fields.map(field => (
+      {fields.map(field => (
         <Field
           key={field.id}
           field={field}

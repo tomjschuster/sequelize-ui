@@ -35,11 +35,13 @@ const ModelContent = ({
 
 /* ----------  COMPONENT  ---------- */
 const ModelListItem = ({
-  model,
+  // State
   isCurrent,
+  modelNameObj,
+  model,
+  // Actions
   receiveModel,
-  removeModel,
-  modelNameObj
+  removeModel
 }) => (
   <ListItem
     ripple={false}

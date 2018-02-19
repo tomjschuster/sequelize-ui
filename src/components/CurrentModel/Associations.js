@@ -11,28 +11,32 @@ import { List, ListItem } from 'react-toolbox/lib/list'
 
 /* ----------  COMPONENT  ---------- */
 const Associations = ({
+  // State
   models,
-  currentModel,
-  addAssociation,
-  updateTarget,
-  updateRelationship,
-  updateAssociationConfig,
-  removeAssociation
+  associations,
+  // Actions
+  currentModelActions: {
+    addAssociation,
+    updateRelationship,
+    updateTarget,
+    updateAssociationConfig,
+    removeAssociation
+  }
 }) => (
   <div>
     <h3>Model Associations</h3>
     <Button primary raised label='+ ADD' onClick={addAssociation} />
     <List>
-      {currentModel.associations.map(assoc => (
+      {associations.map(assoc => (
         <ListItem key={assoc.id}>
           <RelationshipDropdown
             id={assoc.id}
-            value={assoc.relationship}
+            relationship={assoc.relationship}
             updateRelationship={updateRelationship.bind(null, assoc.id)}
           />
           <ModelDropdown
             id={assoc.id}
-            value={assoc.target}
+            target={assoc.target}
             models={models}
             updateTarget={updateTarget.bind(null, assoc.id)}
           />

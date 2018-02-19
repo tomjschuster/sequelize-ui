@@ -2,34 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 /* ----------  ACTION/THUNK CREATORS  ---------- */
-import { actionCreators as modelsActions, thunks as modelsThunks } from '../redux/models'
 import {
-  closeMenu,
-  addMenuModel,
-  updateMenuModelName,
-  cancelMenuModel
-} from '../redux/menu'
-import {
-  receiveModel,
-  setModelName,
-  addField,
-  updateField,
-  removeField,
-  updateValidation,
-  addAssociation,
-  updateTarget,
-  updateRelationship,
-  updateAssociationConfig,
-  removeAssociation,
-  updateConfig,
-  updateMethod
-} from '../redux/currentModel'
-import {
-  closeDialog,
-  closeAllFields,
-  setCurrentModelTabIdx,
-  toggleField
-} from '../redux/ui'
+  actionCreators as modelsActions,
+  thunks as modelsThunks
+} from '../redux/models'
+import { actionCreators as menuActions } from '../redux/menu'
+import { actionCreators as currentModelActions } from '../redux/currentModel'
+import { actionCreators as uiActions } from '../redux/ui'
 
 /* ----------  APP COMPONENTS  ---------- */
 import Sidebar from './Sidebar/Sidebar'
@@ -50,26 +29,9 @@ class Main extends Component {
       ui,
       modelsActions,
       modelsThunks,
-      closeMenu,
-      addMenuModel,
-      updateMenuModelName,
-      cancelMenuModel,
-      receiveModel,
-      setModelName,
-      addField,
-      closeDialog,
-      updateField,
-      updateValidation,
-      removeField,
-      addAssociation,
-      updateTarget,
-      updateRelationship,
-      updateAssociationConfig,
-      removeAssociation,
-      updateConfig,
-      updateMethod,
-      setCurrentModelTabIdx,
-      toggleField
+      currentModelActions,
+      uiActions,
+      menuActions
     } = this.props
 
     return (
@@ -81,35 +43,19 @@ class Main extends Component {
           fieldsToggle={ui.fieldsToggle}
           modelsThunks={modelsThunks}
           modelsActions={modelsActions}
-          setModelName={setModelName}
-          addField={addField}
-          updateField={updateField}
-          updateValidation={updateValidation}
-          removeField={removeField}
-          addAssociation={addAssociation}
-          updateTarget={updateTarget}
-          updateRelationship={updateRelationship}
-          updateAssociationConfig={updateAssociationConfig}
-          removeAssociation={removeAssociation}
-          updateConfig={updateConfig}
-          updateMethod={updateMethod}
-          setTabIdx={setCurrentModelTabIdx}
-          toggleField={toggleField}
+          currentModelActions={currentModelActions}
+          uiActions={uiActions}
         />
         <Sidebar
+          currentId={currentModel.id}
           models={models}
           menu={menu}
-          currentId={currentModel.id}
-          addModel={addMenuModel}
-          updateModelName={updateMenuModelName}
-          cancelModel={cancelMenuModel}
-          saveModel={modelsThunks.saveModel}
-          active={menu.isOpen}
-          removeModel={modelsActions.removeModel}
-          receiveModel={receiveModel}
-          close={closeMenu}
+          menuActions={menuActions}
+          modelsActions={modelsActions}
+          currentModelActions={currentModelActions}
+          modelsThunks={modelsThunks}
         />
-        <ConfirmDialog dialog={ui.dialog} closeDialog={closeDialog} />
+        <ConfirmDialog dialog={ui.dialog} closeDialog={uiActions.closeDialog} />
       </div>
     )
   }
@@ -125,28 +71,9 @@ const mapStateToProps = ({ models, menu, currentModel, ui }) => ({
 const mapDispatchToProps = dispatch => ({
   modelsActions: bindActionCreators(modelsActions, dispatch),
   modelsThunks: bindActionCreators(modelsThunks, dispatch),
-  ...bindActionCreators({
-    closeMenu,
-    addMenuModel,
-    updateMenuModelName,
-    cancelMenuModel,
-    receiveModel,
-    setModelName,
-    addField,
-    updateField,
-    updateValidation,
-    removeField,
-    addAssociation,
-    updateTarget,
-    updateRelationship,
-    updateAssociationConfig,
-    removeAssociation,
-    closeAllFields,
-    updateConfig,
-    updateMethod,
-    setCurrentModelTabIdx,
-    toggleField,
-    closeDialog
-  }, dispatch)})
+  currentModelActions: bindActionCreators(currentModelActions, dispatch),
+  uiActions: bindActionCreators(uiActions, dispatch),
+  menuActions: bindActionCreators(menuActions, dispatch)
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main)

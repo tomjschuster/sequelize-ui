@@ -1,5 +1,5 @@
-import { openDialog, messages } from './ui'
-import { resetModel as resetCurrentModel } from './currentModel'
+import { actionCreators as uiActions, messages } from './ui'
+import { actionCreators as currentModelActions } from './currentModel'
 import { exportModel } from '../utils'
 
 /* ----------  INITIAL STATE  ---------- */
@@ -46,46 +46,63 @@ export const thunks = {
   saveModel: (model, models, isNew) => dispatch => {
     console.log('we here', model, models, isNew)
     let isNameError = models.find(
-    ({ id, name }) => name === model.name && id !== model.id
-  )
+      ({ id, name }) => name === model.name && id !== model.id
+    )
     if (isNameError) {
-      return dispatch(openDialog('Validation Error', messages.dupFieldName))
+      return dispatch(
+        uiActions.openDialog('Validation Error', messages.dupFieldName)
+      )
     }
 
     if (!model.name) {
-      return dispatch(openDialog('Validation Error', messages.reqModelName))
+      return dispatch(
+        uiActions.openDialog('Validation Error', messages.reqModelName)
+      )
     }
 
     for (let field of model.fields) {
       if (!field.name) {
-        return dispatch(openDialog('Validation Error', messages.reqFieldName))
+        return dispatch(
+          uiActions.openDialog('Validation Error', messages.reqFieldName)
+        )
       } else if (!field.type) {
-        return dispatch(openDialog('Validation Error', messages.reqFieldType))
+        return dispatch(
+          uiActions.openDialog('Validation Error', messages.reqFieldType)
+        )
       }
     }
 
     for (let association of model.associations) {
       if (!association.relationship) {
         return dispatch(
-        openDialog('Validation Error', messages.reqAssociationRelationship)
-      )
+          uiActions.openDialog(
+            'Validation Error',
+            messages.reqAssociationRelationship
+          )
+        )
       } else if (!association.target) {
         return dispatch(
-        openDialog('Validation Error', messages.reqAssociationTarget)
-      )
+          uiActions.openDialog(
+            'Validation Error',
+            messages.reqAssociationTarget
+          )
+        )
       } else if (
-      association.relationship === 'belongsToMany' &&
-      !association.config.through
-    ) {
+        association.relationship === 'belongsToMany' &&
+        !association.config.through
+      ) {
         return dispatch(
-        openDialog('Validation Error', messages.reqAssociationThrough)
-      )
+          uiActions.openDialog(
+            'Validation Error',
+            messages.reqAssociationThrough
+          )
+        )
       }
     }
 
     if (isNew) dispatch(actionCreators.addModel(model))
     else dispatch(actionCreators.updateModel(model))
-    dispatch(resetCurrentModel())
+    dispatch(currentModelActions.resetModel())
   },
 
   downloadTemplate: models => () => exportModel(models).catch(console.error)

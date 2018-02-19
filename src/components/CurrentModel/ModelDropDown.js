@@ -4,11 +4,17 @@ import React from 'react'
 import Dropdown from 'react-toolbox/lib/dropdown'
 
 /* ----------  COMPONENT  ---------- */
-const ModelDropdown = ({ models, updateTarget, value }) => (
+const ModelDropdown = ({
+  // State
+  models,
+  target,
+  // Actions
+  updateTarget
+}) => (
   <Dropdown
     auto
     label='Target Model'
-    value={value}
+    value={target}
     source={models.map(({ id, name }) => ({ value: id, label: name }))}
     onChange={updateTarget}
   />

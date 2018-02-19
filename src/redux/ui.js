@@ -1,4 +1,4 @@
-import { RECEIVE_MODEL, RESET_MODEL } from './currentModel'
+import { Actions as CurrentModel } from './currentModel'
 import { Actions as Models } from './models'
 
 export const messages = {
@@ -33,49 +33,54 @@ const initialState = {
 }
 
 /* ----------  ACTION TYPES  ---------- */
-const RESET_UI = 'RESET_UI'
-const OPEN_DIALOG = 'OPEN_DIALOG'
-const CLOSE_DIALOG = 'CLOSE_DIALOG'
-const TOGGLE_FIELD = 'TOGGLE_FIELD'
-const CLOSE_ALL_FIELDS = 'CLOSE_ALL_FIELDS'
-const SET_CURRENT_MODEL_TAB_IDX = 'SET_CURRENT_MODEL_TAB_IDX'
+export const Actions = {
+  RESET_UI: 'UI__RESET_UI',
+  OPEN_DIALOG: 'UI__OPEN_DIALOG',
+  CLOSE_DIALOG: 'UI__CLOSE_DIALOG',
+  TOGGLE_FIELD: 'UI__TOGGLE_FIELD',
+  CLOSE_ALL_FIELDS: 'UI__CLOSE_ALL_FIELDS',
+  SET_CURRENT_MODEL_TAB_IDX: 'UI__SET_CURRENT_MODEL_TAB_IDX'
+}
 
 /* ----------  ACTION CREATORS  ---------- */
-export const resetUi = () => ({
-  type: RESET_UI
-})
-export const openDialog = (title, message) => ({
-  type: OPEN_DIALOG,
-  title,
-  message
-})
+export const actionCreators = {
+  resetUi: () => ({
+    type: Actions.RESET_UI
+  }),
 
-export const closeDialog = () => ({
-  type: CLOSE_DIALOG
-})
+  openDialog: (title, message) => ({
+    type: Actions.OPEN_DIALOG,
+    title,
+    message
+  }),
 
-export const toggleField = id => ({
-  type: TOGGLE_FIELD,
-  id
-})
+  closeDialog: () => ({
+    type: Actions.CLOSE_DIALOG
+  }),
 
-export const closeAllFields = () => ({
-  type: CLOSE_ALL_FIELDS
-})
+  toggleField: id => ({
+    type: Actions.TOGGLE_FIELD,
+    id
+  }),
 
-export const setCurrentModelTabIdx = idx => ({
-  type: SET_CURRENT_MODEL_TAB_IDX,
-  idx
-})
+  closeAllFields: () => ({
+    type: Actions.CLOSE_ALL_FIELDS
+  }),
+
+  setCurrentModelTabIdx: idx => ({
+    type: Actions.SET_CURRENT_MODEL_TAB_IDX,
+    idx
+  })
+}
 
 /* ----------  THUNKS  ---------- */
 
 /* ----------  REDUCER  ---------- */
 export default (state = initialState, action) => {
   switch (action.type) {
-    case RESET_UI:
+    case Actions.RESET_UI:
       return initialState
-    case OPEN_DIALOG:
+    case Actions.OPEN_DIALOG:
       return {
         ...state,
         dialog: {
@@ -85,9 +90,9 @@ export default (state = initialState, action) => {
           message: action.message
         }
       }
-    case CLOSE_DIALOG:
+    case Actions.CLOSE_DIALOG:
       return { ...state, dialog: initialDialog }
-    case TOGGLE_FIELD:
+    case Actions.TOGGLE_FIELD:
       return {
         ...state,
         fieldsToggle: {
@@ -95,24 +100,24 @@ export default (state = initialState, action) => {
           [action.id]: !state.fieldsToggle[action.id]
         }
       }
-    case CLOSE_ALL_FIELDS:
+    case Actions.CLOSE_ALL_FIELDS:
     case Models.RECEIVE:
     case Models.ADD:
     case Models.REMOVE:
     case Models.RESET:
     case Models.UPDATE:
-    case RESET_MODEL:
+    case CurrentModel.RESET:
       return {
         ...state,
         fieldsToggle: initialFieldsToggle
       }
-    case RECEIVE_MODEL:
+    case CurrentModel.RECEIVE:
       return {
         ...state,
         fieldsToggle: initialFieldsToggle,
         modelsListIsOpen: initialModelsListIsOpen
       }
-    case SET_CURRENT_MODEL_TAB_IDX:
+    case Actions.SET_CURRENT_MODEL_TAB_IDX:
       return { ...state, currentModelTabIdx: action.idx }
     default:
       return state

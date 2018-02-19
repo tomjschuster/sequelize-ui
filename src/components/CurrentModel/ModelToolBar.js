@@ -6,25 +6,23 @@ import { Button } from 'react-toolbox/lib/button'
 
 /* ----------  COMPONENT  ---------- */
 const ModelToolBar = ({
-  currentModel,
+  // State
+  isNew,
+  name,
+  // Actions
   setModelName,
   createModel,
   saveModel,
-  removeModel,
-  isNew
+  removeModel
 }) => (
   <div>
-    <Input
-      value={currentModel.name}
-      onChange={setModelName}
-      label='Model Name'
-    />
+    <Input value={name} onChange={setModelName} label='Model Name' />
     {!isNew && <Button label='Save' primary raised onClick={saveModel} />}
     {!isNew && <Button label='Delete' raised accent onClick={removeModel} />}
     {isNew && (
       <Button
         label='Create'
-        disabled={!currentModel.name}
+        disabled={name.length === 0}
         primary
         raised
         onClick={createModel}

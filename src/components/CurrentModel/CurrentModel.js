@@ -15,62 +15,42 @@ const CurrentModel = ({
   currentModel,
   tabIdx,
   fieldsToggle,
-  modelsActions,
-  modelsThunks,
-  setModelName,
-  addField,
-  updateField,
-  updateValidation,
-  removeField,
-  addAssociation,
-  updateTarget,
-  updateRelationship,
-  updateAssociationConfig,
-  removeAssociation,
-  updateConfig,
-  updateMethod,
-  setTabIdx,
-  toggleField
+  modelsActions: { removeModel },
+  modelsThunks: { saveModel },
+  currentModelActions,
+  uiActions
 }) => (
   <section>
     <h3>Current Model</h3>
     <ModelToolBar
-      models={models}
-      currentModel={currentModel}
       isNew={!models.find(({ id }) => id === currentModel.id)}
-      setModelName={setModelName}
-      createModel={modelsThunks.saveModel.bind(null, currentModel, models, true)}
-      saveModel={modelsThunks.saveModel.bind(null, currentModel, models, false)}
-      removeModel={modelsActions.removeModel.bind(null, currentModel.id)}
+      name={currentModel.name}
+      setModelName={currentModelActions.setModelName}
+      createModel={saveModel.bind(null, currentModel, models, true)}
+      saveModel={saveModel.bind(null, currentModel, models, false)}
+      removeModel={removeModel.bind(null, currentModel.id)}
     />
-    <Tabs index={tabIdx} onChange={setTabIdx}>
+    <Tabs index={tabIdx} onChange={uiActions.setCurrentModelTabIdx}>
       <Tab label='Fields'>
         <Fields
-          currentModel={currentModel}
+          fields={currentModel.fields}
           fieldsToggle={fieldsToggle}
-          addField={addField}
-          updateField={updateField}
-          updateValidation={updateValidation}
-          removeField={removeField}
-          toggleField={toggleField}
+          currentModelActions={currentModelActions}
+          uiActions={uiActions}
         />
       </Tab>
       <Tab label='Configuration'>
         <Configuration
-          currentModel={currentModel}
-          updateConfig={updateConfig}
-          updateMethod={updateMethod}
+          config={currentModel.config}
+          methods={currentModel.methods}
+          currentModelActions={currentModelActions}
         />
       </Tab>
       <Tab label='Associations'>
         <Associations
           models={models}
-          currentModel={currentModel}
-          addAssociation={addAssociation}
-          updateTarget={updateTarget}
-          updateRelationship={updateRelationship}
-          updateAssociationConfig={updateAssociationConfig}
-          removeAssociation={removeAssociation}
+          associations={currentModel.associations}
+          currentModelActions={currentModelActions}
         />
       </Tab>
     </Tabs>

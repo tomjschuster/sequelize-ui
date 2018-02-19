@@ -2,7 +2,6 @@ import JSZip from 'jszip'
 import Case from 'case'
 import { saveAs } from 'file-saver'
 
-
 const modelHeader =
   "const Sequelize = require('sequelize')\nconst db = require('./_db')\n\n"
 
@@ -173,7 +172,7 @@ const toZip = models => {
 
 export const exportModel = models =>
   toZip(models)
-    .generateAsync({type: 'blob'})
+    .generateAsync({ type: 'blob' })
     .then(blob => saveAs(blob, 'db.zip'))
 
 export const guid = () =>

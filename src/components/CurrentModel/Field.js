@@ -57,7 +57,7 @@ const Field = ({
         />
         {field.unique && (
           <Input
-            value={field.uniqueKey}
+            value={field.uniqueKey || ''}
             onChange={updateField.bind(null, 'uniqueKey')}
             type='text'
             label='Unique Key'
@@ -66,7 +66,7 @@ const Field = ({
         <Checkbox
           label='NOT NULL'
           checked={field.allowNull === false}
-          onChange={updateField.bind(null, 'allowNull')}
+          onChange={value => updateField('allowNull', !value)}
         />
         <Checkbox
           label='PRIMARY KEY'
