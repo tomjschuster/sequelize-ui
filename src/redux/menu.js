@@ -1,4 +1,4 @@
-import * as models from './models'
+import { Actions as Models } from './models'
 import { guid } from '../utils'
 import * as currentModel from './currentModel'
 
@@ -59,7 +59,7 @@ export default (state = initialState, action) => {
       return { ...state, newModel: { ...state.newModel, name: action.name } }
     case CANCEL_MENU_MODEL:
       return { ...state, newModel: null }
-    case models.ADD_MODEL:
+    case Models.ADD:
       return { ...state, newModel: null }
     default:
       return state

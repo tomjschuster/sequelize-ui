@@ -1,11 +1,5 @@
 import { RECEIVE_MODEL, RESET_MODEL } from './currentModel'
-import {
-  RECEIVE_MODELS,
-  ADD_MODEL,
-  REMOVE_MODEL,
-  RESET_MODELS,
-  UPDATE_MODEL
-} from './models'
+import { Actions as Models } from './models'
 
 export const messages = {
   reqModelName: 'Please give your model a name.',
@@ -102,11 +96,11 @@ export default (state = initialState, action) => {
         }
       }
     case CLOSE_ALL_FIELDS:
-    case RECEIVE_MODELS:
-    case ADD_MODEL:
-    case REMOVE_MODEL:
-    case RESET_MODELS:
-    case UPDATE_MODEL:
+    case Models.RECEIVE:
+    case Models.ADD:
+    case Models.REMOVE:
+    case Models.RESET:
+    case Models.UPDATE:
     case RESET_MODEL:
       return {
         ...state,

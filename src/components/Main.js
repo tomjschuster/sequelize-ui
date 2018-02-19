@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-
+import { bindActionCreators } from 'redux'
 /* ----------  ACTION/THUNK CREATORS  ---------- */
-import { saveModel, removeModel } from '../redux/models'
+import { actionCreators as modelsActions, thunks as modelsThunks } from '../redux/models'
 import {
   closeMenu,
   addMenuModel,
@@ -48,14 +48,14 @@ class Main extends Component {
       menu,
       currentModel,
       ui,
+      modelsActions,
+      modelsThunks,
       closeMenu,
       addMenuModel,
       updateMenuModelName,
       cancelMenuModel,
       receiveModel,
-      removeModel,
       setModelName,
-      saveModel,
       addField,
       closeDialog,
       updateField,
@@ -79,9 +79,9 @@ class Main extends Component {
           currentModel={currentModel}
           tabIdx={ui.currentModelTabIdx}
           fieldsToggle={ui.fieldsToggle}
+          modelsThunks={modelsThunks}
+          modelsActions={modelsActions}
           setModelName={setModelName}
-          saveModel={saveModel}
-          removeModel={removeModel}
           addField={addField}
           updateField={updateField}
           updateValidation={updateValidation}
@@ -103,9 +103,9 @@ class Main extends Component {
           addModel={addMenuModel}
           updateModelName={updateMenuModelName}
           cancelModel={cancelMenuModel}
-          saveModel={saveModel}
+          saveModel={modelsThunks.saveModel}
           active={menu.isOpen}
-          removeModel={removeModel}
+          removeModel={modelsActions.removeModel}
           receiveModel={receiveModel}
           close={closeMenu}
         />
@@ -122,30 +122,31 @@ const mapStateToProps = ({ models, menu, currentModel, ui }) => ({
   currentModel,
   ui
 })
-const mapDispatchToProps = {
-  closeMenu,
-  addMenuModel,
-  updateMenuModelName,
-  cancelMenuModel,
-  receiveModel,
-  removeModel,
-  setModelName,
-  saveModel,
-  addField,
-  updateField,
-  updateValidation,
-  removeField,
-  addAssociation,
-  updateTarget,
-  updateRelationship,
-  updateAssociationConfig,
-  removeAssociation,
-  closeAllFields,
-  updateConfig,
-  updateMethod,
-  setCurrentModelTabIdx,
-  toggleField,
-  closeDialog
-}
+const mapDispatchToProps = dispatch => ({
+  modelsActions: bindActionCreators(modelsActions, dispatch),
+  modelsThunks: bindActionCreators(modelsThunks, dispatch),
+  ...bindActionCreators({
+    closeMenu,
+    addMenuModel,
+    updateMenuModelName,
+    cancelMenuModel,
+    receiveModel,
+    setModelName,
+    addField,
+    updateField,
+    updateValidation,
+    removeField,
+    addAssociation,
+    updateTarget,
+    updateRelationship,
+    updateAssociationConfig,
+    removeAssociation,
+    closeAllFields,
+    updateConfig,
+    updateMethod,
+    setCurrentModelTabIdx,
+    toggleField,
+    closeDialog
+  }, dispatch)})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main)

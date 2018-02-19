@@ -1,4 +1,4 @@
-import { REMOVE_MODEL } from './models'
+import { Actions as Models } from './models'
 import { guid } from '../utils'
 
 /* ----------  INITIAL STATE  ---------- */
@@ -217,7 +217,7 @@ export default (state = initialState, action) => {
         ...state,
         associations: state.associations.filter(({ id }) => id !== action.id)
       }
-    case REMOVE_MODEL:
+    case Models.REMOVE:
       return action.id === state.id ? initialState : state
     default:
       return state
