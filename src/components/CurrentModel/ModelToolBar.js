@@ -1,10 +1,10 @@
 import React from 'react'
 
-/*----------  UI LIBRARY COMPONENTS  ----------*/
+/* ----------  UI LIBRARY COMPONENTS  ---------- */
 import Input from 'react-toolbox/lib/input'
 import { Button } from 'react-toolbox/lib/button'
 
-/*----------  COMPONENT  ----------*/
+/* ----------  COMPONENT  ---------- */
 const ModelToolBar = ({
   currentModel,
   setModelName,
@@ -17,13 +17,13 @@ const ModelToolBar = ({
     <Input
       value={currentModel.name}
       onChange={setModelName}
-      label="Model Name"
+      label='Model Name'
     />
-    {!isNew && <Button label="Save" primary raised onClick={saveModel} />}
-    {!isNew && <Button label="Delete" raised accent onClick={removeModel} />}
+    {!isNew && <Button label='Save' primary raised onClick={saveModel} />}
+    {!isNew && <Button label='Delete' raised accent onClick={removeModel} />}
     {isNew && (
       <Button
-        label="Create"
+        label='Create'
         disabled={!currentModel.name}
         primary
         raised

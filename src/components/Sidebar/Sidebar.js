@@ -2,17 +2,17 @@ import React from 'react'
 
 import ModelListItem from './ModelListItem'
 
-/*----------  UI LIBRARY COMPONENTS  ----------*/
+/* ----------  UI LIBRARY COMPONENTS  ---------- */
 import Drawer from 'react-toolbox/lib/drawer'
 import Input from 'react-toolbox/lib/input'
 import { List, ListSubHeader } from 'react-toolbox/lib/list'
 import { Button } from 'react-toolbox/lib/button'
 
-/*----------  HELPERS  ----------*/
+/* ----------  HELPERS  ---------- */
 const getModelNameObj = models =>
   models.reduce((acc, m) => ({ ...acc, [m.id]: m.name }), {})
 
-/*----------  COMPONENT  ----------*/
+/* ----------  COMPONENT  ---------- */
 const Sidebar = ({
   models,
   menu,
@@ -28,10 +28,10 @@ const Sidebar = ({
 }) => {
   const modelNameObj = getModelNameObj(models)
   return (
-    <Drawer active={active} type="left" onOverlayClick={close}>
+    <Drawer active={active} type='left' onOverlayClick={close}>
       <h2>Sequelize UI</h2>
       <List>
-        <ListSubHeader caption="Models" />
+        <ListSubHeader caption='Models' />
         {models.map(model => (
           <ModelListItem
             key={model.id}
@@ -49,14 +49,14 @@ const Sidebar = ({
               onChange={updateModelName}
             />
             <Button
-              label="Create"
+              label='Create'
               onClick={saveModel.bind(null, menu.newModel, models, true)}
             />
-            <Button label="Cancel" onClick={cancelModel} />
+            <Button label='Cancel' onClick={cancelModel} />
           </div>
         )}
         {!menu.newModel && (
-          <Button icon="add" floating mini onClick={addModel} />
+          <Button icon='add' floating mini onClick={addModel} />
         )}
       </List>
     </Drawer>

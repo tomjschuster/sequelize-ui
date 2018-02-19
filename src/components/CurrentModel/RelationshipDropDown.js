@@ -1,9 +1,9 @@
 import React from 'react'
 
-/*----------  UI LIBRARY COMPONENTS  ----------*/
+/* ----------  UI LIBRARY COMPONENTS  ---------- */
 import Dropdown from 'react-toolbox/lib/dropdown'
 
-/*----------  CONSTANTS  ----------*/
+/* ----------  CONSTANTS  ---------- */
 const relationships = [
   { label: 'Belongs To', value: 'belongsTo' },
   { label: 'Has One', value: 'hasOne' },
@@ -11,11 +11,11 @@ const relationships = [
   { label: 'Belongs To Many', value: 'belongsToMany' }
 ]
 
-/*----------  COMPONENT  ----------*/
+/* ----------  COMPONENT  ---------- */
 const RelationshipDropDown = ({ updateRelationship, value }) => (
   <Dropdown
     auto
-    label="Relationship"
+    label='Relationship'
     source={relationships}
     value={value}
     onChange={updateRelationship}

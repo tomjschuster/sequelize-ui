@@ -1,9 +1,9 @@
 import React from 'react'
 
-/*----------  UI LIBRARY COMPONENTS  ----------*/
+/* ----------  UI LIBRARY COMPONENTS  ---------- */
 import Dialog from 'react-toolbox/lib/dialog'
 
-/*----------  COMPONENT  ----------*/
+/* ----------  COMPONENT  ---------- */
 const ConfirmDialog = ({ dialog: { open, title, message }, closeDialog }) => (
   <Dialog
     title={title}

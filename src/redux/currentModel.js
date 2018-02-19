@@ -1,7 +1,7 @@
 import { REMOVE_MODEL } from './models'
 import { guid } from '../utils'
 
-/*----------  INITIAL STATE  ----------*/
+/* ----------  INITIAL STATE  ---------- */
 export const initialState = {
   id: guid(),
   name: '',
@@ -25,7 +25,7 @@ export const initialState = {
   associations: []
 }
 
-/*----------  ACTION TYPES  ----------*/
+/* ----------  ACTION TYPES  ---------- */
 export const RECEIVE_MODEL = 'RECEIVE_MODEL'
 export const RESET_MODEL = 'RESET_MODEL'
 const SET_MODEL_NAME = 'SET_MODEL_NAME'
@@ -41,7 +41,7 @@ const UPDATE_RELATIONSHIP = 'UPDATE_RELATIONSHIP'
 const UPDATE_ASSOCIATION_CONFIG = 'UPDATE_ASSOCIATION_CONFIG'
 const REMOVE_ASSOCIATION = 'REMOVE_ASSOCIATION'
 
-/*----------  ACTION CREATORS  ----------*/
+/* ----------  ACTION CREATORS  ---------- */
 export const receiveModel = model => ({
   type: RECEIVE_MODEL,
   model
@@ -119,9 +119,9 @@ export const removeAssociation = id => ({
   id
 })
 
-/*----------  THUNKS  ----------*/
+/* ----------  THUNKS  ---------- */
 
-/*----------  REDUCER  ----------*/
+/* ----------  REDUCER  ---------- */
 export default (state = initialState, action) => {
   switch (action.type) {
     case RECEIVE_MODEL:
@@ -155,9 +155,9 @@ export default (state = initialState, action) => {
           field =>
             field.id === action.id
               ? {
-                  ...field,
-                  validate: { ...field.validate, [action.key]: action.val }
-                }
+                ...field,
+                validate: { ...field.validate, [action.key]: action.val }
+              }
               : field
         )
       }
@@ -206,9 +206,9 @@ export default (state = initialState, action) => {
           assoc =>
             assoc.id === action.id
               ? {
-                  ...assoc,
-                  config: { ...assoc.config, [action.key]: action.val }
-                }
+                ...assoc,
+                config: { ...assoc.config, [action.key]: action.val }
+              }
               : assoc
         )
       }

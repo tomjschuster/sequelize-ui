@@ -2,17 +2,17 @@ import { openDialog, messages } from './ui'
 import { resetModel as resetCurrentModel } from './currentModel'
 import { exportModel } from '../utils'
 
-/*----------  INITIAL STATE  ----------*/
+/* ----------  INITIAL STATE  ---------- */
 const initialState = []
 
-/*----------  ACTION TYPES  ----------*/
+/* ----------  ACTION TYPES  ---------- */
 export const RECEIVE_MODELS = 'RECEIVE_MODELS'
 export const ADD_MODEL = 'ADD_MODEL'
 export const REMOVE_MODEL = 'REMOVE_MODEL'
 export const RESET_MODELS = 'RESET_MODELS'
 export const UPDATE_MODEL = 'UPDATE_MODEL'
 
-/*----------  ACTION CREATORS  ----------*/
+/* ----------  ACTION CREATORS  ---------- */
 export const receiveModels = models => ({
   type: RECEIVE_MODELS,
   models
@@ -37,7 +37,7 @@ export const reset = () => ({
   type: RESET_MODELS
 })
 
-/*----------  THUNKS  ----------*/
+/* ----------  THUNKS  ---------- */
 export const saveModel = (model, models, isNew) => dispatch => {
   console.log('we here', model, models, isNew)
   let isNameError = models.find(
@@ -86,7 +86,7 @@ export const saveModel = (model, models, isNew) => dispatch => {
 export const downloadTemplate = models => () =>
   exportModel(models).catch(console.error)
 
-/*----------  REDUCER  ----------*/
+/* ----------  REDUCER  ---------- */
 export default (state = initialState, action) => {
   switch (action.type) {
     case RECEIVE_MODELS:

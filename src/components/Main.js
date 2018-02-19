@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-/*----------  ACTION/THUNK CREATORS  ----------*/
+/* ----------  ACTION/THUNK CREATORS  ---------- */
 import { saveModel, removeModel } from '../redux/models'
 import {
   closeMenu,
@@ -31,18 +31,18 @@ import {
   toggleField
 } from '../redux/ui'
 
-/*----------  APP COMPONENTS  ----------*/
+/* ----------  APP COMPONENTS  ---------- */
 import Sidebar from './Sidebar/Sidebar'
 import CurrentModel from './CurrentModel/CurrentModel'
 import ConfirmDialog from './ConfirmDialog'
 
-/*----------  COMPONENT  ----------*/
+/* ----------  COMPONENT  ---------- */
 class Main extends Component {
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.props.closeAllFields()
   }
 
-  render() {
+  render () {
     const {
       models,
       menu,
@@ -115,7 +115,7 @@ class Main extends Component {
   }
 }
 
-/*----------  CONNECT  ----------*/
+/* ----------  CONNECT  ---------- */
 const mapStateToProps = ({ models, menu, currentModel, ui }) => ({
   models,
   menu,

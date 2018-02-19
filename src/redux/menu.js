@@ -1,10 +1,11 @@
 import * as models from './models'
 import { guid } from '../utils'
 import * as currentModel from './currentModel'
-/*----------  INITIAL STATE  ----------*/
+
+/* ----------  INITIAL STATE  ---------- */
 const initialState = { isOpen: false, newModel: null }
 
-/*----------  ACTION TYPES  ----------*/
+/* ----------  ACTION TYPES  ---------- */
 export const OPEN_MENU = 'OPEN_MENU'
 export const CLOSE_MENU = 'CLOSE_MENU'
 export const TOGGLE_MENU = 'TOGGLE_MENU'
@@ -12,7 +13,7 @@ export const ADD_MENU_MODEL = 'ADD_MENU_MODEL'
 export const UPDATE_MENU_MODEL_NAME = 'UPDATE_MENU_MODEL_NAME'
 export const CANCEL_MENU_MODEL = 'CANCEL_MENU_MODEL'
 
-/*----------  ACTION CREATORS  ----------*/
+/* ----------  ACTION CREATORS  ---------- */
 export const openMenu = () => ({
   type: OPEN_MENU
 })
@@ -38,9 +39,9 @@ export const cancelMenuModel = () => ({
   type: CANCEL_MENU_MODEL
 })
 
-/*----------  THUNKS  ----------*/
+/* ----------  THUNKS  ---------- */
 
-/*----------  REDUCER  ----------*/
+/* ----------  REDUCER  ---------- */
 export default (state = initialState, action) => {
   switch (action.type) {
     case OPEN_MENU:

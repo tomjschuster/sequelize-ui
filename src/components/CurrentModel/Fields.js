@@ -1,12 +1,12 @@
 import React from 'react'
 
-/*----------  APP COMPONENTS  ----------*/
+/* ----------  APP COMPONENTS  ---------- */
 import Field from './Field'
 
-/*----------  UI LIBRARY COMPONENTS  ----------*/
+/* ----------  UI LIBRARY COMPONENTS  ---------- */
 import { Button } from 'react-toolbox/lib/button'
 
-/*----------  COMPONENT  ----------*/
+/* ----------  COMPONENT  ---------- */
 
 const Fields = ({
   currentModel,
@@ -19,7 +19,7 @@ const Fields = ({
 }) => (
   <section>
     <h3>Fields</h3>
-    <Button label="+ ADD" onClick={addField} raised primary />
+    <Button label='+ ADD' onClick={addField} raised primary />
     <div>
       {currentModel.fields.map(field => (
         <Field

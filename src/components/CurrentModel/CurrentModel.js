@@ -1,15 +1,15 @@
 import React from 'react'
 
-/*----------  APP COMPONENTS  ----------*/
+/* ----------  APP COMPONENTS  ---------- */
 import ModelToolBar from './ModelToolBar'
 import Fields from './Fields'
 import Configuration from './Configuration'
 import Associations from './Associations'
 
-/*----------  UI LIBRARY COMPONENTS  ----------*/
+/* ----------  UI LIBRARY COMPONENTS  ---------- */
 import { Tab, Tabs } from 'react-toolbox'
 
-/*----------  COMPONENT  ----------*/
+/* ----------  COMPONENT  ---------- */
 const CurrentModel = ({
   models,
   currentModel,
@@ -44,7 +44,7 @@ const CurrentModel = ({
       removeModel={removeModel.bind(null, currentModel.id)}
     />
     <Tabs index={tabIdx} onChange={setTabIdx}>
-      <Tab label="Fields">
+      <Tab label='Fields'>
         <Fields
           currentModel={currentModel}
           fieldsToggle={fieldsToggle}
@@ -55,14 +55,14 @@ const CurrentModel = ({
           toggleField={toggleField}
         />
       </Tab>
-      <Tab label="Configuration">
+      <Tab label='Configuration'>
         <Configuration
           currentModel={currentModel}
           updateConfig={updateConfig}
           updateMethod={updateMethod}
         />
       </Tab>
-      <Tab label="Associations">
+      <Tab label='Associations'>
         <Associations
           models={models}
           currentModel={currentModel}

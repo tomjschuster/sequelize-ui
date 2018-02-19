@@ -2,6 +2,7 @@ import JSZip from 'jszip'
 import Case from 'case'
 import { saveAs } from 'file-saver'
 
+
 const modelHeader =
   "const Sequelize = require('sequelize')\nconst db = require('./_db')\n\n"
 
@@ -172,13 +173,13 @@ const toZip = models => {
 
 export const exportModel = models =>
   toZip(models)
-    .generateAsync({ type: 'blob' })
+    .generateAsync({type: 'blob'})
     .then(blob => saveAs(blob, 'db.zip'))
 
 export const guid = () =>
   ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
     (
       c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+      (window.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
     ).toString(16)
   )

@@ -1,9 +1,9 @@
 import React from 'react'
 
-/*----------  UI LIBRARY COMPONENTS  ----------*/
+/* ----------  UI LIBRARY COMPONENTS  ---------- */
 import { ListItem } from 'react-toolbox/lib/list'
 import { IconButton } from 'react-toolbox/lib/button'
-/*----------  HELPERS  ----------*/
+/* ----------  HELPERS  ---------- */
 const fieldsText = fields => {
   return `Fields: ${fields.map(({ name }) => name).join(', ')}`
 }
@@ -19,7 +19,7 @@ const associationsText = (associations, modelNameObj) => {
   return `Associations: ${Object.values(targets).join(', ')}`
 }
 
-/*----------  LOCAL COMPONENTS  ----------*/
+/* ----------  LOCAL COMPONENTS  ---------- */
 const ModelContent = ({
   model: { name, fields, associations },
   modelNameObj
@@ -33,7 +33,7 @@ const ModelContent = ({
   </div>
 )
 
-/*----------  COMPONENT  ----------*/
+/* ----------  COMPONENT  ---------- */
 const ModelListItem = ({
   model,
   isCurrent,
@@ -46,10 +46,10 @@ const ModelListItem = ({
     className={isCurrent ? 'active' : ''}
     itemContent={<ModelContent model={model} modelNameObj={modelNameObj} />}
     rightActions={[
-      <IconButton key="edit-button" icon="edit" onClick={receiveModel} />,
+      <IconButton key='edit-button' icon='edit' onClick={receiveModel} />,
       <IconButton
-        key="delete-button"
-        icon="delete_forever"
+        key='delete-button'
+        icon='delete_forever'
         onClick={removeModel}
       />
     ]}

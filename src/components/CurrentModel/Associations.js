@@ -1,15 +1,15 @@
 import React from 'react'
 
-/*----------  APP COMPONENTS  ----------*/
+/* ----------  APP COMPONENTS  ---------- */
 import RelationshipDropdown from './RelationshipDropDown'
 import ModelDropdown from './ModelDropDown'
 
-/*----------  UI LIBRARY COMPONENTS  ----------*/
+/* ----------  UI LIBRARY COMPONENTS  ---------- */
 import Input from 'react-toolbox/lib/input'
 import { Button } from 'react-toolbox/lib/button'
 import { List, ListItem } from 'react-toolbox/lib/list'
 
-/*----------  COMPONENT  ----------*/
+/* ----------  COMPONENT  ---------- */
 const Associations = ({
   models,
   currentModel,
@@ -21,7 +21,7 @@ const Associations = ({
 }) => (
   <div>
     <h3>Model Associations</h3>
-    <Button primary raised label="+ ADD" onClick={addAssociation} />
+    <Button primary raised label='+ ADD' onClick={addAssociation} />
     <List>
       {currentModel.associations.map(assoc => (
         <ListItem key={assoc.id}>
@@ -37,20 +37,20 @@ const Associations = ({
             updateTarget={updateTarget.bind(null, assoc.id)}
           />
           <Input
-            id="as-input"
+            id='as-input'
             value={assoc.config.as || ''}
             onChange={updateAssociationConfig.bind(null, assoc.id, 'as')}
-            type="text"
+            type='text'
           />
           <span>through</span>
           <Input
-            id="through-input"
+            id='through-input'
             value={assoc.config.through || ''}
             onChange={updateAssociationConfig.bind(null, assoc.id, 'through')}
-            type="text"
+            type='text'
           />
           <Button
-            label="DELETE"
+            label='DELETE'
             onClick={removeAssociation.bind(null, assoc.id)}
           />
         </ListItem>

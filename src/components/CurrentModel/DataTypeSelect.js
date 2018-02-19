@@ -1,9 +1,9 @@
 import React from 'react'
 
-/*----------  UI LIBRARY COMPONENTS  ----------*/
+/* ----------  UI LIBRARY COMPONENTS  ---------- */
 import Autocomplete from 'react-toolbox/lib/autocomplete'
 
-/*----------  CONSTANTS  ----------*/
+/* ----------  CONSTANTS  ---------- */
 const source = {
   STRING: 'String',
   TEXT: 'Text',
@@ -21,15 +21,15 @@ const source = {
   UUID: 'UUID'
 }
 
-/*----------  COMPONENT  ----------*/
+/* ----------  COMPONENT  ---------- */
 const DataTypeSelect = ({ currType, updateDataType }) => (
   <Autocomplete
-    direction="down"
+    direction='down'
     multiple={false}
     onChange={updateDataType}
     source={source}
     value={currType}
-    label="Data Type"
+    label='Data Type'
   />
 )
 

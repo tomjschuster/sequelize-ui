@@ -1,3 +1,12 @@
+import { RECEIVE_MODEL, RESET_MODEL } from './currentModel'
+import {
+  RECEIVE_MODELS,
+  ADD_MODEL,
+  REMOVE_MODEL,
+  RESET_MODELS,
+  UPDATE_MODEL
+} from './models'
+
 export const messages = {
   reqModelName: 'Please give your model a name.',
   reqFieldName: 'Every field must have a name.',
@@ -9,16 +18,7 @@ export const messages = {
   dupFieldName: 'Table name already exists. Please select another name.'
 }
 
-import { RECEIVE_MODEL, RESET_MODEL } from './currentModel'
-import {
-  RECEIVE_MODELS,
-  ADD_MODEL,
-  REMOVE_MODEL,
-  RESET_MODELS,
-  UPDATE_MODEL
-} from './models'
-
-/*----------  INITIAL STATE  ----------*/
+/* ----------  INITIAL STATE  ---------- */
 const initialDialog = {
   open: false,
   title: '',
@@ -38,7 +38,7 @@ const initialState = {
   modelsListIsOpen: initialModelsListIsOpen
 }
 
-/*----------  ACTION TYPES  ----------*/
+/* ----------  ACTION TYPES  ---------- */
 const RESET_UI = 'RESET_UI'
 const OPEN_DIALOG = 'OPEN_DIALOG'
 const CLOSE_DIALOG = 'CLOSE_DIALOG'
@@ -46,7 +46,7 @@ const TOGGLE_FIELD = 'TOGGLE_FIELD'
 const CLOSE_ALL_FIELDS = 'CLOSE_ALL_FIELDS'
 const SET_CURRENT_MODEL_TAB_IDX = 'SET_CURRENT_MODEL_TAB_IDX'
 
-/*----------  ACTION CREATORS  ----------*/
+/* ----------  ACTION CREATORS  ---------- */
 export const resetUi = () => ({
   type: RESET_UI
 })
@@ -74,9 +74,9 @@ export const setCurrentModelTabIdx = idx => ({
   idx
 })
 
-/*----------  THUNKS  ----------*/
+/* ----------  THUNKS  ---------- */
 
-/*----------  REDUCER  ----------*/
+/* ----------  REDUCER  ---------- */
 export default (state = initialState, action) => {
   switch (action.type) {
     case RESET_UI:

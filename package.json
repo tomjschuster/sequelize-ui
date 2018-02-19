@@ -1,31 +1,42 @@
 {
   "name": "sequelize-ui",
   "version": "0.1.0",
-  "description":
-    "GUI for designing relational database schema and exporting as formatted Sequlize template.",
+  "description": "GUI for designing relational database schema and exporting as formatted Sequlize template.",
   "homepage": "http://sequelizeui.herokuapp.com",
   "bugs": {
     "url": "https://github.com/tomjschuster/sequelize-ui/issues",
     "email": "tomjschuster@gmail.com"
   },
   "license": "ISC",
-  "author":
-    "Tom Schuster <tomjschuster@gmail.com> (https://github.com/tomjschuster)",
+  "author": "Tom Schuster <tomjschuster@gmail.com> (https://github.com/tomjschuster)",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/tomjschuster/sequelize-ui"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "build-watch": "webpack -w",
-    "start:dev": "webpack -w & nodemon server",
+    "test": "npm run lint",
+    "lint": "./node_modules/standard/bin/cmd.js",
+    "format": "./node_modules/standard/bin/cmd.js --fix",
+    "build:dev": "webpack",
+    "build:dev-watch": "webpack --watch",
+    "start:dev": "nodemon server",
+    "build:prod": "webpack --optimize-minimize --config ./webpack.prod.js",
     "start": "node server",
-    "heroku-postbuild":
-      "webpack -p --config ./webpack.prod.config.js --progress"
+    "heroku-postbuild": "npm run build:prod"
   },
-  "keywords": ["sequelize", "orm", "sql", "schema", "model", "gui"],
+  "keywords": [
+    "sequelize",
+    "orm",
+    "sql",
+    "schema",
+    "model",
+    "gui"
+  ],
+  "standard": {
+    "parser": "babel-eslint",
+    "plugins": ["react"]
+  },
   "dependencies": {
     "autoprefixer": "^7.2.6",
     "axios": "^0.16.1",
@@ -62,11 +73,10 @@
     "webpack": "^2.5.1"
   },
   "devDependencies": {
-    "babel-eslint": "^7.2.3",
-    "eslint": "^3.19.0",
-    "eslint-config-fullstack": "^2.8.1",
-    "eslint-plugin-react": "^7.0.0",
-    "nodemon": "^1.14.12"
+    "babel-eslint": "^8.2.1",
+    "eslint-plugin-react": "^7.6.1",
+    "nodemon": "^1.14.12",
+    "standard": "^10.0.3"
   },
   "engines": {
     "node": "9.5.0"
