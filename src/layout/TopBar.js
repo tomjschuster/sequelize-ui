@@ -11,7 +11,7 @@ import AppBar from 'react-toolbox/lib/app_bar'
 import FontIcon from 'react-toolbox/lib/font_icon'
 
 /* ----------  COMPONENT  ---------- */
-const App = ({
+const TopBar = ({
   children,
   // State
   models,
@@ -19,16 +19,15 @@ const App = ({
   modelsThunks: { downloadTemplate },
   menuActions: { toggleMenu }
 }) => (
-  <div>
-    <AppBar
-      title='Sequelize UI'
-      leftIcon={<FontIcon value='menu' />}
-      rightIcon={<FontIcon value='file_download' />}
-      onLeftIconClick={toggleMenu}
-      onRightIconClick={downloadTemplate.bind(null, models)}
-    />
+  <AppBar
+    title='Sequelize UI'
+    leftIcon={<FontIcon value='menu' />}
+    rightIcon={<FontIcon value='file_download' />}
+    onLeftIconClick={toggleMenu}
+    onRightIconClick={downloadTemplate.bind(null, models)}
+  >
     {children}
-  </div>
+  </AppBar>
 )
 
 /* ----------  CONNECT  ---------- */
@@ -39,4 +38,4 @@ const mapDispatchToProps = dispatch => ({
   menuActions: bindActionCreators(menuActions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(TopBar)

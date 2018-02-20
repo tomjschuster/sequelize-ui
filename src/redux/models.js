@@ -44,65 +44,35 @@ export const actionCreators = {
 /* ----------  THUNKS  ---------- */
 export const thunks = {
   saveModel: (model, models, isNew) => dispatch => {
-    console.log('we here', model, models, isNew)
     let isNameError = models.find(
       ({ id, name }) => name === model.name && id !== model.id
     )
-    if (isNameError) {
-      return dispatch(
-        uiActions.openDialog('Validation Error', messages.dupFieldName)
-      )
-    }
-
-    if (!model.name) {
-      return dispatch(
-        uiActions.openDialog('Validation Error', messages.reqModelName)
-      )
-    }
+    if (isNameError) return Promise.reject(messages.dupeFieldName)
+    if (!model.name) return Promise.reject(messages.reqModelName)
 
     for (let field of model.fields) {
-      if (!field.name) {
-        return dispatch(
-          uiActions.openDialog('Validation Error', messages.reqFieldName)
-        )
-      } else if (!field.type) {
-        return dispatch(
-          uiActions.openDialog('Validation Error', messages.reqFieldType)
-        )
-      }
+      if (!field.name) return Promise.reject(messages.reqFieldName)
+      if (!field.type) return Promise.reject(messages.reqFieldType)
     }
 
     for (let association of model.associations) {
       if (!association.relationship) {
-        return dispatch(
-          uiActions.openDialog(
-            'Validation Error',
-            messages.reqAssociationRelationship
-          )
-        )
-      } else if (!association.target) {
-        return dispatch(
-          uiActions.openDialog(
-            'Validation Error',
-            messages.reqAssociationTarget
-          )
-        )
-      } else if (
+        return Promise.reject(messages.reqAssociationRelationship)
+      }
+
+      if (!association.target) {
+        return Promise.reject(messages.reqAssociationTarget)
+      }
+
+      const needsThrough =
         association.relationship === 'belongsToMany' &&
         !association.config.through
-      ) {
-        return dispatch(
-          uiActions.openDialog(
-            'Validation Error',
-            messages.reqAssociationThrough
-          )
-        )
-      }
+
+      if (needsThrough) return Promise.reject(messages.reqAssociationThrough)
     }
 
-    if (isNew) dispatch(actionCreators.addModel(model))
-    else dispatch(actionCreators.updateModel(model))
-    dispatch(currentModelActions.resetModel())
+    if (isNew) return Promise.resolve(dispatch(actionCreators.addModel(model)))
+    else return Promise.resolve(dispatch(actionCreators.updateModel(model)))
   },
 
   downloadTemplate: models => () => exportModel(models).catch(console.error)

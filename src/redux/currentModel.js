@@ -124,6 +124,12 @@ export const actionCreators = {
 }
 
 /* ----------  THUNKS  ---------- */
+export const thunks = {
+  setModel: id => (dispatch, getState) => {
+    const currentModel = getState().models.find(model => model.id === id)
+    if (currentModel) dispatch(actionCreators.receiveModel(currentModel))
+  }
+}
 
 /* ----------  REDUCER  ---------- */
 export default (state = initialState, action) => {

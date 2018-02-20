@@ -10,24 +10,29 @@ import Associations from './Associations'
 import { Tab, Tabs } from 'react-toolbox'
 
 /* ----------  COMPONENT  ---------- */
-const CurrentModel = ({
-  models,
-  currentModel,
+const SingleModel = ({
+  // State
+  isNew,
   tabIdx,
   fieldsToggle,
-  modelsActions: { removeModel },
-  modelsThunks: { saveModel },
+  models,
+  currentModel,
+  // Actions
+  uiActions,
   currentModelActions,
-  uiActions
+  modelsActions: { removeModel },
+  // Thunks]
+  createModel,
+  saveModel
 }) => (
   <section>
-    <h3>Current Model</h3>
+    {isNew ? <h3>Create a Model</h3> : <h3>Edit a Model</h3>}
     <ModelToolBar
-      isNew={!models.find(({ id }) => id === currentModel.id)}
+      isNew={isNew}
       name={currentModel.name}
       setModelName={currentModelActions.setModelName}
-      createModel={saveModel.bind(null, currentModel, models, true)}
-      saveModel={saveModel.bind(null, currentModel, models, false)}
+      createModel={createModel}
+      saveModel={saveModel}
       removeModel={removeModel.bind(null, currentModel.id)}
     />
     <Tabs index={tabIdx} onChange={uiActions.setCurrentModelTabIdx}>
@@ -57,4 +62,4 @@ const CurrentModel = ({
   </section>
 )
 
-export default CurrentModel
+export default SingleModel

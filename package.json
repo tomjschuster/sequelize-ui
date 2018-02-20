@@ -1,16 +1,14 @@
 {
   "name": "sequelize-ui",
   "version": "0.1.0",
-  "description":
-    "GUI for designing relational database schema and exporting as formatted Sequlize template.",
+  "description": "GUI for designing relational database schema and exporting as formatted Sequlize template.",
   "homepage": "http://sequelizeui.herokuapp.com",
   "bugs": {
     "url": "https://github.com/tomjschuster/sequelize-ui/issues",
     "email": "tomjschuster@gmail.com"
   },
   "license": "ISC",
-  "author":
-    "Tom Schuster <tomjschuster@gmail.com> (https://github.com/tomjschuster)",
+  "author": "Tom Schuster <tomjschuster@gmail.com> (https://github.com/tomjschuster)",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -27,10 +25,20 @@
     "start": "node server",
     "heroku-postbuild": "npm run build:prod"
   },
-  "keywords": ["sequelize", "orm", "sql", "schema", "model", "gui"],
+  "keywords": [
+    "sequelize",
+    "orm",
+    "sql",
+    "schema",
+    "model",
+    "gui"
+  ],
   "standard": {
     "parser": "babel-eslint",
-    "plugins": ["react"]
+    "plugins": [
+      "react",
+      "transform-class-properties"
+    ]
   },
   "dependencies": {
     "autoprefixer": "^7.2.6",
@@ -69,6 +77,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "eslint-plugin-react": "^7.6.1",
     "nodemon": "^1.14.12",
     "standard": "^10.0.3"
