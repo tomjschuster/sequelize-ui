@@ -1,11 +1,12 @@
+const webpack = require('webpack')
+
 module.exports = {
   entry: './src/index.js',
   output: {
     path: __dirname,
-    filename: './public/app.js'
+    filename: './public/app-prod.js'
   },
   context: __dirname,
-  devtool: 'source-map',
   module: {
     loaders: [
       {
@@ -32,5 +33,11 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+    new webpack.optimize.UglifyJsPlugin()
+  ]
 }

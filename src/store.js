@@ -9,10 +9,12 @@ import rootReducer from './redux'
 
 const storage = compose(filter('models'))(adapter(window.localStorage))
 
-const enhancer = compose(
-  applyMiddleware(logger, thunk),
-  persistState(storage, 'sequelize-ui')
-)
+const middleware =
+  process.env.NODE_ENV === 'production'
+    ? applyMiddleware(thunk)
+    : applyMiddleware(logger, thunk)
+
+const enhancer = compose(middleware, persistState(storage, 'sequelize-ui'))
 
 const reducer = compose(mergePersistedState())(rootReducer)
 

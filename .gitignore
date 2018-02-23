@@ -1,7 +1,9 @@
 node_modules
 public/app.js
 public/app.js.map
+public/app-prod.js
+public/app-prod.js.map
 .DS_STORE
 */DS_STORE
-
+.env
 npm-debug.log
