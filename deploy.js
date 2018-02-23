@@ -12,9 +12,9 @@ const ftps = new FTPS({
   sshKeyPath: process.env.FTP_SSH_KEY_PATH
 })
 
-ftps.put('./public/app-prod.js', `./${process.env.FTP_HOST}/app.js`)
-ftps.put('./public/index.html', `./${process.env.FTP_HOST}/index.html`)
-ftps.put('./public/style.css', `./${process.env.FTP_HOST}/style.css`)
+ftps.put('./public/app-prod.js', `${process.env.FTP_DIR}/app.js`)
+ftps.put('./public/index.html', `${process.env.FTP_DIR}/index.html`)
+ftps.put('./public/style.css', `${process.env.FTP_DIR}/style.css`)
 
 ftps.exec((err, res) => {
   if (err) {
