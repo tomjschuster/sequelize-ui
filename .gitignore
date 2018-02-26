@@ -7,3 +7,4 @@ public/app-prod.js.map
 */DS_STORE
 .env
 npm-debug.log
+dist

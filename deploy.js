@@ -1,26 +1,12 @@
 require('dotenv').config()
 
-const FTPS = require('ftps')
-const ftps = new FTPS({
-  host: process.env.FTP_HOST,
-  username: process.env.FTP_USERNAME,
-  password: process.env.FTP_PASSWORD,
-  protocol: 'sftp',
-  port: 22,
-  retries: 2,
-  requireSSHKey: true,
-  sshKeyPath: process.env.FTP_SSH_KEY_PATH
-})
-
-ftps.put('./public/app-prod.js', `${process.env.FTP_DIR}/app.js`)
-ftps.put('./public/index.html', `${process.env.FTP_DIR}/index.html`)
-ftps.put('./public/style.css', `${process.env.FTP_DIR}/style.css`)
-
-ftps.exec((err, res) => {
-  if (err) {
-    console.err(err)
-  } else {
-    console.log('SUCCESS')
-    console.log(res)
-  }
-})
+require('scp2').scp(
+  'dist/',
+  {
+    host: process.env.REMOTE_HOST,
+    username: process.env.REMOTE_USERNAME,
+    password: process.env.REMOTE_PASSWORD,
+    path: process.env.REMOTE_PATH
+  },
+  err => (err ? console.error(err) : console.log('Success'))
+)

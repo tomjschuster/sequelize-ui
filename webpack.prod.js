@@ -4,7 +4,7 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: __dirname,
-    filename: './public/app-prod.js'
+    filename: './dist/app.js'
   },
   context: __dirname,
   module: {
