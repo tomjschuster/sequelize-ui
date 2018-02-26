@@ -20,9 +20,9 @@
     "format": "./node_modules/standard/bin/cmd.js --fix",
     "clean": "rimraf dist",
     "build:dev": "NODE_ENV=development && webpack && cp assets/index.html dist/index.html && cp assets/main.css dist/main.css",
-    "build:dev-watch": "NODE_ENV=development && mkdir dist && cp assets/index.html dist/index.html && cp assets/main.css dist/main.css && webpack --watch",
+    "build:dev-watch": "NODE_ENV=development && mkdir dist && cp assets/index.html dist/index.html && webpack --watch",
     "start:dev": "NODE_ENV=development && npm run clean && npm run build:dev-watch & nodemon server",
-    "build:prod": "NODE_ENV=production && mkdir dist && cp assets/index.html dist/index.html && cp assets/main.css dist/main.css && webpack --optimize-minimize --config ./webpack.prod.js",
+    "build:prod": "NODE_ENV=production && mkdir dist && cp assets/index.html dist/index.html && webpack --optimize-minimize --config ./webpack.prod.js",
     "start": "NODE_ENV=production && node server",
     "heroku-postbuild": "npm run build:prod",
     "deploy": "NODE_ENV=production && npm run clean && npm run build:prod && node deploy"
