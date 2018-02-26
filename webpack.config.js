@@ -2,7 +2,7 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: __dirname,
-    filename: './public/app.js'
+    filename: './dist/app.js'
   },
   context: __dirname,
   devtool: 'eval',
