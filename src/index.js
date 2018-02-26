@@ -5,7 +5,7 @@ import { ThemeProvider } from 'react-css-themr'
 import theme from './theme'
 import store from './store'
 import Routes from './Routes'
-import css from '../assets/main.css'
+import css from './theme/css/main.css'
 
 render(
   <ThemeProvider theme={theme}>
