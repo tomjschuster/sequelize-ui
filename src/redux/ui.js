@@ -29,7 +29,6 @@ const initialState = {
   dialog: initialDialog,
   fieldsToggle: initialFieldsToggle,
   currentModelTabIdx: initialCurrentModelTabIdx,
-  modelsListIsOpen: initialModelsListIsOpen,
   sideBarIsOpen: initialSideBarIsOpen
 }
 
@@ -41,8 +40,8 @@ export const Actions = {
   TOGGLE_FIELD: 'UI__TOGGLE_FIELD',
   CLOSE_ALL_FIELDS: 'UI__CLOSE_ALL_FIELDS',
   SET_CURRENT_MODEL_TAB_IDX: 'UI__SET_CURRENT_MODEL_TAB_IDX',
-  TOGGLE_SIDE_BAR: 'TOGGLE_SIDE_BAR',
-  CLOSE_SIDE_BAR: 'CLOSE_SIDE_BAR'
+  TOGGLE_SIDE_BAR: 'UI__TOGGLE_SIDE_BAR',
+  CLOSE_SIDE_BAR: 'UI__CLOSE_SIDE_BAR'
 }
 
 /* ----------  ACTION CREATORS  ---------- */
