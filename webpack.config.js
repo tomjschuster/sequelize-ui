@@ -16,7 +16,11 @@ module.exports = {
         exclude: '/node_modules',
         loader: 'babel-loader',
         query: {
-          presets: ['react', 'es2015', 'stage-0']
+          presets: ['react', 'env'],
+          plugins: [
+            'transform-object-rest-spread',
+            'transform-class-properties'
+          ]
         }
       },
       {
