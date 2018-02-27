@@ -1,9 +1,9 @@
 import { Actions as Models } from './models'
-import { guid } from '../utils'
+import { uid } from '../utils'
 
 /* ----------  INITIAL STATE  ---------- */
 export const initialState = {
-  id: guid(),
+  id: uid(),
   name: '',
   fields: [],
   config: {
@@ -137,7 +137,7 @@ export default (state = initialState, action) => {
     case Actions.RECEIVE:
       return action.model.id === state.id ? state : action.model
     case Actions.RESET:
-      return { ...initialState, id: guid() }
+      return { ...initialState, id: uid() }
     case Actions.SET_NAME:
       return { ...state, name: action.name }
     case Actions.ADD_FIELD:
@@ -145,7 +145,7 @@ export default (state = initialState, action) => {
         ...state,
         fields: [
           ...state.fields,
-          { id: guid(), name: '', type: '', validate: {} }
+          { id: uid(), name: '', type: '', validate: {} }
         ]
       }
     case Actions.UPDATE_FIELD:
@@ -188,7 +188,7 @@ export default (state = initialState, action) => {
         ...state,
         associations: [
           ...state.associations,
-          { id: guid(), target: null, relationship: null, config: {} }
+          { id: uid(), target: null, relationship: null, config: {} }
         ]
       }
     case Actions.UPDATE_RELATIONSHIP:

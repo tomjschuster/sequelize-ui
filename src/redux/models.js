@@ -1,6 +1,30 @@
 import { actionCreators as uiActions, messages } from './ui'
 import { actionCreators as currentModelActions } from './currentModel'
-import { exportModel } from '../utils'
+import { exportModel, uid } from '../utils'
+
+/* ----------  HELPERS  ---------- */
+const newModel = (id, name) => ({
+  id,
+  name,
+  fields: [],
+  config: {
+    tableName: '',
+    singular: '',
+    plural: '',
+    timestamps: true,
+    freezeTableNames: false,
+    underscored: false,
+    underscoredAll: false
+  },
+  methods: {
+    hooks: false,
+    getterMethods: false,
+    setterMethods: false,
+    instanceMethods: false,
+    classMethods: false
+  },
+  associations: []
+})
 
 /* ----------  INITIAL STATE  ---------- */
 const initialState = []
@@ -21,9 +45,10 @@ export const actionCreators = {
     models
   }),
 
-  addModel: model => ({
+  addModel: (id, name) => ({
     type: Actions.ADD,
-    model
+    id,
+    name
   }),
 
   updateModel: model => ({
@@ -43,6 +68,12 @@ export const actionCreators = {
 
 /* ----------  THUNKS  ---------- */
 export const thunks = {
+  createModel: name => (dispatch, getState) => {
+    let id = uid()
+    while (getState().models.find(m => m.id === id)) id = uid()
+    dispatch(actionCreators.addModel(id, name))
+  },
+
   saveModel: (model, models, isNew) => dispatch => {
     let isNameError = models.find(
       ({ id, name }) => name === model.name && id !== model.id
@@ -84,7 +115,7 @@ export default (state = initialState, action) => {
     case Actions.RECEIVE:
       return [...action.models]
     case Actions.ADD:
-      return [...state, action.model]
+      return [...state, newModel(action.id, action.name)]
     case Actions.UPDATE:
       return state.map(
         model => (model.id === action.model.id ? action.model : model)

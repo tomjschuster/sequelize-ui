@@ -6,6 +6,7 @@ import { withRouter } from 'react-router'
 /* ----------  ACTION/THUNK CREATORS  ---------- */
 import { thunks as modelsThunks } from '../redux/models'
 import { actionCreators as menuActions } from '../redux/menu'
+import { actionCreators as uiActions } from '../redux/ui'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
 import Drawer from 'react-toolbox/lib/drawer'
@@ -41,18 +42,19 @@ class SideMenu extends Component {
       currentId,
       menu,
       models,
+      ui,
       // Actions
-      menuActions: {
-        updateMenuModelName,
-        cancelMenuModel,
-        addMenuModel,
-        closeMenu
-      },
+      menuActions: { updateMenuModelName, cancelMenuModel, addMenuModel },
+      uiActions: { closeSideBar },
       // Thunks
-      modelsThunks: { saveModel }
+      modelsThunks: { createModel }
     } = this.props
     return (
-      <Drawer active={menu.isOpen} type='left' onOverlayClick={closeMenu}>
+      <Drawer
+        active={ui.sideBarIsOpen}
+        type='left'
+        onOverlayClick={closeSideBar}
+      >
         <h2>Sequelize UI</h2>
         <List>
           <Link
@@ -70,20 +72,20 @@ class SideMenu extends Component {
               gotoModel={this.gotoModel.bind(this, model.id)}
             />
           ))}
-          {menu.newModel && (
+          {menu.newModelName !== null && (
             <div>
               <Input
-                value={menu.newModel.name || ''}
+                value={menu.newModelName || ''}
                 onChange={updateMenuModelName}
               />
               <Button
                 label='Create'
-                onClick={saveModel.bind(null, menu.newModel, models, true)}
+                onClick={createModel.bind(null, menu.newModelName)}
               />
               <Button label='Cancel' onClick={cancelMenuModel} />
             </div>
           )}
-          {!menu.newModel && (
+          {menu.newModelName === null && (
             <Button icon='add' floating mini onClick={addMenuModel} />
           )}
         </List>
@@ -92,14 +94,16 @@ class SideMenu extends Component {
   }
 }
 
-const mapStateToProps = ({ currentModel, models, menu }) => ({
+const mapStateToProps = ({ currentModel, models, menu, ui }) => ({
   currentId: currentModel.id,
   menu,
-  models
+  models,
+  ui
 })
 
 const mapDispatchToProps = dispatch => ({
   menuActions: bindActionCreators(menuActions, dispatch),
+  uiActions: bindActionCreators(uiActions, dispatch),
   modelsThunks: bindActionCreators(modelsThunks, dispatch)
 })
 

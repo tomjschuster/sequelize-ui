@@ -23,13 +23,14 @@ const initialFieldsToggle = {}
 
 const initialCurrentModelTabIdx = 0
 
-const initialModelsListIsOpen = false
+const initialSideBarIsOpen = false
 
 const initialState = {
   dialog: initialDialog,
   fieldsToggle: initialFieldsToggle,
   currentModelTabIdx: initialCurrentModelTabIdx,
-  modelsListIsOpen: initialModelsListIsOpen
+  modelsListIsOpen: initialModelsListIsOpen,
+  sideBarIsOpen: initialSideBarIsOpen
 }
 
 /* ----------  ACTION TYPES  ---------- */
@@ -39,7 +40,9 @@ export const Actions = {
   CLOSE_DIALOG: 'UI__CLOSE_DIALOG',
   TOGGLE_FIELD: 'UI__TOGGLE_FIELD',
   CLOSE_ALL_FIELDS: 'UI__CLOSE_ALL_FIELDS',
-  SET_CURRENT_MODEL_TAB_IDX: 'UI__SET_CURRENT_MODEL_TAB_IDX'
+  SET_CURRENT_MODEL_TAB_IDX: 'UI__SET_CURRENT_MODEL_TAB_IDX',
+  TOGGLE_SIDE_BAR: 'TOGGLE_SIDE_BAR',
+  CLOSE_SIDE_BAR: 'CLOSE_SIDE_BAR'
 }
 
 /* ----------  ACTION CREATORS  ---------- */
@@ -70,6 +73,14 @@ export const actionCreators = {
   setCurrentModelTabIdx: idx => ({
     type: Actions.SET_CURRENT_MODEL_TAB_IDX,
     idx
+  }),
+
+  toggleSideBar: () => ({
+    type: Actions.TOGGLE_SIDE_BAR
+  }),
+
+  closeSideBar: () => ({
+    type: Actions.CLOSE_SIDE_BAR
   })
 }
 
@@ -100,25 +111,31 @@ export default (state = initialState, action) => {
           [action.id]: !state.fieldsToggle[action.id]
         }
       }
+    case Models.ADD:
+      return {
+        ...state,
+        fieldsToggle: initialFieldsToggle,
+        sideBarIsOpen: initialSideBarIsOpen
+      }
     case Actions.CLOSE_ALL_FIELDS:
     case Models.RECEIVE:
-    case Models.ADD:
     case Models.REMOVE:
     case Models.RESET:
     case Models.UPDATE:
+    case CurrentModel.RECEIVE:
     case CurrentModel.RESET:
-      return {
-        ...state,
-        fieldsToggle: initialFieldsToggle
-      }
     case CurrentModel.RECEIVE:
       return {
         ...state,
         fieldsToggle: initialFieldsToggle,
-        modelsListIsOpen: initialModelsListIsOpen
+        sideBarIsOpen: initialSideBarIsOpen
       }
     case Actions.SET_CURRENT_MODEL_TAB_IDX:
       return { ...state, currentModelTabIdx: action.idx }
+    case Actions.TOGGLE_SIDE_BAR:
+      return { ...state, sideBarIsOpen: !state.sideBarIsOpen }
+    case Actions.CLOSE_SIDE_BAR:
+      return { ...state, sideBarIsOpen: false }
     default:
       return state
   }

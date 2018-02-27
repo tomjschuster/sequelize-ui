@@ -3,10 +3,10 @@ import {
   Actions as CurrentModel,
   initialState as currentModelInitialState
 } from './currentModel'
-import { guid } from '../utils'
+import { uid } from '../utils'
 
 /* ----------  INITIAL STATE  ---------- */
-const initialState = { isOpen: false, newModel: null }
+const initialState = { isOpen: false, newModelName: null }
 
 /* ----------  ACTION TYPES  ---------- */
 export const Actions = {
@@ -55,20 +55,17 @@ export default (state = initialState, action) => {
       return { ...state, isOpen: true }
     case Actions.CLOSE_MENU:
     case CurrentModel.RECEIVE:
-      return { ...state, isOpen: false, newModel: null }
+      return { ...state, isOpen: false, newModelName: null }
     case Actions.TOGGLE_MENU:
       return { ...state, isOpen: !state.isOpen }
     case Actions.ADD_MENU_MODEL:
-      return {
-        ...state,
-        newModel: { ...currentModelInitialState, id: guid() }
-      }
+      return { ...state, newModelName: '' }
     case Actions.UPDATE_MENU_MODEL_NAME:
-      return { ...state, newModel: { ...state.newModel, name: action.name } }
+      return { ...state, newModelName: action.name }
     case Actions.CANCEL_MENU_MODEL:
-      return { ...state, newModel: null }
+      return { ...state, newModelName: null }
     case Models.ADD:
-      return { ...state, newModel: null }
+      return { ...state, newModelName: null }
     default:
       return state
   }

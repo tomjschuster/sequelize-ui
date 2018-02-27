@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 
 /* ----------  ACTION THUNK CREATORS  ---------- */
 import { thunks as modelsThunks } from '../redux/models'
-import { actionCreators as menuActions } from '../redux/menu'
+import { actionCreators as uiActions } from '../redux/ui'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
 import AppBar from 'react-toolbox/lib/app_bar'
@@ -17,13 +17,13 @@ const TopBar = ({
   models,
   // Actions
   modelsThunks: { downloadTemplate },
-  menuActions: { toggleMenu }
+  uiActions: { toggleSideBar }
 }) => (
   <AppBar
     title='Sequelize UI'
     leftIcon={<FontIcon value='menu' />}
     rightIcon={<FontIcon value='file_download' />}
-    onLeftIconClick={toggleMenu}
+    onLeftIconClick={toggleSideBar}
     onRightIconClick={downloadTemplate.bind(null, models)}
   >
     {children}
@@ -35,7 +35,7 @@ const mapStateToProps = ({ models }) => ({ models })
 
 const mapDispatchToProps = dispatch => ({
   modelsThunks: bindActionCreators(modelsThunks, dispatch),
-  menuActions: bindActionCreators(menuActions, dispatch)
+  uiActions: bindActionCreators(uiActions, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopBar)

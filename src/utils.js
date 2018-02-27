@@ -7,6 +7,7 @@ const modelHeader =
 
 const fieldType = field =>
   `  ${Case.camel(field.name)}: {\n    type: Sequelize.${field.type},\n`
+
 const maybeAppendKey = (field, key, output) =>
   field[key] !== undefined ? output + `    ${key}: '${field[key]}',\n` : output
 
@@ -175,10 +176,21 @@ export const exportModel = models =>
     .generateAsync({ type: 'blob' })
     .then(blob => saveAs(blob, 'db.zip'))
 
-export const guid = () =>
-  ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+// https://stackoverflow.com/a/2117523/6122866
+export const guid = () => {
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
     (
       c ^
       (window.crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
     ).toString(16)
   )
+}
+
+// https://stackoverflow.com/a/6248722/6122866
+export const uid = () => {
+  let firstPart = (Math.random() * 46656) | 0
+  let secondPart = (Math.random() * 46656) | 0
+  firstPart = ('000' + firstPart.toString(36)).slice(-3)
+  secondPart = ('000' + secondPart.toString(36)).slice(-3)
+  return firstPart + secondPart
+}
