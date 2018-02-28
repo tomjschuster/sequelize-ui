@@ -2,9 +2,9 @@ import React from 'react'
 
 /* ----------  APP COMPONENTS  ---------- */
 import ModelCard from './ModelCard'
+import NameDialog from './NameDialog'
 
 /* ----------  UI COMPONENTS  ---------- */
-import Input from 'react-toolbox/lib/input'
 import { Button } from 'react-toolbox/lib/button'
 
 /* ----------  HELPERS  ---------- */
@@ -18,12 +18,15 @@ const Models = ({
   models,
   creatingModel,
   newModelName,
+  errors,
   // Thunks
   gotoModel,
   modelsActions: { removeModel },
   modelsThunks: { createModel },
   formsActions: { inputModelsModelName },
-  uiActions: { startCreatingModel, stopCreatingModel }
+  uiActions: { startCreatingModel, stopCreatingModel },
+  errorsActions: { setModelsDuplicateName, resetModelsDuplicateName },
+  error
 }) => {
   const modelNameObj = getModelNameObj(models)
   return (
@@ -40,18 +43,16 @@ const Models = ({
             removeModel={removeModel.bind(null, model.id)}
           />
         ))}
-        {creatingModel ? (
-          <div>
-            <Input value={newModelName} onChange={inputModelsModelName} />
-            <Button
-              onClick={createModel.bind(null, newModelName)}
-              label='Create'
-            />
-          </div>
-        ) : (
-          <Button icon='add' onClick={startCreatingModel} floating mini />
-        )}
       </div>
+      <Button icon='add' onClick={startCreatingModel} floating mini />
+      <NameDialog
+        name={newModelName}
+        errors={errors}
+        creatingModel={creatingModel}
+        createModel={createModel}
+        inputModelName={inputModelsModelName}
+        stopCreatingModel={stopCreatingModel}
+      />
     </div>
   )
 }

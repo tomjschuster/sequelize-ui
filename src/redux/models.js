@@ -1,4 +1,5 @@
 import { actionCreators as uiActions, messages } from './ui'
+import { actionCreators as errorsActions } from './errors'
 import { actionCreators as currentModelActions } from './currentModel'
 import { exportModel, uid } from '../utils'
 
@@ -69,9 +70,15 @@ export const actionCreators = {
 /* ----------  THUNKS  ---------- */
 export const thunks = {
   createModel: name => (dispatch, getState) => {
+    const { models } = getState()
     let id = uid()
-    while (getState().models.find(m => m.id === id)) id = uid()
-    dispatch(actionCreators.addModel(id, name))
+    while (models.find(m => m.id === id)) id = uid()
+    console.log(models)
+    if (models.find(m => m.name === name)) {
+      dispatch(errorsActions.setModelsDuplicateName())
+    } else {
+      dispatch(actionCreators.addModel(id, name))
+    }
   },
 
   saveModel: (model, models, isNew) => dispatch => {
