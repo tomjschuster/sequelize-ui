@@ -25,11 +25,16 @@ const initialCurrentModelTabIdx = 0
 
 const initialSideBarIsOpen = false
 
+const initialAddModelState = {
+  creatingModel: false
+}
+
 const initialState = {
   dialog: initialDialog,
   fieldsToggle: initialFieldsToggle,
   currentModelTabIdx: initialCurrentModelTabIdx,
-  sideBarIsOpen: initialSideBarIsOpen
+  sideBarIsOpen: initialSideBarIsOpen,
+  addModelState: initialAddModelState
 }
 
 /* ----------  ACTION TYPES  ---------- */
@@ -41,7 +46,9 @@ export const Actions = {
   CLOSE_ALL_FIELDS: 'UI__CLOSE_ALL_FIELDS',
   SET_CURRENT_MODEL_TAB_IDX: 'UI__SET_CURRENT_MODEL_TAB_IDX',
   TOGGLE_SIDE_BAR: 'UI__TOGGLE_SIDE_BAR',
-  CLOSE_SIDE_BAR: 'UI__CLOSE_SIDE_BAR'
+  CLOSE_SIDE_BAR: 'UI__CLOSE_SIDE_BAR',
+  START_CREATING_MODEL: 'START_CREATING_MODEL',
+  STOP_CREATING_MODEL: 'STOP_CREATING_MODEL'
 }
 
 /* ----------  ACTION CREATORS  ---------- */
@@ -80,6 +87,14 @@ export const actionCreators = {
 
   closeSideBar: () => ({
     type: Actions.CLOSE_SIDE_BAR
+  }),
+
+  startCreatingModel: () => ({
+    type: Actions.START_CREATING_MODEL
+  }),
+
+  stopCreatingModel: () => ({
+    type: Actions.STOP_CREATING_MODEL
   })
 }
 
@@ -114,7 +129,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         fieldsToggle: initialFieldsToggle,
-        sideBarIsOpen: initialSideBarIsOpen
+        sideBarIsOpen: initialSideBarIsOpen,
+        addModelState: initialAddModelState
       }
     case Actions.CLOSE_ALL_FIELDS:
     case Models.RECEIVE:
@@ -135,6 +151,10 @@ export default (state = initialState, action) => {
       return { ...state, sideBarIsOpen: !state.sideBarIsOpen }
     case Actions.CLOSE_SIDE_BAR:
       return { ...state, sideBarIsOpen: false }
+    case Actions.START_CREATING_MODEL:
+      return { ...state, addModelState: { creatingModel: true } }
+    case Actions.STOP_CREATING_MODEL:
+      return { ...state, addModelState: { creatingModel: false } }
     default:
       return state
   }

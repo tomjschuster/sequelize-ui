@@ -3,6 +3,10 @@ import React from 'react'
 /* ----------  APP COMPONENTS  ---------- */
 import ModelCard from './ModelCard'
 
+/* ----------  UI COMPONENTS  ---------- */
+import Input from 'react-toolbox/lib/input'
+import { Button } from 'react-toolbox/lib/button'
+
 /* ----------  HELPERS  ---------- */
 const getModelNameObj = models =>
   models.reduce((acc, m) => ({ ...acc, [m.id]: m.name }), {})
@@ -12,9 +16,14 @@ const Models = ({
   // State
   currentId,
   models,
+  creatingModel,
+  newModelName,
   // Thunks
   gotoModel,
-  modelsActions: { removeModel }
+  modelsActions: { removeModel },
+  modelsThunks: { createModel },
+  formsActions: { inputModelsModelName },
+  uiActions: { startCreatingModel, stopCreatingModel }
 }) => {
   const modelNameObj = getModelNameObj(models)
   return (
@@ -31,6 +40,17 @@ const Models = ({
             removeModel={removeModel.bind(null, model.id)}
           />
         ))}
+        {creatingModel ? (
+          <div>
+            <Input value={newModelName} onChange={inputModelsModelName} />
+            <Button
+              onClick={createModel.bind(null, newModelName)}
+              label='Create'
+            />
+          </div>
+        ) : (
+          <Button icon='add' onClick={startCreatingModel} floating mini />
+        )}
       </div>
     </div>
   )
