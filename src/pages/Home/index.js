@@ -1,5 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router'
 
-const Home = () => <h2>Home</h2>
+const Home = () => (
+  <div>
+    <h2>Home</h2>
+    <Link to='/models'>Models</Link>
+  </div>
+)
 
 export default Home
