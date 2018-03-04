@@ -35,6 +35,13 @@
     "model",
     "gui"
   ],
+  "nodemonConfig": {
+    "ignore": [
+      "src/*",
+      "assets/*",
+      "dist/*"
+    ]
+  },
   "standard": {
     "parser": "babel-eslint",
     "plugins": [
@@ -71,8 +78,6 @@
     "react-router": "3.x",
     "react-toolbox": "^2.0.0-beta.12",
     "redux": "^3.6.0",
-    "redux-localstorage": "^1.0.0-rc5",
-    "redux-localstorage-filter": "^0.1.1",
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.1.0",
     "rimraf": "^2.6.2",
