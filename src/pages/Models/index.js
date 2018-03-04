@@ -16,7 +16,7 @@ import { actionCreators as errorsActions } from '../../redux/errors'
 import Models from './Models'
 
 class ModelsPage extends Component {
-  gotoModel = id => this.props.router.push(`/models/${id}`)
+  gotoModel = id => this.props.history.push(`/models/${id}`)
 
   render () {
     return (

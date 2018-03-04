@@ -1,23 +1,32 @@
-import { compose, createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import logger from 'redux-logger'
 import thunk from 'redux-thunk'
-import persistState, { mergePersistedState } from 'redux-localstorage'
-import adapter from 'redux-localstorage/lib/adapters/localStorage'
-import filter from 'redux-localstorage-filter'
 
 import rootReducer from './redux'
 
-const storage = compose(filter('models'))(adapter(window.localStorage))
+const createStorage = keys => store => next => action => {
+  const result = next(action)
+  const state = store.getState()
+  const persistedState = Object.keys(state).reduce(
+    (acc, key) => (keys.includes(key) ? { ...acc, [key]: state[key] } : acc),
+    {}
+  )
+  window.localStorage.setItem('sequelize-ui', JSON.stringify(persistedState))
+  return result
+}
 
 const middleware =
   process.env.NODE_ENV === 'production'
-    ? applyMiddleware(thunk)
-    : applyMiddleware(logger, thunk)
+    ? applyMiddleware(createStorage(['models']), thunk)
+    : applyMiddleware(createStorage(['models']), logger, thunk)
 
-const enhancer = compose(middleware, persistState(storage, 'sequelize-ui'))
+let persistedState
+try {
+  persistedState = JSON.parse(window.localStorage.getItem('sequelize-ui'))
+} catch (e) {
+  persistedState = {}
+}
 
-const reducer = compose(mergePersistedState())(rootReducer)
-
-const store = createStore(reducer, enhancer)
+const store = createStore(rootReducer, persistedState, middleware)
 
 export default store

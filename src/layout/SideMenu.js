@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { withRouter } from 'react-router'
+import { bindActionCreators, compose } from 'redux'
+import { withRouter } from 'react-router-dom'
 
 /* ----------  ACTION/THUNK CREATORS  ---------- */
 import { thunks as modelsThunks } from '../redux/models'
@@ -33,8 +33,8 @@ const ModelListItem = ({ modelId, name, isCurrent, gotoModel }) => (
 
 /* ----------  COMPONENT  ---------- */
 class SideMenu extends Component {
-  gotoModels = id => this.props.router.push('/models')
-  gotoModel = id => this.props.router.push(`/models/${id}`)
+  gotoModels = id => this.props.history.push('/models')
+  gotoModel = id => this.props.history.push(`/models/${id}`)
 
   render () {
     const {
@@ -107,6 +107,7 @@ const mapDispatchToProps = dispatch => ({
   modelsThunks: bindActionCreators(modelsThunks, dispatch)
 })
 
-const SideMenuWithRouter = withRouter(SideMenu, { withRef: true })
-
-export default connect(mapStateToProps, mapDispatchToProps)(SideMenuWithRouter)
+export default compose(
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps)
+)(SideMenu)
