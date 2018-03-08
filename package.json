@@ -43,11 +43,7 @@
     ]
   },
   "standard": {
-    "parser": "babel-eslint",
-    "plugins": [
-      "react",
-      "transform-class-properties"
-    ]
+    "parser": "babel-eslint"
   },
   "dependencies": {
     "autoprefixer": "^8.1.0",
