@@ -133,13 +133,16 @@ export default (state = initialState, action) => {
         addModelState: initialAddModelState
       }
     case Actions.CLOSE_ALL_FIELDS:
+      return {
+        ...state,
+        fieldsToggle: initialFieldsToggle
+      }
     case Models.RECEIVE:
     case Models.REMOVE:
     case Models.RESET:
     case Models.UPDATE:
     case CurrentModel.RECEIVE:
     case CurrentModel.RESET:
-    case CurrentModel.RECEIVE:
       return {
         ...state,
         fieldsToggle: initialFieldsToggle,

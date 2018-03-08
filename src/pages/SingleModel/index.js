@@ -24,6 +24,7 @@ class SingleModelPage extends Component {
   componentDidUpdate () {
     if (this.props.match.params.id !== this.props.currentModel.id) {
       this.props.currentModelThunks.setModel(this.props.match.params.id)
+      this.props.uiActions.closeAllFields()
     }
   }
 
@@ -45,6 +46,7 @@ class SingleModelPage extends Component {
 
   componentWillUnmount () {
     this.props.currentModelActions.resetModel()
+    this.props.uiActions.closeAllFields()
   }
 
   render () {
