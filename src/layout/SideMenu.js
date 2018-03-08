@@ -13,7 +13,7 @@ import Drawer from 'react-toolbox/lib/drawer'
 import Link from 'react-toolbox/lib/link'
 import Input from 'react-toolbox/lib/input'
 import { List, ListItem } from 'react-toolbox/lib/list'
-import { Button, IconButton } from 'react-toolbox/lib/button'
+import { Button } from 'react-toolbox/lib/button'
 
 /* ----------  COMPONENT  ---------- */
 const ModelListItem = ({ modelId, name, isCurrent, gotoModel }) => (
@@ -33,6 +33,14 @@ const ModelListItem = ({ modelId, name, isCurrent, gotoModel }) => (
 
 /* ----------  COMPONENT  ---------- */
 class SideMenu extends Component {
+  componentDidMount () {
+    this.historyListener = this.props.history.listen(this.props.uiActions.closeSideBar)
+  }
+
+  componentWillUnmount () {
+    this.historyListener.unlisten()
+  }
+
   gotoModels = id => this.props.history.push('/models')
   gotoModel = id => this.props.history.push(`/models/${id}`)
 

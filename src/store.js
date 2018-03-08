@@ -15,14 +15,16 @@ const createStorage = keys => store => next => action => {
   return result
 }
 
+const persistState = createStorage(['models'])
+
 const middleware =
   process.env.NODE_ENV === 'production'
-    ? applyMiddleware(createStorage(['models']), thunk)
-    : applyMiddleware(createStorage(['models']), logger, thunk)
+    ? applyMiddleware(persistState, thunk)
+    : applyMiddleware(persistState, logger, thunk)
 
 let persistedState
 try {
-  persistedState = JSON.parse(window.localStorage.getItem('sequelize-ui'))
+  persistedState = JSON.parse(window.localStorage.getItem('sequelize-ui')) || {}
 } catch (e) {
   persistedState = {}
 }

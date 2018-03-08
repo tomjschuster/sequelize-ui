@@ -126,28 +126,9 @@ export default (state = initialState, action) => {
         }
       }
     case Models.ADD:
-      return {
-        ...state,
-        fieldsToggle: initialFieldsToggle,
-        sideBarIsOpen: initialSideBarIsOpen,
-        addModelState: initialAddModelState
-      }
+      return { ...state, addModelState: initialAddModelState }
     case Actions.CLOSE_ALL_FIELDS:
-      return {
-        ...state,
-        fieldsToggle: initialFieldsToggle
-      }
-    case Models.RECEIVE:
-    case Models.REMOVE:
-    case Models.RESET:
-    case Models.UPDATE:
-    case CurrentModel.RECEIVE:
-    case CurrentModel.RESET:
-      return {
-        ...state,
-        fieldsToggle: initialFieldsToggle,
-        sideBarIsOpen: initialSideBarIsOpen
-      }
+      return { ...state, fieldsToggle: initialFieldsToggle }
     case Actions.SET_CURRENT_MODEL_TAB_IDX:
       return { ...state, currentModelTabIdx: action.idx }
     case Actions.TOGGLE_SIDE_BAR:
