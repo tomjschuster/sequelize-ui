@@ -34,7 +34,7 @@ const ModelCard = ({
   // Actions
   gotoModel,
   removeModel
-}) => (
+}) =>
   <Card>
     <CardTitle title={model.name} />
     {(model.fields.length > 0 || model.associations.length > 0) && (
@@ -50,6 +50,5 @@ const ModelCard = ({
       <Button label='Delete' icon='delete_forever' onClick={removeModel} />
     </CardActions>
   </Card>
-)
 
 export default ModelCard

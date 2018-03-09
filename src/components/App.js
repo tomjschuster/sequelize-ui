@@ -11,7 +11,7 @@ import { thunks as modelsThunks } from '../redux/models'
 
 /* ----------  APP COMPONENTS  ---------- */
 import Home from './Home'
-import Models from '../pages/Models'
+import Models from './Models.js'
 import SingleModel from '../pages/SingleModel'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */

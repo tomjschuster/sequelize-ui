@@ -6,11 +6,11 @@ import { bindActionCreators } from 'redux'
 import {
   thunks as modelsThunks,
   actionCreators as modelsActions
-} from '../../redux/models'
-import { actionCreators as currentModelActions } from '../../redux/currentModel'
-import { actionCreators as formsActions } from '../../redux/forms'
-import { actionCreators as uiActions } from '../../redux/ui'
-import { actionCreators as errorsActions } from '../../redux/errors'
+} from '../redux/models'
+import { actionCreators as currentModelActions } from '../redux/currentModel'
+import { actionCreators as formsActions } from '../redux/forms'
+import { actionCreators as uiActions } from '../redux/ui'
+import { actionCreators as errorsActions } from '../redux/errors'
 
 /* ----------  APP COMPONENTS  ---------- */
 import ModelCard from './ModelCard'
