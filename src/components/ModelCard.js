@@ -1,13 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { ListItem } from 'react-toolbox/lib/list'
 import { Button } from 'react-toolbox/lib/button'
-import { IconMenu, MenuItem, MenuDivider } from 'react-toolbox/lib/menu'
 import {
   Card,
-  CardMedia,
   CardTitle,
   CardText,
   CardActions
@@ -28,32 +24,6 @@ const associationsText = (associations, modelNameObj) => {
   )
   return `Associations: ${Object.values(targets).join(', ')}`
 }
-
-/* ----------  LOCAL COMPONENTS  ---------- */
-const ModelContent = ({
-  model: { id, name, fields, associations },
-  modelNameObj
-}) => (
-  <div>
-    <Link to={`/models/${id}`}>{name}</Link>
-    {fields.length > 0 && <p>{fieldsText(fields)}</p>}
-    {associations.length > 0 && (
-      <p>{associationsText(associations, modelNameObj)}</p>
-    )}
-  </div>
-)
-
-const ActionsMenu = ({ gotoModel, removeModel }) => (
-  <IconMenu icon='more_vert'>
-    <MenuItem value='edit' icon='edit' caption='Edit' onClick={gotoModel} />
-    <MenuItem
-      value='delete'
-      icon='delete_forever'
-      caption='delete'
-      onClick={removeModel}
-    />
-  </IconMenu>
-)
 
 /* ----------  COMPONENT  ---------- */
 const ModelCard = ({

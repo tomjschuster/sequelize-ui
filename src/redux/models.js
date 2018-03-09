@@ -1,6 +1,5 @@
-import { actionCreators as uiActions, messages } from './ui'
+import { actionCreators as messages } from './ui'
 import { actionCreators as errorsActions } from './errors'
-import { actionCreators as currentModelActions } from './currentModel'
 import { exportModel, uid } from '../utils'
 
 /* ----------  HELPERS  ---------- */
