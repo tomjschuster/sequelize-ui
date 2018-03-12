@@ -11,8 +11,8 @@ import { thunks as modelsThunks } from '../redux/models'
 
 /* ----------  APP COMPONENTS  ---------- */
 import Home from './Home'
-import Models from './Models.js'
-import SingleModel from '../pages/SingleModel'
+import Models from './Models'
+import EditModel from './EditModel'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
 import { Layout, Panel } from 'react-toolbox/lib/layout'
@@ -30,7 +30,7 @@ const App = ({ download }) => (
         onRightIconClick={download}
       />
       <Switch>
-        <Route path='/models/:id' component={SingleModel} />
+        <Route path='/models/:id' component={EditModel} />
         <Route path='/models' component={Models} />
         <Route path='/' component={Home} />
         <Redirect to='/' />

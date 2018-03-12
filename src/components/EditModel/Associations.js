@@ -1,13 +1,18 @@
 import React from 'react'
 
-/* ----------  APP COMPONENTS  ---------- */
-import RelationshipDropdown from './RelationshipDropDown'
-import ModelDropdown from './ModelDropDown'
-
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
 import Input from 'react-toolbox/lib/input'
 import { Button } from 'react-toolbox/lib/button'
 import { List, ListItem } from 'react-toolbox/lib/list'
+import Dropdown from 'react-toolbox/lib/dropdown'
+
+/* ----------  CONSTANTS  ---------- */
+const relationships = [
+  { label: 'Belongs To', value: 'belongsTo' },
+  { label: 'Has One', value: 'hasOne' },
+  { label: 'Has Many', value: 'hasMany' },
+  { label: 'Belongs To Many', value: 'belongsToMany' }
+]
 
 /* ----------  COMPONENT  ---------- */
 const Associations = ({
@@ -29,16 +34,19 @@ const Associations = ({
     <List>
       {associations.map(assoc => (
         <ListItem key={assoc.id}>
-          <RelationshipDropdown
-            id={assoc.id}
-            relationship={assoc.relationship}
-            updateRelationship={updateRelationship.bind(null, assoc.id)}
+          <Dropdown
+            auto
+            label='Relationship'
+            source={relationships}
+            value={assoc.relationship}
+            onChange={updateRelationship.bind(null, assoc.id)}
           />
-          <ModelDropdown
-            id={assoc.id}
-            target={assoc.target}
-            models={models}
-            updateTarget={updateTarget.bind(null, assoc.id)}
+          <Dropdown
+            auto
+            label='Target Model'
+            value={assoc.target}
+            source={models.map(({ id, name }) => ({ value: id, label: name }))}
+            onChange={updateTarget.bind(null, assoc.id)}
           />
           <Input
             id='as-input'

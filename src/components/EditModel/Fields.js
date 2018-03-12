@@ -1,14 +1,30 @@
 import React from 'react'
 
-/* ----------  APP COMPONENTS  ---------- */
-import DataTypeSelect from './DataTypeSelect'
-
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
+import Autocomplete from 'react-toolbox/lib/autocomplete'
 import { Button } from 'react-toolbox/lib/button'
 import Checkbox from 'react-toolbox/lib/checkbox'
 import Switch from 'react-toolbox/lib/switch'
 import { Card } from 'react-toolbox/lib/card'
 import Input from 'react-toolbox/lib/input'
+
+/* ----------  CONSTANTS  ---------- */
+const dataTypes = {
+  STRING: 'String',
+  TEXT: 'Text',
+  INTEGER: 'Integer',
+  FLOAT: 'Float',
+  REAL: 'Real',
+  DOUBLE: 'Double',
+  DECIMAL: 'Decimal',
+  DATE: 'Date',
+  DATEONLY: 'Date (without time)',
+  BOOLEAN: 'Boolean',
+  ARRAY: 'Array',
+  JSON: 'JSON',
+  BLOB: 'BLOB',
+  UUID: 'UUID'
+}
 
 /* ----------  HELPERS  ---------- */
 const isNumber = type => {
@@ -41,9 +57,13 @@ const Field = ({
         type='text'
         label='Field Name'
       />
-      <DataTypeSelect
-        currType={field.type}
-        updateDataType={updateField.bind(null, 'type')}
+      <Autocomplete
+        direction='down'
+        multiple={false}
+        onChange={updateField.bind(null, 'type')}
+        source={dataTypes}
+        value={field.type}
+        label='Data Type'
       />
       <Button label='DELETE FIELD' onClick={deleteField} />
       <Switch onChange={toggleField} checked={isOpen} label='More Options' />
@@ -144,4 +164,31 @@ const Field = ({
   </Card>
 )
 
-export default Field
+const Fields = ({
+  // State
+  fields,
+  fieldsToggle,
+  // Actions
+  currentModelActions: { addField, updateField, updateValidation, removeField },
+  uiActions: { toggleField }
+}) => (
+  <section>
+    <h3>Fields</h3>
+    <Button label='+ ADD' onClick={addField} raised primary />
+    <div>
+      {fields.map(field => (
+        <Field
+          key={field.id}
+          field={field}
+          isOpen={!!fieldsToggle[field.id]}
+          updateField={updateField.bind(null, field.id)}
+          updateValidation={updateValidation.bind(null, field.id)}
+          removeField={removeField.bind(null, field.id)}
+          toggleField={toggleField.bind(null, field.id)}
+        />
+      ))}
+    </div>
+  </section>
+)
+
+export default Fields

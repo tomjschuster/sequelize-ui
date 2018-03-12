@@ -14,10 +14,16 @@ import {
 import { actionCreators as uiActions } from '../../redux/ui'
 
 /* ----------  APP COMPONENTS  ---------- */
-import SingleModel from './SingleModel'
+import ModelToolBar from './ModelToolBar'
+import Fields from './Fields'
+import Configuration from './Configuration'
+import Associations from './Associations'
 
-class SingleModelPage extends Component {
-  componentWillMount () {
+/* ----------  UI LIBRARY COMPONENTS  ---------- */
+import { Tab, Tabs } from 'react-toolbox'
+
+class EditModel extends Component {
+  componentDidMount () {
     this.props.currentModelThunks.setModel(this.props.match.params.id)
   }
 
@@ -59,21 +65,47 @@ class SingleModelPage extends Component {
       // Actions
       uiActions,
       currentModelActions,
-      modelsActions
+      modelsActions: { removeModel }
     } = this.props
+
+    const isNew = !models.find(({ id }) => id === currentModel.id)
+
     return (
-      <SingleModel
-        isNew={!models.find(({ id }) => id === currentModel.id)}
-        models={models}
-        currentModel={currentModel}
-        tabIdx={tabIdx}
-        fieldsToggle={fieldsToggle}
-        currentModelActions={currentModelActions}
-        uiActions={uiActions}
-        modelsActions={modelsActions}
-        createModel={this.createModel}
-        saveModel={this.saveModel}
-      />
+      <section>
+        {isNew ? <h3>Create a Model</h3> : <h3>Edit a Model</h3>}
+        <ModelToolBar
+          isNew={isNew}
+          name={currentModel.name}
+          setModelName={currentModelActions.setModelName}
+          createModel={this.createModel}
+          saveModel={this.saveModel}
+          removeModel={removeModel.bind(null, currentModel.id)}
+        />
+        <Tabs index={tabIdx} onChange={uiActions.setCurrentModelTabIdx}>
+          <Tab label='Fields'>
+            <Fields
+              fields={currentModel.fields}
+              fieldsToggle={fieldsToggle}
+              currentModelActions={currentModelActions}
+              uiActions={uiActions}
+            />
+          </Tab>
+          <Tab label='Configuration'>
+            <Configuration
+              config={currentModel.config}
+              methods={currentModel.methods}
+              currentModelActions={currentModelActions}
+            />
+          </Tab>
+          <Tab label='Associations'>
+            <Associations
+              models={models}
+              associations={currentModel.associations}
+              currentModelActions={currentModelActions}
+            />
+          </Tab>
+        </Tabs>
+      </section>
     )
   }
 }
@@ -93,4 +125,4 @@ const mapDispatchToProps = dispatch => ({
   currentModelThunks: bindActionCreators(currentModelThunks, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(SingleModelPage)
+export default connect(mapStateToProps, mapDispatchToProps)(EditModel)

@@ -1,5 +1,6 @@
 import { Actions as Models } from './models'
 import { uid } from '../utils'
+import history from '../history'
 
 /* ----------  INITIAL STATE  ---------- */
 export const initialState = {
@@ -128,6 +129,7 @@ export const thunks = {
   setModel: id => (dispatch, getState) => {
     const currentModel = getState().models.find(model => model.id === id)
     if (currentModel) dispatch(actionCreators.receiveModel(currentModel))
+    else history.replace('/')
   }
 }
 
