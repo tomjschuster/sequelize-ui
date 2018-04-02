@@ -1,11 +1,18 @@
 const webpack = require('webpack')
+const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
   entry: './src/index.js',
   output: {
     path: __dirname,
     filename: './dist/app.js'
+  },
+  resolve: {
+    alias: {
+      '../../theme.config$': path.join(__dirname, 'src/styling/theme.config')
+    }
   },
   context: __dirname,
   devtool: 'eval',
@@ -22,6 +29,18 @@ module.exports = {
             'transform-class-properties'
           ]
         }
+      },
+      {
+        test: /\.less$/,
+        use: ExtractTextPlugin.extract({ use: ['css-loader', 'less-loader'] })
+      },
+      {
+        test: /\.jpe?g$|\.gif$|\.png$|\.ttf$|\.eot$|\.svg$/,
+        use: 'file-loader?name=[name].[ext]?[hash]'
+      },
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url-loader?limit=10000&mimetype=application/fontwoff'
       },
       {
         test: /\.css$/,
@@ -48,6 +67,9 @@ module.exports = {
       template: 'src/index.html',
       filename: 'dist/index.html',
       inject: false
+    }),
+    new ExtractTextPlugin({
+      filename: '[name].[contenthash].css'
     })
   ]
 }

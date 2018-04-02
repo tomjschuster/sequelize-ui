@@ -44,8 +44,8 @@ class ViewModel extends React.Component {
     return (
       <React.Fragment>
         <h3>{this.props.currentModel.name}</h3>
-        <Button icon='edit' onClick={this.editModel}>Edit</Button>
-        <Button icon='delete_forever' onClick={this.deleteModel}>Delete</Button>
+        <Button icon='edit' onClick={this.editModel} />
+        <Button icon='delete' onClick={this.deleteModel} />
       </React.Fragment>
     )
   }

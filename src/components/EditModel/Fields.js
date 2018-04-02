@@ -59,7 +59,7 @@ const Field = ({
       options={dataTypeOptions}
       value={field.type}
     />
-    <Button icon='delete' onClick={removeField} />
+    <Button icon='delete' onClick={removeField} primary />
     <Checkbox
       toggle
       onChange={(_, data) => toggleField(data.checked)}

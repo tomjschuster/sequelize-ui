@@ -7,10 +7,9 @@ import store from './redux'
 import { Router, Route } from 'react-router-dom'
 import history from './history'
 import App from './components/App'
-// import 'semantic-ui-css/semantic.min.css'
-/* eslint-disable no-unused-vars */
-import css from './theme/css/main.css'
-/* eslint-enable no-unused-vars */
+import './theme/css/main.css'
+import './styling/semantic.less'
+// import 'semantic-ui-less/semantic.less'
 
 render(
   <ThemeProvider theme={theme}>
