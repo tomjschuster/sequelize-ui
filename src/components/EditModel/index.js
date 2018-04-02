@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -20,9 +20,9 @@ import Configuration from './Configuration'
 import Associations from './Associations'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Tab, Tabs } from 'react-toolbox'
+import { Tab } from 'semantic-ui-react'
 
-class EditModel extends Component {
+class EditModel extends React.Component {
   componentDidMount () {
     this.props.currentModelThunks.setModel(this.props.match.params.id)
   }
@@ -71,7 +71,7 @@ class EditModel extends Component {
     const isNew = !models.find(({ id }) => id === currentModel.id)
 
     return (
-      <section>
+      <React.Fragment>
         {isNew ? <h3>Create a Model</h3> : <h3>Edit a Model</h3>}
         <ModelToolBar
           isNew={isNew}
@@ -81,31 +81,47 @@ class EditModel extends Component {
           saveModel={this.saveModel}
           removeModel={removeModel.bind(null, currentModel.id)}
         />
-        <Tabs index={tabIdx} onChange={uiActions.setCurrentModelTabIdx}>
-          <Tab label='Fields'>
-            <Fields
-              fields={currentModel.fields}
-              fieldsToggle={fieldsToggle}
-              currentModelActions={currentModelActions}
-              uiActions={uiActions}
-            />
-          </Tab>
-          <Tab label='Configuration'>
-            <Configuration
-              config={currentModel.config}
-              methods={currentModel.methods}
-              currentModelActions={currentModelActions}
-            />
-          </Tab>
-          <Tab label='Associations'>
-            <Associations
-              models={models}
-              associations={currentModel.associations}
-              currentModelActions={currentModelActions}
-            />
-          </Tab>
-        </Tabs>
-      </section>
+        <Tab
+          index={tabIdx}
+          onChange={uiActions.setCurrentModelTabIdx}
+          panes={[
+            {
+              menuItem: 'Fields',
+              render: () =>
+                <Tab.Pane>
+                  <Fields
+                    fields={currentModel.fields}
+                    fieldsToggle={fieldsToggle}
+                    currentModelActions={currentModelActions}
+                    uiActions={uiActions}
+                  />
+                </Tab.Pane>
+            },
+            {
+              menuItem: 'Configuration',
+              render: () =>
+                <Tab.Pane>
+                  <Configuration
+                    config={currentModel.config}
+                    methods={currentModel.methods}
+                    currentModelActions={currentModelActions}
+                  />
+                </Tab.Pane>
+            },
+            {
+              menuItem: 'Associations',
+              render: () =>
+                <Tab.Pane>
+                  <Associations
+                    models={models}
+                    associations={currentModel.associations}
+                    currentModelActions={currentModelActions}
+                  />
+                </Tab.Pane>
+            }
+          ]}
+        />
+      </React.Fragment>
     )
   }
 }

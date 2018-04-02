@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -17,7 +17,7 @@ import ModelCard from './ModelCard'
 import NameDialog from './NameDialog'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Button } from 'react-toolbox/lib/button'
+import { Button } from 'semantic-ui-react'
 
 /* ----------  HELPERS  ---------- */
 const getModelNameObj = models =>
@@ -25,7 +25,7 @@ const getModelNameObj = models =>
 
 /* ----------  Component  ---------- */
 
-class Models extends Component {
+class Models extends React.Component {
   gotoModel = id => this.props.history.push(`/models/${id}`)
 
   render () {
@@ -44,21 +44,19 @@ class Models extends Component {
     const modelNameObj = getModelNameObj(models)
 
     return (
-      <Fragment>
+      <React.Fragment>
         <h2>Models</h2>
-        <div>
-          {models.map(model => (
-            <ModelCard
-              key={model.id}
-              isCurrent={model.id === currentId}
-              modelNameObj={modelNameObj}
-              model={model}
-              gotoModel={this.gotoModel.bind(null, model.id)}
-              removeModel={modelsActions.removeModel.bind(null, model.id)}
-            />
-          ))}
-        </div>
-        <Button icon='add' onClick={uiActions.startCreatingModel} floating mini />
+        {models.map(model => (
+          <ModelCard
+            key={model.id}
+            isCurrent={model.id === currentId}
+            modelNameObj={modelNameObj}
+            model={model}
+            gotoModel={this.gotoModel.bind(null, model.id)}
+            removeModel={modelsActions.removeModel.bind(null, model.id)}
+          />
+        ))}
+        <Button icon='add' onClick={uiActions.startCreatingModel} circular />
         <NameDialog
           name={newModelName}
           errors={errors}
@@ -67,7 +65,7 @@ class Models extends Component {
           inputModelName={formsActions.inputModelsModelName}
           stopCreatingModel={uiActions.stopCreatingModel}
         />
-      </Fragment>
+      </React.Fragment>
     )
   }
 }

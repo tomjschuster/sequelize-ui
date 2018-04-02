@@ -1,8 +1,7 @@
 import React from 'react'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import Input from 'react-toolbox/lib/input'
-import { Button } from 'react-toolbox/lib/button'
+import { Button, Input } from 'semantic-ui-react'
 
 /* ----------  COMPONENT  ---------- */
 const ModelToolBar = ({
@@ -15,20 +14,16 @@ const ModelToolBar = ({
   saveModel,
   removeModel
 }) => (
-  <div>
-    <Input value={name} onChange={setModelName} label='Model Name' />
-    {!isNew && <Button label='Save' primary raised onClick={saveModel} />}
-    {!isNew && <Button label='Delete' raised accent onClick={removeModel} />}
+  <React.Fragment>
+    <Input value={name} onChange={evt => setModelName(evt.target.value)} label='Model Name' />
+    {!isNew && <Button primary onClick={saveModel}>Save</Button>}
+    {!isNew && <Button onClick={removeModel}>Delete</Button>}
     {isNew && (
-      <Button
-        label='Create'
-        disabled={name.length === 0}
-        primary
-        raised
-        onClick={createModel}
-      />
+      <Button disabled={name.length === 0} primary onClick={createModel}>
+        Create
+      </Button>
     )}
-  </div>
+  </React.Fragment>
 )
 
 export default ModelToolBar

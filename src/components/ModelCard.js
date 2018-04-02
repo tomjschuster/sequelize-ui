@@ -1,13 +1,7 @@
 import React from 'react'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Button } from 'react-toolbox/lib/button'
-import {
-  Card,
-  CardTitle,
-  CardText,
-  CardActions
-} from 'react-toolbox/lib/card'
+import { Button, Card } from 'semantic-ui-react'
 
 /* ----------  HELPERS  ---------- */
 const fieldsText = fields => {
@@ -36,19 +30,21 @@ const ModelCard = ({
   removeModel
 }) =>
   <Card>
-    <CardTitle title={model.name} />
-    {(model.fields.length > 0 || model.associations.length > 0) && (
-      <CardText>
-        {model.fields.length > 0 && <p>{fieldsText(model.fields)}</p>}
-        {model.associations.length > 0 && (
-          <p>{associationsText(model.associations, modelNameObj)}</p>
-        )}
-      </CardText>
-    )}
-    <CardActions>
-      <Button label='Edit' icon='edit' onClick={gotoModel} />
-      <Button label='Delete' icon='delete_forever' onClick={removeModel} />
-    </CardActions>
+    <Card.Content>
+      <Card.Header>{model.name}</Card.Header>
+      {(model.fields.length > 0 || model.associations.length > 0) && (
+        <Card.Description>
+          {model.fields.length > 0 && <p>{fieldsText(model.fields)}</p>}
+          {model.associations.length > 0 && (
+            <p>{associationsText(model.associations, modelNameObj)}</p>
+          )}
+        </Card.Description>
+      )}
+      <Card.Content extra>
+        <Button icon='edit' onClick={gotoModel} />
+        <Button icon='delete' onClick={removeModel} />
+      </Card.Content>
+    </Card.Content>
   </Card>
 
 export default ModelCard

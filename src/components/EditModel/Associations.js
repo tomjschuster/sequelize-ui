@@ -1,17 +1,18 @@
 import React from 'react'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import Input from 'react-toolbox/lib/input'
-import { Button } from 'react-toolbox/lib/button'
-import { List, ListItem } from 'react-toolbox/lib/list'
-import Dropdown from 'react-toolbox/lib/dropdown'
+import { Input, Button, Dropdown, Card} from 'semantic-ui-react'
+// import Input from 'react-toolbox/lib/input'
+// import { Button } from 'react-toolbox/lib/button'
+// import { List, ListItem } from 'react-toolbox/lib/list'
+// import Dropdown from 'react-toolbox/lib/dropdown'
 
 /* ----------  CONSTANTS  ---------- */
-const relationships = [
-  { label: 'Belongs To', value: 'belongsTo' },
-  { label: 'Has One', value: 'hasOne' },
-  { label: 'Has Many', value: 'hasMany' },
-  { label: 'Belongs To Many', value: 'belongsToMany' }
+const relationshipOptions = [
+  { text: 'Belongs To', value: 'belongsTo' },
+  { text: 'Has One', value: 'hasOne' },
+  { text: 'Has Many', value: 'hasMany' },
+  { text: 'Belongs To Many', value: 'belongsToMany' }
 ]
 
 /* ----------  COMPONENT  ---------- */
@@ -28,47 +29,50 @@ const Associations = ({
     removeAssociation
   }
 }) => (
-  <div>
+  <React.Fragment>
     <h3>Model Associations</h3>
-    <Button primary raised label='+ ADD' onClick={addAssociation} />
-    <List>
+    <Button icon='add' circular onClick={addAssociation} />
+    <React.Fragment>
       {associations.map(assoc => (
-        <ListItem key={assoc.id}>
+        <Card key={assoc.id}>
           <Dropdown
-            auto
-            label='Relationship'
-            source={relationships}
+            placeholder='Relationship'
+            search
+            selection
             value={assoc.relationship}
-            onChange={updateRelationship.bind(null, assoc.id)}
+            onChange={(_, data) => updateRelationship(assoc.id, data.value)}
+            options={relationshipOptions}
           />
           <Dropdown
-            auto
-            label='Target Model'
+            placeholder='Target Model'
+            search
+            selection
             value={assoc.target}
-            source={models.map(({ id, name }) => ({ value: id, label: name }))}
-            onChange={updateTarget.bind(null, assoc.id)}
+            onChange={(_, data) => updateTarget(assoc.id, data.value)}
+            options={models.map(({ id, name }) => ({ text: name, value: id }))}
           />
           <Input
             id='as-input'
+            label='as'
             value={assoc.config.as || ''}
-            onChange={updateAssociationConfig.bind(null, assoc.id, 'as')}
+            onChange={(_, data) => updateAssociationConfig(assoc.id, 'as', data.value)}
             type='text'
           />
-          <span>through</span>
           <Input
             id='through-input'
+            label='through'
             value={assoc.config.through || ''}
-            onChange={updateAssociationConfig.bind(null, assoc.id, 'through')}
+            onChange={(_, data) => updateAssociationConfig(assoc.id, 'through', data.value)}
             type='text'
           />
           <Button
-            label='DELETE'
-            onClick={removeAssociation.bind(null, assoc.id)}
+            icon='delete'
+            onClick={(_, data) => removeAssociation(assoc.id, data.value)}
           />
-        </ListItem>
+        </Card>
       ))}
-    </List>
-  </div>
+    </React.Fragment>
+  </React.Fragment>
 )
 
 export default Associations

@@ -12,32 +12,36 @@ import { thunks as modelsThunks } from '../redux/models'
 /* ----------  APP COMPONENTS  ---------- */
 import Home from './Home'
 import Models from './Models'
+import ViewModel from './ViewModel'
 import EditModel from './EditModel'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Layout, Panel } from 'react-toolbox/lib/layout'
-import AppBar from 'react-toolbox/lib/app_bar'
-import FontIcon from 'react-toolbox/lib/font_icon'
+import { Menu } from 'semantic-ui-react'
 
 /* ----------  COMPONENT  ---------- */
+class App extends React.Component {
+  goHome = () => this.props.history.push('/')
+  goToModels = () => this.props.history.push('/models')
 
-const App = ({ download }) => (
-  <Layout>
-    <Panel>
-      <AppBar
-        title='Sequelize UI'
-        rightIcon={<FontIcon value='file_download' />}
-        onRightIconClick={download}
-      />
-      <Switch>
-        <Route path='/models/:id' component={EditModel} />
-        <Route path='/models' component={Models} />
-        <Route path='/' component={Home} />
-        <Redirect to='/' />
-      </Switch>
-    </Panel>
-  </Layout>
-)
+  render () {
+    return (
+      <React.Fragment>
+        <Menu>
+          <Menu.Item header onClick={this.goHome}>Sequelize UI</Menu.Item>
+          <Menu.Item onClick={this.goToModels}>Models</Menu.Item>
+          <Menu.Item icon='download' onClick={this.props.download} />
+        </Menu>
+        <Switch>
+          <Route path='/models/:id/edit' component={EditModel} />
+          <Route path='/models/:id' component={ViewModel} />
+          <Route path='/models' component={Models} />
+          <Route path='/' component={Home} />
+          <Redirect to='/' />
+        </Switch>
+      </React.Fragment>
+    )
+  }
+}
 
 const mapStateToProps = ({ models }) => ({ models })
 const mapDispatchToProps = { downloadTemplate: modelsThunks.downloadTemplate }

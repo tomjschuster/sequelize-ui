@@ -1,30 +1,25 @@
 import React from 'react'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import Autocomplete from 'react-toolbox/lib/autocomplete'
-import { Button } from 'react-toolbox/lib/button'
-import Checkbox from 'react-toolbox/lib/checkbox'
-import Switch from 'react-toolbox/lib/switch'
-import { Card } from 'react-toolbox/lib/card'
-import Input from 'react-toolbox/lib/input'
+import { Button, Input, Dropdown, Checkbox, Card } from 'semantic-ui-react'
 
 /* ----------  CONSTANTS  ---------- */
-const dataTypes = {
-  STRING: 'String',
-  TEXT: 'Text',
-  INTEGER: 'Integer',
-  FLOAT: 'Float',
-  REAL: 'Real',
-  DOUBLE: 'Double',
-  DECIMAL: 'Decimal',
-  DATE: 'Date',
-  DATEONLY: 'Date (without time)',
-  BOOLEAN: 'Boolean',
-  ARRAY: 'Array',
-  JSON: 'JSON',
-  BLOB: 'BLOB',
-  UUID: 'UUID'
-}
+const dataTypeOptions = [
+  {text: 'String', value: 'STRING'},
+  {text: 'Text', value: 'TEXT'},
+  {text: 'Integer', value: 'INTEGER'},
+  {text: 'Float', value: 'FLOAT'},
+  {text: 'Real', value: 'REAL'},
+  {text: 'Double', value: 'DOUBLE'},
+  {text: 'Decimal', value: 'DECIMAL'},
+  {text: 'Date', value: 'DATE'},
+  {text: 'Date (without time)', value: 'DATEONLY'},
+  {text: 'Boolean', value: 'BOOLEAN'},
+  {text: 'Array', value: 'ARRAY'},
+  {text: 'JSON', value: 'JSON'},
+  {text: 'BLOB', value: 'BLOB'},
+  {text: 'UUID', value: 'UUID'}
+]
 
 /* ----------  HELPERS  ---------- */
 const isNumber = type => {
@@ -44,41 +39,44 @@ const isNumber = type => {
 const Field = ({
   field,
   updateField,
-  deleteField,
+  removeField,
   updateValidation,
   toggleField,
   isOpen
 }) => (
   <Card>
-    <div>
-      <Input
-        value={field.name}
-        onChange={updateField.bind(null, 'name')}
-        type='text'
-        label='Field Name'
-      />
-      <Autocomplete
-        direction='down'
-        multiple={false}
-        onChange={updateField.bind(null, 'type')}
-        source={dataTypes}
-        value={field.type}
-        label='Data Type'
-      />
-      <Button label='DELETE FIELD' onClick={deleteField} />
-      <Switch onChange={toggleField} checked={isOpen} label='More Options' />
-    </div>
+    <Input
+      value={field.name}
+      onChange={(_, data) => updateField('name', data.value)}
+      type='text'
+      label='Field Name'
+    />
+    <Dropdown
+      placeholder='Data Type'
+      search
+      selection
+      onChange={(_, data) => updateField('type', data.value)}
+      options={dataTypeOptions}
+      value={field.type}
+    />
+    <Button icon='delete' onClick={removeField} />
+    <Checkbox
+      toggle
+      onChange={(_, data) => toggleField(data.checked)}
+      checked={isOpen}
+      label='More Options'
+    />
     {isOpen && (
-      <div>
+      <React.Fragment>
         <Checkbox
           label='UNIQUE'
           checked={Boolean(field.unique)}
-          onChange={updateField.bind(null, 'unique')}
+          onClick={(_, data) => updateField('unique', data.checked)}
         />
         {field.unique && (
           <Input
             value={field.uniqueKey || ''}
-            onChange={updateField.bind(null, 'uniqueKey')}
+            onChange={(_, data) => updateField('uniqueKey', data.value)}
             type='text'
             label='Unique Key'
           />
@@ -86,46 +84,46 @@ const Field = ({
         <Checkbox
           label='NOT NULL'
           checked={field.allowNull === false}
-          onChange={value => updateField('allowNull', !value)}
+          onClick={(_, data) => updateField('allowNull', !data.checked)}
         />
         <Checkbox
           label='PRIMARY KEY'
           checked={field.primaryKey}
-          onChange={updateField.bind(null, 'primaryKey')}
+          onClick={(_, data) => updateField('primaryKey', data.checked)}
         />
         <Checkbox
           label='AUTOINCREMENT'
           checked={field.autoIncrement}
-          onChange={updateField.bind(null, 'autoIncrement')}
+          onClick={(_, data) => updateField('autoIncrement', data.checked)}
         />
         <Input
           value={field.default || ''}
-          onChange={updateField.bind(null, 'default')}
+          onChange={(_, data) => updateField('default', data.value)}
           type='text'
           label='Default Value'
         />
         <Input
           value={field.comment || ''}
-          onChange={updateField.bind(null, 'comment')}
+          onChange={(_, data) => updateField('comment', data.value)}
           type='text'
           label='Comment'
         />
         <Input
           value={field.field || ''}
-          onChange={updateField.bind(null, 'field')}
+          onChange={(_, data) => updateField('field', data.value)}
           type='text'
           label='Field Name'
         />
         <h4>Validation</h4>
         <Input
           value={field.validate.is || ''}
-          onChange={updateValidation.bind(null, 'is')}
+          onChange={(_, data) => updateValidation('is', data.value)}
           type='text'
           label='is (/^[a-z]+$/i)'
         />
         <Input
           value={field.validate.contains || ''}
-          onChange={updateValidation.bind(null, 'contains')}
+          onChange={(_, data) => updateValidation('contains', data.value)}
           type='text'
           label='contains'
         />
@@ -133,20 +131,20 @@ const Field = ({
           <Checkbox
             label='isEmail'
             checked={field.validate.isEmail || false}
-            onChange={updateValidation.bind(null, 'isEmail')}
+            onClick={(_, data) => updateValidation('isEmail', data.checked)}
           />
         )}
         {field.type === 'STRING' && (
           <Checkbox
             label='isUrl'
             checked={field.validate.isUrl || false}
-            onChange={updateValidation.bind(null, 'isUrl')}
+            onClick={(_, data) => updateValidation('isUrl', data.checked)}
           />
         )}
         {isNumber(field.type) && (
           <Input
             value={field.validate.min || ''}
-            onChange={updateValidation.bind(null, 'min')}
+            onChange={(_, data) => updateValidation('min', data.value)}
             type='text'
             label='min'
           />
@@ -154,12 +152,12 @@ const Field = ({
         {isNumber(field.type) && (
           <Input
             value={field.validate.max || ''}
-            onChange={updateValidation.bind(null, 'max')}
+            onChange={(_, data) => updateValidation('max`', data.value)}
             type='text'
             label='max'
           />
         )}
-      </div>
+      </React.Fragment>
     )}
   </Card>
 )
@@ -172,10 +170,10 @@ const Fields = ({
   currentModelActions: { addField, updateField, updateValidation, removeField },
   uiActions: { toggleField }
 }) => (
-  <section>
+  <React.Fragment>
     <h3>Fields</h3>
-    <Button label='+ ADD' onClick={addField} raised primary />
-    <div>
+    <Button icon='add' circular onClick={addField} />
+    <React.Fragment>
       {fields.map(field => (
         <Field
           key={field.id}
@@ -187,8 +185,8 @@ const Fields = ({
           toggleField={toggleField.bind(null, field.id)}
         />
       ))}
-    </div>
-  </section>
+    </React.Fragment>
+  </React.Fragment>
 )
 
 export default Fields

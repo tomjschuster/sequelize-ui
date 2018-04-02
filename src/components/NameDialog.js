@@ -1,8 +1,7 @@
 import React from 'react'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import Dialog from 'react-toolbox/lib/dialog'
-import Input from 'react-toolbox/lib/input'
+import { Modal, Button, Input } from 'semantic-ui-react'
 
 /* ----------  COMPONENT  ---------- */
 const NameDialog = ({
@@ -13,19 +12,19 @@ const NameDialog = ({
   stopCreatingModel,
   inputModelName
 }) =>
-  <Dialog
-    title={'Create a Model'}
-    active={creatingModel}
-    actions={[
-      { label: 'OK', onClick: createModel.bind(null, name) },
-      { label: 'Cancel', onClick: stopCreatingModel }
-    ]}
-  >
-    <Input
-      value={name}
-      error={errors.duplicateName.error && errors.duplicateName.message}
-      onChange={inputModelName}
-    />
-  </Dialog>
+  <Modal open={creatingModel} basic small>
+    <Modal.Content>
+      <Input
+        placeholder='Name your model...'
+        value={name}
+        error={errors.duplicateName.error && errors.duplicateName.message}
+        onChange={evt => inputModelName(evt.target.value)}
+      />
+    </Modal.Content>
+    <Modal.Actions>
+      <Button icon='arrow right' onClick={createModel.bind(null, name)} />
+      <Button icon='cancel' onClick={stopCreatingModel} />
+    </Modal.Actions>
+  </Modal>
 
 export default NameDialog
