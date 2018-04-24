@@ -69,7 +69,6 @@
     "less-loader": "^4.1.0",
     "modules-values-extract": "^1.0.3",
     "morgan": "^1.7.0",
-    "path": "^0.12.7",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.4",
