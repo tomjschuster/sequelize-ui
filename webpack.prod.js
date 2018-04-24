@@ -1,22 +1,22 @@
 const webpack = require('webpack')
 const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: './src/index.js',
   output: {
-    path: __dirname,
-    filename: './dist/app.js'
+    path: path.join(__dirname, 'dist'),
+    filename: 'app.[hash].js'
   },
   resolve: {
+    extensions: ['.js', '.jsx'],
     alias: {
-      '../../theme.config$': path.join(__dirname,  'src/styling/theme.config')
+      '../../theme.config$': path.join(__dirname, 'src/style/theme.config')
     }
   },
-  context: __dirname,
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: '/node_modules',
@@ -31,30 +31,34 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        use: ExtractTextPlugin.extract({ use: ['css-loader', 'less-loader'] })
+        use: ExtractTextPlugin.extract({
+          use: ['css-loader', 'less-loader']
+        })
       },
       {
-        test: /\.jpe?g$|\.gif$|\.png$|\.ttf$|\.eot$|\.svg$/,
-        use: 'file-loader?name=[name].[ext]?[hash]'
+        test: /\.jpe?g$|\.gif$|\.ico$|\.png$|\.svg$/,
+        loader: 'file-loader',
+        options: { name: '[name].[ext]?[hash]' }
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/fontwoff'
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          mimetype: 'application/font-woff'
+        }
       },
       {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              importLoaders: 1,
-              localIdentName: '[name]--[local]--[hash:base64:8]'
-            }
-          },
-          'postcss-loader' // postcss.config.js
-        ]
+        test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'file-loader'
+      },
+      {
+        test: /\.otf(\?.*)?$/,
+        loader: 'file-loader',
+        options: {
+          name: '/fonts/[name].[ext]',
+          mimetype: 'application/font-otf'
+        }
       }
     ]
   },
@@ -64,12 +68,9 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: 'src/index.html',
-      filename: 'dist/index.html',
-      inject: false
+      filename: 'index.html'
     }),
-    new ExtractTextPlugin({
-      filename: '[name].[contenthash].css'
-    })
+    new ExtractTextPlugin('[name].[hash].css'),
     new webpack.optimize.UglifyJsPlugin()
   ]
 }
