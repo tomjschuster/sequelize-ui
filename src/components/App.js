@@ -10,45 +10,31 @@ import {
 import { thunks as modelsThunks } from '../redux/models'
 
 /* ----------  APP COMPONENTS  ---------- */
-import Home from './Home'
 import Schema from './Schema'
 import ViewModel from './ViewModel'
 import EditModel from './EditModel'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Menu, Icon, Container } from 'semantic-ui-react'
+import { Menu, Container } from 'semantic-ui-react'
 import styles from '../style/css/main.css'
 
 /* ----------  COMPONENT  ---------- */
-const AppMenu = ({ goHome, goToSchema, download }) => (
+const AppMenu = ({ goHome, download }) => (
   <Menu size='small' icon='labeled'>
-    <Menu.Item onClick={goToSchema}>
-      <Icon name='cubes' />
-      My Schema
-    </Menu.Item>
-    <h1 role='link' onClick={goHome} className={styles.siteTitle}>
-      Sequelize UI
-    </h1>
-    <Menu.Item position='right' onClick={download}>
-      <Icon name='download' />
-      Download Schema
-    </Menu.Item>
+    <Menu.Item icon='cubes' onClick={goHome} />
+    <h1 className={styles.siteTitle}>Sequelize UI</h1>
+    <Menu.Item icon='download' position='right' onClick={download} />
   </Menu>
 )
 
 const App = ({ history, download }) => (
   <React.Fragment>
-    <AppMenu
-      goHome={() => history.push('/')}
-      goToSchema={() => history.push('/schema')}
-      download={download}
-    />
+    <AppMenu goHome={() => history.push('/')} download={download} />
     <Container>
       <Switch>
-        <Route exact path='/schema/models/:id/edit' component={EditModel} />
-        <Route exact path='/schema/models/:id' component={ViewModel} />
-        <Route exact path='/schema' component={Schema} />
-        <Route exact path='/' component={Home} />
+        <Route exact path='/:id/edit' component={EditModel} />
+        <Route exact path='/:id' component={ViewModel} />
+        <Route exact path='/' component={Schema} />
         <Redirect to='/' />
       </Switch>
     </Container>

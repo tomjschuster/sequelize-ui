@@ -84,8 +84,8 @@ const ModelItem = ({
 /* ----------  Component  ---------- */
 
 class Schema extends React.Component {
-  gotoModel = id => this.props.history.push(`/schema/models/${id}`)
-  editModel = id => this.props.history.push(`/schema/models/${id}/edit`)
+  gotoModel = id => this.props.history.push(`/${id}`)
+  editModel = id => this.props.history.push(`/${id}/edit`)
 
   render () {
     const {
@@ -113,8 +113,8 @@ class Schema extends React.Component {
               isCurrent={model.id === currentId}
               modelNameObj={modelNameObj}
               model={model}
-              gotoModel={() => history.push(`/schema/models/${model.id}`)}
-              editModel={() => history.push(`/schema/models/${model.id}/edit`)}
+              gotoModel={() => history.push(`/${model.id}`)}
+              editModel={() => history.push(`/${model.id}/edit`)}
               removeModel={() => modelsActions.removeModel(model.id)}
             />
           ))}
