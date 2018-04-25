@@ -16,32 +16,46 @@ import ViewModel from './ViewModel'
 import EditModel from './EditModel'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Menu } from 'semantic-ui-react'
+import { Menu, Icon } from 'semantic-ui-react'
+import styles from '../style/css/main.css'
 
 /* ----------  COMPONENT  ---------- */
-class App extends React.Component {
-  goHome = () => this.props.history.push('/')
-  goToModels = () => this.props.history.push('/models')
+const AppMenu = ({ goHome, goToModels, download }) => (
+  <Menu size='small' icon='labeled'>
+    <Menu.Item onClick={goHome}>
+      <Icon name='home' />
+      Home
+    </Menu.Item>
+    <Menu.Item onClick={goToModels}>
+      <Icon name='cubes' />
+      Models
+    </Menu.Item>
+    <h1 className={styles.siteTitle}>
+      Sequelize UI
+    </h1>
+    <Menu.Item position='right' onClick={download}>
+      <Icon name='download' />
+      Download Schema
+    </Menu.Item>
+  </Menu>
+)
 
-  render () {
-    return (
-      <React.Fragment>
-        <Menu>
-          <Menu.Item header onClick={this.goHome}>Sequelize UI</Menu.Item>
-          <Menu.Item onClick={this.goToModels}>Models</Menu.Item>
-          <Menu.Item icon='download' onClick={this.props.download} />
-        </Menu>
-        <Switch>
-          <Route path='/models/:id/edit' component={EditModel} />
-          <Route path='/models/:id' component={ViewModel} />
-          <Route path='/models' component={Models} />
-          <Route path='/' component={Home} />
-          <Redirect to='/' />
-        </Switch>
-      </React.Fragment>
-    )
-  }
-}
+const App = ({ history, download }) => (
+  <React.Fragment>
+    <AppMenu
+      goHome={() => history.push('/')}
+      goToModels={() => history.push('/models')}
+      download={download}
+    />
+    <Switch>
+      <Route path='/models/:id/edit' component={EditModel} />
+      <Route path='/models/:id' component={ViewModel} />
+      <Route path='/models' component={Models} />
+      <Route path='/' component={Home} />
+      <Redirect to='/' />
+    </Switch>
+  </React.Fragment>
+)
 
 const mapStateToProps = ({ models }) => ({ models })
 const mapDispatchToProps = { downloadTemplate: modelsThunks.downloadTemplate }
