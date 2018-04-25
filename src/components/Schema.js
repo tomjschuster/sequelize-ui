@@ -12,12 +12,10 @@ import { actionCreators as formsActions } from '../redux/forms'
 import { actionCreators as uiActions } from '../redux/ui'
 import { actionCreators as errorsActions } from '../redux/errors'
 
-/* ----------  APP COMPONENTS  ---------- */
-import NameDialog from './NameDialog'
-
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Button, Header, Segment } from 'semantic-ui-react'
+import { Button, Header, Segment, Input } from 'semantic-ui-react'
 import style from '../style/css/main.css'
+
 /* ----------  HELPERS  ---------- */
 const fieldsText = fields => {
   return `Fields: ${fields.map(({ name }) => name).join(', ')}`
@@ -84,8 +82,31 @@ const ModelItem = ({
 /* ----------  Component  ---------- */
 
 class Schema extends React.Component {
+  constructor (props) {
+    super(props)
+    this.nameInput = React.createRef()
+    this.addModelButton = React.createRef()
+  }
+
   gotoModel = id => this.props.history.push(`/${id}`)
   editModel = id => this.props.history.push(`/${id}/edit`)
+
+  focusOnNameInput = () => this.nameInput.current.focus()
+  focusOnAddModelButton = () => this.addModelButton.current.focus()
+
+  componentDidMount () {
+    this.focusOnAddModelButton()
+  }
+
+  componentDidUpdate (prevProps) {
+    if (!prevProps.creatingModel && this.props.creatingModel) {
+      this.focusOnNameInput()
+    }
+
+    if (prevProps.creatingModel && !this.props.creatingModel) {
+      this.focusOnAddModelButton()
+    }
+  }
 
   render () {
     const {
@@ -94,7 +115,7 @@ class Schema extends React.Component {
       models,
       newModelName,
       creatingModel,
-      errors,
+      // errors,
       modelsActions,
       uiActions,
       modelsThunks,
@@ -105,7 +126,39 @@ class Schema extends React.Component {
 
     return (
       <React.Fragment>
-        <Header as='h2' icon textAlign='center'>My Schema</Header>
+        <Header as='h2' icon textAlign='center'>My Models</Header>
+
+        {creatingModel
+          ? (
+            <Input
+              ref={this.nameInput}
+              placeholder='Name your model...'
+              value={newModelName}
+              onChange={evt => formsActions.inputModelsModelName(evt.target.value)}
+              action
+            >
+              <input />
+              <Button
+                onClick={() => modelsThunks.createModel(newModelName)}
+              >
+                  Create
+              </Button>
+              <Button
+                onClick={() => uiActions.stopCreatingModel()}
+              >
+                  Cancel
+              </Button>
+            </Input>
+          )
+          : (
+            <Button
+              ref={this.addModelButton}
+              icon='add'
+              onClick={uiActions.startCreatingModel}
+              circular
+            />
+          )
+        }
         <Segment.Group>
           {models.map(model => (
             <ModelItem
@@ -119,15 +172,6 @@ class Schema extends React.Component {
             />
           ))}
         </Segment.Group>
-        <Button icon='add' onClick={uiActions.startCreatingModel} circular />
-        <NameDialog
-          name={newModelName}
-          errors={errors}
-          creatingModel={creatingModel}
-          createModel={modelsThunks.createModel}
-          inputModelName={formsActions.inputModelsModelName}
-          stopCreatingModel={uiActions.stopCreatingModel}
-        />
       </React.Fragment>
     )
   }

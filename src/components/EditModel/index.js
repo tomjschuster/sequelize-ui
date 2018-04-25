@@ -38,7 +38,7 @@ class EditModel extends React.Component {
     const { uiActions, modelsThunks, currentModel, models, router } = this.props
     modelsThunks
       .saveModel(currentModel, models, true)
-      .then(() => router.push('/models'))
+      .then(() => router.push('/'))
       .catch(error => uiActions.openDialog('Validation Error', error))
   }
 
@@ -46,7 +46,7 @@ class EditModel extends React.Component {
     const { uiActions, modelsThunks, currentModel, models, router } = this.props
     modelsThunks
       .saveModel(currentModel, models, false)
-      .then(() => router.push('/models'))
+      .then(() => router.push('/'))
       .catch(error => uiActions.openDialog('Validation Error', error))
   }
 

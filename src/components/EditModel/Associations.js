@@ -1,11 +1,7 @@
 import React from 'react'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Input, Button, Dropdown, Card} from 'semantic-ui-react'
-// import Input from 'react-toolbox/lib/input'
-// import { Button } from 'react-toolbox/lib/button'
-// import { List, ListItem } from 'react-toolbox/lib/list'
-// import Dropdown from 'react-toolbox/lib/dropdown'
+import { Input, Button, Dropdown, Card } from 'semantic-ui-react'
 
 /* ----------  CONSTANTS  ---------- */
 const relationshipOptions = [
