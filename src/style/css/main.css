@@ -1,9 +1,17 @@
 .siteTitle {
-  font-size: 1.5em;
+  font-size: 2.5em;
   margin: 0;
   width: 100%;
   text-align: center;
   align-self: center;
+  letter-spacing: 0.18em;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+.createModelBtn {
+  display: inline-block;
+  margin: 0 auto;
 }
 
 .modelItem h3 {

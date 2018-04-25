@@ -13,7 +13,7 @@ import { actionCreators as uiActions } from '../redux/ui'
 import { actionCreators as errorsActions } from '../redux/errors'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Button, Header, Segment, Input } from 'semantic-ui-react'
+import { Button, Segment, Input, Container } from 'semantic-ui-react'
 import style from '../style/css/main.css'
 
 /* ----------  HELPERS  ---------- */
@@ -126,39 +126,40 @@ class Schema extends React.Component {
 
     return (
       <React.Fragment>
-        <Header as='h2' icon textAlign='center'>My Models</Header>
-
-        {creatingModel
-          ? (
-            <Input
-              ref={this.nameInput}
-              placeholder='Name your model...'
-              value={newModelName}
-              onChange={evt => formsActions.inputModelsModelName(evt.target.value)}
-              action
-            >
-              <input />
-              <Button
-                onClick={() => modelsThunks.createModel(newModelName)}
+        <Container textAlign='center'>
+          {creatingModel
+            ? (
+              <Input
+                ref={this.nameInput}
+                placeholder='Name your model...'
+                value={newModelName}
+                onChange={evt => formsActions.inputModelsModelName(evt.target.value)}
+                action
               >
+                <input />
+                <Button
+                  onClick={() => modelsThunks.createModel(newModelName)}
+                >
                   Create
-              </Button>
-              <Button
-                onClick={() => uiActions.stopCreatingModel()}
-              >
+                </Button>
+                <Button
+                  onClick={() => uiActions.stopCreatingModel()}
+                >
                   Cancel
+                </Button>
+              </Input>
+            )
+            : (
+              <Button
+                ref={this.addModelButton}
+                onClick={uiActions.startCreatingModel}
+                className={style.createModelBtn}
+              >
+              Create a Model
               </Button>
-            </Input>
-          )
-          : (
-            <Button
-              ref={this.addModelButton}
-              icon='add'
-              onClick={uiActions.startCreatingModel}
-              circular
-            />
-          )
-        }
+            )
+          }
+        </Container>
         <Segment.Group>
           {models.map(model => (
             <ModelItem
