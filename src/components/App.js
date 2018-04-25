@@ -11,26 +11,22 @@ import { thunks as modelsThunks } from '../redux/models'
 
 /* ----------  APP COMPONENTS  ---------- */
 import Home from './Home'
-import Models from './Models'
+import Schema from './Schema'
 import ViewModel from './ViewModel'
 import EditModel from './EditModel'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Menu, Icon } from 'semantic-ui-react'
+import { Menu, Icon, Container } from 'semantic-ui-react'
 import styles from '../style/css/main.css'
 
 /* ----------  COMPONENT  ---------- */
-const AppMenu = ({ goHome, goToModels, download }) => (
+const AppMenu = ({ goHome, goToSchema, download }) => (
   <Menu size='small' icon='labeled'>
-    <Menu.Item onClick={goHome}>
-      <Icon name='home' />
-      Home
-    </Menu.Item>
-    <Menu.Item onClick={goToModels}>
+    <Menu.Item onClick={goToSchema}>
       <Icon name='cubes' />
-      Models
+      My Schema
     </Menu.Item>
-    <h1 className={styles.siteTitle}>
+    <h1 role='link' onClick={goHome} className={styles.siteTitle}>
       Sequelize UI
     </h1>
     <Menu.Item position='right' onClick={download}>
@@ -44,16 +40,18 @@ const App = ({ history, download }) => (
   <React.Fragment>
     <AppMenu
       goHome={() => history.push('/')}
-      goToModels={() => history.push('/models')}
+      goToSchema={() => history.push('/schema')}
       download={download}
     />
-    <Switch>
-      <Route path='/models/:id/edit' component={EditModel} />
-      <Route path='/models/:id' component={ViewModel} />
-      <Route path='/models' component={Models} />
-      <Route path='/' component={Home} />
-      <Redirect to='/' />
-    </Switch>
+    <Container>
+      <Switch>
+        <Route exact path='/schema/models/:id/edit' component={EditModel} />
+        <Route exact path='/schema/models/:id' component={ViewModel} />
+        <Route exact path='/schema' component={Schema} />
+        <Route exact path='/' component={Home} />
+        <Redirect to='/' />
+      </Switch>
+    </Container>
   </React.Fragment>
 )
 

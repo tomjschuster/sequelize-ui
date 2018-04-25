@@ -4,4 +4,17 @@
   width: 100%;
   text-align: center;
   align-self: center;
+  cursor: pointer;
 }
+
+.modelItem h3 {
+  margin: 0.25em 0 0 0;
+  display: inline-block;
+  float: left;
+}
+
+.modelItem div {
+  display: inline-block;
+  float: right;
+}
+

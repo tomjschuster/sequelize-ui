@@ -31,13 +31,13 @@ class ViewModel extends React.Component {
   }
 
   editModel = () => {
-    this.props.history.push(`/models/${this.props.currentModel.id}/edit`)
+    this.props.history.push(`/schema/models/${this.props.currentModel.id}/edit`)
   }
 
   deleteModel = () => {
     console.log(this.props)
     this.props.modelsActions.removeModel()
-    this.props.history.push('/models')
+    this.props.history.push('/schema')
   }
 
   render () {
