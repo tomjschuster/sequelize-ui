@@ -20,7 +20,7 @@ import Configuration from './Configuration'
 import Associations from './Associations'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Input, Button, Menu, Icon, Container, Tab } from 'semantic-ui-react'
+import { Input, Divider, Button, Container, Tab } from 'semantic-ui-react'
 
 /* ----------  COMPONENT  ---------- */
 
@@ -83,13 +83,19 @@ class Model extends React.Component {
           ]}
         />
         <Container id='content'>
-          <Input
-            value={currentModel.name}
-            onChange={evt => currentModelActions.setModelName(evt.target.value)}
-            label='Model Name'
-          />
-          <Button primary onClick={this.saveModel}>Save</Button>
-          <Button onClick={() => removeModel(currentModel.id)}>Delete</Button>
+          <Container textAlign='center'>
+            <Input
+              placeholder='Name your model...'
+              value={currentModel.name}
+              onChange={evt => currentModelActions.setModelName(evt.target.value)}
+              action
+            >
+              <input />
+              <Button primary onClick={this.saveModel}>Save</Button>
+              <Button onClick={() => removeModel(currentModel.id)}>Delete</Button>
+            </Input>
+          </Container>
+          <Divider />
           <Tab
             index={tabIdx}
             onChange={uiActions.setCurrentModelTabIdx}
