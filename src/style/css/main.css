@@ -30,3 +30,8 @@
   float: right;
   display: inline-block;
 }
+
+.menu-link-separator {
+  display: inline-block;
+  width: 100%;
+}
