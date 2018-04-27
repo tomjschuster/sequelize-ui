@@ -12,7 +12,12 @@ import { Menu, Icon } from 'semantic-ui-react'
 /* ----------  COMPONENT  ---------- */
 const AppBar = ({ history, download, menuLinks }) => (
   <Menu size='small' icon='labeled' fixed='top'>
-    {menuLinks}
+    {menuLinks.map(({ icon, label, ...props }) =>
+      <Menu.Item key={label} {...props}>
+        <Icon name={icon} />
+        {label}
+      </Menu.Item>
+    )}
     <h1 className='site-title'>Sequelize UI</h1>
     <Menu.Item position='right' onClick={download}>
       <Icon name='download' />

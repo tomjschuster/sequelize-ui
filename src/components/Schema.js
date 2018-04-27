@@ -96,10 +96,7 @@ class Schema extends React.Component {
       <React.Fragment>
         <AppBar
           menuLinks={[
-            <Menu.Item key='home' active>
-              <Icon name='cubes' />
-              Models
-            </Menu.Item>
+            { active: true, icon: 'cubes', label: 'Models' }
           ]}
         />
         <Container id='content'>

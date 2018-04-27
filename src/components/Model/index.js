@@ -78,14 +78,8 @@ class Model extends React.Component {
       <React.Fragment>
         <AppBar
           menuLinks={[
-            <Menu.Item key='home' onClick={this.goHome}>
-              <Icon name='cubes' />
-              Models
-            </Menu.Item>,
-            <Menu.Item key='model' active>
-              <Icon name='cube' />
-              {this.props.currentModel.name}
-            </Menu.Item>
+            { icon: 'cubes', label: 'Models', onClick: this.goHome },
+            { icon: 'cube', label: this.props.currentModel.name, active: true }
           ]}
         />
         <Container id='content'>
