@@ -6,6 +6,7 @@ import { Router, Route } from 'react-router-dom'
 import history from './history'
 import App from './components/App'
 import 'semantic-ui-less/semantic.less'
+import './style/css/main.css'
 
 render(
   <Provider store={store}>

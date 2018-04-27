@@ -14,15 +14,17 @@ import {
 import { actionCreators as uiActions } from '../../redux/ui'
 
 /* ----------  APP COMPONENTS  ---------- */
-import ModelToolBar from './ModelToolBar'
+import AppBar from '../AppBar'
 import Fields from './Fields'
 import Configuration from './Configuration'
 import Associations from './Associations'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Tab } from 'semantic-ui-react'
+import { Input, Button, Menu, Icon, Container, Tab } from 'semantic-ui-react'
 
-class EditModel extends React.Component {
+/* ----------  COMPONENT  ---------- */
+
+class Model extends React.Component {
   componentDidMount () {
     this.props.currentModelThunks.setModel(this.props.match.params.id)
   }
@@ -55,6 +57,10 @@ class EditModel extends React.Component {
     this.props.uiActions.closeAllFields()
   }
 
+  goHome = () => {
+    this.props.history.push('/')
+  }
+
   render () {
     const {
       // State
@@ -68,59 +74,69 @@ class EditModel extends React.Component {
       modelsActions: { removeModel }
     } = this.props
 
-    const isNew = !models.find(({ id }) => id === currentModel.id)
-
     return (
       <React.Fragment>
-        {isNew ? <h3>Create a Model</h3> : <h3>Edit a Model</h3>}
-        <ModelToolBar
-          isNew={isNew}
-          name={currentModel.name}
-          setModelName={currentModelActions.setModelName}
-          createModel={this.createModel}
-          saveModel={this.saveModel}
-          removeModel={removeModel.bind(null, currentModel.id)}
-        />
-        <Tab
-          index={tabIdx}
-          onChange={uiActions.setCurrentModelTabIdx}
-          panes={[
-            {
-              menuItem: 'Fields',
-              render: () =>
-                <Tab.Pane>
-                  <Fields
-                    fields={currentModel.fields}
-                    fieldsToggle={fieldsToggle}
-                    currentModelActions={currentModelActions}
-                    uiActions={uiActions}
-                  />
-                </Tab.Pane>
-            },
-            {
-              menuItem: 'Configuration',
-              render: () =>
-                <Tab.Pane>
-                  <Configuration
-                    config={currentModel.config}
-                    methods={currentModel.methods}
-                    currentModelActions={currentModelActions}
-                  />
-                </Tab.Pane>
-            },
-            {
-              menuItem: 'Associations',
-              render: () =>
-                <Tab.Pane>
-                  <Associations
-                    models={models}
-                    associations={currentModel.associations}
-                    currentModelActions={currentModelActions}
-                  />
-                </Tab.Pane>
-            }
+        <AppBar
+          menuLinks={[
+            <Menu.Item key='home' onClick={this.goHome}>
+              <Icon name='cubes' />
+              Models
+            </Menu.Item>,
+            <Menu.Item key='model' active>
+              <Icon name='cube' />
+              {this.props.currentModel.name}
+            </Menu.Item>
           ]}
         />
+        <Container id='content'>
+          <Input
+            value={currentModel.name}
+            onChange={evt => currentModelActions.setModelName(evt.target.value)}
+            label='Model Name'
+          />
+          <Button primary onClick={this.saveModel}>Save</Button>
+          <Button onClick={() => removeModel(currentModel.id)}>Delete</Button>
+          <Tab
+            index={tabIdx}
+            onChange={uiActions.setCurrentModelTabIdx}
+            panes={[
+              {
+                menuItem: 'Fields',
+                render: () =>
+                  <Tab.Pane>
+                    <Fields
+                      fields={currentModel.fields}
+                      fieldsToggle={fieldsToggle}
+                      currentModelActions={currentModelActions}
+                      uiActions={uiActions}
+                    />
+                  </Tab.Pane>
+              },
+              {
+                menuItem: 'Configuration',
+                render: () =>
+                  <Tab.Pane>
+                    <Configuration
+                      config={currentModel.config}
+                      methods={currentModel.methods}
+                      currentModelActions={currentModelActions}
+                    />
+                  </Tab.Pane>
+              },
+              {
+                menuItem: 'Associations',
+                render: () =>
+                  <Tab.Pane>
+                    <Associations
+                      models={models}
+                      associations={currentModel.associations}
+                      currentModelActions={currentModelActions}
+                    />
+                  </Tab.Pane>
+              }
+            ]}
+          />
+        </Container>
       </React.Fragment>
     )
   }
@@ -141,4 +157,4 @@ const mapDispatchToProps = dispatch => ({
   currentModelThunks: bindActionCreators(currentModelThunks, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditModel)
+export default connect(mapStateToProps, mapDispatchToProps)(Model)

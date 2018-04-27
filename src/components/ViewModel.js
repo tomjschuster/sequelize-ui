@@ -9,8 +9,11 @@ import {
   thunks as currentModelThunks, actionCreators as currentModelActions
 } from '../redux/currentModel'
 
+/* ----------  APP COMPONENTS  ---------- */
+import AppBar from './AppBar'
+
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Button } from 'semantic-ui-react'
+import { Menu, Icon, Container, Button } from 'semantic-ui-react'
 
 /* ----------  COMPONENT  ---------- */
 class ViewModel extends React.Component {
@@ -30,6 +33,10 @@ class ViewModel extends React.Component {
     this.props.uiActions.closeAllFields()
   }
 
+  goHome = () => {
+    this.props.history.push('/')
+  }
+
   editModel = () => {
     this.props.history.push(`/${this.props.currentModel.id}/edit`)
   }
@@ -42,9 +49,23 @@ class ViewModel extends React.Component {
   render () {
     return (
       <React.Fragment>
-        <h3>{this.props.currentModel.name}</h3>
-        <Button icon='edit' onClick={this.editModel} />
-        <Button icon='delete' onClick={this.deleteModel} />
+        <AppBar
+          menuLinks={[
+            <Menu.Item key='home' onClick={this.goHome}>
+              <Icon name='cubes' />
+              Models
+            </Menu.Item>,
+            <Menu.Item key='model' active>
+              <Icon name='cube' />
+              {this.props.currentModel.name}
+            </Menu.Item>
+          ]}
+        />
+        <Container id='content'>
+          <h3>{this.props.currentModel.name}</h3>
+          <Button icon='edit' onClick={this.editModel} />
+          <Button icon='delete' onClick={this.deleteModel} />
+        </Container>
       </React.Fragment>
     )
   }

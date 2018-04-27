@@ -12,11 +12,11 @@ import { actionCreators as formsActions } from '../redux/forms'
 import { actionCreators as uiActions } from '../redux/ui'
 import { actionCreators as errorsActions } from '../redux/errors'
 
-/* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Button, Input, Container, Card, Divider } from 'semantic-ui-react'
-import style from '../style/css/main.css'
+/* ----------  APP COMPONENTS  ---------- */
+import AppBar from './AppBar'
 
-/* ----------  HELPERS  ---------- */
+/* ----------  UI LIBRARY COMPONENTS  ---------- */
+import { Menu, Icon, Button, Input, Container, Card, Divider } from 'semantic-ui-react'
 
 /* ----------  COMPONENT  ---------- */
 
@@ -27,26 +27,19 @@ const ModelCard = ({
   model,
   // Actions
   gotoModel,
-  editModel,
   removeModel
 }) =>
-  <Card clearing className={style.modelCard}>
+  <Card className='model-card'>
     <Card.Content>
-      <div className={style.modelCardHeaderContainer}>
-        <Card.Header as='h3' content={model.name} clas />
+      <div className='model-card-header'>
+        <Card.Header as='h3' content={model.name} />
       </div>
-      <div className={style.modelCardButtons}>
+      <div className='model-card-btns'>
         <Button
-          icon='eye'
+          icon='pencil'
           size='tiny'
           circular
           onClick={gotoModel}
-        />
-        <Button
-          icon='edit'
-          size='tiny'
-          circular
-          onClick={editModel}
         />
         <Button
           icon='trash'
@@ -57,8 +50,6 @@ const ModelCard = ({
       </div>
     </Card.Content>
   </Card>
-
-/* ----------  Component  ---------- */
 
 class Schema extends React.Component {
   constructor (props) {
@@ -103,54 +94,63 @@ class Schema extends React.Component {
 
     return (
       <React.Fragment>
-        <Container textAlign='center'>
-          {creatingModel
-            ? (
-              <Input
-                ref={this.nameInput}
-                placeholder='Name your model...'
-                value={newModelName}
-                onChange={evt => inputModelsModelName(evt.target.value)}
-                onKeyPress={evt => evt.key === 'Enter' && createModel(newModelName)}
-                action
-              >
-                <input />
-                <Button
-                  onClick={() => createModel(newModelName)}
+        <AppBar
+          menuLinks={[
+            <Menu.Item key='home' active>
+              <Icon name='cubes' />
+              Models
+            </Menu.Item>
+          ]}
+        />
+        <Container id='content'>
+          <Container textAlign='center'>
+            {creatingModel
+              ? (
+                <Input
+                  ref={this.nameInput}
+                  placeholder='Name your model...'
+                  value={newModelName}
+                  onChange={evt => inputModelsModelName(evt.target.value)}
+                  onKeyPress={evt => evt.key === 'Enter' && createModel(newModelName)}
+                  action
                 >
-                  Create
-                </Button>
+                  <input />
+                  <Button
+                    onClick={() => createModel(newModelName)}
+                  >
+                    Create
+                  </Button>
+                  <Button
+                    onClick={() => uiActions.stopCreatingModel()}
+                  >
+                    Cancel
+                  </Button>
+                </Input>
+              )
+              : (
                 <Button
-                  onClick={() => uiActions.stopCreatingModel()}
+                  ref={this.addModelButton}
+                  onClick={uiActions.startCreatingModel}
+                  className='create-model-btn'
                 >
-                  Cancel
+                Create a Model
                 </Button>
-              </Input>
-            )
-            : (
-              <Button
-                ref={this.addModelButton}
-                onClick={uiActions.startCreatingModel}
-                className={style.createModelBtn}
-              >
-              Create a Model
-              </Button>
-            )
-          }
+              )
+            }
+          </Container>
+          <Divider />
+          <Card.Group centered>
+            {models.map(model => (
+              <ModelCard
+                key={model.id}
+                isCurrent={model.id === currentId}
+                model={model}
+                gotoModel={() => history.push(`/${model.id}`)}
+                removeModel={() => modelsActions.removeModel(model.id)}
+              />
+            ))}
+          </Card.Group>
         </Container>
-        <Divider />
-        <Card.Group>
-          {models.map(model => (
-            <ModelCard
-              key={model.id}
-              isCurrent={model.id === currentId}
-              model={model}
-              gotoModel={() => history.push(`/${model.id}`)}
-              editModel={() => history.push(`/${model.id}/edit`)}
-              removeModel={() => modelsActions.removeModel(model.id)}
-            />
-          ))}
-        </Card.Group>
       </React.Fragment>
     )
   }

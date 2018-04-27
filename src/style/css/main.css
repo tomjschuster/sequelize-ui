@@ -1,28 +1,32 @@
-.siteTitle {
-  font-size: 2.5em;
+#content {
+  padding-top: 6em;
+}
+
+.site-title {
+  font-size: 2em;
   margin: 0;
   width: 100%;
   text-align: center;
   align-self: center;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.15em;
   font-weight: normal;
   text-transform: uppercase;
 }
 
-.createModelBtn {
+.create-model-btn {
   display: inline-block;
   margin: 0 auto;
 }
 
-.modelCardHeaderContainer {
+.model-card-header {
   display: inline-block;
 }
 
-.modelCard .modelCardHeaderContainer h3 {
+.model-card .model-card-header h3 {
   padding-top: 0.2em;
 }
 
-.modelCard .modelCardButtons {
+.model-card .model-card-btns {
   float: right;
   display: inline-block;
 }
