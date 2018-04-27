@@ -13,30 +13,14 @@ import { actionCreators as uiActions } from '../redux/ui'
 import { actionCreators as errorsActions } from '../redux/errors'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Button, Segment, Input, Container } from 'semantic-ui-react'
+import { Button, Input, Container, Card, Divider } from 'semantic-ui-react'
 import style from '../style/css/main.css'
 
 /* ----------  HELPERS  ---------- */
-const fieldsText = fields => {
-  return `Fields: ${fields.map(({ name }) => name).join(', ')}`
-}
-
-const associationsText = (associations, modelNameObj) => {
-  const targets = associations.reduce(
-    (acc, assoc) =>
-      acc[assoc.target]
-        ? acc
-        : { ...acc, [assoc.target]: modelNameObj[assoc.target] },
-    {}
-  )
-  return `Associations: ${Object.values(targets).join(', ')}`
-}
-
-const getModelNameObj = models =>
-  models.reduce((acc, m) => ({ ...acc, [m.id]: m.name }), {})
 
 /* ----------  COMPONENT  ---------- */
-const ModelItem = ({
+
+const ModelCard = ({
   // State
   isCurrent,
   modelNameObj,
@@ -46,38 +30,33 @@ const ModelItem = ({
   editModel,
   removeModel
 }) =>
-  <Segment clearing className={style.modelItem}>
-    <h3>{model.name}</h3>
-    {(model.fields.length > 0 || model.associations.length > 0)
-      ? (<React.Fragment>
-        {model.fields.length > 0 && <p>{fieldsText(model.fields)}</p>}
-        {model.associations.length > 0 && (
-          <p>{associationsText(model.associations, modelNameObj)}</p>
-        )}
-      </React.Fragment>
-      )
-      : null}
-    <div>
-      <Button
-        icon='eye'
-        size='tiny'
-        circular
-        onClick={gotoModel}
-      />
-      <Button
-        icon='edit'
-        size='tiny'
-        circular
-        onClick={editModel}
-      />
-      <Button
-        icon='trash'
-        size='tiny'
-        circular
-        onClick={removeModel}
-      />
-    </div>
-  </Segment>
+  <Card clearing className={style.modelCard}>
+    <Card.Content>
+      <div className={style.modelCardHeaderContainer}>
+        <Card.Header as='h3' content={model.name} clas />
+      </div>
+      <div className={style.modelCardButtons}>
+        <Button
+          icon='eye'
+          size='tiny'
+          circular
+          onClick={gotoModel}
+        />
+        <Button
+          icon='edit'
+          size='tiny'
+          circular
+          onClick={editModel}
+        />
+        <Button
+          icon='trash'
+          size='tiny'
+          circular
+          onClick={removeModel}
+        />
+      </div>
+    </Card.Content>
+  </Card>
 
 /* ----------  Component  ---------- */
 
@@ -118,11 +97,9 @@ class Schema extends React.Component {
       // errors,
       modelsActions,
       uiActions,
-      modelsThunks,
-      formsActions
+      modelsThunks: { createModel },
+      formsActions: { inputModelsModelName }
     } = this.props
-
-    const modelNameObj = getModelNameObj(models)
 
     return (
       <React.Fragment>
@@ -133,12 +110,13 @@ class Schema extends React.Component {
                 ref={this.nameInput}
                 placeholder='Name your model...'
                 value={newModelName}
-                onChange={evt => formsActions.inputModelsModelName(evt.target.value)}
+                onChange={evt => inputModelsModelName(evt.target.value)}
+                onKeyPress={evt => evt.key === 'Enter' && createModel(newModelName)}
                 action
               >
                 <input />
                 <Button
-                  onClick={() => modelsThunks.createModel(newModelName)}
+                  onClick={() => createModel(newModelName)}
                 >
                   Create
                 </Button>
@@ -160,19 +138,19 @@ class Schema extends React.Component {
             )
           }
         </Container>
-        <Segment.Group>
+        <Divider />
+        <Card.Group>
           {models.map(model => (
-            <ModelItem
+            <ModelCard
               key={model.id}
               isCurrent={model.id === currentId}
-              modelNameObj={modelNameObj}
               model={model}
               gotoModel={() => history.push(`/${model.id}`)}
               editModel={() => history.push(`/${model.id}/edit`)}
               removeModel={() => modelsActions.removeModel(model.id)}
             />
           ))}
-        </Segment.Group>
+        </Card.Group>
       </React.Fragment>
     )
   }

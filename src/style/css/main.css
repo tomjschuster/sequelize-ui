@@ -14,14 +14,15 @@
   margin: 0 auto;
 }
 
-.modelItem h3 {
-  margin: 0.25em 0 0 0;
+.modelCardHeaderContainer {
   display: inline-block;
-  float: left;
 }
 
-.modelItem div {
-  display: inline-block;
+.modelCard .modelCardHeaderContainer h3 {
+  padding-top: 0.2em;
+}
+
+.modelCard .modelCardButtons {
   float: right;
+  display: inline-block;
 }
-
