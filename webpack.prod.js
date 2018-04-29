@@ -19,7 +19,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: '/node_modules/',
+        exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
           presets: ['react', 'env'],
@@ -32,8 +32,16 @@ module.exports = {
       {
         test: /\.less$/,
         use: ExtractTextPlugin.extract({
-          use: ['css-loader', 'less-loader']
+          use: ['css-loader', 'less-loader'],
+          fallback: 'style-loader'
         })
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          { loader: 'css-loader' }
+        ]
       },
       {
         test: /\.jpe?g$|\.gif$|\.ico$|\.png$|\.svg$/,
