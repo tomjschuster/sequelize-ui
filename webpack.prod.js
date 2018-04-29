@@ -9,7 +9,7 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: 'app.[hash].js'
   },
-  devtool: null,
+  devtool: false,
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
