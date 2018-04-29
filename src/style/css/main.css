@@ -1,0 +1,37 @@
+#content {
+  padding-top: 6em;
+}
+
+.site-title {
+  font-size: 2em;
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  align-self: center;
+  letter-spacing: 0.15em;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+.create-model-btn {
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.model-card-header {
+  display: inline-block;
+}
+
+.model-card .model-card-header h3 {
+  padding-top: 0.2em;
+}
+
+.model-card .model-card-btns {
+  float: right;
+  display: inline-block;
+}
+
+.menu-link-separator {
+  display: inline-block;
+  width: 100%;
+}

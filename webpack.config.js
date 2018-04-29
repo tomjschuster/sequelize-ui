@@ -1,19 +1,25 @@
 const webpack = require('webpack')
+const path = require('path')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: './src/index.js',
   output: {
-    path: __dirname,
-    filename: './dist/app.js'
+    path: path.join(__dirname, 'dist'),
+    filename: 'app.[hash].js'
   },
-  context: __dirname,
-  devtool: 'eval',
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    alias: {
+      '../../theme.config$': path.join(__dirname, 'src/style/theme.config')
+    }
+  },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        exclude: '/node_modules',
+        exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
           presets: ['react', 'env'],
@@ -24,19 +30,43 @@ module.exports = {
         }
       },
       {
+        test: /\.less$/,
+        use: ExtractTextPlugin.extract({
+          use: ['css-loader', 'less-loader'],
+          fallback: 'style-loader'
+        })
+      },
+      {
         test: /\.css$/,
         use: [
           'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              importLoaders: 1,
-              localIdentName: '[name]--[local]--[hash:base64:8]'
-            }
-          },
-          'postcss-loader' // postcss.config.js
+          { loader: 'css-loader' }
         ]
+      },
+      {
+        test: /\.jpe?g$|\.gif$|\.ico$|\.png$|\.svg$/,
+        loader: 'file-loader',
+        options: { name: '[name].[ext]?[hash]' }
+      },
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          mimetype: 'application/font-woff'
+        }
+      },
+      {
+        test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'file-loader'
+      },
+      {
+        test: /\.otf(\?.*)?$/,
+        loader: 'file-loader',
+        options: {
+          name: '/fonts/[name].[ext]',
+          mimetype: 'application/font-otf'
+        }
       }
     ]
   },
@@ -46,8 +76,8 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: 'src/index.html',
-      filename: 'dist/index.html',
-      inject: false
-    })
+      filename: 'index.html'
+    }),
+    new ExtractTextPlugin('[name].[hash].css')
   ]
 }

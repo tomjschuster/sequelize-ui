@@ -1,23 +1,21 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-import { ThemeProvider } from 'react-css-themr'
-import theme from './theme'
 import store from './redux'
 import { Router, Route } from 'react-router-dom'
 import history from './history'
+import { MediaQueryProvider } from 'react-media-query-hoc'
 import App from './components/App'
-/* eslint-disable no-unused-vars */
-import css from './theme/css/main.css'
-/* eslint-enable no-unused-vars */
+import 'semantic-ui-less/semantic.less'
+import './style/css/main.css'
 
 render(
-  <ThemeProvider theme={theme}>
+  <MediaQueryProvider>
     <Provider store={store}>
       <Router history={history}>
         <Route path='/' component={App} />
       </Router>
     </Provider>
-  </ThemeProvider>,
+  </MediaQueryProvider>,
   document.getElementById('app')
 )
