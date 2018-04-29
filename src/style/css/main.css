@@ -2,7 +2,7 @@
   padding-top: 6em;
 }
 
-.site-title {
+#site-title {
   font-size: 2em;
   margin: 0;
   width: 100%;
@@ -34,4 +34,9 @@
 .menu-link-separator {
   display: inline-block;
   width: 100%;
+}
+
+#site-title.mobile {
+  text-align: right;
+  padding-right: 0.75em;
 }
