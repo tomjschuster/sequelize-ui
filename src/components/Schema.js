@@ -16,7 +16,7 @@ import { actionCreators as errorsActions } from '../redux/errors'
 import AppBar from './AppBar'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Button, Input, Container, Card, Divider } from 'semantic-ui-react'
+import { Modal, Button, Input, Container, Card, Divider } from 'semantic-ui-react'
 
 /* ----------  COMPONENT  ---------- */
 class Schema extends React.Component {
@@ -29,8 +29,11 @@ class Schema extends React.Component {
   gotoModel = id => this.props.history.push(`/${id}`)
   editModel = id => this.props.history.push(`/${id}/edit`)
 
-  focusOnNameInput = () => this.nameInput.current.focus()
-  focusOnAddModelButton = () => this.addModelButton.current.focus()
+  focusOnNameInput = () =>
+    this.nameInput.current && this.nameInput.current.focus()
+
+  focusOnAddModelButton = () =>
+    this.addModelButton.current && this.addModelButton.current.focus()
 
   componentDidMount () {
     this.focusOnAddModelButton()
@@ -88,11 +91,33 @@ class Schema extends React.Component {
       </Card.Content>
     </Card>
 
+  static PreviewModal = ({ model, close, edit }) =>
+    <Modal
+      closeOnDimmerClick
+      open={Boolean(model)}
+      onClose={close}
+      size='large'
+    >
+      {model &&
+      <React.Fragment>
+        <Modal.Header>{model.name}</Modal.Header>
+        <Modal.Content>
+          <Modal.Description />
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={close}>Close</Button>
+          <Button onClick={edit}>Edit</Button>
+        </Modal.Actions>
+      </React.Fragment>
+      }
+    </Modal>
+
   render () {
     const {
       history,
       currentId,
       models,
+      previewModel,
       newModelName,
       creatingModel,
       // errors,
@@ -101,6 +126,8 @@ class Schema extends React.Component {
       modelsThunks: { createModel },
       formsActions: { inputModelsModelName }
     } = this.props
+
+    console.log(previewModel, models)
 
     return (
       <React.Fragment>
@@ -159,13 +186,19 @@ class Schema extends React.Component {
             ))}
           </Card.Group>
         </Container>
+        <Schema.PreviewModal
+          model={previewModel}
+          close={modelsActions.cancelPreviewModel}
+          edit={() => history.push(`/${previewModel.id}`)}
+        />
       </React.Fragment>
     )
   }
 }
-const mapStateToProps = ({ currentModel, models: { models }, forms, ui, errors }) => ({
+const mapStateToProps = ({ currentModel, models: { models, previewModel }, forms, ui, errors }) => ({
   currentId: currentModel.id,
   models,
+  previewModel: previewModel && models.find(({ id }) => previewModel === id),
   newModelName: forms.models.newModelName,
   creatingModel: ui.addModelState.creatingModel,
   errors: errors.models
