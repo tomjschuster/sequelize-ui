@@ -62,3 +62,13 @@
   float: right;
   display: inline-block;
 }
+
+/* SUIR BUG */
+
+.ui.dimmer {
+  display: flex !important;
+}
+
+.ui.modal {
+  margin-top: 0;
+}
