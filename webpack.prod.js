@@ -2,6 +2,7 @@ const webpack = require('webpack')
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: './src/index.js',
@@ -9,6 +10,7 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: 'app.[hash].js'
   },
+  devtool: false,
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
@@ -19,7 +21,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: '/node_modules/',
+        exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
           presets: ['react', 'env'],
@@ -32,8 +34,16 @@ module.exports = {
       {
         test: /\.less$/,
         use: ExtractTextPlugin.extract({
-          use: ['css-loader', 'less-loader']
+          use: ['css-loader', 'less-loader'],
+          fallback: 'style-loader'
         })
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          { loader: 'css-loader' }
+        ]
       },
       {
         test: /\.jpe?g$|\.gif$|\.ico$|\.png$|\.svg$/,
@@ -71,6 +81,7 @@ module.exports = {
       filename: 'index.html'
     }),
     new ExtractTextPlugin('[name].[hash].css'),
-    new webpack.optimize.UglifyJsPlugin()
+    new webpack.optimize.UglifyJsPlugin(),
+    new CopyWebpackPlugin([{ from: 'assets', to: '.' }])
   ]
 }

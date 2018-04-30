@@ -9,8 +9,13 @@ import App from './components/App'
 import 'semantic-ui-less/semantic.less'
 import './style/css/main.css'
 
+const customQueries = {
+  smallScreen: 'screen and (max-width: 740px)',
+  tinyScreen: 'screen and (max-width: 550px)'
+}
+
 render(
-  <MediaQueryProvider>
+  <MediaQueryProvider queries={customQueries}>
     <Provider store={store}>
       <Router history={history}>
         <Route path='/' component={App} />

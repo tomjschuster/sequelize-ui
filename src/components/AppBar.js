@@ -11,54 +11,71 @@ import { thunks as modelsThunks } from '../redux/models'
 import { Menu, Icon } from 'semantic-ui-react'
 
 /* ----------  COMPONENT  ---------- */
-const StandardButtons = ({ download }) =>
-  <React.Fragment>
-    <Menu.Item position='right' onClick={download}>
-      <Icon name='download' />
+class AppBar extends React.Component {
+  static StandardButtons = ({ download, position = null }) =>
+    <React.Fragment>
+      <Menu.Item position={position} onClick={download}>
+        <Icon name='download' />
           Export
-    </Menu.Item>
-    <Menu.Item
-      href='https://github.com/tomjschuster/sequelize-ui'
-      target='_blank'
-      position='right'
-    >
-      <Icon name='github' />
-          Github
-    </Menu.Item>
-  </React.Fragment>
-
-const MenuLinks = ({ links }) =>
-  <React.Fragment>
-    {links.map(({ icon, label, ...props }) =>
-      <Menu.Item key={label} {...props}>
-        <Icon name={icon} />
-        {label}
       </Menu.Item>
-    )}
-  </React.Fragment>
+      <Menu.Item
+        href='https://github.com/tomjschuster/sequelize-ui'
+        target='_blank'
+        position={position}
+      >
+        <Icon name='github' />
+          Github
+      </Menu.Item>
+      <Menu.Item position={position}>
+        <Icon name='question' />
+          Help
+      </Menu.Item>
+    </React.Fragment>
 
-const AppBar = ({ media, download, menuLinks }) => {
-  if (media.mobile) {
-    return (
-      <React.Fragment>
-        <Menu fixed='top'>
-          <h1 className='site-title'>Sequelize UI</h1>
+  static MenuLinks = ({ links }) =>
+    <React.Fragment>
+      {links.map(({ icon, label, ...props }) =>
+        <Menu.Item key={label} {...props}>
+          <Icon name={icon} />
+          {label}
+        </Menu.Item>
+      )}
+    </React.Fragment>
+
+  static LogoImg = () =>
+    <img src='/sequelize-ui-tiny.svg' alt='Seqeulize UI Logo' />
+
+  render () {
+    const { media, download, menuLinks } = this.props
+    if (media.tinyScreen) {
+      return (
+        <React.Fragment>
+          <Menu size='small' icon='labeled' fixed='top'>
+            <AppBar.MenuLinks links={menuLinks} />
+            <h1 id='site-title' className='tiny'><AppBar.LogoImg /></h1>
+          </Menu>
+          <Menu size='small' icon='labeled' widths={3} fixed='bottom'>
+            <AppBar.StandardButtons download={download} />
+          </Menu>
+        </React.Fragment>
+      )
+    } else if (media.smallScreen) {
+      return (
+        <Menu size='small' icon='labeled' fixed='top'>
+          <AppBar.MenuLinks links={menuLinks} />
+          <h1 id='site-title' className='small'><AppBar.LogoImg /></h1>
+          <AppBar.StandardButtons download={download} position='right' />
         </Menu>
-        <Menu size='small' icon='labeled' fluid fixed='bottom'>
-          <MenuLinks links={menuLinks} />
-          <div className='menu-link-separator' />
-          <StandardButtons download={download} />
+      )
+    } else {
+      return (
+        <Menu size='small' icon='labeled' fixed='top'>
+          <AppBar.MenuLinks links={menuLinks} />
+          <h1 id='site-title'>Sequelize UI</h1>
+          <AppBar.StandardButtons download={download} position='right' />
         </Menu>
-      </React.Fragment>
-    )
-  } else {
-    return (
-      <Menu size='small' icon='labeled' fixed='top'>
-        <MenuLinks links={menuLinks} />
-        <h1 className='site-title'>Sequelize UI</h1>
-        <StandardButtons download={download} />
-      </Menu>
-    )
+      )
+    }
   }
 }
 
@@ -71,7 +88,7 @@ const mergeProps = ({ models: { models } }, {downloadTemplate}, ownProps) => ({
 })
 
 export default compose(
-  withMedia,
   withRouter,
+  withMedia,
   connect(mapStateToProps, mapDispatchToProps, mergeProps)
 )(AppBar)
