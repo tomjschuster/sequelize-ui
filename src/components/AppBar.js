@@ -65,7 +65,7 @@ const AppBar = ({ media, download, menuLinks }) => {
 const mapStateToProps = ({ models }) => ({ models })
 const mapDispatchToProps = { downloadTemplate: modelsThunks.downloadTemplate }
 
-const mergeProps = ({ models }, {downloadTemplate}, ownProps) => ({
+const mergeProps = ({ models: { models } }, {downloadTemplate}, ownProps) => ({
   download: downloadTemplate.bind(null, models),
   ...ownProps
 })

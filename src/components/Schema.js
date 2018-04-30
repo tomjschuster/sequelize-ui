@@ -16,41 +16,9 @@ import { actionCreators as errorsActions } from '../redux/errors'
 import AppBar from './AppBar'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Menu, Icon, Button, Input, Container, Card, Divider } from 'semantic-ui-react'
+import { Button, Input, Container, Card, Divider } from 'semantic-ui-react'
 
 /* ----------  COMPONENT  ---------- */
-
-const ModelCard = ({
-  // State
-  isCurrent,
-  modelNameObj,
-  model,
-  // Actions
-  gotoModel,
-  removeModel
-}) =>
-  <Card className='model-card'>
-    <Card.Content>
-      <div className='model-card-header'>
-        <Card.Header as='h3' content={model.name} />
-      </div>
-      <div className='model-card-btns'>
-        <Button
-          icon='pencil'
-          size='tiny'
-          circular
-          onClick={gotoModel}
-        />
-        <Button
-          icon='trash'
-          size='tiny'
-          circular
-          onClick={removeModel}
-        />
-      </div>
-    </Card.Content>
-  </Card>
-
 class Schema extends React.Component {
   constructor (props) {
     super(props)
@@ -77,6 +45,48 @@ class Schema extends React.Component {
       this.focusOnAddModelButton()
     }
   }
+
+  componentWillUnmount () {
+    this.props.modelsActions.cancelPreviewModel()
+  }
+
+  static ModelCard = ({
+  // State
+    isCurrent,
+    modelNameObj,
+    model,
+    // Actions
+    previewModel,
+    gotoModel,
+    removeModel
+  }) =>
+    <Card className='model-card'>
+      <Card.Content>
+        <div className='model-card-header'>
+          <Card.Header as='h3' content={model.name} />
+        </div>
+        <div className='model-card-btns'>
+          <Button
+            icon='eye'
+            size='tiny'
+            circular
+            onClick={previewModel}
+          />
+          <Button
+            icon='pencil'
+            size='tiny'
+            circular
+            onClick={gotoModel}
+          />
+          <Button
+            icon='trash'
+            size='tiny'
+            circular
+            onClick={removeModel}
+          />
+        </div>
+      </Card.Content>
+    </Card>
 
   render () {
     const {
@@ -138,10 +148,11 @@ class Schema extends React.Component {
           <Divider />
           <Card.Group centered>
             {models.map(model => (
-              <ModelCard
+              <Schema.ModelCard
                 key={model.id}
                 isCurrent={model.id === currentId}
                 model={model}
+                previewModel={() => modelsActions.previewModel(model.id)}
                 gotoModel={() => history.push(`/${model.id}`)}
                 removeModel={() => modelsActions.removeModel(model.id)}
               />
@@ -152,7 +163,7 @@ class Schema extends React.Component {
     )
   }
 }
-const mapStateToProps = ({ currentModel, models, forms, ui, errors }) => ({
+const mapStateToProps = ({ currentModel, models: { models }, forms, ui, errors }) => ({
   currentId: currentModel.id,
   models,
   newModelName: forms.models.newModelName,

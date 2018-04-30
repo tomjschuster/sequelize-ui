@@ -27,7 +27,7 @@ const newModel = (id, name) => ({
 })
 
 /* ----------  INITIAL STATE  ---------- */
-const initialState = []
+const initialState = {models: [], previewModel: null}
 
 /* ----------  ACTION TYPES  ---------- */
 export const Actions = {
@@ -35,7 +35,9 @@ export const Actions = {
   ADD: 'MODELS__ADD',
   REMOVE: 'MODELS__REMOVE',
   RESET: 'MODELS__RESET',
-  UPDATE: 'MODELS__UPDATE'
+  UPDATE: 'MODELS__UPDATE',
+  PREVIEW_MODEL: 'MODELS__PREVIEW_MODEL',
+  CANCEL_PREVIEW_MODEL: 'MODELS__CANCEL_PREVIEW_MODEL'
 }
 
 /* ----------  ACTION CREATORS  ---------- */
@@ -61,6 +63,15 @@ export const actionCreators = {
     id
   }),
 
+  previewModel: id => ({
+    type: Actions.PREVIEW_MODEL,
+    id
+  }),
+
+  cancelPreviewModel: () => ({
+    type: Actions.CANCEL_PREVIEW_MODEL
+  }),
+
   reset: () => ({
     type: Actions.RESET
   })
@@ -69,7 +80,7 @@ export const actionCreators = {
 /* ----------  THUNKS  ---------- */
 export const thunks = {
   createModel: name => (dispatch, getState) => {
-    const { models } = getState()
+    const { models: { models } } = getState()
     let id = uid()
     while (models.find(m => m.id === id)) id = uid()
     console.log(models)
@@ -119,15 +130,25 @@ export const thunks = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case Actions.RECEIVE:
-      return [...action.models]
+      return { ...state, models: [...action.models] }
     case Actions.ADD:
-      return [...state, newModel(action.id, action.name)]
+      return { ...state, models: [...state.models, newModel(action.id, action.name)] }
     case Actions.UPDATE:
-      return state.map(
-        model => (model.id === action.model.id ? action.model : model)
-      )
+      return {
+        ...state,
+        models: state.models.map(
+          model => (model.id === action.model.id ? action.model : model)
+        )
+      }
     case Actions.REMOVE:
-      return state.filter(model => model.id !== action.id)
+      return {
+        ...state,
+        models: state.models.filter(model => model.id !== action.id)
+      }
+    case Actions.PREVIEW_MODEL:
+      return { ...state, previewModel: action.id }
+    case Actions.CANCEL_PREVIEW_MODEL:
+      return { ...state, previewModel: null }
     case Actions.RESET:
       return initialState
     default:

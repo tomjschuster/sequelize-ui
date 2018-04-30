@@ -142,7 +142,7 @@ class Model extends React.Component {
   }
 }
 
-const mapStateToProps = ({ currentModel, models, ui }) => ({
+const mapStateToProps = ({ currentModel, models: { models }, ui }) => ({
   tabIdx: ui.currentModelTabIdx,
   fieldsToggle: ui.fieldsToggle,
   currentModel,
