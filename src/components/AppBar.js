@@ -26,6 +26,10 @@ class AppBar extends React.Component {
         <Icon name='github' />
           Github
       </Menu.Item>
+      <Menu.Item position={position}>
+        <Icon name='question' />
+          Help
+      </Menu.Item>
     </React.Fragment>
 
   static MenuLinks = ({ links }) =>
@@ -38,19 +42,30 @@ class AppBar extends React.Component {
       )}
     </React.Fragment>
 
+  static LogoImg = () =>
+    <img src='/sequelize-ui-tiny.svg' alt='Seqeulize UI Logo' />
+
   render () {
     const { media, download, menuLinks } = this.props
-    if (media.mobile) {
+    if (media.tinyScreen) {
       return (
         <React.Fragment>
           <Menu size='small' icon='labeled' fixed='top'>
             <AppBar.MenuLinks links={menuLinks} />
-            <h1 id='site-title' className='mobile'>SUI</h1>
+            <h1 id='site-title' className='tiny'><AppBar.LogoImg /></h1>
           </Menu>
-          <Menu size='small' icon='labeled' widths={2} fixed='bottom'>
+          <Menu size='small' icon='labeled' widths={3} fixed='bottom'>
             <AppBar.StandardButtons download={download} />
           </Menu>
         </React.Fragment>
+      )
+    } else if (media.smallScreen) {
+      return (
+        <Menu size='small' icon='labeled' fixed='top'>
+          <AppBar.MenuLinks links={menuLinks} />
+          <h1 id='site-title' className='small'><AppBar.LogoImg /></h1>
+          <AppBar.StandardButtons download={download} position='right' />
+        </Menu>
       )
     } else {
       return (

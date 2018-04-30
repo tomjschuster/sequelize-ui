@@ -1,17 +1,49 @@
-#content {
-  padding-top: 6em;
-}
+/* APP BAR */
 
 #site-title {
   font-size: 2em;
-  margin: 0;
+  margin: 8.5px 0 0 0;
   width: 100%;
   text-align: center;
   align-self: center;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
   font-weight: normal;
   text-transform: uppercase;
 }
+
+#site-title::before {
+  content: url(../../../assets/sequelize-ui-tiny.svg);
+  margin-right: 0.5em;
+  vertical-align: -45%;
+}
+
+#site-title.tiny {
+  text-align: right;
+  padding-right: 0.75em;
+}
+
+#site-title.small::before {
+  content: none;
+}
+
+#site-title.tiny::before {
+  content: none;
+}
+
+.menu-link-separator {
+  display: inline-block;
+  width: 100%;
+}
+
+/* CONTENT */
+
+#content {
+  padding-top: 6em;
+  padding-bottom: 6em;
+}
+
+
+/* MODELS */
 
 .create-model-btn {
   display: inline-block;
@@ -29,14 +61,4 @@
 .model-card .model-card-btns {
   float: right;
   display: inline-block;
-}
-
-.menu-link-separator {
-  display: inline-block;
-  width: 100%;
-}
-
-#site-title.mobile {
-  text-align: right;
-  padding-right: 0.75em;
 }
