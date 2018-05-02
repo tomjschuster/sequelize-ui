@@ -96,13 +96,18 @@ class Schema extends React.Component {
       closeOnDimmerClick
       open={Boolean(model)}
       onClose={close}
-      size='large'
+      size='small'
     >
       {model &&
       <React.Fragment>
         <Modal.Header>{model.name}</Modal.Header>
         <Modal.Content>
-          <Modal.Description />
+          <Modal.Description>
+            {'Methods: ' + (Object.keys(model.methods)
+              .reduce((acc, key) => model.methods[key] ? [...acc, key] : acc, [])
+              .join(', ') || 'none')
+            }
+          </Modal.Description>
         </Modal.Content>
         <Modal.Actions>
           <Button onClick={close}>Close</Button>
