@@ -43,7 +43,7 @@
 }
 
 
-/* MODELS */
+/* SCHEMA */
 
 .create-model-btn {
   display: inline-block;
@@ -61,6 +61,20 @@
 .model-card .model-card-btns {
   float: right;
   display: inline-block;
+}
+
+.preview-modal .close-btn {
+  background: none;
+  right: 0;
+  top: 0.35em;
+  position: absolute;
+}
+
+.preview-modal .edit-btn {
+  background: none;
+  right: 3em;
+  top: 0.35em;
+  position: absolute;
 }
 
 /* SUIR BUG */

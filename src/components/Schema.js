@@ -97,108 +97,111 @@ class Schema extends React.Component {
       open={Boolean(model)}
       onClose={close}
       size='small'
+      className='preview-modal'
     >
       {model &&
       <React.Fragment>
-        <Modal.Header>{model.name}</Modal.Header>
+        <Modal.Header>
+          {model.name}
+          <Button className='close-btn' icon='cancel' onClick={close} />
+          <Button className='edit-btn' icon='edit' onClick={edit} />
+        </Modal.Header>
         <Modal.Content>
           <Modal.Description>
-            {'Methods: ' + (Object.keys(model.methods)
-              .reduce((acc, key) => model.methods[key] ? [...acc, key] : acc, [])
-              .join(', ') || 'none')
-            }
+            {Schema.viewTemplates(model.methods)}
           </Modal.Description>
         </Modal.Content>
-        <Modal.Actions>
-          <Button onClick={close}>Close</Button>
-          <Button onClick={edit}>Edit</Button>
-        </Modal.Actions>
       </React.Fragment>
       }
     </Modal>
 
-  render () {
-    const {
-      history,
-      currentId,
-      models,
-      previewModel,
-      newModelName,
-      creatingModel,
-      // errors,
-      modelsActions,
-      uiActions,
-      modelsThunks: { createModel },
-      formsActions: { inputModelsModelName }
-    } = this.props
+    static viewTemplates = methods => {
+      const keys = Object.keys(methods).filter(key => methods[key])
+      return keys.length ? `Method Templates: ${keys.join(', ')}` : null
+    }
 
-    console.log(previewModel, models)
+    render () {
+      const {
+        history,
+        currentId,
+        models,
+        previewModel,
+        newModelName,
+        creatingModel,
+        // errors,
+        modelsActions,
+        uiActions,
+        modelsThunks: { createModel },
+        formsActions: { inputModelsModelName }
+      } = this.props
 
-    return (
-      <React.Fragment>
-        <AppBar
-          menuLinks={[
-            { active: true, icon: 'cubes', label: 'Models' }
-          ]}
-        />
-        <Container id='content'>
-          <Container textAlign='center'>
-            {creatingModel
-              ? (
-                <Input
-                  ref={this.nameInput}
-                  placeholder='Name your model...'
-                  value={newModelName}
-                  onChange={evt => inputModelsModelName(evt.target.value)}
-                  onKeyPress={evt => evt.key === 'Enter' && createModel(newModelName)}
-                  action
-                >
-                  <input />
-                  <Button
-                    onClick={() => createModel(newModelName)}
+      console.log(previewModel, models)
+
+      return (
+        <React.Fragment>
+          <AppBar
+            menuLinks={[
+              { active: true, icon: 'cubes', label: 'Models' }
+            ]}
+          />
+          <Container id='content'>
+            <Container textAlign='center'>
+              {creatingModel
+                ? (
+                  <Input
+                    ref={this.nameInput}
+                    placeholder='Name your model...'
+                    value={newModelName}
+                    onChange={evt => inputModelsModelName(evt.target.value)}
+                    onKeyPress={evt => evt.key === 'Enter' && createModel(newModelName)}
+                    action
                   >
+                    <input />
+                    <Button
+                      onClick={() => createModel(newModelName)}
+                    >
                     Create
-                  </Button>
-                  <Button
-                    onClick={() => uiActions.stopCreatingModel()}
-                  >
+                    </Button>
+                    <Button
+                      onClick={() => uiActions.stopCreatingModel()}
+                    >
                     Cancel
-                  </Button>
-                </Input>
-              )
-              : (
-                <Button
-                  ref={this.addModelButton}
-                  onClick={uiActions.startCreatingModel}
-                  className='create-model-btn'
-                >
+                    </Button>
+                  </Input>
+                )
+                : (
+                  <Button
+                    ref={this.addModelButton}
+                    onClick={uiActions.startCreatingModel}
+                    className='create-model-btn'
+                  >
                 Create a Model
-                </Button>
-              )
-            }
+                  </Button>
+                )
+              }
+            </Container>
+            <Divider />
+            <Card.Group centered>
+              {models.map(model => (
+                <Schema.ModelCard
+                  key={model.id}
+                  isCurrent={model.id === currentId}
+                  model={model}
+                  previewModel={() => modelsActions.previewModel(model.id)}
+                  gotoModel={() => history.push(`/${model.id}`)}
+                  removeModel={() => modelsActions.removeModel(model.id)}
+                />
+              ))}
+            </Card.Group>
           </Container>
-          <Divider />
-          <Card.Group centered>
-            {models.map(model => (
-              <Schema.ModelCard
-                key={model.id}
-                isCurrent={model.id === currentId}
-                model={model}
-                previewModel={() => modelsActions.previewModel(model.id)}
-                gotoModel={() => history.push(`/${model.id}`)}
-                removeModel={() => modelsActions.removeModel(model.id)}
-              />
-            ))}
-          </Card.Group>
-        </Container>
-        <Schema.PreviewModal
-          model={previewModel}
-          close={modelsActions.cancelPreviewModel}
-          edit={() => history.push(`/${previewModel.id}`)}
-        />
-      </React.Fragment>
-    )
-  }
+          <Schema.PreviewModal
+            model={previewModel}
+            close={modelsActions.cancelPreviewModel}
+            edit={() => history.push(`/${previewModel.id}`)}
+          />
+        </React.Fragment>
+      )
+    }
 }
 const mapStateToProps = ({ currentModel, models: { models, previewModel }, forms, ui, errors }) => ({
   currentId: currentModel.id,
