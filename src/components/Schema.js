@@ -14,6 +14,7 @@ import { actionCreators as errorsActions } from '../redux/errors'
 
 /* ----------  APP COMPONENTS  ---------- */
 import AppBar from './AppBar'
+import { CONFIG_DISPLAY } from './Model/Configuration'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
 import { Modal, Button, Input, Container, Card, Divider } from 'semantic-ui-react'
@@ -108,16 +109,38 @@ class Schema extends React.Component {
         </Modal.Header>
         <Modal.Content>
           <Modal.Description>
-            {Schema.viewTemplates(model.methods)}
+            {Schema.viewMethods(model.methods)}
+            {Schema.viewConfiguration(model.config)}
           </Modal.Description>
         </Modal.Content>
       </React.Fragment>
       }
     </Modal>
 
-    static viewTemplates = methods => {
-      const keys = Object.keys(methods).filter(key => methods[key])
-      return keys.length ? `Method Templates: ${keys.join(', ')}` : null
+    static viewMethods = methods => {
+      const methodDisplays =
+        Object.keys(methods)
+          .filter(key => methods[key])
+          .map(key => CONFIG_DISPLAY[key])
+
+      return methodDisplays.length
+        ? <p>{`Method Templates: ${methodDisplays.join(', ')}`}</p>
+        : null
+    }
+
+    static viewConfiguration = config => {
+      const configDisplays =
+        Object.keys(config)
+          .filter(key => config[key])
+          .map(key =>
+            typeof config[key] === 'boolean'
+              ? CONFIG_DISPLAY[key]
+              : `${CONFIG_DISPLAY[key]}: ${config[key]}`
+          )
+
+      return configDisplays.length
+        ? <p>{`Configuration: ${configDisplays.join(', ')}`}</p>
+        : null
     }
 
     render () {
