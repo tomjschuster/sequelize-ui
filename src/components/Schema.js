@@ -29,6 +29,7 @@ class Schema extends React.Component {
 
   gotoModel = id => this.props.history.push(`/${id}`)
   editModel = id => this.props.history.push(`/${id}/edit`)
+  focusOnAction = (id, action) => document.getElementById(`${action}-${id}`).focus()
 
   focusOnNameInput = () =>
     this.nameInput.current && this.nameInput.current.focus()
@@ -60,33 +61,82 @@ class Schema extends React.Component {
     modelNameObj,
     model,
     // Actions
+    focusOnAction,
     previewModel,
     gotoModel,
     removeModel
   }) =>
-    <Card className='model-card'>
+    <Card
+      className='model-card'
+      tabIndex={0}
+      onKeyPress={evt => {
+        switch (evt.key) {
+          case 'Enter': return focusOnAction(model.id, 'preview')
+          default:
+        }
+      }}
+    >
       <Card.Content>
         <div className='model-card-header'>
           <Card.Header as='h3' content={model.name} />
         </div>
         <div className='model-card-btns'>
           <Button
+            id={`preview-${model.id}`}
             icon='eye'
             size='tiny'
             circular
             onClick={previewModel}
+            tabIndex={-1}
+            onKeyDown={evt => {
+              switch (evt.key) {
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                  return focusOnAction(model.id, 'delete')
+                case 'ArrowRight':
+                case 'ArrowDown':
+                  return focusOnAction(model.id, 'edit')
+                default:
+              }
+            }}
           />
           <Button
+            id={`edit-${model.id}`}
             icon='pencil'
             size='tiny'
             circular
             onClick={gotoModel}
+            tabIndex={-1}
+            onKeyDown={evt => {
+              switch (evt.key) {
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                  return focusOnAction(model.id, 'preview')
+                case 'ArrowRight':
+                case 'ArrowDown':
+                  return focusOnAction(model.id, 'delete')
+                default:
+              }
+            }}
           />
           <Button
+            id={`delete-${model.id}`}
             icon='trash'
             size='tiny'
             circular
             onClick={removeModel}
+            tabIndex={-1}
+            onKeyDown={evt => {
+              switch (evt.key) {
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                  return focusOnAction(model.id, 'edit')
+                case 'ArrowRight':
+                case 'ArrowDown':
+                  return focusOnAction(model.id, 'preview')
+                default:
+              }
+            }}
           />
         </div>
       </Card.Content>
@@ -158,8 +208,6 @@ class Schema extends React.Component {
         formsActions: { inputModelsModelName }
       } = this.props
 
-      console.log(previewModel, models)
-
       return (
         <React.Fragment>
           <AppBar
@@ -213,6 +261,7 @@ class Schema extends React.Component {
                   previewModel={() => modelsActions.previewModel(model.id)}
                   gotoModel={() => history.push(`/${model.id}`)}
                   removeModel={() => modelsActions.removeModel(model.id)}
+                  focusOnAction={this.focusOnAction}
                 />
               ))}
             </Card.Group>

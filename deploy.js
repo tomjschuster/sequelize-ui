@@ -1,12 +1,19 @@
 require('dotenv').config()
 
+const options = {
+  host: process.env.REMOTE_HOST,
+  username: process.env.REMOTE_USERNAME,
+  path: process.env.REMOTE_PATH
+}
+
+if (process.env.PRIVATE_KEY) {
+  options.privateKey = require('fs').readFileSync(process.env.PRIVATE_KEY)
+} else {
+  options.password = process.env.REMOTE_PASSWORD
+}
+console.log(options)
 require('scp2').scp(
   'dist/',
-  {
-    host: process.env.REMOTE_HOST,
-    username: process.env.REMOTE_USERNAME,
-    password: process.env.REMOTE_PASSWORD,
-    path: process.env.REMOTE_PATH
-  },
+  options,
   err => (err ? console.error(err) : console.log('Success'))
 )
