@@ -25,11 +25,130 @@ class Schema extends React.Component {
     super(props)
     this.nameInput = React.createRef()
     this.addModelButton = React.createRef()
+    this.state = { activeModel: null, activeAction: null }
   }
 
   gotoModel = id => this.props.history.push(`/${id}`)
   editModel = id => this.props.history.push(`/${id}/edit`)
-  focusOnAction = (id, action) => document.getElementById(`${action}-${id}`).focus()
+
+  handleModelKeyDown = evt => {
+    switch (evt.key) {
+      case 'Enter':
+        evt.preventDefault()
+        return this.focusOnActiveAction()
+      case 'ArrowRight': return this.focusOnNextModel()
+      case 'ArrowLeft': return this.focusOnPrevModel()
+      default:
+    }
+  }
+
+  focusOnActiveModel = () => this.updateModelFocus(this.getActiveModel())
+
+  focusOnNextModel = () => {
+    const current = this.getActiveModel()
+    if (current !== null) {
+      const next = current + 1 === this.props.models.length ? 0 : current + 1
+      this.updateModelFocus(next)
+    }
+  }
+
+  focusOnPrevModel = () => {
+    const current = this.getActiveModel()
+    if (current !== null) {
+      const prev = current - 1 < 0 ? this.props.models.length - 1 : current - 1
+      this.updateModelFocus(prev)
+    }
+  }
+
+  updateModelFocus = idx => {
+    if (idx === null) {
+      this.setState({ activeModel: null })
+    } else {
+      this.setState({ activeModel: idx })
+      this.focusOnModel(idx)
+    }
+  }
+
+  getActiveModel = () => {
+    const maxIdx = this.props.models.length - 1
+    switch (true) {
+      case maxIdx < 0: return null
+      case this.state.activeModel === null: return 0
+      case this.state.activeModel > maxIdx: return maxIdx
+      default: return this.state.activeModel
+    }
+  }
+
+  focusOnModel = idx =>
+    document.querySelector(`.model-card:nth-child(${idx + 1})`).focus()
+
+  handleActionKeyDown = evt => {
+    switch (evt.key) {
+      case 'ArrowRight':
+        evt.stopPropagation()
+        return this.focusOnNextAction()
+      case 'ArrowLeft':
+        evt.stopPropagation()
+        return this.focusOnPrevAction()
+      case 'Escape':
+        evt.stopPropagation()
+        return Schema.focusOnParentModel(evt.target)
+      case 'Enter':
+        evt.stopPropagation()
+      default:
+    }
+  }
+
+  static focusOnParentModel = button => {
+    const model = button.closest('.model-card')
+    if (model !== null) model.focus()
+  }
+
+  focusOnActiveAction = () =>
+    console.log('here') || this.updateActionFocus(this.getActiveModel(), this.getActiveAction())
+
+  focusOnNextAction = () => {
+    const activeModel = this.getActiveModel()
+    const current = this.getActiveAction()
+    if (activeModel !== null) {
+      const next = current + 1 === 3 ? 0 : current + 1
+      this.updateActionFocus(activeModel, next)
+    }
+  }
+
+  focusOnPrevAction = () => {
+    const activeModel = this.getActiveModel()
+    const current = this.getActiveAction()
+    if (activeModel !== null) {
+      const prev = current - 1 < 0 ? 2 : current - 1
+      this.updateActionFocus(activeModel, prev)
+    }
+  }
+
+  updateActionFocus = (modelIdx, actionIdx) => {
+    this.setState({ activeAction: actionIdx })
+    this.focusOnAction(modelIdx, actionIdx)
+  }
+
+  getActiveAction = () => {
+    return this.state.activeAction === null ? 0 : this.state.activeAction
+  }
+
+  focusOnAction = (modelIdx, actionIdx) => {
+    const selector =
+      `.model-card:nth-child(${modelIdx + 1}) .model-card-btn:nth-child(${actionIdx + 1})`
+
+    document.querySelector(selector).focus()
+  }
+
+  handleModalKeyDown = (evt, otherClass) => {
+    if (evt.key === 'Tab') {
+      evt.preventDefault()
+      document.querySelector(otherClass).focus()
+    }
+  }
+
+  focusOnModalEdit = () => document.querySelector('.edit-btn').focus()
 
   focusOnNameInput = () =>
     this.nameInput.current && this.nameInput.current.focus()
@@ -41,13 +160,17 @@ class Schema extends React.Component {
     this.focusOnAddModelButton()
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate (prevProps, prevState) {
     if (!prevProps.creatingModel && this.props.creatingModel) {
       this.focusOnNameInput()
     }
 
     if (prevProps.creatingModel && !this.props.creatingModel) {
       this.focusOnAddModelButton()
+    }
+
+    if (prevState.activeModel !== this.state.activeModel) {
+      this.setState({ activeAction: null })
     }
   }
 
@@ -61,20 +184,17 @@ class Schema extends React.Component {
     modelNameObj,
     model,
     // Actions
-    focusOnAction,
+    handleModelKeyDown,
+    handleActionKeyDown,
     previewModel,
     gotoModel,
     removeModel
   }) =>
     <Card
       className='model-card'
-      tabIndex={0}
-      onKeyPress={evt => {
-        switch (evt.key) {
-          case 'Enter': return focusOnAction(model.id, 'preview')
-          default:
-        }
-      }}
+      tabIndex={-1}
+      onKeyDown={handleModelKeyDown}
+      onFocus={evt => evt.stopPropagation()}
     >
       <Card.Content>
         <div className='model-card-header'>
@@ -83,66 +203,42 @@ class Schema extends React.Component {
         <div className='model-card-btns'>
           <Button
             id={`preview-${model.id}`}
+            className='model-card-btn'
             icon='eye'
             size='tiny'
             circular
             onClick={previewModel}
             tabIndex={-1}
-            onKeyDown={evt => {
-              switch (evt.key) {
-                case 'ArrowLeft':
-                case 'ArrowUp':
-                  return focusOnAction(model.id, 'delete')
-                case 'ArrowRight':
-                case 'ArrowDown':
-                  return focusOnAction(model.id, 'edit')
-                default:
-              }
-            }}
+            onKeyDown={handleActionKeyDown}
+            onFocus={evt => evt.stopPropagation()}
           />
           <Button
             id={`edit-${model.id}`}
+            className='model-card-btn'
             icon='pencil'
             size='tiny'
             circular
             onClick={gotoModel}
             tabIndex={-1}
-            onKeyDown={evt => {
-              switch (evt.key) {
-                case 'ArrowLeft':
-                case 'ArrowUp':
-                  return focusOnAction(model.id, 'preview')
-                case 'ArrowRight':
-                case 'ArrowDown':
-                  return focusOnAction(model.id, 'delete')
-                default:
-              }
-            }}
+            onKeyDown={handleActionKeyDown}
+            onFocus={evt => evt.stopPropagation()}
           />
           <Button
             id={`delete-${model.id}`}
+            className='model-card-btn'
             icon='trash'
             size='tiny'
             circular
             onClick={removeModel}
             tabIndex={-1}
-            onKeyDown={evt => {
-              switch (evt.key) {
-                case 'ArrowLeft':
-                case 'ArrowUp':
-                  return focusOnAction(model.id, 'edit')
-                case 'ArrowRight':
-                case 'ArrowDown':
-                  return focusOnAction(model.id, 'preview')
-                default:
-              }
-            }}
+            onKeyDown={handleActionKeyDown}
+            onFocus={evt => evt.stopPropagation()}
           />
         </div>
       </Card.Content>
     </Card>
 
-  static PreviewModal = ({ model, close, edit }) =>
+  static PreviewModal = ({ model, close, edit, handleModalKeyDown }) =>
     <Modal
       closeOnDimmerClick
       open={Boolean(model)}
@@ -154,8 +250,18 @@ class Schema extends React.Component {
       <React.Fragment>
         <Modal.Header>
           {model.name}
-          <Button className='close-btn' icon='cancel' onClick={close} />
-          <Button className='edit-btn' icon='edit' onClick={edit} />
+          <Button
+            className='close-btn'
+            icon='cancel'
+            onClick={close}
+            onKeyDown={evt => handleModalKeyDown(evt, '.edit-btn')}
+          />
+          <Button
+            className='edit-btn'
+            icon='edit'
+            onClick={edit}
+            onKeyDown={evt => handleModalKeyDown(evt, '.close-btn')}
+          />
         </Modal.Header>
         <Modal.Content>
           <Modal.Description>
@@ -252,7 +358,7 @@ class Schema extends React.Component {
               }
             </Container>
             <Divider />
-            <Card.Group centered>
+            <Card.Group centered tabIndex={0} onFocus={this.focusOnActiveModel}>
               {models.map(model => (
                 <Schema.ModelCard
                   key={model.id}
@@ -261,7 +367,8 @@ class Schema extends React.Component {
                   previewModel={() => modelsActions.previewModel(model.id)}
                   gotoModel={() => history.push(`/${model.id}`)}
                   removeModel={() => modelsActions.removeModel(model.id)}
-                  focusOnAction={this.focusOnAction}
+                  handleModelKeyDown={this.handleModelKeyDown}
+                  handleActionKeyDown={this.handleActionKeyDown}
                 />
               ))}
             </Card.Group>
@@ -270,6 +377,7 @@ class Schema extends React.Component {
             model={previewModel}
             close={modelsActions.cancelPreviewModel}
             edit={() => history.push(`/${previewModel.id}`)}
+            handleModalKeyDown={this.handleModalKeyDown}
           />
         </React.Fragment>
       )

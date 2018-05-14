@@ -11,7 +11,7 @@ if (process.env.PRIVATE_KEY) {
 } else {
   options.password = process.env.REMOTE_PASSWORD
 }
-console.log(options)
+
 require('scp2').scp(
   'dist/',
   options,
