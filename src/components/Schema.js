@@ -17,7 +17,7 @@ import AppBar from './AppBar'
 import { CONFIG_DISPLAY } from './Model/Configuration'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Modal, Button, Input, Container, Card, Divider } from 'semantic-ui-react'
+import { Modal, Button, Icon, Input, Container, Card, Divider, Table } from 'semantic-ui-react'
 
 /* ----------  COMPONENT  ---------- */
 class Schema extends React.Component {
@@ -94,7 +94,7 @@ class Schema extends React.Component {
         evt.stopPropagation()
         return Schema.focusOnParentModel(evt.target)
       case 'Enter':
-        evt.stopPropagation()
+        return evt.stopPropagation()
       default:
     }
   }
@@ -265,6 +265,7 @@ class Schema extends React.Component {
         </Modal.Header>
         <Modal.Content>
           <Modal.Description>
+            {model.fields.length ? Schema.viewFields(model.fields) : null}
             {Schema.viewMethods(model.methods)}
             {Schema.viewConfiguration(model.config)}
           </Modal.Description>
@@ -298,6 +299,39 @@ class Schema extends React.Component {
         ? <p>{`Configuration: ${configDisplays.join(', ')}`}</p>
         : null
     }
+
+    static viewFields = fields => (
+      <Table compact celled fixed textAlign='center' size='small'>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Field</Table.HeaderCell>
+            <Table.HeaderCell>Data Type</Table.HeaderCell>
+            <Table.HeaderCell>Primary Key</Table.HeaderCell>
+            <Table.HeaderCell>Unique</Table.HeaderCell>
+            <Table.HeaderCell>Not Null</Table.HeaderCell>
+            <Table.HeaderCell>Default Value</Table.HeaderCell>
+            <Table.HeaderCell>Other Options</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {fields.map(field => (
+            <Table.Row key={field.id}>
+              <Table.Cell>{field.name}</Table.Cell>
+              <Table.Cell>{field.type}</Table.Cell>
+              <Table.Cell>{Schema.checkIf(field.primaryKey)}</Table.Cell>
+              <Table.Cell>{Schema.checkIf(field.unique)}</Table.Cell>
+              <Table.Cell>{Schema.checkIf(!field.allowNull)}</Table.Cell>
+              <Table.Cell>{field.default}</Table.Cell>
+              <Table.Cell />
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+
+    )
+
+    static checkIf = condition => condition
+      ? <Icon color='green' name='checkmark' size='large' /> : null
 
     render () {
       const {
