@@ -152,7 +152,7 @@ const Field = ({
         {isNumber(field.type) && (
           <Input
             value={field.validate.max || ''}
-            onChange={(_, data) => updateValidation('max`', data.value)}
+            onChange={(_, data) => updateValidation('max', data.value)}
             type='text'
             label='max'
           />
