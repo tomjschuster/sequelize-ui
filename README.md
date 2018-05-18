@@ -6,6 +6,8 @@
 
 TODO:
 - Preview fields
+  - Display Other Options
+  - Media Query columns
 - Preview associations
 - Format editing fields
 - Filter fields for local storage

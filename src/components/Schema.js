@@ -301,7 +301,7 @@ class Schema extends React.Component {
     }
 
     static viewFields = fields => (
-      <Table compact celled fixed textAlign='center' size='small'>
+      <Table unstackable celled compact size='small' textAlign='center'>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Field</Table.HeaderCell>
