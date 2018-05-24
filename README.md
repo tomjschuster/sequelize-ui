@@ -10,6 +10,9 @@ TODO:
   - Media Query columns
 - Preview associations
 - Format editing fields
+- Name validation errors
+- Implement all table configuration
+- Revisit validations
 - Filter fields for local storage
 - Fix download zip warning error
 - Google Analytics

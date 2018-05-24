@@ -7,10 +7,10 @@ import { Input, Checkbox } from 'semantic-ui-react'
 export const CONFIG_DISPLAY = {
   tableName: 'Table Name',
   singular: 'Singular Name',
-  plural: 'Plura Name',
-  timestamps: 'Timestamp Columns',
+  plural: 'Plural Name',
   freezeTableName: 'Freeze Table Name',
-  underscored: 'Underscore Column Names',
+  underscoredColumns: 'Underscore Column Names',
+  underscoredTable: 'Underscore Table Name',
   hooks: 'Hooks',
   getterMethods: 'Getter Methods',
   setterMethods: 'Setter Methods',
@@ -62,9 +62,9 @@ class Configuration extends React.Component {
 
   renderCheckboxes = () => {
     const keys = [
-      {key: 'timestamps', negate: true},
       {key: 'freezeTableName', negate: false},
-      {key: 'underscored', negate: false}
+      {key: 'underscoredColumns', negate: false},
+      {key: 'underscoredTable', negate: false}
     ]
 
     return keys.map(({ key, negate }) => this.renderCheckbox(key, negate))
