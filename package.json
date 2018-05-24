@@ -19,10 +19,12 @@
     "lint": "./node_modules/standard/bin/cmd.js",
     "format": "./node_modules/standard/bin/cmd.js --fix",
     "clean": "rimraf dist",
-    "build": "npm run clean && webpack",
-    "start:dev": "NODE_ENV=development npm run build -- --watch & nodemon server",
-    "start": "NODE_ENV=production npm run build && node server",
-    "heroku-postbuild": "NODE_ENV=production && npm run build",
+    "build": "webpack",
+    "build:dev": "NODE_ENV=development webpack",
+    "build:prod": "NODE_ENV=production webpack",
+    "start:dev": "npm run clean && npm run build:dev -- --watch & NODE_ENV=development nodemon server",
+    "start": "NODE_ENV=production node server",
+    "heroku-postbuild": "npm run build:prod",
     "deploy": "NODE_ENV=production && npm run build && node deploy"
   },
   "keywords": [
