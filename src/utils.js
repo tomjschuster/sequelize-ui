@@ -37,31 +37,6 @@ const maybeAppendAllowNull = (field, output) => {
   }
 }
 
-const maybeAppendStringValidation = (validate, key, output) =>
-  validate[key] !== undefined
-    ? output + `      ${key}: '${validate[key]}',\n`
-    : output
-
-const maybeAppendValidation = (validate, key, output) =>
-  validate[key] !== undefined
-    ? output + `      ${key}: ${validate[key]},\n`
-    : output
-
-const maybeAppendValidate = (field, output) => {
-  if (field.validate) {
-    output = output + '    validate: {\n'
-    output = maybeAppendStringValidation(field.validate, 'is', output)
-    output = maybeAppendStringValidation(field.validate, 'contains', output)
-    output = maybeAppendValidation(field.validate, 'min', output)
-    output = maybeAppendValidation(field.validate, 'max', output)
-    output = maybeAppendStringValidation(field.validate, 'isEmail', output)
-    output = maybeAppendStringValidation(field.validate, 'isUrl', output)
-    return output + '    }\n'
-  } else {
-    return output
-  }
-}
-
 const printField = field => {
   let output = fieldType(field)
   output = maybeAppendKey(field, 'allowNull', output)
@@ -71,7 +46,6 @@ const printField = field => {
   output = maybeAppendAllowNull(field, output)
   output = maybeAppendKey(field, 'comment', output)
   output = maybeAppendKey(field, 'field', output)
-  output = maybeAppendValidate(field, output)
   return output + `  }`
 }
 

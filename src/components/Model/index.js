@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import { compose, bindActionCreators } from 'redux'
+import { withRouter } from 'react-router'
 
 /* ----------  ACTION THUNK CREATORS  ---------- */
 import {
@@ -37,18 +38,19 @@ class Model extends React.Component {
   }
 
   createModel = () => {
-    const { uiActions, modelsThunks, currentModel, models, router } = this.props
+    const { uiActions, modelsThunks, currentModel, models, history } = this.props
     modelsThunks
       .saveModel(currentModel, models, true)
-      .then(() => router.push('/'))
+      .then(() => history.push('/'))
       .catch(error => uiActions.openDialog('Validation Error', error))
   }
 
   saveModel = () => {
-    const { uiActions, modelsThunks, currentModel, models, router } = this.props
+    const { uiActions, modelsThunks, currentModel, models, history } = this.props
     modelsThunks
       .saveModel(currentModel, models, false)
-      .then(() => router.push('/'))
+      .then(() => history.push('/'))
+      .catch(console.error)
       .catch(error => uiActions.openDialog('Validation Error', error))
   }
 
@@ -142,7 +144,7 @@ class Model extends React.Component {
   }
 }
 
-const mapStateToProps = ({ currentModel, models, ui }) => ({
+const mapStateToProps = ({ currentModel, models: { models }, ui }) => ({
   tabIdx: ui.currentModelTabIdx,
   fieldsToggle: ui.fieldsToggle,
   currentModel,
@@ -157,4 +159,7 @@ const mapDispatchToProps = dispatch => ({
   currentModelThunks: bindActionCreators(currentModelThunks, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Model)
+export default compose(
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps)
+)(Model)

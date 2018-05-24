@@ -4,77 +4,94 @@ import React from 'react'
 import { Input, Checkbox } from 'semantic-ui-react'
 
 /* ----------  COMPONENT  ---------- */
-const Configuration = ({
-  // State
-  config,
-  methods,
-  // Actions
-  currentModelActions: { updateConfig, updateMethod }
-}) => (
-  <React.Fragment>
-    <h3>Table Options</h3>
-    <Input
-      label='Table Name'
-      value={config.tableName || ''}
-      onChange={(_, data) => updateConfig('tableName', data.value)}
-    />
-    <Input
-      label='Singular Name'
-      value={config.singular || ''}
-      onChange={(_, data) => updateConfig('singular', data.value)}
-    />
-    <Input
-      label='Plural Name'
-      value={config.plural || ''}
-      onChange={(_, data) => updateConfig('plural', data.checked)}
-    />
-    <Checkbox
-      label='No Timestamp Columns'
-      checked={!config.timestamps}
-      onChange={(_, data) => updateConfig('timestamps', !data.checked)}
-    />
-    <Checkbox
-      label='Freeze Table Name'
-      checked={config.freezeTableName}
-      onChange={(_, data) => updateConfig('freezeTableName', data.checked)}
-    />
-    <Checkbox
-      label='Underscore Column Names'
-      checked={config.underscored}
-      onChange={(_, data) => updateConfig('underscored', data.checked)}
-    />
-    <Checkbox
-      label='Underscore Table Names'
-      checked={config.underscoredAll}
-      onChange={(_, data) => updateConfig('underscoredAll', data.checked)}
-    />
-    <h3>Include Templates For:</h3>
-    <Checkbox
-      label='Hooks'
-      checked={methods.hooks}
-      onChange={(_, data) => updateMethod('hooks', data.checked)}
-    />
-    <Checkbox
-      label='Getter Methods'
-      checked={methods.getterMethods}
-      onChange={(_, data) => updateMethod('getterMethods', data.checked)}
-    />
-    <Checkbox
-      label='Setter Methods'
-      checked={methods.setterMethods}
-      onChange={(_, data) => updateMethod('setterMethods', data.checked)}
-    />
-    <Checkbox
-      label='Instance Methods'
-      checked={methods.instanceMethods}
-      onChange={(_, data) => updateMethod('instanceMethods', data.checked)}
-    />
-    <Checkbox
-      label='Class Methods'
-      checked={methods.classMethods}
-      onChange={(_, data) => updateMethod('classMethods', data.checked)}
-    />
-  </React.Fragment>
-)
+export const CONFIG_DISPLAY = {
+  tableName: 'Table Name',
+  singular: 'Singular Name',
+  plural: 'Plural Name',
+  freezeTableName: 'Freeze Table Name',
+  underscoredColumns: 'Underscore Column Names',
+  underscoredTable: 'Underscore Table Name',
+  hooks: 'Hooks',
+  getterMethods: 'Getter Methods',
+  setterMethods: 'Setter Methods',
+  instanceMethods: 'Instance Methods',
+  classMethods: 'Class Methods'
+}
+
+class Configuration extends React.Component {
+  renderInput = (key) => {
+    const { config, currentModelActions: { updateConfig } } = this.props
+    return (
+      <Input
+        key={key}
+        label={CONFIG_DISPLAY[key]}
+        value={config[key] || ''}
+        onChange={(_, data) => updateConfig(key, data.value)}
+      />
+    )
+  }
+
+  renderCheckbox = (key, negate) => {
+    const { config, currentModelActions: { updateConfig } } = this.props
+    return (
+      <Checkbox
+        key={key}
+        label={negate ? `No ${CONFIG_DISPLAY[key]}` : CONFIG_DISPLAY[key]}
+        checked={negate ? !config[key] : config[key]}
+        onChange={(_, data) => updateConfig(key, negate ? !data.checked : data.checked)}
+      />
+    )
+  }
+
+  renderMethodCheckbox = (key) => {
+    const { methods, currentModelActions: { updateMethod } } = this.props
+    return (
+      <Checkbox
+        key={key}
+        label={CONFIG_DISPLAY[key]}
+        checked={methods[key]}
+        onChange={(_, data) => updateMethod(key, data.checked)}
+      />
+    )
+  }
+
+  renderInputs = () => {
+    const keys = ['tableName', 'singular', 'plural']
+    return keys.map(this.renderInput)
+  }
+
+  renderCheckboxes = () => {
+    const keys = [
+      {key: 'freezeTableName', negate: false},
+      {key: 'underscoredColumns', negate: false},
+      {key: 'underscoredTable', negate: false}
+    ]
+
+    return keys.map(({ key, negate }) => this.renderCheckbox(key, negate))
+  }
+
+  renderMethodCheckboxes = () => {
+    const keys = [
+      'hooks',
+      'getterMethods',
+      'setterMethods',
+      'instanceMethods',
+      'classMethods'
+    ]
+
+    return keys.map(this.renderMethodCheckbox)
+  }
+
+  render () {
+    return (
+      <React.Fragment>
+        <h3>Table Options</h3>
+        {this.renderInputs()}
+        {this.renderCheckboxes()}
+        {this.renderMethodCheckboxes()}
+      </React.Fragment>
+    )
+  }
+}
 
 export default Configuration

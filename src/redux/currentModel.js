@@ -13,8 +13,7 @@ export const initialState = {
     plural: '',
     timestamps: true,
     freezeTableNames: false,
-    underscored: false,
-    underscoredAll: false
+    underscored: false
   },
   methods: {
     hooks: false,
@@ -33,7 +32,6 @@ export const Actions = {
   SET_NAME: 'CURRENT_MODEL__SET_NAME',
   ADD_FIELD: 'CURRENT_MODEL__ADD_FIELD',
   UPDATE_FIELD: 'CURRENT_MODEL__UPDATE_FIELD',
-  UPDATE_VALIDATION: 'CURRENT_MODEL__UPDATE_VALIDATION',
   REMOVE_FIELD: 'CURRENT_MODEL__REMOVE_FIELD',
   UPDATE_CONFIG: 'CURRENT_MODEL__UPDATE_CONFIG',
   UPDATE_METHOD: 'CURRENT_MODEL__UPDATE_METHOD',
@@ -66,13 +64,6 @@ export const actionCreators = {
 
   updateField: (id, key, val) => ({
     type: Actions.UPDATE_FIELD,
-    key,
-    id,
-    val
-  }),
-
-  updateValidation: (id, key, val) => ({
-    type: Actions.UPDATE_VALIDATION,
     key,
     id,
     val
@@ -127,7 +118,7 @@ export const actionCreators = {
 /* ----------  THUNKS  ---------- */
 export const thunks = {
   setModel: id => (dispatch, getState) => {
-    const currentModel = getState().models.find(model => model.id === id)
+    const currentModel = getState().models.models.find(model => model.id === id)
     if (currentModel) dispatch(actionCreators.receiveModel(currentModel))
     else history.replace('/')
   }
@@ -157,19 +148,6 @@ export default (state = initialState, action) => {
           field =>
             field.id === action.id
               ? { ...field, [action.key]: action.val }
-              : field
-        )
-      }
-    case Actions.UPDATE_VALIDATION:
-      return {
-        ...state,
-        fields: state.fields.map(
-          field =>
-            field.id === action.id
-              ? {
-                ...field,
-                validate: { ...field.validate, [action.key]: action.val }
-              }
               : field
         )
       }
