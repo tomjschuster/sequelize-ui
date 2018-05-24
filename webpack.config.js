@@ -84,10 +84,10 @@ const common = {
 
 const dev = {
   devtool: 'eval',
-+ plugins: [
+  plugins: [
     new webpack.DefinePlugin({
-  +   'process.env.NODE_ENV': JSON.stringify('development')
-  + })
+      'process.env.NODE_ENV': JSON.stringify('development')
+    })
   ]
 }
 
@@ -98,9 +98,9 @@ const prod = {
       extractComments: true,
       sourceMap: true
     }),
-+   new webpack.DefinePlugin({
-+    'process.env.NODE_ENV': JSON.stringify('production')
-+   })
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    })
   ]
 }
 
