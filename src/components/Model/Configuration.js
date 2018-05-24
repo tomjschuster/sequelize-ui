@@ -11,7 +11,6 @@ export const CONFIG_DISPLAY = {
   timestamps: 'Timestamp Columns',
   freezeTableName: 'Freeze Table Name',
   underscored: 'Underscore Column Names',
-  underscoredAll: 'Underscore Table Names',
   hooks: 'Hooks',
   getterMethods: 'Getter Methods',
   setterMethods: 'Setter Methods',
@@ -65,8 +64,7 @@ class Configuration extends React.Component {
     const keys = [
       {key: 'timestamps', negate: true},
       {key: 'freezeTableName', negate: false},
-      {key: 'underscored', negate: false},
-      {key: 'underscoredAll', negate: false}
+      {key: 'underscored', negate: false}
     ]
 
     return keys.map(({ key, negate }) => this.renderCheckbox(key, negate))

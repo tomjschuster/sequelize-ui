@@ -21,26 +21,11 @@ const dataTypeOptions = [
   {text: 'UUID', value: 'UUID'}
 ]
 
-/* ----------  HELPERS  ---------- */
-const isNumber = type => {
-  switch (type) {
-    case 'INTEGER':
-    case 'FLOAT':
-    case 'REAL':
-    case 'DOUBLE':
-    case 'DECIMAL':
-      return true
-    default:
-      return false
-  }
-}
-
 /* ----------  COMPONENT  ---------- */
 const Field = ({
   field,
   updateField,
   removeField,
-  updateValidation,
   toggleField,
   isOpen
 }) => (
@@ -114,49 +99,6 @@ const Field = ({
           type='text'
           label='Field Name'
         />
-        <h4>Validation</h4>
-        <Input
-          value={field.validate.is || ''}
-          onChange={(_, data) => updateValidation('is', data.value)}
-          type='text'
-          label='is (/^[a-z]+$/i)'
-        />
-        <Input
-          value={field.validate.contains || ''}
-          onChange={(_, data) => updateValidation('contains', data.value)}
-          type='text'
-          label='contains'
-        />
-        {field.type === 'STRING' && (
-          <Checkbox
-            label='isEmail'
-            checked={field.validate.isEmail || false}
-            onClick={(_, data) => updateValidation('isEmail', data.checked)}
-          />
-        )}
-        {field.type === 'STRING' && (
-          <Checkbox
-            label='isUrl'
-            checked={field.validate.isUrl || false}
-            onClick={(_, data) => updateValidation('isUrl', data.checked)}
-          />
-        )}
-        {isNumber(field.type) && (
-          <Input
-            value={field.validate.min || ''}
-            onChange={(_, data) => updateValidation('min', data.value)}
-            type='text'
-            label='min'
-          />
-        )}
-        {isNumber(field.type) && (
-          <Input
-            value={field.validate.max || ''}
-            onChange={(_, data) => updateValidation('max', data.value)}
-            type='text'
-            label='max'
-          />
-        )}
       </React.Fragment>
     )}
   </Card>
@@ -167,7 +109,7 @@ const Fields = ({
   fields,
   fieldsToggle,
   // Actions
-  currentModelActions: { addField, updateField, updateValidation, removeField },
+  currentModelActions: { addField, updateField, removeField },
   uiActions: { toggleField }
 }) => (
   <React.Fragment>
@@ -180,7 +122,6 @@ const Fields = ({
           field={field}
           isOpen={!!fieldsToggle[field.id]}
           updateField={updateField.bind(null, field.id)}
-          updateValidation={updateValidation.bind(null, field.id)}
           removeField={removeField.bind(null, field.id)}
           toggleField={toggleField.bind(null, field.id)}
         />

@@ -84,5 +84,23 @@
 }
 
 .ui.modal {
-  margin-top: 0;
+  margin-top: 0 !important;
 }
+
+.visible.transition {
+  display: unset !important;
+}
+
+.dimmed.dimmable > .ui.visible.dimmer, .ui.active.dimmer {
+  display: -ms-flexbox;
+  display: flex !important;
+  opacity: 1;
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+  .ui.large.modal {
+    width: 88%;
+    margin: 0em 0em 0em 0em;
+  }
+}
+

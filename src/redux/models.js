@@ -13,8 +13,7 @@ const newModel = (id, name) => ({
     plural: '',
     timestamps: true,
     freezeTableNames: false,
-    underscored: false,
-    underscoredAll: false
+    underscored: false
   },
   methods: {
     hooks: false,

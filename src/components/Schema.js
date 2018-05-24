@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import { bindActionCreators, compose } from 'redux'
+import { withMedia } from 'react-media-query-hoc'
 
 /* ----------  ACTION THUNK CREATORS  ---------- */
 import {
@@ -179,7 +180,8 @@ class Schema extends React.Component {
   }
 
   static ModelCard = ({
-  // State
+    media,
+    // State
     isCurrent,
     modelNameObj,
     model,
@@ -238,12 +240,12 @@ class Schema extends React.Component {
       </Card.Content>
     </Card>
 
-  static PreviewModal = ({ model, close, edit, handleModalKeyDown }) =>
+  static PreviewModal = ({ model, close, edit, handleModalKeyDown, media}) =>
     <Modal
       closeOnDimmerClick
       open={Boolean(model)}
       onClose={close}
-      size='small'
+      size='large'
       className='preview-modal'
     >
       {model &&
@@ -265,7 +267,7 @@ class Schema extends React.Component {
         </Modal.Header>
         <Modal.Content>
           <Modal.Description>
-            {model.fields.length ? Schema.viewFields(model.fields) : null}
+            {model.fields.length ? Schema.viewFields(model.fields, media) : null}
             {Schema.viewMethods(model.methods)}
             {Schema.viewConfiguration(model.config)}
           </Modal.Description>
@@ -300,35 +302,81 @@ class Schema extends React.Component {
         : null
     }
 
-    static viewFields = fields => (
-      <Table unstackable celled compact size='small' textAlign='center'>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Field</Table.HeaderCell>
-            <Table.HeaderCell>Data Type</Table.HeaderCell>
-            <Table.HeaderCell>Primary Key</Table.HeaderCell>
-            <Table.HeaderCell>Unique</Table.HeaderCell>
-            <Table.HeaderCell>Not Null</Table.HeaderCell>
-            <Table.HeaderCell>Default Value</Table.HeaderCell>
-            <Table.HeaderCell>Other Options</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {fields.map(field => (
-            <Table.Row key={field.id}>
-              <Table.Cell>{field.name}</Table.Cell>
-              <Table.Cell>{field.type}</Table.Cell>
-              <Table.Cell>{Schema.checkIf(field.primaryKey)}</Table.Cell>
-              <Table.Cell>{Schema.checkIf(field.unique)}</Table.Cell>
-              <Table.Cell>{Schema.checkIf(!field.allowNull)}</Table.Cell>
-              <Table.Cell>{field.default}</Table.Cell>
-              <Table.Cell />
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
-
-    )
+    static viewFields = (fields, media) => {
+      return (
+        media.smallScreen
+          ? <React.Fragment>
+            {fields.map((field, idx) => (
+              <Table
+                attached
+                celled
+                structured
+                unstackable
+                textAlign='center'
+                key={field.id}
+              >
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell colSpan='2'>{field.name}</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  <Table.Row>
+                    <Table.Cell>Data Type</Table.Cell>
+                    <Table.Cell>{field.type}</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>Primary Key</Table.Cell>
+                    <Table.Cell>{Schema.checkIf(field.primaryKey)}</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>Unique Key</Table.Cell>
+                    <Table.Cell>{Schema.checkIf(field.unique)}</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>Not Null</Table.Cell>
+                    <Table.Cell>{Schema.checkIf(!field.allowNull)}</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>Default Value</Table.Cell>
+                    <Table.Cell>{field.default}</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>Auto Increment</Table.Cell>
+                    <Table.Cell>{Schema.checkIf(field.autoIncrement)}</Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+              </Table>
+            ))}
+          </React.Fragment>
+          : <Table celled unstackable compact textAlign='center' size='large'>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Field</Table.HeaderCell>
+                <Table.HeaderCell>Data Type</Table.HeaderCell>
+                <Table.HeaderCell>Primary Key</Table.HeaderCell>
+                <Table.HeaderCell>Unique Key</Table.HeaderCell>
+                <Table.HeaderCell>Not Null</Table.HeaderCell>
+                <Table.HeaderCell>Default Value</Table.HeaderCell>
+                <Table.HeaderCell>Auto Increment</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {fields.map(field => (
+                <Table.Row key={field.id}>
+                  <Table.Cell>{field.name}</Table.Cell>
+                  <Table.Cell>{field.type}</Table.Cell>
+                  <Table.Cell>{Schema.checkIf(field.primaryKey)}</Table.Cell>
+                  <Table.Cell>{Schema.checkIf(field.unique)}</Table.Cell>
+                  <Table.Cell>{Schema.checkIf(!field.allowNull)}</Table.Cell>
+                  <Table.Cell>{field.default}</Table.Cell>
+                  <Table.Cell>{Schema.checkIf(field.autoIncrement)}</Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+      )
+    }
 
     static checkIf = condition => condition
       ? <Icon color='green' name='checkmark' size='large' /> : null
@@ -336,6 +384,7 @@ class Schema extends React.Component {
     render () {
       const {
         history,
+        media,
         currentId,
         models,
         previewModel,
@@ -409,6 +458,7 @@ class Schema extends React.Component {
           </Container>
           <Schema.PreviewModal
             model={previewModel}
+            media={media}
             close={modelsActions.cancelPreviewModel}
             edit={() => history.push(`/${previewModel.id}`)}
             handleModalKeyDown={this.handleModalKeyDown}
@@ -435,4 +485,7 @@ const mapDispatchToProps = dispatch => ({
   modelsThunks: bindActionCreators(modelsThunks, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Schema)
+export default compose(
+  withMedia,
+  connect(mapStateToProps, mapDispatchToProps)
+)(Schema)
