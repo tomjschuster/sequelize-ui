@@ -19,13 +19,11 @@
     "lint": "./node_modules/standard/bin/cmd.js",
     "format": "./node_modules/standard/bin/cmd.js --fix",
     "clean": "rimraf dist",
-    "build:dev": "NODE_ENV=development && npm run clean && webpack",
-    "build:dev-watch": "NODE_ENV=development && npm run clean && webpack --watch",
-    "start:dev": "NODE_ENV=development && npm run build:dev-watch & nodemon server",
-    "build:prod": "NODE_ENV=production && npm run clean && webpack --config ./webpack.prod.js",
-    "start": "NODE_ENV=production && node server",
-    "heroku-postbuild": "npm run build:prod",
-    "deploy": "NODE_ENV=production && npm run build:prod && node deploy"
+    "build": "npm run clean && webpack",
+    "start:dev": "NODE_ENV=development npm run build -- --watch & nodemon server",
+    "start": "NODE_ENV=production npm run build && node server",
+    "heroku-postbuild": "NODE_ENV=production && npm run build",
+    "deploy": "NODE_ENV=production && npm run build && node deploy"
   },
   "keywords": [
     "sequelize",
@@ -84,7 +82,8 @@
     "semantic-ui-react": "^0.79.0",
     "style-loader": "^0.21.0",
     "url-loader": "^1.0.1",
-    "webpack": "^3.10.0"
+    "webpack": "^3.10.0",
+    "webpack-merge": "^3.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",

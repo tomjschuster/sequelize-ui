@@ -1,16 +1,16 @@
 const webpack = require('webpack')
+const merge = require('webpack-merge')
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
-module.exports = {
+const common = {
   entry: './src/index.js',
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'app.[hash].js'
   },
-  devtool: 'eval',
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
@@ -73,9 +73,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
-    }),
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       filename: 'index.html'
@@ -83,4 +80,39 @@ module.exports = {
     new ExtractTextPlugin('[name].[hash].css'),
     new CopyWebpackPlugin([{ from: 'assets', to: '.' }])
   ]
+}
+
+const dev = {
+  devtool: 'eval',
++ plugins: [
+    new webpack.DefinePlugin({
+  +   'process.env.NODE_ENV': JSON.stringify('development')
+  + })
+  ]
+}
+
+const prod = {
+  devtool: 'source-map',
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin({
+      extractComments: true,
+      sourceMap: true
+    }),
++   new webpack.DefinePlugin({
++    'process.env.NODE_ENV': JSON.stringify('production')
++   })
+  ]
+}
+
+console.log(process.env.NODE_ENV)
+
+switch (process.env.NODE_ENV) {
+  case 'production':
+    module.exports = merge(common, prod)
+    break
+  case 'development':
+    module.exports = merge(common, dev)
+    break
+  default:
+    module.exports = merge(common, dev)
 }
