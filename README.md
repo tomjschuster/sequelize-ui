@@ -5,9 +5,6 @@
 [Demo Video](https://www.youtube.com/watch?v=aHT6S81YvwE)
 
 TODO:
-- Preview fields
-  - Display Other Options
-  - Media Query columns
 - Preview associations
 - Format editing fields
 - Name validation errors
@@ -16,4 +13,3 @@ TODO:
 - Filter fields for local storage
 - Fix download zip warning error
 - Google Analytics
-
