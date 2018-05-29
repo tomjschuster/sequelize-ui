@@ -1,41 +1,40 @@
 import React from 'react'
 import { withMedia } from 'react-media-query-hoc'
 
-/* ----------  APP COMPONENTS  ---------- */
-import { CONFIG_DISPLAY } from '../Model/Configuration'
-
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
 import { Modal, Button, Icon, Table } from 'semantic-ui-react'
 
 /* ----------  CONSTANTS  ---------- */
-import { RELATIONSHIPS } from '../../constants'
+import {
+  displayRelationship,
+  displayOption,
+  displayMethod
+} from '../../constants'
 
 const checkIf = condition => condition
   ? <Icon color='green' name='checkmark' size='large' /> : null
 
 const viewMethods = methods => {
   const methodDisplays =
-      Object.keys(methods)
-        .filter(key => methods[key])
-        .map(key => CONFIG_DISPLAY[key])
+      Object.keys(methods).filter(method => methods[method]).map(displayMethod)
 
   return methodDisplays.length
     ? <p>{`Method Templates: ${methodDisplays.join(', ')}`}</p>
     : null
 }
 
-const viewConfiguration = config => {
-  const configDisplays =
+const viewOptions = config => {
+  const optionDisplays =
     Object.keys(config)
-      .filter(key => config[key])
-      .map(key =>
-        typeof config[key] === 'boolean'
-          ? CONFIG_DISPLAY[key]
-          : `${CONFIG_DISPLAY[key]}: ${config[key]}`
+      .filter(option => config[option])
+      .map(option =>
+        typeof config[option] === 'boolean'
+          ? displayOption(option)
+          : `${displayOption(option)}: ${config[option]}`
       )
 
-  return configDisplays.length
-    ? <p>{`Configuration: ${configDisplays.join(', ')}`}</p>
+  return optionDisplays.length
+    ? <p>{`Options: ${optionDisplays.join(', ')}`}</p>
     : null
 }
 
@@ -46,7 +45,9 @@ const viewAssociations = (associations, modelNamesById) => (
         <p>Associations</p>
         <ul>
           {associations.map(({ id, target, relationship }) =>
-            <li key={id}>{RELATIONSHIPS[relationship]} {modelNamesById[target]}</li>
+            <li key={id}>
+              {displayRelationship(relationship)} {modelNamesById[target]}
+            </li>
           )}
         </ul>
       </React.Fragment>
@@ -169,7 +170,7 @@ class PreviewModelModal extends React.Component {
             <Modal.Description>
               {model.fields.length ? viewFields(model.fields, media) : null}
               {viewMethods(model.methods)}
-              {viewConfiguration(model.config)}
+              {viewOptions(model.config)}
               {viewAssociations(model.associations, modelNamesById)}
             </Modal.Description>
           </Modal.Content>

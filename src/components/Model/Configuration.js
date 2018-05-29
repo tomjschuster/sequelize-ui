@@ -3,92 +3,74 @@ import React from 'react'
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
 import { Input, Checkbox } from 'semantic-ui-react'
 
-/* ----------  COMPONENT  ---------- */
-export const CONFIG_DISPLAY = {
-  tableName: 'Table Name',
-  singular: 'Singular Name',
-  plural: 'Plural Name',
-  freezeTableName: 'Freeze Table Name',
-  underscoredColumns: 'Underscore Column Names',
-  underscoredTable: 'Underscore Table Name',
-  hooks: 'Hooks',
-  getterMethods: 'Getter Methods',
-  setterMethods: 'Setter Methods',
-  instanceMethods: 'Instance Methods',
-  classMethods: 'Class Methods'
-}
+/* ----------  CONSTANTS  ---------- */
+import { METHODS, OPTIONS, displayMethod, displayOption } from '../../constants'
 
+/* ----------  COMPONENT  ---------- */
 class Configuration extends React.Component {
-  renderInput = (key) => {
+  renderOptionInput = option => {
     const { config, currentModelActions: { updateConfig } } = this.props
     return (
       <Input
-        key={key}
-        label={CONFIG_DISPLAY[key]}
-        value={config[key] || ''}
-        onChange={(_, data) => updateConfig(key, data.value)}
+        key={option}
+        label={displayOption(option)}
+        value={config[option] || ''}
+        onChange={(_, data) => updateConfig(option, data.value)}
       />
     )
   }
 
-  renderCheckbox = (key, negate) => {
+  renderOptionCheckbox = option => {
     const { config, currentModelActions: { updateConfig } } = this.props
     return (
       <Checkbox
-        key={key}
-        label={negate ? `No ${CONFIG_DISPLAY[key]}` : CONFIG_DISPLAY[key]}
-        checked={negate ? !config[key] : config[key]}
-        onChange={(_, data) => updateConfig(key, negate ? !data.checked : data.checked)}
+        key={option}
+        label={displayOption(option)}
+        checked={!!config[option]}
+        onChange={(_, data) => updateConfig(option, data.checked)}
       />
     )
   }
 
-  renderMethodCheckbox = (key) => {
+  renderMethodCheckbox = method => {
     const { methods, currentModelActions: { updateMethod } } = this.props
     return (
       <Checkbox
-        key={key}
-        label={CONFIG_DISPLAY[key]}
-        checked={methods[key]}
-        onChange={(_, data) => updateMethod(key, data.checked)}
+        key={method}
+        label={displayMethod(method)}
+        checked={!!methods[method]}
+        onChange={(_, data) => updateMethod(method, data.checked)}
       />
     )
   }
 
-  renderInputs = () => {
-    const keys = ['tableName', 'singular', 'plural']
-    return keys.map(this.renderInput)
-  }
+  static INPUT_OPTIONS = [
+    OPTIONS.TABLE_NAME,
+    OPTIONS.SINGULAR,
+    OPTIONS.PLURAL
+  ]
 
-  renderCheckboxes = () => {
-    const keys = [
-      {key: 'freezeTableName', negate: false},
-      {key: 'underscoredColumns', negate: false},
-      {key: 'underscoredTable', negate: false}
-    ]
+  static CHECKBOX_OPTIONS = [
+    OPTIONS.FREEZE_TABLE_NAME,
+    OPTIONS.UNDERSCORED_COLUMNS,
+    OPTIONS.UNDERSCORED_TABLE_NAME
+  ]
 
-    return keys.map(({ key, negate }) => this.renderCheckbox(key, negate))
-  }
-
-  renderMethodCheckboxes = () => {
-    const keys = [
-      'hooks',
-      'getterMethods',
-      'setterMethods',
-      'instanceMethods',
-      'classMethods'
-    ]
-
-    return keys.map(this.renderMethodCheckbox)
-  }
+  static METHODS = [
+    METHODS.HOOKS,
+    METHODS.GETTER_METHODS,
+    METHODS.SETTER_METHODS,
+    METHODS.INSTANCE_METHODS,
+    METHODS.CLASS_METHODS
+  ]
 
   render () {
     return (
       <React.Fragment>
         <h3>Table Options</h3>
-        {this.renderInputs()}
-        {this.renderCheckboxes()}
-        {this.renderMethodCheckboxes()}
+        {Configuration.INPUT_OPTIONS.map(this.renderOptionInput)}
+        {Configuration.CHECKBOX_OPTIONS.map(this.renderOptionCheckbox)}
+        {console.log(Configuration.METHODS) || Configuration.METHODS.map(this.renderMethodCheckbox)}
       </React.Fragment>
     )
   }

@@ -5,6 +5,7 @@
 [Demo Video](https://www.youtube.com/watch?v=aHT6S81YvwE)
 
 TODO:
+- Fix Model Card Focus
 - Preview associations/Cleanup config preview
 - Fix printing of underscore configs
 - Format editing fields
