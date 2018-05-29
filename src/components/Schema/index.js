@@ -304,6 +304,7 @@ class Schema extends React.Component {
                 previewModel={() => modelsActions.previewModel(model.id)}
                 gotoModel={() => history.push(`/${model.id}`)}
                 removeModel={() => modelsActions.removeModel(model.id)}
+                handleModelKeyDown={this.handleModelKeyDown}
                 handleActionKeyDown={this.handleActionKeyDown}
               />
             ))}
