@@ -254,6 +254,9 @@ class Schema extends React.Component {
       formsActions: { inputModelsModelName }
     } = this.props
 
+    const modelNamesById =
+      models.reduce((acc, {id, name}) => ({ ...acc, [id]: name}), {})
+
     return (
       <React.Fragment>
         <AppBar
@@ -308,6 +311,7 @@ class Schema extends React.Component {
         </Container>
         <PreviewModelModal
           model={previewModel}
+          modelNamesById={modelNamesById}
           close={modelsActions.cancelPreviewModel}
           edit={() => history.push(`/${previewModel.id}`)}
         />

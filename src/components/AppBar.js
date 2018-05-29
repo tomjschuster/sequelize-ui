@@ -16,7 +16,7 @@ class AppBar extends React.Component {
     <React.Fragment>
       <Menu.Item position={position} onClick={download}>
         <Icon name='download' />
-          Export
+        Export
       </Menu.Item>
       <Menu.Item
         href='https://github.com/tomjschuster/sequelize-ui'
@@ -24,7 +24,7 @@ class AppBar extends React.Component {
         position={position}
       >
         <Icon name='github' />
-          Github
+        Github
       </Menu.Item>
       <Menu.Item position={position}>
         <Icon name='question' />

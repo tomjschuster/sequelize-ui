@@ -7,6 +7,9 @@ import { CONFIG_DISPLAY } from '../Model/Configuration'
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
 import { Modal, Button, Icon, Table } from 'semantic-ui-react'
 
+/* ----------  CONSTANTS  ---------- */
+import { RELATIONSHIPS } from '../../constants'
+
 const checkIf = condition => condition
   ? <Icon color='green' name='checkmark' size='large' /> : null
 
@@ -35,6 +38,21 @@ const viewConfiguration = config => {
     ? <p>{`Configuration: ${configDisplays.join(', ')}`}</p>
     : null
 }
+
+const viewAssociations = (associations, modelNamesById) => (
+  associations.length
+    ? (
+      <React.Fragment>
+        <p>Associations</p>
+        <ul>
+          {associations.map(({ id, target, relationship }) =>
+            <li key={id}>{RELATIONSHIPS[relationship]} {modelNamesById[target]}</li>
+          )}
+        </ul>
+      </React.Fragment>
+    )
+    : null
+)
 
 const viewFields = (fields, media) => {
   return (
@@ -121,7 +139,7 @@ class PreviewModelModal extends React.Component {
   }
 
   render () {
-    const { model, close, edit, media} = this.props
+    const { model, close, edit, media, modelNamesById } = this.props
     return (
       <Modal
         closeOnDimmerClick
@@ -152,6 +170,7 @@ class PreviewModelModal extends React.Component {
               {model.fields.length ? viewFields(model.fields, media) : null}
               {viewMethods(model.methods)}
               {viewConfiguration(model.config)}
+              {viewAssociations(model.associations, modelNamesById)}
             </Modal.Description>
           </Modal.Content>
         </React.Fragment>

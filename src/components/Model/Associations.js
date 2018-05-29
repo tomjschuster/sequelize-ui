@@ -4,12 +4,7 @@ import React from 'react'
 import { Input, Button, Dropdown, Card } from 'semantic-ui-react'
 
 /* ----------  CONSTANTS  ---------- */
-const relationshipOptions = [
-  { text: 'Belongs To', value: 'belongsTo' },
-  { text: 'Has One', value: 'hasOne' },
-  { text: 'Has Many', value: 'hasMany' },
-  { text: 'Belongs To Many', value: 'belongsToMany' }
-]
+import { RELATIONSHIPS } from '../../constants'
 
 /* ----------  COMPONENT  ---------- */
 const Associations = ({
@@ -37,7 +32,7 @@ const Associations = ({
             selection
             value={assoc.relationship}
             onChange={(_, data) => updateRelationship(assoc.id, data.value)}
-            options={relationshipOptions}
+            options={Object.entries(RELATIONSHIPS).map(([ value, text ]) => ({ value, text }))}
           />
           <Dropdown
             placeholder='Target Model'
