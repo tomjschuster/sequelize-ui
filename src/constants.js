@@ -15,12 +15,20 @@ export const displayRelationship = relationship => {
   }
 }
 
+export const relationshipKey = relationship => {
+  switch (relationship) {
+    case RELATIONSHIPS.BELONGS_TO: return 'belongsTo'
+    case RELATIONSHIPS.HAS_ONE: return 'hasOne'
+    case RELATIONSHIPS.HAS_MANY: return 'hasMany'
+    case RELATIONSHIPS.BELONGS_TO_MANY: return 'belongsToMany'
+    default: return undefined
+  }
+}
+
 export const METHODS = {
   HOOKS: 'HOOKS',
   GETTER_METHODS: 'GETTER_METHODS',
-  SETTER_METHODS: 'SETTER_METHODS',
-  INSTANCE_METHODS: 'INSTANCE_METHODS',
-  CLASS_METHODS: 'CLASS_METHODS'
+  SETTER_METHODS: 'SETTER_METHODS'
 }
 
 export const displayMethod = method => {
@@ -28,8 +36,15 @@ export const displayMethod = method => {
     case METHODS.HOOKS: return 'Hooks'
     case METHODS.GETTER_METHODS: return 'Getter Methods'
     case METHODS.SETTER_METHODS: return 'Setter Methods'
-    case METHODS.INSTANCE_METHODS: return 'Instance Methods'
-    case METHODS.CLASS_METHODS: return 'Class Methods'
+    default: return undefined
+  }
+}
+
+export const methodKey = method => {
+  switch (method) {
+    case METHODS.HOOKS: return 'hooks'
+    case METHODS.GETTER_METHODS: return 'getterMethods'
+    case METHODS.SETTER_METHODS: return 'setterMethods'
     default: return undefined
   }
 }

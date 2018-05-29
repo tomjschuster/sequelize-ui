@@ -59,9 +59,7 @@ class Configuration extends React.Component {
   static METHODS = [
     METHODS.HOOKS,
     METHODS.GETTER_METHODS,
-    METHODS.SETTER_METHODS,
-    METHODS.INSTANCE_METHODS,
-    METHODS.CLASS_METHODS
+    METHODS.SETTER_METHODS
   ]
 
   render () {
