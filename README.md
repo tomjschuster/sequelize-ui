@@ -5,7 +5,8 @@
 [Demo Video](https://www.youtube.com/watch?v=aHT6S81YvwE)
 
 TODO:
-- Preview associations
+- Preview associations/Cleanup config preview
+- Fix printing of underscore configs
 - Format editing fields
 - Name validation errors
 - Implement all table configuration
