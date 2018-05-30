@@ -7,21 +7,8 @@ const newModel = (id, name) => ({
   id,
   name,
   fields: [],
-  config: {
-    tableName: '',
-    singular: '',
-    plural: '',
-    timestamps: true,
-    freezeTableNames: false,
-    underscored: false
-  },
-  methods: {
-    hooks: false,
-    getterMethods: false,
-    setterMethods: false,
-    instanceMethods: false,
-    classMethods: false
-  },
+  config: {},
+  methods: {},
   associations: []
 })
 

@@ -1,6 +1,7 @@
 import JSZip from 'jszip'
 import Case from 'case'
 import { saveAs } from 'file-saver'
+import { OPTIONS, optionKey, relationshipKey, methodKey } from './constants'
 
 const modelHeader =
   "const Sequelize = require('sequelize')\nconst db = require('./_db')\n\n"
@@ -51,28 +52,28 @@ const printField = field => {
 
 const printMethods = methods => {
   let output = ''
-  for (let key in methods) {
-    if (methods[key]) output += `  ${key}: {\n    //Write methods here\n  },\n`
+  for (let method in methods) {
+    if (methods[method]) output += `  ${methodKey(method)}: {\n    //Write methods here\n  },\n`
   }
   return output
 }
 
 const printConfig = config => {
   let output = ''
-  output += config.tableName ? `  tableName: '${config.tableName}',\n` : ''
-  if (config.singular && config.plural) {
-    output += `  name: { singular: '${config.singular}', plural: '${
-      config.plural
+  output += config[OPTIONS.TABLE_NAME] ? `  tableName: '${config[OPTIONS.TABLE_NAME]}',\n` : ''
+  if (config[OPTIONS.SINGULAR] && config[OPTIONS.PLURAL]) {
+    output += `  name: { singular: '${config[OPTIONS.SINGULAR]}', plural: '${
+      config[OPTIONS.PLURAL]
     }' },\n`
-  } else if (config.singular) {
-    output += `  name: { singular: '${config.singular}' },\n`
-  } else if (config.plural) {
-    output += `  name: { plural: '${config.plural}' },\n`
+  } else if (config[OPTIONS.SINGULAR]) {
+    output += `  name: { singular: '${config[OPTIONS.SINGULAR]}' },\n`
+  } else if (config[OPTIONS.PLURAL]) {
+    output += `  name: { plural: '${config[OPTIONS.PLURAL]}' },\n`
   }
-  output += config.timestamps === false ? '  timestamps: false,\n' : ''
-  output += config.freezeTableNames ? '  freezeTableNames: true,\n' : ''
-  output += config.underscored ? '  underscored: true,\n' : ''
-  output += config.underscoredAll ? '  underscoredAll: true,\n' : ''
+  output += config[OPTIONS.TIMESTAMPS] === false ? '  timestamps: false,\n' : ''
+  output += config[OPTIONS.FREEZE_TABLE_NAMES] ? '  freezeTableNames: true,\n' : ''
+  output += config[OPTIONS.UNDERSCORED_COLUMNS] ? '  underscored: true,\n' : ''
+  output += config[OPTIONS.UNDERSCORED_TABLE_NAME] ? '  underscoredAll: true,\n' : ''
   return output
 }
 
@@ -108,13 +109,13 @@ const associationContent = models => {
   models.filter(model => model.associations.length).forEach(model => {
     model.associations.forEach(association => {
       let { relationship, target, config } = association
-      output += `${Case.pascal(model.name)}.${relationship}(${Case.pascal(
+      output += `${Case.pascal(model.name)}.${relationshipKey(relationship)}(${Case.pascal(
         modelNamesObj[target]
       )}`
-      let configKeys = Object.keys(config).filter(key => config[key])
-      if (configKeys.length) {
+      let configOptions = Object.keys(config).filter(option => config[option])
+      if (configOptions.length) {
         output += ', { '
-        output += configKeys.map(key => `${key}: '${config[key]}'`).join(', ')
+        output += configOptions.map(option => `${optionKey(option)}: '${config[option]}'`).join(', ')
         output += ' }'
       }
       output += ')\n'
