@@ -2,7 +2,7 @@ import React from 'react'
 import { withMedia } from 'react-media-query-hoc'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Modal, Button, Icon, Table, Segment, List } from 'semantic-ui-react'
+import { Modal, Button, Icon, Table, Header } from 'semantic-ui-react'
 
 /* ----------  CONSTANTS  ---------- */
 import {
@@ -22,39 +22,31 @@ const checkIf = condition => condition
   ? <Icon color='green' name='checkmark' size='large' /> : null
 
 const viewMethods = methods =>
-  <Segment>
-    <List>
-      {methods.map(method =>
-        <List.Item key={method}>{displayMethod(method)}</List.Item>
-      )}
-    </List>
-  </Segment>
+  <Table.Row>
+    <Table.Cell>Methods</Table.Cell>
+    <Table.Cell>{methods.map(displayMethod).join(', ')}</Table.Cell>
+  </Table.Row>
 
 const viewOptions = options =>
-  <Segment>
-    <List>
-      <List.Item><List.Header>Options</List.Header></List.Item>
-      {options.map(([option, value]) =>
-        <List.Item key={option}>
-          {typeof value === 'boolean'
-            ? displayOption(option) : `${displayOption(option)}: ${value}`
-          }
-        </List.Item>
-      )}
-    </List>
-  </Segment>
+  <React.Fragment>
+    {options.map(([option, value]) =>
+      <Table.Row key={option}>
+        <Table.Cell>{displayOption(option)}</Table.Cell>
+        <Table.Cell>{typeof value === 'boolean' ? checkIf(value) : value}</Table.Cell>
+      </Table.Row>
+    )}
+  </React.Fragment>
 
 const viewAssociations = (associations, modelNamesById) =>
-  <Segment>
-    <List>
-      <List.Item><List.Header>Associations</List.Header></List.Item>
-      {associations.map(({ id, target, relationship }) =>
-        <List.Item key={id}>
-          {displayRelationship(relationship)} {modelNamesById[target]}
-        </List.Item>
-      )}
-    </List>
-  </Segment>
+  <Table.Row>
+    <Table.Cell>Associations</Table.Cell>
+    <Table.Cell>
+      {associations
+        .map(a => displayRelationship(a.relationship) + ' ' + modelNamesById[a.target])
+        .join(', ')
+      }
+    </Table.Cell>
+  </Table.Row>
 
 const viewFields = (fields, media) => {
   return (
@@ -62,6 +54,7 @@ const viewFields = (fields, media) => {
       ? <React.Fragment>
         {fields.map((field, idx) => (
           <Table
+            id='fields-table'
             attached
             celled
             structured
@@ -103,7 +96,15 @@ const viewFields = (fields, media) => {
           </Table>
         ))}
       </React.Fragment>
-      : <Table celled unstackable compact textAlign='center' size='large'>
+      : <Table
+        id='fields-table'
+        celled
+        collapsing
+        unstackable
+        compact
+        textAlign='center'
+        size='large'
+      >
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Field</Table.HeaderCell>
@@ -148,8 +149,8 @@ class PreviewModelModal extends React.Component {
     const options = model ? objectEntriesWithValues(model.config) : []
     const assocs = model ? model.associations : []
 
-    const hasConfig =
-      (fields.length + methods.length + options.length + assocs.length) > 0
+    const hasFields = fields.length > 0
+    const hasConfig = (methods.length + options.length + assocs.length) > 0
 
     return (
       <Modal
@@ -177,13 +178,43 @@ class PreviewModelModal extends React.Component {
             />
           </Modal.Header>
           <Modal.Content>
-            {hasConfig
+            {hasFields || hasConfig
               ? (
                 <Modal.Description>
-                  {fields.length ? viewFields(fields, media) : null}
-                  {methods.length ? viewMethods(methods) : null}
-                  {options.length ? viewOptions(options) : null}
-                  {assocs.length ? viewAssociations(assocs, modelNamesById) : null}
+                  {hasFields ? (
+                    <React.Fragment>
+                      <Header textAlign='center' size='medium'>Fields</Header>
+                      {viewFields(fields, media)}
+                    </React.Fragment>
+                  ) : null}
+                  {hasConfig
+                    ? (
+                      <React.Fragment>
+                        <Header textAlign='center' size='medium'>Configuration</Header>
+                        <Table
+                          id='config-table'
+                          celled
+                          compact
+                          unstackable
+                          collapsing
+                          textAlign='center'
+                          size='large'
+                        >
+                          <Table.Header>
+                            <Table.Row>
+                              <Table.HeaderCell>Option</Table.HeaderCell>
+                              <Table.HeaderCell>Value</Table.HeaderCell>
+                            </Table.Row>
+                          </Table.Header>
+                          <Table.Body>
+                            {methods.length ? viewMethods(methods) : null}
+                            {options.length ? viewOptions(options) : null}
+                            {assocs.length ? viewAssociations(assocs, modelNamesById) : null}
+                          </Table.Body>
+                        </Table>
+                      </React.Fragment>
+                    ) : null
+                  }
                 </Modal.Description>)
               : (
                 <Modal.Description>

@@ -77,6 +77,11 @@
   position: absolute;
 }
 
+#fields-table, #config-table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* SUIR BUG */
 
 .ui.dimmer {
