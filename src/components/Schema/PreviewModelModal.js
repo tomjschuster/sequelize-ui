@@ -2,7 +2,7 @@ import React from 'react'
 import { withMedia } from 'react-media-query-hoc'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Modal, Button, Icon, Table } from 'semantic-ui-react'
+import { Modal, Button, Icon, Table, Segment, List } from 'semantic-ui-react'
 
 /* ----------  CONSTANTS  ---------- */
 import {
@@ -11,49 +11,50 @@ import {
   displayMethod
 } from '../../constants'
 
+/* ----------  HELPERS  ---------- */
+const objectKeysWithValues = obj =>
+  Object.entries(obj).reduce((acc, [k, v]) => v ? [...acc, k] : acc, [])
+
+const objectEntriesWithValues = obj =>
+  Object.entries(obj).reduce((acc, [k, v]) => v ? [...acc, [k, v]] : acc, [])
+
 const checkIf = condition => condition
   ? <Icon color='green' name='checkmark' size='large' /> : null
 
-const viewMethods = methods => {
-  const methodDisplays =
-      Object.keys(methods).filter(method => methods[method]).map(displayMethod)
+const viewMethods = methods =>
+  <Segment>
+    <List>
+      {methods.map(method =>
+        <List.Item key={method}>{displayMethod(method)}</List.Item>
+      )}
+    </List>
+  </Segment>
 
-  return methodDisplays.length
-    ? <p>{`Method Templates: ${methodDisplays.join(', ')}`}</p>
-    : null
-}
+const viewOptions = options =>
+  <Segment>
+    <List>
+      <List.Item><List.Header>Options</List.Header></List.Item>
+      {options.map(([option, value]) =>
+        <List.Item key={option}>
+          {typeof value === 'boolean'
+            ? displayOption(option) : `${displayOption(option)}: ${value}`
+          }
+        </List.Item>
+      )}
+    </List>
+  </Segment>
 
-const viewOptions = config => {
-  const optionDisplays =
-    Object.keys(config)
-      .filter(option => config[option])
-      .map(option =>
-        typeof config[option] === 'boolean'
-          ? displayOption(option)
-          : `${displayOption(option)}: ${config[option]}`
-      )
-
-  return optionDisplays.length
-    ? <p>{`Options: ${optionDisplays.join(', ')}`}</p>
-    : null
-}
-
-const viewAssociations = (associations, modelNamesById) => (
-  associations.length
-    ? (
-      <React.Fragment>
-        <p>Associations</p>
-        <ul>
-          {associations.map(({ id, target, relationship }) =>
-            <li key={id}>
-              {displayRelationship(relationship)} {modelNamesById[target]}
-            </li>
-          )}
-        </ul>
-      </React.Fragment>
-    )
-    : null
-)
+const viewAssociations = (associations, modelNamesById) =>
+  <Segment>
+    <List>
+      <List.Item><List.Header>Associations</List.Header></List.Item>
+      {associations.map(({ id, target, relationship }) =>
+        <List.Item key={id}>
+          {displayRelationship(relationship)} {modelNamesById[target]}
+        </List.Item>
+      )}
+    </List>
+  </Segment>
 
 const viewFields = (fields, media) => {
   return (
@@ -141,6 +142,15 @@ class PreviewModelModal extends React.Component {
 
   render () {
     const { model, close, edit, media, modelNamesById } = this.props
+
+    const fields = model ? model.fields : []
+    const methods = model ? objectKeysWithValues(model.methods) : []
+    const options = model ? objectEntriesWithValues(model.config) : []
+    const assocs = model ? model.associations : []
+
+    const hasConfig =
+      (fields.length + methods.length + options.length + assocs.length) > 0
+
     return (
       <Modal
         closeOnDimmerClick
@@ -167,12 +177,19 @@ class PreviewModelModal extends React.Component {
             />
           </Modal.Header>
           <Modal.Content>
-            <Modal.Description>
-              {model.fields.length ? viewFields(model.fields, media) : null}
-              {viewMethods(model.methods)}
-              {viewOptions(model.config)}
-              {viewAssociations(model.associations, modelNamesById)}
-            </Modal.Description>
+            {hasConfig
+              ? (
+                <Modal.Description>
+                  {fields.length ? viewFields(fields, media) : null}
+                  {methods.length ? viewMethods(methods) : null}
+                  {options.length ? viewOptions(options) : null}
+                  {assocs.length ? viewAssociations(assocs, modelNamesById) : null}
+                </Modal.Description>)
+              : (
+                <Modal.Description>
+                  No fields or configuration.
+                </Modal.Description>)
+            }
           </Modal.Content>
         </React.Fragment>
         }
