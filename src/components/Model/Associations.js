@@ -21,7 +21,7 @@ const Associations = ({
   }
 }) => (
   <React.Fragment>
-    <h3>Model Associations</h3>
+    <h3>Associations</h3>
     <Button icon='add' circular onClick={addAssociation} />
     <React.Fragment>
       {associations.map(assoc => (

@@ -1,7 +1,7 @@
 import React from 'react'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Button, Input, Dropdown, Checkbox, Card } from 'semantic-ui-react'
+import { Button, Input, Dropdown, Checkbox, Card, Form, Segment } from 'semantic-ui-react'
 
 /* ----------  CONSTANTS  ---------- */
 const dataTypeOptions = [
@@ -26,67 +26,59 @@ const Field = ({
   field,
   updateField,
   removeField,
-  toggleField,
   isOpen
 }) => (
-  <Card>
-    <Input
-      value={field.name}
-      onChange={(_, data) => updateField('name', data.value)}
-      type='text'
-      label='Field Name'
-    />
-    <Dropdown
-      placeholder='Data Type'
-      search
-      selection
-      onChange={(_, data) => updateField('type', data.value)}
-      options={dataTypeOptions}
-      value={field.type}
-    />
-    <Button icon='delete' onClick={removeField} primary />
-    <Checkbox
-      toggle
-      onChange={(_, data) => toggleField(data.checked)}
-      checked={isOpen}
-      label='More Options'
-    />
-    {isOpen && (
-      <React.Fragment>
-        <Checkbox
-          label='UNIQUE'
-          checked={Boolean(field.unique)}
-          onClick={(_, data) => updateField('unique', data.checked)}
+  <Segment>
+    <Form>
+      <Form.Group widths='equal'>
+        <Form.Input
+          fluid
+          label='Field Name'
+          value={field.name}
+          onChange={(_, data) => updateField('name', data.value)}
+          type='text'
         />
-        {field.unique && (
-          <Input
-            value={field.uniqueKey || ''}
-            onChange={(_, data) => updateField('uniqueKey', data.value)}
-            type='text'
-            label='Unique Key'
-          />
-        )}
-        <Checkbox
+        <Form.Select
+          fluid
+          label='Data Type'
+          search
+          onChange={(_, data) => updateField('type', data.value)}
+          options={dataTypeOptions}
+          value={field.type}
+        />
+
+        <Form.Button
+          icon='trash'
+          size='tiny'
+          circular
+        />
+      </Form.Group>
+      <Form.Group>
+        <Form.Checkbox
           label='NOT NULL'
           checked={field.allowNull === false}
           onClick={(_, data) => updateField('allowNull', !data.checked)}
         />
-        <Checkbox
+        <Form.Checkbox
           label='PRIMARY KEY'
           checked={field.primaryKey}
           onClick={(_, data) => updateField('primaryKey', data.checked)}
         />
-        <Checkbox
+        <Form.Checkbox
           label='AUTOINCREMENT'
           checked={field.autoIncrement}
           onClick={(_, data) => updateField('autoIncrement', data.checked)}
         />
+      </Form.Group>
+      <Form.Group>
         <Input
           value={field.default || ''}
           onChange={(_, data) => updateField('default', data.value)}
           type='text'
           label='Default Value'
         />
+      </Form.Group>
+      <Form.Group>
         <Input
           value={field.comment || ''}
           onChange={(_, data) => updateField('comment', data.value)}
@@ -99,9 +91,9 @@ const Field = ({
           type='text'
           label='Field Name'
         />
-      </React.Fragment>
-    )}
-  </Card>
+      </Form.Group>
+    </Form>
+  </Segment>
 )
 
 const Fields = ({
@@ -109,24 +101,21 @@ const Fields = ({
   fields,
   fieldsToggle,
   // Actions
-  currentModelActions: { addField, updateField, removeField },
-  uiActions: { toggleField }
+  currentModelActions: { addField, updateField, removeField }
 }) => (
   <React.Fragment>
     <h3>Fields</h3>
     <Button icon='add' circular onClick={addField} />
-    <React.Fragment>
+    <Segment.Group compact>
       {fields.map(field => (
         <Field
           key={field.id}
           field={field}
-          isOpen={!!fieldsToggle[field.id]}
           updateField={updateField.bind(null, field.id)}
           removeField={removeField.bind(null, field.id)}
-          toggleField={toggleField.bind(null, field.id)}
         />
       ))}
-    </React.Fragment>
+    </Segment.Group>
   </React.Fragment>
 )
 
