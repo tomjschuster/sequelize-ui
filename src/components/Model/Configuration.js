@@ -69,7 +69,7 @@ class Configuration extends React.Component {
         <Input
           label='Model Name'
           value={this.props.name}
-          onChange={evt => currentModelActions.setModelName(evt.target.value)}
+          onChange={evt => this.props.currentModelActions.setModelName(evt.target.value)}
           action
         />
         {Configuration.INPUT_OPTIONS.map(this.renderOptionInput)}

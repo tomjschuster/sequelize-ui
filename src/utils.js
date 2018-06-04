@@ -1,153 +1,26 @@
 import JSZip from 'jszip'
 import Case from 'case'
 import { saveAs } from 'file-saver'
-import { OPTIONS, optionKey, relationshipKey, methodKey } from './constants'
+import { optionKey, relationshipKey } from './constants'
+import prettier from 'prettier/standalone'
+import babylon from 'prettier/parser-babylon'
+import * as serialize from './serialize'
 
-const modelHeader =
-  "const Sequelize = require('sequelize')\nconst db = require('./_db')\n\n"
+const prettierConfig = { parser: 'babylon', plugins: [ babylon ] }
 
-const fieldType = field =>
-  `  ${Case.camel(field.name)}: {\n    type: Sequelize.${field.type},\n`
+const zipFile = (zip, name, content) =>
+  zip.file(name, prettier.format(content, prettierConfig))
 
-const maybeAppendKey = (field, key, output) =>
-  field[key] !== undefined ? output + `    ${key}: '${field[key]}',\n` : output
-
-const maybeAppendUnique = (field, output) => {
-  if (field.unique !== undefined) {
-    return (
-      output +
-      `    unique: ${
-        field.uniqueKey ? `'${field.uniqueKey}'` : field.unique
-      },\n`
-    )
-  } else {
-    return output
-  }
-}
-
-const maybeAppendAllowNull = (field, output) => {
-  if (field.defaultValue !== undefined) {
-    const defaultValue =
-      field.type === 'TEXT' || field.type === 'STRING'
-        ? `'${field.defaultValue}'`
-        : field.defaultValue
-
-    return output + `    defaultValue: ${defaultValue},\n`
-  } else {
-    return output
-  }
-}
-
-const printField = field => {
-  let output = fieldType(field)
-  output = maybeAppendKey(field, 'allowNull', output)
-  output = maybeAppendUnique(field, output)
-  output = maybeAppendKey(field, 'primaryKey', output)
-  output = maybeAppendKey(field, 'autoIncrement', output)
-  output = maybeAppendAllowNull(field, output)
-  output = maybeAppendKey(field, 'comment', output)
-  output = maybeAppendKey(field, 'field', output)
-  return output + `  }`
-}
-
-const printMethods = methods => {
-  let output = ''
-  for (let method in methods) {
-    if (methods[method]) output += `  ${methodKey(method)}: {\n    //Write methods here\n  },\n`
-  }
-  return output
-}
-
-const printConfig = config => {
-  let output = ''
-  output += config[OPTIONS.TABLE_NAME] ? `  tableName: '${config[OPTIONS.TABLE_NAME]}',\n` : ''
-  if (config[OPTIONS.SINGULAR] && config[OPTIONS.PLURAL]) {
-    output += `  name: { singular: '${config[OPTIONS.SINGULAR]}', plural: '${
-      config[OPTIONS.PLURAL]
-    }' },\n`
-  } else if (config[OPTIONS.SINGULAR]) {
-    output += `  name: { singular: '${config[OPTIONS.SINGULAR]}' },\n`
-  } else if (config[OPTIONS.PLURAL]) {
-    output += `  name: { plural: '${config[OPTIONS.PLURAL]}' },\n`
-  }
-  output += config[OPTIONS.TIMESTAMPS] === false ? '  timestamps: false,\n' : ''
-  output += config[OPTIONS.FREEZE_TABLE_NAMES] ? '  freezeTableNames: true,\n' : ''
-  output += config[OPTIONS.UNDERSCORED_COLUMNS] ? '  underscored: true,\n' : ''
-  output += config[OPTIONS.UNDERSCORED_TABLE_NAME] ? '  underscoredAll: true,\n' : ''
-  return output
-}
-
-const modelContent = model => {
-  let output = modelHeader
-  output += `const ${Case.pascal(model.name)} = db.define('${Case.snake(
-    model.name
-  )}', {\n`
-  let fields = model.fields.length
-    ? model.fields.map(printField).join(',\n')
-    : ''
-  output += fields
-  output += '\n},\n{\n'
-  output += printMethods(model.methods)
-  output += printConfig(model.config)
-  output += '\n})\n\n'
-  output += `module.exports = ${Case.pascal(model.name)}\n`
-  return output
-}
-const modelFile = (zip, model) =>
-  zip.file(`${Case.camel(model.name)}.js`, modelContent(model))
-
-const associationContent = models => {
-  let output = ''
-  models.forEach(model => {
-    output += `const ${Case.pascal(model.name)} = require('./${model.name}')\n`
-  })
-  output += '\n'
-  const modelNamesObj = models.reduce(
-    (acc, model) => ({ ...acc, [model.id]: model.name }),
-    {}
-  )
-  models.filter(model => model.associations.length).forEach(model => {
-    model.associations.forEach(association => {
-      let { relationship, target, config } = association
-      output += `${Case.pascal(model.name)}.${relationshipKey(relationship)}(${Case.pascal(
-        modelNamesObj[target]
-      )}`
-      let configOptions = Object.keys(config).filter(option => config[option])
-      if (configOptions.length) {
-        output += ', { '
-        output += configOptions.map(option => `${optionKey(option)}: '${config[option]}'`).join(', ')
-        output += ' }'
-      }
-      output += ')\n'
-    })
-    output += '\n'
-  })
-  output += `module.exports = {${models
-    .map(model => Case.pascal(model.name))
-    .join(', ')}}\n`
-  return output
-}
-
-const associationFile = (zip, models) =>
-  zip.file('index.js', associationContent(models))
-
-const dbContent =
-  "const Sequelize = require('sequelize')\n" +
-  "const db = new Sequelize('postgres://user:pass@example.com:5432/dbname')\n" +
-  'module.exports = db\n'
-
-const dbFile = zip => zip.file('_db.js', dbContent)
-
-const toZip = models => {
+const formatAndCompressModels = models => {
   const zip = new JSZip()
-  dbFile(zip)
-  associationFile(zip, models)
-  for (let model of models) modelFile(zip, model)
+  zipFile(zip, '_db.js', serialize.dbFile)
+  zipFile(zip, 'index.js', serialize.associationFile(models))
+  for (let x of models) zipFile(zip, `${Case.snake(x.name)}.js`, serialize.modelFile(x))
   return zip
 }
 
 export const exportModel = models =>
-  toZip(models)
+  formatAndCompressModels(models)
     .generateAsync({ type: 'blob' })
     .then(blob => saveAs(blob, 'db.zip'))
 
