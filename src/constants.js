@@ -51,6 +51,7 @@ export const methodKey = method => {
 
 export const OPTIONS = {
   TABLE_NAME: 'TABLE_NAME',
+  NAME: 'NAME',
   SINGULAR: 'SINGULAR',
   PLURAL: 'PLURAL',
   FREEZE_TABLE_NAME: 'FREEZE_TABLE_NAME',
@@ -61,10 +62,25 @@ export const OPTIONS = {
 export const displayOption = option => {
   switch (option) {
     case OPTIONS.TABLE_NAME: return 'Table Name'
+    case OPTIONS.Name: return 'Name'
     case OPTIONS.SINGULAR: return 'Singular Name'
     case OPTIONS.PLURAL: return 'Plural Name'
     case OPTIONS.FREEZE_TABLE_NAME: return 'Freeze Table Name'
     case OPTIONS.UNDERSCORED_COLUMNS: return 'Underscore Column Names'
     case OPTIONS.UNDERSCORED_TABLE_NAME: return 'Underscore Table Name'
+    default: return undefined
+  }
+}
+
+export const optionKey = option => {
+  switch (option) {
+    case OPTIONS.TABLE_NAME: return 'tableName'
+    case OPTIONS.NAME: return 'name'
+    case OPTIONS.SINGULAR: return 'singular'
+    case OPTIONS.PLURAL: return 'plural'
+    case OPTIONS.FREEZE_TABLE_NAME: return 'freezeTableName'
+    case OPTIONS.UNDERSCORED_COLUMNS: return 'underscored'
+    case OPTIONS.UNDERSCORED_TABLE_NAME: return 'underscoredAll'
+    default: return undefined
   }
 }

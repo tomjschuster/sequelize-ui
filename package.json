@@ -70,6 +70,7 @@
     "less-loader": "^4.1.0",
     "modules-values-extract": "^1.0.3",
     "morgan": "^1.7.0",
+    "prettier": "^1.13.4",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-media-query-hoc": "^0.5.0",
