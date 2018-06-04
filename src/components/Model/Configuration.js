@@ -65,7 +65,13 @@ class Configuration extends React.Component {
   render () {
     return (
       <React.Fragment>
-        <h3>Table Options</h3>
+        <h3>Model Configuration</h3>
+        <Input
+          label='Model Name'
+          value={this.props.name}
+          onChange={evt => currentModelActions.setModelName(evt.target.value)}
+          action
+        />
         {Configuration.INPUT_OPTIONS.map(this.renderOptionInput)}
         {Configuration.CHECKBOX_OPTIONS.map(this.renderOptionCheckbox)}
         {console.log(Configuration.METHODS) || Configuration.METHODS.map(this.renderMethodCheckbox)}

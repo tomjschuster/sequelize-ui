@@ -1,4 +1,3 @@
-import { Actions as CurrentModel } from './currentModel'
 import { Actions as Models } from './models'
 
 export const messages = {
@@ -19,21 +18,12 @@ const initialDialog = {
   message: ''
 }
 
-const initialFieldsToggle = {}
-
-const initialCurrentModelTabIdx = 0
-
-const initialSideBarIsOpen = false
-
 const initialAddModelState = {
   creatingModel: false
 }
 
 const initialState = {
   dialog: initialDialog,
-  fieldsToggle: initialFieldsToggle,
-  currentModelTabIdx: initialCurrentModelTabIdx,
-  sideBarIsOpen: initialSideBarIsOpen,
   addModelState: initialAddModelState
 }
 
@@ -42,11 +32,6 @@ export const Actions = {
   RESET_UI: 'UI__RESET_UI',
   OPEN_DIALOG: 'UI__OPEN_DIALOG',
   CLOSE_DIALOG: 'UI__CLOSE_DIALOG',
-  TOGGLE_FIELD: 'UI__TOGGLE_FIELD',
-  CLOSE_ALL_FIELDS: 'UI__CLOSE_ALL_FIELDS',
-  SET_CURRENT_MODEL_TAB_IDX: 'UI__SET_CURRENT_MODEL_TAB_IDX',
-  TOGGLE_SIDE_BAR: 'UI__TOGGLE_SIDE_BAR',
-  CLOSE_SIDE_BAR: 'UI__CLOSE_SIDE_BAR',
   START_CREATING_MODEL: 'START_CREATING_MODEL',
   STOP_CREATING_MODEL: 'STOP_CREATING_MODEL'
 }
@@ -65,28 +50,6 @@ export const actionCreators = {
 
   closeDialog: () => ({
     type: Actions.CLOSE_DIALOG
-  }),
-
-  toggleField: id => ({
-    type: Actions.TOGGLE_FIELD,
-    id
-  }),
-
-  closeAllFields: () => ({
-    type: Actions.CLOSE_ALL_FIELDS
-  }),
-
-  setCurrentModelTabIdx: idx => ({
-    type: Actions.SET_CURRENT_MODEL_TAB_IDX,
-    idx
-  }),
-
-  toggleSideBar: () => ({
-    type: Actions.TOGGLE_SIDE_BAR
-  }),
-
-  closeSideBar: () => ({
-    type: Actions.CLOSE_SIDE_BAR
   }),
 
   startCreatingModel: () => ({
@@ -127,14 +90,6 @@ export default (state = initialState, action) => {
       }
     case Models.ADD:
       return { ...state, addModelState: initialAddModelState }
-    case Actions.CLOSE_ALL_FIELDS:
-      return { ...state, fieldsToggle: initialFieldsToggle }
-    case Actions.SET_CURRENT_MODEL_TAB_IDX:
-      return { ...state, currentModelTabIdx: action.idx }
-    case Actions.TOGGLE_SIDE_BAR:
-      return { ...state, sideBarIsOpen: !state.sideBarIsOpen }
-    case Actions.CLOSE_SIDE_BAR:
-      return { ...state, sideBarIsOpen: false }
     case Actions.START_CREATING_MODEL:
       return { ...state, addModelState: { creatingModel: true } }
     case Actions.STOP_CREATING_MODEL:

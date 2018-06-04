@@ -21,7 +21,7 @@ import Configuration from './Configuration'
 import Associations from './Associations'
 
 /* ----------  UI LIBRARY COMPONENTS  ---------- */
-import { Input, Divider, Button, Container, Tab } from 'semantic-ui-react'
+import { Input, Divider, Button, Container, Tab, Grid, Segment } from 'semantic-ui-react'
 
 /* ----------  COMPONENT  ---------- */
 
@@ -33,16 +33,7 @@ class Model extends React.Component {
   componentDidUpdate () {
     if (this.props.match.params.id !== this.props.currentModel.id) {
       this.props.currentModelThunks.setModel(this.props.match.params.id)
-      this.props.uiActions.closeAllFields()
     }
-  }
-
-  createModel = () => {
-    const { uiActions, modelsThunks, currentModel, models, history } = this.props
-    modelsThunks
-      .saveModel(currentModel, models, true)
-      .then(() => history.push('/'))
-      .catch(error => uiActions.openDialog('Validation Error', error))
   }
 
   saveModel = () => {
@@ -56,7 +47,6 @@ class Model extends React.Component {
 
   componentWillUnmount () {
     this.props.currentModelActions.resetModel()
-    this.props.uiActions.closeAllFields()
   }
 
   goHome = () => {
@@ -66,10 +56,8 @@ class Model extends React.Component {
   render () {
     const {
       // State
-      tabIdx,
       models,
       currentModel,
-      fieldsToggle,
       // Actions
       uiActions,
       currentModelActions,
@@ -86,58 +74,40 @@ class Model extends React.Component {
         />
         <Container id='content'>
           <Container textAlign='center'>
-            <Input
-              placeholder='Name your model...'
-              value={currentModel.name}
-              onChange={evt => currentModelActions.setModelName(evt.target.value)}
-              action
-            >
-              <input />
-              <Button primary onClick={this.saveModel}>Save</Button>
-              <Button onClick={() => removeModel(currentModel.id)}>Delete</Button>
-            </Input>
+            <Button primary onClick={this.saveModel}>Save</Button>
+            <Button onClick={() => removeModel(currentModel.id)}>Delete</Button>
           </Container>
           <Divider />
-          <Tab
-            index={tabIdx}
-            onChange={uiActions.setCurrentModelTabIdx}
-            panes={[
-              {
-                menuItem: 'Fields',
-                render: () =>
-                  <Tab.Pane>
-                    <Fields
-                      fields={currentModel.fields}
-                      fieldsToggle={fieldsToggle}
-                      currentModelActions={currentModelActions}
-                      uiActions={uiActions}
-                    />
-                  </Tab.Pane>
-              },
-              {
-                menuItem: 'Configuration',
-                render: () =>
-                  <Tab.Pane>
-                    <Configuration
-                      config={currentModel.config}
-                      methods={currentModel.methods}
-                      currentModelActions={currentModelActions}
-                    />
-                  </Tab.Pane>
-              },
-              {
-                menuItem: 'Associations',
-                render: () =>
-                  <Tab.Pane>
-                    <Associations
-                      models={models}
-                      associations={currentModel.associations}
-                      currentModelActions={currentModelActions}
-                    />
-                  </Tab.Pane>
-              }
-            ]}
-          />
+          <Grid columns={2} divided stackable>
+            <Grid.Row streched>
+              <Grid.Column>
+                <Segment>
+                  <Fields
+                    fields={currentModel.fields}
+                    currentModelActions={currentModelActions}
+                    uiActions={uiActions}
+                  />
+                </Segment>
+              </Grid.Column>
+              <Grid.Column>
+                <Segment>
+                  <Configuration
+                    name={currentModel.name}
+                    config={currentModel.config}
+                    methods={currentModel.methods}
+                    currentModelActions={currentModelActions}
+                  />
+                </Segment>
+                <Segment>
+                  <Associations
+                    models={models}
+                    associations={currentModel.associations}
+                    currentModelActions={currentModelActions}
+                  />
+                </Segment>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </Container>
       </React.Fragment>
     )
@@ -145,8 +115,6 @@ class Model extends React.Component {
 }
 
 const mapStateToProps = ({ currentModel, models: { models }, ui }) => ({
-  tabIdx: ui.currentModelTabIdx,
-  fieldsToggle: ui.fieldsToggle,
   currentModel,
   models
 })
