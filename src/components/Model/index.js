@@ -74,16 +74,8 @@ class Model extends React.Component {
         />
         <Container id='content'>
           <Container textAlign='center'>
-            <Input
-              placeholder='Name your model...'
-              value={currentModel.name}
-              onChange={evt => currentModelActions.setModelName(evt.target.value)}
-              action
-            >
-              <input />
-              <Button primary onClick={this.saveModel}>Save</Button>
-              <Button onClick={() => removeModel(currentModel.id)}>Delete</Button>
-            </Input>
+            <Button primary onClick={this.saveModel}>Save</Button>
+            <Button onClick={() => removeModel(currentModel.id)}>Delete</Button>
           </Container>
           <Divider />
           <Grid columns={2} divided stackable>
@@ -100,6 +92,7 @@ class Model extends React.Component {
               <Grid.Column>
                 <Segment>
                   <Configuration
+                    name={currentModel.name}
                     config={currentModel.config}
                     methods={currentModel.methods}
                     currentModelActions={currentModelActions}
