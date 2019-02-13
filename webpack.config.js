@@ -6,21 +6,21 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const common = {
-  entry: './src/index.js',
+  entry: './src-new/index.js',
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'app.[hash].js'
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
-    alias: {
-      '../../theme.config$': path.join(__dirname, 'src/style/theme.config')
-    }
+    extensions: ['.js', '.jsx']
+    // alias: {
+    //   '../../theme.config$': path.join(__dirname, 'src/style/theme.config')
+    // }
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
@@ -40,10 +40,7 @@ const common = {
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          { loader: 'css-loader' }
-        ]
+        use: ['style-loader', { loader: 'css-loader' }]
       },
       {
         test: /\.jpe?g$|\.gif$|\.ico$|\.png$|\.svg$/,
