@@ -1,54 +1,74 @@
 import React from 'react'
 
-const dataTypeOptions = [
-  { text: 'String', value: 'STRING' },
-  { text: 'Text', value: 'TEXT' },
-  { text: 'Integer', value: 'INTEGER' },
-  { text: 'Float', value: 'FLOAT' },
-  { text: 'Real', value: 'REAL' },
-  { text: 'Double', value: 'DOUBLE' },
-  { text: 'Decimal', value: 'DECIMAL' },
-  { text: 'Date', value: 'DATE' },
-  { text: 'Date (without time)', value: 'DATEONLY' },
-  { text: 'Boolean', value: 'BOOLEAN' },
-  { text: 'Array', value: 'ARRAY' },
-  { text: 'JSON', value: 'JSON' },
-  { text: 'BLOB', value: 'BLOB' },
-  { text: 'UUID', value: 'UUID' }
-]
+const EMPTY_OPTION = 'EMPTY_OPTION'
+const optionToValue = value => (value === EMPTY_OPTION ? null : value)
+
+const dataTypeOptions = {
+  EMPTY_OPTION: '-',
+  STRING: 'String',
+  TEXT: 'Text',
+  INTEGER: 'Integer',
+  FLOAT: 'Float',
+  REAL: 'Real',
+  DOUBLE: 'Double',
+  DECIMAL: 'Decimal',
+  DATE: 'Date',
+  DATEONLY: 'Date (without time)',
+  BOOLEAN: 'Boolean',
+  ARRAY: 'Array',
+  JSON: 'JSON',
+  BLOB: 'BLOB',
+  UUID: 'UUID'
+}
 
 export default class App extends React.Component {
   constructor (props) {
     super(props)
 
-    this.state = {
-      error: null,
-      nextModelId: 1,
-      nextFieldId: 1,
-      models: [],
-      currentModel: null,
-      newModelName: '',
-      newFieldName: ''
-    }
+    const prevState = localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {}
+
+    this.state = { ...App.initialState(), ...prevState }
   }
 
-  preventDefault = event => event.preventDefault()
+  static initialState = () => ({
+    error: null,
+    nextModelId: 1,
+    nextFieldId: 1,
+    models: [],
+    currentModel: null,
+    newModelName: '',
+    editingField: App.initialEditingField()
+  })
 
-  handleNewModelNameChange = event =>
-    this.setState({ newModelName: event.target.value })
+  static initialEditingField = () => ({
+    name: '',
+    type: null,
+    primaryKey: false,
+    required: false,
+    unique: false
+  })
 
-  handleNewFieldNameChange = event =>
-    this.setState({ newFieldName: event.target.value })
+  componentDidUpdate (prevProps, prevState) {
+    localStorage.setItem('SUI', JSON.stringify(this.state))
+  }
 
-  handleNewFieldDataTypeChange = event =>
-    this.setState({ newFieldType: event.target.value })
+  reset = () => {
+    localStorage.removeItem('SUI')
+    location.reload()
+  }
 
-  createModel = () =>
+  // New Model
+  inputNewModelName = ({ target: { value } }) =>
+    this.setState({ newModelName: value })
+
+  createModel = event => {
+    event.preventDefault()
     this.setState({
       models: [...this.state.models, this.newModel(this.state.newModelName)],
       newModelName: '',
       nextModelId: this.state.nextModelId + 1
     })
+  }
 
   newModel = () => ({
     id: this.state.nextModelId,
@@ -56,22 +76,81 @@ export default class App extends React.Component {
     fields: []
   })
 
-  createField = () =>
+  // New Field
+  editField = id => {
+    const field = this.state.currentModel.fields.find(f => f.id === id)
+    if (field) this.setState({ editingField: field })
+  }
+
+  inputEditingFieldName = ({ target: { value } }) =>
+    this.setState({
+      editingField: { ...this.state.editingField, name: value }
+    })
+
+  selectEditingFieldType = ({ target: { value } }) =>
+    this.setState({
+      editingField: { ...this.state.editingField, type: optionToValue(value) }
+    })
+
+  toggleEditingFieldPrimaryKey = ({ target: { checked } }) =>
+    this.setState({
+      editingField: { ...this.state.editingField, primaryKey: checked }
+    })
+
+  toggleEditingFieldRequired = ({ target: { checked } }) =>
+    this.setState({
+      editingField: { ...this.state.editingField, required: checked }
+    })
+
+  toggleEditingFieldUnique = ({ target: { checked } }) =>
+    this.setState({
+      editingField: { ...this.state.editingField, unique: checked }
+    })
+
+  saveField = event => {
+    event.preventDefault()
+    this.state.editingField.id ? this.saveExistingField() : this.saveNewField()
+  }
+
+  saveNewField = () => {
     this.setState({
       currentModel: {
         ...this.state.currentModel,
-        fields: [...this.state.currentModel.fields, this.newField()]
+        fields: [...this.state.currentModel.fields, this.getNewField()]
       },
-      newFieldName: '',
-      newFieldType: null,
+      editingField: App.initialEditingField(),
       nextFieldId: this.state.nextFieldId + 1
     })
+  }
 
-  newField = () => ({
+  saveExistingField = () => {
+    const fields = this.state.currentModel.fields.map(field =>
+      field.id === this.state.editingField.id ? this.state.editingField : field
+    )
+
+    this.setState({
+      currentModel: { ...this.state.currentModel, fields },
+      editingField: App.initialEditingField()
+    })
+  }
+
+  getNewField = () => ({
     id: this.state.nextFieldId,
-    name: this.state.newFieldName,
-    dataType: this.state.newFieldType
+    name: this.state.editingField.name,
+    type: this.state.editingField.type,
+    primaryKey: this.state.editingField.primaryKey,
+    required: this.state.editingField.required,
+    unique: this.state.editingField.unique
   })
+
+  saveModel = () => {
+    console.log('saving model')
+    const models = this.state.models.map(model =>
+      model.id == this.state.currentModel.id ? this.state.currentModel : model
+    )
+
+    this.setState({ models, currentModel: null })
+  }
 
   goToModels = () => this.setState({ currentModel: null })
 
@@ -81,52 +160,99 @@ export default class App extends React.Component {
     else this.setState({ error: 'Model not found' })
   }
 
+  // View methods
+  showFieldOptions = field => {
+    const options = {
+      primaryKey: 'Primary Key',
+      required: 'Required',
+      unique: 'Unique'
+    }
+
+    const display = Object.entries(options)
+      .filter(([option, _]) => field[option])
+      .map(([_, text]) => text)
+      .join(', ')
+
+    return display ? `(${display})` : ''
+  }
+
   render () {
     if (this.state.currentModel) {
       return (
         <React.Fragment>
-          <p>{JSON.stringify(this.state, 2)}</p>
           <h1>Sequelize UI</h1>
+          <button onClick={this.reset}>Reset</button>
           <button onClick={this.goToModels}>Back</button>
+          <button onClick={this.saveModel}>Save</button>
           <h2>{this.state.currentModel.name}</h2>
-          <form onSubmit={this.preventDefault}>
+          <form onSubmit={this.saveField}>
             <input
               type='text'
-              value={this.state.newFieldName}
-              onChange={this.handleNewFieldNameChange}
+              value={this.state.editingField.name}
+              onChange={this.inputEditingFieldName}
             />
-            <select onChange={this.handleNewFieldDataTypeChange}>
-              {dataTypeOptions.map(dataType => (
-                <option
-                  key={dataType.value}
-                  value={dataType.value}
-                  selected={this.state.newFieldType === dataType.value}
-                >
-                  {dataType.text}
+            <select
+              value={this.state.editingField.type || EMPTY_OPTION}
+              onChange={this.selectEditingFieldType}
+            >
+              {Object.entries(dataTypeOptions).map(([value, text]) => (
+                <option key={value || EMPTY_OPTION} value={value}>
+                  {text}
                 </option>
               ))}
             </select>
-            <button onClick={() => this.createField()}>Create Field</button>
+            <label>
+              Primary Key
+              <input
+                type='checkbox'
+                checked={this.state.editingField.primaryKey}
+                onChange={this.toggleEditingFieldPrimaryKey}
+              />
+            </label>
+            <label>
+              Required
+              <input
+                type='checkbox'
+                checked={this.state.editingField.required}
+                onChange={this.toggleEditingFieldRequired}
+              />
+            </label>
+
+            <label>
+              Unique
+              <input
+                type='checkbox'
+                checked={this.state.editingField.unique}
+                onChange={this.toggleEditingFieldUnique}
+              />
+            </label>
+            <button type='submit'>
+              {this.state.editingField.id ? 'Save Field' : 'Create Field'}
+            </button>
           </form>
           <ul>
             {this.state.currentModel.fields.map(field => (
-              <li key={field.id}>{field.name}</li>
+              <li key={field.id} onClick={() => this.editField(field.id)}>
+                {field.name} - {dataTypeOptions[field.type]}{' '}
+                {this.showFieldOptions(field)}
+              </li>
             ))}
           </ul>
+          <pre>{JSON.stringify(this.state, undefined, 2)}</pre>
         </React.Fragment>
       )
     } else {
       return (
         <React.Fragment>
-          <p>{JSON.stringify(this.state)}</p>
           <h1>Sequelize UI</h1>
-          <form onSubmit={this.preventDefault}>
+          <button onClick={this.reset}>Reset</button>
+          <form onSubmit={this.createModel}>
             <input
               type='text'
               value={this.state.newModelName}
-              onChange={this.handleNewModelNameChange}
+              onChange={this.inputNewModelName}
             />
-            <button onClick={() => this.createModel()}>Create Model</button>
+            <button type='submit'>Create Model</button>
           </form>
           <ul>
             {this.state.models.map(model => (
@@ -135,6 +261,7 @@ export default class App extends React.Component {
               </li>
             ))}
           </ul>
+          <pre>{JSON.stringify(this.state, undefined, 2)}</pre>
         </React.Fragment>
       )
     }
