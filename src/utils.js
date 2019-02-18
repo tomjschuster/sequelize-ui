@@ -6,21 +6,38 @@ import prettier from 'prettier/standalone'
 import babylon from 'prettier/parser-babylon'
 import * as serialize from './serialize'
 
-const prettierConfig = { parser: 'babylon', plugins: [ babylon ] }
+const defaultConfig = { prettier: { parser: 'babylon', plugins: [babylon] } }
 
-const zipFile = (zip, name, content) =>
-  zip.file(name, prettier.format(content, prettierConfig))
+const zipFile = (zip, { name, content, config }) =>
+  zip.file(name, prettier.format(content, config.prettier))
 
-const formatAndCompressModels = models => {
+const formatAndCompressModels = (models, config) => {
   const zip = new JSZip()
-  zipFile(zip, '_db.js', serialize.dbFile)
-  zipFile(zip, 'index.js', serialize.associationFile(models))
-  for (let x of models) zipFile(zip, `${Case.snake(x.name)}.js`, serialize.modelFile(x))
+
+  zipFile(zip, {
+    name: '_db.js',
+    content: serialize.dbFile,
+    config
+  })
+
+  zipFile(zip, {
+    name: 'index.js',
+    content: serialize.associationFile(models),
+    config
+  })
+
+  for (let x of models) {
+    zipFile(zip, {
+      name: `${Case.snake(x.name)}.js`,
+      content: serialize.modelFile(x),
+      config
+    })
+  }
   return zip
 }
 
-export const exportModel = models =>
-  formatAndCompressModels(models)
+export const exportModels = (models, config = defaultConfig) =>
+  formatAndCompressModels(models, config)
     .generateAsync({ type: 'blob' })
     .then(blob => saveAs(blob, 'db.zip'))
 

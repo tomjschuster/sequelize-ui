@@ -1,4 +1,5 @@
 import React from 'react'
+import { exportModels } from '../src/utils'
 
 const EMPTY_OPTION = 'EMPTY_OPTION'
 const optionToValue = value => (value === EMPTY_OPTION ? null : value)
@@ -37,6 +38,7 @@ export default class App extends React.Component {
     editingModel: App.initialEditingModel(),
     editingField: App.initialEditingField()
   })
+
   static initialEditingModel = () => ({
     name: ''
   })
@@ -52,6 +54,8 @@ export default class App extends React.Component {
   componentDidUpdate (prevProps, prevState) {
     localStorage.setItem('SUI', JSON.stringify(this.state))
   }
+
+  exportModels = () => exportModels(this.state.models)
 
   reset = () => {
     localStorage.removeItem('SUI')
@@ -289,6 +293,7 @@ export default class App extends React.Component {
       return (
         <React.Fragment>
           <h1>Sequelize UI</h1>
+          <button onClick={this.exportModels}>Export</button>
           <button onClick={this.reset}>Reset</button>
           <form onSubmit={this.createModel}>
             <input
