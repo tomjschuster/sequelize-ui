@@ -24,9 +24,7 @@ const dataTypeOptions = {
 export default class App extends React.Component {
   constructor (props) {
     super(props)
-
     const prevState = localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {}
-
     this.state = { ...App.initialState(), ...prevState }
   }
 
@@ -36,8 +34,11 @@ export default class App extends React.Component {
     nextFieldId: 1,
     models: [],
     currentModel: null,
-    newModelName: '',
+    editingModel: App.initialEditingModel(),
     editingField: App.initialEditingField()
+  })
+  static initialEditingModel = () => ({
+    name: ''
   })
 
   static initialEditingField = () => ({
@@ -58,23 +59,40 @@ export default class App extends React.Component {
   }
 
   // New Model
-  inputNewModelName = ({ target: { value } }) =>
-    this.setState({ newModelName: value })
+  inputEditingModelName = ({ target: { value } }) =>
+    this.setState({ editingModel: { ...this.state.editingModel, name: value } })
 
   createModel = event => {
     event.preventDefault()
     this.setState({
-      models: [...this.state.models, this.newModel(this.state.newModelName)],
-      newModelName: '',
+      models: [...this.state.models, this.newModel()],
+      editingModel: App.initialEditingModel(),
       nextModelId: this.state.nextModelId + 1
     })
   }
 
   newModel = () => ({
     id: this.state.nextModelId,
-    name: this.state.newModelName,
+    name: this.state.editingModel.name,
     fields: []
   })
+
+  deleteModel = id =>
+    this.setState({
+      models: this.state.models.filter(model => model.id !== id)
+    })
+
+  // Edit Model Name
+  editModelName = () => this.setState({ editingModel: this.state.currentModel })
+
+  saveModelName = () =>
+    this.setState({
+      editingModel: App.initialEditingModel(),
+      currentModel: this.state.editingModel
+    })
+
+  cancelModelName = () =>
+    this.setState({ editingModel: App.initialEditingModel() })
 
   // New Field
   editField = id => {
@@ -143,7 +161,15 @@ export default class App extends React.Component {
     unique: this.state.editingField.unique
   })
 
-  saveModel = () => {
+  deleteField = id =>
+    this.setState({
+      currentModel: {
+        ...this.state.currentModel,
+        fields: this.state.currentModel.fields.filter(field => field.id !== id)
+      }
+    })
+
+  saveUpdatedModel = () => {
     console.log('saving model')
     const models = this.state.models.map(model =>
       model.id == this.state.currentModel.id ? this.state.currentModel : model
@@ -183,8 +209,23 @@ export default class App extends React.Component {
           <h1>Sequelize UI</h1>
           <button onClick={this.reset}>Reset</button>
           <button onClick={this.goToModels}>Back</button>
-          <button onClick={this.saveModel}>Save</button>
-          <h2>{this.state.currentModel.name}</h2>
+          <button onClick={this.saveUpdatedModel}>Save</button>
+          {this.state.editingModel.id ? (
+            <div>
+              <input
+                type='text'
+                onChange={this.inputEditingModelName}
+                value={this.state.editingModel.name}
+              />
+              <button onClick={this.saveModelName}>Save</button>
+              <button onClick={this.cancelModelName}>Cancel</button>
+            </div>
+          ) : (
+            <h2>
+              {this.state.currentModel.name}
+              <button onClick={this.editModelName}>Edit</button>
+            </h2>
+          )}
           <form onSubmit={this.saveField}>
             <input
               type='text'
@@ -232,9 +273,12 @@ export default class App extends React.Component {
           </form>
           <ul>
             {this.state.currentModel.fields.map(field => (
-              <li key={field.id} onClick={() => this.editField(field.id)}>
-                {field.name} - {dataTypeOptions[field.type]}{' '}
-                {this.showFieldOptions(field)}
+              <li key={field.id}>
+                <span onClick={() => this.editField(field.id)}>
+                  {field.name} - {dataTypeOptions[field.type]}{' '}
+                  {this.showFieldOptions(field)}
+                </span>
+                <button onClick={() => this.deleteField(field.id)}>X</button>
               </li>
             ))}
           </ul>
@@ -249,15 +293,18 @@ export default class App extends React.Component {
           <form onSubmit={this.createModel}>
             <input
               type='text'
-              value={this.state.newModelName}
-              onChange={this.inputNewModelName}
+              value={this.state.editingModel.name}
+              onChange={this.inputEditingModelName}
             />
             <button type='submit'>Create Model</button>
           </form>
           <ul>
             {this.state.models.map(model => (
-              <li key={model.id} onClick={() => this.goToModel(model.id)}>
-                {model.name}
+              <li key={model.id}>
+                <span onClick={() => this.goToModel(model.id)}>
+                  {model.name}
+                </span>
+                <button onClick={() => this.deleteModel(model.id)}>X</button>
               </li>
             ))}
           </ul>
