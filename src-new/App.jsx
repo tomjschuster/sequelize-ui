@@ -25,8 +25,7 @@ const dataTypeOptions = {
 export default class App extends React.Component {
   constructor (props) {
     super(props)
-    const prevState = localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {}
-    this.state = { ...App.initialState(), ...prevState }
+    this.state = { ...App.initialState(), ...this.loadState() }
   }
 
   static initialState = () => ({
@@ -52,6 +51,14 @@ export default class App extends React.Component {
   })
 
   componentDidUpdate (prevProps, prevState) {
+    this.persistState()
+  }
+
+  loadState () {
+    return localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {}
+  }
+
+  persistState () {
     localStorage.setItem('SUI', JSON.stringify(this.state))
   }
 
