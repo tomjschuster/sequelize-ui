@@ -22,45 +22,43 @@ const dataTypeOptions = {
   UUID: 'UUID'
 }
 
+const newField = () => ({
+  name: '',
+  type: null,
+  primaryKey: false,
+  required: false,
+  unique: false
+})
+
+const initialState = () => ({
+  error: null,
+  nextModelId: 1,
+  nextFieldId: 1,
+  models: [],
+  newModelName: null,
+  currentModel: null,
+  editingModel: null
+})
+
+const newModel = (id, name) => ({
+  id,
+  name,
+  fields: []
+})
+
 export default class App extends React.Component {
   constructor (props) {
     super(props)
-    this.state = { ...App.initialState(), ...this.loadState() }
+    this.state = { ...initialState(), ...this.loadState() }
   }
-
-  static initialState = () => ({
-    error: null,
-    nextModelId: 1,
-    nextFieldId: 1,
-    models: [],
-    currentModel: null,
-    editingModel: App.initialEditingModel(),
-    editingField: App.initialEditingField()
-  })
-
-  static initialEditingModel = () => ({
-    name: ''
-  })
-
-  static initialEditingField = () => ({
-    name: '',
-    type: null,
-    primaryKey: false,
-    required: false,
-    unique: false
-  })
 
   componentDidUpdate (prevProps, prevState) {
     this.persistState()
   }
 
-  loadState () {
-    return localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {}
-  }
+  loadState = () => (localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {})
 
-  persistState () {
-    localStorage.setItem('SUI', JSON.stringify(this.state))
-  }
+  persistState = () => localStorage.setItem('SUI', JSON.stringify(this.state))
 
   exportModels = () => exportModels(this.state.models)
 
@@ -69,133 +67,150 @@ export default class App extends React.Component {
     location.reload()
   }
 
-  // New Model
-  inputEditingModelName = ({ target: { value } }) =>
-    this.setState({ editingModel: { ...this.state.editingModel, name: value } })
+  // Models Methods
+  startCreatingNewModel = () =>
+    this.setState({ newModelName: '' })
 
-  createModel = event => {
-    event.preventDefault()
+  goToModel = id =>
+    this.setState({ currentModel: this.state.models.find(m => m.id === id) })
+
+  editModel = id => {
+    const model = this.state.models.find(m => m.id === id)
+
     this.setState({
-      models: [...this.state.models, this.newModel()],
-      editingModel: App.initialEditingModel(),
-      nextModelId: this.state.nextModelId + 1
+      currentModel: model,
+      editingModel: { ...model, newField: newField() }
     })
   }
-
-  newModel = () => ({
-    id: this.state.nextModelId,
-    name: this.state.editingModel.name,
-    fields: []
-  })
 
   deleteModel = id =>
     this.setState({
       models: this.state.models.filter(model => model.id !== id)
     })
 
-  // Edit Model Name
-  editModelName = () => this.setState({ editingModel: this.state.currentModel })
+  // New Model Methods
+  cancelCreatingNewModel = () =>
+    this.setState({ newModelName: null })
 
-  saveModelName = () =>
-    this.setState({
-      editingModel: App.initialEditingModel(),
-      currentModel: this.state.editingModel
-    })
+  inputNewModelName = ({ target: { value } }) =>
+    this.setState({ newModelName: value })
 
-  cancelModelName = () =>
-    this.setState({ editingModel: App.initialEditingModel() })
-
-  // New Field
-  editField = id => {
-    const field = this.state.currentModel.fields.find(f => f.id === id)
-    if (field) this.setState({ editingField: field })
-  }
-
-  inputEditingFieldName = ({ target: { value } }) =>
-    this.setState({
-      editingField: { ...this.state.editingField, name: value }
-    })
-
-  selectEditingFieldType = ({ target: { value } }) =>
-    this.setState({
-      editingField: { ...this.state.editingField, type: optionToValue(value) }
-    })
-
-  toggleEditingFieldPrimaryKey = ({ target: { checked } }) =>
-    this.setState({
-      editingField: { ...this.state.editingField, primaryKey: checked }
-    })
-
-  toggleEditingFieldRequired = ({ target: { checked } }) =>
-    this.setState({
-      editingField: { ...this.state.editingField, required: checked }
-    })
-
-  toggleEditingFieldUnique = ({ target: { checked } }) =>
-    this.setState({
-      editingField: { ...this.state.editingField, unique: checked }
-    })
-
-  saveField = event => {
+  createModel = event => {
     event.preventDefault()
-    this.state.editingField.id ? this.saveExistingField() : this.saveNewField()
-  }
 
-  saveNewField = () => {
     this.setState({
-      currentModel: {
-        ...this.state.currentModel,
-        fields: [...this.state.currentModel.fields, this.getNewField()]
-      },
-      editingField: App.initialEditingField(),
-      nextFieldId: this.state.nextFieldId + 1
+      models: [
+        ...this.state.models,
+        newModel(this.state.nextModelId, this.state.newModelName)
+      ],
+      newModelName: '',
+      nextModelId: this.state.nextModelId + 1
     })
   }
 
-  saveExistingField = () => {
-    const fields = this.state.currentModel.fields.map(field =>
-      field.id === this.state.editingField.id ? this.state.editingField : field
-    )
-
-    this.setState({
-      currentModel: { ...this.state.currentModel, fields },
-      editingField: App.initialEditingField()
-    })
-  }
-
-  getNewField = () => ({
-    id: this.state.nextFieldId,
-    name: this.state.editingField.name,
-    type: this.state.editingField.type,
-    primaryKey: this.state.editingField.primaryKey,
-    required: this.state.editingField.required,
-    unique: this.state.editingField.unique
-  })
-
-  deleteField = id =>
-    this.setState({
-      currentModel: {
-        ...this.state.currentModel,
-        fields: this.state.currentModel.fields.filter(field => field.id !== id)
-      }
-    })
-
-  saveUpdatedModel = () => {
-    console.log('saving model')
-    const models = this.state.models.map(model =>
-      model.id == this.state.currentModel.id ? this.state.currentModel : model
-    )
-
-    this.setState({ models, currentModel: null })
-  }
+  // Current Model Methods
+  startEditingModel = () =>
+    this.setState({ editingModel: { ...this.state.currentModel, newField: newField() } })
 
   goToModels = () => this.setState({ currentModel: null })
 
-  goToModel = id => {
-    const model = this.state.models.find(m => m.id === id)
-    if (model) this.setState({ currentModel: model })
-    else this.setState({ error: 'Model not found' })
+  // Edit Model Methods
+  cancelEditingModel = () =>
+    this.setState({ editingModel: null })
+
+  inputEditingModelName = ({ target: { value } }) =>
+    this.setState({ editingModel: { ...this.state.editingModel, name: value } })
+
+  startCreatingNewField = () =>
+    this.setState({ editingModel: { ...this.state.editingModel, newField: newField() } })
+
+  cancelCreatingNewField = () =>
+    this.setState({ editingModel: { ...this.state.editingModel, newField: null } })
+
+  inputNewFieldName = ({ target: { value } }) =>
+    this.mapNewField(field => ({ ...field, name: value }))
+
+  selectNewFieldType = ({ target: { value } }) =>
+    this.mapNewField(field => ({ ...field, type: optionToValue(value) }))
+
+  toggleNewFieldPrimaryKey = ({ target: { checked } }) =>
+    this.mapNewField(field => ({ ...field, primaryKey: checked }))
+
+  toggleNewFieldRequired = ({ target: { checked } }) =>
+    this.mapNewField(field => ({ ...field, required: checked }))
+
+  toggleNewFieldUnique = ({ target: { checked } }) =>
+    this.mapNewField(field => ({ ...field, unique: checked }))
+
+  createField = () =>
+    this.setState({
+      editingModel: {
+        ...this.state.editingModel,
+        fields: [...this.state.editingModel.fields, this.state.editingModel.newField],
+        newField: newField()
+      }
+    })
+
+  mapNewField = fn =>
+    this.setState({
+      editingModel: {
+        ...this.state.editingModel,
+        newField: fn(this.state.editingModel.newField)
+      }
+    })
+
+  inputEditingFieldName = (id, { target: { value } }) =>
+    this.mapField(id, field => ({...field, name: value}))
+
+  selectEditingFieldType = (id, { target: { value } }) =>
+    this.mapField(id, field => ({...field, type: optionToValue(value)}))
+
+  toggleEditingFieldPrimaryKey = (id, { target: { checked } }) =>
+    this.mapField(id, field => ({...field, primaryKey: checked}))
+
+  toggleEditingFieldRequired = (id, { target: { checked } }) =>
+    this.mapField(id, field => ({...field, required: checked}))
+
+  toggleEditingFieldUnique = (id, { target: { checked } }) =>
+    this.mapField(id, field => ({...field, unique: checked}))
+
+  deleteField = id =>
+    this.setState({
+      editingModel: {
+        ...this.state.editingModel,
+        fields: this.state.editingModel.fields.filter(field => field.id !== id)
+      }
+    })
+
+  mapField = (id, fn) =>
+    this.setState({
+      editingModel: {
+        ...this.state.editingModel,
+        fields: this.state.editingModel.fields.map(field =>
+          field.id === id ? fn({ ...field }) : field
+        )
+      }
+    })
+
+  saveModel = () => {
+    const { newField, ...editingModel } = this.state.editingModel
+    this.setState({
+      currentModel: editingModel,
+      editingModel: null,
+      models: this.state.models.map(model =>
+        model.id === editingModel.id ? editingModel : model)
+    })
   }
+
+  cancelEditingModel = () =>
+    this.setState({ editingModel: null })
+
+  deleteCurrentModel = () =>
+    this.setState({
+      currentModel: null,
+      editingModel: null,
+      models: this.state.models.filter(model => model.id !== this.state.currentModel.id)
+    })
 
   // View methods
   showFieldOptions = field => {
@@ -235,6 +250,7 @@ export default class App extends React.Component {
             <h2>
               {this.state.currentModel.name}
               <button onClick={this.editModelName}>Edit</button>
+              <button onClick={this.deleteEditingModel}>X</button>
             </h2>
           )}
           <form onSubmit={this.saveField}>

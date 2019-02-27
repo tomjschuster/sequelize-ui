@@ -43,7 +43,8 @@
     ]
   },
   "standard": {
-    "parser": "babel-eslint"
+    "parser": "babel-eslint",
+    "globals": ["localStorage", "location"]
   },
   "dependencies": {
     "axios": "^0.18.0",
