@@ -307,6 +307,27 @@ export default class App extends React.Component {
           )
           }
         </select>
+        <label id='new-field-primary-key'>Primary Key</label>
+        <input
+          id='new-field-primary-key'
+          type='checkbox'
+          checked={editingModel.newField.primaryKey}
+          onChange={this.toggleNewFieldPrimaryKey}
+        />
+        <label id='new-field-unique'>Unique</label>
+        <input
+          id='new-field-unique'
+          type='checkbox'
+          checked={editingModel.newField.unique}
+          onChange={this.toggleNewFieldUnique}
+        />
+        <label id='new-field-required'>Required</label>
+        <input
+          id='new-field-required'
+          type='checkbox'
+          checked={editingModel.newField.required}
+          onChange={this.toggleNewFieldRequired}
+        />
         <button type='submit'>Add</button>
         <button type='button' onClick={this.clearNewField}>Clear</button>
       </form>
@@ -333,6 +354,27 @@ export default class App extends React.Component {
               )
               }
             </select>
+            <label id={`editing-field-primary-key-${field.id}`}>Primary Key</label>
+            <input
+              id={`editing-field-primary-key-${field.id}`}
+              type='checkbox'
+              checked={field.primaryKey}
+              onChange={event => this.toggleEditingFieldPrimaryKey(field.id, event)}
+            />
+            <label id={`editing-field-unique-${field.id}`}>Unique}</label>
+            <input
+              id={`editing-field-unique-${field.id}`}
+              type='checkbox'
+              checked={field.unique}
+              onChange={event => this.toggleEditingFieldUnique(field.id, event)}
+            />
+            <label id={`editing-field-required-${field.id}`}>Required</label>
+            <input
+              id={`editing-field--required-${field.id}`}
+              type='checkbox'
+              checked={field.required}
+              onChange={event => this.toggleEditingFieldRequired(field.id, event)}
+            />
             <button onClick={() => this.deleteField(field.id)}>Delete</button>
           </li>
         )}
