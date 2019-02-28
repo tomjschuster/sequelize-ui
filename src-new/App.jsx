@@ -112,7 +112,7 @@ export default class App extends React.Component {
   startEditingModel = () =>
     this.setState({ editingModel: { ...this.state.currentModel, newField: newField() } })
 
-  goToModels = () => this.setState({ currentModel: null })
+  goToModels = () => this.setState({ currentModel: null, editingModel: null })
 
   // Edit Model Methods
   cancelEditingModel = () =>
@@ -228,117 +228,59 @@ export default class App extends React.Component {
     return display ? `(${display})` : ''
   }
 
-  render () {
-    if (this.state.currentModel) {
-      return (
-        <React.Fragment>
-          <h1>Sequelize UI</h1>
-          <button onClick={this.reset}>Reset</button>
-          <button onClick={this.goToModels}>Back</button>
-          <button onClick={this.saveUpdatedModel}>Save</button>
-          {this.state.editingModel.id ? (
-            <div>
-              <input
-                type='text'
-                onChange={this.inputEditingModelName}
-                value={this.state.editingModel.name}
-              />
-              <button onClick={this.saveModelName}>Save</button>
-              <button onClick={this.cancelModelName}>Cancel</button>
-            </div>
-          ) : (
-            <h2>
-              {this.state.currentModel.name}
-              <button onClick={this.editModelName}>Edit</button>
-              <button onClick={this.deleteEditingModel}>X</button>
-            </h2>
-          )}
-          <form onSubmit={this.saveField}>
-            <input
-              type='text'
-              value={this.state.editingField.name}
-              onChange={this.inputEditingFieldName}
-            />
-            <select
-              value={this.state.editingField.type || EMPTY_OPTION}
-              onChange={this.selectEditingFieldType}
-            >
-              {Object.entries(dataTypeOptions).map(([value, text]) => (
-                <option key={value || EMPTY_OPTION} value={value}>
-                  {text}
-                </option>
-              ))}
-            </select>
-            <label>
-              Primary Key
-              <input
-                type='checkbox'
-                checked={this.state.editingField.primaryKey}
-                onChange={this.toggleEditingFieldPrimaryKey}
-              />
-            </label>
-            <label>
-              Required
-              <input
-                type='checkbox'
-                checked={this.state.editingField.required}
-                onChange={this.toggleEditingFieldRequired}
-              />
-            </label>
+  renderModels = (models, newModelName) =>
+    <React.Fragment>
+      <button onClick={this.reset}>Reset</button>
+      <button onClick={this.startCreatingNewModel}>Add a Model</button>
+      <h2>Models</h2>
+      {newModelName !== null
+        ? <form onSubmit={this.createModel}>
+          <input
+            type='text'
+            value={newModelName}
+            onChange={this.inputNewModelName}
+          />
+          <button type='submit'>Create Model</button>
+        </form>
+        : null}
+      <ul>
+        {models.map(model =>
+          <li>
+            <span onClick={() => this.goToModel(model.id)}>{model.name}</span>
+            <button onClick={() => this.editModel(model.id)}>Edit</button>
+            <button onClick={() => this.deleteModel(model.id)}>Delete</button>
+          </li>
+        )}
+      </ul>
+    </React.Fragment>
 
-            <label>
-              Unique
-              <input
-                type='checkbox'
-                checked={this.state.editingField.unique}
-                onChange={this.toggleEditingFieldUnique}
-              />
-            </label>
-            <button type='submit'>
-              {this.state.editingField.id ? 'Save Field' : 'Create Field'}
-            </button>
-          </form>
-          <ul>
-            {this.state.currentModel.fields.map(field => (
-              <li key={field.id}>
-                <span onClick={() => this.editField(field.id)}>
-                  {field.name} - {dataTypeOptions[field.type]}{' '}
-                  {this.showFieldOptions(field)}
-                </span>
-                <button onClick={() => this.deleteField(field.id)}>X</button>
-              </li>
-            ))}
-          </ul>
-          <pre>{JSON.stringify(this.state, undefined, 2)}</pre>
-        </React.Fragment>
-      )
-    } else {
-      return (
-        <React.Fragment>
-          <h1>Sequelize UI</h1>
-          <button onClick={this.exportModels}>Export</button>
-          <button onClick={this.reset}>Reset</button>
-          <form onSubmit={this.createModel}>
-            <input
-              type='text'
-              value={this.state.editingModel.name}
-              onChange={this.inputEditingModelName}
-            />
-            <button type='submit'>Create Model</button>
-          </form>
-          <ul>
-            {this.state.models.map(model => (
-              <li key={model.id}>
-                <span onClick={() => this.goToModel(model.id)}>
-                  {model.name}
-                </span>
-                <button onClick={() => this.deleteModel(model.id)}>X</button>
-              </li>
-            ))}
-          </ul>
-          <pre>{JSON.stringify(this.state, undefined, 2)}</pre>
-        </React.Fragment>
-      )
+  renderCurrentModel = (currentModel) =>
+    <React.Fragment>
+      <button onClick={this.reset}>Reset</button>
+      <button onClick={this.goToModels}>Back</button>
+      <button onClick={this.startEditingModel}>Edit</button>
+      <h2>{currentModel.name}</h2>
+      <ul>
+        {currentModel.fields.map(field =>
+          <li>
+            {field.name} - {dataTypeOptions[field.type]}{' '}
+            {this.showFieldOptions(field)}
+          </li>
+        )}
+      </ul>
+    </React.Fragment>
+
+  renderEditingModel = (editingModel) =>
+    <button onClick={this.goToModels}>Back</button>
+
+  render () {
+    switch (true) {
+      case this.state.editingModel !== null:
+        return this.renderEditingModel(this.state.editingModel)
+      case this.state.currentModel !== null:
+        return this.renderCurrentModel(this.state.currentModel)
+      default:
+        return this.renderModels(this.state.models, this.state.newModelName)
     }
   }
 }
