@@ -22,6 +22,11 @@ const dataTypeOptions = {
   UUID: 'UUID'
 }
 
+const emptyModel = () => ({
+  name: '',
+  fields: []
+})
+
 const emptyField = () => ({
   name: '',
   type: null,
@@ -35,12 +40,12 @@ const initialState = () => ({
   nextModelId: 1,
   nextFieldId: 1,
   models: [],
-  newModelName: null,
+  newModel: null,
   currentModel: null,
   editingModel: null
 })
 
-const newModel = (id, name) => ({ id, name, fields: [] })
+const newModel = (id, model) => ({ id, ...model })
 
 const newField = (id, field) => ({ id, ...field })
 
@@ -67,7 +72,7 @@ export default class App extends React.Component {
 
   // Models Methods
   startCreatingNewModel = () =>
-    this.setState({ newModelName: '' })
+    this.setState({ newModel: emptyModel() })
 
   goToModel = id =>
     this.setState({ currentModel: this.state.models.find(m => m.id === id) })
@@ -88,10 +93,10 @@ export default class App extends React.Component {
 
   // New Model Methods
   cancelCreatingNewModel = () =>
-    this.setState({ newModelName: null })
+    this.setState({ newModel: null })
 
   inputNewModelName = ({ target: { value } }) =>
-    this.setState({ newModelName: value })
+    this.setState({ newModel: { ...this.state.newModel, name: value } })
 
   createModel = event => {
     event.preventDefault()
@@ -99,9 +104,9 @@ export default class App extends React.Component {
     this.setState({
       models: [
         ...this.state.models,
-        newModel(this.state.nextModelId, this.state.newModelName)
+        newModel(this.state.nextModelId, this.state.newModel)
       ],
-      newModelName: '',
+      newModel: emptyModel(),
       nextModelId: this.state.nextModelId + 1
     })
   }
@@ -233,20 +238,21 @@ export default class App extends React.Component {
     return display ? `(${display})` : ''
   }
 
-  renderModels = (models, newModelName) =>
+  renderModels = (models, newModel) =>
     <React.Fragment>
       <button onClick={this.reset}>Reset</button>
       <button onClick={this.startCreatingNewModel}>Add a Model</button>
       <button onClick={this.exportModels}>Export</button>
       <h2>Models</h2>
-      {newModelName !== null
+      {newModel !== null
         ? <form onSubmit={this.createModel}>
           <input
             type='text'
-            value={newModelName}
+            value={newModel.name}
             onChange={this.inputNewModelName}
           />
           <button type='submit'>Create Model</button>
+          <button type='button' onClick={this.cancelCreatingNewModel}>Cancel</button>
         </form>
         : null}
       <ul>
@@ -286,8 +292,9 @@ export default class App extends React.Component {
         value={editingModel.name}
         onChange={this.inputEditingModelName}
       />
-      <h3>NewField</h3>
+      <h3>Fields</h3>
       <form onSubmit={this.createField}>
+        <strong>NewField</strong>
         <label htmlFor='new-field-name'>Name</label>
         <input
           id='new-field-name'
@@ -331,7 +338,6 @@ export default class App extends React.Component {
         <button type='submit'>Add</button>
         <button type='button' onClick={this.clearNewField}>Clear</button>
       </form>
-      <h3>Fields</h3>
       <ul>
         {editingModel.fields.map(field =>
           <li key={field.id}>
@@ -388,7 +394,7 @@ export default class App extends React.Component {
       case this.state.currentModel !== null:
         return this.renderCurrentModel(this.state.currentModel)
       default:
-        return this.renderModels(this.state.models, this.state.newModelName)
+        return this.renderModels(this.state.models, this.state.newModel)
     }
   }
 }
