@@ -14,7 +14,7 @@ const declare = (k, v) => `const ${prependNum(k)} = ${v}`
 const statementList = statements => statements.map(x => x + ';').join('')
 const moduleExports = v => `module.exports = ${v}`
 const array = xs => `[${xs.join()}]`
-const kv = (k, v) => `${k}: ${v}`
+const kv = (k, v) => (/^\d/.test(k) ? `'${k}': ${v}` : `${k}: ${v}`)
 const object = kvs =>
   `{${kvs
     .filter(([k, v, f]) => f)
