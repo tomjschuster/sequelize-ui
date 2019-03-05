@@ -241,12 +241,14 @@ export default class App extends React.Component {
   renderModels = (models, newModel) =>
     <React.Fragment>
       <button onClick={this.reset}>Reset</button>
-      <button onClick={this.startCreatingNewModel}>Add a Model</button>
       <button onClick={this.exportModels}>Export</button>
       <h2>Models</h2>
       {newModel !== null
         ? <form onSubmit={this.createModel}>
+          <strong>New Model</strong>
+          <label for='new-model-name'>Name</label>
           <input
+            id='new-model-name'
             type='text'
             value={newModel.name}
             onChange={this.inputNewModelName}
@@ -254,11 +256,13 @@ export default class App extends React.Component {
           <button type='submit'>Create Model</button>
           <button type='button' onClick={this.cancelCreatingNewModel}>Cancel</button>
         </form>
-        : null}
+        : <button onClick={this.startCreatingNewModel}>Add a Model</button>
+      }
       <ul>
         {models.map(model =>
           <li key={model.id}>
-            <span onClick={() => this.goToModel(model.id)}>{model.name}</span>
+            {model.name}
+            <button onClick={() => this.goToModel(model.id)}>View</button>
             <button onClick={() => this.editModel(model.id)}>Edit</button>
             <button onClick={() => this.deleteModel(model.id)}>Delete</button>
           </li>
