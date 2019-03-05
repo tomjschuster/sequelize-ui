@@ -91,7 +91,8 @@ const methods = [METHODS.HOOKS, METHODS.GETTER_METHODS, METHODS.SETTER_METHODS]
 
 // Model Def
 
-const modelDef = model =>
+const modelDef = model => {
+  const x =
   declare(
     Case.pascal(model.name),
     call(
@@ -103,6 +104,9 @@ const modelDef = model =>
       ],
       [
         object([
+          ['timestamps', model.config.timestamps, true],
+          ['paranoid', model.config.softDeletes, true],
+          ['underscored', model.config.snake, true]
           // ...options.map(option => optionKv(option, model.config)),
           // ...methods.map(method => methodKv(method, model.methods))
         ]),
@@ -110,6 +114,9 @@ const modelDef = model =>
       ]
     )
   )
+  console.log(x)
+  return x
+}
 
 export const modelFile = model =>
   statementList([

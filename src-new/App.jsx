@@ -24,7 +24,12 @@ const dataTypeOptions = {
 
 const emptyModel = () => ({
   name: '',
-  fields: []
+  fields: [],
+  config: {
+    timestamps: true,
+    snake: false,
+    softDeletes: false
+  }
 })
 
 const emptyField = () => ({
@@ -124,6 +129,15 @@ export default class App extends React.Component {
   inputEditingModelName = ({ target: { value } }) =>
     this.setState({ editingModel: { ...this.state.editingModel, name: value } })
 
+  toggleEditingModelTimestamps = ({ target: { checked } }) =>
+    this.mapEditingConfig(config => ({ ...config, timestamps: checked }))
+
+  toggleEditingModelSnake = ({ target: { checked } }) =>
+    this.mapEditingConfig(config => ({ ...config, snake: checked }))
+
+  toggleEditingModelSoftDeletes = ({ target: { checked } }) =>
+    this.mapEditingConfig(config => ({ ...config, softDeletes: checked }))
+
   inputNewFieldName = ({ target: { value } }) =>
     this.mapNewField(field => ({ ...field, name: value }))
 
@@ -161,6 +175,13 @@ export default class App extends React.Component {
     })
   }
 
+  mapEditingConfig = fn =>
+    this.setState({
+      editingModel: {
+        ...this.state.editingModel,
+        config: fn(this.state.editingModel.config)
+      }
+    })
   mapNewField = fn =>
     this.setState({
       editingModel: {
@@ -238,6 +259,31 @@ export default class App extends React.Component {
     return display ? `(${display})` : ''
   }
 
+  renderCurrentModelConfiguration = ({ timestamps, snake, softDeletes }) => {
+    const items = [
+      ['Timestamps', timestamps],
+      ['Snake Case', snake],
+      ['Soft Deletes', softDeletes]
+    ]
+    console.log(items)
+
+    const selectedItems =
+      items
+        .filter(([_, selected]) => selected)
+        .map(([label, _]) => label)
+    console.log(selectedItems)
+    return selectedItems.length === 0
+      ? null
+      : (
+        <React.Fragment>
+          <h3>Configuration</h3>
+          <ul>
+            {selectedItems.map(label => <li key={label}>{label}</li>)}
+          </ul>
+        </React.Fragment>
+      )
+  }
+
   renderModels = (models, newModel) =>
     <React.Fragment>
       <button onClick={this.reset}>Reset</button>
@@ -246,7 +292,7 @@ export default class App extends React.Component {
       {newModel !== null
         ? <form onSubmit={this.createModel}>
           <strong>New Model</strong>
-          <label for='new-model-name'>Name</label>
+          <label htmlFor='new-model-name'>Name</label>
           <input
             id='new-model-name'
             type='text'
@@ -275,14 +321,24 @@ export default class App extends React.Component {
       <button onClick={this.goToModels}>Back</button>
       <button onClick={this.startEditingModel}>Edit</button>
       <h2>{currentModel.name}</h2>
-      <ul key='abc'>
-        {currentModel.fields.map(field =>
-          <li key={field.id}>
-            {field.name} - {dataTypeOptions[field.type]}{' '}
-            {this.showFieldOptions(field)}
-          </li>
-        )}
+      <h3>Configuration</h3>
+      <ul>
+        <li key='timestamps'>Timestamps: {currentModel.config.timestamps ? 'Yes' : 'No'}</li>
+        <li key='snake'>Casing: {currentModel.config.snake ? 'Snake' : 'Camel'}</li>
+        <li key='deletes'>Deletes: {currentModel.config.softDeletes ? 'Soft' : 'Hard'}</li>
       </ul>
+      <h3>Fields</h3>
+      {currentModel.fields.length === 0
+        ? <p>No Fields</p>
+        : <ul key='abc'>
+          {currentModel.fields.map(field =>
+            <li key={field.id}>
+              {field.name} - {dataTypeOptions[field.type]}{' '}
+              {this.showFieldOptions(field)}
+            </li>
+          )}
+        </ul>
+      }
     </React.Fragment>
 
   renderEditingModel = (editingModel) =>
@@ -296,6 +352,36 @@ export default class App extends React.Component {
         value={editingModel.name}
         onChange={this.inputEditingModelName}
       />
+      <h3>Configuration</h3>
+      <ul>
+        <li key='editing-model-config-timestamps'>
+          <label id='editing-model-config-timestamps'>Timestamps</label>
+          <input
+            id='editing-model-config-timestamps'
+            type='checkbox'
+            checked={editingModel.config.timestamps}
+            onChange={this.toggleEditingModelTimestamps}
+          />
+        </li>
+        <li key='editing-model-config-snake'>
+          <label id='editing-model-config-snake'>Snake Case</label>
+          <input
+            id='editing-model-config-snake'
+            type='checkbox'
+            checked={editingModel.config.snake}
+            onChange={this.toggleEditingModelSnake}
+          />
+        </li>
+        <li key='editing-model-config-soft-deletes'>
+          <label id='editing-model-config-soft-deletes'>Soft Deletes</label>
+          <input
+            id='editing-model-config-soft-deletes'
+            type='checkbox'
+            checked={editingModel.config.softDeletes}
+            onChange={this.toggleEditingModelSoftDeletes}
+          />
+        </li>
+      </ul>
       <h3>Fields</h3>
       <form onSubmit={this.createField}>
         <strong>NewField</strong>

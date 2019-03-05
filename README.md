@@ -2,9 +2,11 @@
 
 TODO:
 - Constraints/Validation
+- Table/Schema Configuration
+- Associations
+- Additional Field Configuration
 - UX Patterns
 - UI
-- Table/Schema Configuration
-- Additional Field Configuration
+- Migrations
 - Sequelize Versions
 - JS Format Options
