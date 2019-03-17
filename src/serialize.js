@@ -1,11 +1,11 @@
 import Case from 'case'
 import {
   OPTIONS,
-  METHODS,
-  optionKey,
-  displayMethod,
-  methodKey,
-  relationshipKey
+  // METHODS,
+  optionKey
+  // displayMethod,
+  // methodKey,
+  // relationshipKey
 } from './constants'
 
 // Serialization Helpers
@@ -13,7 +13,7 @@ const prependNum = s => (/^\d/.test(s) ? '_' + s : s)
 const declare = (k, v) => `const ${prependNum(k)} = ${v}`
 const statementList = statements => statements.map(x => x + ';').join('')
 const moduleExports = v => `module.exports = ${v}`
-const array = xs => `[${xs.join()}]`
+// const array = xs => `[${xs.join()}]`
 const kv = (k, v) => (/^\d/.test(k) ? `'${k}': ${v}` : `${k}: ${v}`)
 const object = kvs =>
   `{${kvs
@@ -41,9 +41,10 @@ export const dbFile = statementList([
 
 // Model File
 // Fields Object
-const fieldObj = field =>
+const fieldObj = (field, { snake }) =>
   object([
     ['type', `Sequelize.${field.type}`, true],
+    ['field', Case.snake(field.name), snake],
     ['primaryKey', field.primaryKey, field.primaryKey],
     ['allowNull', !field.required, true],
     ['unique', field.unique, field.unique],
@@ -73,40 +74,40 @@ const optionKv = (option, options) => {
   }
 }
 
-const options = [
-  OPTIONS.TABLE_NAME,
-  OPTIONS.NAME,
-  OPTIONS.FREEZE_TABLE_NAMES,
-  OPTIONS.UNDERSCORED_COLUMNS,
-  OPTIONS.UNDERSCORED_TABLE_NAME
-]
+// const options = [
+//   OPTIONS.TABLE_NAME,
+//   OPTIONS.NAME,
+//   OPTIONS.FREEZE_TABLE_NAMES,
+//   OPTIONS.UNDERSCORED_COLUMNS,
+//   OPTIONS.UNDERSCORED_TABLE_NAME
+// ]
 
-const methodKv = (method, methods) => [
-  methodKey(method),
-  `{\n// Write ${displayMethod(method)} Here\n}`,
-  methods[method]
-]
+// const methods = [METHODS.HOOKS, METHODS.GETTER_METHODS, METHODS.SETTER_METHODS]
 
-const methods = [METHODS.HOOKS, METHODS.GETTER_METHODS, METHODS.SETTER_METHODS]
+// const methodKv = (method, methods) => [
+//   methodKey(method),
+//   `{\n// Write ${displayMethod(method)} Here\n}`,
+//   methods[method]
+// ]
 
 // Model Def
 
-const modelDef = model => {
-  const x =
+const modelDef = model =>
   declare(
     Case.pascal(model.name),
     call(
       'db.define',
       [`'${Case.snake(model.name)}'`, true],
       [
-        object(model.fields.map(x => [Case.camel(x.name), fieldObj(x), true])),
+        object(model.fields.map(x => [Case.camel(x.name), fieldObj(x, model.config), true])),
         true
       ],
       [
         object([
           ['timestamps', model.config.timestamps, true],
           ['paranoid', model.config.softDeletes, true],
-          ['underscored', model.config.snake, true]
+          ['underscored', model.config.snake, true],
+          ['tableName', Case.snake(model.name), model.config.snake]
           // ...options.map(option => optionKv(option, model.config)),
           // ...methods.map(method => methodKv(method, model.methods))
         ]),
@@ -114,9 +115,6 @@ const modelDef = model => {
       ]
     )
   )
-  console.log(x)
-  return x
-}
 
 export const modelFile = model =>
   statementList([
