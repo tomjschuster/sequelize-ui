@@ -1,6 +1,25 @@
 import React from 'react'
-import { downloadZip } from './export.js'
-import sequelizeFiles from './sequelize/files.js'
+import JSZip from 'jszip'
+import { saveAs } from 'file-saver'
+import * as sequelize from './sequelize.js'
+
+const downloadZip = ({ name = 'untitled', files }) => {
+  const zip = new JSZip()
+  files.forEach(file => zipFile(zip, file))
+
+  return zip.generateAsync({ type: 'blob' }).then(blob => saveAs(blob, name))
+}
+
+const zipFile = (zip, file) => {
+  if (file.files) zipDir(zip, file)
+  else zip.file(file.name, file.content)
+}
+
+const zipDir = (zip, dir) => {
+  const folder = zip.folder(dir.name)
+  for (let file of dir.files) zipFile(folder, file)
+}
+
 
 const EMPTY_OPTION = 'EMPTY_OPTION'
 const optionToValue = value => (value === EMPTY_OPTION ? null : value)
@@ -69,7 +88,7 @@ export default class App extends React.Component {
 
   persistState = () => localStorage.setItem('SUI', JSON.stringify(this.state))
 
-  exportModels = () => downloadZip(sequelizeFiles({ models: this.state.models }))
+  exportModels = () => downloadZip(sequelize.files({ models: this.state.models }))
 
   reset = () => {
     localStorage.removeItem('SUI')
