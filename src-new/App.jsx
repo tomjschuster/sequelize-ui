@@ -1,5 +1,6 @@
 import React from 'react'
-import { exportModels } from '../src/utils'
+import { downloadZip } from './export.js'
+import sequelizeFiles from './sequelize/files.js'
 
 const EMPTY_OPTION = 'EMPTY_OPTION'
 const optionToValue = value => (value === EMPTY_OPTION ? null : value)
@@ -68,7 +69,7 @@ export default class App extends React.Component {
 
   persistState = () => localStorage.setItem('SUI', JSON.stringify(this.state))
 
-  exportModels = () => exportModels(this.state.models)
+  exportModels = () => downloadZip(sequelizeFiles({ models: this.state.models }))
 
   reset = () => {
     localStorage.removeItem('SUI')
@@ -76,8 +77,7 @@ export default class App extends React.Component {
   }
 
   // Models Methods
-  startCreatingNewModel = () =>
-    this.setState({ newModel: emptyModel() })
+  startCreatingNewModel = () => this.setState({ newModel: emptyModel() })
 
   goToModel = id =>
     this.setState({ currentModel: this.state.models.find(m => m.id === id) })
@@ -97,8 +97,7 @@ export default class App extends React.Component {
     })
 
   // New Model Methods
-  cancelCreatingNewModel = () =>
-    this.setState({ newModel: null })
+  cancelCreatingNewModel = () => this.setState({ newModel: null })
 
   inputNewModelName = ({ target: { value } }) =>
     this.setState({ newModel: { ...this.state.newModel, name: value } })
@@ -118,13 +117,14 @@ export default class App extends React.Component {
 
   // Current Model Methods
   startEditingModel = () =>
-    this.setState({ editingModel: { ...this.state.currentModel, newField: emptyField() } })
+    this.setState({
+      editingModel: { ...this.state.currentModel, newField: emptyField() }
+    })
 
   goToModels = () => this.setState({ currentModel: null, editingModel: null })
 
   // Edit Model Methods
-  cancelEditingModel = () =>
-    this.setState({ editingModel: null })
+  cancelEditingModel = () => this.setState({ editingModel: null })
 
   inputEditingModelName = ({ target: { value } }) =>
     this.setState({ editingModel: { ...this.state.editingModel, name: value } })
@@ -156,8 +156,10 @@ export default class App extends React.Component {
   clearNewField = () =>
     this.setState({
       editingModel: {
-        ...this.state.editingModel, newField: emptyField()
-      }})
+        ...this.state.editingModel,
+        newField: emptyField()
+      }
+    })
 
   createField = event => {
     event.preventDefault()
@@ -191,19 +193,19 @@ export default class App extends React.Component {
     })
 
   inputEditingFieldName = (id, { target: { value } }) =>
-    this.mapField(id, field => ({...field, name: value}))
+    this.mapField(id, field => ({ ...field, name: value }))
 
   selectEditingFieldType = (id, { target: { value } }) =>
-    this.mapField(id, field => ({...field, type: optionToValue(value)}))
+    this.mapField(id, field => ({ ...field, type: optionToValue(value) }))
 
   toggleEditingFieldPrimaryKey = (id, { target: { checked } }) =>
-    this.mapField(id, field => ({...field, primaryKey: checked}))
+    this.mapField(id, field => ({ ...field, primaryKey: checked }))
 
   toggleEditingFieldRequired = (id, { target: { checked } }) =>
-    this.mapField(id, field => ({...field, required: checked}))
+    this.mapField(id, field => ({ ...field, required: checked }))
 
   toggleEditingFieldUnique = (id, { target: { checked } }) =>
-    this.mapField(id, field => ({...field, unique: checked}))
+    this.mapField(id, field => ({ ...field, unique: checked }))
 
   deleteField = id =>
     this.setState({
@@ -229,18 +231,20 @@ export default class App extends React.Component {
       currentModel: editingModel,
       editingModel: null,
       models: this.state.models.map(model =>
-        model.id === editingModel.id ? editingModel : model)
+        model.id === editingModel.id ? editingModel : model
+      )
     })
   }
 
-  cancelEditingModel = () =>
-    this.setState({ editingModel: null })
+  cancelEditingModel = () => this.setState({ editingModel: null })
 
   deleteCurrentModel = () =>
     this.setState({
       currentModel: null,
       editingModel: null,
-      models: this.state.models.filter(model => model.id !== this.state.currentModel.id)
+      models: this.state.models.filter(
+        model => model.id !== this.state.currentModel.id
+      )
     })
 
   // View methods
@@ -267,30 +271,29 @@ export default class App extends React.Component {
     ]
     console.log(items)
 
-    const selectedItems =
-      items
-        .filter(([_, selected]) => selected)
-        .map(([label, _]) => label)
+    const selectedItems = items
+      .filter(([_, selected]) => selected)
+      .map(([label, _]) => label)
     console.log(selectedItems)
-    return selectedItems.length === 0
-      ? null
-      : (
-        <React.Fragment>
-          <h3>Configuration</h3>
-          <ul>
-            {selectedItems.map(label => <li key={label}>{label}</li>)}
-          </ul>
-        </React.Fragment>
-      )
+    return selectedItems.length === 0 ? null : (
+      <React.Fragment>
+        <h3>Configuration</h3>
+        <ul>
+          {selectedItems.map(label => (
+            <li key={label}>{label}</li>
+          ))}
+        </ul>
+      </React.Fragment>
+    )
   }
 
-  renderModels = (models, newModel) =>
+  renderModels = (models, newModel) => (
     <React.Fragment>
       <button onClick={this.reset}>Reset</button>
       <button onClick={this.exportModels}>Export</button>
       <h2>Models</h2>
-      {newModel !== null
-        ? <form onSubmit={this.createModel}>
+      {newModel !== null ? (
+        <form onSubmit={this.createModel}>
           <strong>New Model</strong>
           <label htmlFor='new-model-name'>Name</label>
           <input
@@ -300,48 +303,60 @@ export default class App extends React.Component {
             onChange={this.inputNewModelName}
           />
           <button type='submit'>Create Model</button>
-          <button type='button' onClick={this.cancelCreatingNewModel}>Cancel</button>
+          <button type='button' onClick={this.cancelCreatingNewModel}>
+            Cancel
+          </button>
         </form>
-        : <button onClick={this.startCreatingNewModel}>Add a Model</button>
-      }
+      ) : (
+        <button onClick={this.startCreatingNewModel}>Add a Model</button>
+      )}
       <ul>
-        {models.map(model =>
+        {models.map(model => (
           <li key={model.id}>
             {model.name}
             <button onClick={() => this.goToModel(model.id)}>View</button>
             <button onClick={() => this.editModel(model.id)}>Edit</button>
             <button onClick={() => this.deleteModel(model.id)}>Delete</button>
           </li>
-        )}
+        ))}
       </ul>
     </React.Fragment>
+  )
 
-  renderCurrentModel = (currentModel) =>
+  renderCurrentModel = currentModel => (
     <React.Fragment>
       <button onClick={this.goToModels}>Back</button>
       <button onClick={this.startEditingModel}>Edit</button>
       <h2>{currentModel.name}</h2>
       <h3>Configuration</h3>
       <ul>
-        <li key='timestamps'>Timestamps: {currentModel.config.timestamps ? 'Yes' : 'No'}</li>
-        <li key='snake'>Casing: {currentModel.config.snake ? 'Snake' : 'Camel'}</li>
-        <li key='deletes'>Deletes: {currentModel.config.softDeletes ? 'Soft' : 'Hard'}</li>
+        <li key='timestamps'>
+          Timestamps: {currentModel.config.timestamps ? 'Yes' : 'No'}
+        </li>
+        <li key='snake'>
+          Casing: {currentModel.config.snake ? 'Snake' : 'Camel'}
+        </li>
+        <li key='deletes'>
+          Deletes: {currentModel.config.softDeletes ? 'Soft' : 'Hard'}
+        </li>
       </ul>
       <h3>Fields</h3>
-      {currentModel.fields.length === 0
-        ? <p>No Fields</p>
-        : <ul key='abc'>
-          {currentModel.fields.map(field =>
+      {currentModel.fields.length === 0 ? (
+        <p>No Fields</p>
+      ) : (
+        <ul key='abc'>
+          {currentModel.fields.map(field => (
             <li key={field.id}>
               {field.name} - {dataTypeOptions[field.type]}{' '}
               {this.showFieldOptions(field)}
             </li>
-          )}
+          ))}
         </ul>
-      }
+      )}
     </React.Fragment>
+  )
 
-  renderEditingModel = (editingModel) =>
+  renderEditingModel = editingModel => (
     <React.Fragment>
       <button onClick={this.saveModel}>Save</button>
       <button onClick={this.cancelEditingModel}>Cancel</button>
@@ -399,10 +414,11 @@ export default class App extends React.Component {
           value={editingModel.newField.type || dataTypeOptions.EMPTY_OPTION}
           onChange={this.selectNewFieldType}
         >
-          {Object.entries(dataTypeOptions).map(([value, text]) =>
-            <option key={value} value={value}>{text}</option>
-          )
-          }
+          {Object.entries(dataTypeOptions).map(([value, text]) => (
+            <option key={value} value={value}>
+              {text}
+            </option>
+          ))}
         </select>
         <label id='new-field-primary-key'>Primary Key</label>
         <input
@@ -426,10 +442,12 @@ export default class App extends React.Component {
           onChange={this.toggleNewFieldRequired}
         />
         <button type='submit'>Add</button>
-        <button type='button' onClick={this.clearNewField}>Clear</button>
+        <button type='button' onClick={this.clearNewField}>
+          Clear
+        </button>
       </form>
       <ul>
-        {editingModel.fields.map(field =>
+        {editingModel.fields.map(field => (
           <li key={field.id}>
             <label htmlFor={`editing-field-name-${field.id}`}>Name</label>
             <input
@@ -445,17 +463,22 @@ export default class App extends React.Component {
               value={field.type || dataTypeOptions.EMPTY_OPTION}
               onChange={event => this.selectEditingFieldType(field.id, event)}
             >
-              {Object.entries(dataTypeOptions).map(([value, text]) =>
-                <option key={value} value={value}>{text}</option>
-              )
-              }
+              {Object.entries(dataTypeOptions).map(([value, text]) => (
+                <option key={value} value={value}>
+                  {text}
+                </option>
+              ))}
             </select>
-            <label id={`editing-field-primary-key-${field.id}`}>Primary Key</label>
+            <label id={`editing-field-primary-key-${field.id}`}>
+              Primary Key
+            </label>
             <input
               id={`editing-field-primary-key-${field.id}`}
               type='checkbox'
               checked={field.primaryKey}
-              onChange={event => this.toggleEditingFieldPrimaryKey(field.id, event)}
+              onChange={event =>
+                this.toggleEditingFieldPrimaryKey(field.id, event)
+              }
             />
             <label id={`editing-field-unique-${field.id}`}>Unique}</label>
             <input
@@ -469,13 +492,16 @@ export default class App extends React.Component {
               id={`editing-field--required-${field.id}`}
               type='checkbox'
               checked={field.required}
-              onChange={event => this.toggleEditingFieldRequired(field.id, event)}
+              onChange={event =>
+                this.toggleEditingFieldRequired(field.id, event)
+              }
             />
             <button onClick={() => this.deleteField(field.id)}>Delete</button>
           </li>
-        )}
+        ))}
       </ul>
     </React.Fragment>
+  )
 
   render () {
     switch (true) {

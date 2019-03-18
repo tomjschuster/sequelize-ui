@@ -5,22 +5,18 @@ import { optionKey, relationshipKey } from './constants'
 import prettier from 'prettier/standalone'
 import babylon from 'prettier/parser-babylon'
 import * as serialize from './serialize'
-import dbTemplate from './templates/db.js'
-import modelTemplate from './templates/model.js'
 
 const defaultConfig = { prettier: { parser: 'babylon', plugins: [babylon] } }
 
-const zipFile = (zip, { name, content, config }) => zip.file(name, content)
-// zip.file(name, prettier.format(content, config.prettier))
+const zipFile = (zip, { name, content, config }) =>
+  zip.file(name, prettier.format(content, config.prettier))
 
 const formatAndCompressModels = (models, config) => {
-  console.log(models)
   const zip = new JSZip()
 
   zipFile(zip, {
     name: '_db.js',
-    content: dbTemplate({ models, config }),
-    // content: serialize.dbFile,
+    content: serialize.dbFile,
     config
   })
 
@@ -31,11 +27,9 @@ const formatAndCompressModels = (models, config) => {
   })
 
   for (let x of models) {
-    console.log(x)
     zipFile(zip, {
-      name: `${Case.kebab(x.name)}.js`,
-      content: modelTemplate(x),
-      // content: serialize.modelFile(x),
+      name: `${Case.snake(x.name)}.js`,
+      content: serialize.modelFile(x),
       config
     })
   }
