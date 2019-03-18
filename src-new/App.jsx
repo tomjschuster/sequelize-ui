@@ -20,7 +20,6 @@ const zipDir = (zip, dir) => {
   for (let file of dir.files) zipFile(folder, file)
 }
 
-
 const EMPTY_OPTION = 'EMPTY_OPTION'
 const optionToValue = value => (value === EMPTY_OPTION ? null : value)
 
@@ -44,12 +43,7 @@ const dataTypeOptions = {
 
 const emptyModel = () => ({
   name: '',
-  fields: [],
-  config: {
-    timestamps: true,
-    snake: false,
-    softDeletes: false
-  }
+  fields: []
 })
 
 const emptyField = () => ({
@@ -64,6 +58,11 @@ const initialState = () => ({
   error: null,
   nextModelId: 1,
   nextFieldId: 1,
+  config: {
+    timestamps: true,
+    snake: false,
+    softDeletes: false
+  },
   models: [],
   newModel: null,
   currentModel: null,
@@ -75,12 +74,12 @@ const newModel = (id, model) => ({ id, ...model })
 const newField = (id, field) => ({ id, ...field })
 
 export default class App extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = { ...initialState(), ...this.loadState() }
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     this.persistState()
   }
 
@@ -88,7 +87,10 @@ export default class App extends React.Component {
 
   persistState = () => localStorage.setItem('SUI', JSON.stringify(this.state))
 
-  exportModels = () => downloadZip(sequelize.files({ models: this.state.models }))
+  exportModels = () =>
+    downloadZip(
+      sequelize.files({ models: this.state.models, config: this.state.config })
+    )
 
   reset = () => {
     localStorage.removeItem('SUI')
@@ -96,6 +98,15 @@ export default class App extends React.Component {
   }
 
   // Models Methods
+  toggleTimestamps = ({ target: { checked } }) =>
+    this.setState({ config: { ...this.state.config, timestamps: checked } })
+
+  toggleSnake = ({ target: { checked } }) =>
+    this.setState({ config: { ...this.state.config, snake: checked } })
+
+  toggleSoftDeletes = ({ target: { checked } }) =>
+    this.setState({ config: { ...this.state.config, softDeletes: checked } })
+
   startCreatingNewModel = () => this.setState({ newModel: emptyModel() })
 
   goToModel = id =>
@@ -148,15 +159,6 @@ export default class App extends React.Component {
   inputEditingModelName = ({ target: { value } }) =>
     this.setState({ editingModel: { ...this.state.editingModel, name: value } })
 
-  toggleEditingModelTimestamps = ({ target: { checked } }) =>
-    this.mapEditingConfig(config => ({ ...config, timestamps: checked }))
-
-  toggleEditingModelSnake = ({ target: { checked } }) =>
-    this.mapEditingConfig(config => ({ ...config, snake: checked }))
-
-  toggleEditingModelSoftDeletes = ({ target: { checked } }) =>
-    this.mapEditingConfig(config => ({ ...config, softDeletes: checked }))
-
   inputNewFieldName = ({ target: { value } }) =>
     this.mapNewField(field => ({ ...field, name: value }))
 
@@ -196,13 +198,6 @@ export default class App extends React.Component {
     })
   }
 
-  mapEditingConfig = fn =>
-    this.setState({
-      editingModel: {
-        ...this.state.editingModel,
-        config: fn(this.state.editingModel.config)
-      }
-    })
   mapNewField = fn =>
     this.setState({
       editingModel: {
@@ -288,7 +283,6 @@ export default class App extends React.Component {
       ['Snake Case', snake],
       ['Soft Deletes', softDeletes]
     ]
-    console.log(items)
 
     const selectedItems = items
       .filter(([_, selected]) => selected)
@@ -306,11 +300,41 @@ export default class App extends React.Component {
     )
   }
 
-  renderModels = (models, newModel) => (
+  renderModels = (config, models, newModel) => (
     <React.Fragment>
       <button onClick={this.reset}>Reset</button>
       <button onClick={this.exportModels}>Export</button>
       <h2>Models</h2>
+      <h3>Configuration</h3>
+      <ul>
+        <li key='config-timestamps'>
+          <label id='config-timestamps'>Timestamps</label>
+          <input
+            id='config-timestamps'
+            type='checkbox'
+            checked={config.timestamps}
+            onChange={this.toggleTimestamps}
+          />
+        </li>
+        <li key='config-snake'>
+          <label id='config-snake'>Snake Case</label>
+          <input
+            id='config-snake'
+            type='checkbox'
+            checked={config.snake}
+            onChange={this.toggleSnake}
+          />
+        </li>
+        <li key='config-soft-deletes'>
+          <label id='config-soft-deletes'>Soft Deletes</label>
+          <input
+            id='config-soft-deletes'
+            type='checkbox'
+            checked={config.softDeletes}
+            onChange={this.toggleSoftDeletes}
+          />
+        </li>
+      </ul>
       {newModel !== null ? (
         <form onSubmit={this.createModel}>
           <strong>New Model</strong>
@@ -327,8 +351,8 @@ export default class App extends React.Component {
           </button>
         </form>
       ) : (
-        <button onClick={this.startCreatingNewModel}>Add a Model</button>
-      )}
+          <button onClick={this.startCreatingNewModel}>Add a Model</button>
+        )}
       <ul>
         {models.map(model => (
           <li key={model.id}>
@@ -347,31 +371,19 @@ export default class App extends React.Component {
       <button onClick={this.goToModels}>Back</button>
       <button onClick={this.startEditingModel}>Edit</button>
       <h2>{currentModel.name}</h2>
-      <h3>Configuration</h3>
-      <ul>
-        <li key='timestamps'>
-          Timestamps: {currentModel.config.timestamps ? 'Yes' : 'No'}
-        </li>
-        <li key='snake'>
-          Casing: {currentModel.config.snake ? 'Snake' : 'Camel'}
-        </li>
-        <li key='deletes'>
-          Deletes: {currentModel.config.softDeletes ? 'Soft' : 'Hard'}
-        </li>
-      </ul>
       <h3>Fields</h3>
       {currentModel.fields.length === 0 ? (
         <p>No Fields</p>
       ) : (
-        <ul key='abc'>
-          {currentModel.fields.map(field => (
-            <li key={field.id}>
-              {field.name} - {dataTypeOptions[field.type]}{' '}
-              {this.showFieldOptions(field)}
-            </li>
-          ))}
-        </ul>
-      )}
+          <ul key='abc'>
+            {currentModel.fields.map(field => (
+              <li key={field.id}>
+                {field.name} - {dataTypeOptions[field.type]}{' '}
+                {this.showFieldOptions(field)}
+              </li>
+            ))}
+          </ul>
+        )}
     </React.Fragment>
   )
 
@@ -386,36 +398,6 @@ export default class App extends React.Component {
         value={editingModel.name}
         onChange={this.inputEditingModelName}
       />
-      <h3>Configuration</h3>
-      <ul>
-        <li key='editing-model-config-timestamps'>
-          <label id='editing-model-config-timestamps'>Timestamps</label>
-          <input
-            id='editing-model-config-timestamps'
-            type='checkbox'
-            checked={editingModel.config.timestamps}
-            onChange={this.toggleEditingModelTimestamps}
-          />
-        </li>
-        <li key='editing-model-config-snake'>
-          <label id='editing-model-config-snake'>Snake Case</label>
-          <input
-            id='editing-model-config-snake'
-            type='checkbox'
-            checked={editingModel.config.snake}
-            onChange={this.toggleEditingModelSnake}
-          />
-        </li>
-        <li key='editing-model-config-soft-deletes'>
-          <label id='editing-model-config-soft-deletes'>Soft Deletes</label>
-          <input
-            id='editing-model-config-soft-deletes'
-            type='checkbox'
-            checked={editingModel.config.softDeletes}
-            onChange={this.toggleEditingModelSoftDeletes}
-          />
-        </li>
-      </ul>
       <h3>Fields</h3>
       <form onSubmit={this.createField}>
         <strong>NewField</strong>
@@ -522,14 +504,18 @@ export default class App extends React.Component {
     </React.Fragment>
   )
 
-  render () {
+  render() {
     switch (true) {
       case this.state.editingModel !== null:
         return this.renderEditingModel(this.state.editingModel)
       case this.state.currentModel !== null:
         return this.renderCurrentModel(this.state.currentModel)
       default:
-        return this.renderModels(this.state.models, this.state.newModel)
+        return this.renderModels(
+          this.state.config,
+          this.state.models,
+          this.state.newModel
+        )
     }
   }
 }

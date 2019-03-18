@@ -1,4 +1,5 @@
 import Case from 'case'
+import { singularize, pluralize } from 'inflection'
 
 export const files = ({ models, config = {} }) => ({
   name: 'db',
@@ -23,7 +24,9 @@ const dbTemplate = ({ models = [], config = {} }) =>
 
 const Sequelize = require('sequelize');
 ${renderModelImports(models)}
-const sequelize = ${renderConnection(config)};
+const sequelize = new Sequelize({
+  ${renderConstructor(config)}
+});
 ${renderModelDefs(models)}
 module.exports = {
   sequelize,
@@ -53,43 +56,59 @@ const renderModelExports = models =>
     ? ',\n  ' + models.map(({ name }) => Case.pascal(name)).join(',\n  ')
     : ''
 
-const renderConnection = (config = {}) =>
-  config.dialect === 'sqlite'
-    ? renderSqliteConnection(config)
-    : renderNormalConnection(config)
-
-const renderSqliteConnection = ({ storage = ':memory' }) => `new Sequelize({
-  dialect: 'sqlite',
-  storage: '${storage}'
-})`
-
-const renderNormalConnection = ({
+const renderConstructor = ({
   dialect = 'postgres',
   host = 'localhost',
   database = 'database',
   username = 'username',
-  password = 'password'
-}) => `new Sequelize({
-  dialect: '${dialect}',
-  host: '${host}',
-  database: '${database}',
-  username: '${username}',
-  password: '${password}'
-})`
+  password = 'password',
+  snake = false,
+  timestamps = true,
+  softDeletes = false
+}) =>
+  kvs(
+    [
+      { k: 'dialect', v: `'${dialect}'` },
+      { k: 'store', v: ':memory', exclude: dialect !== 'sqlite' },
+      { k: 'host', v: `'${host}'`, exclude: dialect === 'sqlite' },
+      { k: 'database', v: `'${database}'`, exclude: dialect === 'sqlite' },
+      { k: 'username', v: `'${username}'`, exclude: dialect === 'sqlite' },
+      { k: 'password', v: `'${password}'`, exclude: dialect === 'sqlite' },
+      {
+        k: 'define',
+        v: `{\n    ${renderDefineOpts({
+          snake,
+          timestamps,
+          softDeletes
+        })}\n  }`,
+        exclude: !snake && timestamps && !softDeletes
+      }
+    ],
+    2
+  )
+
+const renderDefineOpts = ({ snake, timestamps, softDeletes }) =>
+  kvs(
+    [
+      { k: 'underscored', v: snake, exclude: !snake },
+      { k: 'timestamps', v: timestamps, exclude: timestamps },
+      { k: 'paranoid', v: softDeletes, exclude: !softDeletes }
+    ],
+    4
+  )
 
 // Model
 
-const modelTemplate = ({
-  model: { name, fields = [], config = {} },
-  config: {}
-}) =>
+const modelTemplate = ({ model: { name, fields = [] }, config = {} }) =>
   `'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  const ${Case.pascal(name)} = sequelize.define('${name}', {
+  const ${singularize(Case.pascal(name))} = sequelize.define('${singularize(
+  Case.pascal(name)
+)}', {
     ${renderFields(fields, config)}
   }, {
-    ${renderOptions(config)}
+    ${renderOptions(name, config)}
   });
 
   ${Case.pascal(name)}.associate = function(models) {
@@ -122,16 +141,14 @@ const renderFieldKvs = (
     6
   )
 
-const renderOptions = ({
-  snake = false,
-  softDeletes = false,
-  timestamps = true
-}) =>
+const renderOptions = (name, { snake = false }) =>
   kvs(
     [
-      { k: 'underscored', v: snake, exclude: !snake },
-      { k: 'paranoid', v: softDeletes, exclude: !softDeletes },
-      { k: 'timestamps', v: timestamps, exclude: timestamps }
+      {
+        k: 'tableName',
+        v: `'${pluralize(Case.snake(name))}'`,
+        exclude: !snake
+      }
     ],
     4
   )
