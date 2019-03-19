@@ -2,6 +2,14 @@ import React from 'react'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 import * as sequelize from './sequelize.js'
+import Case from 'case'
+
+const MAX_MODEL_NAME_LENGTH = 63
+const UNIQUE_NAME_ERROR = 'Name already taken.'
+const NAME_FORMAT_ERROR =
+  'Name must begin with a letter and only contain numbers, letters or _.'
+const REQUIRED_NAME_ERROR = 'Name is required.'
+const NAME_LENGTH_ERROR = `Name cannot be more than ${MAX_MODEL_NAME_LENGTH} characters when converted to snake_case.`
 
 const downloadZip = ({ name = 'untitled', files }) => {
   const zip = new JSZip()
@@ -43,7 +51,8 @@ const dataTypeOptions = {
 
 const emptyModel = () => ({
   name: '',
-  fields: []
+  fields: [],
+  errors: []
 })
 
 const emptyField = () => ({
@@ -51,7 +60,8 @@ const emptyField = () => ({
   type: null,
   primaryKey: false,
   required: false,
-  unique: false
+  unique: false,
+  errors: []
 })
 
 const initialState = () => ({
@@ -69,17 +79,35 @@ const initialState = () => ({
   editingModel: null
 })
 
-const newModel = (id, model) => ({ id, ...model })
+const buildModel = (id, model) => ({ id, ...model })
 
-const newField = (id, field) => ({ id, ...field })
+const buildField = (id, field) => ({ id, ...field })
+
+const formatNewModel = model => ({ ...model, name: model.name.trim() })
+
+const validateModel = (model, models) => {
+  const errors = [
+    [
+      UNIQUE_NAME_ERROR,
+      !!models.find(({ name }) => Case.snake(name) === Case.snake(model.name))
+    ],
+    [NAME_FORMAT_ERROR, !/^[a-z][\w ]*$/i.test(model.name)],
+    [REQUIRED_NAME_ERROR, model.name.length === 0],
+    [NAME_LENGTH_ERROR, Case.snake(model.name).length > MAX_MODEL_NAME_LENGTH]
+  ]
+
+  console.log(errors)
+
+  return errors.filter(error => error[1]).map(error => error[0])
+}
 
 export default class App extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = { ...initialState(), ...this.loadState() }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate (prevProps, prevState) {
     this.persistState()
   }
 
@@ -129,20 +157,39 @@ export default class App extends React.Component {
   // New Model Methods
   cancelCreatingNewModel = () => this.setState({ newModel: null })
 
-  inputNewModelName = ({ target: { value } }) =>
-    this.setState({ newModel: { ...this.state.newModel, name: value } })
+  inputNewModelName = ({ target: { value } }) => {
+    if (value.length < MAX_MODEL_NAME_LENGTH) {
+      const errors =
+        this.state.newModel.errors.length > 0
+          ? validateModel(
+            formatNewModel(this.state.newModel),
+            this.state.models
+          )
+          : this.state.newModel.errors
+
+      this.setState({
+        newModel: { ...this.state.newModel, name: value, errors }
+      })
+    }
+  }
 
   createModel = event => {
     event.preventDefault()
+    const newModel = formatNewModel(this.state.newModel)
+    const errors = validateModel(newModel, this.state.models)
 
-    this.setState({
-      models: [
-        ...this.state.models,
-        newModel(this.state.nextModelId, this.state.newModel)
-      ],
-      newModel: emptyModel(),
-      nextModelId: this.state.nextModelId + 1
-    })
+    if (errors.length > 0) {
+      this.setState({ newModel: { ...newModel, errors } })
+    } else {
+      this.setState({
+        models: [
+          ...this.state.models,
+          buildModel(this.state.nextModelId, newModel)
+        ],
+        newModel: emptyModel(),
+        nextModelId: this.state.nextModelId + 1
+      })
+    }
   }
 
   // Current Model Methods
@@ -190,7 +237,7 @@ export default class App extends React.Component {
         ...this.state.editingModel,
         fields: [
           ...this.state.editingModel.fields,
-          newField(this.state.nextFieldId, this.state.editingModel.newField)
+          buildField(this.state.nextFieldId, this.state.editingModel.newField)
         ],
         newField: emptyField()
       },
@@ -344,15 +391,30 @@ export default class App extends React.Component {
             type='text'
             value={newModel.name}
             onChange={this.inputNewModelName}
+            maxLength={MAX_MODEL_NAME_LENGTH}
           />
-          <button type='submit'>Create Model</button>
+          {newModel.errors.length > 0 ? (
+            <ul>
+              {newModel.errors.map(message => (
+                <li key={message}>{message}</li>
+              ))}
+            </ul>
+          ) : null}
+          <button
+            type='submit'
+            disabled={
+              newModel.name.trim().length === 0 || newModel.errors.length > 0
+            }
+          >
+            Create Model
+          </button>
           <button type='button' onClick={this.cancelCreatingNewModel}>
             Cancel
           </button>
         </form>
       ) : (
-          <button onClick={this.startCreatingNewModel}>Add a Model</button>
-        )}
+        <button onClick={this.startCreatingNewModel}>Add a Model</button>
+      )}
       <ul>
         {models.map(model => (
           <li key={model.id}>
@@ -375,15 +437,15 @@ export default class App extends React.Component {
       {currentModel.fields.length === 0 ? (
         <p>No Fields</p>
       ) : (
-          <ul key='abc'>
-            {currentModel.fields.map(field => (
-              <li key={field.id}>
-                {field.name} - {dataTypeOptions[field.type]}{' '}
-                {this.showFieldOptions(field)}
-              </li>
-            ))}
-          </ul>
-        )}
+        <ul key='abc'>
+          {currentModel.fields.map(field => (
+            <li key={field.id}>
+              {field.name} - {dataTypeOptions[field.type]}{' '}
+              {this.showFieldOptions(field)}
+            </li>
+          ))}
+        </ul>
+      )}
     </React.Fragment>
   )
 
@@ -504,7 +566,7 @@ export default class App extends React.Component {
     </React.Fragment>
   )
 
-  render() {
+  render () {
     switch (true) {
       case this.state.editingModel !== null:
         return this.renderEditingModel(this.state.editingModel)
