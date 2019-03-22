@@ -4,6 +4,8 @@ import { saveAs } from 'file-saver'
 import * as sequelize from './sequelize.js'
 import Case from 'case'
 import XRegExp from 'xregexp'
+
+const SQL_IDENTIFIER_REGEXP = '^([\\p{L}_][\\p{L}\\p{N}$_ ]*)?$'
 const MAX_MODEL_NAME_LENGTH = 63
 const UNIQUE_NAME_ERROR = 'Name already taken.'
 const NAME_FORMAT_ERROR =
@@ -11,6 +13,7 @@ const NAME_FORMAT_ERROR =
 
 const REQUIRED_NAME_ERROR = 'Name is required.'
 const NAME_LENGTH_ERROR = `Name cannot be more than ${MAX_MODEL_NAME_LENGTH} characters when converted to snake_case.`
+const REQUIRED_TYPE_ERROR = 'Type is required.'
 
 const downloadZip = ({ name = 'untitled', files }) => {
   const zip = new JSZip()
@@ -85,6 +88,7 @@ const buildModel = (id, model) => ({ id, ...model })
 const buildField = (id, field) => ({ id, ...field })
 
 const formatModel = model => ({ ...model, name: model.name.trim() })
+const formatField = field => ({ ...field, name: field.name.trim() })
 
 const validateModel = (model, models) => {
   const errors = [
@@ -95,14 +99,30 @@ const validateModel = (model, models) => {
           Case.snake(name) === Case.snake(model.name) && id !== model.id
       )
     ],
-    [
-      NAME_FORMAT_ERROR,
-      !XRegExp('^[\\p{L}_][\\p{L}\\p{N}$_ ]*$').test(model.name)
-    ],
+    [NAME_FORMAT_ERROR, !XRegExp(SQL_IDENTIFIER_REGEXP).test(model.name)],
     [REQUIRED_NAME_ERROR, model.name.length === 0],
     [NAME_LENGTH_ERROR, Case.snake(model.name).length > MAX_MODEL_NAME_LENGTH]
   ]
 
+  console.log(errors)
+
+  return errors.filter(error => error[1]).map(error => error[0])
+}
+
+const validateField = (field, fields) => {
+  const errors = [
+    [
+      UNIQUE_NAME_ERROR,
+      !!fields.find(
+        ({ name, id }) =>
+          Case.snake(name) === Case.snake(field.name) && id !== field.id
+      )
+    ],
+    [NAME_FORMAT_ERROR, !XRegExp(SQL_IDENTIFIER_REGEXP).test(field.name)],
+    [REQUIRED_NAME_ERROR, field.name.length === 0],
+    [NAME_LENGTH_ERROR, Case.snake(field.name).length > MAX_MODEL_NAME_LENGTH],
+    [REQUIRED_TYPE_ERROR, field.type === null]
+  ]
   console.log(errors)
 
   return errors.filter(error => error[1]).map(error => error[0])
@@ -219,11 +239,38 @@ export default class App extends React.Component {
     })
   }
 
-  inputNewFieldName = ({ target: { value } }) =>
-    this.mapNewField(field => ({ ...field, name: value }))
+  inputNewFieldName = ({ target: { value } }) => {
+    this.mapNewField(field => {
+      const name = value.slice(0, MAX_MODEL_NAME_LENGTH)
+      const updatedField = { ...field, name }
+
+      const errors =
+        updatedField.errors.length > 0
+          ? validateField(
+            formatField(updatedField),
+            this.state.editingModel.fields
+          )
+          : updatedField.errors
+
+      return { ...updatedField, errors }
+    })
+  }
 
   selectNewFieldType = ({ target: { value } }) =>
-    this.mapNewField(field => ({ ...field, type: optionToValue(value) }))
+    this.mapNewField(field => {
+      const type = optionToValue(value)
+      const updatedField = { ...field, type }
+
+      const errors =
+        updatedField.errors.length > 0
+          ? validateField(
+            formatField(updatedField),
+            this.state.editingModel.fields
+          )
+          : updatedField.errors
+
+      return { ...updatedField, errors }
+    })
 
   toggleNewFieldPrimaryKey = ({ target: { checked } }) =>
     this.mapNewField(field => ({ ...field, primaryKey: checked }))
@@ -244,18 +291,27 @@ export default class App extends React.Component {
 
   createField = event => {
     event.preventDefault()
+    const field = formatField(this.state.editingModel.newField)
+    const errors = validateField(field, this.state.editingModel.fields)
 
-    this.setState({
-      editingModel: {
-        ...this.state.editingModel,
-        fields: [
-          ...this.state.editingModel.fields,
-          buildField(this.state.nextFieldId, this.state.editingModel.newField)
-        ],
-        newField: emptyField()
-      },
-      nextFieldId: this.state.nextFieldId + 1
-    })
+    if (errors.length > 0) {
+      this.mapNewField(field => ({ ...field, errors }))
+    } else {
+      this.setState({
+        editingModel: {
+          ...this.state.editingModel,
+          fields: [
+            ...this.state.editingModel.fields,
+            buildField(
+              this.state.nextFieldId,
+              this.state.editingModel.newField
+            )
+          ],
+          newField: emptyField()
+        },
+        nextFieldId: this.state.nextFieldId + 1
+      })
+    }
   }
 
   mapNewField = fn =>
@@ -267,10 +323,36 @@ export default class App extends React.Component {
     })
 
   inputEditingFieldName = (id, { target: { value } }) =>
-    this.mapField(id, field => ({ ...field, name: value }))
+    this.mapField(id, field => {
+      const name = value.slice(0, MAX_MODEL_NAME_LENGTH)
+      const updatedField = { ...field, name }
+
+      const errors =
+        updatedField.errors.length > 0
+          ? validateField(
+            formatField(updatedField),
+            this.state.editingModel.fields
+          )
+          : updatedField.errors
+
+      return { ...updatedField, errors }
+    })
 
   selectEditingFieldType = (id, { target: { value } }) =>
-    this.mapField(id, field => ({ ...field, type: optionToValue(value) }))
+    this.mapField(id, field => {
+      const type = optionToValue(value)
+      const updatedField = { ...field, type }
+
+      const errors =
+        updatedField.errors.length > 0
+          ? validateField(
+            formatField(updatedField),
+            this.state.editingModel.fields
+          )
+          : updatedField.errors
+
+      return { ...updatedField, errors }
+    })
 
   toggleEditingFieldPrimaryKey = (id, { target: { checked } }) =>
     this.mapField(id, field => ({ ...field, primaryKey: checked }))
@@ -303,8 +385,20 @@ export default class App extends React.Component {
     const currentModel = formatModel(this.state.editingModel)
     const errors = validateModel(currentModel, this.state.models)
 
-    if (errors.length > 0) {
-      this.setState({ editingModel: { ...this.state.editingModel, errors } })
+    const fields = currentModel.fields.map(field => {
+      const formattedField = formatField(field)
+      const errors = validateField(
+        formattedField,
+        this.state.editingModel.fields
+      )
+
+      return { ...formattedField, errors }
+    })
+    const hasFieldErrors = fields.some(field => field.errors.length > 0)
+    if (errors.length > 0 || hasFieldErrors) {
+      this.setState({
+        editingModel: { ...this.state.editingModel, fields, errors }
+      })
     } else {
       this.setState({
         currentModel,
@@ -472,7 +566,11 @@ export default class App extends React.Component {
     <React.Fragment>
       <button
         onClick={this.saveModel}
-        disabled={editingModel.errors.length > 0}
+        disabled={
+          editingModel.errors.length > 0 ||
+          editingModel.newField.errors.length > 0 ||
+          editingModel.fields.some(field => field.errors.length > 0)
+        }
       >
         Save
       </button>
@@ -535,7 +633,19 @@ export default class App extends React.Component {
           checked={editingModel.newField.required}
           onChange={this.toggleNewFieldRequired}
         />
-        <button type='submit'>Add</button>
+        {editingModel.newField.errors.length > 0 ? (
+          <ul>
+            {editingModel.newField.errors.map(message => (
+              <li key={message}>{message}</li>
+            ))}
+          </ul>
+        ) : null}
+        <button
+          type='submit'
+          disabled={this.state.editingModel.newField.errors.length > 0}
+        >
+          Add
+        </button>
         <button type='button' onClick={this.clearNewField}>
           Clear
         </button>
@@ -591,6 +701,13 @@ export default class App extends React.Component {
               }
             />
             <button onClick={() => this.deleteField(field.id)}>Delete</button>
+            {field.errors.length > 0 ? (
+              <ul>
+                {field.errors.map(message => (
+                  <li key={message}>{message}</li>
+                ))}
+              </ul>
+            ) : null}
           </li>
         ))}
       </ul>
