@@ -95,7 +95,10 @@ const validateModel = (model, models) => {
           Case.snake(name) === Case.snake(model.name) && id !== model.id
       )
     ],
-    [NAME_FORMAT_ERROR, !XRegExp('^[\\p{L}_][\\p{L}\\p{N}$_ ]*$').test(model.name)],
+    [
+      NAME_FORMAT_ERROR,
+      !XRegExp('^[\\p{L}_][\\p{L}\\p{N}$_ ]*$').test(model.name)
+    ],
     [REQUIRED_NAME_ERROR, model.name.length === 0],
     [NAME_LENGTH_ERROR, Case.snake(model.name).length > MAX_MODEL_NAME_LENGTH]
   ]
@@ -204,7 +207,7 @@ export default class App extends React.Component {
 
   inputEditingModelName = ({ target: { value } }) => {
     const name = value.slice(0, MAX_MODEL_NAME_LENGTH)
-    const editingModel = {...this.state.editingModel, name}
+    const editingModel = { ...this.state.editingModel, name }
 
     const errors =
       editingModel.errors.length > 0
@@ -418,9 +421,9 @@ export default class App extends React.Component {
           ) : null}
           <button
             type='submit'
-            // disabled={
-            //   newModel.name.trim().length === 0 || newModel.errors.length > 0
-            // }
+            disabled={
+              newModel.name.trim().length === 0 || newModel.errors.length > 0
+            }
           >
             Create Model
           </button>
@@ -467,7 +470,12 @@ export default class App extends React.Component {
 
   renderEditingModel = editingModel => (
     <React.Fragment>
-      <button onClick={this.saveModel}>Save</button>
+      <button
+        onClick={this.saveModel}
+        disabled={editingModel.errors.length > 0}
+      >
+        Save
+      </button>
       <button onClick={this.cancelEditingModel}>Cancel</button>
       <label htmlFor='editing-model-name'>Name</label>
       <input
@@ -476,6 +484,13 @@ export default class App extends React.Component {
         value={editingModel.name}
         onChange={this.inputEditingModelName}
       />
+      {editingModel.errors.length > 0 ? (
+        <ul>
+          {editingModel.errors.map(message => (
+            <li key={message}>{message}</li>
+          ))}
+        </ul>
+      ) : null}
       <h3>Fields</h3>
       <form onSubmit={this.createField}>
         <strong>NewField</strong>
