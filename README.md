@@ -2,11 +2,10 @@
 
 TODO:
 - Constraints/Validation
-- Table/Schema Configuration
+  - new field
+  - editing field
 - Associations
-- Additional Field Configuration
-- UX Patterns
 - UI
+- Refactor
 - Migrations
-- Sequelize Versions
-- JS Format Options
+- npm project templates
