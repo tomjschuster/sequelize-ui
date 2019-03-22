@@ -91,7 +91,8 @@
     "style-loader": "^0.21.0",
     "url-loader": "^1.0.1",
     "webpack": "^3.10.0",
-    "webpack-merge": "^3.0.0"
+    "webpack-merge": "^3.0.0",
+    "xregexp": "^4.2.4"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",

@@ -3,11 +3,12 @@ import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 import * as sequelize from './sequelize.js'
 import Case from 'case'
-
+import XRegExp from 'xregexp'
 const MAX_MODEL_NAME_LENGTH = 63
 const UNIQUE_NAME_ERROR = 'Name already taken.'
 const NAME_FORMAT_ERROR =
-  'Name must begin with a letter and only contain numbers, letters or _.'
+  'Name can only contain letters, numbers, spaces, _ or $ and cannot start with a number.'
+
 const REQUIRED_NAME_ERROR = 'Name is required.'
 const NAME_LENGTH_ERROR = `Name cannot be more than ${MAX_MODEL_NAME_LENGTH} characters when converted to snake_case.`
 
@@ -83,15 +84,18 @@ const buildModel = (id, model) => ({ id, ...model })
 
 const buildField = (id, field) => ({ id, ...field })
 
-const formatNewModel = model => ({ ...model, name: model.name.trim() })
+const formatModel = model => ({ ...model, name: model.name.trim() })
 
 const validateModel = (model, models) => {
   const errors = [
     [
       UNIQUE_NAME_ERROR,
-      !!models.find(({ name }) => Case.snake(name) === Case.snake(model.name))
+      !!models.find(
+        ({ name, id }) =>
+          Case.snake(name) === Case.snake(model.name) && id !== model.id
+      )
     ],
-    [NAME_FORMAT_ERROR, !/^[a-z][\w ]*$/i.test(model.name)],
+    [NAME_FORMAT_ERROR, !XRegExp('^[\\p{L}_][\\p{L}\\p{N}$_ ]*$').test(model.name)],
     [REQUIRED_NAME_ERROR, model.name.length === 0],
     [NAME_LENGTH_ERROR, Case.snake(model.name).length > MAX_MODEL_NAME_LENGTH]
   ]
@@ -158,24 +162,19 @@ export default class App extends React.Component {
   cancelCreatingNewModel = () => this.setState({ newModel: null })
 
   inputNewModelName = ({ target: { value } }) => {
-    if (value.length < MAX_MODEL_NAME_LENGTH) {
-      const errors =
-        this.state.newModel.errors.length > 0
-          ? validateModel(
-            formatNewModel(this.state.newModel),
-            this.state.models
-          )
-          : this.state.newModel.errors
+    const name = value.slice(0, MAX_MODEL_NAME_LENGTH)
+    const newModel = { ...this.state.newModel, name }
+    const errors =
+      newModel.errors.length > 0
+        ? validateModel(formatModel(newModel), this.state.models)
+        : newModel.errors
 
-      this.setState({
-        newModel: { ...this.state.newModel, name: value, errors }
-      })
-    }
+    this.setState({ newModel: { ...newModel, errors } })
   }
 
   createModel = event => {
     event.preventDefault()
-    const newModel = formatNewModel(this.state.newModel)
+    const newModel = formatModel(this.state.newModel)
     const errors = validateModel(newModel, this.state.models)
 
     if (errors.length > 0) {
@@ -203,8 +202,19 @@ export default class App extends React.Component {
   // Edit Model Methods
   cancelEditingModel = () => this.setState({ editingModel: null })
 
-  inputEditingModelName = ({ target: { value } }) =>
-    this.setState({ editingModel: { ...this.state.editingModel, name: value } })
+  inputEditingModelName = ({ target: { value } }) => {
+    const name = value.slice(0, MAX_MODEL_NAME_LENGTH)
+    const editingModel = {...this.state.editingModel, name}
+
+    const errors =
+      editingModel.errors.length > 0
+        ? validateModel(formatModel(editingModel), this.state.models)
+        : editingModel.errors
+
+    this.setState({
+      editingModel: { ...editingModel, errors }
+    })
+  }
 
   inputNewFieldName = ({ target: { value } }) =>
     this.mapNewField(field => ({ ...field, name: value }))
@@ -287,14 +297,20 @@ export default class App extends React.Component {
     })
 
   saveModel = () => {
-    const { newField, ...editingModel } = this.state.editingModel
-    this.setState({
-      currentModel: editingModel,
-      editingModel: null,
-      models: this.state.models.map(model =>
-        model.id === editingModel.id ? editingModel : model
-      )
-    })
+    const currentModel = formatModel(this.state.editingModel)
+    const errors = validateModel(currentModel, this.state.models)
+
+    if (errors.length > 0) {
+      this.setState({ editingModel: { ...this.state.editingModel, errors } })
+    } else {
+      this.setState({
+        currentModel,
+        editingModel: null,
+        models: this.state.models.map(model =>
+          model.id === currentModel.id ? currentModel : model
+        )
+      })
+    }
   }
 
   cancelEditingModel = () => this.setState({ editingModel: null })
@@ -402,9 +418,9 @@ export default class App extends React.Component {
           ) : null}
           <button
             type='submit'
-            disabled={
-              newModel.name.trim().length === 0 || newModel.errors.length > 0
-            }
+            // disabled={
+            //   newModel.name.trim().length === 0 || newModel.errors.length > 0
+            // }
           >
             Create Model
           </button>
