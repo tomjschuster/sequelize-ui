@@ -4,6 +4,7 @@ import { saveAs } from 'file-saver'
 import * as sequelize4 from './templates/sequelize-4.js'
 import Case from 'case'
 import XRegExp from 'xregexp'
+import TopBar from './TopBar.jsx'
 
 const SQL_IDENTIFIER_REGEXP = '^([\\p{L}_][\\p{L}\\p{N}$_ ]*)?$'
 const MAX_MODEL_NAME_LENGTH = 63
@@ -168,7 +169,9 @@ export default class App extends React.Component {
     this.setState({ config: { ...this.state.config, softDeletes: checked } })
 
   toggleSingularTableNames = ({ target: { checked } }) =>
-    this.setState({ config: { ...this.state.config, singularTableNames: checked } })
+    this.setState({
+      config: { ...this.state.config, singularTableNames: checked }
+    })
 
   startCreatingNewModel = () => this.setState({ newModel: emptyModel() })
 
@@ -470,8 +473,6 @@ export default class App extends React.Component {
 
   renderModels = (config, models, newModel) => (
     <React.Fragment>
-      <button onClick={this.reset}>Reset</button>
-      <button onClick={this.exportModels}>Export</button>
       <h2>Models</h2>
       <h3>Configuration</h3>
       <ul>
@@ -731,7 +732,7 @@ export default class App extends React.Component {
     </React.Fragment>
   )
 
-  render () {
+  renderMain () {
     switch (true) {
       case this.state.editingModel !== null:
         return this.renderEditingModel(this.state.editingModel)
@@ -744,5 +745,41 @@ export default class App extends React.Component {
           this.state.newModel
         )
     }
+  }
+
+  topBarActions = () => {
+    const codeItem = {
+      onClick: this.previewCode,
+      label: 'Code',
+      icon: 'code'
+    }
+
+    const exportItem = {
+      onClick: this.exportModels,
+      label: 'Export',
+      icon: 'export'
+    }
+
+    switch (true) {
+      case this.state.editingModel !== null:
+        return [
+          { ...codeItem, disabled: true },
+          { ...exportItem, disabled: true }
+        ]
+      case this.state.currentModel !== null:
+        return [codeItem, exportItem]
+      default:
+        return [codeItem, exportItem]
+    }
+  }
+
+  render () {
+    return (
+      <React.Fragment>
+        <TopBar onTitleClick={this.goToModels} actions={this.topBarActions()} />
+        {this.renderMain()}
+        <button onClick={this.reset}>Reset</button>
+      </React.Fragment>
+    )
   }
 }

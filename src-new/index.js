@@ -2,6 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { MediaQueryProvider } from 'react-media-query-hoc'
 import App from './App.jsx'
+import './index.css'
 
 const customQueries = {
   smallScreen: 'screen and (max-width: 740px)',
