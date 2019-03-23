@@ -5,4 +5,3 @@ TODO:
 - UI
 - Refactor
 - Migrations
-- npm project templates
