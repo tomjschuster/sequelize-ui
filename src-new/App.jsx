@@ -1,7 +1,7 @@
 import React from 'react'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
-import * as sequelize from './sequelize.js'
+import * as sequelize4 from './templates/sequelize-4.js'
 import Case from 'case'
 import XRegExp from 'xregexp'
 
@@ -15,9 +15,11 @@ const REQUIRED_NAME_ERROR = 'Name is required.'
 const NAME_LENGTH_ERROR = `Name cannot be more than ${MAX_MODEL_NAME_LENGTH} characters when converted to snake_case.`
 const REQUIRED_TYPE_ERROR = 'Type is required.'
 
-const downloadZip = ({ name = 'untitled', files }) => {
+const downloadZip = ({ name = 'my-project', files }) => {
   const zip = new JSZip()
-  files.forEach(file => zipFile(zip, file))
+  const folder = zip.folder(name)
+
+  files.forEach(file => zipFile(folder, file))
 
   return zip.generateAsync({ type: 'blob' }).then(blob => saveAs(blob, name))
 }
@@ -75,7 +77,10 @@ const initialState = () => ({
   config: {
     timestamps: true,
     snake: false,
-    softDeletes: false
+    softDeletes: false,
+    singularTableNames: false,
+    dialect: 'sqlite',
+    name: 'my-project'
   },
   models: [],
   newModel: null,
@@ -144,7 +149,7 @@ export default class App extends React.Component {
 
   exportModels = () =>
     downloadZip(
-      sequelize.files({ models: this.state.models, config: this.state.config })
+      sequelize4.files({ models: this.state.models, config: this.state.config })
     )
 
   reset = () => {
@@ -161,6 +166,9 @@ export default class App extends React.Component {
 
   toggleSoftDeletes = ({ target: { checked } }) =>
     this.setState({ config: { ...this.state.config, softDeletes: checked } })
+
+  toggleSingularTableNames = ({ target: { checked } }) =>
+    this.setState({ config: { ...this.state.config, singularTableNames: checked } })
 
   startCreatingNewModel = () => this.setState({ newModel: emptyModel() })
 
@@ -492,6 +500,15 @@ export default class App extends React.Component {
             type='checkbox'
             checked={config.softDeletes}
             onChange={this.toggleSoftDeletes}
+          />
+        </li>
+        <li key='config-singular-tableNames'>
+          <label id='config-singular-tableNames'>Singular Table Names</label>
+          <input
+            id='config-singular-tableNames'
+            type='checkbox'
+            checked={config.singularTableNames}
+            onChange={this.toggleSingularTableNames}
           />
         </li>
       </ul>
