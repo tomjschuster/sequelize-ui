@@ -5,3 +5,5 @@ TODO:
 - UI
 - Refactor
 - Migrations
+- Select dialect, input project name
+- Sequelize 5
