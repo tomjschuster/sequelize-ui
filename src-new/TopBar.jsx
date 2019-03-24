@@ -1,12 +1,8 @@
 import React from 'react'
-import { withMedia } from 'react-media-query-hoc'
 
-const topbarClassName = smallScreen =>
-  smallScreen ? 'top-bar --small' : 'top-bar'
-
-const TopBar = ({ onTitleClick, media, actions = [] }) => (
-  <header className={topbarClassName(media.smallScreen)}>
-    <Title onClick={onTitleClick} compact={media.tinyScreen} />
+const TopBar = ({ onTitleClick, actions = [] }) => (
+  <header className='top-bar'>
+    <Title onClick={onTitleClick} />
     <div className='top-bar__actions'>
       {actions.map(item => (
         <ActionButton key={item.label} {...item} />
@@ -15,7 +11,7 @@ const TopBar = ({ onTitleClick, media, actions = [] }) => (
   </header>
 )
 
-const Title = ({ compact, onClick }) => (
+const Title = ({ onClick }) => (
   <h1 onClick={onClick} className='top-bar__title'>
     Sequelize UI
   </h1>
@@ -36,4 +32,4 @@ const ActionButton = ({
   </button>
 )
 
-export default withMedia(TopBar)
+export default TopBar

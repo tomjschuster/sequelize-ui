@@ -1,6 +1,7 @@
 * {
   font-family: 'Lato', sans-serif;;
 }
+
 /* Top Bar */
 .top-bar {
   border-bottom: solid 1px rgba(34, 36, 38, 0.30);
@@ -26,17 +27,12 @@
 .top-bar__title {
   display: inline;
   font-weight: lighter;
-  font-size: 1.5rem;
-  line-height: 3.5rem;
-  margin-left: 0.75rem;
-  cursor: pointer;
-  text-transform: uppercase;
-}
-
-.top-bar.--small .top-bar__title {
   font-size: 1.35rem;
   letter-spacing: 0ch;
+  line-height: 3.5rem;
   margin-left: 0.5rem;
+  cursor: pointer;
+  text-transform: uppercase;
 }
 
 .top-bar__actions {
@@ -45,7 +41,7 @@
 
 .top-bar__actions__button {
     cursor: pointer;
-    min-width: 5em;
+    min-width: 4rem;
     float: right;
     border: none;
     padding: 0.5rem;
@@ -63,4 +59,16 @@
 
 .topbar__actions__button:disabled {
     cursor: initial;
+}
+
+@media (min-width: 600px) { 
+.top-bar__actions__button {
+  min-width: 5rem;
+}
+
+.top-bar__title {
+  font-size: 1.5rem;
+  margin-left: 0.75rem;
+  letter-spacing: initial;
+}
 }
