@@ -1,20 +1,20 @@
 import React from 'react'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
-import * as sequelize4 from './templates/sequelize-4.js'
+import * as sequelize4 from '../templates/sequelize-4.js'
 import Case from 'case'
 import XRegExp from 'xregexp'
 import TopBar from './TopBar.jsx'
-
-const SQL_IDENTIFIER_REGEXP = '^([\\p{L}_][\\p{L}\\p{N}$_ ]*)?$'
-const MAX_MODEL_NAME_LENGTH = 63
-const UNIQUE_NAME_ERROR = 'Name already taken.'
-const NAME_FORMAT_ERROR =
-  'Name can only contain letters, numbers, spaces, _ or $ and cannot start with a number.'
-
-const REQUIRED_NAME_ERROR = 'Name is required.'
-const NAME_LENGTH_ERROR = `Name cannot be more than ${MAX_MODEL_NAME_LENGTH} characters when converted to snake_case.`
-const REQUIRED_TYPE_ERROR = 'Type is required.'
+import Models from './Models.jsx'
+import {
+  SQL_IDENTIFIER_REGEXP,
+  MAX_MODEL_NAME_LENGTH,
+  UNIQUE_NAME_ERROR,
+  NAME_FORMAT_ERROR,
+  REQUIRED_NAME_ERROR,
+  NAME_LENGTH_ERROR,
+  REQUIRED_TYPE_ERROR
+} from '../constants.js'
 
 const downloadZip = ({ name = 'my-project', files }) => {
   const zip = new JSZip()
@@ -159,18 +159,33 @@ export default class App extends React.Component {
   }
 
   // Models Methods
-  toggleTimestamps = ({ target: { checked } }) =>
-    this.setState({ config: { ...this.state.config, timestamps: checked } })
-
-  toggleSnake = ({ target: { checked } }) =>
-    this.setState({ config: { ...this.state.config, snake: checked } })
-
-  toggleSoftDeletes = ({ target: { checked } }) =>
-    this.setState({ config: { ...this.state.config, softDeletes: checked } })
-
-  toggleSingularTableNames = ({ target: { checked } }) =>
+  toggleTimestamps = () =>
     this.setState({
-      config: { ...this.state.config, singularTableNames: checked }
+      config: {
+        ...this.state.config,
+        timestamps: !this.state.config.timestamps
+      }
+    })
+
+  toggleSnake = () =>
+    this.setState({
+      config: { ...this.state.config, snake: !this.state.config.snake }
+    })
+
+  toggleSoftDeletes = () =>
+    this.setState({
+      config: {
+        ...this.state.config,
+        softDeletes: !this.state.config.softDeletes
+      }
+    })
+
+  toggleSingularTableNames = () =>
+    this.setState({
+      config: {
+        ...this.state.config,
+        singularTableNames: !this.state.config.singularTableNames
+      }
     })
 
   startCreatingNewModel = () => this.setState({ newModel: emptyModel() })
@@ -195,8 +210,8 @@ export default class App extends React.Component {
   // New Model Methods
   cancelCreatingNewModel = () => this.setState({ newModel: null })
 
-  inputNewModelName = ({ target: { value } }) => {
-    const name = value.slice(0, MAX_MODEL_NAME_LENGTH)
+  inputNewModelName = inputName => {
+    const name = inputName.slice(0, MAX_MODEL_NAME_LENGTH)
     const newModel = { ...this.state.newModel, name }
     const errors =
       newModel.errors.length > 0
@@ -206,8 +221,7 @@ export default class App extends React.Component {
     this.setState({ newModel: { ...newModel, errors } })
   }
 
-  createModel = event => {
-    event.preventDefault()
+  createModel = () => {
     const newModel = formatModel(this.state.newModel)
     const errors = validateModel(newModel, this.state.models)
 
@@ -471,94 +485,6 @@ export default class App extends React.Component {
     )
   }
 
-  renderModels = (config, models, newModel) => (
-    <React.Fragment>
-      <h2>Models</h2>
-      <h3>Configuration</h3>
-      <ul>
-        <li key='config-timestamps'>
-          <label id='config-timestamps'>Timestamps</label>
-          <input
-            id='config-timestamps'
-            type='checkbox'
-            checked={config.timestamps}
-            onChange={this.toggleTimestamps}
-          />
-        </li>
-        <li key='config-snake'>
-          <label id='config-snake'>Snake Case</label>
-          <input
-            id='config-snake'
-            type='checkbox'
-            checked={config.snake}
-            onChange={this.toggleSnake}
-          />
-        </li>
-        <li key='config-soft-deletes'>
-          <label id='config-soft-deletes'>Soft Deletes</label>
-          <input
-            id='config-soft-deletes'
-            type='checkbox'
-            checked={config.softDeletes}
-            onChange={this.toggleSoftDeletes}
-          />
-        </li>
-        <li key='config-singular-tableNames'>
-          <label id='config-singular-tableNames'>Singular Table Names</label>
-          <input
-            id='config-singular-tableNames'
-            type='checkbox'
-            checked={config.singularTableNames}
-            onChange={this.toggleSingularTableNames}
-          />
-        </li>
-      </ul>
-      {newModel !== null ? (
-        <form onSubmit={this.createModel}>
-          <strong>New Model</strong>
-          <label htmlFor='new-model-name'>Name</label>
-          <input
-            id='new-model-name'
-            type='text'
-            value={newModel.name}
-            onChange={this.inputNewModelName}
-            maxLength={MAX_MODEL_NAME_LENGTH}
-          />
-          {newModel.errors.length > 0 ? (
-            <ul>
-              {newModel.errors.map(message => (
-                <li key={message}>{message}</li>
-              ))}
-            </ul>
-          ) : null}
-          <button
-            type='submit'
-            disabled={
-              newModel.name.trim().length === 0 || newModel.errors.length > 0
-            }
-          >
-            Create Model
-          </button>
-          <button type='button' onClick={this.cancelCreatingNewModel}>
-            Cancel
-          </button>
-        </form>
-      ) : (
-        <button onClick={this.startCreatingNewModel}>Add a Model</button>
-      )}
-      <ul>
-        {models.map(model => (
-          <li key={model.id}>
-            {model.name}
-            <button onClick={() => this.goToModel(model.id)}>View</button>
-            <button onClick={() => this.editModel(model.id)}>Edit</button>
-            <button onClick={() => this.deleteModel(model.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </React.Fragment>
-  )
-
   renderCurrentModel = currentModel => (
     <React.Fragment>
       <button onClick={this.goToModels}>Back</button>
@@ -732,17 +658,30 @@ export default class App extends React.Component {
     </React.Fragment>
   )
 
-  renderMain () {
+  renderMain = () => {
     switch (true) {
       case this.state.editingModel !== null:
         return this.renderEditingModel(this.state.editingModel)
       case this.state.currentModel !== null:
         return this.renderCurrentModel(this.state.currentModel)
       default:
-        return this.renderModels(
-          this.state.config,
-          this.state.models,
-          this.state.newModel
+        return (
+          <Models
+            config={this.state.config}
+            models={this.state.models}
+            newModel={this.state.newModel}
+            toggleTimestamps={this.toggleTimestamps}
+            toggleSnake={this.toggleSnake}
+            toggleSoftDeletes={this.toggleSoftDeletes}
+            toggleSingularTableNames={this.toggleSingularTableNames}
+            startCreatingNewModel={this.startCreatingNewModel}
+            inputNewModelName={this.inputNewModelName}
+            cancelCreatingNewModel={this.cancelCreatingNewModel}
+            createModel={this.createModel}
+            goToModel={this.goToModel}
+            editModel={this.editModel}
+            deleteModel={this.deleteModel}
+          />
         )
     }
   }

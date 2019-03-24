@@ -17,12 +17,7 @@ const Title = ({ onClick }) => (
   </h1>
 )
 
-const ActionButton = ({
-  onClick = () => {},
-  label,
-  icon,
-  disabled = false
-}) => (
+const ActionButton = ({ onClick, label, disabled = false }) => (
   <button
     className='top-bar__actions__button'
     onClick={onClick}

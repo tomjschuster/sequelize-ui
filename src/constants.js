@@ -1,86 +1,9 @@
-export const RELATIONSHIPS = {
-  BELONGS_TO: 'BELONGS_TO',
-  HAS_ONE: 'HAS_ONE',
-  HAS_MANY: 'HAS_MANY',
-  BELONGS_TO_MANY: 'BELONGS_TO_MANY'
-}
+export const SQL_IDENTIFIER_REGEXP = '^([\\p{L}_][\\p{L}\\p{N}$_ ]*)?$'
+export const MAX_MODEL_NAME_LENGTH = 63
+export const UNIQUE_NAME_ERROR = 'Name already taken.'
+export const NAME_FORMAT_ERROR =
+  'Name can only contain letters, numbers, spaces, _ or $ and cannot start with a number.'
 
-export const displayRelationship = relationship => {
-  switch (relationship) {
-    case RELATIONSHIPS.BELONGS_TO: return 'Belongs To'
-    case RELATIONSHIPS.HAS_ONE: return 'Has One'
-    case RELATIONSHIPS.HAS_MANY: return 'Has Many'
-    case RELATIONSHIPS.BELONGS_TO_MANY: return 'Belongs To Many'
-    default: return undefined
-  }
-}
-
-export const relationshipKey = relationship => {
-  switch (relationship) {
-    case RELATIONSHIPS.BELONGS_TO: return 'belongsTo'
-    case RELATIONSHIPS.HAS_ONE: return 'hasOne'
-    case RELATIONSHIPS.HAS_MANY: return 'hasMany'
-    case RELATIONSHIPS.BELONGS_TO_MANY: return 'belongsToMany'
-    default: return undefined
-  }
-}
-
-export const METHODS = {
-  HOOKS: 'HOOKS',
-  GETTER_METHODS: 'GETTER_METHODS',
-  SETTER_METHODS: 'SETTER_METHODS'
-}
-
-export const displayMethod = method => {
-  switch (method) {
-    case METHODS.HOOKS: return 'Hooks'
-    case METHODS.GETTER_METHODS: return 'Getter Methods'
-    case METHODS.SETTER_METHODS: return 'Setter Methods'
-    default: return undefined
-  }
-}
-
-export const methodKey = method => {
-  switch (method) {
-    case METHODS.HOOKS: return 'hooks'
-    case METHODS.GETTER_METHODS: return 'getterMethods'
-    case METHODS.SETTER_METHODS: return 'setterMethods'
-    default: return undefined
-  }
-}
-
-export const OPTIONS = {
-  TABLE_NAME: 'TABLE_NAME',
-  NAME: 'NAME',
-  SINGULAR: 'SINGULAR',
-  PLURAL: 'PLURAL',
-  FREEZE_TABLE_NAME: 'FREEZE_TABLE_NAME',
-  UNDERSCORED_COLUMNS: 'UNDERSCORED_COLUMNS',
-  UNDERSCORED_TABLE_NAME: 'UNDERSCORED_TABLE_NAME'
-}
-
-export const displayOption = option => {
-  switch (option) {
-    case OPTIONS.TABLE_NAME: return 'Table Name'
-    case OPTIONS.Name: return 'Name'
-    case OPTIONS.SINGULAR: return 'Singular Name'
-    case OPTIONS.PLURAL: return 'Plural Name'
-    case OPTIONS.FREEZE_TABLE_NAME: return 'Freeze Table Name'
-    case OPTIONS.UNDERSCORED_COLUMNS: return 'Underscore Column Names'
-    case OPTIONS.UNDERSCORED_TABLE_NAME: return 'Underscore Table Name'
-    default: return undefined
-  }
-}
-
-export const optionKey = option => {
-  switch (option) {
-    case OPTIONS.TABLE_NAME: return 'tableName'
-    case OPTIONS.NAME: return 'name'
-    case OPTIONS.SINGULAR: return 'singular'
-    case OPTIONS.PLURAL: return 'plural'
-    case OPTIONS.FREEZE_TABLE_NAME: return 'freezeTableName'
-    case OPTIONS.UNDERSCORED_COLUMNS: return 'underscored'
-    case OPTIONS.UNDERSCORED_TABLE_NAME: return 'underscoredAll'
-    default: return undefined
-  }
-}
+export const REQUIRED_NAME_ERROR = 'Name is required.'
+export const NAME_LENGTH_ERROR = `Name cannot be more than ${MAX_MODEL_NAME_LENGTH} characters when converted to snake_case.`
+export const REQUIRED_TYPE_ERROR = 'Type is required.'

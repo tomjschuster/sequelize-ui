@@ -6,16 +6,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const common = {
-  entry: './src-new/index.js',
+  entry: './src/index.js',
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'app.[hash].js'
   },
   resolve: {
     extensions: ['.js', '.jsx']
-    // alias: {
-    //   '../../theme.config$': path.join(__dirname, 'src/style/theme.config')
-    // }
   },
   module: {
     rules: [
@@ -30,13 +27,6 @@ const common = {
             'transform-class-properties'
           ]
         }
-      },
-      {
-        test: /\.less$/,
-        use: ExtractTextPlugin.extract({
-          use: ['css-loader', 'less-loader'],
-          fallback: 'style-loader'
-        })
       },
       {
         test: /\.css$/,
