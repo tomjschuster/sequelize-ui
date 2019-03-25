@@ -5,16 +5,22 @@ import * as sequelize4 from '../templates/sequelize-4.js'
 import Case from 'case'
 import XRegExp from 'xregexp'
 import TopBar from './TopBar.jsx'
-import Models from './Models.jsx'
+import ModelsList from './ModelsList.jsx'
+import ModelView from './ModelView.jsx'
+import ModelForm from './ModelForm.jsx'
+
 import {
   SQL_IDENTIFIER_REGEXP,
   MAX_MODEL_NAME_LENGTH,
   UNIQUE_NAME_ERROR,
   NAME_FORMAT_ERROR,
   REQUIRED_NAME_ERROR,
-  NAME_LENGTH_ERROR,
-  REQUIRED_TYPE_ERROR
+  NAME_LENGTH_ERROR
 } from '../constants.js'
+
+const MODELS_LIST = 'MODELS_LIST'
+const MODEL_VIEW = 'MODEL_VIEW'
+const MODEL_FORM = 'MODEL_FORM'
 
 const downloadZip = ({ name = 'my-project', files }) => {
   const zip = new JSZip()
@@ -35,43 +41,14 @@ const zipDir = (zip, dir) => {
   for (let file of dir.files) zipFile(folder, file)
 }
 
-const EMPTY_OPTION = 'EMPTY_OPTION'
-const optionToValue = value => (value === EMPTY_OPTION ? null : value)
-
-const dataTypeOptions = {
-  EMPTY_OPTION: '-',
-  STRING: 'String',
-  TEXT: 'Text',
-  INTEGER: 'Integer',
-  FLOAT: 'Float',
-  REAL: 'Real',
-  DOUBLE: 'Double',
-  DECIMAL: 'Decimal',
-  DATE: 'Date',
-  DATEONLY: 'Date (without time)',
-  BOOLEAN: 'Boolean',
-  ARRAY: 'Array',
-  JSON: 'JSON',
-  BLOB: 'BLOB',
-  UUID: 'UUID'
-}
-
 const emptyModel = () => ({
   name: '',
   fields: [],
   errors: []
 })
 
-const emptyField = () => ({
-  name: '',
-  type: null,
-  primaryKey: false,
-  required: false,
-  unique: false,
-  errors: []
-})
-
 const initialState = () => ({
+  pageState: MODELS_LIST,
   error: null,
   nextModelId: 1,
   nextFieldId: 1,
@@ -85,16 +62,13 @@ const initialState = () => ({
   },
   models: [],
   newModel: null,
-  currentModel: null,
+  currentModelId: null,
   editingModel: null
 })
 
 const buildModel = (id, model) => ({ id, ...model })
 
-const buildField = (id, field) => ({ id, ...field })
-
 const formatModel = model => ({ ...model, name: model.name.trim() })
-const formatField = field => ({ ...field, name: field.name.trim() })
 
 const validateModel = (model, models) => {
   const errors = [
@@ -110,25 +84,6 @@ const validateModel = (model, models) => {
     [NAME_LENGTH_ERROR, Case.snake(model.name).length > MAX_MODEL_NAME_LENGTH]
   ]
 
-  console.log(errors)
-
-  return errors.filter(error => error[1]).map(error => error[0])
-}
-
-const validateField = (field, fields) => {
-  const errors = [
-    [
-      UNIQUE_NAME_ERROR,
-      !!fields.find(
-        ({ name, id }) =>
-          Case.snake(name) === Case.snake(field.name) && id !== field.id
-      )
-    ],
-    [NAME_FORMAT_ERROR, !XRegExp(SQL_IDENTIFIER_REGEXP).test(field.name)],
-    [REQUIRED_NAME_ERROR, field.name.length === 0],
-    [NAME_LENGTH_ERROR, Case.snake(field.name).length > MAX_MODEL_NAME_LENGTH],
-    [REQUIRED_TYPE_ERROR, field.type === null]
-  ]
   console.log(errors)
 
   return errors.filter(error => error[1]).map(error => error[0])
@@ -190,17 +145,9 @@ export default class App extends React.Component {
 
   startCreatingNewModel = () => this.setState({ newModel: emptyModel() })
 
-  goToModel = id =>
-    this.setState({ currentModel: this.state.models.find(m => m.id === id) })
+  goToModel = id => this.setState({ pageState: MODEL_VIEW, currentModelId: id })
 
-  editModel = id => {
-    const model = this.state.models.find(m => m.id === id)
-
-    this.setState({
-      currentModel: model,
-      editingModel: { ...model, newField: emptyField() }
-    })
-  }
+  editModel = id => this.setState({ pageState: MODEL_FORM, currentModelId: id })
 
   deleteModel = id =>
     this.setState({
@@ -240,433 +187,55 @@ export default class App extends React.Component {
   }
 
   // Current Model Methods
-  startEditingModel = () =>
-    this.setState({
-      editingModel: { ...this.state.currentModel, newField: emptyField() }
-    })
+  startEditingModel = () => this.setState({ pageState: MODEL_FORM })
 
-  goToModels = () => this.setState({ currentModel: null, editingModel: null })
+  goToModels = () =>
+    this.setState({ pageState: MODELS_LIST, currentModelId: null })
 
   // Edit Model Methods
-  cancelEditingModel = () => this.setState({ editingModel: null })
+  cancelEditingModel = () => this.setState({ pageState: MODEL_VIEW })
 
-  inputEditingModelName = ({ target: { value } }) => {
-    const name = value.slice(0, MAX_MODEL_NAME_LENGTH)
-    const editingModel = { ...this.state.editingModel, name }
-
-    const errors =
-      editingModel.errors.length > 0
-        ? validateModel(formatModel(editingModel), this.state.models)
-        : editingModel.errors
-
+  saveModel = ({ model, nextFieldId }) => {
     this.setState({
-      editingModel: { ...editingModel, errors }
+      pageState: MODEL_VIEW,
+      models: this.state.models.map(m => (m.id === model.id ? model : m)),
+      nextFieldId
     })
   }
-
-  inputNewFieldName = ({ target: { value } }) => {
-    this.mapNewField(field => {
-      const name = value.slice(0, MAX_MODEL_NAME_LENGTH)
-      const updatedField = { ...field, name }
-
-      const errors =
-        updatedField.errors.length > 0
-          ? validateField(
-            formatField(updatedField),
-            this.state.editingModel.fields
-          )
-          : updatedField.errors
-
-      return { ...updatedField, errors }
-    })
-  }
-
-  selectNewFieldType = ({ target: { value } }) =>
-    this.mapNewField(field => {
-      const type = optionToValue(value)
-      const updatedField = { ...field, type }
-
-      const errors =
-        updatedField.errors.length > 0
-          ? validateField(
-            formatField(updatedField),
-            this.state.editingModel.fields
-          )
-          : updatedField.errors
-
-      return { ...updatedField, errors }
-    })
-
-  toggleNewFieldPrimaryKey = ({ target: { checked } }) =>
-    this.mapNewField(field => ({ ...field, primaryKey: checked }))
-
-  toggleNewFieldRequired = ({ target: { checked } }) =>
-    this.mapNewField(field => ({ ...field, required: checked }))
-
-  toggleNewFieldUnique = ({ target: { checked } }) =>
-    this.mapNewField(field => ({ ...field, unique: checked }))
-
-  clearNewField = () =>
-    this.setState({
-      editingModel: {
-        ...this.state.editingModel,
-        newField: emptyField()
-      }
-    })
-
-  createField = event => {
-    event.preventDefault()
-    const field = formatField(this.state.editingModel.newField)
-    const errors = validateField(field, this.state.editingModel.fields)
-
-    if (errors.length > 0) {
-      this.mapNewField(field => ({ ...field, errors }))
-    } else {
-      this.setState({
-        editingModel: {
-          ...this.state.editingModel,
-          fields: [
-            ...this.state.editingModel.fields,
-            buildField(
-              this.state.nextFieldId,
-              this.state.editingModel.newField
-            )
-          ],
-          newField: emptyField()
-        },
-        nextFieldId: this.state.nextFieldId + 1
-      })
-    }
-  }
-
-  mapNewField = fn =>
-    this.setState({
-      editingModel: {
-        ...this.state.editingModel,
-        newField: fn(this.state.editingModel.newField)
-      }
-    })
-
-  inputEditingFieldName = (id, { target: { value } }) =>
-    this.mapField(id, field => {
-      const name = value.slice(0, MAX_MODEL_NAME_LENGTH)
-      const updatedField = { ...field, name }
-
-      const errors =
-        updatedField.errors.length > 0
-          ? validateField(
-            formatField(updatedField),
-            this.state.editingModel.fields
-          )
-          : updatedField.errors
-
-      return { ...updatedField, errors }
-    })
-
-  selectEditingFieldType = (id, { target: { value } }) =>
-    this.mapField(id, field => {
-      const type = optionToValue(value)
-      const updatedField = { ...field, type }
-
-      const errors =
-        updatedField.errors.length > 0
-          ? validateField(
-            formatField(updatedField),
-            this.state.editingModel.fields
-          )
-          : updatedField.errors
-
-      return { ...updatedField, errors }
-    })
-
-  toggleEditingFieldPrimaryKey = (id, { target: { checked } }) =>
-    this.mapField(id, field => ({ ...field, primaryKey: checked }))
-
-  toggleEditingFieldRequired = (id, { target: { checked } }) =>
-    this.mapField(id, field => ({ ...field, required: checked }))
-
-  toggleEditingFieldUnique = (id, { target: { checked } }) =>
-    this.mapField(id, field => ({ ...field, unique: checked }))
-
-  deleteField = id =>
-    this.setState({
-      editingModel: {
-        ...this.state.editingModel,
-        fields: this.state.editingModel.fields.filter(field => field.id !== id)
-      }
-    })
-
-  mapField = (id, fn) =>
-    this.setState({
-      editingModel: {
-        ...this.state.editingModel,
-        fields: this.state.editingModel.fields.map(field =>
-          field.id === id ? fn({ ...field }) : field
-        )
-      }
-    })
-
-  saveModel = () => {
-    const currentModel = formatModel(this.state.editingModel)
-    const errors = validateModel(currentModel, this.state.models)
-
-    const fields = currentModel.fields.map(field => {
-      const formattedField = formatField(field)
-      const errors = validateField(
-        formattedField,
-        this.state.editingModel.fields
-      )
-
-      return { ...formattedField, errors }
-    })
-    const hasFieldErrors = fields.some(field => field.errors.length > 0)
-    if (errors.length > 0 || hasFieldErrors) {
-      this.setState({
-        editingModel: { ...this.state.editingModel, fields, errors }
-      })
-    } else {
-      this.setState({
-        currentModel,
-        editingModel: null,
-        models: this.state.models.map(model =>
-          model.id === currentModel.id ? currentModel : model
-        )
-      })
-    }
-  }
-
-  cancelEditingModel = () => this.setState({ editingModel: null })
 
   deleteCurrentModel = () =>
     this.setState({
-      currentModel: null,
-      editingModel: null,
+      pageState: MODELS_LIST,
+      currentModelId: null,
       models: this.state.models.filter(
-        model => model.id !== this.state.currentModel.id
+        model => model.id !== this.state.currentModelId
       )
     })
 
-  // View methods
-  showFieldOptions = field => {
-    const options = {
-      primaryKey: 'Primary Key',
-      required: 'Required',
-      unique: 'Unique'
+  // View Methods
+
+  topBarActions = () => [
+    {
+      onClick: this.previewCode,
+      label: 'Code',
+      icon: 'code',
+      disabled: this.state.pageState === MODEL_FORM
+    },
+
+    {
+      onClick: this.exportModels,
+      label: 'Export',
+      icon: 'export',
+      disabled: this.state.pageState === MODEL_FORM
     }
+  ]
 
-    const display = Object.entries(options)
-      .filter(([option, _]) => field[option])
-      .map(([_, text]) => text)
-      .join(', ')
-
-    return display ? `(${display})` : ''
-  }
-
-  renderCurrentModelConfiguration = ({ timestamps, snake, softDeletes }) => {
-    const items = [
-      ['Timestamps', timestamps],
-      ['Snake Case', snake],
-      ['Soft Deletes', softDeletes]
-    ]
-
-    const selectedItems = items
-      .filter(([_, selected]) => selected)
-      .map(([label, _]) => label)
-    console.log(selectedItems)
-    return selectedItems.length === 0 ? null : (
-      <React.Fragment>
-        <h3>Configuration</h3>
-        <ul>
-          {selectedItems.map(label => (
-            <li key={label}>{label}</li>
-          ))}
-        </ul>
-      </React.Fragment>
-    )
-  }
-
-  renderCurrentModel = currentModel => (
-    <React.Fragment>
-      <button onClick={this.goToModels}>Back</button>
-      <button onClick={this.startEditingModel}>Edit</button>
-      <h2>{currentModel.name}</h2>
-      <h3>Fields</h3>
-      {currentModel.fields.length === 0 ? (
-        <p>No Fields</p>
-      ) : (
-        <ul key='abc'>
-          {currentModel.fields.map(field => (
-            <li key={field.id}>
-              {field.name} - {dataTypeOptions[field.type]}{' '}
-              {this.showFieldOptions(field)}
-            </li>
-          ))}
-        </ul>
-      )}
-    </React.Fragment>
-  )
-
-  renderEditingModel = editingModel => (
-    <React.Fragment>
-      <button
-        onClick={this.saveModel}
-        disabled={
-          editingModel.errors.length > 0 ||
-          editingModel.newField.errors.length > 0 ||
-          editingModel.fields.some(field => field.errors.length > 0)
-        }
-      >
-        Save
-      </button>
-      <button onClick={this.cancelEditingModel}>Cancel</button>
-      <label htmlFor='editing-model-name'>Name</label>
-      <input
-        id='editing-model-name'
-        type='text'
-        value={editingModel.name}
-        onChange={this.inputEditingModelName}
-      />
-      {editingModel.errors.length > 0 ? (
-        <ul>
-          {editingModel.errors.map(message => (
-            <li key={message}>{message}</li>
-          ))}
-        </ul>
-      ) : null}
-      <h3>Fields</h3>
-      <form onSubmit={this.createField}>
-        <strong>NewField</strong>
-        <label htmlFor='new-field-name'>Name</label>
-        <input
-          id='new-field-name'
-          type='text'
-          value={editingModel.newField.name}
-          onChange={this.inputNewFieldName}
-        />
-        <label htmlFor='new-field-type'>Type</label>
-        <select
-          id='new-field-type'
-          default={editingModel.newField.type || dataTypeOptions.EMPTY_OPTION}
-          value={editingModel.newField.type || dataTypeOptions.EMPTY_OPTION}
-          onChange={this.selectNewFieldType}
-        >
-          {Object.entries(dataTypeOptions).map(([value, text]) => (
-            <option key={value} value={value}>
-              {text}
-            </option>
-          ))}
-        </select>
-        <label id='new-field-primary-key'>Primary Key</label>
-        <input
-          id='new-field-primary-key'
-          type='checkbox'
-          checked={editingModel.newField.primaryKey}
-          onChange={this.toggleNewFieldPrimaryKey}
-        />
-        <label id='new-field-unique'>Unique</label>
-        <input
-          id='new-field-unique'
-          type='checkbox'
-          checked={editingModel.newField.unique}
-          onChange={this.toggleNewFieldUnique}
-        />
-        <label id='new-field-required'>Required</label>
-        <input
-          id='new-field-required'
-          type='checkbox'
-          checked={editingModel.newField.required}
-          onChange={this.toggleNewFieldRequired}
-        />
-        {editingModel.newField.errors.length > 0 ? (
-          <ul>
-            {editingModel.newField.errors.map(message => (
-              <li key={message}>{message}</li>
-            ))}
-          </ul>
-        ) : null}
-        <button
-          type='submit'
-          disabled={this.state.editingModel.newField.errors.length > 0}
-        >
-          Add
-        </button>
-        <button type='button' onClick={this.clearNewField}>
-          Clear
-        </button>
-      </form>
-      <ul>
-        {editingModel.fields.map(field => (
-          <li key={field.id}>
-            <label htmlFor={`editing-field-name-${field.id}`}>Name</label>
-            <input
-              id={`editing-field-name-${field.id}`}
-              type='text'
-              value={field.name}
-              onChange={event => this.inputEditingFieldName(field.id, event)}
-            />
-            <label htmlFor={`editing-field-type-${field.id}`}>Type</label>
-            <select
-              id={`editing-field-type-${field.id}`}
-              default={field.type || dataTypeOptions.EMPTY_OPTION}
-              value={field.type || dataTypeOptions.EMPTY_OPTION}
-              onChange={event => this.selectEditingFieldType(field.id, event)}
-            >
-              {Object.entries(dataTypeOptions).map(([value, text]) => (
-                <option key={value} value={value}>
-                  {text}
-                </option>
-              ))}
-            </select>
-            <label id={`editing-field-primary-key-${field.id}`}>
-              Primary Key
-            </label>
-            <input
-              id={`editing-field-primary-key-${field.id}`}
-              type='checkbox'
-              checked={field.primaryKey}
-              onChange={event =>
-                this.toggleEditingFieldPrimaryKey(field.id, event)
-              }
-            />
-            <label id={`editing-field-unique-${field.id}`}>Unique}</label>
-            <input
-              id={`editing-field-unique-${field.id}`}
-              type='checkbox'
-              checked={field.unique}
-              onChange={event => this.toggleEditingFieldUnique(field.id, event)}
-            />
-            <label id={`editing-field-required-${field.id}`}>Required</label>
-            <input
-              id={`editing-field--required-${field.id}`}
-              type='checkbox'
-              checked={field.required}
-              onChange={event =>
-                this.toggleEditingFieldRequired(field.id, event)
-              }
-            />
-            <button onClick={() => this.deleteField(field.id)}>Delete</button>
-            {field.errors.length > 0 ? (
-              <ul>
-                {field.errors.map(message => (
-                  <li key={message}>{message}</li>
-                ))}
-              </ul>
-            ) : null}
-          </li>
-        ))}
-      </ul>
-    </React.Fragment>
-  )
-
-  renderMain = () => {
-    switch (true) {
-      case this.state.editingModel !== null:
-        return this.renderEditingModel(this.state.editingModel)
-      case this.state.currentModel !== null:
-        return this.renderCurrentModel(this.state.currentModel)
-      default:
+  renderPage = () => {
+    console.log(this.state.pageState)
+    switch (this.state.pageState) {
+      case MODELS_LIST:
         return (
-          <Models
+          <ModelsList
             config={this.state.config}
             models={this.state.models}
             newModel={this.state.newModel}
@@ -683,32 +252,28 @@ export default class App extends React.Component {
             deleteModel={this.deleteModel}
           />
         )
-    }
-  }
-
-  topBarActions = () => {
-    const codeItem = {
-      onClick: this.previewCode,
-      label: 'Code',
-      icon: 'code'
-    }
-
-    const exportItem = {
-      onClick: this.exportModels,
-      label: 'Export',
-      icon: 'export'
-    }
-
-    switch (true) {
-      case this.state.editingModel !== null:
-        return [
-          { ...codeItem, disabled: true },
-          { ...exportItem, disabled: true }
-        ]
-      case this.state.currentModel !== null:
-        return [codeItem, exportItem]
+      case MODEL_VIEW:
+        return (
+          <ModelView
+            model={this.state.models.find(
+              ({ id }) => id === this.state.currentModelId
+            )}
+            goToModels={this.goToModels}
+            startEditingModel={this.startEditingModel}
+          />
+        )
+      case MODEL_FORM:
+        return (
+          <ModelForm
+            modelId={this.state.currentModelId}
+            models={this.state.models}
+            nextFieldId={this.state.nextFieldId}
+            onSave={this.saveModel}
+            onCancel={this.cancelEditingModel}
+          />
+        )
       default:
-        return [codeItem, exportItem]
+        return <p>Sorry, something went wrong.</p>
     }
   }
 
@@ -716,7 +281,7 @@ export default class App extends React.Component {
     return (
       <React.Fragment>
         <TopBar onTitleClick={this.goToModels} actions={this.topBarActions()} />
-        {this.renderMain()}
+        {this.renderPage()}
         <button onClick={this.reset}>Reset</button>
       </React.Fragment>
     )

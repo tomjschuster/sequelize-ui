@@ -15,9 +15,9 @@
     "url": "https://github.com/tomjschuster/sequelize-ui"
   },
   "scripts": {
-    "build:dev": "NODE_ENV=development webpack",
-    "build:prod": "NODE_ENV=production webpack",
-    "start": "rimraf dist && npm run build:dev && NODE_ENV=development live-server ./dist & npm run build:dev -- --watch"
+    "build:dev": "rimraf dist && NODE_ENV=development webpack",
+    "build:prod": "rimraf dist && NODE_ENV=production webpack",
+    "start": "npm run build:dev && NODE_ENV=development live-server ./dist & npm run build:dev -- --watch"
   },
   "keywords": [
     "sequelize",

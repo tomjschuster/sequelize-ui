@@ -2,7 +2,7 @@ import React from 'react'
 
 import { MAX_MODEL_NAME_LENGTH } from '../constants.js'
 
-const Models = ({
+const ModelsList = ({
   // State
   config,
   models,
@@ -113,4 +113,4 @@ const Models = ({
   </React.Fragment>
 )
 
-export default Models
+export default ModelsList
