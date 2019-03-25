@@ -16,7 +16,11 @@ import {
 } from '../constants.js'
 
 const optionToValue = value => (value === EMPTY_OPTION ? null : value)
-const formatModel = model => ({ ...model, name: model.name.trim() })
+const formatModel = model => ({
+  ...model,
+  name: model.name.trim(),
+  fields: model.fields.map(field => formatField(field))
+})
 const formatField = field => ({ ...field, name: field.name.trim() })
 const buildField = (id, field) => ({ id, ...field })
 const validateModel = (model, models) => {
@@ -88,11 +92,24 @@ export default class ModelForm extends React.Component {
   }
 
   save = () => {
-    if (!this.hasErrors()) {
+    const model = formatModel(this.state.model)
+    const modelErrors = validateModel(model, this.props.models)
+
+    const fieldErrors = model.fields.reduce(
+      (acc, field) => ({
+        ...acc,
+        [field.id]: validateField(field, this.state.model.fields)
+      }),
+      this.state.fieldErrors
+    )
+
+    if (!this.checkErrors(modelErrors, fieldErrors)) {
       this.props.onSave({
         model: formatModel(this.state.model),
         nextFieldId: this.state.nextFieldId
       })
+    } else {
+      this.setState({ model, modelErrors, fieldErrors })
     }
   }
 
@@ -189,7 +206,7 @@ export default class ModelForm extends React.Component {
     const field = fn(currentField)
     const errors =
       currentErrors.length > 0
-        ? validateField(formatField(field))
+        ? validateField(formatField(field), this.state.model.fields)
         : currentErrors
 
     const fields = this.state.model.fields.map(f => (f.id === id ? field : f))
@@ -215,7 +232,9 @@ export default class ModelForm extends React.Component {
     Object.values(this.state.fieldErrors).some(errors => errors.length > 0)
 
   fieldHasErrors = id => this.state.fieldErrors[id].length > 0
-
+  checkErrors = (modelErrors, fieldErrors) =>
+    modelErrors.length > 0 ||
+    Object.values(fieldErrors).some(errors => errors.length > 0)
   render () {
     return (
       <React.Fragment>
