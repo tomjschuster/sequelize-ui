@@ -1,6 +1,8 @@
 # sequelize-ui
 
 TODO:
+- Config form to component
+- Separate validation/formatting
 - UI
   - breadcrumbs
   - page titles
