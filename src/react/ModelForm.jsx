@@ -2,6 +2,7 @@ import React from 'react'
 import Case from 'case'
 import { pluralize } from 'inflection'
 import XRegExp from 'xregexp'
+import * as validators from '../utils/validators.js'
 
 import {
   EMPTY_OPTION,
@@ -11,8 +12,7 @@ import {
   REQUIRED_TYPE_ERROR,
   NAME_LENGTH_ERROR,
   UNIQUE_NAME_ERROR,
-  SQL_IDENTIFIER_REGEXP,
-  MAX_MODEL_NAME_LENGTH
+  MAX_SQL_IDENTIFIER_LENGTH
 } from '../constants.js'
 
 export default class ModelForm extends React.Component {
@@ -168,13 +168,16 @@ export default class ModelForm extends React.Component {
 
   hasModelErrors = () => this.state.modelErrors.length > 0
   hasNewFieldErrors = () => this.state.newFieldErrors.length > 0
+
   hasFieldErrors = () =>
     Object.values(this.state.fieldErrors).some(errors => errors.length > 0)
 
   fieldHasErrors = id => this.state.fieldErrors[id].length > 0
+
   checkErrors = (modelErrors, fieldErrors) =>
     modelErrors.length > 0 ||
     Object.values(fieldErrors).some(errors => errors.length > 0)
+
   render () {
     return (
       <React.Fragment>
@@ -191,8 +194,8 @@ export default class ModelForm extends React.Component {
         />
         {this.hasModelErrors() ? (
           <ul>
-            {this.state.modelErrors.map(message => (
-              <li key={message}>{message}</li>
+            {this.state.modelErrors.map(error => (
+              <li key={error}>{displayModelError(error)}</li>
             ))}
           </ul>
         ) : null}
@@ -330,8 +333,8 @@ export default class ModelForm extends React.Component {
               <button onClick={() => this.deleteField(field.id)}>Delete</button>
               {this.fieldHasErrors(field.id) ? (
                 <ul>
-                  {this.state.fieldErrors[field.id].map(message => (
-                    <li key={message}>{message}</li>
+                  {this.state.fieldErrors[field.id].map(error => (
+                    <li key={error}>{displayFieldError(error)}</li>
                   ))}
                 </ul>
               ) : null}
@@ -344,52 +347,70 @@ export default class ModelForm extends React.Component {
 }
 
 const optionToValue = value => (value === EMPTY_OPTION ? null : value)
+
 const formatModel = model => ({
   ...model,
   name: model.name.trim(),
   fields: model.fields.map(field => formatField(field))
 })
+
 const formatField = field => ({ ...field, name: field.name.trim() })
 const buildField = (id, field) => ({ id, ...field })
+
 const validateModel = (model, models) => {
   const errors = [
-    [
-      UNIQUE_NAME_ERROR,
-      !!models.find(
-        ({ name, id }) =>
-          Case.snake(name) === Case.snake(model.name) && id !== model.id
-      )
-    ],
-    [NAME_FORMAT_ERROR, !XRegExp(SQL_IDENTIFIER_REGEXP).test(model.name)],
-    [REQUIRED_NAME_ERROR, model.name.length === 0],
-    [
-      NAME_LENGTH_ERROR,
-      pluralize(Case.snake(model.name)).length > MAX_MODEL_NAME_LENGTH
-    ]
+    [UNIQUE_NAME_ERROR, validators.validateUniqueName(model, models)],
+    [NAME_FORMAT_ERROR, validators.validateIdentifierFormat(model.name)],
+    [REQUIRED_NAME_ERROR, validators.validateRequired(model.name)],
+    [NAME_LENGTH_ERROR, validators.validateIdentifierLength(model.name)]
   ]
 
   console.log(errors)
 
-  return errors.filter(error => error[1]).map(error => error[0])
+  return errors.filter(error => !error[1]).map(error => error[0])
 }
 
 const validateField = (field, fields) => {
   const errors = [
-    [
-      UNIQUE_NAME_ERROR,
-      !!fields.find(
-        ({ name, id }) =>
-          Case.snake(name) === Case.snake(field.name) && id !== field.id
-      )
-    ],
-    [NAME_FORMAT_ERROR, !XRegExp(SQL_IDENTIFIER_REGEXP).test(field.name)],
-    [REQUIRED_NAME_ERROR, field.name.length === 0],
-    [NAME_LENGTH_ERROR, Case.snake(field.name).length > MAX_MODEL_NAME_LENGTH],
-    [REQUIRED_TYPE_ERROR, field.type === null]
+    [UNIQUE_NAME_ERROR, validators.validateUniqueName(field, fields)],
+    [NAME_FORMAT_ERROR, validators.validateIdentifierFormat(field.name)],
+    [REQUIRED_NAME_ERROR, validators.validateRequired(field.name)],
+    [NAME_LENGTH_ERROR, validators.validateIdentifierLength(field.name)],
+    [REQUIRED_TYPE_ERROR, validators.validateRequired(field.type)]
   ]
   console.log(errors)
 
-  return errors.filter(error => error[1]).map(error => error[0])
+  return errors.filter(error => !error[1]).map(error => error[0])
+}
+
+const displayModelError = error => {
+  switch (error) {
+    case UNIQUE_NAME_ERROR:
+      return 'Name already taken.'
+    case NAME_FORMAT_ERROR:
+      return 'Name can only contain letters, numbers, spaces, _ or $ and cannot start with a number.'
+    case REQUIRED_NAME_ERROR:
+      return 'Name is required.'
+    case NAME_LENGTH_ERROR:
+      return `Name cannot be more than ${MAX_SQL_IDENTIFIER_LENGTH} characters when converted to snake_case.`
+  }
+}
+
+const displayFieldError = error => {
+  switch (error) {
+    case UNIQUE_NAME_ERROR:
+      return 'Name already taken.'
+    case NAME_FORMAT_ERROR:
+      return 'Name can only contain letters, numbers, spaces, _ or $ and cannot start with a number.'
+    case REQUIRED_NAME_ERROR:
+      return 'Name is required.'
+    case NAME_LENGTH_ERROR:
+      return `Name cannot be more than ${MAX_SQL_IDENTIFIER_LENGTH} characters when converted to snake_case.`
+    case REQUIRED_TYPE_ERROR:
+      return 'Type is required.'
+    default:
+      return 'Sorry, something went wront.'
+  }
 }
 
 const emptyField = () => ({

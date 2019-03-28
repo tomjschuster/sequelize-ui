@@ -2,21 +2,10 @@ import React from 'react'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 import * as sequelize4 from '../templates/sequelize-4.js'
-import Case from 'case'
-import XRegExp from 'xregexp'
 import TopBar from './TopBar.jsx'
 import ModelsList from './ModelsList.jsx'
 import ModelView from './ModelView.jsx'
 import ModelForm from './ModelForm.jsx'
-
-import {
-  SQL_IDENTIFIER_REGEXP,
-  MAX_MODEL_NAME_LENGTH,
-  UNIQUE_NAME_ERROR,
-  NAME_FORMAT_ERROR,
-  REQUIRED_NAME_ERROR,
-  NAME_LENGTH_ERROR
-} from '../constants.js'
 
 const MODELS_LIST = 'MODELS_LIST'
 const MODEL_VIEW = 'MODEL_VIEW'
@@ -66,28 +55,7 @@ const initialState = () => ({
   editingModel: null
 })
 
-const buildModel = (id, model) => ({ id, ...model, field: [] })
-
-const formatModel = model => ({ ...model, name: model.name.trim() })
-
-const validateModel = (model, models) => {
-  const errors = [
-    [
-      UNIQUE_NAME_ERROR,
-      !!models.find(
-        ({ name, id }) =>
-          Case.snake(name) === Case.snake(model.name) && id !== model.id
-      )
-    ],
-    [NAME_FORMAT_ERROR, !XRegExp(SQL_IDENTIFIER_REGEXP).test(model.name)],
-    [REQUIRED_NAME_ERROR, model.name.length === 0],
-    [NAME_LENGTH_ERROR, Case.snake(model.name).length > MAX_MODEL_NAME_LENGTH]
-  ]
-
-  console.log(errors)
-
-  return errors.filter(error => error[1]).map(error => error[0])
-}
+const buildModel = (id, model) => ({ id, ...model, fields: [] })
 
 export default class App extends React.Component {
   constructor (props) {
@@ -156,17 +124,6 @@ export default class App extends React.Component {
 
   // New Model Methods
   cancelCreatingNewModel = () => this.setState({ newModel: null })
-
-  inputNewModelName = inputName => {
-    const name = inputName.slice(0, MAX_MODEL_NAME_LENGTH)
-    const newModel = { ...this.state.newModel, name }
-    const errors =
-      newModel.errors.length > 0
-        ? validateModel(formatModel(newModel), this.state.models)
-        : newModel.errors
-
-    this.setState({ newModel: { ...newModel, errors } })
-  }
 
   createModel = ({ model }) => {
     this.setState({
