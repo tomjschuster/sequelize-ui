@@ -30,29 +30,24 @@ const zipDir = (zip, dir) => {
   for (let file of dir.files) zipFile(folder, file)
 }
 
-const emptyModel = () => ({
-  name: '',
-  fields: [],
-  errors: []
-})
-
 const initialState = () => ({
   pageState: MODELS_LIST,
-  error: null,
   nextModelId: 1,
   nextFieldId: 1,
-  config: {
-    timestamps: true,
-    snake: false,
-    softDeletes: false,
-    singularTableNames: false,
-    dialect: 'sqlite',
-    name: 'my-project'
-  },
+  config: initialConfig(),
   models: [],
-  newModel: null,
+  creatingNewModel: false,
   currentModelId: null,
   editingModel: null
+})
+
+const initialConfig = () => ({
+  timestamps: true,
+  snake: false,
+  softDeletes: false,
+  singularTableNames: false,
+  dialect: 'sqlite',
+  name: 'my-project'
 })
 
 const buildModel = (id, model) => ({ id, ...model, fields: [] })
@@ -64,12 +59,27 @@ export default class App extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    this.persistState()
+    const keysToPersist = [
+      'pageState',
+      'nextModelId',
+      'nextFieldId',
+      'config',
+      'models',
+      'currentModelId'
+    ]
+
+    this.persistState(keysToPersist)
   }
 
   loadState = () => (localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {})
 
-  persistState = () => localStorage.setItem('SUI', JSON.stringify(this.state))
+  persistState = keys => {
+    const stateToPersist = Object.entries(this.state)
+      .filter(([key, value]) => keys.includes(key))
+      .reduce((acc, [key, value]) => Object.assign(acc, { [key]: value }), {})
+
+    localStorage.setItem('SUI', JSON.stringify(stateToPersist))
+  }
 
   exportModels = () =>
     downloadZip(
@@ -111,8 +121,6 @@ export default class App extends React.Component {
       }
     })
 
-  startCreatingNewModel = () => this.setState({ newModel: emptyModel() })
-
   goToModel = id => this.setState({ pageState: MODEL_VIEW, currentModelId: id })
 
   editModel = id => this.setState({ pageState: MODEL_FORM, currentModelId: id })
@@ -122,8 +130,9 @@ export default class App extends React.Component {
       models: this.state.models.filter(model => model.id !== id)
     })
 
-  // New Model Methods
-  cancelCreatingNewModel = () => this.setState({ newModel: null })
+  startCreatingNewModel = () => this.setState({ creatingNewModel: true })
+
+  cancelCreatingNewModel = () => this.setState({ creatingNewModel: false })
 
   createModel = ({ model }) => {
     this.setState({
@@ -184,7 +193,7 @@ export default class App extends React.Component {
           <ModelsList
             config={this.state.config}
             models={this.state.models}
-            newModel={this.state.newModel}
+            creatingNewModel={this.state.creatingNewModel}
             toggleTimestamps={this.toggleTimestamps}
             toggleSnake={this.toggleSnake}
             toggleSoftDeletes={this.toggleSoftDeletes}

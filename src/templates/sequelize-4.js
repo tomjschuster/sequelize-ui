@@ -210,8 +210,7 @@ const packageJson = ({ name, dialect }) =>
   "dependencies": {
     ${renderDeps(dialect)}
   }
-}
-`
+}`
 
 const drivers = {
   postgres: [

@@ -1,17 +1,8 @@
 import React from 'react'
-import XRegExp from 'xregexp'
-import { pluralize } from 'inflection'
-import Case from 'case'
 
 import * as validators from '../utils/validators.js'
 
-import {
-  NAME_FORMAT_ERROR,
-  REQUIRED_NAME_ERROR,
-  NAME_LENGTH_ERROR,
-  UNIQUE_NAME_ERROR,
-  MAX_SQL_IDENTIFIER_LENGTH
-} from '../constants.js'
+import { MAX_SQL_IDENTIFIER_LENGTH } from '../constants.js'
 
 export default class NewModelForm extends React.Component {
   constructor (props) {
@@ -23,7 +14,7 @@ export default class NewModelForm extends React.Component {
     }
   }
 
-  create () {
+  create = () => {
     const model = formatModel(this.state.model)
     const errors = validateModel(model, this.props.models)
 
@@ -35,11 +26,12 @@ export default class NewModelForm extends React.Component {
     }
   }
 
-  cancel () {
+  cancel = () => {
     this.props.onCancel()
+    this.setState({ model: emptyModel() })
   }
 
-  inputName (name) {
+  inputName = name => {
     const model = { ...this.state.model, name }
     const errors =
       this.state.errors.length > 0
@@ -90,6 +82,11 @@ export default class NewModelForm extends React.Component {
   }
 }
 
+const UNIQUE_NAME_ERROR = 'UNIQUE_NAME_ERROR'
+const NAME_FORMAT_ERROR = 'NAME_FORMAT_ERROR'
+const REQUIRED_NAME_ERROR = 'REQUIRED_NAME_ERROR'
+const NAME_LENGTH_ERROR = 'NAME_LENGTH_ERROR'
+
 const emptyModel = () => ({ name: '' })
 
 const formatModel = model => ({
@@ -98,16 +95,14 @@ const formatModel = model => ({
 })
 
 const validateModel = (model, models) => {
-  const errors = [
+  const validations = [
     [UNIQUE_NAME_ERROR, validators.validateUniqueName(model, models)],
     [NAME_FORMAT_ERROR, validators.validateIdentifierFormat(model.name)],
     [REQUIRED_NAME_ERROR, validators.validateRequired(model.name)],
     [NAME_LENGTH_ERROR, validators.validateIdentifierLength(model.name)]
   ]
 
-  console.log(errors)
-
-  return errors.filter(error => !error[1]).map(error => error[0])
+  return validations.filter(([_, valid]) => !valid).map(([error, _]) => error)
 }
 
 const displayModelError = error => {

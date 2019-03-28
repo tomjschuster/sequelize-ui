@@ -4,11 +4,6 @@ import * as validators from '../utils/validators.js'
 import {
   EMPTY_OPTION,
   DATA_TYPE_OPTIONS,
-  NAME_FORMAT_ERROR,
-  REQUIRED_NAME_ERROR,
-  REQUIRED_TYPE_ERROR,
-  NAME_LENGTH_ERROR,
-  UNIQUE_NAME_ERROR,
   MAX_SQL_IDENTIFIER_LENGTH
 } from '../constants.js'
 
@@ -249,8 +244,8 @@ export default class ModelForm extends React.Component {
           />
           {this.hasNewFieldErrors() ? (
             <ul>
-              {this.state.newFieldErrors.map(message => (
-                <li key={message}>{message}</li>
+              {this.state.newFieldErrors.map(error => (
+                <li key={error}>{displayFieldError(error)}</li>
               ))}
             </ul>
           ) : null}
@@ -354,30 +349,33 @@ const formatModel = model => ({
 const formatField = field => ({ ...field, name: field.name.trim() })
 const buildField = (id, field) => ({ id, ...field })
 
+const UNIQUE_NAME_ERROR = 'UNIQUE_NAME_ERROR'
+const NAME_FORMAT_ERROR = 'NAME_FORMAT_ERROR'
+const REQUIRED_NAME_ERROR = 'REQUIRED_NAME_ERROR'
+const NAME_LENGTH_ERROR = 'NAME_LENGTH_ERROR'
+const REQUIRED_TYPE_ERROR = 'REQUIRED_TYPE_ERROR'
+
 const validateModel = (model, models) => {
-  const errors = [
+  const validations = [
     [UNIQUE_NAME_ERROR, validators.validateUniqueName(model, models)],
     [NAME_FORMAT_ERROR, validators.validateIdentifierFormat(model.name)],
     [REQUIRED_NAME_ERROR, validators.validateRequired(model.name)],
     [NAME_LENGTH_ERROR, validators.validateIdentifierLength(model.name)]
   ]
 
-  console.log(errors)
-
-  return errors.filter(error => !error[1]).map(error => error[0])
+  return validations.filter(([_, valid]) => !valid).map(([error, _]) => error)
 }
 
 const validateField = (field, fields) => {
-  const errors = [
+  const validations = [
     [UNIQUE_NAME_ERROR, validators.validateUniqueName(field, fields)],
     [NAME_FORMAT_ERROR, validators.validateIdentifierFormat(field.name)],
     [REQUIRED_NAME_ERROR, validators.validateRequired(field.name)],
     [NAME_LENGTH_ERROR, validators.validateIdentifierLength(field.name)],
     [REQUIRED_TYPE_ERROR, validators.validateRequired(field.type)]
   ]
-  console.log(errors)
 
-  return errors.filter(error => !error[1]).map(error => error[0])
+  return validations.filter(([_, valid]) => !valid).map(([error, _]) => error)
 }
 
 const displayModelError = error => {

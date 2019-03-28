@@ -6,7 +6,7 @@ const ModelsList = ({
   // State
   config,
   models,
-  newModel,
+  creatingNewModel,
 
   // Actions
   toggleTimestamps,
@@ -61,7 +61,7 @@ const ModelsList = ({
         />
       </li>
     </ul>
-    {newModel !== null ? (
+    {creatingNewModel ? (
       <NewModelForm
         models={models}
         onCancel={cancelCreatingNewModel}
