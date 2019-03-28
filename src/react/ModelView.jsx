@@ -9,9 +9,9 @@ const ModelView = ({ model, goToModels, startEditingModel }) => (
     <BreadCrumbs
       crumbs={[{ text: 'Models', onClick: goToModels }, { text: model.name }]}
     />
+    <h2>{model.name}</h2>
     <button onClick={goToModels}>Back</button>
     <button onClick={startEditingModel}>Edit</button>
-    <h2>{model.name}</h2>
     <h3>Fields</h3>
     {model.fields.length === 0 ? (
       <p>No Fields</p>

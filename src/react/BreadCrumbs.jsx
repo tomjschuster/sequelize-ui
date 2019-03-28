@@ -1,7 +1,7 @@
 import React from 'react'
 
 const BreadCrumbs = ({ crumbs }) => (
-  <nav>
+  <nav className='breadcrumbs'>
     <ol>
       {crumbs.map(({ text, onClick, disabled }) => (
         <Crumb key={text} text={text} onClick={onClick} disabled={disabled} />
@@ -11,9 +11,12 @@ const BreadCrumbs = ({ crumbs }) => (
 )
 
 const Crumb = ({ text, onClick, disabled }) => (
-  <li>
+  <li className={crumbClass({ onClick, disabled })}>
     <a onClick={onClick && !disabled ? onClick : null}>{text}</a>
   </li>
 )
+
+const crumbClass = ({ onClick, disabled }) =>
+  onClick && !disabled ? 'breadcrumbs__crumb' : 'breadcrumbs__crumb inactive'
 
 export default BreadCrumbs

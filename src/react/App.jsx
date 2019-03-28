@@ -186,7 +186,6 @@ export default class App extends React.Component {
   ]
 
   renderPage = () => {
-    console.log(this.state.pageState)
     switch (this.state.pageState) {
       case MODELS_LIST:
         return (

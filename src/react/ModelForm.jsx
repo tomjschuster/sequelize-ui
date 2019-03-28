@@ -17,6 +17,7 @@ export default class ModelForm extends React.Component {
     const model = this.props.models.find(({ id }) => id === this.props.modelId)
 
     this.state = {
+      prevModel: { ...model },
       model: { ...model },
       newField: emptyField(),
       modelErrors: [],
@@ -179,10 +180,11 @@ export default class ModelForm extends React.Component {
         <BreadCrumbs
           crumbs={[
             { text: 'Models', onClick: this.props.goToModels },
-            { text: this.state.model.name, onClick: this.cancel },
-            { text: 'Edit Model' }
+            { text: this.state.prevModel.name, onClick: this.cancel },
+            { text: 'Edit' }
           ]}
         />
+        <h2>Edit Model</h2>
         <button onClick={this.save} disabled={this.hasErrors()}>
           Save
         </button>
