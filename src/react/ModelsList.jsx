@@ -21,9 +21,9 @@ const ModelsList = ({
   editModel,
   deleteModel
 }) => (
-  <React.Fragment>
-    <BreadCrumbs crumbs={[{ text: 'Models' }]} />
-    <h2>Models</h2>
+  <main class='main-content models-list'>
+    <BreadCrumbs crumbs={[{ text: 'Sequelize UI' }]} />
+    <h2 className='title'>Models</h2>
     <h3>Configuration</h3>
     <ul>
       <li key='config-timestamps'>
@@ -82,7 +82,7 @@ const ModelsList = ({
         </li>
       ))}
     </ul>
-  </React.Fragment>
+  </main>
 )
 
 export default ModelsList

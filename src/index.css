@@ -79,12 +79,8 @@
 }
 
 /* Breadcrumbs */
-/* .breadcrumbs {
-  padding: 1em;
-} */
-
 .breadcrumbs ol {
-  padding: 1em;
+  padding: 0;
   margin: 0;
   display: inline-block;
 }
@@ -110,4 +106,65 @@
   margin-left: 0.5em;
   color: initial;
   cursor: initial;
+}
+
+/* General Page */
+.main-content {
+  padding: 1em;
+}
+
+.title {
+  font-size: 1.5em;
+  /* font-weight: 100; */
+  margin: 1em 0 0;
+  display: inline-block;
+}
+
+.icon-button {
+  border: none;
+  padding: 0;
+  background: none;
+  font-size: 0.875em;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.toolbelt {
+  padding: 0.5em 1em;
+  border: 1px solid #ddd;
+  display: inline-block;
+  border-radius: 6px;
+}
+
+.icon-button {
+  margin-right: 1.25em;
+}
+
+.icon-button:last-of-type {
+  margin-right: 0;
+}
+
+.icon-button:hover {
+  color: var(--primary-color);
+}
+
+.back-button::before {
+  content: '\21E6'; /* LEFTWARDS WHITE ARROW */
+  margin-right: 0.3em;
+}
+
+.edit-button::before {
+  content: '\1F589'; /* Left */
+  margin-right: 0.3em;
+}
+
+.view-code-button::before {
+  content: '</>';
+  margin-right: 0.3em;
+}
+
+/* Page Specific */
+.model-view .title {
+  align-items: center;
+  margin-right: 1em;
 }

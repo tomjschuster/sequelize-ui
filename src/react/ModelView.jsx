@@ -5,13 +5,23 @@ import BreadCrumbs from './BreadCrumbs.jsx'
 import { DATA_TYPE_OPTIONS } from '../constants.js'
 
 const ModelView = ({ model, goToModels, startEditingModel }) => (
-  <React.Fragment>
+  <main class='main-content model-view'>
     <BreadCrumbs
-      crumbs={[{ text: 'Models', onClick: goToModels }, { text: model.name }]}
+      crumbs={[
+        { text: 'Sequelize UI', onClick: goToModels },
+        { text: model.name }
+      ]}
     />
-    <h2>{model.name}</h2>
-    <button onClick={goToModels}>Back</button>
-    <button onClick={startEditingModel}>Edit</button>
+    <h2 className='title'>{model.name}</h2>
+    <div className='toolbelt'>
+      <button className='icon-button back-button' onClick={goToModels}>
+        Back
+      </button>
+      <button className='icon-button edit-button' onClick={startEditingModel}>
+        Edit
+      </button>
+      <button className='icon-button view-code-button'>Code</button>
+    </div>
     <h3>Fields</h3>
     {model.fields.length === 0 ? (
       <p>No Fields</p>
@@ -25,7 +35,7 @@ const ModelView = ({ model, goToModels, startEditingModel }) => (
         ))}
       </ul>
     )}
-  </React.Fragment>
+  </main>
 )
 
 const showFieldOptions = field => {

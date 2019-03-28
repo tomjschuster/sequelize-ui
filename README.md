@@ -2,7 +2,6 @@
 
 TODO:
 - UI
-  - breadcrumbs
   - page titles
   - model configuration
   - model list
