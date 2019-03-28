@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { MAX_MODEL_NAME_LENGTH } from '../constants.js'
+import NewModelForm from './NewModelForm.jsx'
 
 const ModelsList = ({
   // State
@@ -14,7 +14,6 @@ const ModelsList = ({
   toggleSoftDeletes,
   toggleSingularTableNames,
   startCreatingNewModel,
-  inputNewModelName,
   cancelCreatingNewModel,
   createModel,
   goToModel,
@@ -63,40 +62,11 @@ const ModelsList = ({
       </li>
     </ul>
     {newModel !== null ? (
-      <form
-        onSubmit={event => {
-          event.preventDefault()
-          createModel()
-        }}
-      >
-        <strong>New Model</strong>
-        <label htmlFor='new-model-name'>Name</label>
-        <input
-          id='new-model-name'
-          type='text'
-          value={newModel.name}
-          onChange={({ target: { value } }) => inputNewModelName(value)}
-          maxLength={MAX_MODEL_NAME_LENGTH}
-        />
-        {newModel.errors.length > 0 ? (
-          <ul>
-            {newModel.errors.map(message => (
-              <li key={message}>{message}</li>
-            ))}
-          </ul>
-        ) : null}
-        <button
-          type='submit'
-          disabled={
-            newModel.name.trim().length === 0 || newModel.errors.length > 0
-          }
-        >
-          Create Model
-        </button>
-        <button type='button' onClick={cancelCreatingNewModel}>
-          Cancel
-        </button>
-      </form>
+      <NewModelForm
+        models={models}
+        onCancel={cancelCreatingNewModel}
+        onCreate={createModel}
+      />
     ) : (
       <button onClick={startCreatingNewModel}>Add a Model</button>
     )}

@@ -70,7 +70,7 @@ const common = {
 }
 
 const dev = {
-  devtool: 'eval',
+  devtool: 'source-map',
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development')
@@ -79,7 +79,6 @@ const dev = {
 }
 
 const prod = {
-  devtool: 'source-map',
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
       extractComments: true,

@@ -66,7 +66,7 @@ const initialState = () => ({
   editingModel: null
 })
 
-const buildModel = (id, model) => ({ id, ...model })
+const buildModel = (id, model) => ({ id, ...model, field: [] })
 
 const formatModel = model => ({ ...model, name: model.name.trim() })
 
@@ -168,22 +168,11 @@ export default class App extends React.Component {
     this.setState({ newModel: { ...newModel, errors } })
   }
 
-  createModel = () => {
-    const newModel = formatModel(this.state.newModel)
-    const errors = validateModel(newModel, this.state.models)
-
-    if (errors.length > 0) {
-      this.setState({ newModel: { ...newModel, errors } })
-    } else {
-      this.setState({
-        models: [
-          ...this.state.models,
-          buildModel(this.state.nextModelId, newModel)
-        ],
-        newModel: emptyModel(),
-        nextModelId: this.state.nextModelId + 1
-      })
-    }
+  createModel = ({ model }) => {
+    this.setState({
+      models: [...this.state.models, buildModel(this.state.nextModelId, model)],
+      nextModelId: this.state.nextModelId + 1
+    })
   }
 
   // Current Model Methods

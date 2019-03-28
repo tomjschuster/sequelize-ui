@@ -1,7 +1,6 @@
 # sequelize-ui
 
 TODO:
-- New model form to component
 - Separate validation/formatting
 - UI
   - breadcrumbs

@@ -15,66 +15,6 @@ import {
   MAX_MODEL_NAME_LENGTH
 } from '../constants.js'
 
-const optionToValue = value => (value === EMPTY_OPTION ? null : value)
-const formatModel = model => ({
-  ...model,
-  name: model.name.trim(),
-  fields: model.fields.map(field => formatField(field))
-})
-const formatField = field => ({ ...field, name: field.name.trim() })
-const buildField = (id, field) => ({ id, ...field })
-const validateModel = (model, models) => {
-  const errors = [
-    [
-      UNIQUE_NAME_ERROR,
-      !!models.find(
-        ({ name, id }) =>
-          Case.snake(name) === Case.snake(model.name) && id !== model.id
-      )
-    ],
-    [NAME_FORMAT_ERROR, !XRegExp(SQL_IDENTIFIER_REGEXP).test(model.name)],
-    [REQUIRED_NAME_ERROR, model.name.length === 0],
-    [
-      NAME_LENGTH_ERROR,
-      pluralize(Case.snake(model.name)).length > MAX_MODEL_NAME_LENGTH
-    ]
-  ]
-
-  console.log(errors)
-
-  return errors.filter(error => error[1]).map(error => error[0])
-}
-
-const validateField = (field, fields) => {
-  const errors = [
-    [
-      UNIQUE_NAME_ERROR,
-      !!fields.find(
-        ({ name, id }) =>
-          Case.snake(name) === Case.snake(field.name) && id !== field.id
-      )
-    ],
-    [NAME_FORMAT_ERROR, !XRegExp(SQL_IDENTIFIER_REGEXP).test(field.name)],
-    [REQUIRED_NAME_ERROR, field.name.length === 0],
-    [NAME_LENGTH_ERROR, Case.snake(field.name).length > MAX_MODEL_NAME_LENGTH],
-    [REQUIRED_TYPE_ERROR, field.type === null]
-  ]
-  console.log(errors)
-
-  return errors.filter(error => error[1]).map(error => error[0])
-}
-
-const emptyField = () => ({
-  name: '',
-  type: null,
-  primaryKey: false,
-  required: false,
-  unique: false
-})
-
-const emptyFieldErrors = fields =>
-  fields.reduce((acc, { id }) => ({ ...acc, [id]: [] }), {})
-
 export default class ModelForm extends React.Component {
   constructor (props) {
     super(props)
@@ -105,7 +45,7 @@ export default class ModelForm extends React.Component {
 
     if (!this.checkErrors(modelErrors, fieldErrors)) {
       this.props.onSave({
-        model: formatModel(this.state.model),
+        model,
         nextFieldId: this.state.nextFieldId
       })
     } else {
@@ -402,3 +342,63 @@ export default class ModelForm extends React.Component {
     )
   }
 }
+
+const optionToValue = value => (value === EMPTY_OPTION ? null : value)
+const formatModel = model => ({
+  ...model,
+  name: model.name.trim(),
+  fields: model.fields.map(field => formatField(field))
+})
+const formatField = field => ({ ...field, name: field.name.trim() })
+const buildField = (id, field) => ({ id, ...field })
+const validateModel = (model, models) => {
+  const errors = [
+    [
+      UNIQUE_NAME_ERROR,
+      !!models.find(
+        ({ name, id }) =>
+          Case.snake(name) === Case.snake(model.name) && id !== model.id
+      )
+    ],
+    [NAME_FORMAT_ERROR, !XRegExp(SQL_IDENTIFIER_REGEXP).test(model.name)],
+    [REQUIRED_NAME_ERROR, model.name.length === 0],
+    [
+      NAME_LENGTH_ERROR,
+      pluralize(Case.snake(model.name)).length > MAX_MODEL_NAME_LENGTH
+    ]
+  ]
+
+  console.log(errors)
+
+  return errors.filter(error => error[1]).map(error => error[0])
+}
+
+const validateField = (field, fields) => {
+  const errors = [
+    [
+      UNIQUE_NAME_ERROR,
+      !!fields.find(
+        ({ name, id }) =>
+          Case.snake(name) === Case.snake(field.name) && id !== field.id
+      )
+    ],
+    [NAME_FORMAT_ERROR, !XRegExp(SQL_IDENTIFIER_REGEXP).test(field.name)],
+    [REQUIRED_NAME_ERROR, field.name.length === 0],
+    [NAME_LENGTH_ERROR, Case.snake(field.name).length > MAX_MODEL_NAME_LENGTH],
+    [REQUIRED_TYPE_ERROR, field.type === null]
+  ]
+  console.log(errors)
+
+  return errors.filter(error => error[1]).map(error => error[0])
+}
+
+const emptyField = () => ({
+  name: '',
+  type: null,
+  primaryKey: false,
+  required: false,
+  unique: false
+})
+
+const emptyFieldErrors = fields =>
+  fields.reduce((acc, { id }) => ({ ...acc, [id]: [] }), {})
