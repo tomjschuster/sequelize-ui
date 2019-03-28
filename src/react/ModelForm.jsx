@@ -1,4 +1,7 @@
 import React from 'react'
+
+import BreadCrumbs from './BreadCrumbs.jsx'
+
 import * as validators from '../utils/validators.js'
 
 import {
@@ -173,6 +176,13 @@ export default class ModelForm extends React.Component {
   render () {
     return (
       <React.Fragment>
+        <BreadCrumbs
+          crumbs={[
+            { text: 'Models', onClick: this.props.goToModels },
+            { text: this.state.model.name, onClick: this.cancel },
+            { text: 'Edit Model' }
+          ]}
+        />
         <button onClick={this.save} disabled={this.hasErrors()}>
           Save
         </button>

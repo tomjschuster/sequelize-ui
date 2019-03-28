@@ -1,7 +1,6 @@
 # sequelize-ui
 
 TODO:
-- Separate validation/formatting
 - UI
   - breadcrumbs
   - page titles

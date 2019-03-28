@@ -1,8 +1,14 @@
 import React from 'react'
+
+import BreadCrumbs from './BreadCrumbs.jsx'
+
 import { DATA_TYPE_OPTIONS } from '../constants.js'
 
 const ModelView = ({ model, goToModels, startEditingModel }) => (
   <React.Fragment>
+    <BreadCrumbs
+      crumbs={[{ text: 'Models', onClick: goToModels }, { text: model.name }]}
+    />
     <button onClick={goToModels}>Back</button>
     <button onClick={startEditingModel}>Edit</button>
     <h2>{model.name}</h2>

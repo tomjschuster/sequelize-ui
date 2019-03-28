@@ -223,6 +223,7 @@ export default class App extends React.Component {
             modelId={this.state.currentModelId}
             models={this.state.models}
             nextFieldId={this.state.nextFieldId}
+            goToModels={this.goToModels}
             onSave={this.saveModel}
             onCancel={this.cancelEditingModel}
           />

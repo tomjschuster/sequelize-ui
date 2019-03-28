@@ -1,6 +1,7 @@
 import React from 'react'
 
 import NewModelForm from './NewModelForm.jsx'
+import BreadCrumbs from './BreadCrumbs.jsx'
 
 const ModelsList = ({
   // State
@@ -21,6 +22,7 @@ const ModelsList = ({
   deleteModel
 }) => (
   <React.Fragment>
+    <BreadCrumbs crumbs={[{ text: 'Models' }]} />
     <h2>Models</h2>
     <h3>Configuration</h3>
     <ul>
