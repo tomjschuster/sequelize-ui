@@ -1,7 +1,4 @@
 import React from 'react'
-import Case from 'case'
-import { pluralize } from 'inflection'
-import XRegExp from 'xregexp'
 import * as validators from '../utils/validators.js'
 
 import {
