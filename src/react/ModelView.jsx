@@ -1,10 +1,11 @@
 import React from 'react'
 
 import BreadCrumbs from './BreadCrumbs.jsx'
+import ToolBelt, { ToolBeltButton } from './ToolBelt.jsx'
 
 import { DATA_TYPE_OPTIONS } from '../constants.js'
 
-const ModelView = ({ model, goToModels, startEditingModel }) => (
+const ModelView = ({ model, goToModels, editModel }) => (
   <main class='main-content model-view'>
     <BreadCrumbs
       crumbs={[
@@ -13,36 +14,44 @@ const ModelView = ({ model, goToModels, startEditingModel }) => (
       ]}
     />
     <h2 className='title'>{model.name}</h2>
-    <div className='toolbelt'>
-      <button className='icon-button back-button' onClick={goToModels}>
-        Back
-      </button>
-      <button className='icon-button edit-button' onClick={startEditingModel}>
-        Edit
-      </button>
-      <button className='icon-button view-code-button'>Code</button>
-    </div>
+    <ToolBelt>
+      <ToolBeltButton icon='left-arrow' label='Back' onClick={goToModels} />
+      <ToolBeltButton icon='left-pencil' label='Edit' onClick={editModel} />
+      <ToolBeltButton icon='code' label='Code' />
+    </ToolBelt>
     <h3>Fields</h3>
     {model.fields.length === 0 ? (
       <p>No Fields</p>
     ) : (
-      <ul key='abc'>
-        {model.fields.map(field => (
-          <li key={field.id}>
-            {field.name} - {DATA_TYPE_OPTIONS[field.type]}{' '}
-            {showFieldOptions(field)}
-          </li>
-        ))}
-      </ul>
+      <table className='fields-table' key='abc'>
+        <thead>
+          <tr>
+            <th className='fields-table__cell'>Name</th>
+            <th className='fields-table__cell'>Type</th>
+            <th className='fields-table__cell'>Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          {model.fields.map(field => (
+            <tr key={field.id}>
+              <td className='fields-table__cell'>{field.name}</td>
+              <td className='fields-table__cell'>
+                {DATA_TYPE_OPTIONS[field.type]}
+              </td>
+              <td className='fields-table__cell'>{showFieldOptions(field)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     )}
   </main>
 )
 
 const showFieldOptions = field => {
   const options = {
-    primaryKey: 'Primary Key',
-    required: 'Required',
-    unique: 'Unique'
+    primaryKey: 'PK',
+    required: 'REQ',
+    unique: 'UQ'
   }
 
   const display = Object.entries(options)
@@ -50,7 +59,7 @@ const showFieldOptions = field => {
     .map(([_, text]) => text)
     .join(', ')
 
-  return display ? `(${display})` : ''
+  return display
 }
 
 export default ModelView

@@ -142,7 +142,7 @@ export default class App extends React.Component {
   }
 
   // Current Model Methods
-  startEditingModel = () => this.setState({ pageState: MODEL_FORM })
+  editModel = () => this.setState({ pageState: MODEL_FORM })
 
   goToModels = () =>
     this.setState({ pageState: MODELS_LIST, currentModelId: null })
@@ -213,7 +213,7 @@ export default class App extends React.Component {
               ({ id }) => id === this.state.currentModelId
             )}
             goToModels={this.goToModels}
-            startEditingModel={this.startEditingModel}
+            editModel={this.editModel}
           />
         )
       case MODEL_FORM:

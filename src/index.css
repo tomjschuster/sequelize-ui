@@ -78,6 +78,19 @@
   }
 }
 
+/* Icons */
+.icon.code::before {
+  content: '</>';
+}
+
+.icon.left-pencil::before {
+  content: '\1F589';
+}
+
+.icon.left-arrow::before {
+  content: '\21E6';
+}
+
 /* Breadcrumbs */
 .breadcrumbs ol {
   padding: 0;
@@ -108,6 +121,38 @@
   cursor: initial;
 }
 
+/* Toolbelt */
+.toolbelt {
+  border: 1px solid #ddd;
+  display: inline-block;
+  border-radius: 6px;
+}
+
+.toolbelt__button {
+  border: none;
+  background: none;
+  font-size: 0.875em;
+  display: inline-block;
+  cursor: pointer;
+  padding: 0.75em;
+}
+
+.toolbelt__button:first-of-type {
+  padding-left: 1.5em;
+}
+
+.toolbelt__button:last-of-type {
+  padding-right: 1.5em;
+}
+
+.toolbelt__button.icon::before {
+  margin-right: 0.3em;
+}
+
+.toolbelt__button:hover {
+  color: var(--primary-color);
+}
+
 /* General Page */
 .main-content {
   padding: 1em;
@@ -120,51 +165,34 @@
   display: inline-block;
 }
 
-.icon-button {
-  border: none;
-  padding: 0;
-  background: none;
-  font-size: 0.875em;
-  display: inline-block;
-  cursor: pointer;
-}
-
-.toolbelt {
-  padding: 0.5em 1em;
-  border: 1px solid #ddd;
-  display: inline-block;
-  border-radius: 6px;
-}
-
-.icon-button {
-  margin-right: 1.25em;
-}
-
-.icon-button:last-of-type {
-  margin-right: 0;
-}
-
-.icon-button:hover {
-  color: var(--primary-color);
-}
-
-.back-button::before {
-  content: '\21E6'; /* LEFTWARDS WHITE ARROW */
-  margin-right: 0.3em;
-}
-
-.edit-button::before {
-  content: '\1F589'; /* Left */
-  margin-right: 0.3em;
-}
-
-.view-code-button::before {
-  content: '</>';
-  margin-right: 0.3em;
-}
-
 /* Page Specific */
+/* View Model */
 .model-view .title {
   align-items: center;
   margin-right: 1em;
+}
+
+.fields-table {
+  border-collapse: collapse;
+  padding: 0;
+  border: 1px solid #ddd;
+  width: 80%;
+}
+
+.fields-table__cell {
+  border: 1px solid #ddd;
+  padding: 0.5em;
+  text-align: center;
+}
+
+.fields-list__item {
+  padding: 0.5em;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  width: 20em;
+  max-width: 80%;
+}
+
+.fields-list__item:last-of-type {
+  border-bottom: 1px solid #ddd;
 }
