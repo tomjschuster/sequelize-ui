@@ -2,6 +2,7 @@ import React from 'react'
 
 import NewModelForm from './NewModelForm.jsx'
 import BreadCrumbs from './BreadCrumbs.jsx'
+import Checkbox from './Checkbox.jsx'
 
 const ModelsList = ({
   // State
@@ -21,19 +22,13 @@ const ModelsList = ({
   editModel,
   deleteModel
 }) => (
-  <main class='main-content models-list'>
+  <main className='main-content models-list'>
     <BreadCrumbs crumbs={[{ text: 'Sequelize UI' }]} />
     <h2 className='title'>Models</h2>
     <h3>Configuration</h3>
     <ul>
       <li key='config-timestamps'>
-        <label htmlFor='config-timestamps'>Timestamps</label>
-        <input
-          id='config-timestamps'
-          type='checkbox'
-          checked={config.timestamps}
-          onChange={toggleTimestamps}
-        />
+        <Checkbox id='config-timestamps' label='Timestamps' checked={config.timestamps} onCheck={toggleTimestamps} />
       </li>
       <li key='config-snake'>
         <label htmlFor='config-snake'>Snake Case</label>
