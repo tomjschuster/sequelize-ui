@@ -1,19 +1,12 @@
 import React from 'react'
 
 import Button from './Button.jsx'
-import BreadCrumbs from './BreadCrumbs.jsx'
 import ToolBelt from './ToolBelt.jsx'
 
 import { DATA_TYPE_OPTIONS } from '../constants.js'
 
 const ModelView = ({ model, goToModels, editModel }) => (
   <main class='main-content model-view'>
-    <BreadCrumbs
-      crumbs={[
-        { text: 'Sequelize UI', onClick: goToModels },
-        { text: model.name }
-      ]}
-    />
     <h2 className='title'>{model.name}</h2>
     <ToolBelt>
       <Button icon='left-arrow' label='Back' onClick={goToModels} />

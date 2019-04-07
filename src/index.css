@@ -101,16 +101,40 @@
 .list {
   list-style: none;
   padding: 0;
+  margin: 0;
   border: 1px solid #ddd;
   border-radius: 9px;
 }
 
+.list__title + .list {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.list__title {
+  font-size: 1em;
+  line-height: 2.5em;
+  text-transform: uppercase;
+  margin-bottom: 0;
+  display: block;
+
+  border: 1px solid #ddd;
+  border-top-left-radius: 9px;
+  border-top-right-radius: 9px;
+  border-bottom: none;
+}
+
 .list__item {
   padding: 0.5em;
-  border: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+
+.list__item:last-of-type {
+  border-bottom: none;
 }
 
 
@@ -300,16 +324,21 @@ input.checkbox[type="checkbox"]:focus + label::before {
   text-align: center;
 }
 
+.models__title {
+  margin-top: 1em;
+}
 
-.models, .model-config {
+.models__title,
+.models,
+.model-config {
   width: 80%;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
   width: 500px;
   max-width: 80%;
 }
 
-.models-list .title {
-  display: block;
+.models {
   margin-bottom: 1em;
 }
 

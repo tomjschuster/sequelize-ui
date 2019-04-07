@@ -1,7 +1,6 @@
 import React from 'react'
 
 import NewModelForm from './NewModelForm.jsx'
-import BreadCrumbs from './BreadCrumbs.jsx'
 import Checkbox from './Checkbox.jsx'
 import Button from './Button.jsx'
 import ToolBelt from './ToolBelt.jsx'
@@ -25,8 +24,7 @@ const ModelsList = ({
   deleteModel
 }) => (
   <main className='main-content models-list'>
-    <BreadCrumbs crumbs={[{ text: 'Sequelize UI' }]} />
-    <h2 className='title'>Models</h2>
+    <h3 className='models__title list__title'>Models</h3>
     <ul className='models list'>
       {models.map(model => (
         <li className='models__item list__item' key={model.id}>
@@ -53,7 +51,7 @@ const ModelsList = ({
           </span>
         </li>
       ))}
-      <li>
+      <li className='list__item'>
         {creatingNewModel ? (
           <NewModelForm
             models={models}
