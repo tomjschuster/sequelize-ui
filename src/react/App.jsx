@@ -142,8 +142,6 @@ export default class App extends React.Component {
   }
 
   // Current Model Methods
-  editModel = () => this.setState({ pageState: MODEL_FORM })
-
   goToModels = () =>
     this.setState({ pageState: MODELS_LIST, currentModelId: null })
 

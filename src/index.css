@@ -1,6 +1,7 @@
 :root {
-  --primary-color: blue;
-  --secondary-color: green;
+  --primary-color: cornflowerblue;
+  --primary-color-dark: royalblue;
+  --secondary-color: orchid;
 }
 
 * {
@@ -95,6 +96,15 @@
 
 .button.icon--after::after {
   margin-left: 0.3em;
+}
+
+.button.primary {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.button.primary:hover {
+  background-color: var(--primary-color-dark);
 }
 
 /* List */
@@ -328,18 +338,18 @@ input.checkbox[type="checkbox"]:focus + label::before {
   margin-top: 1em;
 }
 
+.add-model {
+  display: block;
+  text-align: center;
+}
+
 .models__title,
 .models,
 .model-config {
-  width: 80%;
   margin-left: auto;
   margin-right: auto;
   width: 500px;
-  max-width: 80%;
-}
-
-.models {
-  margin-bottom: 1em;
+  max-width: 90%;
 }
 
 .model-config {

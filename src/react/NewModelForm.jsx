@@ -8,10 +8,20 @@ export default class NewModelForm extends React.Component {
   constructor (props) {
     super(props)
 
+    this.nameInput = React.createRef()
+
     this.state = {
       model: emptyModel(),
       errors: []
     }
+  }
+
+  componentDidMount () {
+    this.focusOnName()
+  }
+
+  focusOnName () {
+    this.nameInput.current.focus()
   }
 
   create = () => {
@@ -23,6 +33,7 @@ export default class NewModelForm extends React.Component {
     } else {
       this.props.onCreate({ model })
       this.setState({ model: emptyModel() })
+      this.focusOnName()
     }
   }
 
@@ -51,6 +62,7 @@ export default class NewModelForm extends React.Component {
       >
         <label htmlFor='new-model-name'>Name</label>
         <input
+          ref={this.nameInput}
           id='new-model-name'
           type='text'
           value={this.state.model.name}

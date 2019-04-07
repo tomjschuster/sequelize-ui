@@ -51,15 +51,24 @@ const ModelsList = ({
           </span>
         </li>
       ))}
-      <li className='list__item'>
+      <li className='add-model list__item'>
         {creatingNewModel ? (
           <NewModelForm
             models={models}
             onCancel={cancelCreatingNewModel}
             onCreate={createModel}
           />
+        ) : models.length > 0 ? (
+          <Button primary onClick={startCreatingNewModel}>
+            Add a Model
+          </Button>
         ) : (
-          <button onClick={startCreatingNewModel}>Add a Model</button>
+          <React.Fragment>
+            <p>You have no models</p>
+            <Button primary onClick={startCreatingNewModel}>
+              Add a Model
+            </Button>
+          </React.Fragment>
         )}
       </li>
     </ul>
