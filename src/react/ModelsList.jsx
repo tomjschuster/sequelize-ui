@@ -59,15 +59,15 @@ const ModelsList = ({
             onCreate={createModel}
           />
         ) : models.length > 0 ? (
-          <Button primary onClick={startCreatingNewModel}>
-            Add a Model
-          </Button>
+          <Button label='Add a Model' primary onClick={startCreatingNewModel} />
         ) : (
           <React.Fragment>
             <p>You have no models</p>
-            <Button primary onClick={startCreatingNewModel}>
-              Add a Model
-            </Button>
+            <Button
+              label='Add a Model'
+              primary
+              onClick={startCreatingNewModel}
+            />
           </React.Fragment>
         )}
       </li>

@@ -4,6 +4,8 @@ import * as validators from '../utils/validators.js'
 
 import { MAX_SQL_IDENTIFIER_LENGTH } from '../constants.js'
 
+import Button from './Button.jsx'
+
 export default class NewModelForm extends React.Component {
   constructor (props) {
     super(props)
@@ -55,15 +57,19 @@ export default class NewModelForm extends React.Component {
   render () {
     return (
       <form
+        className='new-model-form'
         onSubmit={event => {
           event.preventDefault()
           this.create()
         }}
       >
-        <label htmlFor='new-model-name'>Name</label>
+        <label htmlFor='new-model-name' className='new-model-form__name-label'>
+          Name
+        </label>
         <input
           ref={this.nameInput}
           id='new-model-name'
+          className='new-model-form__name'
           type='text'
           value={this.state.model.name}
           onChange={({ target: { value } }) => this.inputName(value)}
@@ -76,18 +82,27 @@ export default class NewModelForm extends React.Component {
             ))}
           </ul>
         ) : null}
-        <button
+        <Button
+          label='Add'
+          primary
           type='submit'
+          className='new-model-form__add'
+          icon='check-mark'
+          iconPosition='after'
           disabled={
             this.state.model.name.trim().length === 0 ||
             this.state.errors.length > 0
           }
-        >
-          Add
-        </button>
-        <button type='button' onClick={this.cancel}>
-          Cancel
-        </button>
+        />
+        <Button
+          label='Cancel'
+          primary
+          type='button'
+          icon='multiplication-sign'
+          iconPosition='after'
+          className='new-model-form__cancel'
+          onClick={this.cancel}
+        />
       </form>
     )
   }

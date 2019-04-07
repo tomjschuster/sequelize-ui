@@ -1,6 +1,7 @@
 import React from 'react'
 
 const Button = ({
+  className,
   label,
   icon,
   iconPosition,
@@ -10,7 +11,7 @@ const Button = ({
   ...props
 }) => (
   <button
-    className={getClass({ icon, iconPosition, primary, secondary })}
+    className={getClass({ className, icon, iconPosition, primary, secondary })}
     {...props}
   >
     {label || null}
@@ -18,8 +19,9 @@ const Button = ({
   </button>
 )
 
-const getClass = ({ icon, iconPosition, primary, secondary }) => {
+const getClass = ({ className, icon, iconPosition, primary, secondary }) => {
   const classes = [
+    className,
     'button',
     getIconClass(icon, iconPosition),
     primary ? 'primary' : null,

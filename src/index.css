@@ -1,5 +1,6 @@
 :root {
   --primary-color: cornflowerblue;
+  --primary-color-light: lightsteelblue;
   --primary-color-dark: royalblue;
   --secondary-color: orchid;
 }
@@ -105,6 +106,14 @@
 
 .button.primary:hover {
   background-color: var(--primary-color-dark);
+}
+
+.button.primary:focus {
+  border: 2px solid black;
+}
+
+.button.primary:disabled {
+  background-color: var(--primary-color-light);
 }
 
 /* List */
@@ -256,6 +265,13 @@ input.checkbox[type="checkbox"]:focus + label::before {
   content: '\21E8';
 }
 
+.icon.check-mark::before,
+.icon--before.check-mark::before,
+.icon--after.check-mark::after,
+.icon--under.check-mark::after {
+  content: '\2713';
+}
+
 
 /* Breadcrumbs */
 .breadcrumbs ol {
@@ -339,8 +355,8 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 .add-model {
-  display: block;
-  text-align: center;
+  justify-content: space-evenly;
+  height: 3em;
 }
 
 .models__title,
@@ -407,6 +423,26 @@ label.model-config__item:hover {
 
 .models__item__actions > .button:hover {
   color: var(--primary-color);
+}
+
+.new-model-form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.new-model-form__name-label {
+  line-height: 2em;
+  margin-right: 0.5em;
+}
+
+.new-model-form__name {
+  height: 2em;
+}
+
+.new-model-form__add {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 }
 
 /* View Model */
