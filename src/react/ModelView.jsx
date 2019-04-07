@@ -1,7 +1,8 @@
 import React from 'react'
 
+import Button from './Button.jsx'
 import BreadCrumbs from './BreadCrumbs.jsx'
-import ToolBelt, { ToolBeltButton } from './ToolBelt.jsx'
+import ToolBelt from './ToolBelt.jsx'
 
 import { DATA_TYPE_OPTIONS } from '../constants.js'
 
@@ -15,9 +16,9 @@ const ModelView = ({ model, goToModels, editModel }) => (
     />
     <h2 className='title'>{model.name}</h2>
     <ToolBelt>
-      <ToolBeltButton icon='left-arrow' label='Back' onClick={goToModels} />
-      <ToolBeltButton icon='left-pencil' label='Edit' onClick={editModel} />
-      <ToolBeltButton icon='code' label='Code' />
+      <Button icon='left-arrow' label='Back' onClick={goToModels} />
+      <Button icon='left-pencil' label='Edit' onClick={editModel} />
+      <Button icon='code' label='Code' />
     </ToolBelt>
     <h3>Fields</h3>
     {model.fields.length === 0 ? (

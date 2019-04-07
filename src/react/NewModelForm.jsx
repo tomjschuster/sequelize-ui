@@ -49,7 +49,6 @@ export default class NewModelForm extends React.Component {
           this.create()
         }}
       >
-        <strong>New Model</strong>
         <label htmlFor='new-model-name'>Name</label>
         <input
           id='new-model-name'
@@ -72,7 +71,7 @@ export default class NewModelForm extends React.Component {
             this.state.errors.length > 0
           }
         >
-          Create Model
+          Add
         </button>
         <button type='button' onClick={this.cancel}>
           Cancel
