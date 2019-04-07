@@ -399,23 +399,6 @@ label.model-config__item:hover {
 }
 
 
-
-@media (min-width: 700px) {
-  /* input.model-config__item {
-    display: inline-block;
-  }
-
-  .model-config .toolbelt__title {
-    display: inline-block;
-    margin: 0;
-  }
-
-  .model-config .toolbelt__title::after {
-    content: ":";
-  } */
-}
-
-
 .models__item {
   padding: 0 0.5em;
 }
@@ -441,11 +424,42 @@ label.model-config__item:hover {
 
 .new-model-form__name {
   height: 2em;
+  text-align: center;
 }
 
 .new-model-form__add {
   margin-left: 0.5em;
   margin-right: 0.5em;
+}
+
+@media (max-width: 600px) {
+  .new-model-form__add.button,
+  .new-model-form__cancel.button {
+    color: transparent;
+    width: 2em;
+  }
+
+  .new-model-form__add.button::after {
+    color: #fff;
+    margin-left: -1.75em;
+  }
+
+  .new-model-form__cancel.button::after {
+    color: #fff;
+    margin-left: -3em;
+  }
+  /* input.model-config__item {
+    display: inline-block;
+  }
+
+  .model-config .toolbelt__title {
+    display: inline-block;
+    margin: 0;
+  }
+
+  .model-config .toolbelt__title::after {
+    content: ":";
+  } */
 }
 
 /* View Model */

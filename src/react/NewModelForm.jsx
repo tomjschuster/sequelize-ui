@@ -63,15 +63,16 @@ export default class NewModelForm extends React.Component {
           this.create()
         }}
       >
-        <label htmlFor='new-model-name' className='new-model-form__name-label'>
+        {/* <label htmlFor='new-model-name' className='new-model-form__name-label'>
           Name
-        </label>
+        </label> */}
         <input
           ref={this.nameInput}
           id='new-model-name'
           className='new-model-form__name'
           type='text'
           value={this.state.model.name}
+          placeholder='Name'
           onChange={({ target: { value } }) => this.inputName(value)}
           maxLength={MAX_SQL_IDENTIFIER_LENGTH}
         />
