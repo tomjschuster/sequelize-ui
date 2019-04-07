@@ -27,6 +27,44 @@ const ModelsList = ({
   <main className='main-content models-list'>
     <BreadCrumbs crumbs={[{ text: 'Sequelize UI' }]} />
     <h2 className='title'>Models</h2>
+    <ul className='models list'>
+      {models.map(model => (
+        <li className='models__item list__item' key={model.id}>
+          <span className='list__item__content'>{model.name}</span>
+          <span className='models__item__actions list__item__actions'>
+            <Button
+              icon='right-arrow'
+              iconPosition='under'
+              onClick={() => goToModel(model.id)}
+              label='Go'
+            />
+            <Button
+              icon='left-pencil'
+              iconPosition='under'
+              onClick={() => editModel(model.id)}
+              label='Edit'
+            />
+            <Button
+              icon='multiplication-sign'
+              iconPosition='under'
+              onClick={() => deleteModel(model.id)}
+              label='Delete'
+            />
+          </span>
+        </li>
+      ))}
+      <li>
+        {creatingNewModel ? (
+          <NewModelForm
+            models={models}
+            onCancel={cancelCreatingNewModel}
+            onCreate={createModel}
+          />
+        ) : (
+          <button onClick={startCreatingNewModel}>Add a Model</button>
+        )}
+      </li>
+    </ul>
     <ToolBelt className='model-config' title='Options'>
       <Checkbox
         id='config-timestamps'
@@ -57,27 +95,6 @@ const ModelsList = ({
         onCheck={toggleSingularTableNames}
       />
     </ToolBelt>
-    <ul>
-      {models.map(model => (
-        <li key={model.id}>
-          {model.name}
-          <Button onClick={() => goToModel(model.id)} label='View' />
-          <Button onClick={() => editModel(model.id)} label='Edit' />
-          <Button onClick={() => deleteModel(model.id)} label='Delete' />
-        </li>
-      ))}
-      <li>
-        {creatingNewModel ? (
-          <NewModelForm
-            models={models}
-            onCancel={cancelCreatingNewModel}
-            onCreate={createModel}
-          />
-        ) : (
-          <button onClick={startCreatingNewModel}>Add a Model</button>
-        )}
-      </li>
-    </ul>
   </main>
 )
 

@@ -4,7 +4,8 @@
 }
 
 * {
-  font-family: 'Lato', sans-serif;;
+  font-family: 'Lato', sans-serif;
+  box-sizing: border-box;
 }
 
 /* Top Bar */
@@ -85,7 +86,37 @@
   font-size: 0.875em;
   display: inline-block;
   cursor: pointer;
-  padding: 0.75em;
+  padding: 0.5em;
+}
+
+.button.icon--before::before {
+  margin-right: 0.3em;
+}
+
+.button.icon--after::after {
+  margin-left: 0.3em;
+}
+
+/* List */
+.list {
+  list-style: none;
+  padding: 0;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+}
+
+.list__item {
+  padding: 0.5em;
+  border: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.list__item__actions > * {
+  width: 3.5em;
+  /* display: inline-block; */
 }
 
 /* Checkbox */
@@ -152,23 +183,51 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 /* Icons */
-.icon.code::before {
+.icon--under::after {
+  display: block;
+}
+
+.icon.code::before,
+.icon--before.code::before,
+.icon--after.code::after,
+.under--after.code::after {
   content: '</>';
 }
 
-.icon.left-pencil::before {
-  content: '\1F589';
+.icon.left-pencil::before,
+.icon--before.left-pencil::before,
+.icon--after.left-pencil::after,
+.icon--under.left-pencil::after {
+  content: '\270E';
 }
 
-.icon.left-arrow::before {
+.icon.left-arrow::before,
+.icon--before.left-arrow::before,
+.icon--after.left-arrow::after,
+.icon--under.left-arrow::after {
   content: '\21E6';
 }
+
+.icon.multiplication-sign::before,
+.icon--before.multiplication-sign::before,
+.icon--after.multiplication-sign::after,
+.icon--under.multiplication-sign::after {
+  content: '\00D7';
+}
+
+.icon.right-arrow::before,
+.icon--before.right-arrow::before,
+.icon--after.right-arrow::after,
+.icon--under.right-arrow::after {
+  content: '\21E8';
+}
+
 
 /* Breadcrumbs */
 .breadcrumbs ol {
   padding: 0;
   margin: 0;
-  display: inline-block;
+  float: left;
 }
 
 .breadcrumbs__crumb {
@@ -213,10 +272,6 @@ input.checkbox[type="checkbox"]:focus + label::before {
   padding-right: 1.5em;
 }
 
-.toolbelt .button.icon::before {
-  margin-right: 0.3em;
-}
-
 .toolbelt .button:hover {
   color: var(--primary-color);
 }
@@ -241,6 +296,18 @@ input.checkbox[type="checkbox"]:focus + label::before {
 
 /* Page Specific */
 /* Models List */
+.models-list {
+  text-align: center;
+}
+
+
+.models, .model-config {
+  width: 80%;
+  margin: 0 auto;
+  width: 500px;
+  max-width: 80%;
+}
+
 .models-list .title {
   display: block;
   margin-bottom: 1em;
@@ -250,6 +317,8 @@ input.checkbox[type="checkbox"]:focus + label::before {
   list-style: none;
   padding: 0.75em;
   display: inline-block;
+  margin-top: 2em;
+  text-align: left;
 }
 
 input.model-config__item {
@@ -268,12 +337,13 @@ label.model-config__item:hover {
 
 .model-config .toolbelt__title {
   display: block;
+  text-align: center;
 }
 
 
 
 @media (min-width: 700px) {
-  input.model-config__item {
+  /* input.model-config__item {
     display: inline-block;
   }
 
@@ -284,8 +354,22 @@ label.model-config__item:hover {
 
   .model-config .toolbelt__title::after {
     content: ":";
-  }
+  } */
 }
+
+
+.models__item {
+  padding: 0 0.5em;
+}
+
+.models__item {
+  padding: 0 0.5em;
+}
+
+.models__item__actions > .button:hover {
+  color: var(--primary-color);
+}
+
 /* View Model */
 .model-view .title {
   align-items: center;
