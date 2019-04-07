@@ -164,48 +164,48 @@
 
 /* Checkbox */
 .checkbox {
-  line-height: 24px;
-  font-size: 16px;
+  line-height: 1.5em;
+  font-size: 1em;
 }
 
 input.checkbox[type="checkbox"] {
-  width: 0px;
-  height: 0px;
+  width: 0;
+  height: 0;
 }
 
 label.checkbox::before {
   content: "";
   display: inline-block;
 
-  height: 16px;
-  width: 16px;
+  height: 1em;
+  width: 1em;
   
   border: 1px solid;
 
-  left: 0px;
-  top: 3px;
+  left: 0;
+  top: 0.25em;
 }
 
 label.checkbox::after {
   content: "";
   display: inline-block;
 
-  height: 6px;
-  width: 9px;
+  height: 0.25em;
+  width: 0.5em;
   border-left: 2px solid;
   border-bottom: 2px solid;
 
   transform: rotate(-45deg);
 
-  left: 4px;
-  top: 7px;
+  left: 0.3em;
+  top: 0.5em;
 }
 
 label.checkbox {
   position: relative;
   display: inline-block;
 
-  padding-left: 22px;
+  padding-left: 1.5em;
 }
 
 label.checkbox::before,
@@ -389,6 +389,9 @@ label.model-config__item:hover {
   color: var(--primary-color);
 }
 
+.model-config__item {
+  margin-bottom: 0.25em;
+}
 
 .model-config .toolbelt__title {
   display: block;
@@ -422,7 +425,7 @@ label.model-config__item:hover {
 }
 
 .models__item__actions > .button:hover {
-  color: var(--primary-color);
+  color: var(--secondary-color);
 }
 
 .new-model-form {
