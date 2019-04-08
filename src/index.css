@@ -512,6 +512,7 @@ label.model-config__item:hover {
   width: 800px;
   max-width: 95%;
   margin: 0 auto;
+  border: none;
 }
 
 .new-field {
