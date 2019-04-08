@@ -6,7 +6,7 @@ import ToolBelt from './ToolBelt.jsx'
 import { DATA_TYPE_OPTIONS } from '../constants.js'
 
 const ModelView = ({ model, goToModels, editModel }) => (
-  <main class='main-content model-view'>
+  <main className='main-content model-view'>
     <h2 className='title'>{model.name}</h2>
     <ToolBelt>
       <Button icon='left-arrow' label='Back' onClick={goToModels} />

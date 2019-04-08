@@ -123,7 +123,13 @@ export default class App extends React.Component {
 
   goToModel = id => this.setState({ pageState: MODEL_VIEW, currentModelId: id })
 
-  editModel = id => this.setState({ pageState: MODEL_FORM, currentModelId: id })
+  editModel = id =>
+    this.setState({
+      pageState: MODEL_FORM,
+      currentModelId: id || this.state.currentModelId
+    })
+
+  editCurrentModel = () => this.setState({ pageState: MODEL_FORM })
 
   deleteModel = id =>
     this.setState({
@@ -211,7 +217,7 @@ export default class App extends React.Component {
               ({ id }) => id === this.state.currentModelId
             )}
             goToModels={this.goToModels}
-            editModel={this.editModel}
+            editModel={this.editCurrentModel}
           />
         )
       case MODEL_FORM:

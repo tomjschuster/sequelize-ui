@@ -83,7 +83,7 @@ const ModelsList = ({
       <Checkbox
         id='config-snake'
         className='model-config__item'
-        label='Snake'
+        label='snake_case'
         checked={config.snake}
         onCheck={toggleSnake}
       />
