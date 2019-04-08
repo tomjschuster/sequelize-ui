@@ -15,6 +15,9 @@ export default class ModelForm extends React.Component {
   constructor (props) {
     super(props)
 
+    this.modelNameInput = React.createRef()
+    this.newFieldNameInput = React.createRef()
+
     const model = this.props.models.find(({ id }) => id === this.props.modelId)
 
     this.state = {
@@ -25,6 +28,17 @@ export default class ModelForm extends React.Component {
       newFieldErrors: [],
       fieldErrors: emptyFieldErrors(model.fields),
       nextFieldId: this.props.nextFieldId
+    }
+  }
+
+  componentDidMount () {
+    this.modelNameInput.current.focus()
+  }
+
+  componentDidUpdate (prevState) {
+    console.log(prevState.newField, this.state.newField)
+    if (!prevState.newField && this.state.newField) {
+      this.newFieldNameInput.current.focus()
     }
   }
 
@@ -70,9 +84,7 @@ export default class ModelForm extends React.Component {
   // New Field
   startCreatingField = () => this.setState({ newField: emptyField() })
   cancelCreatingField = () => this.setState({ newField: null })
-
   inputNewFieldName = name => this.mapNewField(field => ({ ...field, name }))
-
   selectNewFieldType = type => this.mapNewField(field => ({ ...field, type }))
 
   toggleNewFieldPrimaryKey = primaryKey =>
@@ -179,17 +191,17 @@ export default class ModelForm extends React.Component {
 
   render () {
     return (
-      <main class='main-content'>
+      <main className='main-content'>
         <h3 className='title'>Edit Model</h3>
         <form
           onSubmit={evt => {
             evt.preventDefault()
-            this.save()
           }}
         >
           <fieldset className='edit-model__model-set'>
             <label htmlFor='editing-model-name'>Name</label>
             <input
+              ref={this.modelNameInput}
               id='editing-model-name'
               type='text'
               value={this.state.model.name}
@@ -197,6 +209,7 @@ export default class ModelForm extends React.Component {
             />
             <Button
               primary
+              type='submit'
               icon='floppy-disk'
               label='Save'
               onClick={this.save}
@@ -309,6 +322,7 @@ export default class ModelForm extends React.Component {
                   <div className='new-field__item new-field__name'>
                     <label htmlFor='new-field-name'>Name</label>
                     <input
+                      ref={this.newFieldNameInput}
                       id='new-field-name'
                       type='text'
                       value={this.state.newField.name}
