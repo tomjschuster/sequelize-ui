@@ -191,21 +191,13 @@ export default class ModelForm extends React.Component {
   render () {
     return (
       <main className='main-content'>
-        <h3 className='title'>Edit Model</h3>
+        <h2 className='title'>Edit {this.state.prevModel.name} Model</h2>
         <form
           onSubmit={evt => {
             evt.preventDefault()
           }}
         >
-          <fieldset className='edit-model__model-set'>
-            <label htmlFor='editing-model-name'>Name</label>
-            <input
-              ref={this.modelNameInput}
-              id='editing-model-name'
-              type='text'
-              value={this.state.model.name}
-              onChange={evt => this.inputModelName(evt.target.value)}
-            />
+          <fieldset className='edit-model__actions'>
             <Button
               primary
               type='submit'
@@ -220,6 +212,19 @@ export default class ModelForm extends React.Component {
               label='Cancel'
               onClick={this.cancel}
             />
+          </fieldset>
+          <fieldset className='edit-model__model'>
+            <div className='edit-model-name'>
+              <label htmlFor='editing-model-name'>Name</label>
+              <input
+                ref={this.modelNameInput}
+                id='editing-model-name'
+                className='edit-model-name'
+                type='text'
+                value={this.state.model.name}
+                onChange={evt => this.inputModelName(evt.target.value)}
+              />
+            </div>
             {this.hasModelErrors() ? (
               <ul>
                 {this.state.modelErrors.map(error => (
@@ -229,84 +234,76 @@ export default class ModelForm extends React.Component {
             ) : null}
           </fieldset>
           <fieldset className='edit-model__fields-set'>
-            <h3>Fields</h3>
+            <h3 className='subtitle'>Fields</h3>
             <ul className='edit-model__fields list'>
               {this.state.model.fields.map(field => (
-                <li className='list__item' key={field.id}>
-                  <label htmlFor={`editing-field-name-${field.id}`}>Name</label>
-                  <input
-                    id={`editing-field-name-${field.id}`}
-                    type='text'
-                    value={field.name}
-                    onChange={evt =>
-                      this.inputFieldName(field.id, evt.target.value)
-                    }
-                  />
-                  <label htmlFor={`editing-field-type-${field.id}`}>Type</label>
-                  <select
-                    id={`editing-field-type-${field.id}`}
-                    default={field.type || EMPTY_OPTION}
-                    value={field.type || EMPTY_OPTION}
-                    onChange={evt =>
-                      this.selectFieldType(
-                        field.id,
-                        optionToValue(evt.target.value)
-                      )
-                    }
-                  >
-                    {Object.entries(DATA_TYPE_OPTIONS).map(([value, text]) => (
-                      <option key={value} value={value}>
-                        {text}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor={`editing-field-primary-key-${field.id}`}>
-                    PK
-                  </label>
-                  <input
-                    id={`editing-field-primary-key-${field.id}`}
-                    type='checkbox'
-                    checked={field.primaryKey}
-                    onChange={evt =>
-                      this.toggleEditingFieldPrimaryKey(
-                        field.id,
-                        evt.target.checked
-                      )
-                    }
-                  />
-                  <label htmlFor={`editing-field-unique-${field.id}`}>
-                    Unique
-                  </label>
-                  <input
-                    id={`editing-field-unique-${field.id}`}
-                    type='checkbox'
-                    checked={field.unique}
-                    onChange={evt =>
-                      this.toggleEditingFieldUnique(
-                        field.id,
-                        evt.target.checked
-                      )
-                    }
-                  />
-                  <label htmlFor={`editing-field-required-${field.id}`}>
-                    Required
-                  </label>
-                  <input
-                    id={`editing-field--required-${field.id}`}
-                    type='checkbox'
-                    checked={field.required}
-                    onChange={evt =>
-                      this.toggleEditingFieldRequired(
-                        field.id,
-                        evt.target.checked
-                      )
-                    }
-                  />
-                  <Button
-                    primary
-                    label='Delete'
-                    onClick={() => this.deleteField(field.id)}
-                  />
+                <li className='new-field list__item' key={field.id}>
+                  <div className='new-field__item new-field__name'>
+                    <label htmlFor={`new-field-name-${field.id}`}>Name</label>
+                    <input
+                      id={`new-field-name-${field.id}`}
+                      type='text'
+                      value={field.name}
+                      onChange={evt =>
+                        this.inputFieldName(field.id, evt.target.value)
+                      }
+                    />
+                  </div>
+                  <div className='new-field__item new-field__type'>
+                    <label htmlFor={`new-field-type-${field.id}`}>Type</label>
+                    <select
+                      id={`new-field-type-${field.id}`}
+                      default={field.type || EMPTY_OPTION}
+                      value={field.type || EMPTY_OPTION}
+                      onChange={evt =>
+                        this.selectFieldType(
+                          field.id,
+                          optionToValue(evt.target.value)
+                        )
+                      }
+                    >
+                      {Object.entries(DATA_TYPE_OPTIONS).map(
+                        ([value, text]) => (
+                          <option key={value} value={value}>
+                            {text}
+                          </option>
+                        )
+                      )}
+                    </select>
+                  </div>
+                  <div className='new-field__item new-field__options'>
+                    <Checkbox
+                      label='Primary Key'
+                      checked={field.primaryKey}
+                      onCheck={checked =>
+                        this.toggleEditingFieldPrimaryKey(field.id, checked)
+                      }
+                    />
+                    <Checkbox
+                      label='Unique'
+                      checked={field.unique}
+                      onCheck={checked =>
+                        this.toggleEditingFieldUnique(field.id, checked)
+                      }
+                    />
+                    <Checkbox
+                      label='Required'
+                      checked={field.required}
+                      onCheck={checked =>
+                        this.toggleEditingFieldRequired(field.id, checked)
+                      }
+                    />
+                  </div>
+                  <div className='new-field__item new-field__actions'>
+                    <Button
+                      primary
+                      className='delete-field-button'
+                      icon='multiplication-sign'
+                      iconPosition='after'
+                      label='Delete'
+                      onClick={() => this.deleteField(field.id)}
+                    />
+                  </div>
                   {this.fieldHasErrors(field.id) ? (
                     <ul>
                       {this.state.fieldErrors[field.id].map(error => (
@@ -370,7 +367,6 @@ export default class ModelForm extends React.Component {
                       onCheck={this.toggleNewFieldRequired}
                     />
                   </div>
-
                   <div className='new-field__item new-field__actions'>
                     <Button
                       icon='check-mark'
@@ -402,13 +398,15 @@ export default class ModelForm extends React.Component {
                   ) : null}
                 </li>
               ) : (
-                <Button
-                  iconPosition='after'
-                  primary
-                  label='Add a Field'
-                  type='button'
-                  onClick={this.startCreatingField}
-                />
+                <li className='add-new-field list__item'>
+                  <Button
+                    iconPosition='after'
+                    primary
+                    label='Add a Field'
+                    type='button'
+                    onClick={this.startCreatingField}
+                  />
+                </li>
               )}
             </ul>
           </fieldset>

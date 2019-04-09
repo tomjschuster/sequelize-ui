@@ -156,6 +156,10 @@
   font-size: 1em;
 }
 
+.checkbox:hover {
+  cursor: pointer;
+}
+
 input.checkbox[type="checkbox"] {
   width: 0;
   height: 0;
@@ -318,7 +322,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 .toolbelt .button:hover {
-  color: var(--primary-color);
+  color: var(--secondary-color);
 }
 
 .toolbelt__title {
@@ -327,12 +331,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
   text-transform: uppercase;
 }
 
-/* General Page */
-.main-content {
-  /* padding: 1em; */
-}
-
-.title {
+/* General Page */.title {
   font-size: 1.25em;
   margin: 1em 0;
   text-align: center;
@@ -388,7 +387,7 @@ label.model-config__item {
 }
 
 label.model-config__item:hover {
-  color: var(--primary-color);
+  color: var(--secondary-color);
 }
 
 .model-config__item {
@@ -514,7 +513,8 @@ label.model-config__item:hover {
 }
 
 /* Model Form */
-.edit-model__model-set,
+.edit-model__actions,
+.edit-model__model,
 .edit-model__fields-set {
   width: 800px;
   max-width: 95%;
@@ -523,10 +523,53 @@ label.model-config__item:hover {
   border: none;
 }
 
+.edit-model__actions {
+  text-align: center;
+}
+
+.edit-model__actions .button {
+  width: 150px;
+}
+
+.edit-model__actions .button:first-child {
+  margin-right: 0.5em;
+}
+
+.edit-model__actions .button:last-child {
+  margin-left: 0.5em;
+}
+
+.edit-model__actions, .edit-model__model {
+  margin: 1.5em 0;
+}
+
+.edit-model__model {
+  text-align: center;
+}
+
+.edit-model__model {
+  font-size: 1.25em;
+}
+
+.edit-model__model label {
+  font-size: 1.25rem;
+  margin-right: 0.5em;
+}
+
+
 .new-field {
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: auto;
+}
+
+.add-new-field {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.add-new-field button {
+  width: 150px;
 }
 
 .new-field__item {
@@ -635,3 +678,6 @@ label.checkbox {
   }
 }
 
+.delete-field-button {
+  width: 150px;
+}
