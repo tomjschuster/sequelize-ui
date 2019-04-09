@@ -346,11 +346,17 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 .title {
-  font-size: 1.5em;
-  /* font-weight: 100; */
-  margin: 1em 0 0;
+  font-size: 1.25em;
+  margin: 1em 0;
   text-align: center;
-  /* display: inline-block; */
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-size: 1em;
+  margin: 1em 0;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 /* Page Specific */
@@ -476,22 +482,27 @@ label.model-config__item:hover {
   text-align: center;
 }
 
-
 .model-view .title {
-  margin-bottom: 1em;
+  margin: 1.5em 0;
+}
+
+.fields-title {
+  margin: 1.5em 0;
 }
 
 .fields-table {
   border-collapse: collapse;
   padding: 0;
   border: 1px solid #ddd;
-  width: 80%;
+  width: 90%;
+  margin: 0 auto;
 }
 
 .fields-table__cell {
   border: 1px solid #ddd;
   padding: 0.5em;
   text-align: center;
+  overflow-wrap: break-word;
 }
 
 .fields-list__item {
@@ -504,6 +515,15 @@ label.model-config__item:hover {
 
 .fields-list__item:last-of-type {
   border-bottom: 1px solid #ddd;
+}
+
+.fields-table__name-header {
+  max-width: 60%;
+}
+
+.fields-table__name-cell {
+  max-width: 60%;
+  word-break: break-all;
 }
 
 /* Model Form */
@@ -611,7 +631,7 @@ label.checkbox {
     grid-row-start: 1;
     grid-row-end: 1;
   }
-  
+
   
   .new-field__options {
     grid-column-start: 1;

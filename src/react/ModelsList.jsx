@@ -72,7 +72,7 @@ const ModelsList = ({
         )}
       </li>
     </ul>
-    <ToolBelt className='model-config' title='Options'>
+    <ToolBelt className='model-config' title='Database Options'>
       <Checkbox
         id='config-timestamps'
         className='model-config__item'

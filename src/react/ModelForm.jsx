@@ -36,7 +36,6 @@ export default class ModelForm extends React.Component {
   }
 
   componentDidUpdate (prevState) {
-    console.log(prevState.newField, this.state.newField)
     if (!prevState.newField && this.state.newField) {
       this.newFieldNameInput.current.focus()
     }

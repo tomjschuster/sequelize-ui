@@ -2,10 +2,9 @@
 
 TODO:
 - UI
-  - page titles
-  - model configuration
-  - model list
   - new model form
+  - page titles
+- Code Preview
 - Associations
 - Refactor
 - Migrations
