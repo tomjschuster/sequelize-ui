@@ -5,9 +5,32 @@
   --secondary-color: orchid;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 * {
   font-family: 'Lato', sans-serif;
   box-sizing: border-box;
+}
+
+#react-app {
+  min-height: 100%;
+  position: relative;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 3em;
+  text-align: center;
+}
+
+.footer__reset:hover {
+  color: var(--secondary-color);
 }
 
 /* Top Bar */
@@ -540,7 +563,7 @@ label.model-config__item:hover {
 }
 
 .edit-model__actions, .edit-model__model {
-  margin: 1.5em 0;
+  margin: 1.5em auto;
 }
 
 .edit-model__model {
@@ -555,7 +578,6 @@ label.model-config__item:hover {
   font-size: 1.25rem;
   margin-right: 0.5em;
 }
-
 
 .new-field {
   display: grid;
