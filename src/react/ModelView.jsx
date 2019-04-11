@@ -1,11 +1,12 @@
 import React from 'react'
 
+import * as sequelize4 from '../templates/sequelize-4.js'
 import Button from './Button.jsx'
 import ToolBelt from './ToolBelt.jsx'
 
 import { DATA_TYPE_OPTIONS } from '../constants.js'
 
-const ModelView = ({ model, goToModels, editModel }) => (
+const ModelView = ({ model, config, goToModels, editModel }) => (
   <main className='main-content model-view'>
     <h2 className='title'>{model.name} Model</h2>
     <ToolBelt>
@@ -42,6 +43,11 @@ const ModelView = ({ model, goToModels, editModel }) => (
         </tbody>
       </table>
     )}
+    <pre className='model-code-preview'>
+      <code className='language-js'>
+        {sequelize4.modelFile({ model, config }).content}
+      </code>
+    </pre>
   </main>
 )
 

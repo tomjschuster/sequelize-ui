@@ -535,6 +535,10 @@ label.model-config__item:hover {
   word-break: break-all;
 }
 
+.model-code-preview {
+  text-align: left;
+}
+
 /* Model Form */
 .edit-model__actions,
 .edit-model__model,

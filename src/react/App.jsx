@@ -217,6 +217,7 @@ export default class App extends React.Component {
             model={this.state.models.find(
               ({ id }) => id === this.state.currentModelId
             )}
+            config={this.state.config}
             goToModels={this.goToModels}
             editModel={this.editCurrentModel}
           />

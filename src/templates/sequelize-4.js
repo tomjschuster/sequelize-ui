@@ -30,14 +30,14 @@ export const files = ({ models = [], config: { name, dialect }, config }) => ({
   ]
 })
 
-const modelFile = ({ model, config }) => ({
+export const modelFile = ({ model, config }) => ({
   name: `${modelFileName(model.name)}.js`,
   content: modelTemplate({ model, config })
 })
 
 // DB
 
-const dbTemplate = ({ models = [], config = {} }) =>
+export const dbTemplate = ({ models = [], config = {} }) =>
   `'use strict';
 
 const Sequelize = require('sequelize');
