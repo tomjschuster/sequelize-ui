@@ -1,13 +1,19 @@
 # sequelize-ui
 
-[Demo App](http://sequelizeui.herokuapp.com/) (you may have to reload to wake up app, since it's on free hosting with heroku)
 
-[Demo Video](https://www.youtube.com/watch?v=aHT6S81YvwE)
+## [Version 0.1](https://github.com/tomjschuster/sequelize-ui/tree/0.1.0)
+[Demo App](http://sequelizeui.herokuapp.com/)	
 
+[Demo Video](https://www.youtube.com/watch?v=aHT6S81YvwE)	
+
+
+## Version 0.2 (master, coming soon)
 TODO:
-- Format editing fields
-- Name validation errors
-- Implement all table configuration
-- Revisit field validations
-- Filter fields for local storage
-- Google Analytics
+- Code Preview for entire project
+- Icons
+
+## Future enhancements
+- Associations
+- Migrations
+- Sequelize v5 templates
+- Multiple Projects

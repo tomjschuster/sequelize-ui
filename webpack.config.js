@@ -12,15 +12,12 @@ const common = {
     filename: 'app.[hash].js'
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
-    alias: {
-      '../../theme.config$': path.join(__dirname, 'src/style/theme.config')
-    }
+    extensions: ['.js', '.jsx']
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
@@ -32,18 +29,8 @@ const common = {
         }
       },
       {
-        test: /\.less$/,
-        use: ExtractTextPlugin.extract({
-          use: ['css-loader', 'less-loader'],
-          fallback: 'style-loader'
-        })
-      },
-      {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          { loader: 'css-loader' }
-        ]
+        use: ['style-loader', { loader: 'css-loader' }]
       },
       {
         test: /\.jpe?g$|\.gif$|\.ico$|\.png$|\.svg$/,
@@ -83,7 +70,7 @@ const common = {
 }
 
 const dev = {
-  devtool: 'eval',
+  devtool: 'source-map',
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development')
@@ -92,7 +79,6 @@ const dev = {
 }
 
 const prod = {
-  devtool: 'source-map',
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
       extractComments: true,

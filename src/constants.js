@@ -1,86 +1,37 @@
-export const RELATIONSHIPS = {
-  BELONGS_TO: 'BELONGS_TO',
-  HAS_ONE: 'HAS_ONE',
-  HAS_MANY: 'HAS_MANY',
-  BELONGS_TO_MANY: 'BELONGS_TO_MANY'
+export const SQL_IDENTIFIER_REGEXP = '^([\\p{L}_][\\p{L}\\p{N}$_ ]*)?$'
+
+export const MAX_SQL_IDENTIFIER_LENGTH = 63
+
+export const DATA_TYPES = {
+  STRING: 'STRING',
+  TEXT: 'TEXT',
+  INTEGER: 'INTEGER',
+  FLOAT: 'FLOAT',
+  REAL: 'REAL',
+  DOUBLE: 'DOUBLE',
+  DECIMAL: 'DECIMAL',
+  DATE: 'DATE',
+  DATEONLY: 'DATEONLY',
+  BOOLEAN: 'BOOLEAN',
+  ARRAY: 'ARRAY',
+  JSON_: 'JSON_',
+  BLOB: 'BLOB',
+  UUID: 'UUID'
 }
 
-export const displayRelationship = relationship => {
-  switch (relationship) {
-    case RELATIONSHIPS.BELONGS_TO: return 'Belongs To'
-    case RELATIONSHIPS.HAS_ONE: return 'Has One'
-    case RELATIONSHIPS.HAS_MANY: return 'Has Many'
-    case RELATIONSHIPS.BELONGS_TO_MANY: return 'Belongs To Many'
-    default: return undefined
-  }
-}
-
-export const relationshipKey = relationship => {
-  switch (relationship) {
-    case RELATIONSHIPS.BELONGS_TO: return 'belongsTo'
-    case RELATIONSHIPS.HAS_ONE: return 'hasOne'
-    case RELATIONSHIPS.HAS_MANY: return 'hasMany'
-    case RELATIONSHIPS.BELONGS_TO_MANY: return 'belongsToMany'
-    default: return undefined
-  }
-}
-
-export const METHODS = {
-  HOOKS: 'HOOKS',
-  GETTER_METHODS: 'GETTER_METHODS',
-  SETTER_METHODS: 'SETTER_METHODS'
-}
-
-export const displayMethod = method => {
-  switch (method) {
-    case METHODS.HOOKS: return 'Hooks'
-    case METHODS.GETTER_METHODS: return 'Getter Methods'
-    case METHODS.SETTER_METHODS: return 'Setter Methods'
-    default: return undefined
-  }
-}
-
-export const methodKey = method => {
-  switch (method) {
-    case METHODS.HOOKS: return 'hooks'
-    case METHODS.GETTER_METHODS: return 'getterMethods'
-    case METHODS.SETTER_METHODS: return 'setterMethods'
-    default: return undefined
-  }
-}
-
-export const OPTIONS = {
-  TABLE_NAME: 'TABLE_NAME',
-  NAME: 'NAME',
-  SINGULAR: 'SINGULAR',
-  PLURAL: 'PLURAL',
-  FREEZE_TABLE_NAME: 'FREEZE_TABLE_NAME',
-  UNDERSCORED_COLUMNS: 'UNDERSCORED_COLUMNS',
-  UNDERSCORED_TABLE_NAME: 'UNDERSCORED_TABLE_NAME'
-}
-
-export const displayOption = option => {
-  switch (option) {
-    case OPTIONS.TABLE_NAME: return 'Table Name'
-    case OPTIONS.Name: return 'Name'
-    case OPTIONS.SINGULAR: return 'Singular Name'
-    case OPTIONS.PLURAL: return 'Plural Name'
-    case OPTIONS.FREEZE_TABLE_NAME: return 'Freeze Table Name'
-    case OPTIONS.UNDERSCORED_COLUMNS: return 'Underscore Column Names'
-    case OPTIONS.UNDERSCORED_TABLE_NAME: return 'Underscore Table Name'
-    default: return undefined
-  }
-}
-
-export const optionKey = option => {
-  switch (option) {
-    case OPTIONS.TABLE_NAME: return 'tableName'
-    case OPTIONS.NAME: return 'name'
-    case OPTIONS.SINGULAR: return 'singular'
-    case OPTIONS.PLURAL: return 'plural'
-    case OPTIONS.FREEZE_TABLE_NAME: return 'freezeTableName'
-    case OPTIONS.UNDERSCORED_COLUMNS: return 'underscored'
-    case OPTIONS.UNDERSCORED_TABLE_NAME: return 'underscoredAll'
-    default: return undefined
-  }
+export const DATA_TYPE_OPTIONS = {
+  [DATA_TYPES.STRING]: 'String',
+  [DATA_TYPES.TEXT]: 'Text',
+  [DATA_TYPES.INTEGER]: 'Integer',
+  [DATA_TYPES.FLOAT]: 'Float',
+  [DATA_TYPES.REAL]: 'Real',
+  [DATA_TYPES.DOUBLE]: 'Double',
+  [DATA_TYPES.DECIMAL]: 'Decimal',
+  [DATA_TYPES.DATE]: 'Date',
+  [DATA_TYPES.DATEONLY]: 'Date (without time)',
+  [DATA_TYPES.BOOLEAN]: 'Boolean',
+  [DATA_TYPES.ARRAY]: 'Array',
+  [DATA_TYPES.JSON_]: 'JSON',
+  [DATA_TYPES.BLOB]: 'BLOB',
+  [DATA_TYPES.UUID]: 'UUID'
 }
