@@ -3,53 +3,84 @@ import React from 'react'
 import * as sequelize4 from '../templates/sequelize-4.js'
 import Button from './Button.jsx'
 import ToolBelt from './ToolBelt.jsx'
+import Code from './Code.jsx'
 
 import { DATA_TYPE_OPTIONS } from '../constants.js'
 
-const ModelView = ({ model, config, goToModels, editModel }) => (
-  <main className='main-content model-view'>
-    <h2 className='title'>{model.name} Model</h2>
-    <ToolBelt>
-      <Button icon='left-arrow' label='Back' onClick={goToModels} />
-      <Button icon='left-pencil' label='Edit' onClick={editModel} />
-      <Button icon='code' label='Code' />
-    </ToolBelt>
-    <h3 className='fields-title subtitle'>Fields</h3>
-    {model.fields.length === 0 ? (
-      <p>No Fields</p>
-    ) : (
-      <table className='fields-table' key='abc'>
-        <thead>
-          <tr>
-            <th className='fields-table__name-header fields-table__cell'>
-              Name
-            </th>
-            <th className='fields-table__cell'>Type</th>
-            <th className='fields-table__cell'>Options</th>
-          </tr>
-        </thead>
-        <tbody>
-          {model.fields.map(field => (
-            <tr key={field.id}>
-              <td className='fields-table__name-cell fields-table__cell'>
-                {field.name}
-              </td>
-              <td className='fields-table__cell'>
-                {DATA_TYPE_OPTIONS[field.type]}
-              </td>
-              <td className='fields-table__cell'>{showFieldOptions(field)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    )}
-    <pre className='model-code-preview'>
-      <code className='language-js'>
-        {sequelize4.modelFile({ model, config }).content}
-      </code>
-    </pre>
-  </main>
-)
+export default class ModelView extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.state = { codeOpen: false }
+  }
+
+  toggleCode = () => this.setState({ codeOpen: !this.state.codeOpen })
+
+  renderCode = () =>
+    sequelize4.modelFile({ model: this.props.model, config: this.props.config })
+      .content
+
+  render () {
+    return (
+      <main className='main-content model-view'>
+        <h2 className='title'>{this.props.model.name} Model</h2>
+        <ToolBelt>
+          <Button
+            icon='left-arrow'
+            label='Back'
+            onClick={this.props.goToModels}
+          />
+          <Button
+            icon='left-pencil'
+            label='Edit'
+            onClick={this.props.editModel}
+          />
+          <Button icon='code' label='Code' onClick={this.toggleCode} />
+        </ToolBelt>
+        {this.state.codeOpen ? (
+          <div className='model-code'>
+            <Code
+              code={this.renderCode()}
+              copyButton
+              onHide={this.toggleCode}
+            />
+          </div>
+        ) : null}
+        <h3 className='fields-title subtitle'>Fields</h3>
+        {this.props.model.fields.length === 0 ? (
+          <p>No Fields</p>
+        ) : (
+          <table className='fields-table' key='abc'>
+            <thead>
+              <tr>
+                <th className='fields-table__name-header fields-table__cell'>
+                  Name
+                </th>
+                <th className='fields-table__cell'>Type</th>
+                <th className='fields-table__cell'>Options</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.props.model.fields.map(field => (
+                <tr key={field.id}>
+                  <td className='fields-table__name-cell fields-table__cell'>
+                    {field.name}
+                  </td>
+                  <td className='fields-table__cell'>
+                    {DATA_TYPE_OPTIONS[field.type]}
+                  </td>
+                  <td className='fields-table__cell'>
+                    {showFieldOptions(field)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </main>
+    )
+  }
+}
 
 const showFieldOptions = field => {
   const options = {
@@ -65,5 +96,3 @@ const showFieldOptions = field => {
 
   return display
 }
-
-export default ModelView

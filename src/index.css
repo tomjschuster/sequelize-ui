@@ -354,7 +354,83 @@ input.checkbox[type="checkbox"]:focus + label::before {
   text-transform: uppercase;
 }
 
-/* General Page */.title {
+/* Flyout */
+.flyout {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  left: 100vw;
+  top: 0;
+  transition: left 0.33s;
+}
+
+.flyout.open {
+  left: 0;
+}
+
+.flyout__header {
+  height: 4em;
+  background-color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  padding: 1em;
+}
+
+.flyout__header h2 {
+  margin: 0;
+  font-size: 1.5em;
+  text-transform: uppercase;
+}
+
+.flyout__header button {
+  float: right;
+  background: none;
+  border: none;
+  font-size: 2em;
+  cursor: pointer;
+  margin-right: 0.5em;
+}
+
+/* Code */
+pre.code[class*="language-"]::before,
+pre.code[class*="language-"]::after {
+  box-shadow: none;
+}
+
+.code__actions {
+  position: absolute;
+  top: 0.4em;
+  right: 0.5em;
+  display: inline-block;
+}
+
+
+.code__actions button {
+  background: white;
+  border: 1px var(--primary-color-dark) dashed;
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 3px;
+  font-size: 0.8em;
+  text-transform: uppercase;
+}
+
+.code__actions button {
+  margin-right: 0.5em;
+}
+
+.code__actions button:last-child {
+  margin-right: 0;
+}
+
+.code__actions button:hover {
+  color: var(--primary-color);
+  background-color: #fcfcfc;
+}
+
+/* General Page */
+.title {
   font-size: 1.25em;
   margin: 1em 0;
   text-align: center;
@@ -493,6 +569,12 @@ label.model-config__item:hover {
 
 .model-view .title {
   margin: 1.5em 0;
+}
+
+.model-code {
+  width: 80%;
+  margin: 1.5em auto;
+  display: block;
 }
 
 .fields-title {

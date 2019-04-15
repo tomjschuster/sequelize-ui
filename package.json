@@ -29,11 +29,13 @@
   ],
   "babel": {
     "plugins": [
-      [ "prismjs", 
+      [
+        "prismjs",
         {
-          "languages": ["javascript"],
-          "plugins": ["line-numbers"],
-          "theme": "okaidia",
+          "languages": [
+            "javascript"
+          ],
+          "theme": "coy",
           "css": true
         }
       ]
@@ -55,6 +57,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "case": "^1.5.4",
+    "copy-to-clipboard": "^3.1.0",
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^2.1.1",
     "extract-text-webpack-plugin": "^3.0.2",
