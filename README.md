@@ -2,15 +2,22 @@
 
 
 ## [Version 0.1](https://github.com/tomjschuster/sequelize-ui/tree/0.1.0)
-[Demo App](http://sequelizeui.herokuapp.com/)	
+- [App](http://sequelizeui.herokuapp.com/)	
+- [Presentation](https://www.youtube.com/watch?v=aHT6S81YvwE)	
 
-[Demo Video](https://www.youtube.com/watch?v=aHT6S81YvwE)	
 
+## Version 0.2 (coming soon)
+```
+git clone https://github.com/tomjschuster/sequelize-ui.git
+cd sequelize-ui
+npm install
+npm start
+```
 
-## Version 0.2 (master, coming soon)
 TODO:
-- Code Preview for entire project
+- Code preview for entire project
 - Icons
+- Demo video
 
 ## Future enhancements
 - Associations
