@@ -39,7 +39,8 @@ const initialState = () => ({
   models: [],
   creatingNewModel: false,
   currentModelId: null,
-  editingModel: null
+  editingModel: null,
+  fromModelForm: false
 })
 
 const initialConfig = () => ({
@@ -60,6 +61,7 @@ export default class App extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
+    console.log(this.state)
     const keysToPersist = [
       'pageState',
       'nextModelId',
@@ -70,6 +72,14 @@ export default class App extends React.Component {
     ]
 
     this.persistState(keysToPersist)
+  }
+
+  onModelsListExit () {
+    this.setState({ creatingNewModel: false })
+  }
+
+  onModelFormExit () {
+    this.setState({ fromModelForm: true })
   }
 
   loadState = () => (localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {})
@@ -153,13 +163,15 @@ export default class App extends React.Component {
     this.setState({ pageState: MODELS_LIST, currentModelId: null })
 
   // Edit Model Methods
-  cancelEditingModel = () => this.setState({ pageState: MODEL_VIEW })
+  cancelEditingModel = () =>
+    this.setState({ pageState: MODEL_VIEW, fromModelForm: true })
 
   saveModel = ({ model, nextFieldId }) => {
     this.setState({
       pageState: MODEL_VIEW,
       models: this.state.models.map(m => (m.id === model.id ? model : m)),
-      nextFieldId
+      nextFieldId,
+      fromModelForm: true
     })
   }
 
@@ -171,6 +183,8 @@ export default class App extends React.Component {
         model => model.id !== this.state.currentModelId
       )
     })
+
+  clearFromModelForm = () => this.setState({ fromModelForm: true })
 
   // View Methods
 
@@ -214,12 +228,14 @@ export default class App extends React.Component {
       case MODEL_VIEW:
         return (
           <ModelView
+            fromEdit={this.state.fromModelForm}
             model={this.state.models.find(
               ({ id }) => id === this.state.currentModelId
             )}
             config={this.state.config}
             goToModels={this.goToModels}
             editModel={this.editCurrentModel}
+            clearFromEdit={this.clearFromModelForm}
           />
         )
       case MODEL_FORM:
@@ -244,7 +260,11 @@ export default class App extends React.Component {
         <TopBar onTitleClick={this.goToModels} actions={this.topBarActions()} />
         {this.renderPage()}
         <footer className='footer'>
-          <Button className='footer__reset' label='Reset' onClick={this.reset} />
+          <Button
+            className='footer__reset'
+            label='Reset'
+            onClick={this.reset}
+          />
         </footer>
       </React.Fragment>
     )

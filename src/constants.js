@@ -2,8 +2,6 @@ export const SQL_IDENTIFIER_REGEXP = '^([\\p{L}_][\\p{L}\\p{N}$_ ]*)?$'
 
 export const MAX_SQL_IDENTIFIER_LENGTH = 63
 
-export const EMPTY_OPTION = 'EMPTY_OPTION'
-
 export const DATA_TYPES = {
   STRING: 'STRING',
   TEXT: 'TEXT',
@@ -22,7 +20,6 @@ export const DATA_TYPES = {
 }
 
 export const DATA_TYPE_OPTIONS = {
-  [EMPTY_OPTION]: '-',
   [DATA_TYPES.STRING]: 'String',
   [DATA_TYPES.TEXT]: 'Text',
   [DATA_TYPES.INTEGER]: 'Integer',

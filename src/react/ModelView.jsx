@@ -10,8 +10,16 @@ import { DATA_TYPE_OPTIONS } from '../constants.js'
 export default class ModelView extends React.Component {
   constructor (props) {
     super(props)
-
+    this.editButtonRef = React.createRef()
     this.state = { codeOpen: false }
+  }
+
+  componentDidMount () {
+    console.log('mounted')
+    if (this.props.fromEdit) {
+      this.editButtonRef.current.focus()
+      this.props.clearFromEdit()
+    }
   }
 
   toggleCode = () => this.setState({ codeOpen: !this.state.codeOpen })
@@ -31,6 +39,7 @@ export default class ModelView extends React.Component {
             onClick={this.props.goToModels}
           />
           <Button
+            ref={this.editButtonRef}
             icon='left-pencil'
             label='Edit'
             onClick={this.props.editModel}

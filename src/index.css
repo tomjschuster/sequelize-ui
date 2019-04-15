@@ -19,6 +19,7 @@ html, body {
 #react-app {
   min-height: 100%;
   position: relative;
+  padding-bottom: 4em;
 }
 
 .footer {
@@ -572,7 +573,7 @@ label.model-config__item:hover {
 }
 
 .model-code {
-  width: 80%;
+  width: 90%;
   margin: 1.5em auto;
   display: block;
 }
@@ -665,10 +666,21 @@ label.model-config__item:hover {
   margin-right: 0.5em;
 }
 
-.new-field {
+.form-field {
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: auto;
+}
+
+.edit-model-name input,
+.form-field input,
+.form-field select {
+  padding: 0.3em;
+  margin-top: 0.5em;
+}
+
+.edit-model-name input {
+  text-align: center;
 }
 
 .add-new-field {
@@ -680,7 +692,7 @@ label.model-config__item:hover {
   width: 150px;
 }
 
-.new-field__item {
+.form-field__item {
   /* text-align: center; */
   width: 85%;
   margin: 0.5em auto;
@@ -690,44 +702,44 @@ label.checkbox {
   margin-right: 0.75em;
 }
 
-.new-field__name label,
-.new-field__type label {
+.form-field__name label,
+.form-field__type label {
   margin-right: 1em;
   margin-bottom: 0.5em;
 }
 
-.new-field__name input,
-.new-field__type select {
+.form-field__name input,
+.form-field__type select {
   width: 100%;
 }
 
- .new-field__options {
+ .form-field__options {
    display: flex;
    justify-content: space-evenly;
  }
 
- .new-field__option {
+ .form-field__option {
     font-size: 0.8em;
   }
 
 
-.new-field__actions {
+.form-field__actions {
   display: flex;
   justify-content: space-evenly;
 }
 
-.new-field__action {
+.form-field__action {
   width: 40%;
 }
 
-.new-field__name {
+.form-field__name {
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 1;
   grid-row-end: 1;
 }
 
-.new-field__type {
+.form-field__type {
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 2;
@@ -735,14 +747,14 @@ label.checkbox {
 }
 
 
-.new-field__options {
+.form-field__options {
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 3;
   grid-row-end: 3;
 }
 
-.new-field__actions {
+.form-field__actions {
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 4;
@@ -750,20 +762,20 @@ label.checkbox {
 }
 
 @media (min-width: 700px) {
-  .new-field {
+  .form-field {
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: auto;
   }
   
-  .new-field__name {
+  .form-field__name {
     grid-column-start: 1;
     grid-column-end: 1;
     grid-row-start: 1;
     grid-row-end: 1;
   }
   
-  .new-field__type {
+  .form-field__type {
     grid-column-start: 2;
     grid-column-end: 2;
     grid-row-start: 1;
@@ -771,14 +783,14 @@ label.checkbox {
   }
 
   
-  .new-field__options {
+  .form-field__options {
     grid-column-start: 1;
     grid-column-end: 1;
     grid-row-start: 2;
     grid-row-end: 2;
   }
   
-  .new-field__actions {
+  .form-field__actions {
     grid-column-start: 2;
     grid-column-end: 2;
     grid-row-start: 2;

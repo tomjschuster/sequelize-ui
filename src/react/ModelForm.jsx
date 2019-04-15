@@ -3,13 +3,15 @@ import React from 'react'
 import * as validators from '../utils/validators.js'
 
 import {
-  EMPTY_OPTION,
+  DATA_TYPES,
   DATA_TYPE_OPTIONS,
   MAX_SQL_IDENTIFIER_LENGTH
 } from '../constants.js'
 
 import Button from './Button.jsx'
 import Checkbox from './Checkbox.jsx'
+
+const DEFAULT_DATA_TYPE = DATA_TYPES.STRING
 
 export default class ModelForm extends React.Component {
   constructor (props) {
@@ -35,9 +37,14 @@ export default class ModelForm extends React.Component {
     this.modelNameInput.current.focus()
   }
 
-  componentDidUpdate (prevState) {
+  componentDidUpdate (prevProps, prevState) {
     if (!prevState.newField && this.state.newField) {
       this.newFieldNameInput.current.focus()
+    }
+
+    if (prevState.model.fields.length < this.state.model.fields.length) {
+      this.newFieldNameInput.current.focus()
+      this.newFieldNameInput.current.scrollIntoView()
     }
   }
 
@@ -193,8 +200,16 @@ export default class ModelForm extends React.Component {
       <main className='main-content'>
         <h2 className='title'>Edit {this.state.prevModel.name} Model</h2>
         <form
+          id='model-form'
           onSubmit={evt => {
             evt.preventDefault()
+            this.save()
+          }}
+          onKeyDown={evt => {
+            if (evt.keyCode === 27) {
+              evt.preventDefault()
+              this.cancel()
+            }
           }}
         >
           <fieldset className='edit-model__actions'>
@@ -203,11 +218,11 @@ export default class ModelForm extends React.Component {
               type='submit'
               icon='floppy-disk'
               label='Save'
-              onClick={this.save}
               disabled={this.hasErrors()}
             />
             <Button
               primary
+              type='button'
               icon='multiplication-sign'
               label='Cancel'
               onClick={this.cancel}
@@ -237,11 +252,11 @@ export default class ModelForm extends React.Component {
             <h3 className='subtitle'>Fields</h3>
             <ul className='edit-model__fields list'>
               {this.state.model.fields.map(field => (
-                <li className='new-field list__item' key={field.id}>
-                  <div className='new-field__item new-field__name'>
-                    <label htmlFor={`new-field-name-${field.id}`}>Name</label>
+                <li className='form-field list__item' key={field.id}>
+                  <div className='form-field__item form-field__name'>
+                    <label htmlFor={`field-name-${field.id}`}>Name</label>
                     <input
-                      id={`new-field-name-${field.id}`}
+                      id={`field-name-${field.id}`}
                       type='text'
                       value={field.name}
                       onChange={evt =>
@@ -249,17 +264,14 @@ export default class ModelForm extends React.Component {
                       }
                     />
                   </div>
-                  <div className='new-field__item new-field__type'>
-                    <label htmlFor={`new-field-type-${field.id}`}>Type</label>
+                  <div className='form-field__item form-field__type'>
+                    <label htmlFor={`field-type-${field.id}`}>Type</label>
                     <select
-                      id={`new-field-type-${field.id}`}
-                      default={field.type || EMPTY_OPTION}
-                      value={field.type || EMPTY_OPTION}
+                      id={`field-type-${field.id}`}
+                      default={field.type || DEFAULT_DATA_TYPE}
+                      value={field.type || DEFAULT_DATA_TYPE}
                       onChange={evt =>
-                        this.selectFieldType(
-                          field.id,
-                          optionToValue(evt.target.value)
-                        )
+                        this.selectFieldType(field.id, evt.target.value)
                       }
                     >
                       {Object.entries(DATA_TYPE_OPTIONS).map(
@@ -271,8 +283,9 @@ export default class ModelForm extends React.Component {
                       )}
                     </select>
                   </div>
-                  <div className='new-field__item new-field__options'>
+                  <div className='form-field__item form-field__options'>
                     <Checkbox
+                      id={`field-primary-key-${field.id}`}
                       label='Primary Key'
                       checked={field.primaryKey}
                       onCheck={checked =>
@@ -280,6 +293,7 @@ export default class ModelForm extends React.Component {
                       }
                     />
                     <Checkbox
+                      id={`field-unique-${field.id}`}
                       label='Unique'
                       checked={field.unique}
                       onCheck={checked =>
@@ -287,6 +301,7 @@ export default class ModelForm extends React.Component {
                       }
                     />
                     <Checkbox
+                      id={`field-required-${field.id}`}
                       label='Required'
                       checked={field.required}
                       onCheck={checked =>
@@ -294,9 +309,10 @@ export default class ModelForm extends React.Component {
                       }
                     />
                   </div>
-                  <div className='new-field__item new-field__actions'>
+                  <div className='form-field__item form-field__actions'>
                     <Button
                       primary
+                      type='button'
                       className='delete-field-button'
                       icon='multiplication-sign'
                       iconPosition='after'
@@ -314,8 +330,16 @@ export default class ModelForm extends React.Component {
                 </li>
               ))}
               {this.state.newField ? (
-                <li className='new-field list__item'>
-                  <div className='new-field__item new-field__name'>
+                <li
+                  className='form-field list__item'
+                  onKeyDown={evt => {
+                    if (evt.keyCode === 13) {
+                      evt.preventDefault()
+                      this.createField()
+                    }
+                  }}
+                >
+                  <div className='form-field__item form-field__name'>
                     <label htmlFor='new-field-name'>Name</label>
                     <input
                       ref={this.newFieldNameInput}
@@ -325,14 +349,14 @@ export default class ModelForm extends React.Component {
                       onChange={evt => this.inputNewFieldName(evt.target.value)}
                     />
                   </div>
-                  <div className='new-field__item new-field__type'>
+                  <div className='form-field__item form-field__type'>
                     <label htmlFor='new-field-type'>Type</label>
                     <select
                       id='new-field-type'
-                      default={this.state.newField.type || EMPTY_OPTION}
-                      value={this.state.newField.type || EMPTY_OPTION}
+                      default={this.state.newField.type || DEFAULT_DATA_TYPE}
+                      value={this.state.newField.type || DEFAULT_DATA_TYPE}
                       onChange={evt =>
-                        this.selectNewFieldType(optionToValue(evt.target.value))
+                        this.selectNewFieldType(evt.target.value)
                       }
                     >
                       {Object.entries(DATA_TYPE_OPTIONS).map(
@@ -344,47 +368,47 @@ export default class ModelForm extends React.Component {
                       )}
                     </select>
                   </div>
-                  <div className='new-field__item new-field__options'>
+                  <div className='form-field__item form-field__options'>
                     <Checkbox
                       id='new-field-primary-key'
-                      className='new-field__option'
+                      className='form-field__option'
                       label='Primary Key'
                       checked={this.state.newField.primaryKey}
                       onCheck={this.toggleNewFieldPrimaryKey}
                     />
                     <Checkbox
                       id='new-field-unique'
-                      className='new-field__option'
+                      className='form-field__option'
                       label='Unique'
                       checked={this.state.newField.unique}
                       onCheck={this.toggleNewFieldUnique}
                     />
                     <Checkbox
                       id='new-field-required'
-                      className='new-field__option'
+                      className='form-field__option'
                       label='Required'
                       checked={this.state.newField.required}
                       onCheck={this.toggleNewFieldRequired}
                     />
                   </div>
-                  <div className='new-field__item new-field__actions'>
+                  <div className='form-field__item form-field__actions'>
                     <Button
+                      primary
+                      type='button'
                       icon='check-mark'
                       iconPosition='after'
-                      className='new-field__action'
-                      primary
+                      className='form-field__action'
                       label='Add'
-                      type='button'
                       disabled={this.hasNewFieldErrors()}
                       onClick={this.createField}
                     />
                     <Button
+                      primary
+                      type='button'
                       icon='multiplication-sign'
                       iconPosition='after'
-                      className='new-field__action'
-                      primary
+                      className='form-field__action'
                       label='Cancel'
-                      type='button'
                       onClick={this.cancelCreatingField}
                     />
                   </div>
@@ -400,10 +424,9 @@ export default class ModelForm extends React.Component {
               ) : (
                 <li className='add-new-field list__item'>
                   <Button
-                    iconPosition='after'
                     primary
-                    label='Add a Field'
                     type='button'
+                    label='Add a Field'
                     onClick={this.startCreatingField}
                   />
                 </li>
@@ -415,8 +438,6 @@ export default class ModelForm extends React.Component {
     )
   }
 }
-
-const optionToValue = value => (value === EMPTY_OPTION ? null : value)
 
 const formatModel = model => ({
   ...model,
@@ -488,7 +509,7 @@ const displayFieldError = error => {
 
 const emptyField = () => ({
   name: '',
-  type: null,
+  type: DEFAULT_DATA_TYPE,
   primaryKey: false,
   required: false,
   unique: false

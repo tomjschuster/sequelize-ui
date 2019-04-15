@@ -1,23 +1,45 @@
 import React from 'react'
 
-const Button = ({
-  className,
-  label,
-  icon,
-  iconPosition,
-  primary,
-  secondary,
-  children,
-  ...props
-}) => (
-  <button
-    className={getClass({ className, icon, iconPosition, primary, secondary })}
-    {...props}
-  >
-    {label || null}
-    {children || null}
-  </button>
-)
+export default class Button extends React.Component {
+  constructor (props) {
+    super(props)
+    this.ref = React.createRef()
+  }
+
+  focus () {
+    this.ref.current.focus()
+  }
+
+  render () {
+    const {
+      className,
+      label,
+      icon,
+      iconPosition,
+      primary,
+      secondary,
+      children,
+      ...props
+    } = this.props
+
+    return (
+      <button
+        ref={this.ref}
+        className={getClass({
+          className,
+          icon,
+          iconPosition,
+          primary,
+          secondary
+        })}
+        {...props}
+      >
+        {label || null}
+        {children || null}
+      </button>
+    )
+  }
+}
 
 const getClass = ({ className, icon, iconPosition, primary, secondary }) => {
   const classes = [
@@ -47,5 +69,3 @@ const getIconClass = (icon, position) => {
     return null
   }
 }
-
-export default Button
