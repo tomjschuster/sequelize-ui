@@ -20,7 +20,6 @@ export default class ModelsList extends React.Component {
       // Actions
       toggleTimestamps,
       toggleSnake,
-      toggleSoftDeletes,
       toggleSingularTableNames,
       startCreatingNewModel,
       cancelCreatingNewModel,
@@ -98,13 +97,6 @@ export default class ModelsList extends React.Component {
             label='snake_case'
             checked={config.snake}
             onCheck={toggleSnake}
-          />
-          <Checkbox
-            id='config-soft-deletes'
-            className='model-config__item'
-            label='Soft Deletes'
-            checked={config.softDeletes}
-            onCheck={toggleSoftDeletes}
           />
           <Checkbox
             id='singluar-table-names'
