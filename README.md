@@ -1,9 +1,9 @@
 # sequelize-ui
 
 TODO:
-- Code Preview
+- Directory Code Preview
+- Icons
 - Associations
-- Refactor
 - Migrations
-- Select dialect, input project name
 - Sequelize 5
+- Projects
