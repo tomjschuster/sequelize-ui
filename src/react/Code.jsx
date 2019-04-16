@@ -55,7 +55,7 @@ export default class Code extends React.Component {
   }
 }
 
-export class MultiCode extends React.Component {
+export class CodeExplorer extends React.Component {
   constructor (props) {
     super(props)
     this.state = { activePath: [] }

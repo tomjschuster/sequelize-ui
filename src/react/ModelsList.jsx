@@ -5,7 +5,7 @@ import NewModelForm from './NewModelForm.jsx'
 import Checkbox from './Checkbox.jsx'
 import Button from './Button.jsx'
 import ToolBelt from './ToolBelt.jsx'
-import { MultiCode } from './Code.jsx'
+import { CodeExplorer } from './Code.jsx'
 
 export default class ModelsList extends React.Component {
   componentWillUnmount () {
@@ -34,7 +34,7 @@ export default class ModelsList extends React.Component {
     return (
       <main className='main-content models-list'>
         <h3 className='models__title list__title'>Models</h3>
-        <MultiCode rootFileItem={sequelize4.files({ models, config })} />
+        <CodeExplorer rootFileItem={sequelize4.files({ models, config })} />
         <ul className='models list'>
           {models.map(model => (
             <li className='models__item list__item' key={model.id}>
