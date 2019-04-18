@@ -15,7 +15,6 @@ npm start
 ```
 
 TODO:
-- Code preview for entire project
 - Icons
 - Demo video
 
