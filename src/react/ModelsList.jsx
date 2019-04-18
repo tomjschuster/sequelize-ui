@@ -8,9 +8,16 @@ import ToolBelt from './ToolBelt.jsx'
 import { CodeExplorer } from './Code.jsx'
 
 export default class ModelsList extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = { codeOpen: false }
+  }
+
   componentWillUnmount () {
     this.props.cancelCreatingNewModel()
   }
+
+  toggleCode = () => this.setState({ codeOpen: !this.state.codeOpen })
 
   render () {
     const {
@@ -33,9 +40,15 @@ export default class ModelsList extends React.Component {
 
     return (
       <main className='main-content models-list'>
-        <div className='project-code'>
-          <CodeExplorer rootFileItem={sequelize4.files({ models, config })} />
-        </div>
+        <ToolBelt className='models-list__code-belt'>
+          <Button label='Download' onClick={this.props.exportModels} />
+          <Button icon='code' label='code' onClick={this.toggleCode} />
+        </ToolBelt>
+        {this.state.codeOpen ? (
+          <div className='project-code'>
+            <CodeExplorer rootFileItem={sequelize4.files({ models, config })} />
+          </div>
+        ) : null}
         <h3 className='models__title list__title'>Models</h3>
         <ul className='models list'>
           {models.map(model => (

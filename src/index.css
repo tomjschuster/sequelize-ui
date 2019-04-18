@@ -625,6 +625,10 @@ label.model-config__item:hover {
   } */
 }
 
+.models-list__code-belt {
+  margin: 2em auto 1em;
+}
+
 .project-code {
   width: 90%;
   display: block;
