@@ -77,9 +77,18 @@ html, body {
     padding: 0.5rem;
     height: 3.5rem;
     background: none;
-    line-height: 1;
+    line-height: 3em;
     font-size: 0.8rem;
+    font-weight: bold;
     border-left: solid 0.5px rgba(32, 32, 32, 0.50);
+    text-decoration: none;
+    display: block;
+    align-items: flex-start;
+    color: inherit;
+}
+
+.top-bar__actions__button:hover {
+  color: var(--primary-color-dark)
 }
 
 .top-bar.--small .top-bar__actions__button {

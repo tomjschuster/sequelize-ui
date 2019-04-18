@@ -17,14 +17,25 @@ const Title = ({ onClick }) => (
   </h1>
 )
 
-const ActionButton = ({ onClick, label, disabled = false }) => (
-  <button
-    className='top-bar__actions__button'
-    onClick={onClick}
-    disabled={disabled}
-  >
-    {label}
-  </button>
-)
+const ActionButton = ({ href, newTab, onClick, label, disabled = false }) =>
+  href ? (
+    <a
+      href={href}
+      className='top-bar__actions__button'
+      onClick={onClick}
+      disabled={disabled}
+      target={newTab ? '_blank' : '_self'}
+    >
+      {label}
+    </a>
+  ) : (
+    <button
+      className='top-bar__actions__button'
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {label}
+    </button>
+  )
 
 export default TopBar

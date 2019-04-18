@@ -200,10 +200,19 @@ export default class App extends React.Component {
     }
   }
 
+  topBarActions () {
+    const githubLink = {
+      href: 'https://github.com/tomjschuster/sequelize-ui',
+      label: 'GitHub'
+    }
+
+    return [githubLink]
+  }
+
   render () {
     return (
       <React.Fragment>
-        <TopBar onTitleClick={this.goToModels} />
+        <TopBar actions={this.topBarActions()} onTitleClick={this.goToModels} />
         {this.renderPage()}
         <footer className='footer'>
           <Button
