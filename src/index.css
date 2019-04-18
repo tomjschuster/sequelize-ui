@@ -399,6 +399,10 @@ pre.code[class*="language-"]::after {
   box-shadow: none;
 }
 
+pre.code[class*="language-"] {
+  margin: 0;
+}
+
 .code__actions {
   position: absolute;
   top: 0.4em;
@@ -429,6 +433,64 @@ pre.code[class*="language-"]::after {
   color: var(--primary-color);
   background-color: #fcfcfc;
 }
+
+.code-explorer {
+  display: flex;
+  text-align: left;
+  border: solid 1px #ddd;
+  border-radius: 5px;
+  max-width: 100%;
+}
+
+.code-explorer__code,
+.code-explorer__explorer {
+  align-self: stretch;
+}
+
+.code-explorer__code {
+  flex-grow: 3;
+  border-left: solid 1px #ddd;
+  background: #f2f2f2;
+}
+
+.code-explorer__explorer {
+  flex-grow: 1;
+  border-left: solid 1px #ddd;
+}
+
+.code-explorer__explorer ul {
+  list-style: none;
+  padding-left: 1.25em;
+}
+
+.code-explorer__file-item > .code-explorer__filename {
+  display: block;
+  padding: 0.25em;
+  color: #222;
+}
+
+.code-explorer__file-item > .code-explorer__filename::before {
+  margin-right: 0.5em;
+}
+
+.code-explorer__file > .code-explorer__filename {
+  cursor: pointer;
+}
+
+.code-explorer__file > .code-explorer__filename:hover {
+  color: var(--secondary-color);
+}
+
+
+.code-explorer__directory > .code-explorer__filename::before {
+  content: '\1F4C1';
+}
+
+.code-explorer__file > .code-explorer__filename::before {
+  content: '</>';
+  letter-spacing: 0px;
+}
+
 
 /* General Page */
 .title {
@@ -563,6 +625,15 @@ label.model-config__item:hover {
   } */
 }
 
+.models-list__code-belt {
+  margin: 2em auto 1em;
+}
+
+.project-code {
+  width: 90%;
+  display: block;
+  margin: 1.5em auto;
+}
 /* View Model */
 .model-view {
   text-align: center;

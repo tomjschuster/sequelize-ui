@@ -9,35 +9,172 @@ export default class Code extends React.Component {
   }
 
   componentDidMount () {
-    Prism.highlightAllUnder(this.preRef.current)
+    this.preRef.current && Prism.highlightAllUnder(this.preRef.current)
+  }
+
+  componentDidUpdate (prevProps) {
+    if (prevProps.code !== this.props.code && this.preRef.current) {
+      Prism.highlightAllUnder(this.preRef.current)
+    }
   }
 
   copyCode = () => this.props.code && copy(this.props.code)
 
   render () {
-    const { code, children, className, ...props } = this.props
-    const classText = className ? className + ' ' : ''
+    const {
+      code,
+      children,
+      className,
+      copyButton,
+      onHide,
+      ...props
+    } = this.props
+    const classText = className ? ' ' + className : ''
 
-    return (
+    const languageClass = this.props.language
+      ? ' language-' + this.props.language
+      : ''
+
+    return code ? (
       <pre
         ref={this.preRef}
-        className={classText + 'language-javascript code'}
+        className={'code' + classText + languageClass}
         {...props}
       >
-        <code className='language-javascript'>{code || children || ''}</code>
+        <code className={languageClass}>{code}</code>
         <div className='code__actions'>
-          {this.props.copyButton ? (
+          {copyButton ? (
             <button className='code__copy' onClick={this.copyCode}>
               Copy
             </button>
           ) : null}
           {this.props.onHide ? (
-            <button className='code__hide' onClick={this.props.onHide}>
+            <button className='code__hide' onClick={onHide}>
               Hide
             </button>
           ) : null}
         </div>
       </pre>
+    ) : (
+      <div />
     )
+  }
+}
+
+export class CodeExplorer extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = { activePath: [] }
+  }
+
+  selectFile = path => this.setState({ activePath: path })
+
+  renderExplorerItem = (fileItem, path = []) => {
+    const currentPath = [...path, fileItem.name]
+    if (fileItem.files) {
+      return (
+        <li
+          className='code-explorer__directory code-explorer__file-item'
+          key={fileItem.name}
+        >
+          <span className='code-explorer__filename'>{fileItem.name}</span>
+          <ul>
+            {fileItem.files
+              .slice(0)
+              .sort(compareFiles)
+              .map(file => this.renderExplorerItem(file, currentPath))}
+          </ul>
+        </li>
+      )
+    } else {
+      return (
+        <li
+          className='code-explorer__file code-explorer__file-item'
+          key={fileItem.name}
+        >
+          <span
+            className='code-explorer__filename'
+            onClick={() => this.selectFile(currentPath)}
+          >
+            {fileItem.name}
+          </span>
+        </li>
+      )
+    }
+  }
+
+  renderCode = () => {
+    const file = findFile(this.state.activePath, [this.props.rootFileItem])
+    const language = file ? languageFromFilename(file.name) : null
+    return (
+      <Code code={file ? file.content : null} language={language} copyButton />
+    )
+  }
+
+  render () {
+    const { className, rootFileItem, ...props } = this.props
+    const classText = className ? className + ' ' : ''
+
+    return (
+      <div className={classText + 'code-explorer'} {...props}>
+        <div className='code-explorer__explorer'>
+          <ul>{this.renderExplorerItem(rootFileItem)}</ul>
+        </div>
+        <div className='code-explorer__code'>{this.renderCode()}</div>
+      </div>
+    )
+  }
+}
+
+const compareFiles = (a, b) => compareFileType(a, b) || compareFilename(a, b)
+const compareFileType = (a, b) => (a.files ? -1 : b.files ? 1 : 0)
+const compareFilename = (a, b) => a.name.localeCompare(b.name)
+
+const findFile = (path, files) => {
+  const [currentFileName, ...restPath] = path
+  const fileItem = files.find(file => file.name === currentFileName)
+
+  if (!fileItem) {
+    return null
+  }
+
+  if (restPath.length === 0 && fileItem.content) {
+    return fileItem
+  }
+
+  if (restPath.length > 0 && fileItem.files) {
+    return findFile(restPath, fileItem.files)
+  }
+
+  return null
+}
+
+const languageFromFilename = filename => {
+  if (hardcodedLanguageFiles[filename]) {
+    return hardcodedLanguageFiles[filename]
+  }
+
+  const parts = filename.split('.')
+
+  if (parts.length <= 1) {
+    return null
+  }
+
+  const extension = parts[parts.length - 1]
+  return languageFromExtension(extension)
+}
+
+const hardcodedLanguageFiles = {
+  '.gitignore': 'git'
+}
+
+const languageFromExtension = extension => {
+  switch (extension) {
+    case 'js':
+      return 'javascript'
+    case 'json':
+      return 'json'
+    default:
+      return null
   }
 }

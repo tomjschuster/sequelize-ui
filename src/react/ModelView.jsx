@@ -51,6 +51,7 @@ export default class ModelView extends React.Component {
             <Code
               code={this.renderCode()}
               copyButton
+              language='javascript'
               onHide={this.toggleCode}
             />
           </div>

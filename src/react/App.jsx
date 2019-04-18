@@ -188,22 +188,6 @@ export default class App extends React.Component {
 
   // View Methods
 
-  topBarActions = () => [
-    {
-      onClick: this.previewCode,
-      label: 'Code',
-      icon: 'code',
-      disabled: this.state.pageState === MODEL_FORM
-    },
-
-    {
-      onClick: this.exportModels,
-      label: 'Export',
-      icon: 'export',
-      disabled: this.state.pageState === MODEL_FORM
-    }
-  ]
-
   renderPage = () => {
     switch (this.state.pageState) {
       case MODELS_LIST:
@@ -220,6 +204,7 @@ export default class App extends React.Component {
             inputNewModelName={this.inputNewModelName}
             cancelCreatingNewModel={this.cancelCreatingNewModel}
             createModel={this.createModel}
+            exportModels={this.exportModels}
             goToModel={this.goToModel}
             editModel={this.editModel}
             deleteModel={this.deleteModel}
@@ -257,7 +242,7 @@ export default class App extends React.Component {
   render () {
     return (
       <React.Fragment>
-        <TopBar onTitleClick={this.goToModels} actions={this.topBarActions()} />
+        <TopBar onTitleClick={this.goToModels} />
         {this.renderPage()}
         <footer className='footer'>
           <Button
