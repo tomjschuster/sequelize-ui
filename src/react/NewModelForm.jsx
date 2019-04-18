@@ -73,6 +73,12 @@ export default class NewModelForm extends React.Component {
           type='text'
           value={this.state.model.name}
           placeholder='Name'
+          onKeyDown={evt => {
+            if (evt.keyCode === 27) {
+              evt.preventDefault()
+              this.cancel()
+            }
+          }}
           onChange={({ target: { value } }) => this.inputName(value)}
           maxLength={MAX_SQL_IDENTIFIER_LENGTH}
         />

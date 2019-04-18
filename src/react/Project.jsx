@@ -7,14 +7,22 @@ import Button from './Button.jsx'
 import ToolBelt from './ToolBelt.jsx'
 import { CodeExplorer } from './Code.jsx'
 
-export default class ModelsList extends React.Component {
+export default class Project extends React.Component {
   constructor (props) {
     super(props)
+    this.addButton = React.createRef()
     this.state = { codeOpen: false }
+  }
+  componentDidMount () {
+    if (this.props.models.length === 0) this.focusOnAddButton()
   }
 
   componentWillUnmount () {
     this.props.cancelCreatingNewModel()
+  }
+
+  focusOnAddButton () {
+    this.addButton.current.focus()
   }
 
   toggleCode = () => this.setState({ codeOpen: !this.state.codeOpen })
@@ -39,9 +47,14 @@ export default class ModelsList extends React.Component {
     } = this.props
 
     return (
-      <main className='main-content models-list'>
-        <ToolBelt className='models-list__code-belt'>
-          <Button label='Download' onClick={this.props.exportModels} />
+      <main className='main-content project'>
+        <h2 className='title'>My Sequelize Project</h2>
+        <ToolBelt className='project__code-belt'>
+          <Button
+            icon='down-arrow'
+            label='Download'
+            onClick={this.props.exportModels}
+          />
           <Button icon='code' label='code' onClick={this.toggleCode} />
         </ToolBelt>
         {this.state.codeOpen ? (
@@ -85,6 +98,7 @@ export default class ModelsList extends React.Component {
               />
             ) : models.length > 0 ? (
               <Button
+                ref={this.addButton}
                 label='Add a Model'
                 primary
                 onClick={startCreatingNewModel}
@@ -93,6 +107,7 @@ export default class ModelsList extends React.Component {
               <React.Fragment>
                 <p>You have no models</p>
                 <Button
+                  ref={this.addButton}
                   label='Add a Model'
                   primary
                   onClick={startCreatingNewModel}

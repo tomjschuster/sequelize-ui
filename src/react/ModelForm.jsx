@@ -19,6 +19,7 @@ export default class ModelForm extends React.Component {
 
     this.modelNameInput = React.createRef()
     this.newFieldNameInput = React.createRef()
+    this.addFieldButton = React.createRef()
 
     const model = this.props.models.find(({ id }) => id === this.props.modelId)
 
@@ -89,7 +90,10 @@ export default class ModelForm extends React.Component {
 
   // New Field
   startCreatingField = () => this.setState({ newField: emptyField() })
-  cancelCreatingField = () => this.setState({ newField: null })
+  cancelCreatingField = () => {
+    this.setState({ newField: null })
+    setTimeout(() => this.addFieldButton.current.focus(), 0)
+  }
   inputNewFieldName = name => this.mapNewField(field => ({ ...field, name }))
   selectNewFieldType = type => this.mapNewField(field => ({ ...field, type }))
 
@@ -204,12 +208,6 @@ export default class ModelForm extends React.Component {
           onSubmit={evt => {
             evt.preventDefault()
             this.save()
-          }}
-          onKeyDown={evt => {
-            if (evt.keyCode === 27) {
-              evt.preventDefault()
-              this.cancel()
-            }
           }}
         >
           <fieldset className='edit-model__actions'>
@@ -337,6 +335,11 @@ export default class ModelForm extends React.Component {
                       evt.preventDefault()
                       this.createField()
                     }
+
+                    if (evt.keyCode === 27) {
+                      evt.preventDefault()
+                      this.cancelCreatingField()
+                    }
                   }}
                 >
                   <div className='form-field__item form-field__name'>
@@ -424,6 +427,7 @@ export default class ModelForm extends React.Component {
               ) : (
                 <li className='add-new-field list__item'>
                   <Button
+                    ref={this.addFieldButton}
                     primary
                     type='button'
                     label='Add a Field'

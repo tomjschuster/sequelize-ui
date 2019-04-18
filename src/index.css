@@ -59,9 +59,8 @@ html, body {
 .top-bar__title {
   display: inline;
   font-weight: lighter;
-  font-size: 1.3rem;
+  font-size: 1.75rem;
   line-height: 3.5rem;
-  /* margin-left: 0.6rem; */
   cursor: pointer;
   text-transform: uppercase;
 }
@@ -295,6 +294,13 @@ input.checkbox[type="checkbox"]:focus + label::before {
   content: '\1f4be';
 }
 
+.icon.down-arrow::before,
+.icon--before.down-arrow::before,
+.icon--after.down-arrow::after,
+.icon--under.down-arrow::after {
+  content: '\21E9';
+}
+
 
 /* Breadcrumbs */
 .breadcrumbs ol {
@@ -435,7 +441,9 @@ pre.code[class*="language-"] {
 }
 
 .code-explorer {
-  display: flex;
+  display: grid;
+  grid-template-columns: 35% 65%;
+  grid-template-rows: auto;
   text-align: left;
   border: solid 1px #ddd;
   border-radius: 5px;
@@ -448,14 +456,20 @@ pre.code[class*="language-"] {
 }
 
 .code-explorer__code {
-  flex-grow: 3;
   border-left: solid 1px #ddd;
   background: #f2f2f2;
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 1;
 }
 
 .code-explorer__explorer {
-  flex-grow: 1;
   border-left: solid 1px #ddd;
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 1;
+  grid-row-end: 1;
 }
 
 .code-explorer__explorer ul {
@@ -495,7 +509,7 @@ pre.code[class*="language-"] {
 /* General Page */
 .title {
   font-size: 1.25em;
-  margin: 1em 0;
+  margin: 1.5em 0;
   text-align: center;
   text-transform: uppercase;
 }
@@ -509,12 +523,12 @@ pre.code[class*="language-"] {
 
 /* Page Specific */
 /* Models List */
-.models-list {
+.project {
   text-align: center;
 }
 
 .models__title {
-  margin-top: 1em;
+  margin-top: 1.5em;
 }
 
 .add-model {
@@ -533,10 +547,16 @@ pre.code[class*="language-"] {
 
 .model-config {
   list-style: none;
-  padding: 0.75em;
+  padding: 0 0.75em 0.75em 0.75em;
   display: inline-block;
   margin-top: 2em;
   text-align: left;
+}
+
+.model-config .toolbelt__title {
+  border-bottom: 1px solid #ddd;
+  margin: 0 -0.75em;
+  line-height: 2.5em;
 }
 
 input.model-config__item {
@@ -611,22 +631,10 @@ label.model-config__item:hover {
     color: #fff;
     margin-left: -3em;
   }
-  /* input.model-config__item {
-    display: inline-block;
-  }
-
-  .model-config .toolbelt__title {
-    display: inline-block;
-    margin: 0;
-  }
-
-  .model-config .toolbelt__title::after {
-    content: ":";
-  } */
 }
 
-.models-list__code-belt {
-  margin: 2em auto 1em;
+.project__code-belt {
+  margin: 0 auto;
 }
 
 .project-code {
@@ -637,10 +645,6 @@ label.model-config__item:hover {
 /* View Model */
 .model-view {
   text-align: center;
-}
-
-.model-view .title {
-  margin: 1.5em 0;
 }
 
 .model-code {

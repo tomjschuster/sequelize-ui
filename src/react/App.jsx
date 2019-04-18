@@ -4,64 +4,22 @@ import { saveAs } from 'file-saver'
 import * as sequelize4 from '../templates/sequelize-4.js'
 import TopBar from './TopBar.jsx'
 import Button from './Button.jsx'
-import ModelsList from './ModelsList.jsx'
+import Project from './Project.jsx'
 import ModelView from './ModelView.jsx'
 import ModelForm from './ModelForm.jsx'
 
-const MODELS_LIST = 'MODELS_LIST'
+const PROJECT = 'PROJECT'
 const MODEL_VIEW = 'MODEL_VIEW'
 const MODEL_FORM = 'MODEL_FORM'
-
-const downloadZip = ({ name = 'my-project', files }) => {
-  const zip = new JSZip()
-  const folder = zip.folder(name)
-
-  files.forEach(file => zipFile(folder, file))
-
-  return zip.generateAsync({ type: 'blob' }).then(blob => saveAs(blob, name))
-}
-
-const zipFile = (zip, file) => {
-  if (file.files) zipDir(zip, file)
-  else zip.file(file.name, file.content)
-}
-
-const zipDir = (zip, dir) => {
-  const folder = zip.folder(dir.name)
-  for (let file of dir.files) zipFile(folder, file)
-}
-
-const initialState = () => ({
-  pageState: MODELS_LIST,
-  nextModelId: 1,
-  nextFieldId: 1,
-  config: initialConfig(),
-  models: [],
-  creatingNewModel: false,
-  currentModelId: null,
-  editingModel: null,
-  fromModelForm: false
-})
-
-const initialConfig = () => ({
-  timestamps: true,
-  snake: false,
-  softDeletes: false,
-  singularTableNames: false,
-  dialect: 'sqlite',
-  name: 'my-project'
-})
-
-const buildModel = (id, model) => ({ id, ...model, fields: [] })
 
 export default class App extends React.Component {
   constructor (props) {
     super(props)
+    this.project = React.createRef()
     this.state = { ...initialState(), ...this.loadState() }
   }
 
   componentDidUpdate (prevProps, prevState) {
-    console.log(this.state)
     const keysToPersist = [
       'pageState',
       'nextModelId',
@@ -74,7 +32,7 @@ export default class App extends React.Component {
     this.persistState(keysToPersist)
   }
 
-  onModelsListExit () {
+  onProjectExit () {
     this.setState({ creatingNewModel: false })
   }
 
@@ -149,7 +107,10 @@ export default class App extends React.Component {
 
   startCreatingNewModel = () => this.setState({ creatingNewModel: true })
 
-  cancelCreatingNewModel = () => this.setState({ creatingNewModel: false })
+  cancelCreatingNewModel = () => {
+    this.setState({ creatingNewModel: false })
+    setTimeout(() => this.project.current.focusOnAddButton(), 0)
+  }
 
   createModel = ({ model }) => {
     this.setState({
@@ -159,8 +120,7 @@ export default class App extends React.Component {
   }
 
   // Current Model Methods
-  goToModels = () =>
-    this.setState({ pageState: MODELS_LIST, currentModelId: null })
+  goToModels = () => this.setState({ pageState: PROJECT, currentModelId: null })
 
   // Edit Model Methods
   cancelEditingModel = () =>
@@ -177,7 +137,7 @@ export default class App extends React.Component {
 
   deleteCurrentModel = () =>
     this.setState({
-      pageState: MODELS_LIST,
+      pageState: PROJECT,
       currentModelId: null,
       models: this.state.models.filter(
         model => model.id !== this.state.currentModelId
@@ -190,9 +150,10 @@ export default class App extends React.Component {
 
   renderPage = () => {
     switch (this.state.pageState) {
-      case MODELS_LIST:
+      case PROJECT:
         return (
-          <ModelsList
+          <Project
+            ref={this.project}
             config={this.state.config}
             models={this.state.models}
             creatingNewModel={this.state.creatingNewModel}
@@ -255,3 +216,45 @@ export default class App extends React.Component {
     )
   }
 }
+
+const downloadZip = ({ name = 'my-project', files }) => {
+  const zip = new JSZip()
+  const folder = zip.folder(name)
+
+  files.forEach(file => zipFile(folder, file))
+
+  return zip.generateAsync({ type: 'blob' }).then(blob => saveAs(blob, name))
+}
+
+const zipFile = (zip, file) => {
+  if (file.files) zipDir(zip, file)
+  else zip.file(file.name, file.content)
+}
+
+const zipDir = (zip, dir) => {
+  const folder = zip.folder(dir.name)
+  for (let file of dir.files) zipFile(folder, file)
+}
+
+const initialState = () => ({
+  pageState: PROJECT,
+  nextModelId: 1,
+  nextFieldId: 1,
+  config: initialConfig(),
+  models: [],
+  creatingNewModel: false,
+  currentModelId: null,
+  editingModel: null,
+  fromModelForm: false
+})
+
+const initialConfig = () => ({
+  timestamps: true,
+  snake: false,
+  softDeletes: false,
+  singularTableNames: false,
+  dialect: 'sqlite',
+  name: 'my-project'
+})
+
+const buildModel = (id, model) => ({ id, ...model, fields: [] })
