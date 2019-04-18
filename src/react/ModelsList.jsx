@@ -33,8 +33,10 @@ export default class ModelsList extends React.Component {
 
     return (
       <main className='main-content models-list'>
+        <div className='project-code'>
+          <CodeExplorer rootFileItem={sequelize4.files({ models, config })} />
+        </div>
         <h3 className='models__title list__title'>Models</h3>
-        <CodeExplorer rootFileItem={sequelize4.files({ models, config })} />
         <ul className='models list'>
           {models.map(model => (
             <li className='models__item list__item' key={model.id}>

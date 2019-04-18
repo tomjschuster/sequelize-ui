@@ -9,11 +9,11 @@ export default class Code extends React.Component {
   }
 
   componentDidMount () {
-    Prism.highlightAllUnder(this.preRef.current)
+    this.preRef.current && Prism.highlightAllUnder(this.preRef.current)
   }
 
   componentDidUpdate (prevProps) {
-    if (prevProps.code !== this.props.code) {
+    if (prevProps.code !== this.props.code && this.preRef.current) {
       Prism.highlightAllUnder(this.preRef.current)
     }
   }
@@ -29,15 +29,19 @@ export default class Code extends React.Component {
       onHide,
       ...props
     } = this.props
-    const classText = className ? className + ' ' : ''
+    const classText = className ? ' ' + className : ''
 
     const languageClass = this.props.language
-      ? 'language-' + this.props.language
+      ? ' language-' + this.props.language
       : ''
 
-    return (
-      <pre ref={this.preRef} className={classText + languageClass} {...props}>
-        <code className={languageClass}>{code || children || ''}</code>
+    return code ? (
+      <pre
+        ref={this.preRef}
+        className={'code' + classText + languageClass}
+        {...props}
+      >
+        <code className={languageClass}>{code}</code>
         <div className='code__actions'>
           {copyButton ? (
             <button className='code__copy' onClick={this.copyCode}>
@@ -51,6 +55,8 @@ export default class Code extends React.Component {
           ) : null}
         </div>
       </pre>
+    ) : (
+      <div />
     )
   }
 }
@@ -67,19 +73,29 @@ export class CodeExplorer extends React.Component {
     const currentPath = [...path, fileItem.name]
     if (fileItem.files) {
       return (
-        <li key={fileItem.name}>
-          <span>{fileItem.name}</span>
+        <li
+          className='code-explorer__directory code-explorer__file-item'
+          key={fileItem.name}
+        >
+          <span className='code-explorer__filename'>{fileItem.name}</span>
           <ul>
-            {fileItem.files.map(file =>
-              this.renderExplorerItem(file, currentPath)
-            )}
+            {fileItem.files
+              .slice(0)
+              .sort(compareFiles)
+              .map(file => this.renderExplorerItem(file, currentPath))}
           </ul>
         </li>
       )
     } else {
       return (
-        <li key={fileItem.name}>
-          <span onClick={() => this.selectFile(currentPath)}>
+        <li
+          className='code-explorer__file code-explorer__file-item'
+          key={fileItem.name}
+        >
+          <span
+            className='code-explorer__filename'
+            onClick={() => this.selectFile(currentPath)}
+          >
             {fileItem.name}
           </span>
         </li>
@@ -100,15 +116,19 @@ export class CodeExplorer extends React.Component {
     const classText = className ? className + ' ' : ''
 
     return (
-      <div className={classText + 'multi-code'} {...props}>
-        <div className='multi-code__explorer'>
+      <div className={classText + 'code-explorer'} {...props}>
+        <div className='code-explorer__explorer'>
           <ul>{this.renderExplorerItem(rootFileItem)}</ul>
         </div>
-        <div className='multi-code__code'>{this.renderCode()}</div>
+        <div className='code-explorer__code'>{this.renderCode()}</div>
       </div>
     )
   }
 }
+
+const compareFiles = (a, b) => compareFileType(a, b) || compareFilename(a, b)
+const compareFileType = (a, b) => (a.files ? -1 : b.files ? 1 : 0)
+const compareFilename = (a, b) => a.name.localeCompare(b.name)
 
 const findFile = (path, files) => {
   const [currentFileName, ...restPath] = path
