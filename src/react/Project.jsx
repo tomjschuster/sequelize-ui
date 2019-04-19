@@ -50,12 +50,12 @@ export default class Project extends React.Component {
       <main className='main-content project'>
         <h2 className='title'>My Sequelize Project</h2>
         <ToolBelt className='project__code-belt'>
+          <Button icon='code' label='Code' onClick={this.toggleCode} />
           <Button
-            icon='down-arrow'
-            label='Download'
+            icon='download'
+            label='Export'
             onClick={this.props.exportModels}
           />
-          <Button icon='code' label='code' onClick={this.toggleCode} />
         </ToolBelt>
         {this.state.codeOpen ? (
           <div className='project-code'>
@@ -69,20 +69,20 @@ export default class Project extends React.Component {
               <span className='list__item__content'>{model.name}</span>
               <span className='models__item__actions list__item__actions'>
                 <Button
-                  icon='right-arrow'
-                  iconPosition='under'
+                  icon='view'
+                  iconPosition='above'
                   onClick={() => goToModel(model.id)}
-                  label='Go'
+                  label='View'
                 />
                 <Button
-                  icon='left-pencil'
-                  iconPosition='under'
+                  icon='edit'
+                  iconPosition='above'
                   onClick={() => editModel(model.id)}
                   label='Edit'
                 />
                 <Button
-                  icon='multiplication-sign'
-                  iconPosition='under'
+                  icon='delete'
+                  iconPosition='above'
                   onClick={() => deleteModel(model.id)}
                   label='Delete'
                 />
@@ -99,6 +99,7 @@ export default class Project extends React.Component {
             ) : models.length > 0 ? (
               <Button
                 ref={this.addButton}
+                icon='add'
                 label='Add a Model'
                 primary
                 onClick={startCreatingNewModel}
@@ -108,6 +109,7 @@ export default class Project extends React.Component {
                 <p>You have no models</p>
                 <Button
                   ref={this.addButton}
+                  icon='add'
                   label='Add a Model'
                   primary
                   onClick={startCreatingNewModel}

@@ -90,12 +90,11 @@ export default class NewModelForm extends React.Component {
           </ul>
         ) : null}
         <Button
-          label='Add'
           primary
           type='submit'
+          icon='check'
+          label='Add'
           className='new-model-form__add'
-          icon='check-mark'
-          iconPosition='after'
           disabled={
             this.state.model.name.trim().length === 0 ||
             this.state.errors.length > 0
@@ -105,8 +104,7 @@ export default class NewModelForm extends React.Component {
           label='Cancel'
           primary
           type='button'
-          icon='multiplication-sign'
-          iconPosition='after'
+          icon='cancel'
           className='new-model-form__cancel'
           onClick={this.cancel}
         />

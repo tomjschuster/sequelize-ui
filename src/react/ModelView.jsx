@@ -33,18 +33,14 @@ export default class ModelView extends React.Component {
       <main className='main-content model-view'>
         <h2 className='title'>{this.props.model.name} Model</h2>
         <ToolBelt>
-          <Button
-            icon='left-arrow'
-            label='Back'
-            onClick={this.props.goToModels}
-          />
+          <Button icon='back' label='Back' onClick={this.props.goToModels} />
+          <Button icon='code' label='Code' onClick={this.toggleCode} />
           <Button
             ref={this.editButtonRef}
-            icon='left-pencil'
+            icon='edit'
             label='Edit'
             onClick={this.props.editModel}
           />
-          <Button icon='code' label='Code' onClick={this.toggleCode} />
         </ToolBelt>
         {this.state.codeOpen ? (
           <div className='model-code'>

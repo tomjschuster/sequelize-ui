@@ -203,6 +203,8 @@ export default class App extends React.Component {
   topBarActions () {
     const githubLink = {
       href: 'https://github.com/tomjschuster/sequelize-ui',
+      icon: 'github',
+      iconPosition: 'above',
       label: 'GitHub'
     }
 

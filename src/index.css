@@ -87,6 +87,15 @@ html, body {
     color: inherit;
 }
 
+.top-bar__actions__button.icon.above {
+  line-height: inherit;
+}
+
+.top-bar__actions__button.icon.above::before {
+  text-align: center;
+  font-size: 1.75em;
+}
+
 .top-bar__actions__button:hover {
   color: var(--primary-color-dark)
 }
@@ -110,12 +119,11 @@ html, body {
   padding: 0.5em;
 }
 
-.button.icon::before, 
-.button.icon--before::before {
+.button.icon.before::before {
   margin-right: 0.3em;
 }
 
-.button.icon--after::after {
+.button.icon.after::after {
   margin-left: 0.3em;
 }
 
@@ -250,66 +258,109 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 /* Icons */
-.icon--under::after {
+.icon.before::before,
+.icon.above::before,
+.icon.after::after,
+.icon.below::after {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Font Awesome 5 Free";
+}
+
+.icon.above::before,
+.icon.below::after {
   display: block;
 }
 
-.icon.code::before,
-.icon--before.code::before,
-.icon--after.code::after,
-.under--after.code::after {
-  content: '</>';
+.icon.before.code::before,
+.icon.above.code::before,
+.icon.after.code::after,
+.icon.below.code::after {
+  font-weight: 900;
+  content: '\f121';
 }
 
-.icon.left-pencil::before,
-.icon--before.left-pencil::before,
-.icon--after.left-pencil::after,
-.icon--under.left-pencil::after {
-  content: '\270E';
+.icon.before.edit::before,
+.icon.above.edit::before,
+.icon.after.edit::after,
+.icon.below.edit::after {
+  font-weight: 900;
+  content: '\f044';
 }
 
-.icon.left-arrow::before,
-.icon--before.left-arrow::before,
-.icon--after.left-arrow::after,
-.icon--under.left-arrow::after {
-  content: '\21E6';
+.icon.before.back::before,
+.icon.above.back::before,
+.icon.after.back::after,
+.icon.below.back::after {
+  content: '\f359';
 }
 
-.icon.multiplication-sign::before,
-.icon--before.multiplication-sign::before,
-.icon--after.multiplication-sign::after,
-.icon--under.multiplication-sign::after {
-  content: '\00D7';
+.icon.before.delete::before,
+.icon.above.delete::before,
+.icon.after.delete::after,
+.icon.below.delete::after {
+  font-weight: 900;
+  content: '\f2ed';
 }
 
-.icon.right-arrow::before,
-.icon--before.right-arrow::before,
-.icon--after.right-arrow::after,
-.icon--under.right-arrow::after {
-  content: '\21E8';
+.icon.before.view::before,
+.icon.above.view::before,
+.icon.after.view::after,
+.icon.below.view::after {
+  font-weight: 900;
+  content: '\f06e';
 }
 
-.icon.check-mark::before,
-.icon--before.check-mark::before,
-.icon--after.check-mark::after,
-.icon--under.check-mark::after {
-  content: '\2713';
+.icon.before.check::before,
+.icon.above.check::before,
+.icon.after.check::after,
+.icon.below.check::after {
+  font-weight: 900;
+  content: '\f00c';
 }
 
-.icon.floppy-disk::before,
-.icon--before.floppy-disk::before,
-.icon--after.floppy-disk::after,
-.icon--under.floppy-disk::after {
-  content: '\1f4be';
+.icon.before.save::before,
+.icon.above.save::before,
+.icon.after.save::after,
+.icon.below.save::after {
+  content: '\f0c7';
 }
 
-.icon.down-arrow::before,
-.icon--before.down-arrow::before,
-.icon--after.down-arrow::after,
-.icon--under.down-arrow::after {
-  content: '\21E9';
+.icon.before.cancel::before,
+.icon.above.cancel::before,
+.icon.after.cancel::after,
+.icon.below.cancel::after {
+  font-weight: 900;
+  content: '\f00d';
 }
 
+.icon.before.download::before,
+.icon.above.download::before,
+.icon.after.download::after,
+.icon.below.download::after {
+  font-weight: 900;
+  content: '\f019';
+}
+
+.icon.before.add::before,
+.icon.above.add::before,
+.icon.after.add::after,
+.icon.below.add::after {
+  font-weight: 900;
+  content: '\f067';
+}
+
+.icon.before.github::before,
+.icon.above.github::before,
+.icon.after.github::after,
+.icon.below.github::after {
+  font-family: 'Font Awesome 5 Brands';
+  font-weight: 400;
+  content: '\f09b';
+}
 
 /* Breadcrumbs */
 .breadcrumbs ol {
@@ -746,8 +797,11 @@ label.model-config__item:hover {
 }
 
 .edit-model__model label {
-  font-size: 1.25rem;
+  font-size: 1rem;
   margin-right: 0.5em;
+  display: block;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 .form-field {
@@ -763,6 +817,7 @@ label.model-config__item:hover {
   margin-top: 0.5em;
 }
 
+.edit-model-name label,
 .edit-model-name input {
   text-align: center;
 }
@@ -777,9 +832,17 @@ label.model-config__item:hover {
 }
 
 .form-field__item {
-  /* text-align: center; */
+  text-align: center;
   width: 85%;
   margin: 0.5em auto;
+}
+
+.form-field__item input {
+  text-align: center;
+}
+
+.form-field__item option {
+  padding-left: 2em;
 }
 
 label.checkbox {

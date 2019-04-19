@@ -51,6 +51,7 @@
     ]
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.8.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.0.0",
     "babel-plugin-prismjs": "^1.0.2",

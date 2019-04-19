@@ -214,14 +214,14 @@ export default class ModelForm extends React.Component {
             <Button
               primary
               type='submit'
-              icon='floppy-disk'
+              icon='save'
               label='Save'
               disabled={this.hasErrors()}
             />
             <Button
               primary
               type='button'
-              icon='multiplication-sign'
+              icon='cancel'
               label='Cancel'
               onClick={this.cancel}
             />
@@ -312,8 +312,7 @@ export default class ModelForm extends React.Component {
                       primary
                       type='button'
                       className='delete-field-button'
-                      icon='multiplication-sign'
-                      iconPosition='after'
+                      icon='delete'
                       label='Delete'
                       onClick={() => this.deleteField(field.id)}
                     />
@@ -398,8 +397,7 @@ export default class ModelForm extends React.Component {
                     <Button
                       primary
                       type='button'
-                      icon='check-mark'
-                      iconPosition='after'
+                      icon='check'
                       className='form-field__action'
                       label='Add'
                       disabled={this.hasNewFieldErrors()}
@@ -408,8 +406,7 @@ export default class ModelForm extends React.Component {
                     <Button
                       primary
                       type='button'
-                      icon='multiplication-sign'
-                      iconPosition='after'
+                      icon='cancel'
                       className='form-field__action'
                       label='Cancel'
                       onClick={this.cancelCreatingField}
@@ -430,6 +427,7 @@ export default class ModelForm extends React.Component {
                     ref={this.addFieldButton}
                     primary
                     type='button'
+                    icon='add'
                     label='Add a Field'
                     onClick={this.startCreatingField}
                   />

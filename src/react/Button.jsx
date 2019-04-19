@@ -57,13 +57,15 @@ const getIconClass = (icon, position) => {
   if (icon) {
     switch (position) {
       case 'before':
-        return `icon--before ${icon}`
+        return `icon before ${icon}`
+      case 'above':
+        return `icon above ${icon}`
       case 'after':
-        return `icon--after ${icon}`
-      case 'under':
-        return `icon--under ${icon}`
+        return `icon after ${icon}`
+      case 'below':
+        return `icon below ${icon}`
       default:
-        return `icon ${icon}`
+        return `icon before ${icon}`
     }
   } else {
     return null
