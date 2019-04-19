@@ -15,7 +15,7 @@ npm start
 ```
 
 TODO:
-- Icons
+- Finish styling code explorer
 - Demo video
 
 ## Future enhancements
