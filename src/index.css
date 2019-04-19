@@ -353,6 +353,14 @@ input.checkbox[type="checkbox"]:focus + label::before {
   content: '\f067';
 }
 
+.icon.before.folder::before,
+.icon.above.folder::before,
+.icon.after.folder::after,
+.icon.below.folder::after {
+  content: '\f07b';
+}
+
+
 .icon.before.github::before,
 .icon.above.github::before,
 .icon.after.github::after,
@@ -360,6 +368,32 @@ input.checkbox[type="checkbox"]:focus + label::before {
   font-family: 'Font Awesome 5 Brands';
   font-weight: 400;
   content: '\f09b';
+}
+
+.icon.before.nodejs::before,
+.icon.above.nodejs::before,
+.icon.after.nodejs::after,
+.icon.below.nodejs::after {
+  font-family: 'Font Awesome 5 Brands';
+  font-weight: 400;
+  content: '\f3d3';
+}
+
+.icon.before.git::before,
+.icon.above.git::before,
+.icon.after.git::after,
+.icon.below.git::after {
+  font-family: 'Font Awesome 5 Brands';
+  font-weight: 400;
+  content: '\f1d3';
+}
+
+.icon.before.json::before,
+.icon.above.json::before,
+.icon.after.json::after,
+.icon.below.json::after {
+  font-weight: bold;
+  content: '{}';
 }
 
 /* Breadcrumbs */
@@ -543,6 +577,12 @@ pre.code[class*="language-"] {
   color: #222;
 }
 
+@media (max-width: 600px) {
+  .code-explorer__file-item > ul {
+    padding-left: 0.5em;
+  }
+}
+
 .code-explorer__file-item > .code-explorer__filename::before {
   margin-right: 0.5em;
 }
@@ -555,15 +595,24 @@ pre.code[class*="language-"] {
   color: var(--secondary-color);
 }
 
-
+.code-explorer__filename::before {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Font Awesome 5 Free";
+}
+/* 
 .code-explorer__directory > .code-explorer__filename::before {
-  content: '\1F4C1';
-}
+  content: '\f07b';
+} */
 
-.code-explorer__file > .code-explorer__filename::before {
-  content: '</>';
-  letter-spacing: 0px;
-}
+/* .code-explorer__file > .code-explorer__filename::before {
+  font-family: "Font Awesome 5 Brands";
+  content: '\f3d3';
+  content: '\f1d3';
+} */
 
 
 /* General Page */

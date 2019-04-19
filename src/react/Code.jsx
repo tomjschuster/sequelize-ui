@@ -71,13 +71,20 @@ export class CodeExplorer extends React.Component {
 
   renderExplorerItem = (fileItem, path = []) => {
     const currentPath = [...path, fileItem.name]
+    const language = languageFromFilename(fileItem.name)
+    const iconClass = language
+      ? ' icon before ' + iconFromLanguage(language)
+      : ' icon before code'
+
     if (fileItem.files) {
       return (
         <li
           className='code-explorer__directory code-explorer__file-item'
           key={fileItem.name}
         >
-          <span className='code-explorer__filename'>{fileItem.name}</span>
+          <span className={'code-explorer__filename icon before folder'}>
+            {fileItem.name}
+          </span>
           <ul>
             {fileItem.files
               .slice(0)
@@ -93,7 +100,7 @@ export class CodeExplorer extends React.Component {
           key={fileItem.name}
         >
           <span
-            className='code-explorer__filename'
+            className={'code-explorer__filename' + iconClass}
             onClick={() => this.selectFile(currentPath)}
           >
             {fileItem.name}
@@ -174,6 +181,19 @@ const languageFromExtension = extension => {
       return 'javascript'
     case 'json':
       return 'json'
+    default:
+      return null
+  }
+}
+
+const iconFromLanguage = language => {
+  switch (language) {
+    case 'javascript':
+      return 'nodejs'
+    case 'json':
+      return 'json'
+    case 'git':
+      return 'git'
     default:
       return null
   }
