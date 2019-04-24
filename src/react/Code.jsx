@@ -69,12 +69,9 @@ export class CodeExplorer extends React.Component {
 
   selectFile = path => this.setState({ activePath: path })
 
-  renderExplorerItem = (fileItem, path = []) => {
+  renderExplorerItem = (fileItem, activePath, path = []) => {
     const currentPath = [...path, fileItem.name]
-    const language = languageFromFilename(fileItem.name)
-    const iconClass = language
-      ? ' icon before ' + iconFromLanguage(language)
-      : ' icon before code'
+    const restActivePath = activePath.length === 0 ? [] : activePath.slice(1)
 
     if (fileItem.files) {
       return (
@@ -89,14 +86,27 @@ export class CodeExplorer extends React.Component {
             {fileItem.files
               .slice(0)
               .sort(compareFiles)
-              .map(file => this.renderExplorerItem(file, currentPath))}
+              .map(file =>
+                this.renderExplorerItem(file, restActivePath, currentPath)
+              )}
           </ul>
         </li>
       )
     } else {
+      const active =
+        restActivePath.length === 0 && activePath[0] === fileItem.name
+      const language = languageFromFilename(fileItem.name)
+      const iconClass = language
+        ? ' icon before ' + iconFromLanguage(language)
+        : ' icon before code'
+
+      const activeClass = active ? ' active' : ''
+
       return (
         <li
-          className='code-explorer__file code-explorer__file-item'
+          className={
+            'code-explorer__file code-explorer__file-item' + activeClass
+          }
           key={fileItem.name}
         >
           <span
@@ -125,7 +135,9 @@ export class CodeExplorer extends React.Component {
     return (
       <div className={classText + 'code-explorer'} {...props}>
         <div className='code-explorer__explorer'>
-          <ul>{this.renderExplorerItem(rootFileItem)}</ul>
+          <ul>
+            {this.renderExplorerItem(rootFileItem, this.state.activePath)}
+          </ul>
         </div>
         <div className='code-explorer__code'>{this.renderCode()}</div>
       </div>

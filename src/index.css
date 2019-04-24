@@ -535,13 +535,17 @@ pre.code[class*="language-"] {
 }
 
 .code-explorer {
-  display: grid;
-  grid-template-columns: 35% 65%;
-  grid-template-rows: auto;
+  /* display: grid; */
+  /* grid-template-columns: auto 1fr; */
+  /* grid-template-rows: auto; */
   text-align: left;
   border: solid 1px #ddd;
   border-radius: 5px;
   max-width: 100%;
+}
+
+.code-explorer > :first-child {
+  max-width: 400px;
 }
 
 .code-explorer__code,
@@ -552,30 +556,50 @@ pre.code[class*="language-"] {
 .code-explorer__code {
   border-left: solid 1px #ddd;
   background: #f2f2f2;
-  grid-column-start: 2;
+  min-width: 70%;
+  /* grid-column-start: 2;
   grid-column-end: 2;
   grid-row-start: 1;
-  grid-row-end: 1;
+  grid-row-end: 1; */
 }
 
 .code-explorer__explorer {
-  border-left: solid 1px #ddd;
-  grid-column-start: 1;
+  padding: 1em;
+  max-width: 30%;
+  /* grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 1;
-  grid-row-end: 1;
+  grid-row-end: 1; */
 }
 
 .code-explorer__explorer ul {
   list-style: none;
   padding-left: 1.25em;
+  margin: 0;
+}
+
+.code-explorer__explorer > ul {
+  padding-left: 0;
 }
 
 .code-explorer__file-item > .code-explorer__filename {
   display: block;
   padding: 0.25em;
   color: #222;
+  white-space: nowrap;
 }
+
+.code-explorer__file-item.active > .code-explorer__filename {
+  font-weight: bold;
+  color: var(--primary-color-dark);
+  cursor: default;
+}
+
+.code-explorer__file-item.active > .code-explorer__filename:hover {
+  color: var(--primary-color-dark);
+  cursor: default;
+}
+
 
 @media (max-width: 600px) {
   .code-explorer__file-item > ul {
