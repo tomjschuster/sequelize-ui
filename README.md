@@ -24,4 +24,5 @@ TODO:
 - Associations
 - Migrations
 - Sequelize v5 templates
+- Select Driver
 - Multiple Projects
