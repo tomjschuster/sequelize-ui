@@ -15,6 +15,7 @@ html, body {
 * {
   font-family: 'Lato', sans-serif;
   box-sizing: border-box;
+  color: #2a2a2a;
 }
 
 #react-app {
