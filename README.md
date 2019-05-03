@@ -17,7 +17,7 @@ npm start
 ```
 
 TODO:
-- Finish styling code explorer
+- Copied confirmation
 - Demo video
 
 ## Future enhancements
