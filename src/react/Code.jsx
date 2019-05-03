@@ -33,17 +33,17 @@ export default class Code extends React.Component {
 
     const languageClass = this.props.language
       ? ' language-' + this.props.language
-      : ''
-
-    return code ? (
+      : 'language-javascript'
+    console.log('code', code.length)
+    return (
       <pre
         ref={this.preRef}
         className={'code' + classText + languageClass}
         {...props}
       >
-        <code className={languageClass}>{code}</code>
+        <code className={languageClass}>{code || ''}</code>
         <div className='code__actions'>
-          {copyButton ? (
+          {code && copyButton ? (
             <button className='code__copy' onClick={this.copyCode}>
               Copy
             </button>
@@ -55,8 +55,6 @@ export default class Code extends React.Component {
           ) : null}
         </div>
       </pre>
-    ) : (
-      <div />
     )
   }
 }
@@ -64,7 +62,7 @@ export default class Code extends React.Component {
 export class CodeExplorer extends React.Component {
   constructor (props) {
     super(props)
-    this.state = { activePath: [] }
+    this.state = { activePath: ['my-project', 'db', 'index.js'] }
   }
 
   selectFile = path => this.setState({ activePath: path })
@@ -124,7 +122,7 @@ export class CodeExplorer extends React.Component {
     const file = findFile(this.state.activePath, [this.props.rootFileItem])
     const language = file ? languageFromFilename(file.name) : null
     return (
-      <Code code={file ? file.content : null} language={language} copyButton />
+      <Code code={file ? file.content : ''} language={language} copyButton />
     )
   }
 
