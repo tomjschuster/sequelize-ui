@@ -495,6 +495,10 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 /* Code */
+pre[class*="language-"] > code {
+  background-size: 2.95em 2.95em
+}
+
 pre.code[class*="language-"]::before,
 pre.code[class*="language-"]::after {
   box-shadow: none;
@@ -507,7 +511,7 @@ pre.code[class*="language-"] {
 .code__actions {
   position: absolute;
   top: 0.4em;
-  right: 0.5em;
+  right: 1em;
   display: inline-block;
 }
 
@@ -607,6 +611,7 @@ pre.code[class*="language-"] {
 .code-explorer__code code {
   box-shadow: none;
   padding-top: 1em;
+  padding-bottom: 1em;
 }
 
 @media (min-width: 800px) {
@@ -800,10 +805,13 @@ label.model-config__item:hover {
   top: var(--top-bar-height);
   left: 100vw;
   width: 100%;
-  height: 100%;
   z-index: 1;
   padding: 1em;
   transition: left 400ms ease-in-out;
+}
+
+.model-code {
+  height: calc(100vh - var(--top-bar-height) - 2em);
 }
 
 @media (max-width: 450px) {
@@ -841,6 +849,11 @@ label.model-config__item:hover {
   border-top: none;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+.model-code pre,
+.model-code code {
+  height: 100%;
 }
 
 /* View Model */
@@ -1079,3 +1092,30 @@ label.checkbox {
 .delete-field-button {
   width: 150px;
 }
+
+
+/* Customize website's scrollbar like Mac OS
+Not supports in Firefox and IE */
+
+/* total width */
+.code-explorer__explorer::-webkit-scrollbar,
+.code-explorer__code code::-webkit-scrollbar {
+  background-color:#f8f8f8;;
+  width:16px
+}
+
+/* background of the scrollbar except button or resizer */
+.code-explorer__explorer::-webkit-scrollbar-track,
+.code-explorer__code::-webkit-scrollbar-track {
+  background-color:#f8f8f8;
+}
+
+/* scrollbar itself */
+.code-explorer__explorer::-webkit-scrollbar-thumb,
+.code-explorer__code code::-webkit-scrollbar-thumb {
+  background-color:#babac0;
+  border-radius:16px;
+  border:4px solid #f8f8f8;
+}
+
+/* set button(top and bottom of the scrollbar) */

@@ -1,6 +1,7 @@
 import React from 'react'
 import Prism from 'prismjs'
 import copy from 'copy-to-clipboard'
+import Button from './Button.jsx'
 
 export default class Code extends React.Component {
   constructor (props) {
@@ -21,14 +22,7 @@ export default class Code extends React.Component {
   copyCode = () => this.props.code && copy(this.props.code)
 
   render () {
-    const {
-      code,
-      children,
-      className,
-      copyButton,
-      onHide,
-      ...props
-    } = this.props
+    const { code, children, className, copyButton, ...props } = this.props
     const classText = className ? ' ' + className : ''
 
     const languageClass = this.props.language
@@ -44,14 +38,11 @@ export default class Code extends React.Component {
         <code className={languageClass}>{code || ''}</code>
         <div className='code__actions'>
           {code && copyButton ? (
-            <button className='code__copy' onClick={this.copyCode}>
-              Copy
-            </button>
-          ) : null}
-          {this.props.onHide ? (
-            <button className='code__hide' onClick={onHide}>
-              Hide
-            </button>
+            <Button
+              label='Copy'
+              className='code__copy'
+              onClick={this.copyCode}
+            />
           ) : null}
         </div>
       </pre>
