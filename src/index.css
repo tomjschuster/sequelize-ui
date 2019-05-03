@@ -647,17 +647,6 @@ pre.code[class*="language-"] {
   -webkit-font-smoothing: antialiased;
   font-family: "Font Awesome 5 Free";
 }
-/* 
-.code-explorer__directory > .code-explorer__filename::before {
-  content: '\f07b';
-} */
-
-/* .code-explorer__file > .code-explorer__filename::before {
-  font-family: "Font Awesome 5 Brands";
-  content: '\f3d3';
-  content: '\f1d3';
-} */
-
 
 /* General Page */
 .title {
@@ -786,22 +775,26 @@ label.model-config__item:hover {
   }
 }
 
-.project .title {
+.project .title,
+.model-view .title {
   clear: right;
 }
 
-.project-code__open {
+.project-code__open,
+.model-code__open {
   float: right;
   color: var(--primary-color-dark);
   font-size: 1rem;
-  margin: 0.75em 0.375em;
+  margin: 18px 14px;
 }
 
-.project-code__open:hover {
+.project-code__open:hover, 
+.model-code__open:hover {
   color: var(--secondary-color);
 }
 
-.project-code {
+.project-code,
+.model-code {
   position: fixed;
   background-color: #fff;
   top: var(--top-bar-height);
@@ -819,11 +812,13 @@ label.model-config__item:hover {
   }
 }
 
-.project-code.open {
+.project-code.open,
+.model-code.open {
   left: 0;
 }
 
-.project-code__top {
+.project-code__top,
+.model-code__top {
   display: flex;
   justify-content: flex-end;
   border: 1px solid #ddd;
@@ -831,15 +826,18 @@ label.model-config__item:hover {
   border-top-right-radius: 5px;
 }
 
-.project-code__top .button {
+.project-code__top .button,
+.model-code__top .button {
   font-size: 1rem;
 }
 
-  .project-code__top .button:hover {
+.project-code__top .button:hover,
+.model-code__top .button:hover {
   color: var(--secondary-color);
 }
 
-.project-code .code-explorer {
+.project-code .code-explorer,
+.model-code .code-explorer {
   border-top: none;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -848,12 +846,6 @@ label.model-config__item:hover {
 /* View Model */
 .model-view {
   text-align: center;
-}
-
-.model-code {
-  width: 90%;
-  margin: 1.5em auto;
-  display: block;
 }
 
 .fields-title {
@@ -894,10 +886,6 @@ label.model-config__item:hover {
 .fields-table__name-cell {
   max-width: 60%;
   word-break: break-all;
-}
-
-.model-code-preview {
-  text-align: left;
 }
 
 /* Model Form */
