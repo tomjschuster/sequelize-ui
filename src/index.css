@@ -790,7 +790,7 @@ label.model-config__item:hover {
 }
 
 .fields-title {
-  margin: 1.5em 0;
+  margin: 1.5rem 0;
 }
 
 .fields-table {
@@ -803,16 +803,16 @@ label.model-config__item:hover {
 
 .fields-table__cell {
   border: 1px solid #ddd;
-  padding: 0.5em;
+  padding: 0.5rem;
   text-align: center;
   overflow-wrap: break-word;
 }
 
-.fields-list__item {
-  padding: 0.5em;
+.fields-list__itrem {
+  padding: 0.5rem;
   border: 1px solid #ddd;
   border-bottom: none;
-  width: 20em;
+  width: 20rem;
   max-width: 80%;
 }
 
@@ -849,15 +849,15 @@ label.model-config__item:hover {
 }
 
 .edit-model__actions .button:first-child {
-  margin-right: 0.5em;
+  margin-right: 0.5rem;
 }
 
 .edit-model__actions .button:last-child {
-  margin-left: 0.5em;
+  margin-left: 0.5rem;
 }
 
 .edit-model__actions, .edit-model__model {
-  margin: 1.5em auto;
+  margin: 1.5rem auto;
 }
 
 .edit-model__model {
@@ -865,12 +865,12 @@ label.model-config__item:hover {
 }
 
 .edit-model__model {
-  font-size: 1.25em;
+  font-size: 1.25rem;
 }
 
 .edit-model__model label {
   font-size: 1rem;
-  margin-right: 0.5em;
+  margin-right: 0.5rem;
   display: block;
   text-transform: uppercase;
   font-weight: bold;
@@ -885,8 +885,8 @@ label.model-config__item:hover {
 .edit-model-name input,
 .form-field input,
 .form-field select {
-  padding: 0.3em;
-  margin-top: 0.5em;
+  padding: 0.3rem;
+  margin-top: 0.5rem;
 }
 
 .edit-model-name label,
@@ -906,7 +906,7 @@ label.model-config__item:hover {
 .form-field__item {
   text-align: center;
   width: 85%;
-  margin: 0.5em auto;
+  margin: 0.5rem auto;
 }
 
 .form-field__item input {
@@ -914,17 +914,17 @@ label.model-config__item:hover {
 }
 
 .form-field__item option {
-  padding-left: 2em;
+  padding-left: 2rem;
 }
 
 label.checkbox {
-  margin-right: 0.75em;
+  margin-right: 0.75rem;
 }
 
 .form-field__name label,
 .form-field__type label {
   margin-right: 1em;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.5rem;
 }
 
 .form-field__name input,
@@ -938,7 +938,7 @@ label.checkbox {
  }
 
  .form-field__option {
-    font-size: 0.8em;
+    font-size: 0.8rem;
   }
 
 
