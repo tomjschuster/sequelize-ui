@@ -20,6 +20,10 @@ html, body {
   color:var(--black);
 }
 
+/**************************
+ ********* Layout *********
+ **************************/
+
 #app {
   height: 100vh;
   display: flex;
@@ -100,22 +104,42 @@ html, body {
   color: var(--primary-color);
 }
 
+
+/**************************
+ ******* Components *******
+ **************************/
+
+/* Text */
+.title {
+  font-size: 1.25rem;
+  margin: 1.5rem 0;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-size: 1rem;
+  margin: 1rem 0;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 /* Button */
 .button {
   border: none;
   background: none;
-  font-size: 0.875em;
+  font-size: 0.875rem;
   display: inline-block;
   cursor: pointer;
-  padding: 0.5em;
+  padding: 0.5rem;
 }
 
 .button.icon.before::before {
-  margin-right: 0.3em;
+  margin-right: 0.3rem;
 }
 
 .button.icon.after::after {
-  margin-left: 0.3em;
+  margin-left: 0.3rem;
 }
 
 .button.primary {
@@ -150,8 +174,8 @@ html, body {
 }
 
 .list__title {
-  font-size: 1em;
-  line-height: 2.5em;
+  font-size: 1rem;
+  line-height: 2.5rem;
   text-transform: uppercase;
   margin-bottom: 0;
   display: block;
@@ -163,7 +187,7 @@ html, body {
 }
 
 .list__item {
-  padding: 0.5em;
+  padding: 0.5rem;
   border-bottom: 1px solid #ddd;
   display: flex;
   justify-content: space-between;
@@ -177,14 +201,14 @@ html, body {
 
 
 .list__item__actions > * {
-  width: 3.5em;
+  width: 3.5rem;
   /* display: inline-block; */
 }
 
 /* Checkbox */
 .checkbox {
-  line-height: 1.5em;
-  font-size: 1em;
+  line-height: 1.5rem;
+  font-size: 1rem;
 }
 
 .checkbox:hover {
@@ -200,35 +224,35 @@ label.checkbox::before {
   content: "";
   display: inline-block;
 
-  height: 1em;
-  width: 1em;
+  height: 1rem;
+  width: 1rem;
   
   border: 1px solid;
 
   left: 0;
-  top: 0.25em;
+  top: 0.25rem;
 }
 
 label.checkbox::after {
   content: "";
   display: inline-block;
 
-  height: 0.25em;
-  width: 0.5em;
+  height: 0.25rem;
+  width: 0.5rem;
   border-left: 2px solid;
   border-bottom: 2px solid;
 
   transform: rotate(-45deg);
 
-  left: 0.3em;
-  top: 0.5em;
+  left: 0.3rem;
+  top: 0.5rem;
 }
 
 label.checkbox {
   position: relative;
   display: inline-block;
 
-  padding-left: 1.5em;
+  padding-left: 1.5rem;
 }
 
 label.checkbox::before,
@@ -248,175 +272,6 @@ input.checkbox[type="checkbox"]:focus + label::before {
   outline: rgb(59, 153, 252) auto 12px;
 }
 
-/* Icons */
-.icon.before::before,
-.icon.above::before,
-.icon.after::after,
-.icon.below::after {
-  display: inline-block;
-  font-style: normal;
-  font-variant: normal;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  font-family: "Font Awesome 5 Free";
-}
-
-.icon.above::before,
-.icon.below::after {
-  display: block;
-}
-
-.icon.before.code::before,
-.icon.above.code::before,
-.icon.after.code::after,
-.icon.below.code::after {
-  font-weight: 900;
-  content: '\f121';
-}
-
-.icon.before.edit::before,
-.icon.above.edit::before,
-.icon.after.edit::after,
-.icon.below.edit::after {
-  font-weight: 900;
-  content: '\f044';
-}
-
-.icon.before.back::before,
-.icon.above.back::before,
-.icon.after.back::after,
-.icon.below.back::after {
-  content: '\f359';
-}
-
-.icon.before.delete::before,
-.icon.above.delete::before,
-.icon.after.delete::after,
-.icon.below.delete::after {
-  font-weight: 900;
-  content: '\f2ed';
-}
-
-.icon.before.view::before,
-.icon.above.view::before,
-.icon.after.view::after,
-.icon.below.view::after {
-  font-weight: 900;
-  content: '\f06e';
-}
-
-.icon.before.check::before,
-.icon.above.check::before,
-.icon.after.check::after,
-.icon.below.check::after {
-  font-weight: 900;
-  content: '\f00c';
-}
-
-.icon.before.save::before,
-.icon.above.save::before,
-.icon.after.save::after,
-.icon.below.save::after {
-  content: '\f0c7';
-}
-
-.icon.before.cancel::before,
-.icon.above.cancel::before,
-.icon.after.cancel::after,
-.icon.below.cancel::after {
-  font-weight: 900;
-  content: '\f00d';
-}
-
-.icon.before.download::before,
-.icon.above.download::before,
-.icon.after.download::after,
-.icon.below.download::after {
-  font-weight: 900;
-  content: '\f019';
-}
-
-.icon.before.add::before,
-.icon.above.add::before,
-.icon.after.add::after,
-.icon.below.add::after {
-  font-weight: 900;
-  content: '\f067';
-}
-
-.icon.before.folder::before,
-.icon.above.folder::before,
-.icon.after.folder::after,
-.icon.below.folder::after {
-  content: '\f07b';
-}
-
-
-.icon.before.github::before,
-.icon.above.github::before,
-.icon.after.github::after,
-.icon.below.github::after {
-  font-family: 'Font Awesome 5 Brands';
-  font-weight: 400;
-  content: '\f09b';
-}
-
-.icon.before.nodejs::before,
-.icon.above.nodejs::before,
-.icon.after.nodejs::after,
-.icon.below.nodejs::after {
-  font-family: 'Font Awesome 5 Brands';
-  font-weight: 400;
-  content: '\f3d3';
-}
-
-.icon.before.git::before,
-.icon.above.git::before,
-.icon.after.git::after,
-.icon.below.git::after {
-  font-family: 'Font Awesome 5 Brands';
-  font-weight: 400;
-  content: '\f1d3';
-}
-
-.icon.before.json::before,
-.icon.above.json::before,
-.icon.after.json::after,
-.icon.below.json::after {
-  font-weight: bold;
-  content: '{}';
-}
-
-/* Breadcrumbs */
-.breadcrumbs ol {
-  padding: 0;
-  margin: 0;
-  float: left;
-}
-
-.breadcrumbs__crumb {
-  display: inline;
-  margin-right: 0.5em;
-}
-
-.breadcrumbs__crumb:not(.inactive) a {
-  cursor: pointer;
-  font-weight: bold;
-  color: var(--secondary-color);
-}
-
-
-.breadcrumbs__crumb:last-child {
-  margin-right: 0;
-}
-
-.breadcrumbs__crumb:not(:last-child)::after {
-  content: '\\';
-  margin-left: 0.5em;
-  color: initial;
-  cursor: initial;
-}
-
 /* Toolbelt */
 .toolbelt {
   border: 1px solid #ddd;
@@ -425,15 +280,15 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 .toolbelt .button {
-  padding: 0.75em;
+  padding: 0.75rem;
 }
 
 .toolbelt .button:first-of-type {
-  padding-left: 1.5em;
+  padding-left: 1.5rem;
 }
 
 .toolbelt .button:last-of-type {
-  padding-right: 1.5em;
+  padding-right: 1.5rem;
 }
 
 .toolbelt .button:hover {
@@ -441,47 +296,9 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 .toolbelt__title {
-  margin: 0 0 0.5em;
-  font-size: 1em;
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
   text-transform: uppercase;
-}
-
-/* Flyout */
-.flyout {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  background-color: white;
-  left: 100vw;
-  top: 0;
-  transition: left 0.33s;
-}
-
-.flyout.open {
-  left: 0;
-}
-
-.flyout__header {
-  height: 4em;
-  background-color: var(--secondary-color);
-  display: flex;
-  align-items: center;
-  padding: 1em;
-}
-
-.flyout__header h2 {
-  margin: 0;
-  font-size: 1.5em;
-  text-transform: uppercase;
-}
-
-.flyout__header button {
-  float: right;
-  background: none;
-  border: none;
-  font-size: 2em;
-  cursor: pointer;
-  margin-right: 0.5em;
 }
 
 /* Code */
@@ -643,34 +460,157 @@ pre.code[class*="language-"] {
   font-family: "Font Awesome 5 Free";
 }
 
-/* General Page */
-.title {
-  font-size: 1.25em;
-  margin: 1.5em 0;
-  text-align: center;
-  text-transform: uppercase;
+/* Icons */
+.icon.before::before,
+.icon.above::before,
+.icon.after::after,
+.icon.below::after {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Font Awesome 5 Free";
 }
 
-.subtitle {
-  font-size: 1em;
-  margin: 1em 0;
-  text-align: center;
-  text-transform: uppercase;
+.icon.above::before,
+.icon.below::after {
+  display: block;
 }
 
-/* Page Specific */
-/* Models List */
+.icon.before.code::before,
+.icon.above.code::before,
+.icon.after.code::after,
+.icon.below.code::after {
+  font-weight: 900;
+  content: '\f121';
+}
+
+.icon.before.edit::before,
+.icon.above.edit::before,
+.icon.after.edit::after,
+.icon.below.edit::after {
+  font-weight: 900;
+  content: '\f044';
+}
+
+.icon.before.back::before,
+.icon.above.back::before,
+.icon.after.back::after,
+.icon.below.back::after {
+  content: '\f359';
+}
+
+.icon.before.delete::before,
+.icon.above.delete::before,
+.icon.after.delete::after,
+.icon.below.delete::after {
+  font-weight: 900;
+  content: '\f2ed';
+}
+
+.icon.before.view::before,
+.icon.above.view::before,
+.icon.after.view::after,
+.icon.below.view::after {
+  font-weight: 900;
+  content: '\f06e';
+}
+
+.icon.before.check::before,
+.icon.above.check::before,
+.icon.after.check::after,
+.icon.below.check::after {
+  font-weight: 900;
+  content: '\f00c';
+}
+
+.icon.before.save::before,
+.icon.above.save::before,
+.icon.after.save::after,
+.icon.below.save::after {
+  content: '\f0c7';
+}
+
+.icon.before.cancel::before,
+.icon.above.cancel::before,
+.icon.after.cancel::after,
+.icon.below.cancel::after {
+  font-weight: 900;
+  content: '\f00d';
+}
+
+.icon.before.download::before,
+.icon.above.download::before,
+.icon.after.download::after,
+.icon.below.download::after {
+  font-weight: 900;
+  content: '\f019';
+}
+
+.icon.before.add::before,
+.icon.above.add::before,
+.icon.after.add::after,
+.icon.below.add::after {
+  font-weight: 900;
+  content: '\f067';
+}
+
+.icon.before.folder::before,
+.icon.above.folder::before,
+.icon.after.folder::after,
+.icon.below.folder::after {
+  content: '\f07b';
+}
+
+
+.icon.before.github::before,
+.icon.above.github::before,
+.icon.after.github::after,
+.icon.below.github::after {
+  font-family: 'Font Awesome 5 Brands';
+  font-weight: 400;
+  content: '\f09b';
+}
+
+.icon.before.nodejs::before,
+.icon.above.nodejs::before,
+.icon.after.nodejs::after,
+.icon.below.nodejs::after {
+  font-family: 'Font Awesome 5 Brands';
+  font-weight: 400;
+  content: '\f3d3';
+}
+
+.icon.before.git::before,
+.icon.above.git::before,
+.icon.after.git::after,
+.icon.below.git::after {
+  font-family: 'Font Awesome 5 Brands';
+  font-weight: 400;
+  content: '\f1d3';
+}
+
+.icon.before.json::before,
+.icon.above.json::before,
+.icon.after.json::after,
+.icon.below.json::after {
+  font-weight: bold;
+  content: '{}';
+}
+
+/**************************
+ ***** Page Specific ******
+ **************************/
+
+/* Project */
 .project {
   text-align: center;
 }
 
-.models__title {
-  margin-top: 1.5em;
-}
-
 .add-model {
   justify-content: space-evenly;
-  height: 3em;
+  height: 3rem;
 }
 
 .models__title,
@@ -682,49 +622,13 @@ pre.code[class*="language-"] {
   max-width: 90%;
 }
 
-.model-config {
-  list-style: none;
-  padding: 0 0.75em 0.75em 0.75em;
-  display: inline-block;
-  margin-top: 2em;
-  text-align: left;
-}
-
-.model-config .toolbelt__title {
-  border-bottom: 1px solid #ddd;
-  margin: 0 -0.75em;
-  line-height: 2.5em;
-}
-
-input.model-config__item {
-  display: block;
-}
-
-label.model-config__item {
-  margin-left: 1em;
-  cursor: pointer;
-}
-
-label.model-config__item:hover {
-  color: var(--secondary-color);
-}
-
-.model-config__item {
-  margin-bottom: 0.25em;
-}
-
-.model-config .toolbelt__title {
-  display: block;
-  text-align: center;
-}
-
 
 .models__item {
-  padding: 0 0.5em;
+  padding: 0 0.5rem;
 }
 
 .models__item {
-  padding: 0 0.5em;
+  padding: 0 0.5rem;
 }
 
 .models__item__actions > .button:hover {
@@ -738,36 +642,70 @@ label.model-config__item:hover {
 }
 
 .new-model-form__name-label {
-  line-height: 2em;
-  margin-right: 0.5em;
+  line-height: 2rem;
+  margin-right: 0.5rem;
 }
 
 .new-model-form__name {
-  height: 2em;
+  height: 2rem;
   text-align: center;
 }
 
 .new-model-form__add {
-  margin-left: 0.5em;
-  margin-right: 0.5em;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 @media (max-width: 400px) {
-  .new-model-form__add.button,
-  .new-model-form__cancel.button {
-    color: transparent;
-    width: 2em;
+  .new-model-form__name {
+    max-width: 50%;
   }
 
-  .new-model-form__add.button::after {
-    color: #fff;
-    margin-left: -1.75em;
+  .new-model-form .button {
+    font-size: 0.75rem;
   }
 
-  .new-model-form__cancel.button::after {
-    color: #fff;
-    margin-left: -3em;
+  .new-model-form__add {
+    padding: 0.35rem;
+    margin-right: 0.35rem;
+    margin-left: 0.35rem;
   }
+}
+
+.model-config {
+  list-style: none;
+  padding: 0 0.75rem 0.75rem 0.75rem;
+  display: inline-block;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.model-config .toolbelt__title {
+  border-bottom: 1px solid #ddd;
+  margin: 0 -0.75rem 1rem;
+  line-height: 2.5rem;
+}
+
+input.model-config__item {
+  display: block;
+}
+
+label.model-config__item {
+  margin-left: 1rem;
+  cursor: pointer;
+}
+
+label.model-config__item:hover {
+  color: var(--secondary-color);
+}
+
+.model-config__item {
+  margin-bottom: 0.25rem;
+}
+
+.model-config .toolbelt__title {
+  display: block;
+  text-align: center;
 }
 
 .project .title,
@@ -796,17 +734,17 @@ label.model-config__item:hover {
   left: 100vw;
   width: 100%;
   z-index: 1;
-  padding: 1em;
+  padding: 1rem;
   transition: left 400ms ease-in-out;
 }
 
 .model-code {
-  height: calc(100vh - var(--header-height) - 2em);
+  height: calc(100vh - var(--header-height) - 2rem);
 }
 
 @media (max-width: 450px) {
   .project-code {
-    font-size: 0.8em;
+    font-size: 0.8rem;
   }
 }
 

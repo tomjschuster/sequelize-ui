@@ -63,9 +63,6 @@ export default class NewModelForm extends React.Component {
           this.create()
         }}
       >
-        {/* <label htmlFor='new-model-name' className='new-model-form__name-label'>
-          Name
-        </label> */}
         <input
           ref={this.nameInput}
           id='new-model-name'
