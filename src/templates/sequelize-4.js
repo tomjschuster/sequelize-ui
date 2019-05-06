@@ -196,7 +196,7 @@ const serverJs = () =>
  db
    .sequelize
    .sync({ force: true })
-   .then(() => console.log('done'))`
+   .then(() => console.log('done'))\n`
 
 const packageJson = ({ name, dialect }) =>
   `{
@@ -213,7 +213,7 @@ const packageJson = ({ name, dialect }) =>
   "dependencies": {
     ${renderDeps(dialect)}
   }
-}`
+}\n`
 
 const drivers = {
   postgres: [

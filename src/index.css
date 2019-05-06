@@ -294,7 +294,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 .toolbelt .button:hover {
-  color: var(--secondary-color);
+  color: var(--primary-color);
 }
 
 .toolbelt__title {
@@ -307,7 +307,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
 .code-explorer {
   text-align: left;
   border-radius: 5px;
-  height: calc(100vh - var(--header-height) - 4em);
+  height: calc(100vh - var(--header-height));
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: 30% 70%;
@@ -333,7 +333,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
   grid-column: 1 / 1;
   grid-row: 1 / 1;
   vertical-align: top;
-  padding: 1em 0;
+  padding: 0.25rem 0;
   border-bottom: solid 1px #ddd;
 }
 
@@ -341,7 +341,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
   list-style: none;
   padding-left: 0em;
   margin: 0;
-  margin-left: 1.25em;
+  margin-left: 1.25rem;
 }
 
 .code-explorer__explorer > ul {
@@ -394,11 +394,12 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 .code__container {
-  height: calc(100% - 2em);
+  height: calc(100% - 2rem);
 }
 
 .code-explorer .code__container {
   height: 100%;
+  padding-bottom: 1.5rem;
 }
 
 .code__container pre {
@@ -407,6 +408,8 @@ input.checkbox[type="checkbox"]:focus + label::before {
   margin: 0;
   box-shadow: none;
   padding: 0;
+  padding-left: 3rem !important;
+  padding-bottom: 1.5rem;
 }
 
 @media (min-width: 800px) {
@@ -446,14 +449,12 @@ input.checkbox[type="checkbox"]:focus + label::before {
 
 
 .code-flyout {
-  border: solid 1px #ddd;
   position: fixed;
   top: var(--header-height);
   left: 100vw;
-  height: calc(100vh - var(--header-height) - 1.75rem);
-  width: calc(100vw - 1.5rem);
+  height: calc(100vh - var(--header-height));
+  width: 100vw;
   z-index: 1;
-  margin: 0.75rem;
   transition: left 400ms ease-in-out;
 }
 
@@ -469,29 +470,10 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 .code-flyout__top-menu {
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
   border-bottom: solid 2px #0D3A58;
   display: flex;
   justify-content: space-between;
   background-color: #2D3C46;
-}
-
-.code-flyout .code__container pre {
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-.code-flyout .code-explorer__explorer {
-  border-bottom-left-radius: 5px;
-}
-
-.code-flyout .code-explorer__code {
-  border-bottom-right-radius: 5px;
-}
-
-.code-explorer .code__container pre {
-  border-bottom-left-radius: 0;
 }
 
 .code-flyout__top-menu__filename {
@@ -696,7 +678,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 .models__item__actions > .button:hover {
-  color: var(--secondary-color);
+  color: var(--primary-color);
 }
 
 .new-model-form {
@@ -760,7 +742,7 @@ label.model-config__item {
 }
 
 label.model-config__item:hover {
-  color: var(--secondary-color);
+  color: var(--primary-color);
 }
 
 .model-config__item {
@@ -777,17 +759,27 @@ label.model-config__item:hover {
   clear: right;
 }
 
+.model__back {
+  float: left;
+  color: var(--primary-color-dark);
+  font-size: 1rem;
+  margin: 0.5rem;
+  padding: 0;
+}
+
 .project-code__open,
 .model-code__open {
   float: right;
   color: var(--primary-color-dark);
   font-size: 1rem;
-  margin: 18px 14px;
+  margin: 0.5rem;
+  padding: 0;
 }
 
 .project-code__open:hover, 
-.model-code__open:hover {
-  color: var(--secondary-color);
+.model-code__open:hover,
+.model__back:hover {
+  color: var(--primary-color);
 }
 
 /* View Model */

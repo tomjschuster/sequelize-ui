@@ -54,11 +54,8 @@ export class CodeFlyout extends React.Component {
   render () {
     const { open, project, ...props } = this.props
 
-    const fileItem = this.getFile()
-    const filename = fileItem && fileItem.name
+    const filename = project ? props.rootFileItem.name : props.fileItem.name
     const flyoutClass = open ? 'code-flyout open' : 'code-flyout'
-    const downloadLabel = project ? 'Download Project' : 'Download'
-    const copyLabel = project ? 'Copy File' : 'Copy'
 
     return (
       <aside className={flyoutClass}>
@@ -66,11 +63,11 @@ export class CodeFlyout extends React.Component {
           <p className='code-flyout__top-menu__filename'>{filename}</p>
           <div className='code-flyout__top-menu__buttons'>
             <Button
-              label={downloadLabel}
+              label='Download'
               icon='download'
               onClick={this.downloadCode}
             />
-            <Button label={copyLabel} icon='copy' onClick={this.copyCode} />
+            <Button label='Copy' icon='copy' onClick={this.copyCode} />
             <Button label='Close' icon='cancel' onClick={this.handleClose} />
           </div>
         </div>

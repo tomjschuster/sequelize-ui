@@ -29,6 +29,12 @@ export default class ModelView extends React.Component {
       <React.Fragment>
         <main className='main-content model-view'>
           <Button
+            className='model__back'
+            icon='back'
+            label='Back'
+            onClick={this.props.goToModels}
+          />
+          <Button
             className='model-code__open'
             icon='code'
             label='Code'
@@ -36,7 +42,6 @@ export default class ModelView extends React.Component {
           />
           <h2 className='title'>{this.props.model.name} Model</h2>
           <ToolBelt>
-            <Button icon='back' label='Back' onClick={this.props.goToModels} />
             <Button
               ref={this.editButtonRef}
               icon='edit'
