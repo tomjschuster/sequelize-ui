@@ -3,7 +3,9 @@
   --primary-color-light: lightsteelblue;
   --primary-color-dark: royalblue;
   --secondary-color: orchid;
-  --top-bar-height: 3.5rem;
+  --header-height: 3.5rem;
+  --black: #2a2a2a;
+  --white: #fefefe;
 }
 
 html, body {
@@ -15,36 +17,26 @@ html, body {
 * {
   font-family: 'Lato', sans-serif;
   box-sizing: border-box;
-  color: #2a2a2a;
+  color:var(--black);
 }
 
-#react-app {
-  min-height: 100%;
-  position: relative;
-  padding-bottom: 4em;
+#app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 3em;
-  text-align: center;
-}
-
-.footer__reset:hover {
-  color: var(--secondary-color);
-}
-
-/* Top Bar */
-.top-bar {
+/* Header */
+.header {
   border-bottom: solid 1px rgba(34, 36, 38, 0.30);
-  height: var(--top-bar-height);
+  height: var(--header-height);
   box-shadow: 0px 1px 2px 0 rgba(34, 36, 38, 0.15);
-  text-align: left;
+  display: flex;
+  justify-content: space-between;
 }
 
-.top-bar::before {
+.header__title::before {
   content: "";
   background-image: url(../assets/sequelize-ui-tiny.svg);
   background-size: 2.5rem 2.5rem;
@@ -52,14 +44,12 @@ html, body {
   background-position: center;
   width: 2.5rem;
   height: 2.5rem;
-  padding: 0.5rem;
-  margin-left: 0.5rem;
-  float: left;
+  padding: 2.5rem;
   cursor: pointer;
 }
 
-.top-bar__title {
-  display: inline;
+.header__title {
+  margin: 0;
   font-weight: lighter;
   font-size: 1.75rem;
   line-height: 3.5rem;
@@ -67,48 +57,47 @@ html, body {
   text-transform: uppercase;
 }
 
-.top-bar__actions {
-  float: right;
-}
-
-.top-bar__actions__button {
+.header__actions__button {
     cursor: pointer;
     min-width: 3rem;
-    float: right;
     border: none;
     padding: 0.5rem;
     height: 3.5rem;
     background: none;
-    line-height: 3em;
+    line-height: 3rem;
     font-size: 0.8rem;
     font-weight: bold;
     border-left: solid 0.5px rgba(32, 32, 32, 0.50);
     text-decoration: none;
     display: block;
-    align-items: flex-start;
-    color: inherit;
 }
 
-.top-bar__actions__button.icon.above {
-  line-height: inherit;
+.header__actions__button.icon.above {
+  line-height: initial;
 }
 
-.top-bar__actions__button.icon.above::before {
+.header__actions__button.icon.above::before {
   text-align: center;
-  font-size: 1.75em;
+  font-size: 1.5rem;
 }
 
-.top-bar__actions__button:hover {
+.header__actions__button:hover {
   color: var(--primary-color-dark)
 }
 
-.top-bar.--small .top-bar__actions__button {
-  min-width: 4rem;
+/* Main Content */
+.main-content {
+  position: relative;
+  flex: 1 1 auto;
 }
 
+/* Footer */
+.footer {
+  text-align: center;
+}
 
-.topbar__actions__button:disabled {
-    cursor: initial;
+.footer__reset:hover {
+  color: var(--primary-color);
 }
 
 /* Button */
@@ -544,7 +533,7 @@ pre.code[class*="language-"] {
   text-align: left;
   border: solid 1px #ddd;
   border-radius: 5px;
-  height: calc(100vh - var(--top-bar-height) - 4em);
+  height: calc(100vh - var(--header-height) - 4em);
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: 30% 70%;
@@ -803,7 +792,7 @@ label.model-config__item:hover {
 .model-code {
   position: fixed;
   background-color: #fff;
-  top: var(--top-bar-height);
+  top: var(--header-height);
   left: 100vw;
   width: 100%;
   z-index: 1;
@@ -812,7 +801,7 @@ label.model-config__item:hover {
 }
 
 .model-code {
-  height: calc(100vh - var(--top-bar-height) - 2em);
+  height: calc(100vh - var(--header-height) - 2em);
 }
 
 @media (max-width: 450px) {

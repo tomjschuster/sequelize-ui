@@ -2,7 +2,7 @@ import React from 'react'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 import * as sequelize4 from '../templates/sequelize-4.js'
-import TopBar from './TopBar.jsx'
+import Header from './Header.jsx'
 import Button from './Button.jsx'
 import Project from './Project.jsx'
 import ModelView from './ModelView.jsx'
@@ -214,7 +214,7 @@ export default class App extends React.Component {
   render () {
     return (
       <React.Fragment>
-        <TopBar actions={this.topBarActions()} onTitleClick={this.goToModels} />
+        <Header actions={this.topBarActions()} onTitleClick={this.goToModels} />
         {this.renderPage()}
         <footer className='footer'>
           <Button
