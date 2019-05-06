@@ -1,9 +1,90 @@
 import React from 'react'
+
 import Prism from 'prismjs'
+import '../prism-cobalt.css'
+import 'prismjs/components/prism-git.js'
+import 'prismjs/components/prism-json.js'
+import 'prismjs/plugins/line-numbers/prism-line-numbers'
+import 'prismjs/plugins/line-numbers/prism-line-numbers.css'
+
+import JSZip from 'jszip'
 import copy from 'copy-to-clipboard'
+import { saveAs } from 'file-saver'
+
 import Button from './Button.jsx'
 
-export default class Code extends React.Component {
+export class CodeFlyout extends React.Component {
+  constructor (props) {
+    super(props)
+
+    if (props.project) {
+      this.codeExplorer = React.createRef()
+    }
+  }
+
+  downloadCode = () => {
+    if (this.props.project) {
+      downloadZip(this.props.rootFileItem)
+    } else {
+      downloadFile(this.props.fileItem)
+    }
+  }
+
+  copyCode = () => {
+    if (this.props.project) {
+      const file = this.codeExplorer.current.activeFile()
+      if (file) {
+        copy(file.content)
+      }
+    } else {
+      copy(this.props.fileItem.content)
+    }
+  }
+
+  getFile = () => {
+    if (this.props.project) {
+      return this.codeExplorer.current && this.codeExplorer.current.activeFile()
+    } else {
+      return this.props.fileItem
+    }
+  }
+
+  handleClose = () => this.props.onClose()
+
+  render () {
+    const { open, project, ...props } = this.props
+
+    const fileItem = this.getFile()
+    const filename = fileItem && fileItem.name
+    const flyoutClass = open ? 'code-flyout open' : 'code-flyout'
+    const downloadLabel = project ? 'Download Project' : 'Download'
+    const copyLabel = project ? 'Copy File' : 'Copy'
+
+    return (
+      <aside className={flyoutClass}>
+        <div className='code-flyout__top-menu'>
+          <p className='code-flyout__top-menu__filename'>{filename}</p>
+          <div className='code-flyout__top-menu__buttons'>
+            <Button
+              label={downloadLabel}
+              icon='download'
+              onClick={this.downloadCode}
+            />
+            <Button label={copyLabel} icon='copy' onClick={this.copyCode} />
+            <Button label='Close' icon='cancel' onClick={this.handleClose} />
+          </div>
+        </div>
+        {project ? (
+          <CodeExplorer ref={this.codeExplorer} {...props} />
+        ) : (
+          <Code {...props} />
+        )}
+      </aside>
+    )
+  }
+}
+
+export class Code extends React.Component {
   constructor (props) {
     super(props)
     this.preRef = React.createRef()
@@ -14,38 +95,33 @@ export default class Code extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    if (prevProps.code !== this.props.code && this.preRef.current) {
+    if (
+      prevProps.fileItem.content !== this.props.fileItem.code &&
+      this.preRef.current
+    ) {
       Prism.highlightAllUnder(this.preRef.current)
     }
   }
 
-  copyCode = () => this.props.code && copy(this.props.code)
-
   render () {
-    const { code, children, className, copyButton, ...props } = this.props
+    const { fileItem, children, className, copyButton, ...props } = this.props
     const classText = className ? ' ' + className : ''
+    const language = languageFromFilename(fileItem.name)
 
-    const languageClass = this.props.language
-      ? ' language-' + this.props.language
-      : 'language-javascript'
-    console.log('code', code.length)
+    const languageClass = language
+      ? ' language-' + language
+      : ' language-javascript'
+
     return (
-      <pre
-        ref={this.preRef}
-        className={'code' + classText + languageClass}
-        {...props}
-      >
-        <code className={languageClass}>{code || ''}</code>
-        <div className='code__actions'>
-          {code && copyButton ? (
-            <Button
-              label='Copy'
-              className='code__copy'
-              onClick={this.copyCode}
-            />
-          ) : null}
-        </div>
-      </pre>
+      <div class='code__container'>
+        <pre
+          ref={this.preRef}
+          className={'line-numbers' + classText + languageClass}
+          {...props}
+        >
+          <code className={languageClass}>{fileItem.content || ''}</code>
+        </pre>
+      </div>
     )
   }
 }
@@ -58,30 +134,45 @@ export class CodeExplorer extends React.Component {
 
   selectFile = path => this.setState({ activePath: path })
 
-  renderExplorerItem = (fileItem, activePath, path = []) => {
+  activeFile = () => findFile(this.state.activePath, [this.props.rootFileItem])
+
+  renderExplorerItem = (fileItem, activePath, path = [], depth = 0) => {
     const currentPath = [...path, fileItem.name]
     const restActivePath = activePath.length === 0 ? [] : activePath.slice(1)
+    const depthClass = ' depth-' + depth
 
     if (fileItem.files) {
+      console.log(fileItem.name)
       return (
-        <li
-          className='code-explorer__directory code-explorer__file-item'
-          key={fileItem.name}
-        >
-          <span className={'code-explorer__filename icon before folder'}>
-            {fileItem.name}
-          </span>
-          <ul>
-            {fileItem.files
-              .slice(0)
-              .sort(compareFiles)
-              .map(file =>
-                this.renderExplorerItem(file, restActivePath, currentPath)
-              )}
-          </ul>
-        </li>
+        <React.Fragment>
+          <li
+            className={
+              'code-explorer__directory code-explorer__file-item' + depthClass
+            }
+            key={fileItem.name}
+          >
+            <span
+              key={fileItem.name + 'span'}
+              className={'code-explorer__filename icon before folder'}
+            >
+              {fileItem.name}
+            </span>
+          </li>
+          {fileItem.files
+            .slice(0)
+            .sort(compareFiles)
+            .map(file =>
+              this.renderExplorerItem(
+                file,
+                restActivePath,
+                currentPath,
+                depth + 1
+              )
+            )}
+        </React.Fragment>
       )
     } else {
+      console.log(fileItem.name)
       const active =
         restActivePath.length === 0 && activePath[0] === fileItem.name
       const language = languageFromFilename(fileItem.name)
@@ -94,7 +185,9 @@ export class CodeExplorer extends React.Component {
       return (
         <li
           className={
-            'code-explorer__file code-explorer__file-item' + activeClass
+            'code-explorer__file code-explorer__file-item' +
+            activeClass +
+            depthClass
           }
           key={fileItem.name}
         >
@@ -110,15 +203,12 @@ export class CodeExplorer extends React.Component {
   }
 
   renderCode = () => {
-    const file = findFile(this.state.activePath, [this.props.rootFileItem])
-    const language = file ? languageFromFilename(file.name) : null
-    return (
-      <Code code={file ? file.content : ''} language={language} copyButton />
-    )
+    const fileItem = findFile(this.state.activePath, [this.props.rootFileItem])
+    return <Code fileItem={fileItem} />
   }
 
   render () {
-    const { className, rootFileItem, ...props } = this.props
+    const { menu, className, rootFileItem, onClose, ...props } = this.props
     const classText = className ? className + ' ' : ''
 
     return (
@@ -132,6 +222,30 @@ export class CodeExplorer extends React.Component {
       </div>
     )
   }
+}
+
+const downloadZip = ({ name = 'my-project', files }) => {
+  const zip = new JSZip()
+  const folder = zip.folder(name)
+
+  files.forEach(file => zipFile(folder, file))
+
+  return zip.generateAsync({ type: 'blob' }).then(blob => saveAs(blob, name))
+}
+
+const downloadFile = ({ name, content }) => {
+  const file = new Blob([content], { type: 'text/plain;charset=utf-8' })
+  saveAs(file, name)
+}
+
+const zipFile = (zip, file) => {
+  if (file.files) zipDir(zip, file)
+  else zip.file(file.name, file.content)
+}
+
+const zipDir = (zip, dir) => {
+  const folder = zip.folder(dir.name)
+  for (let file of dir.files) zipFile(folder, file)
 }
 
 const compareFiles = (a, b) => compareFileType(a, b) || compareFilename(a, b)

@@ -5,7 +5,7 @@ import NewModelForm from './NewModelForm.jsx'
 import Checkbox from './Checkbox.jsx'
 import Button from './Button.jsx'
 import ToolBelt from './ToolBelt.jsx'
-import { CodeExplorer } from './Code.jsx'
+import { CodeFlyout } from './Code.jsx'
 
 export default class Project extends React.Component {
   constructor (props) {
@@ -136,20 +136,13 @@ export default class Project extends React.Component {
             />
           </ToolBelt>
         </main>
-        <aside className={codeClass(this.state.codeOpen)}>
-          <div className='project-code__top'>
-            <Button
-              label='Export'
-              icon='download'
-              onClick={this.props.exportModels}
-            />
-            <Button label='Close' icon='cancel' onClick={this.toggleCode} />
-          </div>
-          <CodeExplorer rootFileItem={sequelize4.files({ models, config })} />
-        </aside>
+        <CodeFlyout
+          project
+          open={this.state.codeOpen}
+          onClose={this.toggleCode}
+          rootFileItem={sequelize4.files({ models, config })}
+        />
       </React.Fragment>
     )
   }
 }
-
-const codeClass = open => (open ? 'project-code open' : 'project-code')

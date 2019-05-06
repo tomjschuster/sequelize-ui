@@ -27,25 +27,10 @@
     "model",
     "gui"
   ],
-  "babel": {
-    "plugins": [
-      [
-        "prismjs",
-        {
-          "languages": [
-            "javascript",
-            "json",
-            "git"
-          ],
-          "theme": "coy",
-          "css": true
-        }
-      ]
-    ]
-  },
   "standard": {
     "parser": "babel-eslint",
     "globals": [
+      "Blob",
       "localStorage",
       "location"
     ]

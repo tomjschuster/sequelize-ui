@@ -2,7 +2,7 @@ import Case from 'case'
 import { singularize, pluralize } from 'inflection'
 
 const modelVar = name => singularize(Case.pascal(name))
-const modelFileName = name => singularize(Case.kebab(name))
+export const modelFileName = name => singularize(Case.kebab(name))
 const modelProp = name => singularize(Case.camel(name))
 const modelTable = ({ name, snake, singularTableNames }) => {
   const casedName = snake ? Case.snake(name) : Case.camel(name)
@@ -193,7 +193,10 @@ const indent = depth => new Array(depth).fill(' ').join('')
 
 const serverJs = () =>
   `const db = require('./db');
- db.sequelize.sync({ force: true }).then(() => console.log('done'))`
+ db
+   .sequelize
+   .sync({ force: true })
+   .then(() => console.log('done'))`
 
 const packageJson = ({ name, dialect }) =>
   `{
@@ -223,19 +226,19 @@ const drivers = {
   mssql: [{ name: 'tedious', version: '5.0.3' }]
 }
 
-const renderDeps = dialect => `    ${renderDepsKvs(drivers[dialect] || [])}`
+const renderDeps = dialect => `${renderDepsKvs(drivers[dialect] || [])}`
 
 const renderDepsKvs = drivers =>
-  kvs([
-    { k: `"sequelize"`, v: `"^4.43.0"` },
-    ...drivers.map(
-      ({ name, version }) => ({
+  kvs(
+    [
+      { k: `"sequelize"`, v: `"^4.43.0"` },
+      ...drivers.map(({ name, version }) => ({
         k: `"${name}"`,
         v: `"^${version}"`
-      }),
-      4
-    )
-  ])
+      }))
+    ],
+    4
+  )
 
 const gitignore = () =>
   `# Created by https://www.gitignore.io/api/node

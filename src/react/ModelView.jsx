@@ -3,7 +3,7 @@ import React from 'react'
 import * as sequelize4 from '../templates/sequelize-4.js'
 import Button from './Button.jsx'
 import ToolBelt from './ToolBelt.jsx'
-import Code from './Code.jsx'
+import { CodeFlyout } from './Code.jsx'
 
 import { DATA_TYPE_OPTIONS } from '../constants.js'
 
@@ -23,10 +23,6 @@ export default class ModelView extends React.Component {
   }
 
   toggleCode = () => this.setState({ codeOpen: !this.state.codeOpen })
-
-  renderCode = () =>
-    sequelize4.modelFile({ model: this.props.model, config: this.props.config })
-      .content
 
   render () {
     return (
@@ -80,18 +76,18 @@ export default class ModelView extends React.Component {
             </table>
           )}
         </main>
-        <aside className={codeClass(this.state.codeOpen)}>
-          <div className='model-code__top'>
-            <Button label='Close' icon='cancel' onClick={this.toggleCode} />
-          </div>
-          <Code code={this.renderCode()} copyButton language='javascript' />
-        </aside>
+        <CodeFlyout
+          open={this.state.codeOpen}
+          onClose={this.toggleCode}
+          fileItem={sequelize4.modelFile({
+            model: this.props.model,
+            config: this.props.config
+          })}
+        />
       </React.Fragment>
     )
   }
 }
-
-const codeClass = open => (open ? 'model-code open' : 'model-code')
 
 const showFieldOptions = field => {
   const options = {

@@ -172,12 +172,14 @@ export default class App extends React.Component {
           />
         )
       case MODEL_VIEW:
+        const model = this.state.models.find(
+          ({ id }) => id === this.state.currentModelId
+        )
         return (
           <ModelView
             fromEdit={this.state.fromModelForm}
-            model={this.state.models.find(
-              ({ id }) => id === this.state.currentModelId
-            )}
+            model={model}
+            filename={sequelize4.modelFileName(model.name)}
             config={this.state.config}
             goToModels={this.goToModels}
             editModel={this.editCurrentModel}
