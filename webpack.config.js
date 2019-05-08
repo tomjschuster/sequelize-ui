@@ -9,7 +9,7 @@ const common = {
   entry: './src/index.js',
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'app.[hash].js'
+    filename: 'static/js/app.js'
   },
   resolve: {
     extensions: ['.js', '.jsx']
@@ -35,26 +35,36 @@ const common = {
       {
         test: /\.jpe?g$|\.gif$|\.ico$|\.png$|\.svg$/,
         loader: 'file-loader',
-        options: { name: '[name].[ext]?[hash]' }
+        options: {
+          name: '[name].[ext]?[hash]',
+          outputPath: 'static/images'
+        }
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'url-loader',
         options: {
           limit: 10000,
-          mimetype: 'application/font-woff'
+          mimetype: 'application/font-woff',
+          name: '[name].[ext]?[hash]',
+          outputPath: 'static/fonts'
         }
       },
       {
         test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader'
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]?[hash]',
+          outputPath: 'static/fonts'
+        }
       },
       {
         test: /\.otf(\?.*)?$/,
         loader: 'file-loader',
         options: {
           name: '/fonts/[name].[ext]',
-          mimetype: 'application/font-otf'
+          mimetype: 'application/font-otf',
+          outputPath: 'static'
         }
       }
     ]
@@ -65,7 +75,7 @@ const common = {
       filename: 'index.html'
     }),
     new ExtractTextPlugin('[name].[hash].css'),
-    new CopyWebpackPlugin([{ from: 'assets', to: '.' }])
+    new CopyWebpackPlugin([{ from: 'assets', to: './static' }])
   ]
 }
 

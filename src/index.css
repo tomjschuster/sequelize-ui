@@ -43,7 +43,7 @@ html, body {
 
 .header__title::before {
   content: "";
-  background-image: url(../assets/sequelize-ui-tiny.svg);
+  background-image: url(../assets/images/sequelize-ui-tiny.svg);
   background-size: 2.5rem 2.5rem;
   background-repeat: no-repeat;
   background-position: center;
