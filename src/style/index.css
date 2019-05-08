@@ -43,7 +43,7 @@ html, body {
 
 .header__title::before {
   content: "";
-  background-image: url(../assets/images/sequelize-ui-tiny.svg);
+  background-image: url(../../assets/images/sequelize-ui-tiny.svg);
   background-size: 2.5rem 2.5rem;
   background-repeat: no-repeat;
   background-position: center;
@@ -221,6 +221,11 @@ html, body {
 input.checkbox[type="checkbox"] {
   width: 0;
   height: 0;
+  -ms-transform: scale(0); /* IE */
+  -moz-transform: scale(0); /* FF */
+  -webkit-transform: scale(0); /* Safari and Chrome */
+  -o-transform: scale(0); /* Opera */
+  transform: scale(0);
 }
 
 label.checkbox::before {
@@ -671,11 +676,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
 
 
 .models__item {
-  padding: 0 0.5rem;
-}
-
-.models__item {
-  padding: 0 0.5rem;
+  padding: 0 1.5rem;
 }
 
 .models__item__actions > .button:hover {

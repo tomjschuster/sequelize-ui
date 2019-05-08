@@ -6,13 +6,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const common = {
-  entry: {
-    'static/js/app': './src/index.js',
-    'static/css/main': './src/index.css'
-  },
+  entry: './src/index.js',
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: '[name].js'
+    filename: 'static/[name].js'
   },
   resolve: {
     extensions: ['.js', '.jsx']
@@ -34,9 +31,21 @@ const common = {
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
-          publicPath: '../../',
+          publicPath: '../',
           fallback: 'style-loader',
-          use: 'css-loader'
+          use: [
+            {
+              loader: 'css-loader',
+              options: { importLoaders: 1 }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                ident: 'postcss',
+                plugins: () => [require('autoprefixer')({})]
+              }
+            }
+          ]
         })
       },
       {
@@ -79,10 +88,9 @@ const common = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html',
-      filename: 'index.html',
-      inject: false
+      filename: 'index.html'
     }),
-    new ExtractTextPlugin('[name].css'),
+    new ExtractTextPlugin('static/[name].css'),
     new CopyWebpackPlugin([{ from: 'assets', to: './static' }])
   ]
 }

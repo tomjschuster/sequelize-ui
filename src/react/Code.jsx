@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Prism from 'prismjs'
-// import '../prism-cobalt.css'
+import '../style/prism-cobalt.css'
 import 'prismjs/components/prism-git.js'
 import 'prismjs/components/prism-json.js'
 import 'prismjs/plugins/line-numbers/prism-line-numbers'
