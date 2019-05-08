@@ -9,7 +9,7 @@ const common = {
   entry: './src/index.js',
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'static/[name].js'
+    filename: 'static/[name].[hash].js'
   },
   resolve: {
     extensions: ['.js', '.jsx']
@@ -90,7 +90,7 @@ const common = {
       template: 'src/index.html',
       filename: 'index.html'
     }),
-    new ExtractTextPlugin('static/[name].css'),
+    new ExtractTextPlugin('static/[name].[hash].css'),
     new CopyWebpackPlugin([{ from: 'assets', to: './static' }])
   ]
 }
