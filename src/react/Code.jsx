@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Prism from 'prismjs'
-import '../prism-cobalt.css'
+// import '../prism-cobalt.css'
 import 'prismjs/components/prism-git.js'
 import 'prismjs/components/prism-json.js'
 import 'prismjs/plugins/line-numbers/prism-line-numbers'
@@ -110,7 +110,7 @@ export class Code extends React.Component {
       : ' language-javascript'
 
     return (
-      <div class='code__container'>
+      <div className='code__container'>
         <pre
           ref={this.preRef}
           className={'line-numbers' + classText + languageClass}
@@ -138,20 +138,18 @@ export class CodeExplorer extends React.Component {
     const restActivePath = activePath.length === 0 ? [] : activePath.slice(1)
     const depthClass = ' depth-' + depth
 
+    const key = currentPath.join('/')
+
     if (fileItem.files) {
-      console.log(fileItem.name)
       return (
-        <React.Fragment>
+        <React.Fragment key={key + 'fragment'}>
           <li
             className={
               'code-explorer__directory code-explorer__file-item' + depthClass
             }
-            key={fileItem.name}
+            key={key}
           >
-            <span
-              key={fileItem.name + 'span'}
-              className={'code-explorer__filename icon before folder'}
-            >
+            <span className={'code-explorer__filename icon before folder'}>
               {fileItem.name}
             </span>
           </li>
@@ -169,7 +167,6 @@ export class CodeExplorer extends React.Component {
         </React.Fragment>
       )
     } else {
-      console.log(fileItem.name)
       const active =
         restActivePath.length === 0 && activePath[0] === fileItem.name
       const language = languageFromFilename(fileItem.name)
@@ -186,7 +183,7 @@ export class CodeExplorer extends React.Component {
             activeClass +
             depthClass
           }
-          key={fileItem.name}
+          key={key}
         >
           <span
             className={'code-explorer__filename' + iconClass}
@@ -211,7 +208,7 @@ export class CodeExplorer extends React.Component {
     return (
       <div className={classText + 'code-explorer'} {...props}>
         <div className='code-explorer__explorer'>
-          <ul>
+          <ul key={'1'}>
             {this.renderExplorerItem(rootFileItem, this.state.activePath)}
           </ul>
         </div>

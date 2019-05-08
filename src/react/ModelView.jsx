@@ -15,7 +15,6 @@ export default class ModelView extends React.Component {
   }
 
   componentDidMount () {
-    console.log('mounted')
     if (this.props.fromEdit) {
       this.editButtonRef.current.focus()
       this.props.clearFromEdit()

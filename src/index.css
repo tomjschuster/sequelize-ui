@@ -49,7 +49,7 @@ html, body {
   background-position: center;
   width: 2.5rem;
   height: 2.5rem;
-  padding: 2.5rem;
+  padding: 2.5rem 2rem;
   cursor: pointer;
 }
 
@@ -63,6 +63,7 @@ html, body {
 }
 
 .header__actions__button {
+    color: initial;
     cursor: pointer;
     min-width: 3rem;
     border: none;

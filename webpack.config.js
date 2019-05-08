@@ -6,10 +6,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const common = {
-  entry: './src/index.js',
+  entry: {
+    'static/js/app': './src/index.js',
+    'static/css/main': './src/index.css'
+  },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'static/js/app.js'
+    filename: '[name].js'
   },
   resolve: {
     extensions: ['.js', '.jsx']
@@ -30,13 +33,17 @@ const common = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', { loader: 'css-loader' }]
+        use: ExtractTextPlugin.extract({
+          publicPath: '../../',
+          fallback: 'style-loader',
+          use: 'css-loader'
+        })
       },
       {
         test: /\.jpe?g$|\.gif$|\.ico$|\.png$|\.svg$/,
         loader: 'file-loader',
         options: {
-          name: '[name].[ext]?[hash]',
+          name: '[name].[ext]',
           outputPath: 'static/images'
         }
       },
@@ -46,7 +53,7 @@ const common = {
         options: {
           limit: 10000,
           mimetype: 'application/font-woff',
-          name: '[name].[ext]?[hash]',
+          name: '[name].[ext]',
           outputPath: 'static/fonts'
         }
       },
@@ -54,7 +61,7 @@ const common = {
         test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'file-loader',
         options: {
-          name: '[name].[ext]?[hash]',
+          name: '[name].[ext]',
           outputPath: 'static/fonts'
         }
       },
@@ -72,9 +79,10 @@ const common = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html',
-      filename: 'index.html'
+      filename: 'index.html',
+      inject: false
     }),
-    new ExtractTextPlugin('[name].[hash].css'),
+    new ExtractTextPlugin('[name].css'),
     new CopyWebpackPlugin([{ from: 'assets', to: './static' }])
   ]
 }
@@ -89,6 +97,7 @@ const dev = {
 }
 
 const prod = {
+  devtool: 'source-map',
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
       extractComments: true,

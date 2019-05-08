@@ -27,7 +27,6 @@ const ActionButton = ({
   disabled = false
 }) => {
   const iconClassName = getIconClass(icon, iconPosition)
-  console.log(iconPosition)
   return href ? (
     <a
       href={href}
