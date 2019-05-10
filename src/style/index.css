@@ -413,14 +413,12 @@ input.checkbox[type="checkbox"]:focus + label::before {
   height: 100%;
   margin: 0;
   box-shadow: none;
-  padding: 0;
-  padding-left: 3rem !important;
   padding-bottom: 1.5rem;
 }
 
 @media (min-width: 800px) {
   .code-explorer {
-    grid-template-columns: 30% 70%;
+    grid-template-columns: 300px 1fr;
     grid-template-rows: 100%;
   }
 

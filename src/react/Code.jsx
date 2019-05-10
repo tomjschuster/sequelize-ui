@@ -113,7 +113,7 @@ export class Code extends React.Component {
       <div className='code__container'>
         <pre
           ref={this.preRef}
-          className={'line-numbers' + classText + languageClass}
+          className={classText + languageClass}
           {...props}
         >
           <code className={languageClass}>{fileItem.content || ''}</code>
