@@ -1,11 +1,11 @@
 import React from 'react'
 
-import * as sequelize4 from '../templates/sequelize-4.js'
-import Button from './components/Button.jsx'
-import ToolBelt from './components/ToolBelt.jsx'
-import { CodeFlyout } from './components/Code.jsx'
+import * as sequelize4 from '../../templates/sequelize-4.js'
+import Button from '../components/Button.jsx'
+import ToolBelt from '../components/ToolBelt.jsx'
+import { CodeFlyout } from '../components/Code.jsx'
 
-import { DATA_TYPE_OPTIONS } from '../constants.js'
+import { DATA_TYPE_OPTIONS } from '../../constants.js'
 
 export default class ModelView extends React.Component {
   constructor (props) {

@@ -1,11 +1,11 @@
 import React from 'react'
 
-import * as sequelize4 from '../templates/sequelize-4.js'
-import NewModelForm from './forms/NewModelForm.jsx'
-import Checkbox from './components/Checkbox.jsx'
-import Button from './components/Button.jsx'
-import ToolBelt from './components/ToolBelt.jsx'
-import { CodeFlyout } from './components/Code.jsx'
+import * as sequelize4 from '../../templates/sequelize-4.js'
+import NewModelForm from '../forms/NewModelForm.jsx'
+import Checkbox from '../components/Checkbox.jsx'
+import Button from '../components/Button.jsx'
+import ToolBelt from '../components/ToolBelt.jsx'
+import { CodeFlyout } from '../components/Code.jsx'
 
 export default class Project extends React.Component {
   constructor (props) {
