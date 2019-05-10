@@ -1,9 +1,9 @@
 import React from 'react'
 
 import * as sequelize4 from '../templates/sequelize-4.js'
-import Button from './Button.jsx'
-import ToolBelt from './ToolBelt.jsx'
-import { CodeFlyout } from './Code.jsx'
+import Button from './components/Button.jsx'
+import ToolBelt from './components/ToolBelt.jsx'
+import { CodeFlyout } from './components/Code.jsx'
 
 import { DATA_TYPE_OPTIONS } from '../constants.js'
 
@@ -27,26 +27,16 @@ export default class ModelView extends React.Component {
     return (
       <React.Fragment>
         <main className='main-content model-view'>
-          <Button
-            className='model__back'
-            icon='back'
-            label='Back'
-            onClick={this.props.goToModels}
-          />
-          <Button
-            className='model-code__open'
-            icon='code'
-            label='Code'
-            onClick={this.toggleCode}
-          />
           <h2 className='title'>{this.props.model.name} Model</h2>
           <ToolBelt>
+            <Button icon='back' label='Back' onClick={this.props.goToModels} />
             <Button
               ref={this.editButtonRef}
               icon='edit'
               label='Edit'
               onClick={this.props.editModel}
             />
+            <Button icon='code' label='Code' onClick={this.toggleCode} />
           </ToolBelt>
           <h3 className='fields-title subtitle'>Fields</h3>
           {this.props.model.fields.length === 0 ? (

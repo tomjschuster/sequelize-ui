@@ -759,29 +759,6 @@ label.model-config__item:hover {
   clear: right;
 }
 
-.model__back {
-  float: left;
-  color: var(--primary-color-dark);
-  font-size: 1rem;
-  margin: 0.5rem;
-  padding: 0;
-}
-
-.project-code__open,
-.model-code__open {
-  float: right;
-  color: var(--primary-color-dark);
-  font-size: 1rem;
-  margin: 0.5rem;
-  padding: 0;
-}
-
-.project-code__open:hover, 
-.model-code__open:hover,
-.model__back:hover {
-  color: var(--primary-color);
-}
-
 /* View Model */
 .model-view {
   text-align: center;
@@ -792,6 +769,7 @@ label.model-config__item:hover {
 }
 
 .fields-table,
+.project .toolbelt,
 .model-view .toolbelt {
   background-color: #ffffff;
 }

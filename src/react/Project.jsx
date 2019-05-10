@@ -1,11 +1,11 @@
 import React from 'react'
 
 import * as sequelize4 from '../templates/sequelize-4.js'
-import NewModelForm from './NewModelForm.jsx'
-import Checkbox from './Checkbox.jsx'
-import Button from './Button.jsx'
-import ToolBelt from './ToolBelt.jsx'
-import { CodeFlyout } from './Code.jsx'
+import NewModelForm from './forms/NewModelForm.jsx'
+import Checkbox from './components/Checkbox.jsx'
+import Button from './components/Button.jsx'
+import ToolBelt from './components/ToolBelt.jsx'
+import { CodeFlyout } from './components/Code.jsx'
 
 export default class Project extends React.Component {
   constructor (props) {
@@ -49,13 +49,10 @@ export default class Project extends React.Component {
     return (
       <React.Fragment>
         <main className='main-content project'>
-          <Button
-            className='project-code__open'
-            icon='code'
-            label='Code'
-            onClick={this.toggleCode}
-          />
           <h2 className='title'>My Sequelize Project</h2>
+          <ToolBelt>
+            <Button icon='code' label='Code' onClick={this.toggleCode} />
+          </ToolBelt>
           <h3 className='models__title list__title'>Models</h3>
           <ul className='models list'>
             {models.map(model => (

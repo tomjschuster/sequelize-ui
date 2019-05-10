@@ -1,15 +1,15 @@
 import React from 'react'
 
-import * as validators from '../utils/validators.js'
+import * as validators from '../../utils/validators.js'
 
 import {
   DATA_TYPES,
   DATA_TYPE_OPTIONS,
   MAX_SQL_IDENTIFIER_LENGTH
-} from '../constants.js'
+} from '../../constants.js'
 
-import Button from './Button.jsx'
-import Checkbox from './Checkbox.jsx'
+import Button from '../components/Button.jsx'
+import Checkbox from '../components/Checkbox.jsx'
 
 const DEFAULT_DATA_TYPE = DATA_TYPES.STRING
 

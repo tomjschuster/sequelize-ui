@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Prism from 'prismjs'
-import '../style/prism-cobalt.css'
+import '../../style/prism-cobalt.css'
 import 'prismjs/components/prism-git.js'
 import 'prismjs/components/prism-json.js'
 import 'prismjs/plugins/line-numbers/prism-line-numbers'
@@ -111,11 +111,7 @@ export class Code extends React.Component {
 
     return (
       <div className='code__container'>
-        <pre
-          ref={this.preRef}
-          className={classText + languageClass}
-          {...props}
-        >
+        <pre ref={this.preRef} className={classText + languageClass} {...props}>
           <code className={languageClass}>{fileItem.content || ''}</code>
         </pre>
       </div>

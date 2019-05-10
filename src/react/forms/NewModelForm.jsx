@@ -1,10 +1,10 @@
 import React from 'react'
 
-import * as validators from '../utils/validators.js'
+import * as validators from '../../utils/validators.js'
 
-import { MAX_SQL_IDENTIFIER_LENGTH } from '../constants.js'
+import { MAX_SQL_IDENTIFIER_LENGTH } from '../../constants.js'
 
-import Button from './Button.jsx'
+import Button from '../components/Button.jsx'
 
 export default class NewModelForm extends React.Component {
   constructor (props) {
