@@ -4,7 +4,7 @@
   --primary-color-dark: royalblue;
   --secondary-color: orchid;
   --header-height: 3.5rem;
-  --black: #2a2a2a;
+  --black: #252525;
   --white: #fefefe;
 }
 
@@ -34,16 +34,16 @@ html, body {
 
 /* Header */
 .header {
-  border-bottom: solid 1px rgba(34, 36, 38, 0.30);
+  color: var(--white);
+  background-color: var(--black);
   height: var(--header-height);
-  box-shadow: 0px 1px 2px 0 rgba(34, 36, 38, 0.15);
   display: flex;
   justify-content: space-between;
 }
 
 .header__title::before {
   content: "";
-  background-image: url(../../assets/images/sequelize-ui-tiny.svg);
+  background-image: url(../../assets/images/sequelize-ui-tiny-white.svg);
   background-size: 2.5rem 2.5rem;
   background-repeat: no-repeat;
   background-position: center;
@@ -63,19 +63,19 @@ html, body {
 }
 
 .header__actions__button {
-    color: initial;
-    cursor: pointer;
-    min-width: 3rem;
-    border: none;
-    padding: 0.5rem;
-    height: 3.5rem;
-    background: none;
-    line-height: 3rem;
-    font-size: 0.8rem;
-    font-weight: bold;
-    border-left: solid 0.5px rgba(32, 32, 32, 0.50);
-    text-decoration: none;
-    display: block;
+  color: var(--white);
+  cursor: pointer;
+  min-width: 3rem;
+  border: none;
+  padding: 0.5rem;
+  height: 3.5rem;
+  background: none;
+  line-height: 3rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-left: solid 1px rgba(238, 238, 238, 0.50);
+  text-decoration: none;
+  display: block;
 }
 
 .header__actions__button.icon.above {
@@ -88,12 +88,13 @@ html, body {
 }
 
 .header__actions__button:hover {
-  color: var(--primary-color-dark)
+  color: var(--primary-color);
+  background-color: #222222;
 }
 
 /* Main Content */
 .main-content {
-  background-color: #f4f4f4;
+  background-color: #f0f0f0;
   position: relative;
   flex: 1 1 auto;
 }
@@ -101,6 +102,13 @@ html, body {
 /* Footer */
 .footer {
   text-align: center;
+  border-top: 1px solid #999999;
+  background-color: var(--black);
+  color: var(--white);
+}
+
+.footer__reset {
+  color: var(--white);
 }
 
 .footer__reset:hover {
