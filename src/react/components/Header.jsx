@@ -1,12 +1,14 @@
 import React from 'react'
 
 const Header = ({ onTitleClick, actions = [] }) => (
-  <header className='header'>
-    <Title onClick={onTitleClick} />
-    <div className='header__actions'>
-      {actions.map(item => (
-        <ActionButton key={item.label} {...item} />
-      ))}
+  <header className='header-wrapper'>
+    <div className='header'>
+      <Title onClick={onTitleClick} />
+      <div className='header__actions'>
+        {actions.map(item => (
+          <ActionButton key={item.label} {...item} />
+        ))}
+      </div>
     </div>
   </header>
 )

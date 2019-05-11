@@ -33,12 +33,17 @@ html, body {
 }
 
 /* Header */
+.header-wrapper {
+  background-color: var(--black);
+}
+
 .header {
   color: var(--white);
-  background-color: var(--black);
   height: var(--header-height);
   display: flex;
   justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .header__title::before {
@@ -73,7 +78,6 @@ html, body {
   line-height: 3rem;
   font-size: 0.8rem;
   font-weight: bold;
-  border-left: solid 1px rgba(238, 238, 238, 0.50);
   text-decoration: none;
   display: block;
 }
@@ -99,10 +103,14 @@ html, body {
   flex: 1 1 auto;
 }
 
+.content-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 /* Footer */
 .footer {
   text-align: center;
-  border-top: 1px solid #999999;
   background-color: var(--black);
   color: var(--white);
 }
@@ -247,6 +255,7 @@ label.checkbox::before {
 
   left: 0;
   top: 0.25rem;
+  background-color: var(--white);
 }
 
 label.checkbox::after {
@@ -869,6 +878,10 @@ label.model-config__item:hover {
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: auto;
+}
+
+.form-field__type select {
+  background-color: var(--white);
 }
 
 .edit-model-name input,

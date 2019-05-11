@@ -202,240 +202,244 @@ export default class ModelForm extends React.Component {
   render () {
     return (
       <main className='main-content'>
-        <h2 className='title'>Edit {this.state.prevModel.name} Model</h2>
-        <form
-          id='model-form'
-          onSubmit={evt => {
-            evt.preventDefault()
-            this.save()
-          }}
-        >
-          <fieldset className='edit-model__actions'>
-            <Button
-              primary
-              type='submit'
-              icon='save'
-              label='Save'
-              disabled={this.hasErrors()}
-            />
-            <Button
-              primary
-              type='button'
-              icon='cancel'
-              label='Cancel'
-              onClick={this.cancel}
-            />
-          </fieldset>
-          <fieldset className='edit-model__model'>
-            <div className='edit-model-name'>
-              <label htmlFor='editing-model-name'>Name</label>
-              <input
-                ref={this.modelNameInput}
-                id='editing-model-name'
-                className='edit-model-name'
-                type='text'
-                value={this.state.model.name}
-                onChange={evt => this.inputModelName(evt.target.value)}
+        <div className='content-wrapper'>
+          <h2 className='title'>Edit {this.state.prevModel.name} Model</h2>
+          <form
+            id='model-form'
+            onSubmit={evt => {
+              evt.preventDefault()
+              this.save()
+            }}
+          >
+            <fieldset className='edit-model__actions'>
+              <Button
+                primary
+                type='submit'
+                icon='save'
+                label='Save'
+                disabled={this.hasErrors()}
               />
-            </div>
-            {this.hasModelErrors() ? (
-              <ul>
-                {this.state.modelErrors.map(error => (
-                  <li key={error}>{displayModelError(error)}</li>
+              <Button
+                primary
+                type='button'
+                icon='cancel'
+                label='Cancel'
+                onClick={this.cancel}
+              />
+            </fieldset>
+            <fieldset className='edit-model__model'>
+              <div className='edit-model-name'>
+                <label htmlFor='editing-model-name'>Name</label>
+                <input
+                  ref={this.modelNameInput}
+                  id='editing-model-name'
+                  className='edit-model-name'
+                  type='text'
+                  value={this.state.model.name}
+                  onChange={evt => this.inputModelName(evt.target.value)}
+                />
+              </div>
+              {this.hasModelErrors() ? (
+                <ul>
+                  {this.state.modelErrors.map(error => (
+                    <li key={error}>{displayModelError(error)}</li>
+                  ))}
+                </ul>
+              ) : null}
+            </fieldset>
+            <fieldset className='edit-model__fields-set'>
+              <h3 className='subtitle'>Fields</h3>
+              <ul className='edit-model__fields list'>
+                {this.state.model.fields.map(field => (
+                  <li className='form-field list__item' key={field.id}>
+                    <div className='form-field__item form-field__name'>
+                      <label htmlFor={`field-name-${field.id}`}>Name</label>
+                      <input
+                        id={`field-name-${field.id}`}
+                        type='text'
+                        value={field.name}
+                        onChange={evt =>
+                          this.inputFieldName(field.id, evt.target.value)
+                        }
+                      />
+                    </div>
+                    <div className='form-field__item form-field__type'>
+                      <label htmlFor={`field-type-${field.id}`}>Type</label>
+                      <select
+                        id={`field-type-${field.id}`}
+                        default={field.type || DEFAULT_DATA_TYPE}
+                        value={field.type || DEFAULT_DATA_TYPE}
+                        onChange={evt =>
+                          this.selectFieldType(field.id, evt.target.value)
+                        }
+                      >
+                        {Object.entries(DATA_TYPE_OPTIONS).map(
+                          ([value, text]) => (
+                            <option key={value} value={value}>
+                              {text}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                    <div className='form-field__item form-field__options'>
+                      <Checkbox
+                        id={`field-primary-key-${field.id}`}
+                        label='Primary Key'
+                        checked={field.primaryKey}
+                        onCheck={checked =>
+                          this.toggleEditingFieldPrimaryKey(field.id, checked)
+                        }
+                      />
+                      <Checkbox
+                        id={`field-unique-${field.id}`}
+                        label='Unique'
+                        checked={field.unique}
+                        onCheck={checked =>
+                          this.toggleEditingFieldUnique(field.id, checked)
+                        }
+                      />
+                      <Checkbox
+                        id={`field-required-${field.id}`}
+                        label='Required'
+                        checked={field.required}
+                        onCheck={checked =>
+                          this.toggleEditingFieldRequired(field.id, checked)
+                        }
+                      />
+                    </div>
+                    <div className='form-field__item form-field__actions'>
+                      <Button
+                        primary
+                        type='button'
+                        className='delete-field-button'
+                        icon='delete'
+                        label='Delete'
+                        onClick={() => this.deleteField(field.id)}
+                      />
+                    </div>
+                    {this.fieldHasErrors(field.id) ? (
+                      <ul>
+                        {this.state.fieldErrors[field.id].map(error => (
+                          <li key={error}>{displayFieldError(error)}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </li>
                 ))}
+                {this.state.newField ? (
+                  <li
+                    className='form-field list__item'
+                    onKeyDown={evt => {
+                      if (evt.keyCode === 13) {
+                        evt.preventDefault()
+                        this.createField()
+                      }
+
+                      if (evt.keyCode === 27) {
+                        evt.preventDefault()
+                        this.cancelCreatingField()
+                      }
+                    }}
+                  >
+                    <div className='form-field__item form-field__name'>
+                      <label htmlFor='new-field-name'>Name</label>
+                      <input
+                        ref={this.newFieldNameInput}
+                        id='new-field-name'
+                        type='text'
+                        value={this.state.newField.name}
+                        onChange={evt =>
+                          this.inputNewFieldName(evt.target.value)
+                        }
+                      />
+                    </div>
+                    <div className='form-field__item form-field__type'>
+                      <label htmlFor='new-field-type'>Type</label>
+                      <select
+                        id='new-field-type'
+                        default={this.state.newField.type || DEFAULT_DATA_TYPE}
+                        value={this.state.newField.type || DEFAULT_DATA_TYPE}
+                        onChange={evt =>
+                          this.selectNewFieldType(evt.target.value)
+                        }
+                      >
+                        {Object.entries(DATA_TYPE_OPTIONS).map(
+                          ([value, text]) => (
+                            <option key={value} value={value}>
+                              {text}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                    <div className='form-field__item form-field__options'>
+                      <Checkbox
+                        id='new-field-primary-key'
+                        className='form-field__option'
+                        label='Primary Key'
+                        checked={this.state.newField.primaryKey}
+                        onCheck={this.toggleNewFieldPrimaryKey}
+                      />
+                      <Checkbox
+                        id='new-field-unique'
+                        className='form-field__option'
+                        label='Unique'
+                        checked={this.state.newField.unique}
+                        onCheck={this.toggleNewFieldUnique}
+                      />
+                      <Checkbox
+                        id='new-field-required'
+                        className='form-field__option'
+                        label='Required'
+                        checked={this.state.newField.required}
+                        onCheck={this.toggleNewFieldRequired}
+                      />
+                    </div>
+                    <div className='form-field__item form-field__actions'>
+                      <Button
+                        primary
+                        type='button'
+                        icon='check'
+                        className='form-field__action'
+                        label='Add'
+                        disabled={this.hasNewFieldErrors()}
+                        onClick={this.createField}
+                      />
+                      <Button
+                        primary
+                        type='button'
+                        icon='cancel'
+                        className='form-field__action'
+                        label='Cancel'
+                        onClick={this.cancelCreatingField}
+                      />
+                    </div>
+
+                    {this.hasNewFieldErrors() ? (
+                      <ul>
+                        {this.state.newFieldErrors.map(error => (
+                          <li key={error}>{displayFieldError(error)}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </li>
+                ) : (
+                  <li className='add-new-field list__item'>
+                    <Button
+                      ref={this.addFieldButton}
+                      primary
+                      type='button'
+                      icon='add'
+                      label='Add a Field'
+                      onClick={this.startCreatingField}
+                    />
+                  </li>
+                )}
               </ul>
-            ) : null}
-          </fieldset>
-          <fieldset className='edit-model__fields-set'>
-            <h3 className='subtitle'>Fields</h3>
-            <ul className='edit-model__fields list'>
-              {this.state.model.fields.map(field => (
-                <li className='form-field list__item' key={field.id}>
-                  <div className='form-field__item form-field__name'>
-                    <label htmlFor={`field-name-${field.id}`}>Name</label>
-                    <input
-                      id={`field-name-${field.id}`}
-                      type='text'
-                      value={field.name}
-                      onChange={evt =>
-                        this.inputFieldName(field.id, evt.target.value)
-                      }
-                    />
-                  </div>
-                  <div className='form-field__item form-field__type'>
-                    <label htmlFor={`field-type-${field.id}`}>Type</label>
-                    <select
-                      id={`field-type-${field.id}`}
-                      default={field.type || DEFAULT_DATA_TYPE}
-                      value={field.type || DEFAULT_DATA_TYPE}
-                      onChange={evt =>
-                        this.selectFieldType(field.id, evt.target.value)
-                      }
-                    >
-                      {Object.entries(DATA_TYPE_OPTIONS).map(
-                        ([value, text]) => (
-                          <option key={value} value={value}>
-                            {text}
-                          </option>
-                        )
-                      )}
-                    </select>
-                  </div>
-                  <div className='form-field__item form-field__options'>
-                    <Checkbox
-                      id={`field-primary-key-${field.id}`}
-                      label='Primary Key'
-                      checked={field.primaryKey}
-                      onCheck={checked =>
-                        this.toggleEditingFieldPrimaryKey(field.id, checked)
-                      }
-                    />
-                    <Checkbox
-                      id={`field-unique-${field.id}`}
-                      label='Unique'
-                      checked={field.unique}
-                      onCheck={checked =>
-                        this.toggleEditingFieldUnique(field.id, checked)
-                      }
-                    />
-                    <Checkbox
-                      id={`field-required-${field.id}`}
-                      label='Required'
-                      checked={field.required}
-                      onCheck={checked =>
-                        this.toggleEditingFieldRequired(field.id, checked)
-                      }
-                    />
-                  </div>
-                  <div className='form-field__item form-field__actions'>
-                    <Button
-                      primary
-                      type='button'
-                      className='delete-field-button'
-                      icon='delete'
-                      label='Delete'
-                      onClick={() => this.deleteField(field.id)}
-                    />
-                  </div>
-                  {this.fieldHasErrors(field.id) ? (
-                    <ul>
-                      {this.state.fieldErrors[field.id].map(error => (
-                        <li key={error}>{displayFieldError(error)}</li>
-                      ))}
-                    </ul>
-                  ) : null}
-                </li>
-              ))}
-              {this.state.newField ? (
-                <li
-                  className='form-field list__item'
-                  onKeyDown={evt => {
-                    if (evt.keyCode === 13) {
-                      evt.preventDefault()
-                      this.createField()
-                    }
-
-                    if (evt.keyCode === 27) {
-                      evt.preventDefault()
-                      this.cancelCreatingField()
-                    }
-                  }}
-                >
-                  <div className='form-field__item form-field__name'>
-                    <label htmlFor='new-field-name'>Name</label>
-                    <input
-                      ref={this.newFieldNameInput}
-                      id='new-field-name'
-                      type='text'
-                      value={this.state.newField.name}
-                      onChange={evt => this.inputNewFieldName(evt.target.value)}
-                    />
-                  </div>
-                  <div className='form-field__item form-field__type'>
-                    <label htmlFor='new-field-type'>Type</label>
-                    <select
-                      id='new-field-type'
-                      default={this.state.newField.type || DEFAULT_DATA_TYPE}
-                      value={this.state.newField.type || DEFAULT_DATA_TYPE}
-                      onChange={evt =>
-                        this.selectNewFieldType(evt.target.value)
-                      }
-                    >
-                      {Object.entries(DATA_TYPE_OPTIONS).map(
-                        ([value, text]) => (
-                          <option key={value} value={value}>
-                            {text}
-                          </option>
-                        )
-                      )}
-                    </select>
-                  </div>
-                  <div className='form-field__item form-field__options'>
-                    <Checkbox
-                      id='new-field-primary-key'
-                      className='form-field__option'
-                      label='Primary Key'
-                      checked={this.state.newField.primaryKey}
-                      onCheck={this.toggleNewFieldPrimaryKey}
-                    />
-                    <Checkbox
-                      id='new-field-unique'
-                      className='form-field__option'
-                      label='Unique'
-                      checked={this.state.newField.unique}
-                      onCheck={this.toggleNewFieldUnique}
-                    />
-                    <Checkbox
-                      id='new-field-required'
-                      className='form-field__option'
-                      label='Required'
-                      checked={this.state.newField.required}
-                      onCheck={this.toggleNewFieldRequired}
-                    />
-                  </div>
-                  <div className='form-field__item form-field__actions'>
-                    <Button
-                      primary
-                      type='button'
-                      icon='check'
-                      className='form-field__action'
-                      label='Add'
-                      disabled={this.hasNewFieldErrors()}
-                      onClick={this.createField}
-                    />
-                    <Button
-                      primary
-                      type='button'
-                      icon='cancel'
-                      className='form-field__action'
-                      label='Cancel'
-                      onClick={this.cancelCreatingField}
-                    />
-                  </div>
-
-                  {this.hasNewFieldErrors() ? (
-                    <ul>
-                      {this.state.newFieldErrors.map(error => (
-                        <li key={error}>{displayFieldError(error)}</li>
-                      ))}
-                    </ul>
-                  ) : null}
-                </li>
-              ) : (
-                <li className='add-new-field list__item'>
-                  <Button
-                    ref={this.addFieldButton}
-                    primary
-                    type='button'
-                    icon='add'
-                    label='Add a Field'
-                    onClick={this.startCreatingField}
-                  />
-                </li>
-              )}
-            </ul>
-          </fieldset>
-        </form>
+            </fieldset>
+          </form>
+        </div>
       </main>
     )
   }
