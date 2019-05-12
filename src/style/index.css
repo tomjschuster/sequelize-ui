@@ -4,7 +4,7 @@
   --primary-color-dark: royalblue;
   --secondary-color: orchid;
   --header-height: 3.5rem;
-  --black: #252525;
+  --black: #151515;
   --white: #fefefe;
 }
 
@@ -516,6 +516,24 @@ input.checkbox[type="checkbox"]:focus + label::before {
 .code-flyout pre,
 .code-flyout code {
   height: 100%;
+}
+
+/* Message */
+.message {
+  opacity: 1;
+  position: fixed;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  background: var(--primary-color-dark);
+  color: white;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  top: calc(var(--header-height) / 2);
+  transition: opacity 0.5s ease-out;
+}
+
+.message.hidden {
+  opacity: 0;
 }
 
 /* Icons */

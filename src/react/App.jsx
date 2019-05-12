@@ -1,6 +1,4 @@
 import React from 'react'
-import JSZip from 'jszip'
-import { saveAs } from 'file-saver'
 import * as sequelize4 from '../templates/sequelize-4.js'
 import Header from './components/Header.jsx'
 import Button from './components/Button.jsx'
@@ -49,11 +47,6 @@ export default class App extends React.Component {
 
     localStorage.setItem('SUI', JSON.stringify(stateToPersist))
   }
-
-  exportModels = () =>
-    downloadZip(
-      sequelize4.files({ models: this.state.models, config: this.state.config })
-    )
 
   reset = () => {
     localStorage.removeItem('SUI')
@@ -165,7 +158,6 @@ export default class App extends React.Component {
             inputNewModelName={this.inputNewModelName}
             cancelCreatingNewModel={this.cancelCreatingNewModel}
             createModel={this.createModel}
-            exportModels={this.exportModels}
             goToModel={this.goToModel}
             editModel={this.editModel}
             deleteModel={this.deleteModel}
@@ -228,25 +220,6 @@ export default class App extends React.Component {
       </React.Fragment>
     )
   }
-}
-
-const downloadZip = ({ name = 'my-project', files }) => {
-  const zip = new JSZip()
-  const folder = zip.folder(name)
-
-  files.forEach(file => zipFile(folder, file))
-
-  return zip.generateAsync({ type: 'blob' }).then(blob => saveAs(blob, name))
-}
-
-const zipFile = (zip, file) => {
-  if (file.files) zipDir(zip, file)
-  else zip.file(file.name, file.content)
-}
-
-const zipDir = (zip, dir) => {
-  const folder = zip.folder(dir.name)
-  for (let file of dir.files) zipFile(folder, file)
 }
 
 const initialState = () => ({

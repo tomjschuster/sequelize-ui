@@ -12,6 +12,7 @@ import copy from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
 
 import Button from './Button.jsx'
+import Message from './Message.jsx'
 
 export class CodeFlyout extends React.Component {
   constructor (props) {
@@ -20,6 +21,8 @@ export class CodeFlyout extends React.Component {
     if (props.project) {
       this.codeExplorer = React.createRef()
     }
+
+    this.state = { messages: [] }
   }
 
   downloadCode = () => {
@@ -31,15 +34,41 @@ export class CodeFlyout extends React.Component {
   }
 
   copyCode = () => {
-    if (this.props.project) {
-      const file = this.codeExplorer.current.activeFile()
-      if (file) {
-        copy(file.content)
+    let success = false
+    try {
+      if (this.props.project) {
+        const file = this.codeExplorer.current.activeFile()
+        if (file) {
+          success = copy(file.content)
+        }
+      } else {
+        success = copy(this.props.fileItem.content)
       }
+    } catch (_) {
+      success = false
+    }
+
+    if (success) {
+      this.copySuccess()
     } else {
-      copy(this.props.fileItem.content)
+      this.copyError()
     }
   }
+
+  copySuccess = () => this.addMessage('Copied to clipboard')
+
+  copyError = () => this.addMessage('Error copying')
+
+  addMessage = text => {
+    const id = Math.random()
+    const message = { id, text }
+
+    this.setState({ messages: [message, ...this.state.messages] })
+    setTimeout(() => this.clearMessage(id), MESSAGE_TIME)
+  }
+
+  clearMessage = id =>
+    this.setState({ messages: this.state.messages.filter(m => m.id !== id) })
 
   getFile = () => {
     if (this.props.project) {
@@ -52,31 +81,37 @@ export class CodeFlyout extends React.Component {
   handleClose = () => this.props.onClose()
 
   render () {
+    console.log(this.state)
     const { open, project, ...props } = this.props
 
     const filename = project ? props.rootFileItem.name : props.fileItem.name
     const flyoutClass = open ? 'code-flyout open' : 'code-flyout'
 
     return (
-      <aside className={flyoutClass}>
-        <div className='code-flyout__top-menu'>
-          <p className='code-flyout__top-menu__filename'>{filename}</p>
-          <div className='code-flyout__top-menu__buttons'>
-            <Button
-              label='Download'
-              icon='download'
-              onClick={this.downloadCode}
-            />
-            <Button label='Copy' icon='copy' onClick={this.copyCode} />
-            <Button label='Close' icon='cancel' onClick={this.handleClose} />
+      <React.Fragment>
+        <aside className={flyoutClass}>
+          <div className='code-flyout__top-menu'>
+            <p className='code-flyout__top-menu__filename'>{filename}</p>
+            <div className='code-flyout__top-menu__buttons'>
+              <Button
+                label='Download'
+                icon='download'
+                onClick={this.downloadCode}
+              />
+              <Button label='Copy' icon='copy' onClick={this.copyCode} />
+              <Button label='Close' icon='cancel' onClick={this.handleClose} />
+            </div>
           </div>
-        </div>
-        {project ? (
-          <CodeExplorer ref={this.codeExplorer} {...props} />
-        ) : (
-          <Code {...props} />
-        )}
-      </aside>
+          {project ? (
+            <CodeExplorer ref={this.codeExplorer} {...props} />
+          ) : (
+            <Code {...props} />
+          )}
+        </aside>
+        {this.state.messages.map(message => (
+          <Message time={MESSAGE_TIME} message={message.text} />
+        ))}
+      </React.Fragment>
     )
   }
 }
@@ -303,3 +338,5 @@ const iconFromLanguage = language => {
       return null
   }
 }
+
+const MESSAGE_TIME = 1750

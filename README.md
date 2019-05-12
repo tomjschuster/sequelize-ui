@@ -17,7 +17,7 @@ npm start
 ```
 
 TODO:
-- Copied confirmation
+- Instructions / Landing Page
 - Demo video
 
 ## Future enhancements
