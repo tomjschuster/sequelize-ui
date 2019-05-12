@@ -20,8 +20,9 @@ export default class Message extends React.Component {
 
   render () {
     const customClass = this.props.className ? ' ' + this.props.className : ''
+    const errorClass = this.props.type === 'error' ? ' error' : ''
     const hiddenClass = this.state.visible ? '' : ' hidden'
-    const className = 'message' + customClass + hiddenClass
+    const className = 'message' + customClass + hiddenClass + errorClass
     return <div className={className}>{this.props.message}</div>
   }
 }

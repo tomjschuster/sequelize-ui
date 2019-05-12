@@ -25,11 +25,34 @@ export class CodeFlyout extends React.Component {
     this.state = { messages: [] }
   }
 
+  downloadSuccess = () => this.successMessage('Code downloaded')
+  downloadError = () => this.errorMessage('Error downloading')
+  copySuccess = () => this.successMessage('Copied to clipboard')
+  copyError = () => this.errorMessage('Error copying')
+
+  successMessage = text => this.addMessage(text, 'success')
+  errorMessage = text => this.addMessage(text, 'error')
+
+  addMessage = (text, type) => {
+    const id = Math.random()
+    const message = { id, text, type }
+
+    this.setState({ messages: [message, ...this.state.messages] })
+    setTimeout(() => this.clearMessage(id), MESSAGE_TIME)
+  }
+
+  clearMessage = id =>
+    this.setState({ messages: this.state.messages.filter(m => m.id !== id) })
+
   downloadCode = () => {
     if (this.props.project) {
       downloadZip(this.props.rootFileItem)
+        .then(() => this.downloadSuccess())
+        .catch(() => this.downloadError())
     } else {
       downloadFile(this.props.fileItem)
+        .then(() => this.downloadSuccess())
+        .catch(() => this.downloadError())
     }
   }
 
@@ -54,21 +77,6 @@ export class CodeFlyout extends React.Component {
       this.copyError()
     }
   }
-
-  copySuccess = () => this.addMessage('Copied to clipboard')
-
-  copyError = () => this.addMessage('Error copying')
-
-  addMessage = text => {
-    const id = Math.random()
-    const message = { id, text }
-
-    this.setState({ messages: [message, ...this.state.messages] })
-    setTimeout(() => this.clearMessage(id), MESSAGE_TIME)
-  }
-
-  clearMessage = id =>
-    this.setState({ messages: this.state.messages.filter(m => m.id !== id) })
 
   getFile = () => {
     if (this.props.project) {
@@ -109,7 +117,11 @@ export class CodeFlyout extends React.Component {
           )}
         </aside>
         {this.state.messages.map(message => (
-          <Message time={MESSAGE_TIME} message={message.text} />
+          <Message
+            time={MESSAGE_TIME}
+            message={message.text}
+            type={message.type}
+          />
         ))}
       </React.Fragment>
     )

@@ -536,6 +536,10 @@ input.checkbox[type="checkbox"]:focus + label::before {
   opacity: 0;
 }
 
+.message.error {
+  background: #c0392b;
+}
+
 /* Icons */
 .icon.before::before,
 .icon.above::before,
