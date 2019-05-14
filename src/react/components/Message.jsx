@@ -5,24 +5,33 @@ export default class Message extends React.Component {
     super(props)
 
     this.state = { visible: false }
-
-    if (this.props.time) {
-      setTimeout(() => this.hide(), this.props.time - 500)
-    }
   }
 
   componentDidMount () {
     setTimeout(() => this.show(), 0)
   }
 
+  componentDidUpdate (oldProps) {
+    if (oldProps.messages.length < this.props.messages.length) {
+      clearTimeout(this.messageTimeout)
+
+      if (!this.state.visible) {
+        setTimeout(() => this.show(), 0)
+      }
+
+      this.messageTimeout = setTimeout(() => this.hide(), this.props.time - 500)
+    }
+  }
+
   show = () => this.setState({ visible: true })
   hide = () => this.setState({ visible: false })
 
   render () {
+    const message = this.props.messages[0] || null
     const customClass = this.props.className ? ' ' + this.props.className : ''
-    const errorClass = this.props.type === 'error' ? ' error' : ''
+    const errorClass = message && message.type === 'error' ? ' error' : ''
     const hiddenClass = this.state.visible ? '' : ' hidden'
     const className = 'message' + customClass + hiddenClass + errorClass
-    return <div className={className}>{this.props.message}</div>
+    return message ? <div className={className}>{message.text}</div> : null
   }
 }

@@ -79,6 +79,7 @@ export default class ModelView extends React.Component {
         <CodeFlyout
           open={this.state.codeOpen}
           onClose={this.toggleCode}
+          newMessage={this.props.newMessage}
           fileItem={sequelize4.modelFile({
             model: this.props.model,
             config: this.props.config

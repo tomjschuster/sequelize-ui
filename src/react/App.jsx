@@ -2,6 +2,7 @@ import React from 'react'
 import * as sequelize4 from '../templates/sequelize-4.js'
 import Header from './components/Header.jsx'
 import Button from './components/Button.jsx'
+import Message from './components/Message.jsx'
 import Project from './views/Project.jsx'
 import ModelView from './views/ModelView.jsx'
 import ModelForm from './forms/ModelForm.jsx'
@@ -9,6 +10,7 @@ import ModelForm from './forms/ModelForm.jsx'
 const PROJECT = 'PROJECT'
 const MODEL_VIEW = 'MODEL_VIEW'
 const MODEL_FORM = 'MODEL_FORM'
+const MESSAGE_TIME = 1750
 
 export default class App extends React.Component {
   constructor (props) {
@@ -52,6 +54,18 @@ export default class App extends React.Component {
     localStorage.removeItem('SUI')
     location.reload()
   }
+
+  newMessage = (text, type) => {
+    const id = Math.random()
+    const message = { id, text, type }
+
+    clearTimeout(this.messageTimeout)
+    this.messageTimeout = setTimeout(() => this.clearMessage(id), MESSAGE_TIME)
+    this.setState({ messages: [message, ...this.state.messages] })
+  }
+
+  clearMessage = id =>
+    this.setState({ messages: this.state.messages.filter(m => m.id !== id) })
 
   // Models Methods
   toggleTimestamps = () =>
@@ -161,6 +175,7 @@ export default class App extends React.Component {
             goToModel={this.goToModel}
             editModel={this.editModel}
             deleteModel={this.deleteModel}
+            newMessage={this.newMessage}
           />
         )
       case MODEL_VIEW:
@@ -176,6 +191,7 @@ export default class App extends React.Component {
             goToModels={this.goToModels}
             editModel={this.editCurrentModel}
             clearFromEdit={this.clearFromModelForm}
+            newMessage={this.newMessage}
           />
         )
       case MODEL_FORM:
@@ -217,6 +233,7 @@ export default class App extends React.Component {
             onClick={this.reset}
           />
         </footer>
+        <Message time={MESSAGE_TIME} messages={this.state.messages} />
       </React.Fragment>
     )
   }
@@ -231,7 +248,8 @@ const initialState = () => ({
   creatingNewModel: false,
   currentModelId: null,
   editingModel: null,
-  fromModelForm: false
+  fromModelForm: false,
+  messages: []
 })
 
 const initialConfig = () => ({

@@ -12,7 +12,6 @@ import copy from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
 
 import Button from './Button.jsx'
-import Message from './Message.jsx'
 
 export class CodeFlyout extends React.Component {
   constructor (props) {
@@ -21,24 +20,6 @@ export class CodeFlyout extends React.Component {
     if (props.project) {
       this.codeExplorer = React.createRef()
     }
-
-    this.state = { messages: [] }
-  }
-
-  downloadSuccess = () => this.successMessage('Code downloaded')
-  downloadError = () => this.errorMessage('Error downloading')
-  copySuccess = () => this.successMessage('Copied to clipboard')
-  copyError = () => this.errorMessage('Error copying')
-
-  successMessage = text => this.addMessage(text, 'success')
-  errorMessage = text => this.addMessage(text, 'error')
-
-  addMessage = (text, type) => {
-    const id = Math.random()
-    const message = { id, text, type }
-
-    this.setState({ messages: [message, ...this.state.messages] })
-    setTimeout(() => this.clearMessage(id), MESSAGE_TIME)
   }
 
   clearMessage = id =>
@@ -47,12 +28,12 @@ export class CodeFlyout extends React.Component {
   downloadCode = () => {
     if (this.props.project) {
       downloadZip(this.props.rootFileItem)
-        .then(() => this.downloadSuccess())
-        .catch(() => this.downloadError())
+        .then(() => this.props.newMessage('Code downloaded', 'success'))
+        .catch(() => this.props.newMessage('Error downloading', 'error'))
     } else {
       downloadFile(this.props.fileItem)
-        .then(() => this.downloadSuccess())
-        .catch(() => this.downloadError())
+        .then(() => this.props.newMessage('Code downloaded', 'success'))
+        .catch(() => this.props.newMessage('Error downloading', 'error'))
     }
   }
 
@@ -72,9 +53,9 @@ export class CodeFlyout extends React.Component {
     }
 
     if (success) {
-      this.copySuccess()
+      this.props.newMessage('Copied to clipboard', 'success')
     } else {
-      this.copyError()
+      this.props.newMessage('Error copying', 'error')
     }
   }
 
@@ -89,7 +70,6 @@ export class CodeFlyout extends React.Component {
   handleClose = () => this.props.onClose()
 
   render () {
-    console.log(this.state)
     const { open, project, ...props } = this.props
 
     const filename = project ? props.rootFileItem.name : props.fileItem.name
@@ -116,13 +96,6 @@ export class CodeFlyout extends React.Component {
             <Code {...props} />
           )}
         </aside>
-        {this.state.messages.map(message => (
-          <Message
-            time={MESSAGE_TIME}
-            message={message.text}
-            type={message.type}
-          />
-        ))}
       </React.Fragment>
     )
   }
@@ -350,5 +323,3 @@ const iconFromLanguage = language => {
       return null
   }
 }
-
-const MESSAGE_TIME = 1750
