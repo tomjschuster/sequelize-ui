@@ -7,7 +7,7 @@ import { CodeFlyout } from '../components/Code.jsx'
 
 import { DATA_TYPE_OPTIONS } from '../../constants.js'
 
-export default class ModelView extends React.Component {
+export default class Model extends React.Component {
   constructor (props) {
     super(props)
     this.editButtonRef = React.createRef()

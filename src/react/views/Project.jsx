@@ -1,7 +1,7 @@
 import React from 'react'
 
 import * as sequelize4 from '../../templates/sequelize-4.js'
-import NewModelForm from '../forms/NewModelForm.jsx'
+import NewModelForm from './Model/NewModelForm.jsx'
 import Checkbox from '../components/Checkbox.jsx'
 import Button from '../components/Button.jsx'
 import ToolBelt from '../components/ToolBelt.jsx'

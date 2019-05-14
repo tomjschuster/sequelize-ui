@@ -4,12 +4,12 @@ import Header from './components/Header.jsx'
 import Button from './components/Button.jsx'
 import Message from './components/Message.jsx'
 import Project from './views/Project.jsx'
-import ModelView from './views/ModelView.jsx'
-import ModelForm from './forms/ModelForm.jsx'
+import Model from './views/Model.jsx'
+import EditModel from './views/EditModel.jsx'
 
 const PROJECT = 'PROJECT'
-const MODEL_VIEW = 'MODEL_VIEW'
-const MODEL_FORM = 'MODEL_FORM'
+const MODEL = 'MODEL'
+const EDIT_MODEL = 'EDIT_MODEL'
 const MESSAGE_TIME = 1750
 
 export default class App extends React.Component {
@@ -36,8 +36,8 @@ export default class App extends React.Component {
     this.setState({ creatingNewModel: false })
   }
 
-  onModelFormExit () {
-    this.setState({ fromModelForm: true })
+  onEditModelExit () {
+    this.setState({ fromEditModel: true })
   }
 
   loadState = () => (localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {})
@@ -97,15 +97,15 @@ export default class App extends React.Component {
       }
     })
 
-  goToModel = id => this.setState({ pageState: MODEL_VIEW, currentModelId: id })
+  goToModel = id => this.setState({ pageState: MODEL, currentModelId: id })
 
   editModel = id =>
     this.setState({
-      pageState: MODEL_FORM,
+      pageState: EDIT_MODEL,
       currentModelId: id || this.state.currentModelId
     })
 
-  editCurrentModel = () => this.setState({ pageState: MODEL_FORM })
+  editCurrentModel = () => this.setState({ pageState: EDIT_MODEL })
 
   deleteModel = id =>
     this.setState({
@@ -131,14 +131,14 @@ export default class App extends React.Component {
 
   // Edit Model Methods
   cancelEditingModel = () =>
-    this.setState({ pageState: MODEL_VIEW, fromModelForm: true })
+    this.setState({ pageState: MODEL, fromEditModel: true })
 
   saveModel = ({ model, nextFieldId }) => {
     this.setState({
-      pageState: MODEL_VIEW,
+      pageState: MODEL,
       models: this.state.models.map(m => (m.id === model.id ? model : m)),
       nextFieldId,
-      fromModelForm: true
+      fromEditModel: true
     })
   }
 
@@ -151,7 +151,7 @@ export default class App extends React.Component {
       )
     })
 
-  clearFromModelForm = () => this.setState({ fromModelForm: true })
+  clearFromEditModel = () => this.setState({ fromEditModel: true })
 
   // View Methods
 
@@ -178,25 +178,25 @@ export default class App extends React.Component {
             newMessage={this.newMessage}
           />
         )
-      case MODEL_VIEW:
+      case MODEL:
         const model = this.state.models.find(
           ({ id }) => id === this.state.currentModelId
         )
         return (
-          <ModelView
-            fromEdit={this.state.fromModelForm}
+          <Model
+            fromEdit={this.state.fromEditModel}
             model={model}
             filename={sequelize4.modelFileName(model.name)}
             config={this.state.config}
             goToModels={this.goToModels}
             editModel={this.editCurrentModel}
-            clearFromEdit={this.clearFromModelForm}
+            clearFromEdit={this.clearFromEditModel}
             newMessage={this.newMessage}
           />
         )
-      case MODEL_FORM:
+      case EDIT_MODEL:
         return (
-          <ModelForm
+          <EditModel
             modelId={this.state.currentModelId}
             models={this.state.models}
             nextFieldId={this.state.nextFieldId}
@@ -248,7 +248,7 @@ const initialState = () => ({
   creatingNewModel: false,
   currentModelId: null,
   editingModel: null,
-  fromModelForm: false,
+  fromEditModel: false,
   messages: []
 })
 

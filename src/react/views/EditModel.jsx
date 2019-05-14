@@ -13,7 +13,7 @@ import Checkbox from '../components/Checkbox.jsx'
 
 const DEFAULT_DATA_TYPE = DATA_TYPES.STRING
 
-export default class ModelForm extends React.Component {
+export default class EditModel extends React.Component {
   constructor (props) {
     super(props)
 
