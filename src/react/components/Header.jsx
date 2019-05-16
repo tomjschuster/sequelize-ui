@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const Header = ({ onTitleClick, actions = [] }) => (
   <header className='header-wrapper'>
@@ -13,11 +14,20 @@ const Header = ({ onTitleClick, actions = [] }) => (
   </header>
 )
 
+Header.propTypes = {
+  onTitleClick: PropTypes.func,
+  actions: PropTypes.arrayOf(PropTypes.object)
+}
+
 const Title = ({ onClick }) => (
   <h1 onClick={onClick} className='header__title'>
     Sequelize UI
   </h1>
 )
+
+Title.propTypes = {
+  onClick: PropTypes.func
+}
 
 const ActionButton = ({
   href,
@@ -48,6 +58,16 @@ const ActionButton = ({
       {label}
     </button>
   )
+}
+
+ActionButton.propTypes = {
+  href: PropTypes.string,
+  icon: PropTypes.string,
+  iconPosition: PropTypes.oneOf(['before', 'above', 'after', 'below']),
+  newTab: PropTypes.bool,
+  onClick: PropTypes.func,
+  label: PropTypes.string,
+  disabled: PropTypes.bool
 }
 
 const getIconClass = (icon, position) => {

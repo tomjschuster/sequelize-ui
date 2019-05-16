@@ -140,7 +140,7 @@ export default class Project extends React.Component {
           open={this.state.codeOpen}
           onClose={this.toggleCode}
           newMessage={this.props.newMessage}
-          rootFileItem={sequelize4.files({ models, config })}
+          fileItem={sequelize4.files({ models, config })}
         />
       </React.Fragment>
     )

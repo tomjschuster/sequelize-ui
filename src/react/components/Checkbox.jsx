@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const Checkbox = ({
   id,
@@ -29,5 +30,13 @@ const Checkbox = ({
     </label>
   </React.Fragment>
 )
+
+Checkbox.propTypes = {
+  id: PropTypes.string,
+  checked: PropTypes.bool,
+  onCheck: PropTypes.func,
+  className: PropTypes.string,
+  labelProps: PropTypes.object
+}
 
 export default Checkbox

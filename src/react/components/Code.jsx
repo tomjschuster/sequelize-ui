@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import Prism from 'prismjs'
 import '../../style/prism-cobalt.css'
@@ -12,94 +13,6 @@ import copy from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
 
 import Button from './Button.jsx'
-
-export class CodeFlyout extends React.Component {
-  constructor (props) {
-    super(props)
-
-    if (props.project) {
-      this.codeExplorer = React.createRef()
-    }
-  }
-
-  clearMessage = id =>
-    this.setState({ messages: this.state.messages.filter(m => m.id !== id) })
-
-  downloadCode = () => {
-    if (this.props.project) {
-      downloadZip(this.props.rootFileItem)
-        .then(() => this.props.newMessage('Code downloaded', 'success'))
-        .catch(() => this.props.newMessage('Error downloading', 'error'))
-    } else {
-      downloadFile(this.props.fileItem)
-        .then(() => this.props.newMessage('Code downloaded', 'success'))
-        .catch(() => this.props.newMessage('Error downloading', 'error'))
-    }
-  }
-
-  copyCode = () => {
-    let success = false
-    try {
-      if (this.props.project) {
-        const file = this.codeExplorer.current.activeFile()
-        if (file) {
-          success = copy(file.content)
-        }
-      } else {
-        success = copy(this.props.fileItem.content)
-      }
-    } catch (_) {
-      success = false
-    }
-
-    if (success) {
-      this.props.newMessage('Copied to clipboard', 'success')
-    } else {
-      this.props.newMessage('Error copying', 'error')
-    }
-  }
-
-  getFile = () => {
-    if (this.props.project) {
-      return this.codeExplorer.current && this.codeExplorer.current.activeFile()
-    } else {
-      return this.props.fileItem
-    }
-  }
-
-  handleClose = () => this.props.onClose()
-
-  render () {
-    const { open, project, ...props } = this.props
-
-    const filename = project ? props.rootFileItem.name : props.fileItem.name
-    const flyoutClass = open ? 'code-flyout open' : 'code-flyout'
-
-    return (
-      <React.Fragment>
-        <aside className={flyoutClass}>
-          <div className='code-flyout__top-menu'>
-            <p className='code-flyout__top-menu__filename'>{filename}</p>
-            <div className='code-flyout__top-menu__buttons'>
-              <Button
-                label='Download'
-                icon='download'
-                onClick={this.downloadCode}
-              />
-              <Button label='Copy' icon='copy' onClick={this.copyCode} />
-              <Button label='Close' icon='cancel' onClick={this.handleClose} />
-            </div>
-          </div>
-          {project ? (
-            <CodeExplorer ref={this.codeExplorer} {...props} />
-          ) : (
-            <Code {...props} />
-          )}
-        </aside>
-      </React.Fragment>
-    )
-  }
-}
 
 export class Code extends React.Component {
   constructor (props) {
@@ -121,7 +34,7 @@ export class Code extends React.Component {
   }
 
   render () {
-    const { fileItem, children, className, copyButton, ...props } = this.props
+    const { fileItem, children, className, ...props } = this.props
     const classText = className ? ' ' + className : ''
     const language = languageFromFilename(fileItem.name)
 
@@ -139,6 +52,11 @@ export class Code extends React.Component {
   }
 }
 
+Code.propTypes = {
+  fileItem: PropTypes.object.isRequired,
+  className: PropTypes.string
+}
+
 export class CodeExplorer extends React.Component {
   constructor (props) {
     super(props)
@@ -147,7 +65,7 @@ export class CodeExplorer extends React.Component {
 
   selectFile = path => this.setState({ activePath: path })
 
-  activeFile = () => findFile(this.state.activePath, [this.props.rootFileItem])
+  activeFile = () => findFile(this.state.activePath, [this.props.fileItem])
 
   renderExplorerItem = (fileItem, activePath, path = [], depth = 0) => {
     const currentPath = [...path, fileItem.name]
@@ -213,25 +131,124 @@ export class CodeExplorer extends React.Component {
   }
 
   renderCode = () => {
-    const fileItem = findFile(this.state.activePath, [this.props.rootFileItem])
+    const fileItem = findFile(this.state.activePath, [this.props.fileItem])
     return <Code fileItem={fileItem} />
   }
 
   render () {
-    const { menu, className, rootFileItem, onClose, ...props } = this.props
+    const { className, fileItem, ...props } = this.props
     const classText = className ? className + ' ' : ''
 
     return (
       <div className={classText + 'code-explorer'} {...props}>
         <div className='code-explorer__explorer'>
           <ul key={'1'}>
-            {this.renderExplorerItem(rootFileItem, this.state.activePath)}
+            {this.renderExplorerItem(fileItem, this.state.activePath)}
           </ul>
         </div>
         <div className='code-explorer__code'>{this.renderCode()}</div>
       </div>
     )
   }
+}
+
+CodeExplorer.propTypes = {
+  fileItem: PropTypes.object.isRequired,
+  className: PropTypes.string
+}
+
+export class CodeFlyout extends React.Component {
+  constructor (props) {
+    super(props)
+
+    if (props.project) {
+      this.codeExplorer = React.createRef()
+    }
+  }
+
+  clearMessage = id =>
+    this.setState({ messages: this.state.messages.filter(m => m.id !== id) })
+
+  downloadCode = () => {
+    if (this.props.project) {
+      downloadZip(this.props.fileItem)
+        .then(() => this.props.newMessage('Code downloaded', 'success'))
+        .catch(() => this.props.newMessage('Error downloading', 'error'))
+    } else {
+      downloadFile(this.props.fileItem)
+        .then(() => this.props.newMessage('Code downloaded', 'success'))
+        .catch(() => this.props.newMessage('Error downloading', 'error'))
+    }
+  }
+
+  copyCode = () => {
+    let success = false
+    try {
+      if (this.props.project) {
+        const file = this.codeExplorer.current.activeFile()
+        if (file) {
+          success = copy(file.content)
+        }
+      } else {
+        success = copy(this.props.fileItem.content)
+      }
+    } catch (_) {
+      success = false
+    }
+
+    if (success) {
+      this.props.newMessage('Copied to clipboard', 'success')
+    } else {
+      this.props.newMessage('Error copying', 'error')
+    }
+  }
+
+  getFile = () => {
+    if (this.props.project) {
+      return this.codeExplorer.current && this.codeExplorer.current.activeFile()
+    } else {
+      return this.props.fileItem
+    }
+  }
+
+  handleClose = () => this.props.onClose()
+
+  render () {
+    const { open, project, newMessage, ...props } = this.props
+
+    const filename = project ? props.fileItem.name : props.fileItem.name
+    const flyoutClass = open ? 'code-flyout open' : 'code-flyout'
+
+    return (
+      <React.Fragment>
+        <aside className={flyoutClass}>
+          <div className='code-flyout__top-menu'>
+            <p className='code-flyout__top-menu__filename'>{filename}</p>
+            <div className='code-flyout__top-menu__buttons'>
+              <Button
+                label='Download'
+                icon='download'
+                onClick={this.downloadCode}
+              />
+              <Button label='Copy' icon='copy' onClick={this.copyCode} />
+              <Button label='Close' icon='cancel' onClick={this.handleClose} />
+            </div>
+          </div>
+          {project ? (
+            <CodeExplorer ref={this.codeExplorer} {...props} />
+          ) : (
+            <Code {...props} />
+          )}
+        </aside>
+      </React.Fragment>
+    )
+  }
+}
+
+CodeFlyout.propTypes = {
+  fileItem: PropTypes.object.isRequired,
+  project: PropTypes.bool,
+  newMessage: PropTypes.func.isRequired
 }
 
 const downloadZip = ({ name = 'my-project', files }) => {

@@ -116,7 +116,10 @@ export default class App extends React.Component {
 
   cancelCreatingNewModel = () => {
     this.setState({ creatingNewModel: false })
-    setTimeout(() => this.project.current.focusOnAddButton(), 0)
+    setTimeout(
+      () => this.project.current && this.project.current.focusOnAddButton(),
+      0
+    )
   }
 
   createModel = ({ model }) => {

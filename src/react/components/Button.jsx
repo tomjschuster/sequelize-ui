@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export default class Button extends React.Component {
   constructor (props) {
@@ -39,6 +40,16 @@ export default class Button extends React.Component {
       </button>
     )
   }
+}
+
+Button.propTypes = {
+  className: PropTypes.string,
+  label: PropTypes.string,
+  icon: PropTypes.string,
+  iconPosition: PropTypes.oneOf(['above', 'below', 'before', 'after']),
+  primary: PropTypes.bool,
+  secondary: PropTypes.bool,
+  children: PropTypes.arrayOf(PropTypes.element)
 }
 
 const getClass = ({ className, icon, iconPosition, primary, secondary }) => {

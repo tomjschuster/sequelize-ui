@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export default class Message extends React.Component {
   constructor (props) {
@@ -34,4 +35,10 @@ export default class Message extends React.Component {
     const className = 'message' + customClass + hiddenClass + errorClass
     return message ? <div className={className}>{message.text}</div> : null
   }
+}
+
+Message.propTypes = {
+  messages: PropTypes.arrayOf(PropTypes.object),
+  className: PropTypes.string,
+  time: PropTypes.number
 }
