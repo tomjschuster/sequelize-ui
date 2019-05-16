@@ -17,6 +17,7 @@ npm start
 ```
 
 TODO:
+- Individual edit forms
 - Instructions / Landing Page
 - Demo video
 
