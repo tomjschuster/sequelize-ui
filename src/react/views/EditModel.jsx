@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import * as validators from '../../utils/validators.js'
 
@@ -443,6 +444,13 @@ export default class EditModel extends React.Component {
       </main>
     )
   }
+}
+
+EditModel.propTypes = {
+  models: PropTypes.arrayOf(PropTypes.object).isRequired,
+  modelId: PropTypes.number.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired
 }
 
 const formatModel = model => ({

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import * as sequelize4 from '../../templates/sequelize-4.js'
 import Button from '../components/Button.jsx'
@@ -88,6 +89,16 @@ export default class Model extends React.Component {
       </React.Fragment>
     )
   }
+}
+
+Model.propTypes = {
+  fromEdit: PropTypes.bool.isRequired,
+  clearFromEdit: PropTypes.func.isRequired,
+  model: PropTypes.object.isRequired,
+  goToModels: PropTypes.func.isRequired,
+  editModel: PropTypes.func.isRequired,
+  newMessage: PropTypes.func.isRequired,
+  config: PropTypes.object.isRequired
 }
 
 const showFieldOptions = field => {

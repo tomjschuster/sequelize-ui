@@ -262,7 +262,10 @@ const downloadZip = ({ name = 'my-project', files }) => {
 
 const downloadFile = ({ name, content }) => {
   const file = new Blob([content], { type: 'text/plain;charset=utf-8' })
-  saveAs(file, name)
+  return new Promise(resolve => {
+    saveAs(file, name)
+    resolve(true)
+  })
 }
 
 const zipFile = (zip, file) => {

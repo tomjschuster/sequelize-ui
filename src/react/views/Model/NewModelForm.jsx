@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import * as validators from '../../../utils/validators.js'
 
@@ -108,6 +109,12 @@ export default class NewModelForm extends React.Component {
       </form>
     )
   }
+}
+
+NewModelForm.propTypes = {
+  models: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired
 }
 
 const UNIQUE_NAME_ERROR = 'UNIQUE_NAME_ERROR'

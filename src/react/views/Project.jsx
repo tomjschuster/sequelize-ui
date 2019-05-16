@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import * as sequelize4 from '../../templates/sequelize-4.js'
 import NewModelForm from './Model/NewModelForm.jsx'
@@ -145,4 +146,21 @@ export default class Project extends React.Component {
       </React.Fragment>
     )
   }
+}
+
+Project.propTypes = {
+  config: PropTypes.object.isRequired,
+  models: PropTypes.arrayOf(PropTypes.object.isRequired),
+  creatingNewModel: PropTypes.bool.isRequired,
+
+  // Actions
+  toggleTimestamps: PropTypes.func.isRequired,
+  toggleSnake: PropTypes.func.isRequired,
+  toggleSingularTableNames: PropTypes.func.isRequired,
+  startCreatingNewModel: PropTypes.func.isRequired,
+  cancelCreatingNewModel: PropTypes.func.isRequired,
+  createModel: PropTypes.func.isRequired,
+  goToModel: PropTypes.func.isRequired,
+  editModel: PropTypes.func.isRequired,
+  deleteModel: PropTypes.func.isRequired
 }
