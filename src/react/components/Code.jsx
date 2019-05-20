@@ -5,8 +5,6 @@ import Prism from 'prismjs'
 import '../../style/prism-cobalt.css'
 import 'prismjs/components/prism-git.js'
 import 'prismjs/components/prism-json.js'
-import 'prismjs/plugins/line-numbers/prism-line-numbers'
-import 'prismjs/plugins/line-numbers/prism-line-numbers.css'
 
 import JSZip from 'jszip'
 import copy from 'copy-to-clipboard'

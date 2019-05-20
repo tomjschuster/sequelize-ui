@@ -1,52 +1,51 @@
-const webpack = require('webpack')
-const merge = require('webpack-merge')
 const path = require('path')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
-const common = {
+module.exports = {
   entry: './src/index.js',
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'static/[name].[hash].js'
   },
-  resolve: {
-    extensions: ['.js', '.jsx']
-  },
+  resolve: { extensions: ['.js', '.jsx'] },
+  devtool: 'source-map',
   module: {
     rules: [
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'env'],
-          plugins: [
-            'transform-object-rest-spread',
-            'transform-class-properties'
-          ]
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+            plugins: ['@babel/plugin-proposal-class-properties']
+          }
         }
       },
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          publicPath: '../',
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: { importLoaders: 1 }
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                ident: 'postcss',
-                plugins: () => [require('autoprefixer')({})]
-              }
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../'
             }
-          ]
-        })
+          },
+          {
+            loader: 'css-loader',
+            options: { importLoaders: 1 }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              plugins: () => [require('autoprefixer')({})]
+            }
+          }
+        ]
       },
       {
         test: /\.jpe?g$|\.gif$|\.ico$|\.png$|\.svg$/,
@@ -90,40 +89,7 @@ const common = {
       template: 'src/index.html',
       filename: 'index.html'
     }),
-    new ExtractTextPlugin('static/[name].[hash].css'),
+    new MiniCssExtractPlugin({ filename: 'static/[name].[hash].css' }),
     new CopyWebpackPlugin([{ from: 'assets', to: './static' }])
   ]
-}
-
-const dev = {
-  devtool: 'source-map',
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
-    })
-  ]
-}
-
-const prod = {
-  devtool: 'source-map',
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      extractComments: true,
-      sourceMap: true
-    }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    })
-  ]
-}
-
-switch (process.env.NODE_ENV) {
-  case 'production':
-    module.exports = merge(common, prod)
-    break
-  case 'development':
-    module.exports = merge(common, dev)
-    break
-  default:
-    module.exports = merge(common, dev)
 }
