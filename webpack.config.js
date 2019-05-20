@@ -2,6 +2,8 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const RobotstxtPlugin = require('robotstxt-webpack-plugin')
+const SitemapPlugin = require('sitemap-webpack-plugin').default
 
 module.exports = {
   entry: './src/index.js',
@@ -90,6 +92,8 @@ module.exports = {
       filename: 'index.html'
     }),
     new MiniCssExtractPlugin({ filename: 'static/[name].[hash].css' }),
-    new CopyWebpackPlugin([{ from: 'assets', to: './static' }])
+    new CopyWebpackPlugin([{ from: 'assets', to: './static' }]),
+    new RobotstxtPlugin(),
+    new SitemapPlugin('https://sequelizeui.app', ['/'], { lastMod: true })
   ]
 }
