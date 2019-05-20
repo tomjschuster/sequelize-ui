@@ -5,6 +5,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const RobotstxtPlugin = require('robotstxt-webpack-plugin')
 const SitemapPlugin = require('sitemap-webpack-plugin').default
 
+const production = process.env.NODE_ENV === 'production'
+
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -12,7 +14,7 @@ module.exports = {
     filename: 'static/[name].[hash].js'
   },
   resolve: { extensions: ['.js', '.jsx'] },
-  devtool: 'source-map',
+  devtool: production ? 'source-map' : 'eval-source-map',
   module: {
     rules: [
       {
