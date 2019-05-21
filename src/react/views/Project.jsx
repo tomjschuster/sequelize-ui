@@ -7,6 +7,7 @@ import Checkbox from '../components/Checkbox.jsx'
 import Button from '../components/Button.jsx'
 import ToolBelt from '../components/ToolBelt.jsx'
 import { CodeFlyout } from '../components/Code.jsx'
+import * as List from '../components/List.jsx'
 
 export default class Project extends React.Component {
   constructor (props) {
@@ -55,12 +56,12 @@ export default class Project extends React.Component {
             <ToolBelt>
               <Button icon='code' label='Code' onClick={this.toggleCode} />
             </ToolBelt>
-            <h3 className='models__title list__title'>Models</h3>
-            <ul className='models list'>
+            <List.Title className='models__title' text='Models' />
+            <List.List className='models'>
               {models.map(model => (
-                <li className='models__item list__item' key={model.id}>
-                  <span className='list__item__content'>{model.name}</span>
-                  <span className='models__item__actions list__item__actions'>
+                <List.Item key={model.id}>
+                  <List.Content>{model.name}</List.Content>
+                  <List.Actions>
                     <Button
                       icon='view'
                       iconPosition='above'
@@ -79,10 +80,10 @@ export default class Project extends React.Component {
                       onClick={() => deleteModel(model.id)}
                       label='Delete'
                     />
-                  </span>
-                </li>
+                  </List.Actions>
+                </List.Item>
               ))}
-              <li className='add-model list__item'>
+              <List.Item className='add-model'>
                 {creatingNewModel ? (
                   <NewModelForm
                     models={models}
@@ -109,8 +110,8 @@ export default class Project extends React.Component {
                     />
                   </React.Fragment>
                 )}
-              </li>
-            </ul>
+              </List.Item>
+            </List.List>
             <ToolBelt className='model-config' title='Database Options'>
               <Checkbox
                 id='config-timestamps'

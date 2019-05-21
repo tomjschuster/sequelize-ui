@@ -101,6 +101,7 @@ html, body {
   background-color: #f0f0f0;
   position: relative;
   flex: 1 1 auto;
+  padding-bottom: 2rem;
 }
 
 .content-wrapper {
@@ -206,7 +207,7 @@ html, body {
 }
 
 .list__item {
-  padding: 0.5rem;
+  padding: 0.5rem 1.5rem;
   border-bottom: 1px solid #ddd;
   display: flex;
   justify-content: space-between;
@@ -221,8 +222,14 @@ html, body {
 
 .list__item__actions > * {
   width: 3.5rem;
-  /* display: inline-block; */
 }
+
+@media (max-width: 450px) {
+  .list__item {
+    padding: 0.5rem 1rem;
+  }
+}
+
 
 /* Checkbox */
 .checkbox {
@@ -702,7 +709,9 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 .models__title,
+.fields__title,
 .models,
+.fields,
 .model-config {
   background: #ffffff;
   margin-left: auto;
@@ -711,12 +720,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
   max-width: 90%;
 }
 
-
-.models__item {
-  padding: 0 1.5rem;
-}
-
-.models__item__actions > .button:hover {
+.models .list__item__actions > .button:hover {
   color: var(--primary-color);
 }
 
@@ -803,51 +807,53 @@ label.model-config__item:hover {
   text-align: center;
 }
 
-.fields-title {
-  margin: 1.5rem 0;
-}
-
-.fields-table,
 .project .toolbelt,
 .model-view .toolbelt {
   background-color: #ffffff;
 }
 
-.fields-table {
-  border-collapse: collapse;
-  padding: 0;
-  border: 1px solid #ddd;
-  width: 90%;
-  margin: 0 auto;
+.fields__item {
+  display: grid;
+  grid-template-columns: 35% 30% 35%;
+  grid-template-rows: auto auto;
+  text-align: left;
 }
 
-.fields-table__cell {
-  border: 1px solid #ddd;
-  padding: 0.5rem;
-  text-align: center;
-  overflow-wrap: break-word;
+.fields__item__name {
+  /* font-weight: bold; */
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
 }
 
-.fields-list__itrem {
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-bottom: none;
-  width: 20rem;
-  max-width: 80%;
+.fields__item__type {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
 }
 
-.fields-list__item:last-of-type {
-  border-bottom: 1px solid #ddd;
+.fields__item__type.--no-opts {
+  grid-row: 1 / 3;
 }
 
-.fields-table__name-header {
-  max-width: 60%;
+.fields__item__options {
+  font-size: 0.8rem;
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
 }
 
-.fields-table__name-cell {
-  max-width: 60%;
-  word-break: break-all;
+.fields__item__actions {
+  display: flex;
+  justify-content: flex-end;
+  grid-column: 3 / 4;
+  grid-row: 1 / 3;
 }
+
+
+@media (max-width: 450px) {
+  .fields__item {
+    padding-right: 0.5rem;
+  }
+}
+
 
 /* Model Form */
 .edit-model__actions,

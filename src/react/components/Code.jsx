@@ -162,6 +162,20 @@ export class CodeFlyout extends React.Component {
     if (props.project) {
       this.codeExplorer = React.createRef()
     }
+
+    this.state = { opening: false, closing: false }
+  }
+
+  componentDidUpdate (prevProps) {
+    if (!prevProps.open && this.props.open) {
+      this.setState({ opening: true })
+      setTimeout(() => this.setState({ opening: false }))
+    }
+
+    if (prevProps.open && !this.props.open) {
+      this.setState({ closing: true })
+      setTimeout(() => this.setState({ closing: false }), 400)
+    }
   }
 
   clearMessage = id =>
@@ -215,11 +229,15 @@ export class CodeFlyout extends React.Component {
     const { open, project, newMessage, ...props } = this.props
 
     const filename = project ? props.fileItem.name : props.fileItem.name
-    const flyoutClass = open ? 'code-flyout open' : 'code-flyout'
+
+    const flyoutClass =
+      open && !this.state.opening ? 'code-flyout open' : 'code-flyout'
+
+    const hide = !open && !this.state.opening && !this.state.closing
 
     return (
       <React.Fragment>
-        <aside className={flyoutClass}>
+        <aside style={hide ? { display: 'none' } : {}} className={flyoutClass}>
           <div className='code-flyout__top-menu'>
             <p className='code-flyout__top-menu__filename'>{filename}</p>
             <div className='code-flyout__top-menu__buttons'>

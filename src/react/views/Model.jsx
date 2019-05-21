@@ -5,6 +5,7 @@ import * as sequelize4 from '../../templates/sequelize-4.js'
 import Button from '../components/Button.jsx'
 import ToolBelt from '../components/ToolBelt.jsx'
 import { CodeFlyout } from '../components/Code.jsx'
+import * as List from '../components/List.jsx'
 
 import { DATA_TYPE_OPTIONS } from '../../constants.js'
 
@@ -44,37 +45,55 @@ export default class Model extends React.Component {
               />
               <Button icon='code' label='Code' onClick={this.toggleCode} />
             </ToolBelt>
-            <h3 className='fields-title subtitle'>Fields</h3>
-            {this.props.model.fields.length === 0 ? (
-              <p>No Fields</p>
-            ) : (
-              <table className='fields-table' key='abc'>
-                <thead>
-                  <tr>
-                    <th className='fields-table__name-header fields-table__cell'>
-                      Name
-                    </th>
-                    <th className='fields-table__cell'>Type</th>
-                    <th className='fields-table__cell'>Options</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.props.model.fields.map(field => (
-                    <tr key={field.id}>
-                      <td className='fields-table__name-cell fields-table__cell'>
-                        {field.name}
-                      </td>
-                      <td className='fields-table__cell'>
-                        {DATA_TYPE_OPTIONS[field.type]}
-                      </td>
-                      <td className='fields-table__cell'>
-                        {showFieldOptions(field)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+            <List.Title className='fields__title' text='Fields' />
+            <List.List className='fields'>
+              {this.props.model.fields.length === 0 ? (
+                <List.Item>
+                  <p>No Fields</p>
+                </List.Item>
+              ) : (
+                this.props.model.fields.map(field => (
+                  <List.Item className='fields__item' key={field.id}>
+                    <div className='fields__item__name'>{field.name}</div>
+                    <div
+                      className={
+                        showFieldOptions(field)
+                          ? 'fields__item__type'
+                          : 'fields__item__type --no-opts'
+                      }
+                    >
+                      {DATA_TYPE_OPTIONS[field.type]}
+                    </div>
+                    <div className='fields__item__options'>
+                      {showFieldOptions(field)}
+                    </div>
+                    <div className='fields__item__actions list__item__actions'>
+                      <Button
+                        icon='edit'
+                        iconPosition='above'
+                        // onClick={() => editModel(model.id)}
+                        label='Edit'
+                      />
+                      <Button
+                        icon='delete'
+                        iconPosition='above'
+                        // onClick={() => deleteModel(model.id)}
+                        label='Delete'
+                      />
+                    </div>
+                  </List.Item>
+                ))
+              )}
+              <List.Item className='add-model'>
+                <Button
+                  // ref={this.addButton}
+                  icon='add'
+                  label='Add a Field'
+                  primary
+                  // onClick={startCreatingNewModel}
+                />
+              </List.Item>
+            </List.List>
           </div>
         </main>
         <CodeFlyout
