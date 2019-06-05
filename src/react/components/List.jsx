@@ -43,8 +43,8 @@ export const Content = ({ className, text, children, ...props }) => {
 
 Content.propTypes = {
   className: PropTypes.string,
-  text: PropTypes.string.className,
-  children: PropTypes.arrayOf(PropTypes.element)
+  text: PropTypes.string,
+  children: PropTypes.element
 }
 
 export const Actions = ({ className, ...props }) => {

@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import * as sequelize4 from '../../templates/sequelize-4.js'
+import NewFieldForm from './Model/NewFieldForm.jsx'
+
 import Button from '../components/Button.jsx'
 import ToolBelt from '../components/ToolBelt.jsx'
 import { CodeFlyout } from '../components/Code.jsx'
@@ -12,8 +14,9 @@ import { DATA_TYPE_OPTIONS } from '../../constants.js'
 export default class Model extends React.Component {
   constructor (props) {
     super(props)
+    this.addButton = React.createRef()
     this.editButtonRef = React.createRef()
-    this.state = { codeOpen: false }
+    this.state = { creatingNewField: false, codeOpen: false }
   }
 
   componentDidMount () {
@@ -21,7 +24,16 @@ export default class Model extends React.Component {
       this.editButtonRef.current.focus()
       this.props.clearFromEdit()
     }
+
+    if (this.props.model.fields.length === 0) this.focusOnAddButton()
   }
+
+  focusOnAddButton () {
+    this.addButton.current.focus()
+  }
+
+  startCreatingNewField = () => this.setState({ creatingNewField: true })
+  cancelCreatingNewField = () => this.setState({ creatingNewField: false })
 
   toggleCode = () => this.setState({ codeOpen: !this.state.codeOpen })
 
@@ -47,52 +59,67 @@ export default class Model extends React.Component {
             </ToolBelt>
             <List.Title className='fields__title' text='Fields' />
             <List.List className='fields'>
-              {this.props.model.fields.length === 0 ? (
-                <List.Item>
-                  <p>No Fields</p>
+              {this.props.model.fields.map(field => (
+                <List.Item className='fields__item' key={field.id}>
+                  <div className='fields__item__name'>{field.name}</div>
+                  <div
+                    className={
+                      showFieldOptions(field)
+                        ? 'fields__item__type'
+                        : 'fields__item__type --no-opts'
+                    }
+                  >
+                    {DATA_TYPE_OPTIONS[field.type]}
+                  </div>
+                  <div className='fields__item__options'>
+                    {showFieldOptions(field)}
+                  </div>
+                  <div className='fields__item__actions list__item__actions'>
+                    <Button
+                      icon='edit'
+                      iconPosition='above'
+                      // onClick={() => editModel(model.id)}
+                      label='Edit'
+                    />
+                    <Button
+                      icon='delete'
+                      iconPosition='above'
+                      onClick={() => this.props.deleteField(field.id)}
+                      label='Delete'
+                    />
+                  </div>
+                </List.Item>
+              ))}
+              {this.state.creatingNewField ? (
+                <List.Item className='new-field'>
+                  <NewFieldForm
+                    fields={this.props.model.fields}
+                    onCreate={this.props.createField}
+                    onCancel={this.cancelCreatingNewField}
+                  />
+                </List.Item>
+              ) : this.props.model.fields.length === 0 ? (
+                <List.Item className='add-field'>
+                  <p>You have no fields</p>
+                  <Button
+                    ref={this.addButton}
+                    icon='add'
+                    label='Add a Field'
+                    primary
+                    onClick={this.startCreatingNewField}
+                  />
                 </List.Item>
               ) : (
-                this.props.model.fields.map(field => (
-                  <List.Item className='fields__item' key={field.id}>
-                    <div className='fields__item__name'>{field.name}</div>
-                    <div
-                      className={
-                        showFieldOptions(field)
-                          ? 'fields__item__type'
-                          : 'fields__item__type --no-opts'
-                      }
-                    >
-                      {DATA_TYPE_OPTIONS[field.type]}
-                    </div>
-                    <div className='fields__item__options'>
-                      {showFieldOptions(field)}
-                    </div>
-                    <div className='fields__item__actions list__item__actions'>
-                      <Button
-                        icon='edit'
-                        iconPosition='above'
-                        // onClick={() => editModel(model.id)}
-                        label='Edit'
-                      />
-                      <Button
-                        icon='delete'
-                        iconPosition='above'
-                        // onClick={() => deleteModel(model.id)}
-                        label='Delete'
-                      />
-                    </div>
-                  </List.Item>
-                ))
+                <List.Item className='add-field'>
+                  <Button
+                    ref={this.addButton}
+                    icon='add'
+                    label='Add a Field'
+                    primary
+                    onClick={this.startCreatingNewField}
+                  />
+                </List.Item>
               )}
-              <List.Item className='add-model'>
-                <Button
-                  // ref={this.addButton}
-                  icon='add'
-                  label='Add a Field'
-                  primary
-                  // onClick={startCreatingNewModel}
-                />
-              </List.Item>
             </List.List>
           </div>
         </main>
@@ -115,6 +142,8 @@ Model.propTypes = {
   clearFromEdit: PropTypes.func.isRequired,
   model: PropTypes.object.isRequired,
   goToModels: PropTypes.func.isRequired,
+  createField: PropTypes.func.isRequired,
+  deleteField: PropTypes.func.isRequired,
   editModel: PropTypes.func.isRequired,
   newMessage: PropTypes.func.isRequired,
   config: PropTypes.object.isRequired

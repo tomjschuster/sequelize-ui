@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import * as sequelize4 from '../../templates/sequelize-4.js'
-import NewModelForm from './Model/NewModelForm.jsx'
+import NewModelForm from './Project/NewModelForm.jsx'
 import Checkbox from '../components/Checkbox.jsx'
 import Button from '../components/Button.jsx'
 import ToolBelt from '../components/ToolBelt.jsx'
@@ -15,6 +15,7 @@ export default class Project extends React.Component {
     this.addButton = React.createRef()
     this.state = { codeOpen: false }
   }
+
   componentDidMount () {
     if (this.props.models.length === 0) this.focusOnAddButton()
   }

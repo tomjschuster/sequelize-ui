@@ -67,7 +67,7 @@ export default class App extends React.Component {
   clearMessage = id =>
     this.setState({ messages: this.state.messages.filter(m => m.id !== id) })
 
-  // Models Methods
+  // Project Methods
   toggleTimestamps = () =>
     this.setState({
       config: {
@@ -129,8 +129,25 @@ export default class App extends React.Component {
     })
   }
 
-  // Current Model Methods
+  // Model Methods
   goToModels = () => this.setState({ pageState: PROJECT, currentModelId: null })
+
+  createField = ({ field }) =>
+    this.setState(({ models, currentModelId, nextFieldId }) => ({
+      models: models.map(model =>
+        model.id === currentModelId
+          ? addField(model, nextFieldId, field)
+          : model
+      ),
+      nextFieldId: nextFieldId + 1
+    }))
+
+  deleteField = fieldId =>
+    this.setState(({ models, currentModelId }) => ({
+      models: models.map(model =>
+        model.id === currentModelId ? removeField(model, fieldId) : model
+      )
+    }))
 
   // Edit Model Methods
   cancelEditingModel = () =>
@@ -192,6 +209,8 @@ export default class App extends React.Component {
             filename={sequelize4.modelFileName(model.name)}
             config={this.state.config}
             goToModels={this.goToModels}
+            createField={this.createField}
+            deleteField={this.deleteField}
             editModel={this.editCurrentModel}
             clearFromEdit={this.clearFromEditModel}
             newMessage={this.newMessage}
@@ -265,3 +284,14 @@ const initialConfig = () => ({
 })
 
 const buildModel = (id, model) => ({ id, ...model, fields: [] })
+const buildField = (id, field) => ({ id, ...field })
+
+const addField = (model, nextFieldId, field) => ({
+  ...model,
+  fields: [...model.fields, buildField(nextFieldId, field)]
+})
+
+const removeField = (model, fieldId) => ({
+  ...model,
+  fields: model.fields.filter(field => field.id !== fieldId)
+})
