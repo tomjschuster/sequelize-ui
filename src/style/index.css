@@ -183,6 +183,10 @@ html, body {
   background-color: var(--primary-color-light);
 }
 
+.button:disabled {
+  cursor: initial;
+}
+
 /* List */
 
 .list {
@@ -863,7 +867,7 @@ label.model-config__item:hover {
   width: 150px;
 }
 
-.new-field-form {
+.field-form {
   width: 100%;
 }
 

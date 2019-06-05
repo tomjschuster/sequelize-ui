@@ -14,14 +14,16 @@ import Checkbox from '../../components/Checkbox.jsx'
 
 const DEFAULT_DATA_TYPE = DATA_TYPES.STRING
 
-export default class NewFieldForm extends React.Component {
+export default class FieldForm extends React.Component {
   constructor (props) {
     super(props)
 
     this.nameInput = React.createRef()
 
+    const field =
+      this.props.fields.find(f => f.id === this.props.fieldId) || emptyField()
     this.state = {
-      field: emptyField(),
+      field,
       errors: []
     }
   }
@@ -34,14 +36,14 @@ export default class NewFieldForm extends React.Component {
     this.nameInput.current.focus()
   }
 
-  create = () => {
+  save = () => {
     const field = formatField(this.state.field)
     const errors = validateField(field, this.props.fields)
 
     if (errors.length > 0) {
       this.setState({ errors })
     } else {
-      this.props.onCreate({ field })
+      this.props.onSave({ field })
       this.setState({ field: emptyField() })
       this.focusOnName()
     }
@@ -76,11 +78,11 @@ export default class NewFieldForm extends React.Component {
   render () {
     return (
       <form
-        id='new-field-form'
-        className='new-field-form field-form'
+        id='field-form'
+        className='field-form field-form'
         onSubmit={event => {
           event.preventDefault()
-          this.create()
+          this.save()
         }}
         onKeyDown={evt => {
           if (evt.keyCode === 27) {
@@ -143,7 +145,7 @@ export default class NewFieldForm extends React.Component {
             type='submit'
             icon='check'
             className='field-form__action'
-            label='Add'
+            label={this.props.fieldId ? 'Update' : 'Add'}
             disabled={this.state.errors.length > 0}
           />
           <Button
@@ -168,10 +170,11 @@ export default class NewFieldForm extends React.Component {
   }
 }
 
-NewFieldForm.propTypes = {
+FieldForm.propTypes = {
   fields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fieldId: PropTypes.number,
   onCancel: PropTypes.func.isRequired,
-  onCreate: PropTypes.func.isRequired
+  onSave: PropTypes.func.isRequired
 }
 
 const formatField = field => ({ ...field, name: field.name.trim() })

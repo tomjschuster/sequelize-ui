@@ -142,6 +142,13 @@ export default class App extends React.Component {
       nextFieldId: nextFieldId + 1
     }))
 
+  updateField = ({ field }) =>
+    this.setState(({ models, currentModelId }) => ({
+      models: models.map(model =>
+        model.id === currentModelId ? updateField(model, field) : model
+      )
+    }))
+
   deleteField = fieldId =>
     this.setState(({ models, currentModelId }) => ({
       models: models.map(model =>
@@ -210,6 +217,7 @@ export default class App extends React.Component {
             config={this.state.config}
             goToModels={this.goToModels}
             createField={this.createField}
+            updateField={this.updateField}
             deleteField={this.deleteField}
             editModel={this.editCurrentModel}
             clearFromEdit={this.clearFromEditModel}
@@ -289,6 +297,11 @@ const buildField = (id, field) => ({ id, ...field })
 const addField = (model, nextFieldId, field) => ({
   ...model,
   fields: [...model.fields, buildField(nextFieldId, field)]
+})
+
+const updateField = (model, field) => ({
+  ...model,
+  fields: model.fields.map(f => (f.id === field.id ? field : f))
 })
 
 const removeField = (model, fieldId) => ({

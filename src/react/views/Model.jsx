@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import * as sequelize4 from '../../templates/sequelize-4.js'
-import NewFieldForm from './Model/NewFieldForm.jsx'
+import FieldForm from './Model/FieldForm.jsx'
 
 import Button from '../components/Button.jsx'
 import ToolBelt from '../components/ToolBelt.jsx'
@@ -14,9 +14,19 @@ import { DATA_TYPE_OPTIONS } from '../../constants.js'
 export default class Model extends React.Component {
   constructor (props) {
     super(props)
+
     this.addButton = React.createRef()
     this.editButtonRef = React.createRef()
-    this.state = { creatingNewField: false, codeOpen: false }
+
+    this.props.model.fields.forEach(field => {
+      this[`editFieldButton${field.id}`] = React.createRef()
+    })
+
+    this.state = {
+      creatingNewField: false,
+      editingFieldId: null,
+      codeOpen: false
+    }
   }
 
   componentDidMount () {
@@ -32,8 +42,30 @@ export default class Model extends React.Component {
     this.addButton.current.focus()
   }
 
+  focusOnEditFieldButton (fieldId) {
+    this[`editFieldButton${fieldId}`].current.focus()
+  }
+
   startCreatingNewField = () => this.setState({ creatingNewField: true })
-  cancelCreatingNewField = () => this.setState({ creatingNewField: false })
+
+  cancelCreatingNewField = () => {
+    this.setState({ creatingNewField: false })
+    setTimeout(() => this.focusOnAddButton())
+  }
+
+  startEditingField = fieldId => this.setState({ editingFieldId: fieldId })
+
+  cancelEditingField = () => {
+    const fieldId = this.state.editingFieldId
+    this.setState({ editingFieldId: null })
+    setTimeout(() => this.focusOnEditFieldButton(fieldId))
+  }
+
+  updateField = ({ field }) => {
+    this.cancelEditingField()
+    this.props.updateField({ field })
+    setTimeout(() => this.focusOnEditFieldButton(field.id))
+  }
 
   toggleCode = () => this.setState({ codeOpen: !this.state.codeOpen })
 
@@ -59,42 +91,62 @@ export default class Model extends React.Component {
             </ToolBelt>
             <List.Title className='fields__title' text='Fields' />
             <List.List className='fields'>
-              {this.props.model.fields.map(field => (
-                <List.Item className='fields__item' key={field.id}>
-                  <div className='fields__item__name'>{field.name}</div>
-                  <div
-                    className={
-                      showFieldOptions(field)
-                        ? 'fields__item__type'
-                        : 'fields__item__type --no-opts'
-                    }
-                  >
-                    {DATA_TYPE_OPTIONS[field.type]}
-                  </div>
-                  <div className='fields__item__options'>
-                    {showFieldOptions(field)}
-                  </div>
-                  <div className='fields__item__actions list__item__actions'>
-                    <Button
-                      icon='edit'
-                      iconPosition='above'
-                      // onClick={() => editModel(model.id)}
-                      label='Edit'
+              {this.props.model.fields.map(field =>
+                field.id === this.state.editingFieldId ? (
+                  <List.Item className='edit-field' key={field.id}>
+                    <FieldForm
+                      fields={this.props.model.fields}
+                      fieldId={field.id}
+                      onSave={this.updateField}
+                      onCancel={this.cancelEditingField}
                     />
-                    <Button
-                      icon='delete'
-                      iconPosition='above'
-                      onClick={() => this.props.deleteField(field.id)}
-                      label='Delete'
-                    />
-                  </div>
-                </List.Item>
-              ))}
+                  </List.Item>
+                ) : (
+                  <List.Item className='fields__item' key={field.id}>
+                    <div className='fields__item__name'>{field.name}</div>
+                    <div
+                      className={
+                        showFieldOptions(field)
+                          ? 'fields__item__type'
+                          : 'fields__item__type --no-opts'
+                      }
+                    >
+                      {DATA_TYPE_OPTIONS[field.type]}
+                    </div>
+                    <div className='fields__item__options'>
+                      {showFieldOptions(field)}
+                    </div>
+                    <div className='fields__item__actions list__item__actions'>
+                      <Button
+                        ref={this[`editFieldButton${field.id}`]}
+                        icon='edit'
+                        iconPosition='above'
+                        onClick={() => this.startEditingField(field.id)}
+                        label='Edit'
+                        disabled={
+                          this.state.creatingNewField ||
+                          !!this.state.editingFieldId
+                        }
+                      />
+                      <Button
+                        icon='delete'
+                        iconPosition='above'
+                        onClick={() => this.props.deleteField(field.id)}
+                        label='Delete'
+                        disabled={
+                          this.state.creatingNewField ||
+                          !!this.state.editingFieldId
+                        }
+                      />
+                    </div>
+                  </List.Item>
+                )
+              )}
               {this.state.creatingNewField ? (
                 <List.Item className='new-field'>
-                  <NewFieldForm
+                  <FieldForm
                     fields={this.props.model.fields}
-                    onCreate={this.props.createField}
+                    onSave={this.props.createField}
                     onCancel={this.cancelCreatingNewField}
                   />
                 </List.Item>
@@ -117,6 +169,7 @@ export default class Model extends React.Component {
                     label='Add a Field'
                     primary
                     onClick={this.startCreatingNewField}
+                    disabled={!!this.state.editingFieldId}
                   />
                 </List.Item>
               )}
