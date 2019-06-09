@@ -132,6 +132,13 @@ export default class App extends React.Component {
   // Model Methods
   goToModels = () => this.setState({ pageState: PROJECT, currentModelId: null })
 
+  updateModelName = ({ name }) =>
+    this.setState(({ models, currentModelId }) => ({
+      models: models.map(model =>
+        model.id === currentModelId ? updateModelName(model, name) : model
+      )
+    }))
+
   createField = ({ field }) =>
     this.setState(({ models, currentModelId, nextFieldId }) => ({
       models: models.map(model =>
@@ -213,9 +220,11 @@ export default class App extends React.Component {
           <Model
             fromEdit={this.state.fromEditModel}
             model={model}
+            models={this.state.models}
             filename={sequelize4.modelFileName(model.name)}
             config={this.state.config}
             goToModels={this.goToModels}
+            updateModelName={this.updateModelName}
             createField={this.createField}
             updateField={this.updateField}
             deleteField={this.deleteField}
@@ -293,6 +302,8 @@ const initialConfig = () => ({
 
 const buildModel = (id, model) => ({ id, ...model, fields: [] })
 const buildField = (id, field) => ({ id, ...field })
+
+const updateModelName = (model, name) => ({ ...model, name })
 
 const addField = (model, nextFieldId, field) => ({
   ...model,

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import * as sequelize4 from '../../templates/sequelize-4.js'
 import FieldForm from './Model/FieldForm.jsx'
+import ModelNameForm from './Model/ModelNameForm.jsx'
 
 import Button from '../components/Button.jsx'
 import ToolBelt from '../components/ToolBelt.jsx'
@@ -15,6 +16,7 @@ export default class Model extends React.Component {
   constructor (props) {
     super(props)
 
+    this.editNameButton = React.createRef()
     this.addButton = React.createRef()
     this.editButtonRef = React.createRef()
 
@@ -23,6 +25,7 @@ export default class Model extends React.Component {
     })
 
     this.state = {
+      editingName: false,
       creatingNewField: false,
       editingFieldId: null,
       codeOpen: false
@@ -38,14 +41,20 @@ export default class Model extends React.Component {
     if (this.props.model.fields.length === 0) this.focusOnAddButton()
   }
 
-  focusOnAddButton () {
-    this.addButton.current.focus()
-  }
+  focusOnEditNameButton = () => this.editNameButton.current.focus()
+  focusOnAddButton = () => this.addButton.current.focus()
 
-  focusOnEditFieldButton (fieldId) {
+  focusOnEditFieldButton = fieldId =>
     this[`editFieldButton${fieldId}`].current.focus()
-  }
 
+  startEditingName = () => this.setState({ editingName: true })
+  cancelEditingName = () => this.setState({ editingName: false })
+
+  updateModelName = ({ name }) => {
+    this.cancelEditingName()
+    this.props.updateModelName({ name })
+    setTimeout(() => this.focusOnEditNameButton())
+  }
   startCreatingNewField = () => this.setState({ creatingNewField: true })
 
   cancelCreatingNewField = () => {
@@ -69,33 +78,67 @@ export default class Model extends React.Component {
 
   toggleCode = () => this.setState({ codeOpen: !this.state.codeOpen })
 
+  codeFileItem = () =>
+    sequelize4.modelFile({
+      model: this.props.model,
+      config: this.props.config
+    })
+
+  editing = () =>
+    this.state.editingName ||
+    !!this.state.editingFieldId ||
+    this.state.creatingNewField
+
   render () {
+    const { props, state } = this
+    const editing = this.editing()
+
     return (
       <React.Fragment>
         <main className='main-content model-view'>
           <div className='content-wrapper'>
-            <h2 className='title'>{this.props.model.name} Model</h2>
+            {state.editingName ? (
+              <ModelNameForm
+                modelId={props.model.id}
+                name={props.model.name}
+                models={props.models}
+                onCancel={this.cancelEditingName}
+                onSave={this.updateModelName}
+              />
+            ) : (
+              <React.Fragment>
+                <h2 className='title'>{props.model.name} Model</h2>
+                <Button
+                  ref={this.editNameButton}
+                  icon='edit'
+                  iconPosition='above'
+                  onClick={() => this.startEditingName()}
+                  label='Edit'
+                  disabled={editing}
+                />
+              </React.Fragment>
+            )}
             <ToolBelt>
               <Button
                 icon='back'
                 label='Back'
-                onClick={this.props.goToModels}
+                onClick={props.goToModels}
+                disabled={editing}
               />
               <Button
-                ref={this.editButtonRef}
-                icon='edit'
-                label='Edit'
-                onClick={this.props.editModel}
+                icon='code'
+                label='Code'
+                onClick={this.toggleCode}
+                disabled={editing}
               />
-              <Button icon='code' label='Code' onClick={this.toggleCode} />
             </ToolBelt>
             <List.Title className='fields__title' text='Fields' />
             <List.List className='fields'>
-              {this.props.model.fields.map(field =>
-                field.id === this.state.editingFieldId ? (
+              {props.model.fields.map(field =>
+                field.id === state.editingFieldId ? (
                   <List.Item className='edit-field' key={field.id}>
                     <FieldForm
-                      fields={this.props.model.fields}
+                      fields={props.model.fields}
                       fieldId={field.id}
                       onSave={this.updateField}
                       onCancel={this.cancelEditingField}
@@ -123,34 +166,28 @@ export default class Model extends React.Component {
                         iconPosition='above'
                         onClick={() => this.startEditingField(field.id)}
                         label='Edit'
-                        disabled={
-                          this.state.creatingNewField ||
-                          !!this.state.editingFieldId
-                        }
+                        disabled={editing}
                       />
                       <Button
                         icon='delete'
                         iconPosition='above'
-                        onClick={() => this.props.deleteField(field.id)}
+                        onClick={() => props.deleteField(field.id)}
                         label='Delete'
-                        disabled={
-                          this.state.creatingNewField ||
-                          !!this.state.editingFieldId
-                        }
+                        disabled={editing}
                       />
                     </div>
                   </List.Item>
                 )
               )}
-              {this.state.creatingNewField ? (
+              {state.creatingNewField ? (
                 <List.Item className='new-field'>
                   <FieldForm
-                    fields={this.props.model.fields}
-                    onSave={this.props.createField}
+                    fields={props.model.fields}
+                    onSave={props.createField}
                     onCancel={this.cancelCreatingNewField}
                   />
                 </List.Item>
-              ) : this.props.model.fields.length === 0 ? (
+              ) : props.model.fields.length === 0 ? (
                 <List.Item className='add-field'>
                   <p>You have no fields</p>
                   <Button
@@ -159,6 +196,7 @@ export default class Model extends React.Component {
                     label='Add a Field'
                     primary
                     onClick={this.startCreatingNewField}
+                    disabled={editing}
                   />
                 </List.Item>
               ) : (
@@ -169,7 +207,7 @@ export default class Model extends React.Component {
                     label='Add a Field'
                     primary
                     onClick={this.startCreatingNewField}
-                    disabled={!!this.state.editingFieldId}
+                    disabled={editing}
                   />
                 </List.Item>
               )}
@@ -177,13 +215,10 @@ export default class Model extends React.Component {
           </div>
         </main>
         <CodeFlyout
-          open={this.state.codeOpen}
+          open={state.codeOpen}
           onClose={this.toggleCode}
-          newMessage={this.props.newMessage}
-          fileItem={sequelize4.modelFile({
-            model: this.props.model,
-            config: this.props.config
-          })}
+          newMessage={props.newMessage}
+          fileItem={this.codeFileItem()}
         />
       </React.Fragment>
     )
