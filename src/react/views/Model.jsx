@@ -13,40 +13,67 @@ import * as List from '../components/List.jsx'
 import { DATA_TYPE_OPTIONS } from '../../constants.js'
 
 export default class Model extends React.Component {
+  static propTypes = {
+    model: PropTypes.object.isRequired,
+    models: PropTypes.arrayOf(PropTypes.object).isRequired,
+    config: PropTypes.object.isRequired,
+    goToProject: PropTypes.func.isRequired,
+    updateModelName: PropTypes.func.isRequired,
+    createField: PropTypes.func.isRequired,
+    updateField: PropTypes.func.isRequired,
+    deleteField: PropTypes.func.isRequired,
+    newMessage: PropTypes.func.isRequired
+  }
+
+  state = {
+    editingName: false,
+    creatingNewField: false,
+    editingFieldId: null,
+    codeOpen: false
+  }
+
   constructor (props) {
     super(props)
 
+    this.createRefs()
+  }
+
+  createRefs = () => {
     this.editNameButton = React.createRef()
     this.addButton = React.createRef()
     this.editButtonRef = React.createRef()
+    this.createFieldRefs()
+  }
 
-    this.props.model.fields.forEach(field => {
-      this[`editFieldButton${field.id}`] = React.createRef()
-    })
+  createFieldRefs = () => {
+    this.props.model.fields.forEach(field => this.createFieldRef(field))
+  }
 
-    this.state = {
-      editingName: false,
-      creatingNewField: false,
-      editingFieldId: null,
-      codeOpen: false
+  createFieldRef = ({ id }) => {
+    if (!this[`editFieldButton${id}`]) {
+      this[`editFieldButton${id}`] = React.createRef()
     }
+  }
+
+  componentDidUpdate (prevProps) {
+    const fieldAdded =
+      prevProps.model.fields.length < this.props.model.fields.length
+
+    if (fieldAdded) this.createFieldRefs()
   }
 
   componentDidMount () {
-    if (this.props.fromEdit) {
-      this.editButtonRef.current.focus()
-      this.props.clearFromEdit()
-    }
-
     if (this.props.model.fields.length === 0) this.focusOnAddButton()
   }
 
+  // Focus Helpers
   focusOnEditNameButton = () => this.editNameButton.current.focus()
   focusOnAddButton = () => this.addButton.current.focus()
 
   focusOnEditFieldButton = fieldId =>
     this[`editFieldButton${fieldId}`].current.focus()
 
+  // Model Name
   startEditingName = () => this.setState({ editingName: true })
   cancelEditingName = () => this.setState({ editingName: false })
 
@@ -55,6 +82,8 @@ export default class Model extends React.Component {
     this.props.updateModelName({ name })
     setTimeout(() => this.focusOnEditNameButton())
   }
+
+  // New Field
   startCreatingNewField = () => this.setState({ creatingNewField: true })
 
   cancelCreatingNewField = () => {
@@ -62,6 +91,7 @@ export default class Model extends React.Component {
     setTimeout(() => this.focusOnAddButton())
   }
 
+  // Edit Field
   startEditingField = fieldId => this.setState({ editingFieldId: fieldId })
 
   cancelEditingField = () => {
@@ -76,6 +106,7 @@ export default class Model extends React.Component {
     setTimeout(() => this.focusOnEditFieldButton(field.id))
   }
 
+  // Code
   toggleCode = () => this.setState({ codeOpen: !this.state.codeOpen })
 
   codeFileItem = () =>
@@ -122,7 +153,7 @@ export default class Model extends React.Component {
               <Button
                 icon='back'
                 label='Back'
-                onClick={props.goToModels}
+                onClick={props.goToProject}
                 disabled={editing}
               />
               <Button
@@ -223,18 +254,6 @@ export default class Model extends React.Component {
       </React.Fragment>
     )
   }
-}
-
-Model.propTypes = {
-  fromEdit: PropTypes.bool.isRequired,
-  clearFromEdit: PropTypes.func.isRequired,
-  model: PropTypes.object.isRequired,
-  goToModels: PropTypes.func.isRequired,
-  createField: PropTypes.func.isRequired,
-  deleteField: PropTypes.func.isRequired,
-  editModel: PropTypes.func.isRequired,
-  newMessage: PropTypes.func.isRequired,
-  config: PropTypes.object.isRequired
 }
 
 const showFieldOptions = field => {

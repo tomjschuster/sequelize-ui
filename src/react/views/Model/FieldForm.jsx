@@ -14,18 +14,36 @@ import Checkbox from '../../components/Checkbox.jsx'
 
 const DEFAULT_DATA_TYPE = DATA_TYPES.STRING
 
+const emptyField = () => ({
+  name: '',
+  type: DEFAULT_DATA_TYPE,
+  primaryKey: false,
+  required: false,
+  unique: false
+})
+
 export default class FieldForm extends React.Component {
+  static propTypes = {
+    fields: PropTypes.arrayOf(PropTypes.object).isRequired,
+    fieldId: PropTypes.number,
+    onCancel: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired
+  }
+
+  state = {
+    field:
+      this.props.fields.find(f => f.id === this.props.fieldId) || emptyField(),
+    errors: []
+  }
+
   constructor (props) {
     super(props)
 
-    this.nameInput = React.createRef()
+    this.createRefs()
+  }
 
-    const field =
-      this.props.fields.find(f => f.id === this.props.fieldId) || emptyField()
-    this.state = {
-      field,
-      errors: []
-    }
+  createRefs = () => {
+    this.nameInput = React.createRef()
   }
 
   componentDidMount () {
@@ -76,6 +94,8 @@ export default class FieldForm extends React.Component {
   }
 
   render () {
+    const { props, state } = this
+
     return (
       <form
         id='field-form'
@@ -97,7 +117,7 @@ export default class FieldForm extends React.Component {
             ref={this.nameInput}
             id='new-field-name'
             type='text'
-            value={this.state.field.name}
+            value={state.field.name}
             onChange={event => this.inputName(event.target.value)}
           />
         </div>
@@ -105,8 +125,8 @@ export default class FieldForm extends React.Component {
           <label htmlFor='new-field-type'>Type</label>
           <select
             id='new-field-type'
-            default={this.state.field.type || DEFAULT_DATA_TYPE}
-            value={this.state.field.type || DEFAULT_DATA_TYPE}
+            default={state.field.type || DEFAULT_DATA_TYPE}
+            value={state.field.type || DEFAULT_DATA_TYPE}
             onChange={event => this.selectField(event.target.value)}
           >
             {Object.entries(DATA_TYPE_OPTIONS).map(([value, text]) => (
@@ -121,21 +141,21 @@ export default class FieldForm extends React.Component {
             id='new-field-primary-key'
             className='field-form__option'
             label='Primary Key'
-            checked={this.state.field.primaryKey}
+            checked={state.field.primaryKey}
             onCheck={this.togglePrimaryKey}
           />
           <Checkbox
             id='new-field-unique'
             className='field-form__option'
             label='Unique'
-            checked={this.state.field.unique}
+            checked={state.field.unique}
             onCheck={this.toggleUnique}
           />
           <Checkbox
             id='new-field-required'
             className='field-form__option'
             label='Required'
-            checked={this.state.field.required}
+            checked={state.field.required}
             onCheck={this.toggleRequired}
           />
         </div>
@@ -145,8 +165,8 @@ export default class FieldForm extends React.Component {
             type='submit'
             icon='check'
             className='field-form__action'
-            label={this.props.fieldId ? 'Update' : 'Add'}
-            disabled={this.state.errors.length > 0}
+            label={props.fieldId ? 'Update' : 'Add'}
+            disabled={state.errors.length > 0}
           />
           <Button
             primary
@@ -158,9 +178,9 @@ export default class FieldForm extends React.Component {
           />
         </div>
 
-        {this.state.errors.length ? (
+        {state.errors.length ? (
           <ul>
-            {this.state.errors.map(error => (
+            {state.errors.map(error => (
               <li key={error}>{displayErrors(error)}</li>
             ))}
           </ul>
@@ -168,13 +188,6 @@ export default class FieldForm extends React.Component {
       </form>
     )
   }
-}
-
-FieldForm.propTypes = {
-  fields: PropTypes.arrayOf(PropTypes.object).isRequired,
-  fieldId: PropTypes.number,
-  onCancel: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired
 }
 
 const formatField = field => ({ ...field, name: field.name.trim() })
@@ -213,11 +226,3 @@ const displayErrors = error => {
       return 'Sorry, something went wront.'
   }
 }
-
-const emptyField = () => ({
-  name: '',
-  type: DEFAULT_DATA_TYPE,
-  primaryKey: false,
-  required: false,
-  unique: false
-})

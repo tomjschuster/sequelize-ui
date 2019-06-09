@@ -7,16 +7,27 @@ import { MAX_SQL_IDENTIFIER_LENGTH } from '../../../constants.js'
 
 import Button from '../../components/Button.jsx'
 
+const emptyModel = () => ({ name: '' })
+
 export default class NewModelForm extends React.Component {
+  static propTypes = {
+    models: PropTypes.arrayOf(PropTypes.object).isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onCreate: PropTypes.func.isRequired
+  }
+
+  state = {
+    model: emptyModel(),
+    errors: []
+  }
+
   constructor (props) {
     super(props)
+    this.createRefs()
+  }
 
+  createRefs = () => {
     this.nameInput = React.createRef()
-
-    this.state = {
-      model: emptyModel(),
-      errors: []
-    }
   }
 
   componentDidMount () {
@@ -56,6 +67,8 @@ export default class NewModelForm extends React.Component {
   }
 
   render () {
+    const { state } = this
+
     return (
       <form
         className='new-model-form'
@@ -69,7 +82,7 @@ export default class NewModelForm extends React.Component {
           id='new-model-name'
           className='new-model-form__name'
           type='text'
-          value={this.state.model.name}
+          value={state.model.name}
           placeholder='Name'
           onKeyDown={evt => {
             if (evt.keyCode === 27) {
@@ -80,9 +93,9 @@ export default class NewModelForm extends React.Component {
           onChange={({ target: { value } }) => this.inputName(value)}
           maxLength={MAX_SQL_IDENTIFIER_LENGTH}
         />
-        {this.state.errors.length > 0 ? (
+        {state.errors.length > 0 ? (
           <ul>
-            {this.state.errors.map(error => (
+            {state.errors.map(error => (
               <li key={error}>{displayModelError(error)}</li>
             ))}
           </ul>
@@ -94,8 +107,7 @@ export default class NewModelForm extends React.Component {
           label='Add'
           className='new-model-form__add'
           disabled={
-            this.state.model.name.trim().length === 0 ||
-            this.state.errors.length > 0
+            state.model.name.trim().length === 0 || state.errors.length > 0
           }
         />
         <Button
@@ -111,18 +123,10 @@ export default class NewModelForm extends React.Component {
   }
 }
 
-NewModelForm.propTypes = {
-  models: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onCancel: PropTypes.func.isRequired,
-  onCreate: PropTypes.func.isRequired
-}
-
 const UNIQUE_NAME_ERROR = 'UNIQUE_NAME_ERROR'
 const NAME_FORMAT_ERROR = 'NAME_FORMAT_ERROR'
 const REQUIRED_NAME_ERROR = 'REQUIRED_NAME_ERROR'
 const NAME_LENGTH_ERROR = 'NAME_LENGTH_ERROR'
-
-const emptyModel = () => ({ name: '' })
 
 const formatModel = model => ({
   ...model,

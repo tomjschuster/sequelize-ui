@@ -10,44 +10,57 @@ import { CodeFlyout } from '../components/Code.jsx'
 import * as List from '../components/List.jsx'
 
 export default class Project extends React.Component {
+  static propTypes = {
+    config: PropTypes.object.isRequired,
+    models: PropTypes.arrayOf(PropTypes.object.isRequired),
+    toggleTimestamps: PropTypes.func.isRequired,
+    toggleSnake: PropTypes.func.isRequired,
+    toggleSingularTableNames: PropTypes.func.isRequired,
+    createModel: PropTypes.func.isRequired,
+    goToModel: PropTypes.func.isRequired,
+    deleteModel: PropTypes.func.isRequired,
+    newMessage: PropTypes.func.isRequired
+  }
+
+  state = { creatingNewModel: false, codeOpen: false }
+
   constructor (props) {
     super(props)
+    this.createRefs()
+  }
+
+  createRefs = () => {
     this.addButton = React.createRef()
-    this.state = { codeOpen: false }
   }
 
   componentDidMount () {
     if (this.props.models.length === 0) this.focusOnAddButton()
   }
 
-  componentWillUnmount () {
-    this.props.cancelCreatingNewModel()
-  }
-
+  // Focus Helpers
   focusOnAddButton () {
     this.addButton.current.focus()
   }
 
+  // New Model
+  startCreatingNewModel = () => this.setState({ creatingNewModel: true })
+
+  cancelCreatingNewModel = () => {
+    this.setState({ creatingNewModel: false })
+    setTimeout(() => this.focusOnAddButton())
+  }
+
+  // Code
   toggleCode = () => this.setState({ codeOpen: !this.state.codeOpen })
 
-  render () {
-    const {
-      // State
-      config,
-      models,
-      creatingNewModel,
+  projectFileItem = () =>
+    sequelize4.files({
+      models: this.props.models,
+      config: this.props.config
+    })
 
-      // Actions
-      toggleTimestamps,
-      toggleSnake,
-      toggleSingularTableNames,
-      startCreatingNewModel,
-      cancelCreatingNewModel,
-      createModel,
-      goToModel,
-      editModel,
-      deleteModel
-    } = this.props
+  render () {
+    const { props, state } = this
 
     return (
       <React.Fragment>
@@ -59,45 +72,39 @@ export default class Project extends React.Component {
             </ToolBelt>
             <List.Title className='models__title' text='Models' />
             <List.List className='models'>
-              {models.map(model => (
+              {props.models.map(model => (
                 <List.Item key={model.id}>
                   <List.Content>{model.name}</List.Content>
                   <List.Actions>
                     <Button
                       icon='view'
                       iconPosition='above'
-                      onClick={() => goToModel(model.id)}
+                      onClick={() => props.goToModel(model.id)}
                       label='View'
-                    />
-                    <Button
-                      icon='edit'
-                      iconPosition='above'
-                      onClick={() => editModel(model.id)}
-                      label='Edit'
                     />
                     <Button
                       icon='delete'
                       iconPosition='above'
-                      onClick={() => deleteModel(model.id)}
+                      onClick={() => props.deleteModel(model.id)}
                       label='Delete'
                     />
                   </List.Actions>
                 </List.Item>
               ))}
               <List.Item className='add-model'>
-                {creatingNewModel ? (
+                {state.creatingNewModel ? (
                   <NewModelForm
-                    models={models}
-                    onCancel={cancelCreatingNewModel}
-                    onCreate={createModel}
+                    models={props.models}
+                    onCancel={this.cancelCreatingNewModel}
+                    onCreate={props.createModel}
                   />
-                ) : models.length > 0 ? (
+                ) : props.models.length > 0 ? (
                   <Button
                     ref={this.addButton}
                     icon='add'
                     label='Add a Model'
                     primary
-                    onClick={startCreatingNewModel}
+                    onClick={this.startCreatingNewModel}
                   />
                 ) : (
                   <React.Fragment>
@@ -107,7 +114,7 @@ export default class Project extends React.Component {
                       icon='add'
                       label='Add a Model'
                       primary
-                      onClick={startCreatingNewModel}
+                      onClick={this.startCreatingNewModel}
                     />
                   </React.Fragment>
                 )}
@@ -118,22 +125,22 @@ export default class Project extends React.Component {
                 id='config-timestamps'
                 className='model-config__item'
                 label='Timestamps'
-                checked={config.timestamps}
-                onCheck={toggleTimestamps}
+                checked={props.config.timestamps}
+                onCheck={props.toggleTimestamps}
               />
               <Checkbox
                 id='config-snake'
                 className='model-config__item'
                 label='snake_case'
-                checked={config.snake}
-                onCheck={toggleSnake}
+                checked={props.config.snake}
+                onCheck={props.toggleSnake}
               />
               <Checkbox
                 id='singluar-table-names'
                 className='model-config__item'
                 label='Singular Table Names'
-                checked={config.singularTableNames}
-                onCheck={toggleSingularTableNames}
+                checked={props.config.singularTableNames}
+                onCheck={props.toggleSingularTableNames}
               />
             </ToolBelt>
           </div>
@@ -143,26 +150,9 @@ export default class Project extends React.Component {
           open={this.state.codeOpen}
           onClose={this.toggleCode}
           newMessage={this.props.newMessage}
-          fileItem={sequelize4.files({ models, config })}
+          fileItem={this.projectFileItem()}
         />
       </React.Fragment>
     )
   }
-}
-
-Project.propTypes = {
-  config: PropTypes.object.isRequired,
-  models: PropTypes.arrayOf(PropTypes.object.isRequired),
-  creatingNewModel: PropTypes.bool.isRequired,
-
-  // Actions
-  toggleTimestamps: PropTypes.func.isRequired,
-  toggleSnake: PropTypes.func.isRequired,
-  toggleSingularTableNames: PropTypes.func.isRequired,
-  startCreatingNewModel: PropTypes.func.isRequired,
-  cancelCreatingNewModel: PropTypes.func.isRequired,
-  createModel: PropTypes.func.isRequired,
-  goToModel: PropTypes.func.isRequired,
-  editModel: PropTypes.func.isRequired,
-  deleteModel: PropTypes.func.isRequired
 }

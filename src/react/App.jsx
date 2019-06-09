@@ -1,24 +1,43 @@
 import React from 'react'
-import * as sequelize4 from '../templates/sequelize-4.js'
 import Header from './components/Header.jsx'
 import Button from './components/Button.jsx'
 import Message from './components/Message.jsx'
 import Project from './views/Project.jsx'
 import Model from './views/Model.jsx'
-import EditModel from './views/EditModel.jsx'
 
 const PROJECT = 'PROJECT'
 const MODEL = 'MODEL'
-const EDIT_MODEL = 'EDIT_MODEL'
 const MESSAGE_TIME = 1750
 
 export default class App extends React.Component {
-  constructor (props) {
-    super(props)
-    this.project = React.createRef()
-    this.state = { ...initialState(), ...this.loadState() }
+  state = {
+    pageState: PROJECT,
+    nextModelId: 1,
+    nextFieldId: 1,
+    config: {
+      timestamps: true,
+      snake: false,
+      singularTableNames: false,
+      dialect: 'sqlite',
+      name: 'my-project'
+    },
+    models: [],
+    currentModelId: null,
+    messages: []
   }
 
+  constructor (props) {
+    super(props)
+    this.createRefs()
+
+    this.state = { ...this.state, ...this.loadState() }
+  }
+
+  createRefs = () => {
+    this.projectComponent = React.createRef()
+  }
+
+  // Persistence
   componentDidUpdate (prevProps, prevState) {
     const keysToPersist = [
       'pageState',
@@ -30,14 +49,6 @@ export default class App extends React.Component {
     ]
 
     this.persistState(keysToPersist)
-  }
-
-  onProjectExit () {
-    this.setState({ creatingNewModel: false })
-  }
-
-  onEditModelExit () {
-    this.setState({ fromEditModel: true })
   }
 
   loadState = () => (localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {})
@@ -55,6 +66,13 @@ export default class App extends React.Component {
     location.reload()
   }
 
+  // Navigation
+  goToProject = () =>
+    this.setState({ pageState: PROJECT, currentModelId: null })
+
+  goToModel = id => this.setState({ pageState: MODEL, currentModelId: id })
+
+  // Messages
   newMessage = (text, type) => {
     const id = Math.random()
     const message = { id, text, type }
@@ -69,58 +87,19 @@ export default class App extends React.Component {
 
   // Project Methods
   toggleTimestamps = () =>
-    this.setState({
-      config: {
-        ...this.state.config,
-        timestamps: !this.state.config.timestamps
-      }
-    })
+    this.setState(({ config }) => ({
+      config: { ...config, timestamps: !config.timestamps }
+    }))
 
   toggleSnake = () =>
-    this.setState({
-      config: { ...this.state.config, snake: !this.state.config.snake }
-    })
-
-  toggleSoftDeletes = () =>
-    this.setState({
-      config: {
-        ...this.state.config,
-        softDeletes: !this.state.config.softDeletes
-      }
-    })
+    this.setState(({ config }) => ({
+      config: { ...config, snake: !config.snake }
+    }))
 
   toggleSingularTableNames = () =>
-    this.setState({
-      config: {
-        ...this.state.config,
-        singularTableNames: !this.state.config.singularTableNames
-      }
-    })
-
-  goToModel = id => this.setState({ pageState: MODEL, currentModelId: id })
-
-  editModel = id =>
-    this.setState({
-      pageState: EDIT_MODEL,
-      currentModelId: id || this.state.currentModelId
-    })
-
-  editCurrentModel = () => this.setState({ pageState: EDIT_MODEL })
-
-  deleteModel = id =>
-    this.setState({
-      models: this.state.models.filter(model => model.id !== id)
-    })
-
-  startCreatingNewModel = () => this.setState({ creatingNewModel: true })
-
-  cancelCreatingNewModel = () => {
-    this.setState({ creatingNewModel: false })
-    setTimeout(
-      () => this.project.current && this.project.current.focusOnAddButton(),
-      0
-    )
-  }
+    this.setState(({ config }) => ({
+      config: { ...config, singularTableNames: !config.singularTableNames }
+    }))
 
   createModel = ({ model }) => {
     this.setState({
@@ -129,9 +108,12 @@ export default class App extends React.Component {
     })
   }
 
-  // Model Methods
-  goToModels = () => this.setState({ pageState: PROJECT, currentModelId: null })
+  deleteModel = id =>
+    this.setState({
+      models: this.state.models.filter(model => model.id !== id)
+    })
 
+  // Model Methods
   updateModelName = ({ name }) =>
     this.setState(({ models, currentModelId }) => ({
       models: models.map(model =>
@@ -163,30 +145,6 @@ export default class App extends React.Component {
       )
     }))
 
-  // Edit Model Methods
-  cancelEditingModel = () =>
-    this.setState({ pageState: MODEL, fromEditModel: true })
-
-  saveModel = ({ model, nextFieldId }) => {
-    this.setState({
-      pageState: MODEL,
-      models: this.state.models.map(m => (m.id === model.id ? model : m)),
-      nextFieldId,
-      fromEditModel: true
-    })
-  }
-
-  deleteCurrentModel = () =>
-    this.setState({
-      pageState: PROJECT,
-      currentModelId: null,
-      models: this.state.models.filter(
-        model => model.id !== this.state.currentModelId
-      )
-    })
-
-  clearFromEditModel = () => this.setState({ fromEditModel: true })
-
   // View Methods
 
   renderPage = () => {
@@ -194,20 +152,14 @@ export default class App extends React.Component {
       case PROJECT:
         return (
           <Project
-            ref={this.project}
+            ref={this.projectComponent}
             config={this.state.config}
             models={this.state.models}
-            creatingNewModel={this.state.creatingNewModel}
             toggleTimestamps={this.toggleTimestamps}
             toggleSnake={this.toggleSnake}
-            toggleSoftDeletes={this.toggleSoftDeletes}
             toggleSingularTableNames={this.toggleSingularTableNames}
-            startCreatingNewModel={this.startCreatingNewModel}
-            inputNewModelName={this.inputNewModelName}
-            cancelCreatingNewModel={this.cancelCreatingNewModel}
             createModel={this.createModel}
             goToModel={this.goToModel}
-            editModel={this.editModel}
             deleteModel={this.deleteModel}
             newMessage={this.newMessage}
           />
@@ -218,30 +170,15 @@ export default class App extends React.Component {
         )
         return (
           <Model
-            fromEdit={this.state.fromEditModel}
             model={model}
             models={this.state.models}
-            filename={sequelize4.modelFileName(model.name)}
             config={this.state.config}
-            goToModels={this.goToModels}
+            goToProject={this.goToProject}
             updateModelName={this.updateModelName}
             createField={this.createField}
             updateField={this.updateField}
             deleteField={this.deleteField}
-            editModel={this.editCurrentModel}
-            clearFromEdit={this.clearFromEditModel}
             newMessage={this.newMessage}
-          />
-        )
-      case EDIT_MODEL:
-        return (
-          <EditModel
-            modelId={this.state.currentModelId}
-            models={this.state.models}
-            nextFieldId={this.state.nextFieldId}
-            goToModels={this.goToModels}
-            onSave={this.saveModel}
-            onCancel={this.cancelEditingModel}
           />
         )
       default:
@@ -263,7 +200,10 @@ export default class App extends React.Component {
   render () {
     return (
       <React.Fragment>
-        <Header actions={this.topBarActions()} onTitleClick={this.goToModels} />
+        <Header
+          actions={this.topBarActions()}
+          onTitleClick={this.goToProject}
+        />
         {this.renderPage()}
         <footer className='footer'>
           <Button
@@ -277,28 +217,6 @@ export default class App extends React.Component {
     )
   }
 }
-
-const initialState = () => ({
-  pageState: PROJECT,
-  nextModelId: 1,
-  nextFieldId: 1,
-  config: initialConfig(),
-  models: [],
-  creatingNewModel: false,
-  currentModelId: null,
-  editingModel: null,
-  fromEditModel: false,
-  messages: []
-})
-
-const initialConfig = () => ({
-  timestamps: true,
-  snake: false,
-  softDeletes: false,
-  singularTableNames: false,
-  dialect: 'sqlite',
-  name: 'my-project'
-})
 
 const buildModel = (id, model) => ({ id, ...model, fields: [] })
 const buildField = (id, field) => ({ id, ...field })
