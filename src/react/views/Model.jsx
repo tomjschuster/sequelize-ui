@@ -153,8 +153,8 @@ export default class Model extends React.Component {
                   onSave={this.updateModelName}
                 />
               ) : (
-                <React.Fragment>
-                  <h3 className='model-name__text'>{props.model.name}</h3>
+                <div className='model-name__view'>
+                  <h4 className='model-name__text'>{props.model.name}</h4>
                   <Button
                     ref={this.editNameButton}
                     className='model-name__edit'
@@ -164,7 +164,7 @@ export default class Model extends React.Component {
                     label='Edit'
                     disabled={editing}
                   />
-                </React.Fragment>
+                </div>
               )}
             </ToolBelt>
             <List.Title className='fields__title' text='Fields' />

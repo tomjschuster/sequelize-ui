@@ -748,8 +748,20 @@ label.model-config__item:hover {
   /* justify-content: space-between; */
 }
 
+.model-name .toolbelt__title {
+  margin: 0;
+}
+
+.model-name__view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .model-name__text {
   display: inline-block;
+  font-size: 1.5rem;
+  font-weight: 400;
   margin: 0;
   margin-left: 4.5rem;
 }
