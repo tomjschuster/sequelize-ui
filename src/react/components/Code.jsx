@@ -32,9 +32,10 @@ export class Code extends React.Component {
   }
 
   render () {
-    const { fileItem, children, className, ...props } = this.props
-    const classText = className ? ' ' + className : ''
-    const language = languageFromFilename(fileItem.name)
+    const { props } = this
+    const { fileItem, children, className, ...divProps } = props
+    const classText = props.className ? ' ' + props.className : ''
+    const language = languageFromFilename(props.fileItem.name)
 
     const languageClass = language
       ? ' language-' + language
@@ -42,8 +43,12 @@ export class Code extends React.Component {
 
     return (
       <div className='code__container'>
-        <pre ref={this.preRef} className={classText + languageClass} {...props}>
-          <code className={languageClass}>{fileItem.content || ''}</code>
+        <pre
+          ref={this.preRef}
+          className={classText + languageClass}
+          {...divProps}
+        >
+          <code className={languageClass}>{props.fileItem.content || ''}</code>
         </pre>
       </div>
     )
@@ -56,10 +61,12 @@ Code.propTypes = {
 }
 
 export class CodeExplorer extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = { activePath: ['my-project', 'db', 'index.js'] }
+  static propTypes = {
+    fileItem: PropTypes.object.isRequired,
+    className: PropTypes.string
   }
+
+  state = { activePath: ['my-project', 'db', 'index.js'] }
 
   selectFile = path => this.setState({ activePath: path })
 
@@ -134,14 +141,15 @@ export class CodeExplorer extends React.Component {
   }
 
   render () {
-    const { className, fileItem, ...props } = this.props
-    const classText = className ? className + ' ' : ''
+    const { props, state } = this
+    const { className, fileItem, ...divProps } = props
+    const classText = props.className ? props.className + ' ' : ''
 
     return (
-      <div className={classText + 'code-explorer'} {...props}>
+      <div className={classText + 'code-explorer'} {...divProps}>
         <div className='code-explorer__explorer'>
           <ul key={'1'}>
-            {this.renderExplorerItem(fileItem, this.state.activePath)}
+            {this.renderExplorerItem(props.fileItem, state.activePath)}
           </ul>
         </div>
         <div className='code-explorer__code'>{this.renderCode()}</div>
@@ -150,20 +158,25 @@ export class CodeExplorer extends React.Component {
   }
 }
 
-CodeExplorer.propTypes = {
-  fileItem: PropTypes.object.isRequired,
-  className: PropTypes.string
-}
-
 export class CodeFlyout extends React.Component {
+  static propTypes = {
+    fileItem: PropTypes.object.isRequired,
+    project: PropTypes.bool,
+    newMessage: PropTypes.func.isRequired
+  }
+
+  state = { opening: false, closing: false }
+
   constructor (props) {
     super(props)
 
-    if (props.project) {
+    this.createRefs()
+  }
+
+  createRefs = () => {
+    if (this.props.project) {
       this.codeExplorer = React.createRef()
     }
-
-    this.state = { opening: false, closing: false }
   }
 
   componentDidUpdate (prevProps) {
@@ -225,21 +238,26 @@ export class CodeFlyout extends React.Component {
 
   handleClose = () => this.props.onClose()
 
-  render () {
-    const { open, project, newMessage, ...props } = this.props
+  shouldHide = () =>
+    !this.props.open && !this.state.opening && !this.state.closing
 
-    const filename = project ? props.fileItem.name : props.fileItem.name
+  render () {
+    const { props, state } = this
+    const { open, project, newMessage, ...codeProps } = props
 
     const flyoutClass =
-      open && !this.state.opening ? 'code-flyout open' : 'code-flyout'
-
-    const hide = !open && !this.state.opening && !this.state.closing
+      props.open && !state.opening ? 'code-flyout open' : 'code-flyout'
 
     return (
       <React.Fragment>
-        <aside style={hide ? { display: 'none' } : {}} className={flyoutClass}>
+        <aside
+          style={this.shouldHide() ? { display: 'none' } : {}}
+          className={flyoutClass}
+        >
           <div className='code-flyout__top-menu'>
-            <p className='code-flyout__top-menu__filename'>{filename}</p>
+            <p className='code-flyout__top-menu__filename'>
+              {props.fileItem.name}
+            </p>
             <div className='code-flyout__top-menu__buttons'>
               <Button
                 label='Download'
@@ -251,20 +269,14 @@ export class CodeFlyout extends React.Component {
             </div>
           </div>
           {project ? (
-            <CodeExplorer ref={this.codeExplorer} {...props} />
+            <CodeExplorer ref={this.codeExplorer} {...codeProps} />
           ) : (
-            <Code {...props} />
+            <Code {...codeProps} />
           )}
         </aside>
       </React.Fragment>
     )
   }
-}
-
-CodeFlyout.propTypes = {
-  fileItem: PropTypes.object.isRequired,
-  project: PropTypes.bool,
-  newMessage: PropTypes.func.isRequired
 }
 
 const downloadZip = ({ name = 'my-project', files }) => {
