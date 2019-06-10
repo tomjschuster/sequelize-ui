@@ -334,6 +334,11 @@ input.checkbox[type="checkbox"]:focus+label::before {
   margin: 0 0 0.5rem;
   font-size: 1rem;
   text-transform: uppercase;
+  border-bottom: 1px solid #ddd;
+  margin: 0 -0.75rem 1rem;
+  line-height: 2.5rem;
+  display: block;
+  text-align: center;
 }
 
 /* Code */
@@ -655,7 +660,7 @@ input.checkbox[type="checkbox"]:focus+label::before {
   height: 3rem;
 }
 
-.models__title, .fields__title, .models, .fields, .model-config {
+.models__title, .fields__title, .models, .fields, .model-config, .model-name {
   background: #ffffff;
   margin-left: auto;
   margin-right: auto;
@@ -710,12 +715,6 @@ input.checkbox[type="checkbox"]:focus+label::before {
   text-align: left;
 }
 
-.model-config .toolbelt__title {
-  border-bottom: 1px solid #ddd;
-  margin: 0 -0.75rem 1rem;
-  line-height: 2.5rem;
-}
-
 input.model-config__item {
   display: block;
 }
@@ -733,11 +732,6 @@ label.model-config__item:hover {
   margin-bottom: 0.25rem;
 }
 
-.model-config .toolbelt__title {
-  display: block;
-  text-align: center;
-}
-
 .project .title, .model-view .title {
   clear: right;
 }
@@ -746,6 +740,22 @@ label.model-config__item:hover {
 
 .model-view {
   text-align: center;
+}
+
+.model-name {
+  display: block;
+  /* display: flex; */
+  /* justify-content: space-between; */
+}
+
+.model-name__text {
+  display: inline-block;
+  margin: 0;
+  margin-left: 4.5rem;
+}
+
+.model-name.toolbelt {
+  margin-top: 1.5rem;
 }
 
 .project .toolbelt, .model-view .toolbelt {

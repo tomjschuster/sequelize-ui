@@ -128,27 +128,7 @@ export default class Model extends React.Component {
       <React.Fragment>
         <main className='main-content model-view'>
           <div className='content-wrapper'>
-            {state.editingName ? (
-              <ModelNameForm
-                modelId={props.model.id}
-                name={props.model.name}
-                models={props.models}
-                onCancel={this.cancelEditingName}
-                onSave={this.updateModelName}
-              />
-            ) : (
-              <React.Fragment>
-                <h2 className='title'>{props.model.name} Model</h2>
-                <Button
-                  ref={this.editNameButton}
-                  icon='edit'
-                  iconPosition='above'
-                  onClick={() => this.startEditingName()}
-                  label='Edit'
-                  disabled={editing}
-                />
-              </React.Fragment>
-            )}
+            <h2 className='title'>Model Details</h2>
             <ToolBelt>
               <Button
                 icon='back'
@@ -162,6 +142,30 @@ export default class Model extends React.Component {
                 onClick={this.toggleCode}
                 disabled={editing}
               />
+            </ToolBelt>
+            <ToolBelt className='model-name' title='Name'>
+              {state.editingName ? (
+                <ModelNameForm
+                  modelId={props.model.id}
+                  name={props.model.name}
+                  models={props.models}
+                  onCancel={this.cancelEditingName}
+                  onSave={this.updateModelName}
+                />
+              ) : (
+                <React.Fragment>
+                  <h3 className='model-name__text'>{props.model.name}</h3>
+                  <Button
+                    ref={this.editNameButton}
+                    className='model-name__edit'
+                    icon='edit'
+                    iconPosition='above'
+                    onClick={() => this.startEditingName()}
+                    label='Edit'
+                    disabled={editing}
+                  />
+                </React.Fragment>
+              )}
             </ToolBelt>
             <List.Title className='fields__title' text='Fields' />
             <List.List className='fields'>
