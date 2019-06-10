@@ -120,24 +120,24 @@ export default class Project extends React.Component {
                 )}
               </List.Item>
             </List.List>
-            <ToolBelt className='model-config' title='Database Options'>
+            <ToolBelt className='project-config' title='Database Options'>
               <Checkbox
                 id='config-timestamps'
-                className='model-config__item'
+                className='project-config__item'
                 label='Timestamps'
                 checked={props.config.timestamps}
                 onCheck={props.toggleTimestamps}
               />
               <Checkbox
                 id='config-snake'
-                className='model-config__item'
+                className='project-config__item'
                 label='snake_case'
                 checked={props.config.snake}
                 onCheck={props.toggleSnake}
               />
               <Checkbox
                 id='singluar-table-names'
-                className='model-config__item'
+                className='project-config__item'
                 label='Singular Table Names'
                 checked={props.config.singularTableNames}
                 onCheck={props.toggleSingularTableNames}

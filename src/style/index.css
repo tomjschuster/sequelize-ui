@@ -247,6 +247,10 @@ html, body {
   cursor: pointer;
 }
 
+label.checkbox {
+  margin-right: 0.75rem;
+}
+
 input.checkbox[type="checkbox"] {
   width: 0;
   height: 0;
@@ -660,7 +664,7 @@ input.checkbox[type="checkbox"]:focus+label::before {
   height: 3rem;
 }
 
-.models__title, .fields__title, .models, .fields, .model-config, .model-name {
+.models__title, .fields__title, .models, .fields, .project-config, .model-name {
   background: #ffffff;
   margin-left: auto;
   margin-right: auto;
@@ -707,7 +711,7 @@ input.checkbox[type="checkbox"]:focus+label::before {
   }
 }
 
-.model-config {
+.project-config {
   list-style: none;
   padding: 0 0.75rem 0.75rem 0.75rem;
   display: inline-block;
@@ -715,20 +719,20 @@ input.checkbox[type="checkbox"]:focus+label::before {
   text-align: left;
 }
 
-input.model-config__item {
+input.project-config__item {
   display: block;
 }
 
-label.model-config__item {
+label.project-config__item {
   margin-left: 1rem;
   cursor: pointer;
 }
 
-label.model-config__item:hover {
+label.project-config__item:hover {
   color: var(--primary-color);
 }
 
-.model-config__item {
+.project-config__item {
   margin-bottom: 0.25rem;
 }
 
@@ -744,8 +748,6 @@ label.model-config__item:hover {
 
 .model-name {
   display: block;
-  /* display: flex; */
-  /* justify-content: space-between; */
 }
 
 .model-name .toolbelt__title {
@@ -756,6 +758,7 @@ label.model-config__item:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 1rem;
 }
 
 .model-name__text {
@@ -768,6 +771,10 @@ label.model-config__item:hover {
 
 .model-name.toolbelt {
   margin-top: 1.5rem;
+}
+
+.model-name__edit.button {
+  padding: 0;
 }
 
 .project .toolbelt, .model-view .toolbelt {
@@ -817,154 +824,93 @@ label.model-config__item:hover {
 
 /* Model Form */
 
-.edit-model__actions, .edit-model__model, .edit-model__fields-set {
-  width: 800px;
-  max-width: 95%;
-  margin: 0 auto;
-  padding: 0;
-  border: none;
-}
-
-.edit-model__actions {
-  text-align: center;
-}
-
-.edit-model__actions .button {
-  width: 150px;
-}
-
-.edit-model__actions .button:first-child {
-  margin-right: 0.5rem;
-}
-
-.edit-model__actions .button:last-child {
-  margin-left: 0.5rem;
-}
-
-.edit-model__actions, .edit-model__model {
-  margin: 1.5rem auto;
-}
-
-.edit-model__model {
-  text-align: center;
-}
-
-.edit-model__model {
-  font-size: 1.25rem;
-}
-
-.edit-model__model label {
-  font-size: 1rem;
-  margin-right: 0.5rem;
-  display: block;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.form-field, .field-form {
+.field-form {
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: auto;
 }
 
-.form-field__type select, .field-form__type select {
+.field-form__type select {
   background-color: var(--white);
 }
 
-.edit-model-name input, .form-field input, .field-form input, .form-field select, .field-form select {
+.field-form input, .field-form select {
   padding: 0.3rem;
   margin-top: 0.5rem;
-}
-
-.edit-model-name label, .edit-model-name input {
-  text-align: center;
-}
-
-.add-new-field {
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.add-new-field button {
-  width: 150px;
 }
 
 .field-form {
   width: 100%;
 }
 
-.form-field__item, .field-form__item {
+.field-form__item {
   text-align: center;
   width: 85%;
   margin: 0.5rem auto;
 }
 
-.form-field__item input, .field-form__item input {
+.field-form__item input {
   text-align: center;
 }
 
-.form-field__item option, .field-form__item option {
+.field-form__item option {
   padding-left: 2rem;
 }
 
-label.checkbox {
-  margin-right: 0.75rem;
-}
-
-.form-field__name label, .form-field__type label {
+.form-field__type label {
   margin-right: 1em;
   margin-bottom: 0.5rem;
 }
 
-.form-field__name label, .field-form__name label, .form-field__type label, .field-form__type label {
+.field-form__name label, .field-form__type label {
   display: block;
 }
 
-.form-field__name input, .field-form__name input, .form-field__type select, .field-form__type select {
+.field-form__name input, .field-form__type select {
   width: 100%;
   max-width: 300px;
 }
 
-.form-field__options, .field-form__options {
+.field-form__options {
   display: flex;
   justify-content: space-evenly;
 }
 
-.form-field__option, .field-form__option {
+.field-form__option {
   font-size: 0.8rem;
 }
 
-.form-field__actions, .field-form__actions {
+.field-form__actions {
   display: flex;
   justify-content: space-evenly;
 }
 
-.form-field__action, .field-form__action {
+.field-form__action {
   width: 40%;
 }
 
-.form-field__name, .field-form__name {
+.field-form__name {
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 1;
   grid-row-end: 1;
 }
 
-.form-field__type, .field-form__type {
+.field-form__type {
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 2;
   grid-row-end: 2;
 }
 
-.form-field__options, .field-form__options {
+.field-form__options {
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 3;
   grid-row-end: 3;
 }
 
-.form-field__actions, .field-form__actions {
+.field-form__actions {
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 4;
@@ -972,37 +918,33 @@ label.checkbox {
 }
 
 @media (min-width: 700px) {
-  .form-field, .field-form {
+  .field-form {
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: auto;
   }
-  .form-field__name, .field-form__name {
+  .field-form__name {
     grid-column-start: 1;
     grid-column-end: 1;
     grid-row-start: 1;
     grid-row-end: 1;
   }
-  .form-field__type, .field-form__type {
+  .field-form__type {
     grid-column-start: 2;
     grid-column-end: 2;
     grid-row-start: 1;
     grid-row-end: 1;
   }
-  .form-field__options, .field-form__options {
+  .field-form__options {
     grid-column-start: 1;
     grid-column-end: 1;
     grid-row-start: 2;
     grid-row-end: 2;
   }
-  .form-field__actions, .field-form__actions {
+  .field-form__actions {
     grid-column-start: 2;
     grid-column-end: 2;
     grid-row-start: 2;
     grid-row-end: 2;
   }
-}
-
-.delete-field-button {
-  width: 150px;
 }
