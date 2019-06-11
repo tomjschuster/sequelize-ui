@@ -71,6 +71,7 @@ export default class ModelNameForm extends React.Component {
 
     return (
       <form
+        className='model-form'
         onSubmit={event => {
           event.preventDefault()
           this.save()
@@ -78,8 +79,8 @@ export default class ModelNameForm extends React.Component {
       >
         <input
           ref={this.nameInput}
-          id='new-model-name'
-          className='new-model-form__name'
+          id='model-name'
+          className='model-form__name'
           type='text'
           value={state.model.name}
           placeholder='Name'
@@ -104,7 +105,7 @@ export default class ModelNameForm extends React.Component {
           type='submit'
           icon='check'
           label='Update'
-          className='new-model-form__add'
+          className='model-form__add'
           disabled={
             state.model.name.trim().length === 0 || state.errors.length > 0
           }
@@ -114,7 +115,7 @@ export default class ModelNameForm extends React.Component {
           primary
           type='button'
           icon='cancel'
-          className='new-model-form__cancel'
+          className='model-form__cancel'
           onClick={this.cancel}
         />
       </form>

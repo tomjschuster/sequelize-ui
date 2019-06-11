@@ -75,7 +75,11 @@ export default class Model extends React.Component {
 
   // Model Name
   startEditingName = () => this.setState({ editingName: true })
-  cancelEditingName = () => this.setState({ editingName: false })
+  
+  cancelEditingName = () => {
+    this.setState({ editingName: false })
+    setTimeout(() => this.focusOnEditNameButton())
+  }
 
   updateModelName = ({ name }) => {
     this.cancelEditingName()
