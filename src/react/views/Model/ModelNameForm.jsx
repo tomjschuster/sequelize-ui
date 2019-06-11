@@ -2,21 +2,32 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import * as validators from '../../../utils/validators.js'
-
 import { MAX_SQL_IDENTIFIER_LENGTH } from '../../../constants.js'
 
 import Button from '../../components/Button.jsx'
 
-export default class NewModelForm extends React.Component {
+export default class ModelNameForm extends React.Component {
+  static propTypes = {
+    modelId: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    models: PropTypes.arrayOf(PropTypes.object).isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired
+  }
+
+  state = {
+    model: { id: this.props.modelId, name: this.props.name },
+    errors: []
+  }
+
   constructor (props) {
     super(props)
 
-    this.nameInput = React.createRef()
+    this.createRefs()
+  }
 
-    this.state = {
-      model: emptyModel(),
-      errors: []
-    }
+  createRefs = () => {
+    this.nameInput = React.createRef()
   }
 
   componentDidMount () {
@@ -27,49 +38,51 @@ export default class NewModelForm extends React.Component {
     this.nameInput.current.focus()
   }
 
-  create = () => {
+  inputName = name =>
+    this.setState(({ model, errors }) => {
+      const updatedModel = { ...model, name }
+
+      const updatedErrors =
+        errors.length > 0
+          ? validateModel(formatModel(updatedModel), this.props.models)
+          : errors
+
+      return { model: updatedModel, errors: updatedErrors }
+    })
+
+  save = () => {
     const model = formatModel(this.state.model)
     const errors = validateModel(model, this.props.models)
 
     if (errors.length > 0) {
       this.setState({ errors })
     } else {
-      this.props.onCreate({ model })
-      this.setState({ model: emptyModel() })
-      this.focusOnName()
+      this.props.onSave({ name: model.name })
     }
   }
 
   cancel = () => {
     this.props.onCancel()
-    this.setState({ model: emptyModel() })
-  }
-
-  inputName = name => {
-    const model = { ...this.state.model, name }
-    const errors =
-      this.state.errors.length > 0
-        ? validateModel(formatModel(model), this.props.models)
-        : this.state.errors
-
-    this.setState({ model, errors })
+    this.setState({ name: '', errors: [] })
   }
 
   render () {
+    const { state } = this
+
     return (
       <form
-        className='new-model-form'
+        className='model-form'
         onSubmit={event => {
           event.preventDefault()
-          this.create()
+          this.save()
         }}
       >
         <input
           ref={this.nameInput}
-          id='new-model-name'
-          className='new-model-form__name'
+          id='model-name'
+          className='model-form__name'
           type='text'
-          value={this.state.model.name}
+          value={state.model.name}
           placeholder='Name'
           onKeyDown={evt => {
             if (evt.keyCode === 27) {
@@ -80,9 +93,9 @@ export default class NewModelForm extends React.Component {
           onChange={({ target: { value } }) => this.inputName(value)}
           maxLength={MAX_SQL_IDENTIFIER_LENGTH}
         />
-        {this.state.errors.length > 0 ? (
+        {state.errors.length > 0 ? (
           <ul>
-            {this.state.errors.map(error => (
+            {state.errors.map(error => (
               <li key={error}>{displayModelError(error)}</li>
             ))}
           </ul>
@@ -91,11 +104,10 @@ export default class NewModelForm extends React.Component {
           primary
           type='submit'
           icon='check'
-          label='Add'
-          className='new-model-form__add'
+          label='Update'
+          className='model-form__add'
           disabled={
-            this.state.model.name.trim().length === 0 ||
-            this.state.errors.length > 0
+            state.model.name.trim().length === 0 || state.errors.length > 0
           }
         />
         <Button
@@ -103,7 +115,7 @@ export default class NewModelForm extends React.Component {
           primary
           type='button'
           icon='cancel'
-          className='new-model-form__cancel'
+          className='model-form__cancel'
           onClick={this.cancel}
         />
       </form>
@@ -111,18 +123,10 @@ export default class NewModelForm extends React.Component {
   }
 }
 
-NewModelForm.propTypes = {
-  models: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onCancel: PropTypes.func.isRequired,
-  onCreate: PropTypes.func.isRequired
-}
-
 const UNIQUE_NAME_ERROR = 'UNIQUE_NAME_ERROR'
 const NAME_FORMAT_ERROR = 'NAME_FORMAT_ERROR'
 const REQUIRED_NAME_ERROR = 'REQUIRED_NAME_ERROR'
 const NAME_LENGTH_ERROR = 'NAME_LENGTH_ERROR'
-
-const emptyModel = () => ({ name: '' })
 
 const formatModel = model => ({
   ...model,

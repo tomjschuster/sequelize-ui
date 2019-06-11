@@ -2,50 +2,65 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import * as sequelize4 from '../../templates/sequelize-4.js'
-import NewModelForm from './Model/NewModelForm.jsx'
+import NewModelForm from './Project/NewModelForm.jsx'
 import Checkbox from '../components/Checkbox.jsx'
 import Button from '../components/Button.jsx'
 import ToolBelt from '../components/ToolBelt.jsx'
 import { CodeFlyout } from '../components/Code.jsx'
+import * as List from '../components/List.jsx'
 
 export default class Project extends React.Component {
+  static propTypes = {
+    config: PropTypes.object.isRequired,
+    models: PropTypes.arrayOf(PropTypes.object.isRequired),
+    toggleTimestamps: PropTypes.func.isRequired,
+    toggleSnake: PropTypes.func.isRequired,
+    toggleSingularTableNames: PropTypes.func.isRequired,
+    createModel: PropTypes.func.isRequired,
+    goToModel: PropTypes.func.isRequired,
+    deleteModel: PropTypes.func.isRequired,
+    newMessage: PropTypes.func.isRequired
+  }
+
+  state = { creatingNewModel: false, codeOpen: false }
+
   constructor (props) {
     super(props)
-    this.addButton = React.createRef()
-    this.state = { codeOpen: false }
+    this.createRefs()
   }
+
+  createRefs = () => {
+    this.addButton = React.createRef()
+  }
+
   componentDidMount () {
     if (this.props.models.length === 0) this.focusOnAddButton()
   }
 
-  componentWillUnmount () {
-    this.props.cancelCreatingNewModel()
-  }
-
+  // Focus Helpers
   focusOnAddButton () {
     this.addButton.current.focus()
   }
 
+  // New Model
+  startCreatingNewModel = () => this.setState({ creatingNewModel: true })
+
+  cancelCreatingNewModel = () => {
+    this.setState({ creatingNewModel: false })
+    setTimeout(() => this.focusOnAddButton())
+  }
+
+  // Code
   toggleCode = () => this.setState({ codeOpen: !this.state.codeOpen })
 
-  render () {
-    const {
-      // State
-      config,
-      models,
-      creatingNewModel,
+  projectFileItem = () =>
+    sequelize4.files({
+      models: this.props.models,
+      config: this.props.config
+    })
 
-      // Actions
-      toggleTimestamps,
-      toggleSnake,
-      toggleSingularTableNames,
-      startCreatingNewModel,
-      cancelCreatingNewModel,
-      createModel,
-      goToModel,
-      editModel,
-      deleteModel
-    } = this.props
+  render () {
+    const { props, state } = this
 
     return (
       <React.Fragment>
@@ -55,47 +70,41 @@ export default class Project extends React.Component {
             <ToolBelt>
               <Button icon='code' label='Code' onClick={this.toggleCode} />
             </ToolBelt>
-            <h3 className='models__title list__title'>Models</h3>
-            <ul className='models list'>
-              {models.map(model => (
-                <li className='models__item list__item' key={model.id}>
-                  <span className='list__item__content'>{model.name}</span>
-                  <span className='models__item__actions list__item__actions'>
+            <List.Title className='models__title' text='Models' />
+            <List.List className='models'>
+              {props.models.map(model => (
+                <List.Item key={model.id}>
+                  <List.Content>{model.name}</List.Content>
+                  <List.Actions>
                     <Button
                       icon='view'
                       iconPosition='above'
-                      onClick={() => goToModel(model.id)}
+                      onClick={() => props.goToModel(model.id)}
                       label='View'
-                    />
-                    <Button
-                      icon='edit'
-                      iconPosition='above'
-                      onClick={() => editModel(model.id)}
-                      label='Edit'
                     />
                     <Button
                       icon='delete'
                       iconPosition='above'
-                      onClick={() => deleteModel(model.id)}
+                      onClick={() => props.deleteModel(model.id)}
                       label='Delete'
                     />
-                  </span>
-                </li>
+                  </List.Actions>
+                </List.Item>
               ))}
-              <li className='add-model list__item'>
-                {creatingNewModel ? (
+              <List.Item className='add-model'>
+                {state.creatingNewModel ? (
                   <NewModelForm
-                    models={models}
-                    onCancel={cancelCreatingNewModel}
-                    onCreate={createModel}
+                    models={props.models}
+                    onCancel={this.cancelCreatingNewModel}
+                    onCreate={props.createModel}
                   />
-                ) : models.length > 0 ? (
+                ) : props.models.length > 0 ? (
                   <Button
                     ref={this.addButton}
                     icon='add'
                     label='Add a Model'
                     primary
-                    onClick={startCreatingNewModel}
+                    onClick={this.startCreatingNewModel}
                   />
                 ) : (
                   <React.Fragment>
@@ -105,33 +114,33 @@ export default class Project extends React.Component {
                       icon='add'
                       label='Add a Model'
                       primary
-                      onClick={startCreatingNewModel}
+                      onClick={this.startCreatingNewModel}
                     />
                   </React.Fragment>
                 )}
-              </li>
-            </ul>
-            <ToolBelt className='model-config' title='Database Options'>
+              </List.Item>
+            </List.List>
+            <ToolBelt className='project-config' title='Database Options'>
               <Checkbox
                 id='config-timestamps'
-                className='model-config__item'
+                className='project-config__item'
                 label='Timestamps'
-                checked={config.timestamps}
-                onCheck={toggleTimestamps}
+                checked={props.config.timestamps}
+                onCheck={props.toggleTimestamps}
               />
               <Checkbox
                 id='config-snake'
-                className='model-config__item'
+                className='project-config__item'
                 label='snake_case'
-                checked={config.snake}
-                onCheck={toggleSnake}
+                checked={props.config.snake}
+                onCheck={props.toggleSnake}
               />
               <Checkbox
                 id='singluar-table-names'
-                className='model-config__item'
+                className='project-config__item'
                 label='Singular Table Names'
-                checked={config.singularTableNames}
-                onCheck={toggleSingularTableNames}
+                checked={props.config.singularTableNames}
+                onCheck={props.toggleSingularTableNames}
               />
             </ToolBelt>
           </div>
@@ -141,26 +150,9 @@ export default class Project extends React.Component {
           open={this.state.codeOpen}
           onClose={this.toggleCode}
           newMessage={this.props.newMessage}
-          fileItem={sequelize4.files({ models, config })}
+          fileItem={this.projectFileItem()}
         />
       </React.Fragment>
     )
   }
-}
-
-Project.propTypes = {
-  config: PropTypes.object.isRequired,
-  models: PropTypes.arrayOf(PropTypes.object.isRequired),
-  creatingNewModel: PropTypes.bool.isRequired,
-
-  // Actions
-  toggleTimestamps: PropTypes.func.isRequired,
-  toggleSnake: PropTypes.func.isRequired,
-  toggleSingularTableNames: PropTypes.func.isRequired,
-  startCreatingNewModel: PropTypes.func.isRequired,
-  cancelCreatingNewModel: PropTypes.func.isRequired,
-  createModel: PropTypes.func.isRequired,
-  goToModel: PropTypes.func.isRequired,
-  editModel: PropTypes.func.isRequired,
-  deleteModel: PropTypes.func.isRequired
 }

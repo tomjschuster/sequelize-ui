@@ -2,18 +2,20 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 export default class Message extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.state = { visible: false }
+  static propTypes = {
+    messages: PropTypes.arrayOf(PropTypes.object),
+    className: PropTypes.string,
+    time: PropTypes.number
   }
+
+  state = { visible: false }
 
   componentDidMount () {
     setTimeout(() => this.show(), 0)
   }
 
-  componentDidUpdate (oldProps) {
-    if (oldProps.messages.length < this.props.messages.length) {
+  componentDidUpdate (prevProps) {
+    if (prevProps.messages.length < this.props.messages.length) {
       clearTimeout(this.messageTimeout)
 
       if (!this.state.visible) {
@@ -35,10 +37,4 @@ export default class Message extends React.Component {
     const className = 'message' + customClass + hiddenClass + errorClass
     return message ? <div className={className}>{message.text}</div> : null
   }
-}
-
-Message.propTypes = {
-  messages: PropTypes.arrayOf(PropTypes.object),
-  className: PropTypes.string,
-  time: PropTypes.number
 }
