@@ -1,17 +1,27 @@
 import React from 'react'
+
+import Storage from '../utils/Storage.js'
+import * as stateUtils from '../utils/state.js'
+
 import Header from './components/Header.jsx'
 import Button from './components/Button.jsx'
 import Message from './components/Message.jsx'
+import Home from './views/Home.jsx'
 import Project from './views/Project.jsx'
 import Model from './views/Model.jsx'
 
+const HOME = 'HOME'
+const LOADING = 'LOADING'
 const PROJECT = 'PROJECT'
 const MODEL = 'MODEL'
 const MESSAGE_TIME = 1750
+const STATE_KEY = 'SUI_STATE'
+const FLAGS_KEY = 'SUI_FLAGS'
 
 export default class App extends React.Component {
   state = {
-    pageState: PROJECT,
+    loaded: false,
+    pageState: LOADING,
     nextModelId: 1,
     nextFieldId: 1,
     config: {
@@ -30,43 +40,96 @@ export default class App extends React.Component {
     super(props)
     this.createRefs()
 
-    this.state = { ...this.state, ...this.loadState() }
+    this.flags = new Storage(FLAGS_KEY)
+    this.store = new Storage(STATE_KEY)
+    this.mergePersistedState()
+    console.log('constructor!!!', this.state)
   }
 
   createRefs = () => {
     this.projectComponent = React.createRef()
   }
 
+  async mergePersistedState () {
+    const persistedData = await this.store.load()
+    const hasLeftHome = await this.flags.get('hasLeftHome')
+    const pageState = this.getLandingPage(persistedData, hasLeftHome)
+    persistedData.pageState = pageState
+    persistedData.loaded = true
+    this.setState(persistedData)
+  }
+
+  getLandingPage = (data, hasLeftHome) => {
+    if (data.pageState && data.pageState !== LOADING) {
+      return data.pageState
+    }
+
+    if (hasLeftHome) {
+      return PROJECT
+    }
+
+    return HOME
+  }
+
   // Persistence
   componentDidUpdate (prevProps, prevState) {
-    const keysToPersist = [
-      'pageState',
-      'nextModelId',
-      'nextFieldId',
-      'config',
-      'models',
-      'currentModelId'
-    ]
+    if (this.state.loaded) {
+      const keysToPersist = [
+        'pageState',
+        'nextModelId',
+        'nextFieldId',
+        'config',
+        'models',
+        'currentModelId'
+      ]
 
-    this.persistState(keysToPersist)
+      const stateToPersist = stateUtils.extract(this.state, keysToPersist)
+      this.store.save(stateToPersist)
+    }
+
+    if (prevState.page !== this.state.page) {
+      this.clearPageState(prevState.page)
+    }
   }
 
-  loadState = () => (localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {})
+  // loadState = () => (localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {})
 
-  persistState = keys => {
-    const stateToPersist = Object.entries(this.state)
-      .filter(([key, value]) => keys.includes(key))
-      .reduce((acc, [key, value]) => Object.assign(acc, { [key]: value }), {})
+  // persistState = keys => {
+  //   const stateToPersist = Object.entries(this.state)
+  //     .filter(([key, value]) => keys.includes(key))
+  //     .reduce((acc, [key, value]) => Object.assign(acc, { [key]: value }), {})
 
-    localStorage.setItem('SUI', JSON.stringify(stateToPersist))
-  }
+  //   localStorage.setItem('SUI', JSON.stringify(stateToPersist))
+  // }
 
   reset = () => {
-    localStorage.removeItem('SUI')
+    this.flags.reset()
+    this.store.reset()
+    // localStorage.removeItem('SUI')
     location.reload()
   }
 
+  // saveHasLeftHome = () => localStorage.setItem('SUI-home-visited', true)
+  // getHasLeftHome = () => localStorage.get.item('SUI-home-visited')
+
+  clearPageState = page => {
+    switch (page) {
+      case HOME:
+        this.flags.put('hasLeftHome', true)
+        break
+      case PROJECT:
+        break
+      case MODEL:
+        this.setState({ currentModelId: true })
+        break
+      default:
+        break
+    }
+  }
+
   // Navigation
+  goHome = () => this.setState({ pageState: HOME })
+
   goToProject = () =>
     this.setState({ pageState: PROJECT, currentModelId: null })
 
@@ -149,6 +212,10 @@ export default class App extends React.Component {
 
   renderPage = () => {
     switch (this.state.pageState) {
+      case LOADING:
+        return <p>Loading...</p>
+      case HOME:
+        return <Home />
       case PROJECT:
         return (
           <Project

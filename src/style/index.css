@@ -647,6 +647,7 @@ input.checkbox[type="checkbox"]:focus+label::before {
 .icon.before.json::before, .icon.above.json::before, .icon.after.json::after, .icon.below.json::after {
   font-weight: bold;
   content: '{}';
+  letter-spacing: 0.15rem;
 }
 
 /**************************
