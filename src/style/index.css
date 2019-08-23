@@ -3,7 +3,8 @@
   --primary-color-light: lightsteelblue;
   --primary-color-dark: royalblue;
   --secondary-color: orchid;
-  --header-height: 3.5rem;
+  --secondary-color-dark: darkorchid;
+  --header-height: 3.75rem;
   --black: #151515;
   --white: #fefefe;
 }
@@ -18,6 +19,12 @@ html, body {
 
 * {
   box-sizing: border-box;
+}
+
+a {
+  color: var(--secondary-color-dark);
+  text-decoration: none;
+  font-weight: bold;
 }
 
 /**************************
@@ -39,11 +46,12 @@ html, body {
 
 .header {
   color: var(--white);
-  height: var(--header-height);
+  /* height: var(--header-height); */
   display: flex;
   justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0.25rem;
 }
 
 .header__title::before {
@@ -67,6 +75,11 @@ html, body {
   text-transform: uppercase;
 }
 
+.header__actions {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 .header__actions__button {
   color: var(--white);
   cursor: pointer;
@@ -76,10 +89,10 @@ html, body {
   height: 3.5rem;
   background: none;
   line-height: 3rem;
-  font-size: 0.8rem;
-  font-weight: bold;
+  font-size: 1rem;
   text-decoration: none;
   display: block;
+  font-weight: normal;
 }
 
 .header__actions__button.icon.above {
@@ -91,9 +104,25 @@ html, body {
   font-size: 1.5rem;
 }
 
-.header__actions__button:hover {
+.header__actions__button:hover:not(:disabled) {
   color: var(--primary-color);
   background-color: #222222;
+}
+
+.header__actions__button:disabled {
+  cursor: auto;
+  color: var(--primary-color);
+}
+
+@media (max-width: 550px) {
+  .header {
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+  }
+  .header__actions {
+    justify-content: center;
+  }
 }
 
 /* Main Content */
@@ -113,14 +142,18 @@ html, body {
 /* Footer */
 
 .footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   height: var(--header-height);
   text-align: center;
   background-color: var(--black);
   color: var(--white);
 }
 
-.footer__reset {
+.footer__reset.button {
   color: var(--white);
+  font-size: 1.25rem;
 }
 
 .footer__reset:hover {
@@ -492,7 +525,7 @@ input.checkbox[type="checkbox"]:focus+label::before {
   height: calc(100vh - 2 * var(--header-height));
   width: 100vw;
   z-index: 1;
-  transition: left 400ms ease-in-out;
+  transition: left 400ms ease-out;
 }
 
 @media (max-width: 450px) {
@@ -621,6 +654,16 @@ input.checkbox[type="checkbox"]:focus+label::before {
   content: '\f07b';
 }
 
+.icon.before.info::before, .icon.above.info::before, .icon.after.info::after, .icon.below.info::after {
+  font-weight: 400;
+  content: '\f059';
+}
+
+.icon.before.cubes::before, .icon.above.cubes::before, .icon.after.cubes::after, .icon.below.cubes::after {
+  font-weight: 900;
+  content: '\f1b3';
+}
+
 .icon.before.copy::before, .icon.above.copy::before, .icon.after.copy::after, .icon.below.copy::after {
   font-weight: 900;
   content: '\f0c5';
@@ -647,11 +690,67 @@ input.checkbox[type="checkbox"]:focus+label::before {
 .icon.before.json::before, .icon.above.json::before, .icon.after.json::after, .icon.below.json::after {
   font-weight: bold;
   content: '{}';
+  letter-spacing: 0.15rem;
 }
 
 /**************************
  ***** Page Specific ******
  **************************/
+
+/* About */
+
+.about .content-wrapper {
+  max-width: 80%;
+  width: 560px;
+}
+
+.about__title {
+  font-size: 2rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+.about__logo {
+  text-align: center;
+  width: 100px;
+  margin: 0 auto;
+}
+
+.about__logo img {
+  width: 100%;
+}
+
+@media (max-width: 500px) {
+  .about__title__part {
+    display: block;
+  }
+  .about__title__part:not(:first-of-type) {
+    margin-top: 0.25rem;
+  }
+}
+
+.about .info {
+  font-size: 1.35rem;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.9rem;
+  letter-spacing: 0.05ch;
+  font-weight: 400;
+}
+
+.about .info strong {
+  font-weight: 700;
+}
+
+.about .get-started {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.about .get-started__button {
+  font-size: 1.5rem;
+  padding: 0.75rem;
+}
 
 /* Project */
 

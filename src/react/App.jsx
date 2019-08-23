@@ -1,17 +1,27 @@
 import React from 'react'
+
+import Storage from '../utils/Storage.js'
+import * as stateUtils from '../utils/state.js'
+
 import Header from './components/Header.jsx'
 import Button from './components/Button.jsx'
 import Message from './components/Message.jsx'
+import About from './views/About.jsx'
 import Project from './views/Project.jsx'
 import Model from './views/Model.jsx'
 
+const ABOUT = 'ABOUT'
+const LOADING = 'LOADING'
 const PROJECT = 'PROJECT'
 const MODEL = 'MODEL'
 const MESSAGE_TIME = 1750
+const STATE_KEY = 'SUI_STATE'
+const FLAGS_KEY = 'SUI_FLAGS'
 
 export default class App extends React.Component {
   state = {
-    pageState: PROJECT,
+    loaded: false,
+    pageState: LOADING,
     nextModelId: 1,
     nextFieldId: 1,
     config: {
@@ -30,43 +40,96 @@ export default class App extends React.Component {
     super(props)
     this.createRefs()
 
-    this.state = { ...this.state, ...this.loadState() }
+    this.flags = new Storage(FLAGS_KEY)
+    this.store = new Storage(STATE_KEY)
+    this.mergePersistedState()
+    console.log('constructor!!!', this.state)
   }
 
   createRefs = () => {
     this.projectComponent = React.createRef()
   }
 
+  async mergePersistedState () {
+    const persistedData = await this.store.load()
+    const hasRedAbout = await this.flags.get('hasRedAbout')
+    const pageState = this.getLandingPage(persistedData, hasRedAbout)
+    persistedData.pageState = pageState
+    persistedData.loaded = true
+    this.setState(persistedData)
+  }
+
+  getLandingPage = (data, hasRedAbout) => {
+    if (data.pageState && data.pageState !== LOADING) {
+      return data.pageState
+    }
+
+    if (hasRedAbout) {
+      return PROJECT
+    }
+
+    return ABOUT
+  }
+
   // Persistence
   componentDidUpdate (prevProps, prevState) {
-    const keysToPersist = [
-      'pageState',
-      'nextModelId',
-      'nextFieldId',
-      'config',
-      'models',
-      'currentModelId'
-    ]
+    if (this.state.loaded) {
+      const keysToPersist = [
+        'pageState',
+        'nextModelId',
+        'nextFieldId',
+        'config',
+        'models',
+        'currentModelId'
+      ]
 
-    this.persistState(keysToPersist)
+      const stateToPersist = stateUtils.extract(this.state, keysToPersist)
+      this.store.save(stateToPersist)
+    }
+
+    if (prevState.page !== this.state.page) {
+      this.clearPageState(prevState.page)
+    }
   }
 
-  loadState = () => (localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {})
+  // loadState = () => (localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {})
 
-  persistState = keys => {
-    const stateToPersist = Object.entries(this.state)
-      .filter(([key, value]) => keys.includes(key))
-      .reduce((acc, [key, value]) => Object.assign(acc, { [key]: value }), {})
+  // persistState = keys => {
+  //   const stateToPersist = Object.entries(this.state)
+  //     .filter(([key, value]) => keys.includes(key))
+  //     .reduce((acc, [key, value]) => Object.assign(acc, { [key]: value }), {})
 
-    localStorage.setItem('SUI', JSON.stringify(stateToPersist))
-  }
+  //   localStorage.setItem('SUI', JSON.stringify(stateToPersist))
+  // }
 
   reset = () => {
-    localStorage.removeItem('SUI')
+    this.flags.reset()
+    this.store.reset()
+    // localStorage.removeItem('SUI')
     location.reload()
   }
 
+  // saveHasLeftAbout = () => localStorage.setItem('SUI-home-visited', true)
+  // getHasLeftAbout = () => localStorage.get.item('SUI-home-visited')
+
+  clearPageState = page => {
+    switch (page) {
+      case ABOUT:
+        this.flags.put('hasRedAbout', true)
+        break
+      case PROJECT:
+        break
+      case MODEL:
+        this.setState({ currentModelId: true })
+        break
+      default:
+        break
+    }
+  }
+
   // Navigation
+  goToAbout = () => this.setState({ pageState: ABOUT })
+
   goToProject = () =>
     this.setState({ pageState: PROJECT, currentModelId: null })
 
@@ -149,6 +212,10 @@ export default class App extends React.Component {
 
   renderPage = () => {
     switch (this.state.pageState) {
+      case LOADING:
+        return <p>Loading...</p>
+      case ABOUT:
+        return <About goToProject={this.goToProject} />
       case PROJECT:
         return (
           <Project
@@ -187,14 +254,31 @@ export default class App extends React.Component {
   }
 
   topBarActions () {
+    const aboutLink = {
+      onClick: this.goToAbout,
+      icon: 'info',
+      iconPosition: 'above',
+      label: 'About',
+      disabled: this.state.pageState === ABOUT
+    }
+
+    const projectLink = {
+      onClick: this.goToProject,
+      icon: 'cubes',
+      iconPosition: 'above',
+      label: 'My Project',
+      disabled: this.state.pageState === PROJECT
+    }
+
     const githubLink = {
       href: 'https://github.com/tomjschuster/sequelize-ui',
       icon: 'github',
       iconPosition: 'above',
-      label: 'GitHub'
+      label: 'GitHub',
+      newTab: true
     }
 
-    return [githubLink]
+    return [aboutLink, projectLink, githubLink]
   }
 
   render () {
