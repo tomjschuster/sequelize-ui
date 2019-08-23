@@ -4,7 +4,7 @@
   --primary-color-dark: royalblue;
   --secondary-color: orchid;
   --secondary-color-dark: darkorchid;
-  --header-height: 3.5rem;
+  --header-height: 3.75rem;
   --black: #151515;
   --white: #fefefe;
 }
@@ -46,11 +46,12 @@ a {
 
 .header {
   color: var(--white);
-  height: var(--header-height);
+  /* height: var(--header-height); */
   display: flex;
   justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0.25rem;
 }
 
 .header__title::before {
@@ -76,22 +77,22 @@ a {
 
 .header__actions {
   display: flex;
+  justify-content: space-evenly;
 }
 
 .header__actions__button {
   color: var(--white);
   cursor: pointer;
   min-width: 3rem;
-  margin: 0 0.5rem;
   border: none;
   padding: 0.5rem;
   height: 3.5rem;
   background: none;
   line-height: 3rem;
-  font-size: 0.8rem;
-  font-weight: bold;
+  font-size: 1rem;
   text-decoration: none;
   display: block;
+  font-weight: normal;
 }
 
 .header__actions__button.icon.above {
@@ -103,9 +104,25 @@ a {
   font-size: 1.5rem;
 }
 
-.header__actions__button:hover {
+.header__actions__button:hover:not(:disabled) {
   color: var(--primary-color);
   background-color: #222222;
+}
+
+.header__actions__button:disabled {
+  cursor: auto;
+  color: var(--primary-color);
+}
+
+@media (max-width: 550px) {
+  .header {
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+  }
+  .header__actions {
+    justify-content: center;
+  }
 }
 
 /* Main Content */
@@ -125,14 +142,18 @@ a {
 /* Footer */
 
 .footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   height: var(--header-height);
   text-align: center;
   background-color: var(--black);
   color: var(--white);
 }
 
-.footer__reset {
+.footer__reset.button {
   color: var(--white);
+  font-size: 1.25rem;
 }
 
 .footer__reset:hover {
@@ -638,6 +659,11 @@ input.checkbox[type="checkbox"]:focus+label::before {
   content: '\f059';
 }
 
+.icon.before.cubes::before, .icon.above.cubes::before, .icon.after.cubes::after, .icon.below.cubes::after {
+  font-weight: 900;
+  content: '\f1b3';
+}
+
 .icon.before.copy::before, .icon.above.copy::before, .icon.after.copy::after, .icon.below.copy::after {
   font-weight: 900;
   content: '\f0c5';
@@ -681,7 +707,17 @@ input.checkbox[type="checkbox"]:focus+label::before {
 .about__title {
   font-size: 2rem;
   font-weight: 400;
-  /* text-align: left; */
+  text-align: center;
+}
+
+.about__logo {
+  text-align: center;
+  width: 100px;
+  margin: 0 auto;
+}
+
+.about__logo img {
+  width: 100%;
 }
 
 @media (max-width: 500px) {

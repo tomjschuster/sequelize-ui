@@ -10,11 +10,16 @@ const About = ({ goToProject }) => (
         <span className='about__title__part'>Preview. </span>
         <span className='about__title__part'>Generate. </span>
       </h2>
+      <div className='about__logo'>
+        <img src='static/images/sequelize-ui.svg' />
+      </div>
       <p className='info'>
         <strong>Sequelize UI</strong> provides a user-friendly interface for
-        designing SQL database models and generating{' '}
-        <a href='https://sequelize.org/'>Sequelize</a> code for a Node.js
-        project.
+        designing a relational database and generating{' '}
+        <a href='https://sequelize.org/' target='_blank'>
+          Sequelize ORM
+        </a>{' '}
+        model code for a Node.js project.
       </p>
       <p className='info'>
         Use the code previewer to look the Sequelize code needed to generate

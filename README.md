@@ -17,11 +17,10 @@ npm start
 ```
 
 TODO:
-- Instructions / Landing Page
-- Demo video
+- Associations
+- Demo GIF's
 
 ## Future enhancements
-- Associations
 - Migrations
 - Sequelize v5 templates
 - Select Driver

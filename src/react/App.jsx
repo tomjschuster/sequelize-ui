@@ -10,7 +10,7 @@ import About from './views/About.jsx'
 import Project from './views/Project.jsx'
 import Model from './views/Model.jsx'
 
-const HOME = 'HOME'
+const ABOUT = 'ABOUT'
 const LOADING = 'LOADING'
 const PROJECT = 'PROJECT'
 const MODEL = 'MODEL'
@@ -68,7 +68,7 @@ export default class App extends React.Component {
       return PROJECT
     }
 
-    return HOME
+    return ABOUT
   }
 
   // Persistence
@@ -114,7 +114,7 @@ export default class App extends React.Component {
 
   clearPageState = page => {
     switch (page) {
-      case HOME:
+      case ABOUT:
         this.flags.put('hasRedAbout', true)
         break
       case PROJECT:
@@ -128,7 +128,7 @@ export default class App extends React.Component {
   }
 
   // Navigation
-  goAbout = () => this.setState({ pageState: HOME })
+  goToAbout = () => this.setState({ pageState: ABOUT })
 
   goToProject = () =>
     this.setState({ pageState: PROJECT, currentModelId: null })
@@ -214,7 +214,7 @@ export default class App extends React.Component {
     switch (this.state.pageState) {
       case LOADING:
         return <p>Loading...</p>
-      case HOME:
+      case ABOUT:
         return <About goToProject={this.goToProject} />
       case PROJECT:
         return (
@@ -255,20 +255,30 @@ export default class App extends React.Component {
 
   topBarActions () {
     const aboutLink = {
-      onClick: this.goAbout,
+      onClick: this.goToAbout,
       icon: 'info',
       iconPosition: 'above',
-      label: 'About'
+      label: 'About',
+      disabled: this.state.pageState === ABOUT
+    }
+
+    const projectLink = {
+      onClick: this.goToProject,
+      icon: 'cubes',
+      iconPosition: 'above',
+      label: 'My Project',
+      disabled: this.state.pageState === PROJECT
     }
 
     const githubLink = {
       href: 'https://github.com/tomjschuster/sequelize-ui',
       icon: 'github',
       iconPosition: 'above',
-      label: 'GitHub'
+      label: 'GitHub',
+      newTab: true
     }
 
-    return [aboutLink, githubLink]
+    return [aboutLink, projectLink, githubLink]
   }
 
   render () {
