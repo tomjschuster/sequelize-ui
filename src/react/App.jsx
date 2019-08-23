@@ -6,7 +6,7 @@ import * as stateUtils from '../utils/state.js'
 import Header from './components/Header.jsx'
 import Button from './components/Button.jsx'
 import Message from './components/Message.jsx'
-import Home from './views/Home.jsx'
+import About from './views/About.jsx'
 import Project from './views/Project.jsx'
 import Model from './views/Model.jsx'
 
@@ -52,19 +52,19 @@ export default class App extends React.Component {
 
   async mergePersistedState () {
     const persistedData = await this.store.load()
-    const hasLeftHome = await this.flags.get('hasLeftHome')
-    const pageState = this.getLandingPage(persistedData, hasLeftHome)
+    const hasRedAbout = await this.flags.get('hasRedAbout')
+    const pageState = this.getLandingPage(persistedData, hasRedAbout)
     persistedData.pageState = pageState
     persistedData.loaded = true
     this.setState(persistedData)
   }
 
-  getLandingPage = (data, hasLeftHome) => {
+  getLandingPage = (data, hasRedAbout) => {
     if (data.pageState && data.pageState !== LOADING) {
       return data.pageState
     }
 
-    if (hasLeftHome) {
+    if (hasRedAbout) {
       return PROJECT
     }
 
@@ -109,13 +109,13 @@ export default class App extends React.Component {
     location.reload()
   }
 
-  // saveHasLeftHome = () => localStorage.setItem('SUI-home-visited', true)
-  // getHasLeftHome = () => localStorage.get.item('SUI-home-visited')
+  // saveHasLeftAbout = () => localStorage.setItem('SUI-home-visited', true)
+  // getHasLeftAbout = () => localStorage.get.item('SUI-home-visited')
 
   clearPageState = page => {
     switch (page) {
       case HOME:
-        this.flags.put('hasLeftHome', true)
+        this.flags.put('hasRedAbout', true)
         break
       case PROJECT:
         break
@@ -128,7 +128,7 @@ export default class App extends React.Component {
   }
 
   // Navigation
-  goHome = () => this.setState({ pageState: HOME })
+  goAbout = () => this.setState({ pageState: HOME })
 
   goToProject = () =>
     this.setState({ pageState: PROJECT, currentModelId: null })
@@ -215,7 +215,7 @@ export default class App extends React.Component {
       case LOADING:
         return <p>Loading...</p>
       case HOME:
-        return <Home />
+        return <About goToProject={this.goToProject} />
       case PROJECT:
         return (
           <Project
@@ -254,6 +254,13 @@ export default class App extends React.Component {
   }
 
   topBarActions () {
+    const aboutLink = {
+      onClick: this.goAbout,
+      icon: 'info',
+      iconPosition: 'above',
+      label: 'About'
+    }
+
     const githubLink = {
       href: 'https://github.com/tomjschuster/sequelize-ui',
       icon: 'github',
@@ -261,7 +268,7 @@ export default class App extends React.Component {
       label: 'GitHub'
     }
 
-    return [githubLink]
+    return [aboutLink, githubLink]
   }
 
   render () {

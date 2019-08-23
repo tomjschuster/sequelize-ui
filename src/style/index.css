@@ -3,6 +3,7 @@
   --primary-color-light: lightsteelblue;
   --primary-color-dark: royalblue;
   --secondary-color: orchid;
+  --secondary-color-dark: darkorchid;
   --header-height: 3.5rem;
   --black: #151515;
   --white: #fefefe;
@@ -18,6 +19,12 @@ html, body {
 
 * {
   box-sizing: border-box;
+}
+
+a {
+  color: var(--secondary-color-dark);
+  text-decoration: none;
+  font-weight: bold;
 }
 
 /**************************
@@ -67,10 +74,15 @@ html, body {
   text-transform: uppercase;
 }
 
+.header__actions {
+  display: flex;
+}
+
 .header__actions__button {
   color: var(--white);
   cursor: pointer;
   min-width: 3rem;
+  margin: 0 0.5rem;
   border: none;
   padding: 0.5rem;
   height: 3.5rem;
@@ -492,7 +504,7 @@ input.checkbox[type="checkbox"]:focus+label::before {
   height: calc(100vh - 2 * var(--header-height));
   width: 100vw;
   z-index: 1;
-  transition: left 400ms ease-in-out;
+  transition: left 400ms ease-out;
 }
 
 @media (max-width: 450px) {
@@ -621,6 +633,11 @@ input.checkbox[type="checkbox"]:focus+label::before {
   content: '\f07b';
 }
 
+.icon.before.info::before, .icon.above.info::before, .icon.after.info::after, .icon.below.info::after {
+  font-weight: 400;
+  content: '\f059';
+}
+
 .icon.before.copy::before, .icon.above.copy::before, .icon.after.copy::after, .icon.below.copy::after {
   font-weight: 900;
   content: '\f0c5';
@@ -653,6 +670,51 @@ input.checkbox[type="checkbox"]:focus+label::before {
 /**************************
  ***** Page Specific ******
  **************************/
+
+/* About */
+
+.about .content-wrapper {
+  max-width: 80%;
+  width: 560px;
+}
+
+.about__title {
+  font-size: 2rem;
+  font-weight: 400;
+  /* text-align: left; */
+}
+
+@media (max-width: 500px) {
+  .about__title__part {
+    display: block;
+  }
+  .about__title__part:not(:first-of-type) {
+    margin-top: 0.25rem;
+  }
+}
+
+.about .info {
+  font-size: 1.35rem;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.9rem;
+  letter-spacing: 0.05ch;
+  font-weight: 400;
+}
+
+.about .info strong {
+  font-weight: 700;
+}
+
+.about .get-started {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.about .get-started__button {
+  font-size: 1.5rem;
+  padding: 0.75rem;
+}
 
 /* Project */
 
