@@ -18,8 +18,6 @@ npm start
 
 TODO:
 - Associations
-- Sample Model
-- Reset/Clear
 - Explain Storage
 - Demo GIF's
 

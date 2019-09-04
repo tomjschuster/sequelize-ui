@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { Blog } from '../utils/sample-data.js'
 import Storage from '../utils/Storage.js'
 import * as stateUtils from '../utils/state.js'
 
@@ -18,32 +19,36 @@ const MESSAGE_TIME = 1750
 const STATE_KEY = 'SUI_STATE'
 const FLAGS_KEY = 'SUI_FLAGS'
 
+const initialState = {
+  loaded: false,
+  pageState: LOADING,
+  nextModelId: 1,
+  nextFieldId: 1,
+  config: {
+    timestamps: true,
+    snake: false,
+    singularTableNames: false,
+    dialect: 'sqlite',
+    name: 'my-project'
+  },
+  models: [],
+  currentModelId: null,
+  messages: []
+}
+
 export default class App extends React.Component {
-  state = {
-    loaded: false,
-    pageState: LOADING,
-    nextModelId: 1,
-    nextFieldId: 1,
-    config: {
-      timestamps: true,
-      snake: false,
-      singularTableNames: false,
-      dialect: 'sqlite',
-      name: 'my-project'
-    },
-    models: [],
-    currentModelId: null,
-    messages: []
-  }
+  state = initialState
 
   constructor (props) {
     super(props)
     this.createRefs()
+  }
 
+  componentDidMount = () => {
+    this.loadDefaultProject()
     this.flags = new Storage(FLAGS_KEY)
     this.store = new Storage(STATE_KEY)
     this.mergePersistedState()
-    console.log('constructor!!!', this.state)
   }
 
   createRefs = () => {
@@ -57,6 +62,24 @@ export default class App extends React.Component {
     persistedData.pageState = pageState
     persistedData.loaded = true
     this.setState(persistedData)
+  }
+
+  loadDefaultProject = () => {
+    this.setState(state => {
+      let nextModelId = state.nextModelId
+      let nextFieldId = state.nextFieldId
+
+      const models = Blog.models.map(model => ({
+        id: nextModelId++,
+        ...model,
+        fields: model.fields.map(field => ({
+          id: nextFieldId++,
+          ...field
+        }))
+      }))
+
+      return { nextModelId, nextFieldId, models }
+    })
   }
 
   getLandingPage = (data, hasRedAbout) => {
@@ -92,25 +115,17 @@ export default class App extends React.Component {
     }
   }
 
-  // loadState = () => (localStorage['SUI'] ? JSON.parse(localStorage['SUI']) : {})
-
-  // persistState = keys => {
-  //   const stateToPersist = Object.entries(this.state)
-  //     .filter(([key, value]) => keys.includes(key))
-  //     .reduce((acc, [key, value]) => Object.assign(acc, { [key]: value }), {})
-
-  //   localStorage.setItem('SUI', JSON.stringify(stateToPersist))
-  // }
-
   reset = () => {
     this.flags.reset()
     this.store.reset()
-    // localStorage.removeItem('SUI')
     location.reload()
   }
 
-  // saveHasLeftAbout = () => localStorage.setItem('SUI-home-visited', true)
-  // getHasLeftAbout = () => localStorage.get.item('SUI-home-visited')
+  clear = () => {
+    this.flags.reset()
+    this.store.reset()
+    this.setState({ ...initialState, pageState: PROJECT })
+  }
 
   clearPageState = page => {
     switch (page) {
@@ -294,6 +309,11 @@ export default class App extends React.Component {
             className='footer__reset'
             label='Reset'
             onClick={this.reset}
+          />
+          <Button
+            className='footer__reset'
+            label='Clear'
+            onClick={this.clear}
           />
         </footer>
         <Message time={MESSAGE_TIME} messages={this.state.messages} />
