@@ -19,6 +19,7 @@ npm start
 TODO:
 - Associations
 - Explain Storage
+- Clear/Reset warning modals
 - Demo GIF's
 
 ## Future enhancements
