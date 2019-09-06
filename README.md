@@ -18,11 +18,15 @@ npm start
 
 TODO:
 - Associations
+  - Style
+  - Generate Code
+  - Cleanup
 - Explain Storage
 - Clear/Reset warning modals
 - Demo GIF's
 
 ## Future enhancements
+- Elm?
 - Migrations
 - Sequelize v5 templates
 - Select Driver

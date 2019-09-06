@@ -1,36 +1,11 @@
 import { DATA_TYPES } from '../constants'
 
-const Post = {
-  name: 'Post',
-  fields: [
-    {
-      name: 'Title',
-      type: DATA_TYPES.STRING,
-      primaryKey: false,
-      required: true,
-      unique: false
-    },
-    {
-      name: 'Content',
-      type: DATA_TYPES.TEXT,
-      primaryKey: false,
-      required: false,
-      unique: false
-    },
-    {
-      name: 'Author ID',
-      type: DATA_TYPES.INTEGER,
-      primaryKey: false,
-      required: true,
-      unique: false
-    }
-  ]
-}
-
 const User = {
+  id: 1,
   name: 'User',
   fields: [
     {
+      id: 1,
       name: 'First Name',
       type: DATA_TYPES.STRING,
       primaryKey: false,
@@ -38,6 +13,7 @@ const User = {
       unique: false
     },
     {
+      id: 2,
       name: 'Last Name',
       type: DATA_TYPES.STRING,
       primaryKey: false,
@@ -45,67 +21,109 @@ const User = {
       unique: false
     },
     {
+      id: 3,
       name: 'Email',
       type: DATA_TYPES.String,
       primaryKey: false,
       required: true,
       unique: true
     }
-  ]
+  ],
+  assocs: []
 }
 
-const Tag = {
-  name: 'Tag',
+const Post = {
+  id: 2,
+  name: 'Post',
   fields: [
     {
-      name: 'Post ID',
-      type: DATA_TYPES.INTEGER,
+      id: 4,
+      name: 'Title',
+      type: DATA_TYPES.STRING,
       primaryKey: false,
       required: true,
       unique: false
     },
     {
+      id: 5,
+      name: 'Content',
+      type: DATA_TYPES.TEXT,
+      primaryKey: false,
+      required: false,
+      unique: false
+    }
+  ],
+  assocs: [
+    {
+      id: 1,
+      type: 'BELONGS_TO',
+      modelId: User.id,
+      as: 'Author',
+      through: []
+    }
+  ]
+}
+
+const Tag = {
+  id: 3,
+  name: 'Tag',
+  fields: [
+    {
+      id: 6,
       name: 'Name',
       type: DATA_TYPES.STRING,
       primaryKey: false,
       required: true,
       unique: false
     }
+  ],
+  assocs: [
+    {
+      id: 1,
+      type: 'BELONGS_TO',
+      modelId: Post.id,
+      as: null,
+      through: []
+    }
   ]
 }
 
 const Comment = {
+  id: 4,
   name: 'Comment',
   fields: [
     {
-      name: 'Author ID',
-      type: DATA_TYPES.INTEGER,
-      primaryKey: false,
-      required: true,
-      unique: false
-    },
-    {
-      name: 'Post ID',
-      type: DATA_TYPES.INTEGER,
-      primaryKey: false,
-      required: true,
-      unique: false
-    },
-    {
-      name: 'Parent ID',
-      type: DATA_TYPES.INTEGER,
-      primaryKey: false,
-      required: false,
-      unique: false
-    },
-    {
+      id: 7,
       name: 'Content',
       type: DATA_TYPES.TEXT,
       primaryKey: false,
       required: true,
       unique: false
     }
+  ],
+  assocs: [
+    {
+      id: 2,
+      type: 'BELONGS_TO',
+      modelId: User.id,
+      as: 'Author',
+      through: []
+    },
+    {
+      id: 3,
+      type: 'BELONGS_TO',
+      modelId: Post.id,
+      as: null,
+      through: []
+    },
+    {
+      id: 4,
+      type: 'BELONGS_TO',
+      modelId: 4, // Self
+      as: 'Parent',
+      through: []
+    }
   ]
 }
 
-export const Blog = {models: [Post, User, Tag, Comment]}
+export const Blog = { models: [Post, User, Tag, Comment] }

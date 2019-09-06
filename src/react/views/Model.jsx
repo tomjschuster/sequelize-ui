@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import * as sequelize4 from '../../templates/sequelize-4.js'
+import AssocForm from './Model/AssocForm.jsx'
 import FieldForm from './Model/FieldForm.jsx'
 import ModelNameForm from './Model/ModelNameForm.jsx'
 
@@ -22,6 +23,9 @@ export default class Model extends React.Component {
     createField: PropTypes.func.isRequired,
     updateField: PropTypes.func.isRequired,
     deleteField: PropTypes.func.isRequired,
+    createAssoc: PropTypes.func.isRequired,
+    updateAssoc: PropTypes.func.isRequired,
+    deleteAssoc: PropTypes.func.isRequired,
     newMessage: PropTypes.func.isRequired
   }
 
@@ -29,6 +33,8 @@ export default class Model extends React.Component {
     editingName: false,
     creatingNewField: false,
     editingFieldId: null,
+    creatingNewAssoc: false,
+    editingAssocId: null,
     codeOpen: false
   }
 
@@ -40,9 +46,10 @@ export default class Model extends React.Component {
 
   createRefs = () => {
     this.editNameButton = React.createRef()
-    this.addButton = React.createRef()
-    this.editButtonRef = React.createRef()
+    this.addFieldButton = React.createRef()
+    this.addAssocButton = React.createRef()
     this.createFieldRefs()
+    this.createAssocRefs()
   }
 
   createFieldRefs = () => {
@@ -55,27 +62,47 @@ export default class Model extends React.Component {
     }
   }
 
+  createAssocRefs = () => {
+    this.props.model.fields.forEach(field => this.createAssocRef(field))
+  }
+
+  createAssocRef = ({ id }) => {
+    if (!this[`editAssocButton${id}`]) {
+      this[`editAssocButton${id}`] = React.createRef()
+    }
+  }
+
   componentDidUpdate (prevProps) {
+    console.log(this.state)
     const fieldAdded =
       prevProps.model.fields.length < this.props.model.fields.length
 
     if (fieldAdded) this.createFieldRefs()
+
+    const assocAdded =
+      prevProps.model.assocs.length < this.props.model.assocs.length
+
+    if (assocAdded) this.createAssocRefs()
   }
 
   componentDidMount () {
-    if (this.props.model.fields.length === 0) this.focusOnAddButton()
+    if (this.props.model.fields.length === 0) this.focusOnAddFieldButton()
   }
 
   // Focus Helpers
   focusOnEditNameButton = () => this.editNameButton.current.focus()
-  focusOnAddButton = () => this.addButton.current.focus()
+  focusOnAddFieldButton = () => this.addFieldButton.current.focus()
+  focusOnAddAssocButton = () => this.addAssocButton.current.focus()
 
   focusOnEditFieldButton = fieldId =>
     this[`editFieldButton${fieldId}`].current.focus()
 
+  focusOnEditAssocButton = assocId =>
+    this[`editAssocButton${assocId}`].current.focus()
+
   // Model Name
   startEditingName = () => this.setState({ editingName: true })
-  
+
   cancelEditingName = () => {
     this.setState({ editingName: false })
     setTimeout(() => this.focusOnEditNameButton())
@@ -92,7 +119,7 @@ export default class Model extends React.Component {
 
   cancelCreatingNewField = () => {
     this.setState({ creatingNewField: false })
-    setTimeout(() => this.focusOnAddButton())
+    setTimeout(() => this.focusOnAddFieldButton())
   }
 
   // Edit Field
@@ -110,6 +137,29 @@ export default class Model extends React.Component {
     setTimeout(() => this.focusOnEditFieldButton(field.id))
   }
 
+  // New Assoc
+  startCreatingNewAssoc = () => this.setState({ creatingNewAssoc: true })
+
+  cancelCreatingNewAssoc = () => {
+    this.setState({ creatingNewAssoc: false })
+    setTimeout(() => this.focusOnAddAssocButton())
+  }
+
+  // Edit Assoc
+  startEditingAssoc = assocId => this.setState({ editingAssocId: assocId })
+
+  cancelEditingAssoc = () => {
+    const assocId = this.state.editingAssocId
+    this.setState({ editingAssocId: null })
+    setTimeout(() => this.focusOnEditAssocButton(assocId))
+  }
+
+  updateAssoc = ({ assoc }) => {
+    this.cancelEditingAssoc()
+    this.props.updateAssoc({ assoc })
+    setTimeout(() => this.focusOnEditAssocButton(assoc.id))
+  }
+
   // Code
   toggleCode = () => this.setState({ codeOpen: !this.state.codeOpen })
 
@@ -122,7 +172,9 @@ export default class Model extends React.Component {
   editing = () =>
     this.state.editingName ||
     !!this.state.editingFieldId ||
-    this.state.creatingNewField
+    this.state.creatingNewField ||
+    !!this.state.editingAssocId ||
+    this.state.creatingNewAssoc
 
   render () {
     const { props, state } = this
@@ -230,7 +282,7 @@ export default class Model extends React.Component {
                 <List.Item className='add-field'>
                   <p>You have no fields</p>
                   <Button
-                    ref={this.addButton}
+                    ref={this.addFieldButton}
                     icon='add'
                     label='Add a Field'
                     primary
@@ -241,11 +293,84 @@ export default class Model extends React.Component {
               ) : (
                 <List.Item className='add-field'>
                   <Button
-                    ref={this.addButton}
+                    ref={this.addFieldButton}
                     icon='add'
                     label='Add a Field'
                     primary
                     onClick={this.startCreatingNewField}
+                    disabled={editing}
+                  />
+                </List.Item>
+              )}
+            </List.List>
+            <List.Title className='assocs__title' text='Associations' />
+            <List.List className='assocs'>
+              {props.model.assocs.map(assoc =>
+                assoc.id === state.editingAssocId ? (
+                  <List.Item className='edit-assoc' key={assoc.id}>
+                    <AssocForm
+                      models={props.models}
+                      assocs={props.model.assocs}
+                      assocId={assoc.id}
+                      onSave={this.updateAssoc}
+                      onCancel={this.cancelEditingAssoc}
+                    />
+                  </List.Item>
+                ) : (
+                  <List.Item className='assocs__item' key={assoc.id}>
+                    <div className='assocs__item__name'>
+                      {assoc.type}{' '}
+                      {props.models.find(m => m.id === assoc.modelId).name}
+                      {assoc.as ? ' as ' + assoc.as : null}
+                    </div>
+                    <div className='assocs__item__actions list__item__actions'>
+                      <Button
+                        ref={this[`editAssocButton${assoc.id}`]}
+                        icon='edit'
+                        iconPosition='above'
+                        onClick={() => this.startEditingAssoc(assoc.id)}
+                        label='Edit'
+                        disabled={editing}
+                      />
+                      <Button
+                        icon='delete'
+                        iconPosition='above'
+                        onClick={() => props.deleteAssoc(assoc.id)}
+                        label='Delete'
+                        disabled={editing}
+                      />
+                    </div>
+                  </List.Item>
+                )
+              )}
+              {state.creatingNewAssoc ? (
+                <List.Item className='new-field'>
+                  <AssocForm
+                    models={props.models}
+                    assocs={props.model.assocs}
+                    onSave={props.createAssoc}
+                    onCancel={this.cancelCreatingNewAssoc}
+                  />
+                </List.Item>
+              ) : props.model.assocs.length === 0 ? (
+                <List.Item className='add-assoc'>
+                  <p>You have no assocs</p>
+                  <Button
+                    icon='add'
+                    label='Add an Assoc'
+                    primary
+                    onClick={this.startCreatingNewAssoc}
+                    disabled={editing}
+                  />
+                </List.Item>
+              ) : (
+                <List.Item className='add-assoc'>
+                  <Button
+                    ref={this.addAssocButton}
+                    icon='add'
+                    label='Add an Assoc'
+                    primary
+                    onClick={this.startCreatingNewAssoc}
                     disabled={editing}
                   />
                 </List.Item>

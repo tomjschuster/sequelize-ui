@@ -24,6 +24,7 @@ const initialState = {
   pageState: LOADING,
   nextModelId: 1,
   nextFieldId: 1,
+  nextAssocId: 1,
   config: {
     timestamps: true,
     snake: false,
@@ -56,7 +57,7 @@ export default class App extends React.Component {
   }
 
   async mergePersistedState () {
-    const persistedData = await this.store.load()
+    const persistedData = await this.fetchPersistedState()
     const hasRedAbout = await this.flags.get('hasRedAbout')
     const pageState = this.getLandingPage(persistedData, hasRedAbout)
     persistedData.pageState = pageState
@@ -64,21 +65,33 @@ export default class App extends React.Component {
     this.setState(persistedData)
   }
 
+  async fetchPersistedState () {
+    const state = await this.store.load()
+    return state.models
+      ? {
+        ...state,
+        models: state.models.map(m => (m.assocs ? m : { ...m, assocs: [] }))
+      }
+      : state
+  }
+
   loadDefaultProject = () => {
-    this.setState(state => {
-      let nextModelId = state.nextModelId
-      let nextFieldId = state.nextFieldId
+    const models = Blog.models
+    const maxModelId = Math.max(0, ...models.map(m => m.id))
+    const maxFieldId = Math.max(
+      0,
+      ...models.flatMap(m => m.fields.map(f => f.id))
+    )
+    const maxAssocId = Math.max(
+      0,
+      ...models.flatMap(m => m.assocs.map(f => f.id))
+    )
 
-      const models = Blog.models.map(model => ({
-        id: nextModelId++,
-        ...model,
-        fields: model.fields.map(field => ({
-          id: nextFieldId++,
-          ...field
-        }))
-      }))
-
-      return { nextModelId, nextFieldId, models }
+    this.setState({
+      models,
+      nextModelId: maxModelId + 1,
+      nextFieldId: maxFieldId + 1,
+      nextAssocId: maxAssocId + 1
     })
   }
 
@@ -96,6 +109,7 @@ export default class App extends React.Component {
 
   // Persistence
   componentDidUpdate (prevProps, prevState) {
+    console.log(this.state)
     if (this.state.loaded) {
       const keysToPersist = [
         'pageState',
@@ -223,6 +237,30 @@ export default class App extends React.Component {
       )
     }))
 
+  createAssoc = ({ assoc }) =>
+    this.setState(({ models, currentModelId, nextAssocId }) => ({
+      models: models.map(model =>
+        model.id === currentModelId
+          ? addAssoc(model, nextAssocId, assoc)
+          : model
+      ),
+      nextAssocId: nextAssocId + 1
+    }))
+
+  updateAssoc = ({ assoc }) =>
+    this.setState(({ models, currentModelId }) => ({
+      models: models.map(model =>
+        model.id === currentModelId ? updateAssoc(model, assoc) : model
+      )
+    }))
+
+  deleteAssoc = assocId =>
+    this.setState(({ models, currentModelId }) => ({
+      models: models.map(model =>
+        model.id === currentModelId ? removeAssoc(model, assocId) : model
+      )
+    }))
+
   // View Methods
 
   renderPage = () => {
@@ -260,6 +298,9 @@ export default class App extends React.Component {
             createField={this.createField}
             updateField={this.updateField}
             deleteField={this.deleteField}
+            createAssoc={this.createAssoc}
+            updateAssoc={this.updateAssoc}
+            deleteAssoc={this.deleteAssoc}
             newMessage={this.newMessage}
           />
         )
@@ -322,8 +363,14 @@ export default class App extends React.Component {
   }
 }
 
-const buildModel = (id, model) => ({ id, ...model, fields: [] })
+const buildModel = (id, model) => ({
+  id,
+  ...model,
+  fields: [],
+  associations: []
+})
 const buildField = (id, field) => ({ id, ...field })
+const buildAssoc = (id, assoc) => ({ id, ...assoc })
 
 const updateModelName = (model, name) => ({ ...model, name })
 
@@ -340,4 +387,19 @@ const updateField = (model, field) => ({
 const removeField = (model, fieldId) => ({
   ...model,
   fields: model.fields.filter(field => field.id !== fieldId)
+})
+
+const addAssoc = (model, nextAssocId, assoc) => ({
+  ...model,
+  assocs: [...model.assocs, buildAssoc(nextAssocId, assoc)]
+})
+
+const updateAssoc = (model, assoc) => ({
+  ...model,
+  assocs: model.assocs.map(f => (f.id === assoc.id ? assoc : f))
+})
+
+const removeAssoc = (model, assocId) => ({
+  ...model,
+  assocs: model.assocs.filter(assoc => assoc.id !== assocId)
 })
