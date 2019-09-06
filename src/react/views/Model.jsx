@@ -237,18 +237,18 @@ export default class Model extends React.Component {
                   </List.Item>
                 ) : (
                   <List.Item className='fields__item' key={field.id}>
-                    <div className='fields__item__name'>{field.name}</div>
-                    <div
-                      className={
-                        showFieldOptions(field)
-                          ? 'fields__item__type'
-                          : 'fields__item__type --no-opts'
-                      }
-                    >
-                      {DATA_TYPE_OPTIONS[field.type]}
-                    </div>
-                    <div className='fields__item__options'>
-                      {showFieldOptions(field)}
+                    <div className='fields__item__details'>
+                      <div className='fields__item__name'>{field.name}</div>
+                      <div className='fields__item__info'>
+                        <div className='fields__item__type'>
+                          {DATA_TYPE_OPTIONS[field.type]}
+                        </div>
+                        {hasOptions(field) ? (
+                          <div className='fields__item__options'>
+                            {showFieldOptions(field)}
+                          </div>
+                        ) : null}
+                      </div>
                     </div>
                     <div className='fields__item__actions list__item__actions'>
                       <Button
@@ -281,7 +281,7 @@ export default class Model extends React.Component {
               ) : props.model.fields.length === 0 ? (
                 <List.Item className='add-field'>
                   <p>You have no fields</p>
-                  <Button
+                  <Btton
                     ref={this.addFieldButton}
                     icon='add'
                     label='Add a Field'
@@ -393,6 +393,16 @@ export default class Model extends React.Component {
       </React.Fragment>
     )
   }
+}
+
+const hasOptions = field => {
+  const options = {
+    primaryKey: 'PK',
+    required: 'REQ',
+    unique: 'UQ'
+  }
+
+  return Object.keys(options).some(opt => field[opt])
 }
 
 const showFieldOptions = field => {
