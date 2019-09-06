@@ -11,7 +11,7 @@ import ToolBelt from '../components/ToolBelt.jsx'
 import { CodeFlyout } from '../components/Code.jsx'
 import * as List from '../components/List.jsx'
 
-import { DATA_TYPE_OPTIONS } from '../../constants.js'
+import { DATA_TYPE_OPTIONS, ASSOC_TYPE_OPTIONS } from '../../constants.js'
 
 export default class Model extends React.Component {
   static propTypes = {
@@ -318,10 +318,16 @@ export default class Model extends React.Component {
                   </List.Item>
                 ) : (
                   <List.Item className='assocs__item' key={assoc.id}>
-                    <div className='assocs__item__name'>
-                      {assoc.type}{' '}
-                      {props.models.find(m => m.id === assoc.modelId).name}
-                      {assoc.as ? ' as ' + assoc.as : null}
+                    <div className='assocs__item__description'>
+                      <span className='assocs__item__name'>
+                        {ASSOC_TYPE_OPTIONS[assoc.type]}{' '}
+                        {props.models.find(m => m.id === assoc.modelId).name}
+                      </span>
+                      {assoc.as ? (
+                        <span className='assocs__item__alias'>
+                          {' as ' + assoc.as}
+                        </span>
+                      ) : null}
                     </div>
                     <div className='assocs__item__actions list__item__actions'>
                       <Button

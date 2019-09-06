@@ -763,7 +763,7 @@ input.checkbox[type="checkbox"]:focus+label::before {
   height: 3rem;
 }
 
-.models__title, .fields__title, .models, .fields, .project-config, .model-name {
+.models__title, .fields__title, .models, .fields, .project-config, .model-name, .assocs__title, .assocs {
   background: #ffffff;
   margin-left: auto;
   margin-right: auto;
@@ -935,6 +935,28 @@ label.project-config__item:hover {
   .fields__item {
     padding-right: 0.5rem;
   }
+}
+
+.assocs__item {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 450px) {
+  .assocs__item__description {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .assocs__item__alias {
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+  }
+}
+
+.assocs__item__actions {
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* Model Form */

@@ -3,18 +3,16 @@ import PropTypes from 'prop-types'
 
 import * as validators from '../../../utils/validators.js'
 
-import { MAX_SQL_IDENTIFIER_LENGTH } from '../../../constants.js'
+import {
+  MAX_SQL_IDENTIFIER_LENGTH,
+  ASSOC_TYPES,
+  ASSOC_TYPE_OPTIONS
+} from '../../../constants.js'
 
 import Button from '../../components/Button.jsx'
 
-export const TYPES = {
-  BELONGS_TO: 'BELONGS_TO',
-  HAS_ONE: 'HAS_ONE',
-  HAS_MANY: 'HAS_MANY'
-}
-
 const emptyAssoc = modelId => ({
-  type: TYPES.BELONGS_TO,
+  type: ASSOC_TYPES.BELONGS_TO,
   modelId,
   as: '',
   through: []
@@ -119,7 +117,7 @@ export default class AssocForm extends React.Component {
             value={state.assoc.type}
             onChange={event => this.selectType(event.target.value)}
           >
-            {Object.entries(TYPES).map(
+            {Object.entries(ASSOC_TYPE_OPTIONS).map(
               ([value, text]) =>
                 console.log(value, text) || (
                   <option key={value} value={value}>
