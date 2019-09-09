@@ -126,16 +126,6 @@ export default class AssocForm extends React.Component {
                 )
             )}
           </select>
-          <div className='assoc-form__item assoc-form__as'>
-            <label htmlFor='new-assoc-as'>as</label>
-            <input
-              ref={this.asInput}
-              id='new-assoc-as'
-              type='text'
-              value={state.assoc.as}
-              onChange={event => this.inputAs(event.target.value)}
-            />
-          </div>
         </div>
         <div className='assoc-form__item assoc-form__model'>
           <label htmlFor='new-assoc-model'>Model</label>
@@ -150,6 +140,17 @@ export default class AssocForm extends React.Component {
               </option>
             ))}
           </select>
+        </div>
+        <div className='assoc-form__item assoc-form__name'>
+          <label htmlFor='new-assoc-name'>name</label>
+          as
+          <input
+            ref={this.asInput}
+            id='new-assoc-name'
+            type='text'
+            value={state.assoc.as}
+            onChange={event => this.inputAs(event.target.value)}
+          />
         </div>
         <div className='assoc-form__item assoc-form__actions'>
           <Button

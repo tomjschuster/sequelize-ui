@@ -1090,3 +1090,47 @@ label.project-config__item:hover {
     grid-row-end: 2;
   }
 }
+
+/* Assoc Form */
+
+.assoc-form {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: auto;
+}
+
+.assoc-form__type select {
+  background-color: var(--white);
+}
+
+.assoc-form input, .assoc-form select {
+  padding: 0.3rem;
+  margin-top: 0.5rem;
+}
+
+.assoc-form {
+  width: 100%;
+}
+
+.assoc-form__item {
+  text-align: center;
+  width: 85%;
+  margin: 0.5rem auto;
+}
+
+.assoc-form__item input {
+  text-align: center;
+}
+
+.assoc-form__item option {
+  padding-left: 2rem;
+}
+
+.assoc-form__model label, .assoc-form__type label, .assoc-form__name label {
+  display: block;
+}
+
+.assoc-form__model input, .assoc-form__type select, .assoc-form__name select {
+  width: 100%;
+  max-width: 300px;
+}
