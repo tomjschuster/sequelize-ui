@@ -758,7 +758,7 @@ input.checkbox[type="checkbox"]:focus+label::before {
   text-align: center;
 }
 
-.add-model, .add-field {
+.add-model, .add-field, .add-assoc {
   justify-content: space-evenly;
   height: 3rem;
 }
@@ -941,6 +941,10 @@ label.project-config__item:hover {
 .assocs__item {
   display: flex;
   justify-content: space-between;
+}
+
+.assocs__item__target {
+  cursor: pointer;
 }
 
 @media (max-width: 450px) {

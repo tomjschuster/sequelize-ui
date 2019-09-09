@@ -293,6 +293,7 @@ export default class App extends React.Component {
             model={model}
             models={this.state.models}
             config={this.state.config}
+            goToModel={this.goToModel}
             goToProject={this.goToProject}
             updateModelName={this.updateModelName}
             createField={this.createField}

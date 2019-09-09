@@ -18,6 +18,7 @@ export default class Model extends React.Component {
     model: PropTypes.object.isRequired,
     models: PropTypes.arrayOf(PropTypes.object).isRequired,
     config: PropTypes.object.isRequired,
+    goToModel: PropTypes.func.isRequired,
     goToProject: PropTypes.func.isRequired,
     updateModelName: PropTypes.func.isRequired,
     createField: PropTypes.func.isRequired,
@@ -57,32 +58,46 @@ export default class Model extends React.Component {
   }
 
   createFieldRef = ({ id }) => {
-    if (!this[`editFieldButton${id}`]) {
-      this[`editFieldButton${id}`] = React.createRef()
-    }
+    if (!this[`editFieldButton${id}`]) { this[`editFieldButton${id}`] = React.createRef() }
   }
 
   createAssocRefs = () => {
-    this.props.model.fields.forEach(field => this.createAssocRef(field))
+    this.props.model.assocs.forEach(assoc => this.createAssocRef(assoc))
   }
 
   createAssocRef = ({ id }) => {
-    if (!this[`editAssocButton${id}`]) {
-      this[`editAssocButton${id}`] = React.createRef()
-    }
+    if (!this[`editAssocButton${id}`]) { this[`editAssocButton${id}`] = React.createRef() }
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate (prevProps, prevState) {
     console.log(this.state)
-    const fieldAdded =
-      prevProps.model.fields.length < this.props.model.fields.length
+    if (prevState.editingName && !this.state.editingName) {
+      this.focusOnEditNameButton()
+    }
 
-    if (fieldAdded) this.createFieldRefs()
+    if (prevState.creatingNewField && !this.state.creatingNewField) {
+      const fieldAdded =
+        prevProps.model.fields.length < this.props.model.fields.length
 
-    const assocAdded =
-      prevProps.model.assocs.length < this.props.model.assocs.length
+      if (fieldAdded) this.createFieldRefs()
+      else this.focusOnAddFieldButton()
+    }
 
-    if (assocAdded) this.createAssocRefs()
+    if (prevState.editingFieldId && !this.state.editingFieldId) {
+      this.focusOnEditFieldButton(prevState.editingFieldId)
+    }
+
+    if (prevState.creatingNewAssoc && !this.state.creatingNewAssoc) {
+      const assocAdded =
+        prevProps.model.assocs.length < this.props.model.assocs.length
+
+      if (assocAdded) this.createAssocRefs()
+      else this.focusOnAddAssocButton()
+    }
+
+    if (prevState.editingAssocId && !this.state.editingAssocId) {
+      this.focusOnEditAssocButton(prevState.editingAssocId)
+    }
   }
 
   componentDidMount () {
@@ -102,62 +117,37 @@ export default class Model extends React.Component {
 
   // Model Name
   startEditingName = () => this.setState({ editingName: true })
-
-  cancelEditingName = () => {
-    this.setState({ editingName: false })
-    setTimeout(() => this.focusOnEditNameButton())
-  }
+  cancelEditingName = () => this.setState({ editingName: false })
 
   updateModelName = ({ name }) => {
     this.cancelEditingName()
     this.props.updateModelName({ name })
-    setTimeout(() => this.focusOnEditNameButton())
   }
 
   // New Field
   startCreatingNewField = () => this.setState({ creatingNewField: true })
-
-  cancelCreatingNewField = () => {
-    this.setState({ creatingNewField: false })
-    setTimeout(() => this.focusOnAddFieldButton())
-  }
+  cancelCreatingNewField = () => this.setState({ creatingNewField: false })
 
   // Edit Field
   startEditingField = fieldId => this.setState({ editingFieldId: fieldId })
-
-  cancelEditingField = () => {
-    const fieldId = this.state.editingFieldId
-    this.setState({ editingFieldId: null })
-    setTimeout(() => this.focusOnEditFieldButton(fieldId))
-  }
+  cancelEditingField = () => this.setState({ editingFieldId: null })
 
   updateField = ({ field }) => {
     this.cancelEditingField()
     this.props.updateField({ field })
-    setTimeout(() => this.focusOnEditFieldButton(field.id))
   }
 
   // New Assoc
   startCreatingNewAssoc = () => this.setState({ creatingNewAssoc: true })
-
-  cancelCreatingNewAssoc = () => {
-    this.setState({ creatingNewAssoc: false })
-    setTimeout(() => this.focusOnAddAssocButton())
-  }
+  cancelCreatingNewAssoc = () => this.setState({ creatingNewAssoc: false })
 
   // Edit Assoc
   startEditingAssoc = assocId => this.setState({ editingAssocId: assocId })
-
-  cancelEditingAssoc = () => {
-    const assocId = this.state.editingAssocId
-    this.setState({ editingAssocId: null })
-    setTimeout(() => this.focusOnEditAssocButton(assocId))
-  }
+  cancelEditingAssoc = () => this.setState({ editingAssocId: null })
 
   updateAssoc = ({ assoc }) => {
     this.cancelEditingAssoc()
     this.props.updateAssoc({ assoc })
-    setTimeout(() => this.focusOnEditAssocButton(assoc.id))
   }
 
   // Code
@@ -281,7 +271,7 @@ export default class Model extends React.Component {
               ) : props.model.fields.length === 0 ? (
                 <List.Item className='add-field'>
                   <p>You have no fields</p>
-                  <Btton
+                  <Button
                     ref={this.addFieldButton}
                     icon='add'
                     label='Add a Field'
@@ -321,7 +311,12 @@ export default class Model extends React.Component {
                     <div className='assocs__item__description'>
                       <span className='assocs__item__name'>
                         {ASSOC_TYPE_OPTIONS[assoc.type]}{' '}
-                        {props.models.find(m => m.id === assoc.modelId).name}
+                        <strong
+                          className='assocs__item__target'
+                          onClick={() => this.props.goToModel(assoc.modelId)}
+                        >
+                          {props.models.find(m => m.id === assoc.modelId).name}
+                        </strong>
                       </span>
                       {assoc.as ? (
                         <span className='assocs__item__alias'>

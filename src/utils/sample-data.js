@@ -79,7 +79,7 @@ const Tag = {
   ],
   assocs: [
     {
-      id: 1,
+      id: 2,
       type: 'BELONGS_TO',
       modelId: Post.id,
       as: null,
@@ -103,21 +103,21 @@ const Comment = {
   ],
   assocs: [
     {
-      id: 2,
+      id: 3,
       type: 'BELONGS_TO',
       modelId: User.id,
       as: 'Author',
       through: []
     },
     {
-      id: 3,
+      id: 4,
       type: 'BELONGS_TO',
       modelId: Post.id,
       as: null,
       through: []
     },
     {
-      id: 4,
+      id: 5,
       type: 'BELONGS_TO',
       modelId: 4, // Self
       as: 'Parent',
