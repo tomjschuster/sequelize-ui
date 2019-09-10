@@ -18,7 +18,6 @@ npm start
 
 TODO:
 - Associations
-  - Style
   - Generate Code
   - Cleanup
 - Explain Storage

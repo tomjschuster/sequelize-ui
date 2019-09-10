@@ -58,7 +58,9 @@ export default class Model extends React.Component {
   }
 
   createFieldRef = ({ id }) => {
-    if (!this[`editFieldButton${id}`]) { this[`editFieldButton${id}`] = React.createRef() }
+    if (!this[`editFieldButton${id}`]) {
+      this[`editFieldButton${id}`] = React.createRef()
+    }
   }
 
   createAssocRefs = () => {
@@ -66,7 +68,9 @@ export default class Model extends React.Component {
   }
 
   createAssocRef = ({ id }) => {
-    if (!this[`editAssocButton${id}`]) { this[`editAssocButton${id}`] = React.createRef() }
+    if (!this[`editAssocButton${id}`]) {
+      this[`editAssocButton${id}`] = React.createRef()
+    }
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -227,18 +231,16 @@ export default class Model extends React.Component {
                   </List.Item>
                 ) : (
                   <List.Item className='fields__item' key={field.id}>
-                    <div className='fields__item__details'>
-                      <div className='fields__item__name'>{field.name}</div>
-                      <div className='fields__item__info'>
-                        <div className='fields__item__type'>
-                          {DATA_TYPE_OPTIONS[field.type]}
-                        </div>
-                        {hasOptions(field) ? (
-                          <div className='fields__item__options'>
-                            {showFieldOptions(field)}
-                          </div>
-                        ) : null}
+                    <div className='fields__item__name'>{field.name}</div>
+                    <div className='fields__item__info'>
+                      <div className='fields__item__type'>
+                        {DATA_TYPE_OPTIONS[field.type]}
                       </div>
+                      {hasOptions(field) ? (
+                        <div className='fields__item__options'>
+                          {showFieldOptions(field)}
+                        </div>
+                      ) : null}
                     </div>
                     <div className='fields__item__actions list__item__actions'>
                       <Button

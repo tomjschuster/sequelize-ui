@@ -111,7 +111,6 @@ export default class AssocForm extends React.Component {
         }}
       >
         <div className='assoc-form__item assoc-form__type'>
-          <label htmlFor='new-assoc-type'>Type</label>
           <select
             id='new-assoc-type'
             value={state.assoc.type}
@@ -127,8 +126,17 @@ export default class AssocForm extends React.Component {
             )}
           </select>
         </div>
+        <div className='assoc-form__item assoc-form__name'>
+          <label htmlFor='new-assoc-name'>as</label>
+          <input
+            ref={this.asInput}
+            id='new-assoc-name'
+            type='text'
+            value={state.assoc.as}
+            onChange={event => this.inputAs(event.target.value)}
+          />
+        </div>
         <div className='assoc-form__item assoc-form__model'>
-          <label htmlFor='new-assoc-model'>Model</label>
           <select
             id='new-assoc-model'
             value={state.assoc.modelId}
@@ -140,17 +148,6 @@ export default class AssocForm extends React.Component {
               </option>
             ))}
           </select>
-        </div>
-        <div className='assoc-form__item assoc-form__name'>
-          <label htmlFor='new-assoc-name'>name</label>
-          as
-          <input
-            ref={this.asInput}
-            id='new-assoc-name'
-            type='text'
-            value={state.assoc.as}
-            onChange={event => this.inputAs(event.target.value)}
-          />
         </div>
         <div className='assoc-form__item assoc-form__actions'>
           <Button
@@ -207,11 +204,11 @@ const validateAssoc = (assoc, assocs, models) => {
 const displayErrors = error => {
   switch (error) {
     case UNIQUE_AS_ERROR:
-      return 'as already taken.'
+      return 'alias already taken.'
     case AS_FORMAT_ERROR:
-      return 'as can only contain letters, numbers, spaces, _ or $ and cannot start with a number.'
+      return 'alias can only contain letters, numbers, spaces, _ or $ and cannot start with a number.'
     case AS_LENGTH_ERROR:
-      return `as cannot be more than ${MAX_SQL_IDENTIFIER_LENGTH} characters when converted to snake_case.`
+      return `alias cannot be more than ${MAX_SQL_IDENTIFIER_LENGTH} characters when converted to snake_case.`
     case REQUIRED_TYPE_ERROR:
       return 'Type is required.'
     default:
