@@ -39,11 +39,13 @@ export const DATA_TYPE_OPTIONS = {
 export const ASSOC_TYPES = {
   BELONGS_TO: 'BELONGS_TO',
   HAS_ONE: 'HAS_ONE',
-  HAS_MANY: 'HAS_MANY'
+  HAS_MANY: 'HAS_MANY',
+  MANY_TO_MANY: 'MANY_TO_MANY'
 }
 
 export const ASSOC_TYPE_OPTIONS = {
   [ASSOC_TYPES.BELONGS_TO]: 'Belongs to',
   [ASSOC_TYPES.HAS_ONE]: 'Has one',
-  [ASSOC_TYPES.HAS_MANY]: 'Has many'
+  [ASSOC_TYPES.HAS_MANY]: 'Has many',
+  [ASSOC_TYPES.MANY_TO_MANY]: 'Many to many'
 }

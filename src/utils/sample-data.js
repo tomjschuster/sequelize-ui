@@ -23,7 +23,7 @@ const User = {
     {
       id: 3,
       name: 'Email',
-      type: DATA_TYPES.String,
+      type: DATA_TYPES.STRING,
       primaryKey: false,
       required: true,
       unique: true

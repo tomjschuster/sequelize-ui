@@ -1,5 +1,6 @@
 import Case from 'case'
 import { singularize, pluralize } from 'inflection'
+import { ASSOC_TYPES } from '../constants'
 
 const modelVar = name => singularize(Case.pascal(name))
 export const modelFileName = name => singularize(Case.kebab(name))
@@ -46,6 +47,7 @@ const sequelize = new Sequelize({
   ${renderConstructor(config)}
 });
 ${renderModelDefs(models)}
+${renderAssocs({ models, config })}
 
 module.exports = {
   sequelize,
@@ -59,6 +61,62 @@ const renderModelImport = ({ name }) =>
   `const ${modelVar(name)}Model = require('./models/${modelFileName(
     name
   )}.js');\n`
+
+const renderAssocs = ({ models, config }) =>
+  models.some(model => model.assocs.length > 0)
+    ? models
+      .map(model =>
+        model.assocs
+          .map(assoc =>
+            renderAssoc(
+              assoc,
+              model,
+              models.find(m => m.id === assoc.modelId),
+              config
+            )
+          )
+          .join('')
+      )
+      .join('')
+    : ''
+
+const renderAssoc = (assoc, model, target, config) =>
+  `${modelVar(model.name)}.${assocMethod(assoc.type)}(${
+    target.name
+  }${renderAssocOpts(assoc, model, target, config)});\n`
+
+const assocMethod = type => {
+  switch (type) {
+    case ASSOC_TYPES.BELONGS_TO:
+      return 'belongsTo'
+    case ASSOC_TYPES.HAS_ONE:
+      return 'hasOne'
+    case ASSOC_TYPES.HAS_MANY:
+      return 'hasMany'
+    case ASSOC_TYPES.MANY_TO_MANY:
+      return 'belongsToMany'
+  }
+}
+
+const renderAssocOpts = (assoc, model, target, config) =>
+  assoc.as || assoc.type === ASSOC_TYPES.MANY_TO_MANY
+    ? `, {${kvs(
+      [
+        {
+          k: 'through',
+          v: `'${modelTable({
+            name: modelVar(model.name) + modelVar(assoc.as || target.name),
+            snake: config.snake,
+            singularTableNames: config.singularTableNames
+          })}'`,
+          exclude: assoc.type !== ASSOC_TYPES.MANY_TO_MANY
+        },
+        { k: 'as', v: `'${Case.camel(assoc.as)}'`, exclude: !assoc.as }
+      ],
+      0,
+      true
+    )}}`
+    : ''
 
 const renderModelDefs = models =>
   models.length
@@ -183,11 +241,11 @@ const renderModelOpts = ({ name, config: { snake, singularTableNames } }) =>
     ? `, { tableName: '${modelTable({ name, snake, singularTableNames })}' }`
     : ''
 
-const kvs = (kvs, depth = 0) =>
+const kvs = (kvs, depth = 0, singleLine = false) =>
   kvs
     .filter(kv => !kv.exclude)
     .map(({ k, v }) => `${k}: ${v}`)
-    .join(`,\n${indent(depth)}`)
+    .join(`,${singleLine ? ' ' : `\n${indent(depth)}`}`)
 
 const indent = depth => new Array(depth).fill(' ').join('')
 
