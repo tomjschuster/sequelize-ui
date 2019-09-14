@@ -1093,22 +1093,12 @@ label.project-config__item:hover {
 
 /* Assoc Form */
 
-.assoc-form {
-  display: grid;
-  grid-template-columns: 50% 50%;
-  grid-template-rows: auto;
-}
-
-.assoc-form__type select {
+.assoc-form__type select, .assoc-form__model select {
   background-color: var(--white);
 }
 
 .assoc-form input, .assoc-form select {
   padding: 0.3rem;
-}
-
-.assoc-form {
-  width: 100%;
 }
 
 .assoc-form__item {
@@ -1134,7 +1124,7 @@ label.project-config__item:hover {
   max-width: 300px;
 }
 
-.assoc-form__name {
+.assoc-form__name, .assoc-form__foreign-key, .assoc-form__target-foreign-key , .assoc-form__through {
   display: flex;
   align-items: center;
   width: 85%;
@@ -1142,12 +1132,12 @@ label.project-config__item:hover {
   justify-content: space-between;
 }
 
-.assoc-form__name input {
+.assoc-form__name input, .assoc-form__foreign-key input, .assoc-form__target-foreign-key input , .assoc-form__through  input  {
   margin-top: 0;
   flex: 1;
 }
 
-.assoc-form__name label {
+.assoc-form__name label, .assoc-form__foreign-key label, .assoc-form__target-foreign-key label , .assoc-form__through label {
   margin-right: 1rem;
 }
 
@@ -1162,37 +1152,20 @@ label.project-config__item:hover {
 }
 
 .assoc-form {
+  width: 100%;
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: auto;
 }
 
-.assoc-form__type {
+
+.assoc-form__actions, .assoc-form__errors {
   grid-column-start: 1;
-  grid-column-end: 1;
-  grid-row-start: 1;
-  grid-row-end: 1;
+  grid-column-end: 2;
 }
 
-.assoc-form__model {
-  grid-column-start: 1;
-  grid-column-end: 1;
-  grid-row-start: 2;
-  grid-row-end: 2;
-}
-
-.assoc-form__name {
-  grid-column-start: 1;
-  grid-column-end: 1;
-  grid-row-start: 3;
-  grid-row-end: 3;
-}
-
-.assoc-form__actions {
-  grid-column-start: 1;
-  grid-column-end: 1;
-  grid-row-start: 4;
-  grid-row-end: 4;
+.assoc-form__errors {
+  text-align: left;
 }
 
 @media (min-width: 700px) {
@@ -1201,28 +1174,9 @@ label.project-config__item:hover {
     grid-template-columns: 50% 50%;
     grid-template-rows: auto;
   }
-  .assoc-form__type {
-    grid-column-start: 1;
-    grid-column-end: 2;
-    grid-row-start: 1;
-    grid-row-end: 1;
-  }
-  .assoc-form__model {
-    grid-column-start: 1;
-    grid-column-end: 2;
-    grid-row-start: 2;
-    grid-row-end: 2;
-  }
-  .assoc-form__name {
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 1;
-  }
-  .assoc-form__actions {
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 2;
-    grid-row-end: 2;
-  }
+
+.assoc-form__actions, .assoc-form__errors {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
 }

@@ -40,14 +40,18 @@ const User = {
       type: 'HAS_MANY',
       modelId: POST_ID,
       as: null,
-      through: []
+      through: null,
+      foreignKey: 'author id',
+      targetForeignKey: null
     },
     {
       id: 2,
       type: 'HAS_MANY',
       modelId: COMMENT_ID,
       as: null,
-      through: []
+      through: null,
+      foreignKey: 'author id',
+      targetForeignKey: null
     }
   ]
 }
@@ -79,21 +83,27 @@ const Post = {
       type: 'BELONGS_TO',
       modelId: USER_ID,
       as: 'Author',
-      through: []
+      through: null,
+      foreignKey: null,
+      targetForeignKey: null
     },
     {
       id: 4,
       type: 'HAS_MANY',
       modelId: COMMENT_ID,
       as: null,
-      through: []
+      through: null,
+      foreignKey: null,
+      targetForeignKey: null
     },
     {
       id: 5,
       type: 'MANY_TO_MANY',
       modelId: TAG_ID,
       as: null,
-      through: []
+      through: 'Post Tags',
+      foreignKey: null,
+      targetForeignKey: null
     }
   ]
 }
@@ -117,7 +127,9 @@ const Tag = {
       type: 'MANY_TO_MANY',
       modelId: POST_ID,
       as: null,
-      through: []
+      through: 'Post Tags',
+      foreignKey: null,
+      targetForeignKey: null
     }
   ]
 }
@@ -141,28 +153,36 @@ const Comment = {
       type: 'BELONGS_TO',
       modelId: USER_ID,
       as: 'Author',
-      through: []
+      through: null,
+      foreignKey: null,
+      targetForeignKey: null
     },
     {
       id: 8,
       type: 'BELONGS_TO',
       modelId: POST_ID,
       as: null,
-      through: []
+      through: null,
+      foreignKey: null,
+      targetForeignKey: null
     },
     {
       id: 9,
       type: 'BELONGS_TO',
       modelId: COMMENT_ID,
       as: 'Parent',
-      through: []
+      through: null,
+      foreignKey: null,
+      targetForeignKey: null
     },
     {
       id: 10,
       type: 'HAS_MANY',
       modelId: COMMENT_ID,
       as: 'Response',
-      through: []
+      through: null,
+      foreignKey: 'parent id',
+      targetForeignKey: null
     }
   ]
 }

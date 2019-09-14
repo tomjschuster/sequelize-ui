@@ -15,7 +15,9 @@ const emptyAssoc = modelId => ({
   type: ASSOC_TYPES.BELONGS_TO,
   modelId,
   as: '',
-  through: []
+  through: '',
+  foreignKey: '',
+  targetForeignKey: ''
 })
 
 export default class AssocForm extends React.Component {
@@ -43,8 +45,17 @@ export default class AssocForm extends React.Component {
     this.asInput = React.createRef()
   }
 
-  componentDidUpdate () {
-    console.log(this.state)
+  componentDidUpdate (prevProps, prevState) {
+    const changedFromManyToMany =
+      prevState.assoc.type === ASSOC_TYPES.MANY_TO_MANY &&
+      this.state.assoc.type !== ASSOC_TYPES.MANY_TO_MANY
+    if (changedFromManyToMany) {
+      this.mapAssoc(assoc => ({
+        ...assoc,
+        through: null,
+        targetForeignKey: null
+      }))
+    }
   }
 
   componentDidMount () {
@@ -76,6 +87,11 @@ export default class AssocForm extends React.Component {
   inputAs = as => this.mapAssoc(assoc => ({ ...assoc, as }))
   selectType = type => this.mapAssoc(assoc => ({ ...assoc, type }))
   selectModel = modelId => this.mapAssoc(assoc => ({ ...assoc, modelId }))
+  inputThrough = through => this.mapAssoc(assoc => ({ ...assoc, through }))
+  inputForeignKey = foreignKey =>
+    this.mapAssoc(assoc => ({ ...assoc, foreignKey }))
+  inputTargetForeignKey = targetForeignKey =>
+    this.mapAssoc(assoc => ({ ...assoc, targetForeignKey }))
 
   mapAssoc = fn => {
     const assoc = fn(this.state.assoc)
@@ -126,16 +142,6 @@ export default class AssocForm extends React.Component {
             )}
           </select>
         </div>
-        <div className='assoc-form__item assoc-form__name'>
-          <label htmlFor='new-assoc-name'>as</label>
-          <input
-            ref={this.asInput}
-            id='new-assoc-name'
-            type='text'
-            value={state.assoc.as}
-            onChange={event => this.inputAs(event.target.value)}
-          />
-        </div>
         <div className='assoc-form__item assoc-form__model'>
           <select
             id='new-assoc-model'
@@ -149,6 +155,49 @@ export default class AssocForm extends React.Component {
             ))}
           </select>
         </div>
+        <div className='assoc-form__item assoc-form__name'>
+          <label htmlFor='new-assoc-name'>as</label>
+          <input
+            ref={this.asInput}
+            id='new-assoc-name'
+            type='text'
+            value={state.assoc.as || ''}
+            onChange={event => this.inputAs(event.target.value)}
+          />
+        </div>
+        <div className='assoc-form__item assoc-form__foreign-key'>
+          <label htmlFor='new-assoc-foreign-key'>FK</label>
+          <input
+            id='new-assoc-foreign-key'
+            type='text'
+            value={state.assoc.foreignKey || ''}
+            onChange={event => this.inputForeignKey(event.target.value)}
+          />
+        </div>
+        {this.state.assoc.type === ASSOC_TYPES.MANY_TO_MANY ? (
+          <>
+            <div className='assoc-form__item assoc-form__through'>
+              <label htmlFor='new-assoc-through'>Through</label>
+              <input
+                id='new-assoc-through'
+                type='text'
+                value={state.assoc.through || ''}
+                onChange={event => this.inputThrough(event.target.value)}
+              />
+            </div>
+            <div className='assoc-form__item assoc-form__target-foreign-key'>
+              <label htmlFor='new-assoc-target-foreign-key'>Target FK</label>
+              <input
+                id='new-assoc-target-foreign-key'
+                type='text'
+                value={state.assoc.targetForeignKey || ''}
+                onChange={event =>
+                  this.inputTargetForeignKey(event.target.value)
+                }
+              />
+            </div>
+          </>
+        ) : null}
         <div className='assoc-form__item assoc-form__actions'>
           <Button
             primary
@@ -169,7 +218,7 @@ export default class AssocForm extends React.Component {
         </div>
 
         {state.errors.length ? (
-          <ul>
+          <ul className='assoc-form__errors'>
             {state.errors.map(error => (
               <li key={error}>{displayErrors(error)}</li>
             ))}
@@ -182,35 +231,48 @@ export default class AssocForm extends React.Component {
 
 const formatAssoc = assoc => ({
   ...assoc,
-  as: assoc.as.trim()
+  as: trimAndNullify(assoc.as),
+  through: trimAndNullify(assoc.through),
+  foreignKey: trimAndNullify(assoc.foreignKey),
+  targetForeignKey: trimAndNullify(assoc.targetForeignKey)
 })
 
-const UNIQUE_AS_ERROR = 'UNIQUE_AS_ERROR'
-const AS_FORMAT_ERROR = 'AS_FORMAT_ERROR'
-const AS_LENGTH_ERROR = 'AS_LENGTH_ERROR'
+const UNIQUE_ASSOC_ERROR = 'UNIQUE_ASSOC_ERROR'
+const NAME_FORMAT_ERROR = 'NAME_FORMAT_ERROR'
+const NAME_LENGTH_ERROR = 'NAME_LENGTH_ERROR'
 const REQUIRED_TYPE_ERROR = 'REQUIRED_TYPE_ERROR'
+const REQUIRED_THROUGH_ERROR = 'REQUIRED_THROUGH_ERROR'
 
 const validateAssoc = (assoc, assocs, models) => {
   const validations = [
-    [UNIQUE_AS_ERROR, validators.validateUniqueAssoc(assoc, assocs, models)],
-    [AS_FORMAT_ERROR, validators.validateIdentifierFormat(assoc.as)],
-    [AS_LENGTH_ERROR, validators.validateIdentifierLength(assoc.as)],
-    [REQUIRED_TYPE_ERROR, validators.validateRequired(assoc.type)]
+    [UNIQUE_ASSOC_ERROR, validators.validateUniqueAssoc(assoc, assocs, models)],
+    [NAME_FORMAT_ERROR, validators.validateIdentifierFormat(assoc.as)],
+    [NAME_LENGTH_ERROR, validators.validateIdentifierLength(assoc.as)],
+    [REQUIRED_TYPE_ERROR, validators.validateRequired(assoc.type)],
+    [
+      REQUIRED_THROUGH_ERROR,
+      assoc.type === ASSOC_TYPES.MANY_TO_MANY &&
+        validators.validateRequired(assoc.through)
+    ]
   ]
 
   return validations.filter(([_, valid]) => !valid).map(([error, _]) => error)
 }
 
+const trimAndNullify = value => (value ? value.trim() || null : null)
+
 const displayErrors = error => {
   switch (error) {
-    case UNIQUE_AS_ERROR:
-      return 'alias already taken.'
-    case AS_FORMAT_ERROR:
-      return 'alias can only contain letters, numbers, spaces, _ or $ and cannot start with a number.'
-    case AS_LENGTH_ERROR:
-      return `alias cannot be more than ${MAX_SQL_IDENTIFIER_LENGTH} characters when converted to snake_case.`
+    case UNIQUE_ASSOC_ERROR:
+      return 'assoc already taken.'
+    case NAME_FORMAT_ERROR:
+      return 'name can only contain letters, numbers, spaces, _ or $ and cannot start with a number.'
+    case NAME_LENGTH_ERROR:
+      return `name cannot be more than ${MAX_SQL_IDENTIFIER_LENGTH} characters when converted to snake_case.`
     case REQUIRED_TYPE_ERROR:
       return 'Type is required.'
+    case REQUIRED_THROUGH_ERROR:
+      return 'Through is required for many to many relationships.'
     default:
       return 'Sorry, something went wront.'
   }
