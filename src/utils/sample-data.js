@@ -1,7 +1,12 @@
 import { DATA_TYPES } from '../constants'
 
+const USER_ID = 1
+const POST_ID = 2
+const TAG_ID = 3
+const COMMENT_ID = 4
+
 const User = {
-  id: 1,
+  id: USER_ID,
   name: 'User',
   fields: [
     {
@@ -29,11 +34,26 @@ const User = {
       unique: true
     }
   ],
-  assocs: []
+  assocs: [
+    {
+      id: 1,
+      type: 'HAS_MANY',
+      modelId: POST_ID,
+      as: null,
+      through: []
+    },
+    {
+      id: 2,
+      type: 'HAS_MANY',
+      modelId: COMMENT_ID,
+      as: null,
+      through: []
+    }
+  ]
 }
 
 const Post = {
-  id: 2,
+  id: POST_ID,
   name: 'Post',
   fields: [
     {
@@ -55,17 +75,31 @@ const Post = {
   ],
   assocs: [
     {
-      id: 1,
+      id: 3,
       type: 'BELONGS_TO',
-      modelId: User.id,
+      modelId: USER_ID,
       as: 'Author',
+      through: []
+    },
+    {
+      id: 4,
+      type: 'HAS_MANY',
+      modelId: COMMENT_ID,
+      as: null,
+      through: []
+    },
+    {
+      id: 5,
+      type: 'MANY_TO_MANY',
+      modelId: TAG_ID,
+      as: null,
       through: []
     }
   ]
 }
 
 const Tag = {
-  id: 3,
+  id: TAG_ID,
   name: 'Tag',
   fields: [
     {
@@ -79,9 +113,9 @@ const Tag = {
   ],
   assocs: [
     {
-      id: 2,
-      type: 'BELONGS_TO',
-      modelId: Post.id,
+      id: 6,
+      type: 'MANY_TO_MANY',
+      modelId: POST_ID,
       as: null,
       through: []
     }
@@ -89,7 +123,7 @@ const Tag = {
 }
 
 const Comment = {
-  id: 4,
+  id: COMMENT_ID,
   name: 'Comment',
   fields: [
     {
@@ -103,24 +137,31 @@ const Comment = {
   ],
   assocs: [
     {
-      id: 3,
+      id: 7,
       type: 'BELONGS_TO',
-      modelId: User.id,
+      modelId: USER_ID,
       as: 'Author',
       through: []
     },
     {
-      id: 4,
+      id: 8,
       type: 'BELONGS_TO',
-      modelId: Post.id,
+      modelId: POST_ID,
       as: null,
       through: []
     },
     {
-      id: 5,
+      id: 9,
       type: 'BELONGS_TO',
-      modelId: 4, // Self
+      modelId: COMMENT_ID,
       as: 'Parent',
+      through: []
+    },
+    {
+      id: 10,
+      type: 'HAS_MANY',
+      modelId: COMMENT_ID,
+      as: 'Response',
       through: []
     }
   ]

@@ -1,3 +1,4 @@
+// import 'core-js/features/array/flat-map'
 import Case from 'case'
 import { singularize, pluralize } from 'inflection'
 import { ASSOC_TYPES } from '../constants'
@@ -38,7 +39,7 @@ export const modelFile = ({ model, config }) => ({
 
 // DB
 
-export const dbTemplate = ({ models = [], config = {} }) =>
+const dbTemplate = ({ models = [], config = {} }) =>
   `'use strict';
 
 const Sequelize = require('sequelize');
@@ -58,24 +59,18 @@ const renderModelImports = models =>
   models.length ? models.map(model => renderModelImport(model)).join('') : ''
 
 const renderModelImport = ({ name }) =>
-  `const ${modelVar(name)}Model = require('./models/${modelFileName(
-    name
-  )}.js');\n`
+  `const ${modelVar(name)}Model = require('${renderModelPath(name)}');\n`
+
+const renderModelPath = name => `./models/${modelFileName(name)}.js`
 
 const renderAssocs = ({ models, config }) =>
   models.some(model => model.assocs.length > 0)
     ? models
-      .map(model =>
-        model.assocs
-          .map(assoc =>
-            renderAssoc(
-              assoc,
-              model,
-              models.find(m => m.id === assoc.modelId),
-              config
-            )
-          )
-          .join('')
+      .flatMap(model =>
+        model.assocs.map(assoc => {
+          const target = models.find(m => m.id === assoc.modelId)
+          return renderAssoc(assoc, model, target, config)
+        })
       )
       .join('')
     : ''
@@ -181,10 +176,6 @@ module.exports = (sequelize, DataTypes) => {
   const ${modelVar(name)} = sequelize.define('${modelProp(name)}', {
     ${renderFields(fields, config)}
   }${renderModelOpts({ name, config })});
-
-  ${modelVar(name)}.associate = function(models) {
-    // associations can be defined here
-  };
 
   return ${modelVar(name)};
 };

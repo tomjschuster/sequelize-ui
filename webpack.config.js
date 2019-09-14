@@ -8,7 +8,7 @@ const SitemapPlugin = require('sitemap-webpack-plugin').default
 const production = process.env.NODE_ENV === 'production'
 
 module.exports = {
-  entry: './src/index.js',
+  entry: ['core-js/features/array/flat-map', './src/index.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'static/[name].[hash].js'
