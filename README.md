@@ -18,15 +18,20 @@ npm start
 
 TODO:
 - Associations
-  - Generate Code
+  - Foreign Key
+  - Through
+  - UUID's
+  - as -> alias
+  - modelId -> targetId
+  - add modelID
   - Cleanup
+- Select Driver
+- Name project
 - Explain Storage
 - Clear/Reset warning modals
 - Demo GIF's
 
 ## Future enhancements
-- Elm?
 - Migrations
 - Sequelize v5 templates
-- Select Driver
 - Multiple Projects
