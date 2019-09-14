@@ -18,8 +18,6 @@ npm start
 
 TODO:
 - Associations
-  - Foreign Key
-  - Through
   - UUID's
   - as -> alias
   - modelId -> targetId
