@@ -14,7 +14,7 @@ import Button from '../../components/Button.jsx'
 const emptyAssoc = modelId => ({
   type: ASSOC_TYPES.BELONGS_TO,
   modelId,
-  as: '',
+  name: '',
   through: '',
   foreignKey: '',
   targetForeignKey: ''
@@ -42,7 +42,7 @@ export default class AssocForm extends React.Component {
   }
 
   createRefs = () => {
-    this.asInput = React.createRef()
+    this.nameInput = React.createRef()
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -63,7 +63,7 @@ export default class AssocForm extends React.Component {
   }
 
   focusOnName () {
-    this.asInput.current.focus()
+    this.nameInput.current.focus()
   }
 
   save = () => {
@@ -84,7 +84,7 @@ export default class AssocForm extends React.Component {
     this.setState({ assoc: emptyAssoc() })
   }
 
-  inputAs = as => this.mapAssoc(assoc => ({ ...assoc, as }))
+  inputName = name => this.mapAssoc(assoc => ({ ...assoc, name }))
   selectType = type => this.mapAssoc(assoc => ({ ...assoc, type }))
   selectModel = modelId => this.mapAssoc(assoc => ({ ...assoc, modelId }))
   inputThrough = through => this.mapAssoc(assoc => ({ ...assoc, through }))
@@ -156,11 +156,11 @@ export default class AssocForm extends React.Component {
         <div className='assoc-form__item assoc-form__name'>
           <label htmlFor='new-assoc-name'>as</label>
           <input
-            ref={this.asInput}
+            ref={this.nameInput}
             id='new-assoc-name'
             type='text'
-            value={state.assoc.as || ''}
-            onChange={event => this.inputAs(event.target.value)}
+            value={state.assoc.name || ''}
+            onChange={event => this.inputName(event.target.value)}
           />
         </div>
         <div className='assoc-form__item assoc-form__foreign-key'>
@@ -229,7 +229,7 @@ export default class AssocForm extends React.Component {
 
 const formatAssoc = assoc => ({
   ...assoc,
-  as: trimAndNullify(assoc.as),
+  name: trimAndNullify(assoc.name),
   through: trimAndNullify(assoc.through),
   foreignKey: trimAndNullify(assoc.foreignKey),
   targetForeignKey: trimAndNullify(assoc.targetForeignKey)
@@ -244,8 +244,8 @@ const REQUIRED_THROUGH_ERROR = 'REQUIRED_THROUGH_ERROR'
 const validateAssoc = (assoc, assocs, models) => {
   const validations = [
     [UNIQUE_ASSOC_ERROR, validators.validateUniqueAssoc(assoc, assocs, models)],
-    [NAME_FORMAT_ERROR, validators.validateIdentifierFormat(assoc.as)],
-    [NAME_LENGTH_ERROR, validators.validateIdentifierLength(assoc.as)],
+    [NAME_FORMAT_ERROR, validators.validateIdentifierFormat(assoc.name)],
+    [NAME_LENGTH_ERROR, validators.validateIdentifierLength(assoc.name)],
     [REQUIRED_TYPE_ERROR, validators.validateRequired(assoc.type)],
     [
       REQUIRED_THROUGH_ERROR,

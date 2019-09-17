@@ -94,7 +94,7 @@ const assocMethod = type => {
 }
 
 const renderAssocOpts = (assoc, model, target, config) =>
-  assoc.as || assoc.foreignKey || assoc.type === ASSOC_TYPES.MANY_TO_MANY
+  assoc.name || assoc.foreignKey || assoc.type === ASSOC_TYPES.MANY_TO_MANY
     ? `, {\n  ${kvs(
       [
         {
@@ -109,7 +109,7 @@ const renderAssocOpts = (assoc, model, target, config) =>
         {
           k: 'foreignKey',
           v: `'${modelTable({
-            name: assoc.foreignKey || assoc.as + ' id',
+            name: assoc.foreignKey || assoc.name + ' id',
             snake: config.snake,
             singularTableNames: true
           })}'`,
@@ -122,7 +122,7 @@ const renderAssocOpts = (assoc, model, target, config) =>
               assoc.type !== ASSOC_TYPES.MANY_TO_MANY ||
               !assoc.targetForeignKey
         },
-        { k: 'as', v: `'${Case.camel(assoc.as)}'`, exclude: !assoc.as }
+        { k: 'as', v: `'${Case.camel(assoc.name)}'`, exclude: !assoc.name }
       ],
       2
     )}\n}`

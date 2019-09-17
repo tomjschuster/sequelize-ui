@@ -40,7 +40,7 @@ const User = {
       id: uuid(),
       type: 'HAS_MANY',
       modelId: POST_ID,
-      as: null,
+      name: null,
       through: null,
       foreignKey: 'author id',
       targetForeignKey: null
@@ -49,7 +49,7 @@ const User = {
       id: uuid(),
       type: 'HAS_MANY',
       modelId: COMMENT_ID,
-      as: null,
+      name: null,
       through: null,
       foreignKey: 'author id',
       targetForeignKey: null
@@ -83,7 +83,7 @@ const Post = {
       id: uuid(),
       type: 'BELONGS_TO',
       modelId: USER_ID,
-      as: 'Author',
+      name: 'Author',
       through: null,
       foreignKey: null,
       targetForeignKey: null
@@ -92,7 +92,7 @@ const Post = {
       id: uuid(),
       type: 'HAS_MANY',
       modelId: COMMENT_ID,
-      as: null,
+      name: null,
       through: null,
       foreignKey: null,
       targetForeignKey: null
@@ -101,7 +101,7 @@ const Post = {
       id: uuid(),
       type: 'MANY_TO_MANY',
       modelId: TAG_ID,
-      as: null,
+      name: null,
       through: 'Post Tags',
       foreignKey: null,
       targetForeignKey: null
@@ -127,7 +127,7 @@ const Tag = {
       id: uuid(),
       type: 'MANY_TO_MANY',
       modelId: POST_ID,
-      as: null,
+      name: null,
       through: 'Post Tags',
       foreignKey: null,
       targetForeignKey: null
@@ -153,7 +153,7 @@ const Comment = {
       id: uuid(),
       type: 'BELONGS_TO',
       modelId: USER_ID,
-      as: 'Author',
+      name: 'Author',
       through: null,
       foreignKey: null,
       targetForeignKey: null
@@ -162,7 +162,7 @@ const Comment = {
       id: uuid(),
       type: 'BELONGS_TO',
       modelId: POST_ID,
-      as: null,
+      name: null,
       through: null,
       foreignKey: null,
       targetForeignKey: null
@@ -171,7 +171,7 @@ const Comment = {
       id: uuid(),
       type: 'BELONGS_TO',
       modelId: COMMENT_ID,
-      as: 'Parent',
+      name: 'Parent',
       through: null,
       foreignKey: null,
       targetForeignKey: null
@@ -180,7 +180,7 @@ const Comment = {
       id: uuid(),
       type: 'HAS_MANY',
       modelId: COMMENT_ID,
-      as: 'Response',
+      name: 'Response',
       through: null,
       foreignKey: 'parent id',
       targetForeignKey: null
