@@ -18,7 +18,6 @@ npm start
 
 TODO:
 - Associations
-  - UUID's
   - as -> alias
   - modelId -> targetId
   - add modelID

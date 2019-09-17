@@ -134,11 +134,9 @@ export default class AssocForm extends React.Component {
           >
             {Object.entries(ASSOC_TYPE_OPTIONS).map(
               ([value, text]) =>
-                console.log(value, text) || (
-                  <option key={value} value={value}>
-                    {text}
-                  </option>
-                )
+                <option key={value} value={value}>
+                  {text}
+                </option>
             )}
           </select>
         </div>
@@ -146,9 +144,9 @@ export default class AssocForm extends React.Component {
           <select
             id='new-assoc-model'
             value={state.assoc.modelId}
-            onChange={event => this.selectModel(parseInt(event.target.value))}
+            onChange={event => this.selectModel(event.target.value)}
           >
-            {props.models.map(({ id, name }) => (
+            {console.log(props.models) || props.models.map(({ id, name }) => (
               <option key={id} value={id}>
                 {name}
               </option>
@@ -251,8 +249,8 @@ const validateAssoc = (assoc, assocs, models) => {
     [REQUIRED_TYPE_ERROR, validators.validateRequired(assoc.type)],
     [
       REQUIRED_THROUGH_ERROR,
-      assoc.type === ASSOC_TYPES.MANY_TO_MANY &&
-        validators.validateRequired(assoc.through)
+      assoc.type === ASSOC_TYPES.MANY_TO_MANY
+        ? validators.validateRequired(assoc.through) : true
     ]
   ]
 

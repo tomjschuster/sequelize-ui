@@ -67,7 +67,7 @@ const renderAssocs = ({ models, config }) =>
   models.some(model => model.assocs.length > 0)
     ? models
       .flatMap(model =>
-        model.assocs.map(assoc => {
+        console.log(model) || model.assocs.map(assoc => {
           const target = models.find(m => m.id === assoc.modelId)
           return renderAssoc(assoc, model, target, config)
         })

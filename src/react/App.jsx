@@ -1,4 +1,5 @@
 import React from 'react'
+import uuid from 'uuid/v4'
 
 import { Blog } from '../utils/sample-data.js'
 import Storage from '../utils/Storage.js'
@@ -22,9 +23,6 @@ const FLAGS_KEY = 'SUI_FLAGS'
 const initialState = {
   loaded: false,
   pageState: LOADING,
-  nextModelId: 1,
-  nextFieldId: 1,
-  nextAssocId: 1,
   config: {
     timestamps: true,
     snake: false,
@@ -75,25 +73,7 @@ export default class App extends React.Component {
       : state
   }
 
-  loadDefaultProject = () => {
-    const models = Blog.models
-    const maxModelId = Math.max(0, ...models.map(m => m.id))
-    const maxFieldId = Math.max(
-      0,
-      ...models.flatMap(m => m.fields.map(f => f.id))
-    )
-    const maxAssocId = Math.max(
-      0,
-      ...models.flatMap(m => m.assocs.map(f => f.id))
-    )
-
-    this.setState({
-      models,
-      nextModelId: maxModelId + 1,
-      nextFieldId: maxFieldId + 1,
-      nextAssocId: maxAssocId + 1
-    })
-  }
+  loadDefaultProject = () => this.setState({ models: Blog.models })
 
   getLandingPage = (data, hasRedAbout) => {
     if (data.pageState && data.pageState !== LOADING) {
@@ -113,8 +93,6 @@ export default class App extends React.Component {
     if (this.state.loaded) {
       const keysToPersist = [
         'pageState',
-        'nextModelId',
-        'nextFieldId',
         'config',
         'models',
         'currentModelId'
@@ -159,8 +137,7 @@ export default class App extends React.Component {
   // Navigation
   goToAbout = () => this.setState({ pageState: ABOUT })
 
-  goToProject = () =>
-    this.setState({ pageState: PROJECT, currentModelId: null })
+  goToProject = () => this.setState({ pageState: PROJECT, currentModelId: null })
 
   goToModel = id => this.setState({ pageState: MODEL, currentModelId: id })
 
@@ -193,17 +170,11 @@ export default class App extends React.Component {
       config: { ...config, singularTableNames: !config.singularTableNames }
     }))
 
-  createModel = ({ model }) => {
-    this.setState({
-      models: [...this.state.models, buildModel(this.state.nextModelId, model)],
-      nextModelId: this.state.nextModelId + 1
-    })
-  }
+  createModel = ({ model }) =>
+    this.setState({ models: [...this.state.models, buildModel(model)] })
 
   deleteModel = id =>
-    this.setState({
-      models: this.state.models.filter(model => model.id !== id)
-    })
+    this.setState({ models: this.state.models.filter(model => model.id !== id) })
 
   // Model Methods
   updateModelName = ({ name }) =>
@@ -214,13 +185,10 @@ export default class App extends React.Component {
     }))
 
   createField = ({ field }) =>
-    this.setState(({ models, currentModelId, nextFieldId }) => ({
+    this.setState(({ models, currentModelId }) => ({
       models: models.map(model =>
-        model.id === currentModelId
-          ? addField(model, nextFieldId, field)
-          : model
-      ),
-      nextFieldId: nextFieldId + 1
+        model.id === currentModelId ? addField(model, field) : model
+      )
     }))
 
   updateField = ({ field }) =>
@@ -238,13 +206,9 @@ export default class App extends React.Component {
     }))
 
   createAssoc = ({ assoc }) =>
-    this.setState(({ models, currentModelId, nextAssocId }) => ({
+    this.setState(({ models, currentModelId }) => ({
       models: models.map(model =>
-        model.id === currentModelId
-          ? addAssoc(model, nextAssocId, assoc)
-          : model
-      ),
-      nextAssocId: nextAssocId + 1
+        model.id === currentModelId ? addAssoc(model, assoc) : model)
     }))
 
   updateAssoc = ({ assoc }) =>
@@ -364,20 +328,21 @@ export default class App extends React.Component {
   }
 }
 
-const buildModel = (id, model) => ({
-  id,
+const buildModel = model => ({
+  id: uuid(),
   ...model,
   fields: [],
-  associations: []
+  assocs: []
 })
-const buildField = (id, field) => ({ id, ...field })
-const buildAssoc = (id, assoc) => ({ id, ...assoc })
+
+const buildField = field => ({ id: uuid(), ...field })
+const buildAssoc = assoc => ({ id: uuid(), ...assoc })
 
 const updateModelName = (model, name) => ({ ...model, name })
 
-const addField = (model, nextFieldId, field) => ({
+const addField = (model, field) => ({
   ...model,
-  fields: [...model.fields, buildField(nextFieldId, field)]
+  fields: [...model.fields, buildField(field)]
 })
 
 const updateField = (model, field) => ({
@@ -390,9 +355,9 @@ const removeField = (model, fieldId) => ({
   fields: model.fields.filter(field => field.id !== fieldId)
 })
 
-const addAssoc = (model, nextAssocId, assoc) => ({
+const addAssoc = (model, assoc) => ({
   ...model,
-  assocs: [...model.assocs, buildAssoc(nextAssocId, assoc)]
+  assocs: [...model.assocs, buildAssoc(assoc)]
 })
 
 const updateAssoc = (model, assoc) => ({

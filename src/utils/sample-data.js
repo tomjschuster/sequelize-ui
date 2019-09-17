@@ -1,16 +1,17 @@
 import { DATA_TYPES } from '../constants'
+import uuid from 'uuid/v4'
 
-const USER_ID = 1
-const POST_ID = 2
-const TAG_ID = 3
-const COMMENT_ID = 4
+const USER_ID = uuid()
+const POST_ID = uuid()
+const TAG_ID = uuid()
+const COMMENT_ID = uuid()
 
 const User = {
   id: USER_ID,
   name: 'User',
   fields: [
     {
-      id: 1,
+      id: uuid(),
       name: 'First Name',
       type: DATA_TYPES.STRING,
       primaryKey: false,
@@ -18,7 +19,7 @@ const User = {
       unique: false
     },
     {
-      id: 2,
+      id: uuid(),
       name: 'Last Name',
       type: DATA_TYPES.STRING,
       primaryKey: false,
@@ -26,7 +27,7 @@ const User = {
       unique: false
     },
     {
-      id: 3,
+      id: uuid(),
       name: 'Email',
       type: DATA_TYPES.STRING,
       primaryKey: false,
@@ -36,7 +37,7 @@ const User = {
   ],
   assocs: [
     {
-      id: 1,
+      id: uuid(),
       type: 'HAS_MANY',
       modelId: POST_ID,
       as: null,
@@ -45,7 +46,7 @@ const User = {
       targetForeignKey: null
     },
     {
-      id: 2,
+      id: uuid(),
       type: 'HAS_MANY',
       modelId: COMMENT_ID,
       as: null,
@@ -61,7 +62,7 @@ const Post = {
   name: 'Post',
   fields: [
     {
-      id: 4,
+      id: uuid(),
       name: 'Title',
       type: DATA_TYPES.STRING,
       primaryKey: false,
@@ -69,7 +70,7 @@ const Post = {
       unique: false
     },
     {
-      id: 5,
+      id: uuid(),
       name: 'Content',
       type: DATA_TYPES.TEXT,
       primaryKey: false,
@@ -79,7 +80,7 @@ const Post = {
   ],
   assocs: [
     {
-      id: 3,
+      id: uuid(),
       type: 'BELONGS_TO',
       modelId: USER_ID,
       as: 'Author',
@@ -88,7 +89,7 @@ const Post = {
       targetForeignKey: null
     },
     {
-      id: 4,
+      id: uuid(),
       type: 'HAS_MANY',
       modelId: COMMENT_ID,
       as: null,
@@ -97,7 +98,7 @@ const Post = {
       targetForeignKey: null
     },
     {
-      id: 5,
+      id: uuid(),
       type: 'MANY_TO_MANY',
       modelId: TAG_ID,
       as: null,
@@ -113,7 +114,7 @@ const Tag = {
   name: 'Tag',
   fields: [
     {
-      id: 6,
+      id: uuid(),
       name: 'Name',
       type: DATA_TYPES.STRING,
       primaryKey: false,
@@ -123,7 +124,7 @@ const Tag = {
   ],
   assocs: [
     {
-      id: 6,
+      id: uuid(),
       type: 'MANY_TO_MANY',
       modelId: POST_ID,
       as: null,
@@ -139,7 +140,7 @@ const Comment = {
   name: 'Comment',
   fields: [
     {
-      id: 7,
+      id: uuid(),
       name: 'Content',
       type: DATA_TYPES.TEXT,
       primaryKey: false,
@@ -149,7 +150,7 @@ const Comment = {
   ],
   assocs: [
     {
-      id: 7,
+      id: uuid(),
       type: 'BELONGS_TO',
       modelId: USER_ID,
       as: 'Author',
@@ -158,7 +159,7 @@ const Comment = {
       targetForeignKey: null
     },
     {
-      id: 8,
+      id: uuid(),
       type: 'BELONGS_TO',
       modelId: POST_ID,
       as: null,
@@ -167,7 +168,7 @@ const Comment = {
       targetForeignKey: null
     },
     {
-      id: 9,
+      id: uuid(),
       type: 'BELONGS_TO',
       modelId: COMMENT_ID,
       as: 'Parent',
@@ -176,7 +177,7 @@ const Comment = {
       targetForeignKey: null
     },
     {
-      id: 10,
+      id: uuid(),
       type: 'HAS_MANY',
       modelId: COMMENT_ID,
       as: 'Response',
