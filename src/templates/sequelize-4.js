@@ -49,7 +49,6 @@ const sequelize = new Sequelize({
 });
 ${renderModelDefs(models)}
 ${renderAssocs({ models, config })}
-
 module.exports = {
   sequelize,
   Sequelize${renderModelExports(models)}
@@ -66,13 +65,15 @@ const renderModelPath = name => `./models/${modelFileName(name)}.js`
 const renderAssocs = ({ models, config }) =>
   models.some(model => model.assocs.length > 0)
     ? models
-      .flatMap(model =>
-        console.log(model) || model.assocs.map(assoc => {
-          const target = models.find(m => m.id === assoc.modelId)
-          return renderAssoc(assoc, model, target, config)
-        })
+      .flatMap(
+        model =>
+          console.log(model) ||
+            model.assocs.map(assoc => {
+              const target = models.find(m => m.id === assoc.targetId)
+              return renderAssoc(assoc, model, target, config)
+            })
       )
-      .join('')
+      .join('\n')
     : ''
 
 const renderAssoc = (assoc, model, target, config) =>

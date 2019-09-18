@@ -315,9 +315,9 @@ export default class Model extends React.Component {
                         {ASSOC_TYPE_OPTIONS[assoc.type]}{' '}
                         <strong
                           className='assocs__item__target'
-                          onClick={() => this.props.goToModel(assoc.modelId)}
+                          onClick={() => this.props.goToModel(assoc.targetId)}
                         >
-                          {props.models.find(m => m.id === assoc.modelId).name}
+                          {props.models.find(m => m.id === assoc.targetId).name}
                         </strong>
                       </span>
                       {assoc.as ? (

@@ -91,12 +91,7 @@ export default class App extends React.Component {
   componentDidUpdate (prevProps, prevState) {
     console.log(this.state)
     if (this.state.loaded) {
-      const keysToPersist = [
-        'pageState',
-        'config',
-        'models',
-        'currentModelId'
-      ]
+      const keysToPersist = ['pageState', 'config', 'models', 'currentModelId']
 
       const stateToPersist = stateUtils.extract(this.state, keysToPersist)
       this.store.save(stateToPersist)
@@ -137,7 +132,8 @@ export default class App extends React.Component {
   // Navigation
   goToAbout = () => this.setState({ pageState: ABOUT })
 
-  goToProject = () => this.setState({ pageState: PROJECT, currentModelId: null })
+  goToProject = () =>
+    this.setState({ pageState: PROJECT, currentModelId: null })
 
   goToModel = id => this.setState({ pageState: MODEL, currentModelId: id })
 
@@ -174,7 +170,14 @@ export default class App extends React.Component {
     this.setState({ models: [...this.state.models, buildModel(model)] })
 
   deleteModel = id =>
-    this.setState({ models: this.state.models.filter(model => model.id !== id) })
+    this.setState({
+      models: this.state.models
+        .filter(model => model.id !== id)
+        .map(model => ({
+          ...model,
+          assocs: model.assocs.filter(assoc => assoc.targetId !== id)
+        }))
+    })
 
   // Model Methods
   updateModelName = ({ name }) =>
@@ -208,7 +211,8 @@ export default class App extends React.Component {
   createAssoc = ({ assoc }) =>
     this.setState(({ models, currentModelId }) => ({
       models: models.map(model =>
-        model.id === currentModelId ? addAssoc(model, assoc) : model)
+        model.id === currentModelId ? addAssoc(model, assoc) : model
+      )
     }))
 
   updateAssoc = ({ assoc }) =>
@@ -335,14 +339,22 @@ const buildModel = model => ({
   assocs: []
 })
 
-const buildField = field => ({ id: uuid(), ...field })
-const buildAssoc = assoc => ({ id: uuid(), ...assoc })
+const buildField = (model, field) => ({
+  id: uuid(),
+  modelId: model.id,
+  ...field
+})
+const buildAssoc = (model, assoc) => ({
+  id: uuid(),
+  sourceId: model.id,
+  ...assoc
+})
 
 const updateModelName = (model, name) => ({ ...model, name })
 
 const addField = (model, field) => ({
   ...model,
-  fields: [...model.fields, buildField(field)]
+  fields: [...model.fields, buildField(model, field)]
 })
 
 const updateField = (model, field) => ({
@@ -357,7 +369,7 @@ const removeField = (model, fieldId) => ({
 
 const addAssoc = (model, assoc) => ({
   ...model,
-  assocs: [...model.assocs, buildAssoc(assoc)]
+  assocs: [...model.assocs, buildAssoc(model, assoc)]
 })
 
 const updateAssoc = (model, assoc) => ({

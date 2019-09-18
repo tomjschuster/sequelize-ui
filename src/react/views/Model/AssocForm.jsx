@@ -11,9 +11,10 @@ import {
 
 import Button from '../../components/Button.jsx'
 
-const emptyAssoc = modelId => ({
+const emptyAssoc = sourceId => ({
   type: ASSOC_TYPES.BELONGS_TO,
-  modelId,
+  sourceId,
+  targetId: null,
   name: '',
   through: '',
   foreignKey: '',
@@ -86,7 +87,7 @@ export default class AssocForm extends React.Component {
 
   inputName = name => this.mapAssoc(assoc => ({ ...assoc, name }))
   selectType = type => this.mapAssoc(assoc => ({ ...assoc, type }))
-  selectModel = modelId => this.mapAssoc(assoc => ({ ...assoc, modelId }))
+  selectModel = targetId => this.mapAssoc(assoc => ({ ...assoc, targetId }))
   inputThrough = through => this.mapAssoc(assoc => ({ ...assoc, through }))
   inputForeignKey = foreignKey =>
     this.mapAssoc(assoc => ({ ...assoc, foreignKey }))
@@ -132,25 +133,25 @@ export default class AssocForm extends React.Component {
             value={state.assoc.type}
             onChange={event => this.selectType(event.target.value)}
           >
-            {Object.entries(ASSOC_TYPE_OPTIONS).map(
-              ([value, text]) =>
-                <option key={value} value={value}>
-                  {text}
-                </option>
-            )}
+            {Object.entries(ASSOC_TYPE_OPTIONS).map(([value, text]) => (
+              <option key={value} value={value}>
+                {text}
+              </option>
+            ))}
           </select>
         </div>
         <div className='assoc-form__item assoc-form__model'>
           <select
             id='new-assoc-model'
-            value={state.assoc.modelId}
+            value={state.assoc.targetId}
             onChange={event => this.selectModel(event.target.value)}
           >
-            {console.log(props.models) || props.models.map(({ id, name }) => (
-              <option key={id} value={id}>
-                {name}
-              </option>
-            ))}
+            {console.log(props.models) ||
+              props.models.map(({ id, name }) => (
+                <option key={id} value={id}>
+                  {name}
+                </option>
+              ))}
           </select>
         </div>
         <div className='assoc-form__item assoc-form__name'>
@@ -250,7 +251,8 @@ const validateAssoc = (assoc, assocs, models) => {
     [
       REQUIRED_THROUGH_ERROR,
       assoc.type === ASSOC_TYPES.MANY_TO_MANY
-        ? validators.validateRequired(assoc.through) : true
+        ? validators.validateRequired(assoc.through)
+        : true
     ]
   ]
 

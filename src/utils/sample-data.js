@@ -12,6 +12,7 @@ const User = {
   fields: [
     {
       id: uuid(),
+      modelId: USER_ID,
       name: 'First Name',
       type: DATA_TYPES.STRING,
       primaryKey: false,
@@ -20,6 +21,7 @@ const User = {
     },
     {
       id: uuid(),
+      modelId: USER_ID,
       name: 'Last Name',
       type: DATA_TYPES.STRING,
       primaryKey: false,
@@ -28,6 +30,7 @@ const User = {
     },
     {
       id: uuid(),
+      modelId: USER_ID,
       name: 'Email',
       type: DATA_TYPES.STRING,
       primaryKey: false,
@@ -39,7 +42,8 @@ const User = {
     {
       id: uuid(),
       type: 'HAS_MANY',
-      modelId: POST_ID,
+      sourceId: USER_ID,
+      targetId: POST_ID,
       name: null,
       through: null,
       foreignKey: 'author id',
@@ -48,7 +52,8 @@ const User = {
     {
       id: uuid(),
       type: 'HAS_MANY',
-      modelId: COMMENT_ID,
+      sourceId: USER_ID,
+      targetId: COMMENT_ID,
       name: null,
       through: null,
       foreignKey: 'author id',
@@ -63,6 +68,7 @@ const Post = {
   fields: [
     {
       id: uuid(),
+      modelId: POST_ID,
       name: 'Title',
       type: DATA_TYPES.STRING,
       primaryKey: false,
@@ -71,6 +77,7 @@ const Post = {
     },
     {
       id: uuid(),
+      modelId: POST_ID,
       name: 'Content',
       type: DATA_TYPES.TEXT,
       primaryKey: false,
@@ -82,7 +89,8 @@ const Post = {
     {
       id: uuid(),
       type: 'BELONGS_TO',
-      modelId: USER_ID,
+      sourceId: POST_ID,
+      targetId: USER_ID,
       name: 'Author',
       through: null,
       foreignKey: null,
@@ -91,7 +99,8 @@ const Post = {
     {
       id: uuid(),
       type: 'HAS_MANY',
-      modelId: COMMENT_ID,
+      sourceId: POST_ID,
+      targetId: COMMENT_ID,
       name: null,
       through: null,
       foreignKey: null,
@@ -100,7 +109,8 @@ const Post = {
     {
       id: uuid(),
       type: 'MANY_TO_MANY',
-      modelId: TAG_ID,
+      sourceId: POST_ID,
+      targetId: TAG_ID,
       name: null,
       through: 'Post Tags',
       foreignKey: null,
@@ -115,6 +125,7 @@ const Tag = {
   fields: [
     {
       id: uuid(),
+      modelId: TAG_ID,
       name: 'Name',
       type: DATA_TYPES.STRING,
       primaryKey: false,
@@ -126,7 +137,8 @@ const Tag = {
     {
       id: uuid(),
       type: 'MANY_TO_MANY',
-      modelId: POST_ID,
+      sourceId: TAG_ID,
+      targetId: POST_ID,
       name: null,
       through: 'Post Tags',
       foreignKey: null,
@@ -141,6 +153,7 @@ const Comment = {
   fields: [
     {
       id: uuid(),
+      modelId: COMMENT_ID,
       name: 'Content',
       type: DATA_TYPES.TEXT,
       primaryKey: false,
@@ -152,7 +165,8 @@ const Comment = {
     {
       id: uuid(),
       type: 'BELONGS_TO',
-      modelId: USER_ID,
+      sourceId: COMMENT_ID,
+      targetId: USER_ID,
       name: 'Author',
       through: null,
       foreignKey: null,
@@ -161,7 +175,8 @@ const Comment = {
     {
       id: uuid(),
       type: 'BELONGS_TO',
-      modelId: POST_ID,
+      sourceId: COMMENT_ID,
+      targetId: POST_ID,
       name: null,
       through: null,
       foreignKey: null,
@@ -170,7 +185,8 @@ const Comment = {
     {
       id: uuid(),
       type: 'BELONGS_TO',
-      modelId: COMMENT_ID,
+      sourceId: COMMENT_ID,
+      targetId: COMMENT_ID,
       name: 'Parent',
       through: null,
       foreignKey: null,
@@ -179,7 +195,8 @@ const Comment = {
     {
       id: uuid(),
       type: 'HAS_MANY',
-      modelId: COMMENT_ID,
+      sourceId: COMMENT_ID,
+      targetId: COMMENT_ID,
       name: 'Response',
       through: null,
       foreignKey: 'parent id',
