@@ -17,11 +17,6 @@ npm start
 ```
 
 TODO:
-- Associations
-  - as -> alias
-  - modelId -> targetId
-  - add modelID
-  - Cleanup
 - Select Driver
 - Name project
 - Explain Storage
