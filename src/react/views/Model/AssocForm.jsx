@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import uuid from 'uuid/v4'
 
 import * as validators from '../../../utils/validators.js'
 
@@ -11,10 +12,11 @@ import {
 
 import Button from '../../components/Button.jsx'
 
-const emptyAssoc = sourceId => ({
+const emptyAssoc = (sourceId, targetId) => ({
+  id: uuid(),
   type: ASSOC_TYPES.BELONGS_TO,
   sourceId,
-  targetId: null,
+  targetId,
   name: '',
   through: '',
   foreignKey: '',
@@ -23,8 +25,9 @@ const emptyAssoc = sourceId => ({
 
 export default class AssocForm extends React.Component {
   static propTypes = {
+    modelId: PropTypes.string,
     models: PropTypes.arrayOf(PropTypes.object).isRequired,
-    assocId: PropTypes.number,
+    assocId: PropTypes.string,
     onCancel: PropTypes.func.isRequired,
     onSave: PropTypes.func.isRequired
   }
@@ -32,7 +35,7 @@ export default class AssocForm extends React.Component {
   state = {
     assoc:
       this.props.assocs.find(f => f.id === this.props.assocId) ||
-      emptyAssoc(this.props.models[0].id),
+      this.newAssoc(),
     errors: []
   }
 
@@ -67,6 +70,10 @@ export default class AssocForm extends React.Component {
     this.nameInput.current.focus()
   }
 
+  newAssoc () {
+    return emptyAssoc(this.props.modelId, this.props.models[0].id)
+  }
+
   save = () => {
     const assoc = formatAssoc(this.state.assoc)
     const errors = validateAssoc(assoc, this.props.assocs, this.props.models)
@@ -75,14 +82,14 @@ export default class AssocForm extends React.Component {
       this.setState({ errors })
     } else {
       this.props.onSave({ assoc })
-      this.setState({ assoc: emptyAssoc() })
+      this.setState({ assoc: this.newAssoc() })
       this.focusOnName()
     }
   }
 
   cancel = () => {
     this.props.onCancel()
-    this.setState({ assoc: emptyAssoc() })
+    this.setState({ assoc: this.newAssoc() })
   }
 
   inputName = name => this.mapAssoc(assoc => ({ ...assoc, name }))
@@ -146,12 +153,11 @@ export default class AssocForm extends React.Component {
             value={state.assoc.targetId}
             onChange={event => this.selectModel(event.target.value)}
           >
-            {console.log(props.models) ||
-              props.models.map(({ id, name }) => (
-                <option key={id} value={id}>
-                  {name}
-                </option>
-              ))}
+            {props.models.map(({ id, name }) => (
+              <option key={id} value={id}>
+                {name}
+              </option>
+            ))}
           </select>
         </div>
         <div className='assoc-form__item assoc-form__name'>

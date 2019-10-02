@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import uuid from 'uuid/v4'
 
 import * as validators from '../../../utils/validators.js'
 
@@ -14,7 +15,9 @@ import Checkbox from '../../components/Checkbox.jsx'
 
 const DEFAULT_DATA_TYPE = DATA_TYPES.STRING
 
-const emptyField = () => ({
+const emptyField = modelId => ({
+  id: uuid(),
+  modelId,
   name: '',
   type: DEFAULT_DATA_TYPE,
   primaryKey: false,
@@ -24,15 +27,17 @@ const emptyField = () => ({
 
 export default class FieldForm extends React.Component {
   static propTypes = {
+    modelId: PropTypes.string,
     fields: PropTypes.arrayOf(PropTypes.object).isRequired,
-    fieldId: PropTypes.number,
+    fieldId: PropTypes.string,
     onCancel: PropTypes.func.isRequired,
     onSave: PropTypes.func.isRequired
   }
 
   state = {
     field:
-      this.props.fields.find(f => f.id === this.props.fieldId) || emptyField(),
+      this.props.fields.find(f => f.id === this.props.fieldId) ||
+      emptyField(this.props.modelId),
     errors: []
   }
 
@@ -62,14 +67,14 @@ export default class FieldForm extends React.Component {
       this.setState({ errors })
     } else {
       this.props.onSave({ field })
-      this.setState({ field: emptyField() })
+      this.setState({ field: emptyField(this.props.modelId) })
       this.focusOnName()
     }
   }
 
   cancel = () => {
     this.props.onCancel()
-    this.setState({ field: emptyField() })
+    this.setState({ field: emptyField(this.props.modelId) })
   }
 
   inputName = name => this.mapField(field => ({ ...field, name }))

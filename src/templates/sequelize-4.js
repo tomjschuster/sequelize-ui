@@ -65,13 +65,11 @@ const renderModelPath = name => `./models/${modelFileName(name)}.js`
 const renderAssocs = ({ models, config }) =>
   models.some(model => model.assocs.length > 0)
     ? models
-      .flatMap(
-        model =>
-          console.log(model) ||
-            model.assocs.map(assoc => {
-              const target = models.find(m => m.id === assoc.targetId)
-              return renderAssoc(assoc, model, target, config)
-            })
+      .flatMap(model =>
+        model.assocs.map(assoc => {
+          const target = models.find(m => m.id === assoc.targetId)
+          return renderAssoc(assoc, model, target, config)
+        })
       )
       .join('\n')
     : ''

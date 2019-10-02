@@ -3,6 +3,7 @@ import { pluralize } from 'inflection'
 import Case from 'case'
 
 import {
+  ASSOC_TYPES,
   SQL_IDENTIFIER_REGEXP,
   MAX_SQL_IDENTIFIER_LENGTH
 } from '../constants.js'
@@ -24,13 +25,22 @@ export const validateRequired = s => s && s.length
 export const validateUniqueAssoc = (assoc, assocs, models) => {
   const name = assocName(assoc, models)
 
-  return !assocs.find(
-    a =>
-      a.id !== assoc.id && Case.snake(name) === Case.snake(assocName(a, models))
+  return !assocs.find(a =>
+    a.id !== assoc.id &&
+    Case.snake(name) === Case.snake(assocName(a, models)) &&
+    a.type === assoc.type
+      ? a.type === ASSOC_TYPES.HAS_ONE || a.type === ASSOC_TYPES.HAS_MANY
+        ? a.foreignKey === assoc.foreignKey
+        : a.type === ASSOC_TYPES.MANY_TO_MANY
+          ? a.through === assoc.through &&
+          (a.foreignKey === assoc.foreignKey ||
+            a.targetForeignKey === assoc.targetForeignKey)
+          : true
+      : false
   )
 }
 
 const assocName = (assoc, models) => {
   const model = models.find(m => m.id === assoc.modelId)
-  return assoc.as || (model && model.name) || null
+  return assoc.name || (model && model.name) || null
 }

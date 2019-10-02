@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import uuid from 'uuid/v4'
 
 import * as validators from '../../../utils/validators.js'
 
@@ -7,7 +8,7 @@ import { MAX_SQL_IDENTIFIER_LENGTH } from '../../../constants.js'
 
 import Button from '../../components/Button.jsx'
 
-const emptyModel = () => ({ name: '' })
+const emptyModel = () => ({ id: uuid(), name: '', fields: [], assocs: [] })
 
 export default class NewModelForm extends React.Component {
   static propTypes = {

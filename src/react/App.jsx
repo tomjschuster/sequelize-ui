@@ -89,7 +89,6 @@ export default class App extends React.Component {
 
   // Persistence
   componentDidUpdate (prevProps, prevState) {
-    console.log(this.state)
     if (this.state.loaded) {
       const keysToPersist = ['pageState', 'config', 'models', 'currentModelId']
 
@@ -167,7 +166,7 @@ export default class App extends React.Component {
     }))
 
   createModel = ({ model }) =>
-    this.setState({ models: [...this.state.models, buildModel(model)] })
+    this.setState({ models: [...this.state.models, model] })
 
   deleteModel = id =>
     this.setState({
@@ -332,29 +331,11 @@ export default class App extends React.Component {
   }
 }
 
-const buildModel = model => ({
-  id: uuid(),
-  ...model,
-  fields: [],
-  assocs: []
-})
-
-const buildField = (model, field) => ({
-  id: uuid(),
-  modelId: model.id,
-  ...field
-})
-const buildAssoc = (model, assoc) => ({
-  id: uuid(),
-  sourceId: model.id,
-  ...assoc
-})
-
 const updateModelName = (model, name) => ({ ...model, name })
 
 const addField = (model, field) => ({
   ...model,
-  fields: [...model.fields, buildField(model, field)]
+  fields: [...model.fields, field]
 })
 
 const updateField = (model, field) => ({
@@ -369,7 +350,7 @@ const removeField = (model, fieldId) => ({
 
 const addAssoc = (model, assoc) => ({
   ...model,
-  assocs: [...model.assocs, buildAssoc(model, assoc)]
+  assocs: [...model.assocs, assoc]
 })
 
 const updateAssoc = (model, assoc) => ({
