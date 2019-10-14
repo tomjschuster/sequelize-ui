@@ -78,12 +78,18 @@ export default class Model extends React.Component {
       this.focusOnEditNameButton()
     }
 
-    if (prevState.creatingNewField && !this.state.creatingNewField) {
-      const fieldAdded =
-        prevProps.model.fields.length < this.props.model.fields.length
+    const fieldAdded =
+      prevProps.model.fields.length < this.props.model.fields.length
+    if (fieldAdded) {
+      this.createFieldRefs()
+    }
 
-      if (fieldAdded) this.createFieldRefs()
-      else this.focusOnAddFieldButton()
+    if (
+      prevState.creatingNewField &&
+      !this.state.creatingNewField &&
+      !fieldAdded
+    ) {
+      this.focusOnAddFieldButton()
     }
 
     if (prevState.editingFieldId && !this.state.editingFieldId) {
@@ -305,59 +311,56 @@ export default class Model extends React.Component {
             <List.Title className='assocs__title' text='Associations' />
             <List.List className='assocs'>
               {props.model.assocs.map(assoc =>
-                  assoc.id === state.editingAssocId ? (
-                    <List.Item className='edit-assoc' key={assoc.id}>
-                      <AssocForm
-                        modelId={props.modelId}
-                        models={props.models}
-                        assocs={props.model.assocs}
-                        assocId={assoc.id}
-                        onSave={this.updateAssoc}
-                        onCancel={this.cancelEditingAssoc}
-                      />
-                    </List.Item>
-                  ) : (
-                    <List.Item className='assocs__item' key={assoc.id}>
-                      <div className='assocs__item__description'>
-                        <span className='assocs__item__name'>
-                          {ASSOC_TYPE_OPTIONS[assoc.type]}{' '}
-                          <strong
-                            className='assocs__item__target'
-                            onClick={() => this.props.goToModel(assoc.targetId)}
-                          >
-                            {
-                              props.models.find(m => m.id === assoc.targetId)
-                                .name
-                            }
-                          </strong>
+                assoc.id === state.editingAssocId ? (
+                  <List.Item className='edit-assoc' key={assoc.id}>
+                    <AssocForm
+                      modelId={props.modelId}
+                      models={props.models}
+                      assocs={props.model.assocs}
+                      assocId={assoc.id}
+                      onSave={this.updateAssoc}
+                      onCancel={this.cancelEditingAssoc}
+                    />
+                  </List.Item>
+                ) : (
+                  <List.Item className='assocs__item' key={assoc.id}>
+                    <div className='assocs__item__description'>
+                      <span className='assocs__item__name'>
+                        {ASSOC_TYPE_OPTIONS[assoc.type]}{' '}
+                        <strong
+                          className='assocs__item__target'
+                          onClick={() => this.props.goToModel(assoc.targetId)}
+                        >
+                          {props.models.find(m => m.id === assoc.targetId).name}
+                        </strong>
+                      </span>
+                      {assoc.name ? (
+                        <span className='assocs__item__alias'>
+                          {' as '}
+                          <em>{assoc.name}</em>
                         </span>
-                        {assoc.name ? (
-                          <span className='assocs__item__alias'>
-                            {' as '}
-                            <em>{assoc.name}</em>
-                          </span>
-                        ) : null}
-                      </div>
-                      <div className='assocs__item__actions list__item__actions'>
-                        <Button
-                          ref={this[`editAssocButton${assoc.id}`]}
-                          icon='edit'
-                          iconPosition='above'
-                          onClick={() => this.startEditingAssoc(assoc.id)}
-                          label='Edit'
-                          disabled={editing}
-                        />
-                        <Button
-                          icon='delete'
-                          iconPosition='above'
-                          onClick={() => props.deleteAssoc(assoc.id)}
-                          label='Delete'
-                          disabled={editing}
-                        />
-                      </div>
-                    </List.Item>
-                  )
-                )}
+                      ) : null}
+                    </div>
+                    <div className='assocs__item__actions list__item__actions'>
+                      <Button
+                        ref={this[`editAssocButton${assoc.id}`]}
+                        icon='edit'
+                        iconPosition='above'
+                        onClick={() => this.startEditingAssoc(assoc.id)}
+                        label='Edit'
+                        disabled={editing}
+                      />
+                      <Button
+                        icon='delete'
+                        iconPosition='above'
+                        onClick={() => props.deleteAssoc(assoc.id)}
+                        label='Delete'
+                        disabled={editing}
+                      />
+                    </div>
+                  </List.Item>
+                )
+              )}
               {state.creatingNewAssoc ? (
                 <List.Item className='new-field'>
                   <AssocForm
