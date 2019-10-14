@@ -120,14 +120,19 @@ export default class Model extends React.Component {
   }
 
   // Focus Helpers
-  focusOnEditNameButton = () => this.editNameButton.current.focus()
-  focusOnAddFieldButton = () => this.addFieldButton.current.focus()
-  focusOnAddAssocButton = () => this.addAssocButton.current.focus()
+  focusOnEditNameButton = () =>
+    this.editNameButton.current && this.editNameButton.current.focus()
+  focusOnAddFieldButton = () =>
+    this.addFieldButton.current && this.addFieldButton.current.focus()
+  focusOnAddAssocButton = () =>
+    this.addAssocButton.current && this.addAssocButton.current.focus()
 
   focusOnEditFieldButton = fieldId =>
+    this[`editFieldButton${fieldId}`].current &&
     this[`editFieldButton${fieldId}`].current.focus()
 
   focusOnEditAssocButton = assocId =>
+    this[`editAssocButton${assocId}`].current &&
     this[`editAssocButton${assocId}`].current.focus()
 
   // Model Name

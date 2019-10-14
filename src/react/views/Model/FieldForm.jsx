@@ -56,7 +56,7 @@ export default class FieldForm extends React.Component {
   }
 
   focusOnName () {
-    this.nameInput.current.focus()
+    this.nameInput.current && this.nameInput.current.focus()
   }
 
   save = () => {

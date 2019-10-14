@@ -39,7 +39,7 @@ export default class Project extends React.Component {
 
   // Focus Helpers
   focusOnAddButton () {
-    this.addButton.current.focus()
+    this.addButton.current && this.addButton.current.focus()
   }
 
   // New Model
