@@ -121,27 +121,33 @@ export default class Project extends React.Component {
               </List.Item>
             </List.List>
             <ToolBelt className='project-config' title='Database Options'>
-              <Checkbox
-                id='config-timestamps'
-                className='project-config__item'
-                label='Timestamps'
-                checked={props.config.timestamps}
-                onCheck={props.toggleTimestamps}
-              />
-              <Checkbox
-                id='config-snake'
-                className='project-config__item'
-                label='snake_case'
-                checked={props.config.snake}
-                onCheck={props.toggleSnake}
-              />
-              <Checkbox
-                id='singluar-table-names'
-                className='project-config__item'
-                label='Singular Table Names'
-                checked={props.config.singularTableNames}
-                onCheck={props.toggleSingularTableNames}
-              />
+              <List.Item noBorder>
+                <Checkbox
+                  id='config-timestamps'
+                  className='project-config__item'
+                  label='Timestamps'
+                  checked={props.config.timestamps}
+                  onCheck={props.toggleTimestamps}
+                />
+              </List.Item>
+              <List.Item noBorder>
+                <Checkbox
+                  id='config-snake'
+                  className='project-config__item'
+                  label='snake_case'
+                  checked={props.config.snake}
+                  onCheck={props.toggleSnake}
+                />
+              </List.Item>
+              <List.Item noBorder>
+                <Checkbox
+                  id='singluar-table-names'
+                  className='project-config__item'
+                  label='Singular Table Names'
+                  checked={props.config.singularTableNames}
+                  onCheck={props.toggleSingularTableNames}
+                />
+              </List.Item>
             </ToolBelt>
           </div>
         </main>

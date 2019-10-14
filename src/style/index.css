@@ -255,6 +255,10 @@ a {
   align-items: center;
 }
 
+.list__item--no-border {
+  border-bottom: none;
+}
+
 .list__item:last-of-type {
   border-bottom: none;
 }
@@ -285,6 +289,7 @@ label.checkbox {
 }
 
 input.checkbox[type="checkbox"] {
+  display: none;
   width: 0;
   height: 0;
   -ms-transform: scale(0);
@@ -372,7 +377,6 @@ input.checkbox[type="checkbox"]:focus+label::before {
   font-size: 1rem;
   text-transform: uppercase;
   border-bottom: 1px solid #ddd;
-  margin: 0 -0.75rem 1rem;
   line-height: 2.5rem;
   display: block;
   text-align: center;
@@ -824,7 +828,6 @@ input.checkbox[type="checkbox"]:focus+label::before {
 
 .project-config {
   list-style: none;
-  padding: 0 0.75rem 0.75rem 0.75rem;
   display: inline-block;
   margin-top: 2rem;
   text-align: left;
@@ -835,16 +838,11 @@ input.project-config__item {
 }
 
 label.project-config__item {
-  margin-left: 1rem;
   cursor: pointer;
 }
 
 label.project-config__item:hover {
   color: var(--primary-color);
-}
-
-.project-config__item {
-  margin-bottom: 0.25rem;
 }
 
 .project .title, .model-view .title {
@@ -1124,7 +1122,7 @@ label.project-config__item:hover {
   max-width: 300px;
 }
 
-.assoc-form__name, .assoc-form__foreign-key, .assoc-form__target-foreign-key , .assoc-form__through {
+.assoc-form__name, .assoc-form__foreign-key, .assoc-form__target-foreign-key, .assoc-form__through {
   display: flex;
   align-items: center;
   width: 85%;
@@ -1132,12 +1130,12 @@ label.project-config__item:hover {
   justify-content: space-between;
 }
 
-.assoc-form__name input, .assoc-form__foreign-key input, .assoc-form__target-foreign-key input , .assoc-form__through  input  {
+.assoc-form__name input, .assoc-form__foreign-key input, .assoc-form__target-foreign-key input, .assoc-form__through input {
   margin-top: 0;
   flex: 1;
 }
 
-.assoc-form__name label, .assoc-form__foreign-key label, .assoc-form__target-foreign-key label , .assoc-form__through label {
+.assoc-form__name label, .assoc-form__foreign-key label, .assoc-form__target-foreign-key label, .assoc-form__through label {
   margin-right: 1rem;
 }
 
@@ -1158,7 +1156,6 @@ label.project-config__item:hover {
   grid-template-rows: auto;
 }
 
-
 .assoc-form__actions, .assoc-form__errors {
   grid-column-start: 1;
   grid-column-end: 2;
@@ -1174,9 +1171,8 @@ label.project-config__item:hover {
     grid-template-columns: 50% 50%;
     grid-template-rows: auto;
   }
-
-.assoc-form__actions, .assoc-form__errors {
-  grid-column-start: 1;
-  grid-column-end: 3;
-}
+  .assoc-form__actions, .assoc-form__errors {
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
 }
