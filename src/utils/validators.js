@@ -41,6 +41,6 @@ export const validateUniqueAssoc = (assoc, assocs, models) => {
 }
 
 const assocName = (assoc, models) => {
-  const model = models.find(m => m.id === assoc.modelId)
+  const model = models.find(m => m.id === assoc.targetId)
   return assoc.name || (model && model.name) || null
 }
