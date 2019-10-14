@@ -17,7 +17,8 @@ npm start
 ```
 
 TODO:
-- Associations
+- Select Driver
+- Name project
 - Explain Storage
 - Clear/Reset warning modals
 - Demo GIF's
@@ -25,5 +26,4 @@ TODO:
 ## Future enhancements
 - Migrations
 - Sequelize v5 templates
-- Select Driver
 - Multiple Projects

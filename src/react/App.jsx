@@ -1,4 +1,5 @@
 import React from 'react'
+import uuid from 'uuid/v4'
 
 import { Blog } from '../utils/sample-data.js'
 import Storage from '../utils/Storage.js'
@@ -22,8 +23,6 @@ const FLAGS_KEY = 'SUI_FLAGS'
 const initialState = {
   loaded: false,
   pageState: LOADING,
-  nextModelId: 1,
-  nextFieldId: 1,
   config: {
     timestamps: true,
     snake: false,
@@ -56,7 +55,7 @@ export default class App extends React.Component {
   }
 
   async mergePersistedState () {
-    const persistedData = await this.store.load()
+    const persistedData = await this.fetchPersistedState()
     const hasRedAbout = await this.flags.get('hasRedAbout')
     const pageState = this.getLandingPage(persistedData, hasRedAbout)
     persistedData.pageState = pageState
@@ -64,23 +63,17 @@ export default class App extends React.Component {
     this.setState(persistedData)
   }
 
-  loadDefaultProject = () => {
-    this.setState(state => {
-      let nextModelId = state.nextModelId
-      let nextFieldId = state.nextFieldId
-
-      const models = Blog.models.map(model => ({
-        id: nextModelId++,
-        ...model,
-        fields: model.fields.map(field => ({
-          id: nextFieldId++,
-          ...field
-        }))
-      }))
-
-      return { nextModelId, nextFieldId, models }
-    })
+  async fetchPersistedState () {
+    const state = await this.store.load()
+    return state.models
+      ? {
+        ...state,
+        models: state.models.map(m => (m.assocs ? m : { ...m, assocs: [] }))
+      }
+      : state
   }
+
+  loadDefaultProject = () => this.setState({ models: Blog.models })
 
   getLandingPage = (data, hasRedAbout) => {
     if (data.pageState && data.pageState !== LOADING) {
@@ -97,14 +90,7 @@ export default class App extends React.Component {
   // Persistence
   componentDidUpdate (prevProps, prevState) {
     if (this.state.loaded) {
-      const keysToPersist = [
-        'pageState',
-        'nextModelId',
-        'nextFieldId',
-        'config',
-        'models',
-        'currentModelId'
-      ]
+      const keysToPersist = ['pageState', 'config', 'models', 'currentModelId']
 
       const stateToPersist = stateUtils.extract(this.state, keysToPersist)
       this.store.save(stateToPersist)
@@ -179,16 +165,17 @@ export default class App extends React.Component {
       config: { ...config, singularTableNames: !config.singularTableNames }
     }))
 
-  createModel = ({ model }) => {
-    this.setState({
-      models: [...this.state.models, buildModel(this.state.nextModelId, model)],
-      nextModelId: this.state.nextModelId + 1
-    })
-  }
+  createModel = ({ model }) =>
+    this.setState({ models: [...this.state.models, model] })
 
   deleteModel = id =>
     this.setState({
-      models: this.state.models.filter(model => model.id !== id)
+      models: this.state.models
+        .filter(model => model.id !== id)
+        .map(model => ({
+          ...model,
+          assocs: model.assocs.filter(assoc => assoc.targetId !== id)
+        }))
     })
 
   // Model Methods
@@ -200,13 +187,10 @@ export default class App extends React.Component {
     }))
 
   createField = ({ field }) =>
-    this.setState(({ models, currentModelId, nextFieldId }) => ({
+    this.setState(({ models, currentModelId }) => ({
       models: models.map(model =>
-        model.id === currentModelId
-          ? addField(model, nextFieldId, field)
-          : model
-      ),
-      nextFieldId: nextFieldId + 1
+        model.id === currentModelId ? addField(model, field) : model
+      )
     }))
 
   updateField = ({ field }) =>
@@ -220,6 +204,27 @@ export default class App extends React.Component {
     this.setState(({ models, currentModelId }) => ({
       models: models.map(model =>
         model.id === currentModelId ? removeField(model, fieldId) : model
+      )
+    }))
+
+  createAssoc = ({ assoc }) =>
+    this.setState(({ models, currentModelId }) => ({
+      models: models.map(model =>
+        model.id === currentModelId ? addAssoc(model, assoc) : model
+      )
+    }))
+
+  updateAssoc = ({ assoc }) =>
+    this.setState(({ models, currentModelId }) => ({
+      models: models.map(model =>
+        model.id === currentModelId ? updateAssoc(model, assoc) : model
+      )
+    }))
+
+  deleteAssoc = assocId =>
+    this.setState(({ models, currentModelId }) => ({
+      models: models.map(model =>
+        model.id === currentModelId ? removeAssoc(model, assocId) : model
       )
     }))
 
@@ -255,11 +260,15 @@ export default class App extends React.Component {
             model={model}
             models={this.state.models}
             config={this.state.config}
+            goToModel={this.goToModel}
             goToProject={this.goToProject}
             updateModelName={this.updateModelName}
             createField={this.createField}
             updateField={this.updateField}
             deleteField={this.deleteField}
+            createAssoc={this.createAssoc}
+            updateAssoc={this.updateAssoc}
+            deleteAssoc={this.deleteAssoc}
             newMessage={this.newMessage}
           />
         )
@@ -322,14 +331,11 @@ export default class App extends React.Component {
   }
 }
 
-const buildModel = (id, model) => ({ id, ...model, fields: [] })
-const buildField = (id, field) => ({ id, ...field })
-
 const updateModelName = (model, name) => ({ ...model, name })
 
-const addField = (model, nextFieldId, field) => ({
+const addField = (model, field) => ({
   ...model,
-  fields: [...model.fields, buildField(nextFieldId, field)]
+  fields: [...model.fields, field]
 })
 
 const updateField = (model, field) => ({
@@ -340,4 +346,19 @@ const updateField = (model, field) => ({
 const removeField = (model, fieldId) => ({
   ...model,
   fields: model.fields.filter(field => field.id !== fieldId)
+})
+
+const addAssoc = (model, assoc) => ({
+  ...model,
+  assocs: [...model.assocs, assoc]
+})
+
+const updateAssoc = (model, assoc) => ({
+  ...model,
+  assocs: model.assocs.map(f => (f.id === assoc.id ? assoc : f))
+})
+
+const removeAssoc = (model, assocId) => ({
+  ...model,
+  assocs: model.assocs.filter(assoc => assoc.id !== assocId)
 })

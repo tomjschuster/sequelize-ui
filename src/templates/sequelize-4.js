@@ -1,5 +1,7 @@
+// import 'core-js/features/array/flat-map'
 import Case from 'case'
 import { singularize, pluralize } from 'inflection'
+import { ASSOC_TYPES } from '../constants'
 
 const modelVar = name => singularize(Case.pascal(name))
 export const modelFileName = name => singularize(Case.kebab(name))
@@ -37,7 +39,7 @@ export const modelFile = ({ model, config }) => ({
 
 // DB
 
-export const dbTemplate = ({ models = [], config = {} }) =>
+const dbTemplate = ({ models = [], config = {} }) =>
   `'use strict';
 
 const Sequelize = require('sequelize');
@@ -46,7 +48,7 @@ const sequelize = new Sequelize({
   ${renderConstructor(config)}
 });
 ${renderModelDefs(models)}
-
+${renderAssocs({ models, config })}
 module.exports = {
   sequelize,
   Sequelize${renderModelExports(models)}
@@ -56,9 +58,74 @@ const renderModelImports = models =>
   models.length ? models.map(model => renderModelImport(model)).join('') : ''
 
 const renderModelImport = ({ name }) =>
-  `const ${modelVar(name)}Model = require('./models/${modelFileName(
-    name
-  )}.js');\n`
+  `const ${modelVar(name)}Model = require('${renderModelPath(name)}');\n`
+
+const renderModelPath = name => `./models/${modelFileName(name)}.js`
+
+const renderAssocs = ({ models, config }) =>
+  models.some(model => model.assocs.length > 0)
+    ? models
+      .flatMap(model =>
+        model.assocs.map(assoc => {
+          const target = models.find(m => m.id === assoc.targetId)
+          return renderAssoc(assoc, model, target, config)
+        })
+      )
+      .join('\n')
+    : ''
+
+const renderAssoc = (assoc, model, target, config) =>
+  `${modelVar(model.name)}.${assocMethod(assoc.type)}(${
+    target.name
+  }${renderAssocOpts(assoc, model, target, config)});\n`
+
+const assocMethod = type => {
+  switch (type) {
+    case ASSOC_TYPES.BELONGS_TO:
+      return 'belongsTo'
+    case ASSOC_TYPES.HAS_ONE:
+      return 'hasOne'
+    case ASSOC_TYPES.HAS_MANY:
+      return 'hasMany'
+    case ASSOC_TYPES.MANY_TO_MANY:
+      return 'belongsToMany'
+  }
+}
+
+const renderAssocOpts = (assoc, model, target, config) =>
+  assoc.name || assoc.foreignKey || assoc.type === ASSOC_TYPES.MANY_TO_MANY
+    ? `, {\n  ${kvs(
+      [
+        {
+          k: 'through',
+          v: `'${modelTable({
+            name: assoc.through,
+            snake: config.snake,
+            singularTableNames: config.singularTableNames
+          })}'`,
+          exclude: assoc.type !== ASSOC_TYPES.MANY_TO_MANY
+        },
+        {
+          k: 'foreignKey',
+          v: `'${modelTable({
+            name: assoc.foreignKey || assoc.name + ' id',
+            snake: config.snake,
+            singularTableNames: true
+          })}'`,
+          exclude: !assoc.foreignKey && !(assoc.as && config.snake)
+        },
+        {
+          k: 'otherKey',
+          v: `'${assoc.targetForeignKey}'`,
+          exclude:
+              assoc.type !== ASSOC_TYPES.MANY_TO_MANY ||
+              !assoc.targetForeignKey
+        },
+        { k: 'as', v: `'${Case.camel(assoc.name)}'`, exclude: !assoc.name }
+      ],
+      2
+    )}\n}`
+    : ''
 
 const renderModelDefs = models =>
   models.length
@@ -124,10 +191,6 @@ module.exports = (sequelize, DataTypes) => {
     ${renderFields(fields, config)}
   }${renderModelOpts({ name, config })});
 
-  ${modelVar(name)}.associate = function(models) {
-    // associations can be defined here
-  };
-
   return ${modelVar(name)};
 };
 `
@@ -183,11 +246,11 @@ const renderModelOpts = ({ name, config: { snake, singularTableNames } }) =>
     ? `, { tableName: '${modelTable({ name, snake, singularTableNames })}' }`
     : ''
 
-const kvs = (kvs, depth = 0) =>
+const kvs = (kvs, depth = 0, singleLine = false) =>
   kvs
     .filter(kv => !kv.exclude)
     .map(({ k, v }) => `${k}: ${v}`)
-    .join(`,\n${indent(depth)}`)
+    .join(`,${singleLine ? ' ' : `\n${indent(depth)}`}`)
 
 const indent = depth => new Array(depth).fill(' ').join('')
 

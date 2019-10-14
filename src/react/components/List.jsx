@@ -20,9 +20,16 @@ export const Title = ({ className, text, children, ...props }) => {
   )
 }
 
-export const Item = ({ className, ...props }) => {
-  const itemClassName = className ? 'list__item ' + className : 'list__item'
-  return <li className={itemClassName} {...props} />
+export const Item = ({ className, noBorder, ...props }) => {
+  const classNames = [
+    'list__item',
+    className,
+    noBorder && 'list__item--no-border'
+  ]
+    .filter(x => x)
+    .join(' ')
+
+  return <li className={classNames} {...props} />
 }
 
 Item.propTypes = {
