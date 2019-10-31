@@ -315,6 +315,24 @@ export default class App extends React.Component {
     return [aboutLink, projectLink, githubLink]
   }
 
+  renderFooterActions = () => {
+    return this.state.pageState === ABOUT ||
+      this.state.pageState === LOADING ? null : (
+        <div>
+          <Button
+            className='footer__reset'
+            label='Reset'
+            onClick={this.openResetModal}
+          />
+          <Button
+            className='footer__reset'
+            label='Clear'
+            onClick={this.openClearModal}
+          />
+        </div>
+      )
+  }
+
   render () {
     return (
       <React.Fragment>
@@ -331,21 +349,7 @@ export default class App extends React.Component {
                 Tom Schuster
               </a>
             </p>
-            {this.state.pageState === ABOUT ||
-            this.state.pageState === LOADING ? null : (
-              <div>
-                  <Button
-                  className='footer__reset'
-                  label='Reset'
-                  onClick={this.openResetModal}
-                  />
-                  <Button
-                  className='footer__reset'
-                  label='Clear'
-                  onClick={this.openClearModal}
-                  />
-                </div>
-              )}
+            {this.renderFooterActions()}
           </div>
         </footer>
         <Message time={MESSAGE_TIME} messages={this.state.messages} />
@@ -363,7 +367,8 @@ export default class App extends React.Component {
                 target='_blank'
               >
                 localStorage
-              </a>.
+              </a>
+              .
             </p>
           }
           actions={
