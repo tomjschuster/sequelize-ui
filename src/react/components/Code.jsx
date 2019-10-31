@@ -222,7 +222,7 @@ export class CodeFlyout extends React.Component {
     }
 
     if (success) {
-      this.props.newMessage('Copied to clipboard', 'success')
+      this.props.newMessage('Code copied to clipboard', 'success')
     } else {
       this.props.newMessage('Error copying', 'error')
     }

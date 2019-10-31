@@ -62,43 +62,56 @@ export default class Project extends React.Component {
   render () {
     const { props, state } = this
 
+    const className = state.codeOpen
+      ? 'main-content project no-scroll'
+      : 'main-content project'
+
     return (
-      <React.Fragment>
-        <main className='main-content project'>
-          <div className='content-wrapper'>
-            <h2 className='title'>My Sequelize Project</h2>
-            <ToolBelt>
-              <Button icon='code' label='Code' onClick={this.toggleCode} />
-            </ToolBelt>
-            <List.Title className='models__title' text='Models' />
-            <List.List className='models'>
-              {props.models.map(model => (
-                <List.Item key={model.id}>
-                  <List.Content>{model.name}</List.Content>
-                  <List.Actions>
-                    <Button
-                      icon='view'
-                      iconPosition='above'
-                      onClick={() => props.goToModel(model.id)}
-                      label='View'
-                    />
-                    <Button
-                      icon='delete'
-                      iconPosition='above'
-                      onClick={() => props.deleteModel(model.id)}
-                      label='Delete'
-                    />
-                  </List.Actions>
-                </List.Item>
-              ))}
-              <List.Item className='add-model'>
-                {state.creatingNewModel ? (
-                  <NewModelForm
-                    models={props.models}
-                    onCancel={this.cancelCreatingNewModel}
-                    onCreate={props.createModel}
+      <main className={className}>
+        <div className='content-wrapper'>
+          <h2 className='title'>My Sequelize Project</h2>
+          <ToolBelt>
+            <Button icon='code' label='Code' onClick={this.toggleCode} />
+          </ToolBelt>
+          <List.Title className='models__title' text='Models' />
+          <List.List className='models'>
+            {props.models.map(model => (
+              <List.Item key={model.id}>
+                <List.Content>{model.name}</List.Content>
+                <List.Actions>
+                  <Button
+                    icon='view'
+                    iconPosition='above'
+                    onClick={() => props.goToModel(model.id)}
+                    label='View'
                   />
-                ) : props.models.length > 0 ? (
+                  <Button
+                    icon='delete'
+                    iconPosition='above'
+                    onClick={() => props.deleteModel(model.id)}
+                    label='Delete'
+                  />
+                </List.Actions>
+              </List.Item>
+            ))}
+            <List.Item className='add-model'>
+              {state.creatingNewModel ? (
+                <NewModelForm
+                  models={props.models}
+                  onCancel={this.cancelCreatingNewModel}
+                  onCreate={props.createModel}
+                />
+              ) : props.models.length > 0 ? (
+                <Button
+                  ref={this.addButton}
+                  icon='add'
+                  label='Add a Model'
+                  primary
+                  onClick={this.startCreatingNewModel}
+                />
+              ) : (
+                <React.Fragment>
+                  <p>You have no models</p>
                   <Button
                     ref={this.addButton}
                     icon='add'
@@ -106,51 +119,40 @@ export default class Project extends React.Component {
                     primary
                     onClick={this.startCreatingNewModel}
                   />
-                ) : (
-                  <React.Fragment>
-                    <p>You have no models</p>
-                    <Button
-                      ref={this.addButton}
-                      icon='add'
-                      label='Add a Model'
-                      primary
-                      onClick={this.startCreatingNewModel}
-                    />
-                  </React.Fragment>
-                )}
-              </List.Item>
-            </List.List>
-            <ToolBelt className='project-config' title='Database Options'>
-              <List.Item noBorder>
-                <Checkbox
-                  id='config-timestamps'
-                  className='project-config__item'
-                  label='Timestamps'
-                  checked={props.config.timestamps}
-                  onCheck={props.toggleTimestamps}
-                />
-              </List.Item>
-              <List.Item noBorder>
-                <Checkbox
-                  id='config-snake'
-                  className='project-config__item'
-                  label='snake_case'
-                  checked={props.config.snake}
-                  onCheck={props.toggleSnake}
-                />
-              </List.Item>
-              <List.Item noBorder>
-                <Checkbox
-                  id='singluar-table-names'
-                  className='project-config__item'
-                  label='Singular Table Names'
-                  checked={props.config.singularTableNames}
-                  onCheck={props.toggleSingularTableNames}
-                />
-              </List.Item>
-            </ToolBelt>
-          </div>
-        </main>
+                </React.Fragment>
+              )}
+            </List.Item>
+          </List.List>
+          <ToolBelt className='project-config' title='Database Options'>
+            <List.Item noBorder>
+              <Checkbox
+                id='config-timestamps'
+                className='project-config__item'
+                label='Timestamps'
+                checked={props.config.timestamps}
+                onCheck={props.toggleTimestamps}
+              />
+            </List.Item>
+            <List.Item noBorder>
+              <Checkbox
+                id='config-snake'
+                className='project-config__item'
+                label='snake_case'
+                checked={props.config.snake}
+                onCheck={props.toggleSnake}
+              />
+            </List.Item>
+            <List.Item noBorder>
+              <Checkbox
+                id='singluar-table-names'
+                className='project-config__item'
+                label='Singular Table Names'
+                checked={props.config.singularTableNames}
+                onCheck={props.toggleSingularTableNames}
+              />
+            </List.Item>
+          </ToolBelt>
+        </div>
         <CodeFlyout
           project
           open={this.state.codeOpen}
@@ -158,7 +160,7 @@ export default class Project extends React.Component {
           newMessage={this.props.newMessage}
           fileItem={this.projectFileItem()}
         />
-      </React.Fragment>
+      </main>
     )
   }
 }

@@ -17,13 +17,11 @@ npm start
 ```
 
 TODO:
-- Select Driver
-- Name project
-- Explain Storage
-- Clear/Reset warning modals
 - Demo GIF's
 
 ## Future enhancements
+- Name project
+- Select Driver
 - Migrations
 - Sequelize v5 templates
 - Multiple Projects

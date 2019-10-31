@@ -1,5 +1,4 @@
 import React from 'react'
-import uuid from 'uuid/v4'
 
 import { Blog } from '../utils/sample-data.js'
 import Storage from '../utils/Storage.js'
@@ -8,6 +7,7 @@ import * as stateUtils from '../utils/state.js'
 import Header from './components/Header.jsx'
 import Button from './components/Button.jsx'
 import Message from './components/Message.jsx'
+import Modal from './components/Modal.jsx'
 import About from './views/About.jsx'
 import Project from './views/Project.jsx'
 import Model from './views/Model.jsx'
@@ -19,6 +19,9 @@ const MODEL = 'MODEL'
 const MESSAGE_TIME = 1750
 const STATE_KEY = 'SUI_STATE'
 const FLAGS_KEY = 'SUI_FLAGS'
+
+const CLEAR_MODAL = 'CLEAR_MODAL'
+const RESET_MODAL = 'RESET_MODAL'
 
 const initialState = {
   loaded: false,
@@ -32,7 +35,8 @@ const initialState = {
   },
   models: [],
   currentModelId: null,
-  messages: []
+  messages: [],
+  modal: null
 }
 
 export default class App extends React.Component {
@@ -148,6 +152,12 @@ export default class App extends React.Component {
 
   clearMessage = id =>
     this.setState({ messages: this.state.messages.filter(m => m.id !== id) })
+
+  // Modal
+
+  openClearModal = () => this.setState({ modal: CLEAR_MODAL })
+  openResetModal = () => this.setState({ modal: RESET_MODAL })
+  closeModal = () => this.setState({ modal: null })
 
   // Project Methods
   toggleTimestamps = () =>
@@ -298,7 +308,7 @@ export default class App extends React.Component {
       href: 'https://github.com/tomjschuster/sequelize-ui',
       icon: 'github',
       iconPosition: 'above',
-      label: 'GitHub',
+      label: 'Source Code',
       newTab: true
     }
 
@@ -314,18 +324,65 @@ export default class App extends React.Component {
         />
         {this.renderPage()}
         <footer className='footer'>
-          <Button
-            className='footer__reset'
-            label='Reset'
-            onClick={this.reset}
-          />
-          <Button
-            className='footer__reset'
-            label='Clear'
-            onClick={this.clear}
-          />
+          <div className='footer__content'>
+            <p>
+              © 2016-present{' '}
+              <a href='https://github.com/tomjschuster' target='_blank'>
+                Tom Schuster
+              </a>
+            </p>
+            {this.state.pageState === ABOUT ||
+            this.state.pageState === LOADING ? null : (
+              <div>
+                  <Button
+                  className='footer__reset'
+                  label='Reset'
+                  onClick={this.openResetModal}
+                  />
+                  <Button
+                  className='footer__reset'
+                  label='Clear'
+                  onClick={this.openClearModal}
+                  />
+                </div>
+              )}
+          </div>
         </footer>
         <Message time={MESSAGE_TIME} messages={this.state.messages} />
+        <Modal
+          title={
+            this.state.modal === RESET_MODAL ? 'Reset Project' : 'Clear Project'
+          }
+          open={this.state.modal !== null}
+          onClose={this.closeModal}
+          footNote={
+            <p>
+              All models are persisted locally through{' '}
+              <a
+                href='https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage'
+                target='_blank'
+              >
+                localStorage
+              </a>.
+            </p>
+          }
+          actions={
+            <>
+              <Button
+                primary
+                label='Confirm'
+                onClick={
+                  this.state.modal === RESET_MODAL ? this.reset : this.clear
+                }
+              />
+              <Button secondary label='Cancel' onClick={this.closeModal} />
+            </>
+          }
+        >
+          {this.state.modal === RESET_MODAL
+            ? 'Are you sure you want to reset Sequelize UI to its initial state? You will lose all of your models.'
+            : 'Are you sure you want to clear your project? You will lose all of your models.'}
+        </Modal>
       </React.Fragment>
     )
   }
