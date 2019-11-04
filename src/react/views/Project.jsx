@@ -1,13 +1,13 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from "react";
+import PropTypes from "prop-types";
 
-import * as sequelize4 from '../../templates/sequelize-4.js'
-import NewModelForm from './Project/NewModelForm.jsx'
-import Checkbox from '../components/Checkbox.jsx'
-import Button from '../components/Button.jsx'
-import ToolBelt from '../components/ToolBelt.jsx'
-import { CodeFlyout } from '../components/Code.jsx'
-import * as List from '../components/List.jsx'
+import * as sequelize4 from "../../templates/sequelize-4.js";
+import NewModelForm from "./Project/NewModelForm.jsx";
+import Checkbox from "../components/Checkbox.jsx";
+import Button from "../components/Button.jsx";
+import ToolBelt from "../components/ToolBelt.jsx";
+import { CodeFlyout } from "../components/Code.jsx";
+import * as List from "../components/List.jsx";
 
 export default class Project extends React.Component {
   static propTypes = {
@@ -20,81 +20,81 @@ export default class Project extends React.Component {
     goToModel: PropTypes.func.isRequired,
     deleteModel: PropTypes.func.isRequired,
     newMessage: PropTypes.func.isRequired
-  }
+  };
 
-  state = { creatingNewModel: false, codeOpen: false }
+  state = { creatingNewModel: false, codeOpen: false };
 
-  constructor (props) {
-    super(props)
-    this.createRefs()
+  constructor(props) {
+    super(props);
+    this.createRefs();
   }
 
   createRefs = () => {
-    this.addButton = React.createRef()
-  }
+    this.addButton = React.createRef();
+  };
 
-  componentDidMount () {
-    if (this.props.models.length === 0) this.focusOnAddButton()
+  componentDidMount() {
+    if (this.props.models.length === 0) this.focusOnAddButton();
   }
 
   // Focus Helpers
-  focusOnAddButton () {
-    this.addButton.current && this.addButton.current.focus()
+  focusOnAddButton() {
+    this.addButton.current && this.addButton.current.focus();
   }
 
   // New Model
-  startCreatingNewModel = () => this.setState({ creatingNewModel: true })
+  startCreatingNewModel = () => this.setState({ creatingNewModel: true });
 
   cancelCreatingNewModel = () => {
-    this.setState({ creatingNewModel: false })
-    setTimeout(() => this.focusOnAddButton())
-  }
+    this.setState({ creatingNewModel: false });
+    setTimeout(() => this.focusOnAddButton());
+  };
 
   // Code
-  toggleCode = () => this.setState({ codeOpen: !this.state.codeOpen })
+  toggleCode = () => this.setState({ codeOpen: !this.state.codeOpen });
 
   projectFileItem = () =>
     sequelize4.files({
       models: this.props.models,
       config: this.props.config
-    })
+    });
 
-  render () {
-    const { props, state } = this
+  render() {
+    const { props, state } = this;
 
     const className = state.codeOpen
-      ? 'main-content project no-scroll'
-      : 'main-content project'
+      ? "main-content project no-scroll"
+      : "main-content project";
 
     return (
       <main className={className}>
-        <div className='content-wrapper'>
-          <h2 className='title'>My Sequelize Project</h2>
+        <div className="content-wrapper">
+          <h2 className="title">My Sequelize Project</h2>
           <ToolBelt>
-            <Button icon='code' label='Code' onClick={this.toggleCode} />
+            <Button icon="code" label="Code" onClick={this.toggleCode} />
           </ToolBelt>
-          <List.Title className='models__title' text='Models' />
-          <List.List className='models'>
+          <List.Title className="models__title" text="Models" />
+          <List.List className="models">
             {props.models.map(model => (
               <List.Item key={model.id}>
                 <List.Content>{model.name}</List.Content>
                 <List.Actions>
                   <Button
-                    icon='view'
-                    iconPosition='above'
+                    icon="view"
+                    iconPosition="above"
                     onClick={() => props.goToModel(model.id)}
-                    label='View'
+                    label="View"
                   />
                   <Button
-                    icon='delete'
-                    iconPosition='above'
+                    icon="delete"
+                    iconPosition="above"
                     onClick={() => props.deleteModel(model.id)}
-                    label='Delete'
+                    label="Delete"
                   />
                 </List.Actions>
               </List.Item>
             ))}
-            <List.Item className='add-model'>
+            <List.Item className="add-model">
               {state.creatingNewModel ? (
                 <NewModelForm
                   models={props.models}
@@ -104,9 +104,9 @@ export default class Project extends React.Component {
               ) : props.models.length > 0 ? (
                 <Button
                   ref={this.addButton}
-                  icon='add'
-                  label='Add a Model'
-                  primary
+                  icon="add"
+                  label="Add a Model"
+                  secondary
                   onClick={this.startCreatingNewModel}
                 />
               ) : (
@@ -114,39 +114,39 @@ export default class Project extends React.Component {
                   <p>You have no models</p>
                   <Button
                     ref={this.addButton}
-                    icon='add'
-                    label='Add a Model'
-                    primary
+                    icon="add"
+                    label="Add a Model"
+                    secondary
                     onClick={this.startCreatingNewModel}
                   />
                 </React.Fragment>
               )}
             </List.Item>
           </List.List>
-          <ToolBelt className='project-config' title='Database Options'>
+          <ToolBelt className="project-config" title="Database Options">
             <List.Item noBorder>
               <Checkbox
-                id='config-timestamps'
-                className='project-config__item'
-                label='Timestamps'
+                id="config-timestamps"
+                className="project-config__item"
+                label="Timestamps"
                 checked={props.config.timestamps}
                 onCheck={props.toggleTimestamps}
               />
             </List.Item>
             <List.Item noBorder>
               <Checkbox
-                id='config-snake'
-                className='project-config__item'
-                label='snake_case'
+                id="config-snake"
+                className="project-config__item"
+                label="snake_case"
                 checked={props.config.snake}
                 onCheck={props.toggleSnake}
               />
             </List.Item>
             <List.Item noBorder>
               <Checkbox
-                id='singluar-table-names'
-                className='project-config__item'
-                label='Singular Table Names'
+                id="singluar-table-names"
+                className="project-config__item"
+                label="Singular Table Names"
                 checked={props.config.singularTableNames}
                 onCheck={props.toggleSingularTableNames}
               />
@@ -161,6 +161,6 @@ export default class Project extends React.Component {
           fileItem={this.projectFileItem()}
         />
       </main>
-    )
+    );
   }
 }
