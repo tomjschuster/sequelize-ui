@@ -309,7 +309,7 @@ export default class App extends React.Component {
       icon: "github",
       iconPosition: "above",
       label: "Source Code",
-      newTab: true
+      newTab: false
     };
 
     return [aboutLink, projectLink, githubLink];
