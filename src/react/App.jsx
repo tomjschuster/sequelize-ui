@@ -337,7 +337,7 @@ export default class App extends React.Component {
           <div className="footer__content">
             <p className="footer__copyright">
               © 2016-present{" "}
-              <a href="https://github.com/tomjschuster" target="_blank">
+              <a href="https://github.com/tomjschuster">
                 Tom Schuster
               </a>
             </p>
