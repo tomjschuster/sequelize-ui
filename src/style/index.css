@@ -886,6 +886,7 @@ input.checkbox[type="checkbox"]:focus+label::before {
   line-height: 1.9rem;
   letter-spacing: 0.05ch;
   font-weight: 400;
+  max-width: 100%;
   width: 560px;
 }
 
