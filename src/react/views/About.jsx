@@ -21,32 +21,38 @@ const About = ({ goToProject }) => (
         </a>
         &nbsp; model code for a Node.js project.
       </p>
-      <figure className='preview-gif'>
-        <img
-          src='static/images/build.gif'
+      <div className='preview'>
+        <video
+          autoPlay
+          loop
+          src='static/images/build.mp4'
           alt='Demo of creating a model using the GUI'
         />
-      </figure>
+      </div>
       <p className='info'>
         Use the code previewer to see the generated Sequelize code for your
         models, including configuration such as table/column name casing and
         pluralization.
       </p>
-      <figure className='preview-gif'>
-        <img
-          src='static/images/preview.gif'
+      <div className='preview'>
+        <video
+          autoPlay
+          loop
+          src='static/images/preview.mp4'
           alt='Demo of previewing generated Sequelize code'
         />
-      </figure>
+      </div>
       <p className='info'>
         Download your generated Sequelize project, and run it immediately.
       </p>
-      <figure className='preview-gif'>
-        <img
-          src='static/images/download.gif'
+      <div className='preview'>
+        <video
+          autoPlay
+          loop
+          src='static/images/download.mp4'
           alt='Demo of downloading and running generated Sequelize code'
         />
-      </figure>
+      </div>
       <div className='get-started'>
         <Button
           className='get-started__button'

@@ -903,7 +903,7 @@ input.checkbox[type="checkbox"]:focus+label::before {
   padding: 1rem;
 }
 
-.about .preview-gif {
+.about .preview {
   background-color: var(--white);
   border: var(--black) 1px solid;
   margin: 2rem auto;
@@ -911,7 +911,7 @@ input.checkbox[type="checkbox"]:focus+label::before {
   padding: 1rem;
 }
 
-.about .preview-gif img {
+.about .preview video {
   width: 100%;
 }
 
