@@ -23,7 +23,7 @@ const About = ({ goToProject }) => (
       </p>
       <div className='preview'>
         <video
-          autoPlay
+          controls
           loop
           src='static/images/build.mp4'
           alt='Demo of creating a model using the GUI'
@@ -36,7 +36,7 @@ const About = ({ goToProject }) => (
       </p>
       <div className='preview'>
         <video
-          autoPlay
+          controls
           loop
           src='static/images/preview.mp4'
           alt='Demo of previewing generated Sequelize code'
@@ -47,7 +47,7 @@ const About = ({ goToProject }) => (
       </p>
       <div className='preview'>
         <video
-          autoPlay
+          controls
           loop
           src='static/images/download.mp4'
           alt='Demo of downloading and running generated Sequelize code'
