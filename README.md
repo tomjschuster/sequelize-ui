@@ -1,13 +1,24 @@
 # sequelize-ui
 [![Build Status](https://travis-ci.com/tomjschuster/sequelize-ui.svg?branch=master)](https://travis-ci.com/tomjschuster/sequelize-ui)
 
-## [Version 0.1](https://github.com/tomjschuster/sequelize-ui/tree/0.1.0)
-- [App](http://sequelizeui.herokuapp.com)	
-- [Presentation](https://www.youtube.com/watch?v=aHT6S81YvwE)	
+## About
 
+[**Sequelize UI**](https://sequelizeui.app) provides a user-friendly interface for designing a relational database and generating [Sequelize ORM](https://sequelize.org/) model code for a Node.js project.
 
-## Version 0.2 (coming soon)
-- [App](https://sequelizeui.app)
+![Demo of creating a model using the GUI](assets/images/build.gif)
+
+Use the code previewer to see the generated Sequelize code for your models, including configuration such as table/column name casing and pluralization.
+
+![Demo of previewing generated Sequelize code](assets/images/preview.gif)
+
+Download your generated Sequelize project, and run it immediately.
+
+![Demo of downloading and running generated Sequelize code](assets/images/download.gif)
+
+## Using Sequelize UI
+
+You can use Sequelize UI at [sequelizeui.app](https://sequelizeui.app) or you can run it locally:
+
 
 ```
 git clone https://github.com/tomjschuster/sequelize-ui.git
@@ -16,12 +27,10 @@ npm install
 npm start
 ```
 
-TODO:
-- Demo GIF's
-
 ## Future enhancements
-- Name project
+- Multiple Projects
 - Select Driver
 - Migrations
 - Sequelize v5 templates
-- Multiple Projects
+- Generate code for multiple frameworks
+

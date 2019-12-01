@@ -10,8 +10,7 @@
   --white: #fefefe;
 }
 
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -139,6 +138,7 @@ a:visited {
 
 .main-content {
   background-color: #f0f0f0;
+  overflow-y: auto;
   position: relative;
   flex: 1 1 auto;
   padding-bottom: 2rem;
@@ -268,8 +268,7 @@ a:visited {
   border: 2px solid black;
 }
 
-.button.primary:disabled,
-.button.secondary:disabled {
+.button.primary:disabled, .button.secondary:disabled {
   background-color: #aaa;
 }
 
@@ -287,7 +286,7 @@ a:visited {
   border-radius: 9px;
 }
 
-.list__title + .list {
+.list__title+.list {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
@@ -320,7 +319,7 @@ a:visited {
   border-bottom: none;
 }
 
-.list__item__actions > * {
+.list__item__actions>* {
   width: 3.5rem;
 }
 
@@ -389,20 +388,19 @@ label.checkbox {
   padding-left: 1.5rem;
 }
 
-label.checkbox::before,
-label.checkbox::after {
+label.checkbox::before, label.checkbox::after {
   position: absolute;
 }
 
-input.checkbox[type="checkbox"] + label::after {
+input.checkbox[type="checkbox"]+label::after {
   content: none;
 }
 
-input.checkbox[type="checkbox"]:checked + label::after {
+input.checkbox[type="checkbox"]:checked+label::after {
   content: "";
 }
 
-input.checkbox[type="checkbox"]:focus + label::before {
+input.checkbox[type="checkbox"]:focus+label::before {
   outline: rgb(59, 153, 252) auto 12px;
 }
 
@@ -451,8 +449,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
   grid-template-rows: 30% 70%;
 }
 
-.code-explorer__explorer,
-.code-explorer__code {
+.code-explorer__explorer, .code-explorer__code {
   width: 100%;
   display: inline-block;
   overflow-y: auto;
@@ -482,12 +479,12 @@ input.checkbox[type="checkbox"]:focus + label::before {
   margin-left: 1.25rem;
 }
 
-.code-explorer__explorer > ul {
+.code-explorer__explorer>ul {
   margin-left: 0;
   padding-left: 0;
 }
 
-.code-explorer__file-item > .code-explorer__filename {
+.code-explorer__file-item>.code-explorer__filename {
   display: block;
   padding: 0.25em;
   color: #d6d6d6;
@@ -502,12 +499,12 @@ input.checkbox[type="checkbox"]:focus + label::before {
   background-color: #0d3a58;
 }
 
-.code-explorer__file-item.active > .code-explorer__filename {
+.code-explorer__file-item.active>.code-explorer__filename {
   font-weight: bold;
   cursor: default;
 }
 
-.code-explorer__file-item.active > .code-explorer__filename:hover {
+.code-explorer__file-item.active>.code-explorer__filename:hover {
   cursor: default;
 }
 
@@ -564,11 +561,11 @@ input.checkbox[type="checkbox"]:focus + label::before {
   }
 }
 
-.code-explorer__file-item > .code-explorer__filename::before {
+.code-explorer__file-item>.code-explorer__filename::before {
   margin-right: 0.5em;
 }
 
-.code-explorer__file > .code-explorer__filename {
+.code-explorer__file>.code-explorer__filename {
   cursor: pointer;
 }
 
@@ -592,8 +589,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 @media (max-width: 450px) {
-  .code-flyout .code-explorer,
-  .code-flyout .code__container {
+  .code-flyout .code-explorer, .code-flyout .code__container {
     font-size: 0.8rem;
   }
 }
@@ -615,8 +611,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
   font-style: italic;
 }
 
-.code-flyout__top-menu__filename,
-.code-flyout__top-menu__buttons .button {
+.code-flyout__top-menu__filename, .code-flyout__top-menu__buttons .button {
   font-size: 1rem;
   color: #e6e6e6;
 }
@@ -625,8 +620,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
   color: #0088ff;
 }
 
-.code-flyout pre,
-.code-flyout code {
+.code-flyout pre, .code-flyout code {
   height: 100%;
 }
 
@@ -721,7 +715,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
   flex-direction: row-reverse;
 }
 
-.modal__buttons > :not(:last-child) {
+.modal__buttons> :not(:last-child) {
   margin-right: 1rem;
 }
 
@@ -741,10 +735,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
 
 /* Icons */
 
-.icon.before::before,
-.icon.above::before,
-.icon.after::after,
-.icon.below::after {
+.icon.before::before, .icon.above::before, .icon.after::after, .icon.below::after {
   display: inline-block;
   font-style: normal;
   font-variant: normal;
@@ -753,160 +744,102 @@ input.checkbox[type="checkbox"]:focus + label::before {
   font-family: "Font Awesome 5 Free";
 }
 
-.icon.above::before,
-.icon.below::after {
+.icon.above::before, .icon.below::after {
   display: block;
 }
 
-.icon.before.code::before,
-.icon.above.code::before,
-.icon.after.code::after,
-.icon.below.code::after {
+.icon.before.code::before, .icon.above.code::before, .icon.after.code::after, .icon.below.code::after {
   font-weight: 900;
   content: "\f121";
 }
 
-.icon.before.edit::before,
-.icon.above.edit::before,
-.icon.after.edit::after,
-.icon.below.edit::after {
+.icon.before.edit::before, .icon.above.edit::before, .icon.after.edit::after, .icon.below.edit::after {
   font-weight: 900;
   content: "\f044";
 }
 
-.icon.before.back::before,
-.icon.above.back::before,
-.icon.after.back::after,
-.icon.below.back::after {
+.icon.before.back::before, .icon.above.back::before, .icon.after.back::after, .icon.below.back::after {
   content: "\f359";
 }
 
-.icon.before.delete::before,
-.icon.above.delete::before,
-.icon.after.delete::after,
-.icon.below.delete::after {
+.icon.before.delete::before, .icon.above.delete::before, .icon.after.delete::after, .icon.below.delete::after {
   font-weight: 900;
   content: "\f2ed";
 }
 
-.icon.before.view::before,
-.icon.above.view::before,
-.icon.after.view::after,
-.icon.below.view::after {
+.icon.before.view::before, .icon.above.view::before, .icon.after.view::after, .icon.below.view::after {
   font-weight: 900;
   content: "\f06e";
 }
 
-.icon.before.check::before,
-.icon.above.check::before,
-.icon.after.check::after,
-.icon.below.check::after {
+.icon.before.check::before, .icon.above.check::before, .icon.after.check::after, .icon.below.check::after {
   font-weight: 900;
   content: "\f00c";
 }
 
-.icon.before.save::before,
-.icon.above.save::before,
-.icon.after.save::after,
-.icon.below.save::after {
+.icon.before.save::before, .icon.above.save::before, .icon.after.save::after, .icon.below.save::after {
   content: "\f0c7";
 }
 
-.icon.before.cancel::before,
-.icon.above.cancel::before,
-.icon.after.cancel::after,
-.icon.below.cancel::after {
+.icon.before.cancel::before, .icon.above.cancel::before, .icon.after.cancel::after, .icon.below.cancel::after {
   font-weight: 900;
   content: "\f00d";
 }
 
-.icon.before.download::before,
-.icon.above.download::before,
-.icon.after.download::after,
-.icon.below.download::after {
+.icon.before.download::before, .icon.above.download::before, .icon.after.download::after, .icon.below.download::after {
   font-weight: 900;
   content: "\f019";
 }
 
-.icon.before.add::before,
-.icon.above.add::before,
-.icon.after.add::after,
-.icon.below.add::after {
+.icon.before.add::before, .icon.above.add::before, .icon.after.add::after, .icon.below.add::after {
   font-weight: 900;
   content: "\f067";
 }
 
-.icon.before.folder::before,
-.icon.above.folder::before,
-.icon.after.folder::after,
-.icon.below.folder::after {
+.icon.before.folder::before, .icon.above.folder::before, .icon.after.folder::after, .icon.below.folder::after {
   content: "\f07b";
 }
 
-.icon.before.info::before,
-.icon.above.info::before,
-.icon.after.info::after,
-.icon.below.info::after {
+.icon.before.info::before, .icon.above.info::before, .icon.after.info::after, .icon.below.info::after {
   font-weight: 400;
   content: "\f059";
 }
 
-.icon.before.cubes::before,
-.icon.above.cubes::before,
-.icon.after.cubes::after,
-.icon.below.cubes::after {
+.icon.before.cubes::before, .icon.above.cubes::before, .icon.after.cubes::after, .icon.below.cubes::after {
   font-weight: 900;
   content: "\f1b3";
 }
 
-.icon.before.copy::before,
-.icon.above.copy::before,
-.icon.after.copy::after,
-.icon.below.copy::after {
+.icon.before.copy::before, .icon.above.copy::before, .icon.after.copy::after, .icon.below.copy::after {
   font-weight: 900;
   content: "\f0c5";
 }
 
-.icon.before.github::before,
-.icon.above.github::before,
-.icon.after.github::after,
-.icon.below.github::after {
+.icon.before.github::before, .icon.above.github::before, .icon.after.github::after, .icon.below.github::after {
   font-family: "Font Awesome 5 Brands";
   font-weight: 400;
   content: "\f09b";
 }
 
-.icon.before.nodejs::before,
-.icon.above.nodejs::before,
-.icon.after.nodejs::after,
-.icon.below.nodejs::after {
+.icon.before.nodejs::before, .icon.above.nodejs::before, .icon.after.nodejs::after, .icon.below.nodejs::after {
   font-family: "Font Awesome 5 Brands";
   font-weight: 400;
   content: "\f3d3";
 }
 
-.icon.before.git::before,
-.icon.above.git::before,
-.icon.after.git::after,
-.icon.below.git::after {
+.icon.before.git::before, .icon.above.git::before, .icon.after.git::after, .icon.below.git::after {
   font-family: "Font Awesome 5 Brands";
   font-weight: 400;
   content: "\f1d3";
 }
 
-.icon.before.json::before,
-.icon.above.json::before,
-.icon.after.json::after,
-.icon.below.json::after {
+.icon.before.json::before, .icon.above.json::before, .icon.after.json::after, .icon.below.json::after {
   font-weight: bold;
   content: "{}";
   letter-spacing: 0.15rem;
 }
 
-.icon.before.reset::before,
-.icon.above.reset::before,
-.icon.after.reset::after,
-.icon.below.reset::after {
+.icon.before.reset::before, .icon.above.reset::before, .icon.after.reset::after, .icon.below.reset::after {
   font-weight: 900;
   content: "\f0e2";
 }
@@ -919,7 +852,6 @@ input.checkbox[type="checkbox"]:focus + label::before {
 
 .about .content-wrapper {
   max-width: 80%;
-  width: 560px;
 }
 
 .about__title {
@@ -954,6 +886,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
   line-height: 1.9rem;
   letter-spacing: 0.05ch;
   font-weight: 400;
+  width: 560px;
 }
 
 .about .info strong {
@@ -961,13 +894,25 @@ input.checkbox[type="checkbox"]:focus + label::before {
 }
 
 .about .get-started {
-  margin-top: 3rem;
+  margin: 3rem auto 1rem;
   text-align: center;
 }
 
 .about .get-started__button {
-  font-size: 1.5rem;
-  padding: 0.75rem;
+  font-size: 2rem;
+  padding: 1rem;
+}
+
+.about .preview-gif {
+  background-color: var(--white);
+  border: var(--black) 1px solid;
+  margin: 2rem auto;
+  max-width: 600px;
+  padding: 1rem;
+}
+
+.about .preview-gif img {
+  width: 100%;
 }
 
 /* Project */
@@ -976,20 +921,11 @@ input.checkbox[type="checkbox"]:focus + label::before {
   text-align: center;
 }
 
-.add-model,
-.add-field,
-.add-assoc {
+.add-model, .add-field, .add-assoc {
   justify-content: space-evenly;
 }
 
-.models__title,
-.fields__title,
-.models,
-.fields,
-.project-config,
-.model-name,
-.assocs__title,
-.assocs {
+.models__title, .fields__title, .models, .fields, .project-config, .model-name, .assocs__title, .assocs {
   background: #ffffff;
   margin-left: auto;
   margin-right: auto;
@@ -1001,9 +937,7 @@ input.checkbox[type="checkbox"]:focus + label::before {
   color: var(--primary-color);
 }
 
-.models__title,
-.fields__title,
-.assocs__title {
+.models__title, .fields__title, .assocs__title {
   background: var(--primary-color-light);
 }
 
@@ -1026,8 +960,7 @@ label.project-config__item:hover {
   color: var(--primary-color);
 }
 
-.project .title,
-.model-view .title {
+.project .title, .model-view .title {
   clear: right;
 }
 
@@ -1106,18 +1039,15 @@ label.project-config__item:hover {
   margin-left: 1rem;
 }
 
-.model-name__edit.button:last-of-type,
-.model-name__edit.button:first-of-type {
+.model-name__edit.button:last-of-type, .model-name__edit.button:first-of-type {
   padding: 0.5rem;
 }
 
-.project .toolbelt,
-.model-view .toolbelt {
+.project .toolbelt, .model-view .toolbelt {
   background-color: var(--white);
 }
 
-.project .toolbelt__title,
-.model-view .toolbelt__title {
+.project .toolbelt__title, .model-view .toolbelt__title {
   background-color: var(--primary-color-light);
 }
 
@@ -1244,8 +1174,7 @@ label.project-config__item:hover {
   background-color: var(--white);
 }
 
-.field-form input,
-.field-form select {
+.field-form input, .field-form select {
   padding: 0.3rem;
   margin-top: 0.5rem;
 }
@@ -1273,13 +1202,11 @@ label.project-config__item:hover {
   margin-bottom: 0.5rem;
 }
 
-.field-form__name label,
-.field-form__type label {
+.field-form__name label, .field-form__type label {
   display: block;
 }
 
-.field-form__name input,
-.field-form__type select {
+.field-form__name input, .field-form__type select {
   width: 100%;
   max-width: 300px;
 }
@@ -1364,13 +1291,11 @@ label.project-config__item:hover {
 
 /* Assoc Form */
 
-.assoc-form__type select,
-.assoc-form__model select {
+.assoc-form__type select, .assoc-form__model select {
   background-color: var(--white);
 }
 
-.assoc-form input,
-.assoc-form select {
+.assoc-form input, .assoc-form select {
   padding: 0.3rem;
 }
 
@@ -1388,22 +1313,16 @@ label.project-config__item:hover {
   padding-left: 2rem;
 }
 
-.assoc-form__model label,
-.assoc-form__type label {
+.assoc-form__model label, .assoc-form__type label {
   display: block;
 }
 
-.assoc-form__model input,
-.assoc-form__type select,
-.assoc-form__model select {
+.assoc-form__model input, .assoc-form__type select, .assoc-form__model select {
   width: 100%;
   max-width: 300px;
 }
 
-.assoc-form__name,
-.assoc-form__foreign-key,
-.assoc-form__target-foreign-key,
-.assoc-form__through {
+.assoc-form__name, .assoc-form__foreign-key, .assoc-form__target-foreign-key, .assoc-form__through {
   display: flex;
   align-items: center;
   width: 85%;
@@ -1411,18 +1330,12 @@ label.project-config__item:hover {
   justify-content: space-between;
 }
 
-.assoc-form__name input,
-.assoc-form__foreign-key input,
-.assoc-form__target-foreign-key input,
-.assoc-form__through input {
+.assoc-form__name input, .assoc-form__foreign-key input, .assoc-form__target-foreign-key input, .assoc-form__through input {
   margin-top: 0;
   flex: 1;
 }
 
-.assoc-form__name label,
-.assoc-form__foreign-key label,
-.assoc-form__target-foreign-key label,
-.assoc-form__through label {
+.assoc-form__name label, .assoc-form__foreign-key label, .assoc-form__target-foreign-key label, .assoc-form__through label {
   margin-right: 1rem;
 }
 
@@ -1443,8 +1356,7 @@ label.project-config__item:hover {
   grid-template-rows: auto;
 }
 
-.assoc-form__actions,
-.assoc-form__errors {
+.assoc-form__actions, .assoc-form__errors {
   grid-column-start: 1;
   grid-column-end: 2;
 }
@@ -1459,8 +1371,7 @@ label.project-config__item:hover {
     grid-template-columns: 50% 50%;
     grid-template-rows: auto;
   }
-  .assoc-form__actions,
-  .assoc-form__errors {
+  .assoc-form__actions, .assoc-form__errors {
     grid-column-start: 1;
     grid-column-end: 3;
   }

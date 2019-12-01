@@ -15,21 +15,38 @@ const About = ({ goToProject }) => (
       </div>
       <p className='info'>
         <strong>Sequelize UI</strong> provides a user-friendly interface for
-        designing a relational database and generating{' '}
+        designing a relational database and generating&nbsp;
         <a href='https://sequelize.org/' target='_blank'>
           Sequelize ORM
-        </a>{' '}
-        model code for a Node.js project.
+        </a>
+        &nbsp; model code for a Node.js project.
       </p>
+      <figure className='preview-gif'>
+        <img
+          src='static/images/build.gif'
+          alt='Demo of creating a model using the GUI'
+        />
+      </figure>
       <p className='info'>
-        Use the code previewer to look the Sequelize code needed to generate
-        your model while you configure your database, creating columns and add
-        constraints.
+        Use the code previewer to see the generated Sequelize code for your
+        models, including configuration such as table/column name casing and
+        pluralization.
       </p>
+      <figure className='preview-gif'>
+        <img
+          src='static/images/preview.gif'
+          alt='Demo of previewing generated Sequelize code'
+        />
+      </figure>
       <p className='info'>
-        Download your complete Sequelize project, or just a single file, or copy
-        the code to include in an existing project.
+        Download your generated Sequelize project, and run it immediately.
       </p>
+      <figure className='preview-gif'>
+        <img
+          src='static/images/download.gif'
+          alt='Demo of downloading and running generated Sequelize code'
+        />
+      </figure>
       <div className='get-started'>
         <Button
           className='get-started__button'
