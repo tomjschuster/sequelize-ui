@@ -1,7 +1,7 @@
 {
   "name": "sequelize-ui",
-  "version": "0.1.0",
-  "description": "Browser-based GUI that lets you design your database model, preview Sequelize code and automatically generate Sequelize project files.",
+  "version": "0.2.0",
+  "description":  "Browser-based GUI for previewing and generating Sequelize project files.",
   "homepage": "https://sequelizeui.app",
   "bugs": {
     "url": "https://github.com/tomjschuster/sequelize-ui/issues",
