@@ -24,7 +24,7 @@ const About = ({ goToProject }) => (
       <figure className='preview-gif'>
         <img
           src='static/images/build.gif'
-          alt='Demo of creating a model through using the GUI'
+          alt='Demo of creating a model using the GUI'
         />
       </figure>
       <p className='info'>
