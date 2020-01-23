@@ -679,6 +679,7 @@ input.checkbox[type="checkbox"]:focus+label::before {
 }
 
 .modal__header {
+  align-items: center;
   background: var(--primary-color-light);
   display: flex;
   justify-content: space-between;
