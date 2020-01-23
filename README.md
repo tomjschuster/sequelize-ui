@@ -5,7 +5,7 @@
 
 [**Sequelize UI**](https://sequelizeui.app) provides a user-friendly interface for designing a relational database and generating [Sequelize ORM](https://sequelize.org/) model code for a Node.js project.
 
-![Demo of creating a model using the GUI](assets/images/build.gif)
+![Demo of creating a model using the GUI](assets/images/models-demo.png)
 
 Use the code previewer to see the generated Sequelize code for your models, including configuration such as table/column name casing and pluralization.
 
