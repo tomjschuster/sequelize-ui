@@ -97,7 +97,7 @@ module.exports = {
       filename: 'index.html'
     }),
     new MiniCssExtractPlugin({ filename: 'static/[name].[hash].css' }),
-    new CopyWebpackPlugin([{ from: 'assets', to: './static' }]),
+    new CopyWebpackPlugin({ patterns: [{ from: 'assets', to: 'static' }] }),
     new RobotstxtPlugin(),
     new SitemapPlugin('https://sequelizeui.app', ['/'], { lastMod: true })
   ]
