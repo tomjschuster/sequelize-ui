@@ -1,19 +1,21 @@
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 const RobotstxtPlugin = require('robotstxt-webpack-plugin')
 const SitemapPlugin = require('sitemap-webpack-plugin').default
 
 const production = process.env.NODE_ENV === 'production'
 
+const alias = production ? {} : { 'react-dom': '@hot-loader/react-dom' }
+
 module.exports = {
   entry: ['core-js/features/array/flat-map', './src/index.js'],
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'static/[name].[hash].js'
+    path: path.resolve(__dirname, 'dist/'),
+    filename: 'static/[name].[fullhash].js'
   },
-  resolve: { extensions: ['.js', '.jsx'] },
+  resolve: { extensions: ['.js', '.jsx'], alias },
   devtool: production ? 'source-map' : 'eval-source-map',
   module: {
     rules: [
@@ -48,8 +50,10 @@ module.exports = {
           {
             loader: 'postcss-loader',
             options: {
-              ident: 'postcss',
-              plugins: () => [require('autoprefixer')({})]
+              postcssOptions: {
+                ident: 'postcss',
+                plugins: ['autoprefixer']
+              }
             }
           }
         ]
@@ -96,9 +100,13 @@ module.exports = {
       template: 'src/index.html',
       filename: 'index.html'
     }),
-    new MiniCssExtractPlugin({ filename: 'static/[name].[hash].css' }),
-    new CopyWebpackPlugin({ patterns: [{ from: 'assets', to: 'static' }] }),
+    new MiniCssExtractPlugin({ filename: 'static/[name].[fullhash].css' }),
+    new CopyPlugin({ patterns: [{ from: 'assets', to: 'static' }] }),
     new RobotstxtPlugin(),
-    new SitemapPlugin('https://sequelizeui.app', ['/'], { lastMod: true })
+    new SitemapPlugin({
+      base: 'https://sequelizeui.app',
+      paths: ['/'],
+      options:{ lastMod: true }
+    })
   ]
 }

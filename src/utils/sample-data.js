@@ -1,5 +1,5 @@
 import { DATA_TYPES } from '../constants'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 
 const USER_ID = uuid()
 const POST_ID = uuid()
