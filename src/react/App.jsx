@@ -58,23 +58,25 @@ export default class App extends React.Component {
     this.projectComponent = React.createRef()
   }
 
-  async mergePersistedState () {
-    const persistedData = await this.fetchPersistedState()
-    const hasRedAbout = await this.flags.get('hasRedAbout')
-    const pageState = this.getLandingPage(persistedData, hasRedAbout)
-    persistedData.pageState = pageState
-    persistedData.loaded = true
-    this.setState(persistedData)
+  mergePersistedState () {
+    Promise.all([this.fetchPersistedState(), this.flags.get('hasReadAbout')])
+      .then(([persistedData, hasReadAbout]) => {
+        const pageState = this.getLandingPage(persistedData, hasReadAbout)
+        persistedData.pageState = pageState
+        persistedData.loaded = true
+        this.setState(persistedData)
+    })
   }
 
-  async fetchPersistedState () {
-    const state = await this.store.load()
-    return state.models
-      ? {
-        ...state,
-        models: state.models.map(m => (m.assocs ? m : { ...m, assocs: [] }))
-      }
-      : state
+  fetchPersistedState () {
+    return this.store.load().then(state =>
+      state.models
+        ? {
+          ...state,
+          models: state.models.map(m => (m.assocs ? m : { ...m, assocs: [] }))
+       }
+       : state
+    )
   }
 
   loadDefaultProject = () => this.setState({ models: Blog.models })

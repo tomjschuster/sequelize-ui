@@ -8,9 +8,18 @@ export default class Modal extends React.Component {
     className: PropTypes.string,
     title: PropTypes.string,
     onClose: PropTypes.func,
-    footNote: PropTypes.arrayOf(PropTypes.element),
-    actions: PropTypes.arrayOf(PropTypes.element),
-    children: PropTypes.arrayOf(PropTypes.element)
+    footNode: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node
+    ]),
+    actions: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node
+    ]),
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node
+    ])
   }
 
   render () {
