@@ -24,7 +24,7 @@ You can use Sequelize UI at [sequelizeui.app](https://sequelizeui.app) or you ca
 git clone https://github.com/tomjschuster/sequelize-ui.git
 cd sequelize-ui
 npm install
-npm start
+npm run dev
 ```
 
 ## Future enhancements

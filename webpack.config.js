@@ -12,7 +12,7 @@ const alias = production ? {} : { 'react-dom': '@hot-loader/react-dom' }
 module.exports = {
   entry: ['core-js/features/array/flat-map', './src/index.js'],
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist/'),
     filename: 'static/[name].[fullhash].js'
   },
   resolve: { extensions: ['.js', '.jsx'], alias },
