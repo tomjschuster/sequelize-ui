@@ -7,13 +7,15 @@ const SitemapPlugin = require('sitemap-webpack-plugin').default
 
 const production = process.env.NODE_ENV === 'production'
 
+const alias = production ? {} : { 'react-dom': '@hot-loader/react-dom' }
+
 module.exports = {
   entry: ['core-js/features/array/flat-map', './src/index.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'static/[name].[fullhash].js'
   },
-  resolve: { extensions: ['.js', '.jsx'] },
+  resolve: { extensions: ['.js', '.jsx'], alias },
   devtool: production ? 'source-map' : 'eval-source-map',
   module: {
     rules: [
