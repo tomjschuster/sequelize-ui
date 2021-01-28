@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "camel-case": "^4.1.2",
+    "change-case": "^4.1.2",
     "pluralize": "^8.0.0"
   },
   "devDependencies": {
