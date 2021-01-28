@@ -10,6 +10,7 @@ import {
   Association,
   AssociationType,
   DataType,
+  DataTypeType,
   Field,
   Model,
   Schema,
@@ -117,10 +118,10 @@ const getAssociationTypes = ({
           acc[type] = true
           return acc
         },
-        acc[pascalCase(model.name)] || {},
+        acc[singular(pascalCase(model.name))] || {},
       )
 
-      acc[pascalCase(model.name)] = types
+      acc[singular(pascalCase(model.name))] = types
 
       return acc
     },
@@ -141,10 +142,10 @@ const getAssociationTypes = ({
 
 const associationTypes = ({ model, association }: ModelAssociation): string[] =>
   [
-    pascalCase(model.name),
-    `${model.name}Id`,
+    singular(pascalCase(model.name)),
+    `${singular(pascalCase(model.name))}Id`,
     association.type === AssociationType.HasOne
-      ? `${pascalCase(model.name)}CreationAttributes`
+      ? `${singular(pascalCase(model.name))}CreationAttributes`
       : null,
   ].filter((x): x is string => !!x)
 
@@ -308,8 +309,11 @@ const fieldTemplate = ({ name, type, required, primaryKey, unique }: Field): str
     2,
     [
       typeField(type),
-      required === undefined ? '' : allowNullField(!required),
       primaryKey === undefined ? '' : primaryKeyField(primaryKey),
+      type.type === DataTypeType.Integer && type.autoincrement !== undefined
+        ? autoincrementField(type.autoincrement)
+        : '',
+      required === undefined ? '' : allowNullField(!required),
       unique === undefined ? '' : uniqueField(unique),
       // TODO; Unique
     ]
@@ -323,6 +327,7 @@ const typeField = (dataType: DataType): string =>
 const allowNullField = (allowNull: boolean): string => `allowNull: ${allowNull}`
 const primaryKeyField = (primaryKey: boolean): string => `primaryKey: ${primaryKey}`
 const uniqueField = (unique: boolean): string => `unique: ${unique}`
+const autoincrementField = (autoincrement: boolean) => `autoIncrement: ${autoincrement}`
 
 type ModelOptionsArgs = { modelName: string; options: SchemaOptions }
 const modelOptions = ({ modelName, options }: ModelOptionsArgs): string =>

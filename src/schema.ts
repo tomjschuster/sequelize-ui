@@ -44,7 +44,7 @@ type DataTypeBase<T extends DataTypeType> = { type: T }
 
 export type StringDataType = DataTypeBase<DataTypeType.String>
 export type TextDataType = DataTypeBase<DataTypeType.Text>
-export type IntegerDataType = DataTypeBase<DataTypeType.Integer>
+export type IntegerDataType = DataTypeBase<DataTypeType.Integer> & { autoincrement?: boolean }
 export type FloatDataType = DataTypeBase<DataTypeType.Float>
 export type RealDataType = DataTypeBase<DataTypeType.Real>
 export type DoubleDataType = DataTypeBase<DataTypeType.Double>
@@ -99,11 +99,11 @@ export type ManyToManyAssociation = AssociationBase<AssociationType.ManyToMany> 
   through: ManyToManyThrough
   targetFk?: string
 }
-type ManyToManyThrough =
+export type ManyToManyThrough =
   | { type: ThroughType.ThroughModel; modelId: string }
   | { type: ThroughType.ThroughTable; table: string }
 
-enum ThroughType {
+export enum ThroughType {
   ThroughModel = 'THROUGH_MODEL',
   ThroughTable = 'THROUGH_TABLE',
 }

@@ -21,7 +21,7 @@ export enum SequelizeDataTypeType {
 
 type SequelizeStringType = { type: SequelizeDataTypeType.String }
 type SequelizeTextType = { type: SequelizeDataTypeType.Text }
-type SequelizeIntegerType = { type: SequelizeDataTypeType.Integer }
+type SequelizeIntegerType = { type: SequelizeDataTypeType.Integer; autoincrement?: boolean }
 type SequelizeFloatType = { type: SequelizeDataTypeType.Float }
 type SequelizeRealType = { type: SequelizeDataTypeType.Real }
 type SequelizeDoubleType = { type: SequelizeDataTypeType.Double }
@@ -76,7 +76,7 @@ export function dataTypeToSequelize(dataType: DataType): SequelizeDataType {
     case DataTypeType.Text:
       return { type: SequelizeDataTypeType.Text }
     case DataTypeType.Integer:
-      return { type: SequelizeDataTypeType.Integer }
+      return { type: SequelizeDataTypeType.Integer, autoincrement: dataType.autoincrement }
     case DataTypeType.Float:
       return { type: SequelizeDataTypeType.Float }
     case DataTypeType.Real:

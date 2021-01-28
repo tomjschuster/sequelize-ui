@@ -1,5 +1,5 @@
 import { modelTemplate, ModelTemplateArgs } from './codegen/sequelize/templates/model'
-import { AssociationType, DataTypeType, Model, Schema, SchemaOptions } from './schema'
+import { AssociationType, DataTypeType, Model, Schema, SchemaOptions, ThroughType } from './schema'
 
 /*
   TODO:
@@ -7,6 +7,7 @@ import { AssociationType, DataTypeType, Model, Schema, SchemaOptions } from './s
     - Timestamps
     - Singular table names
     - Other files
+    - Default values
 */
 
 const options: SchemaOptions = {
@@ -87,3 +88,53 @@ const data: ModelTemplateArgs = {
 }
 
 console.log(modelTemplate(data))
+
+const category: Model = {
+  id: '6',
+  name: 'category',
+  fields: [
+    {
+      name: 'categoryId',
+      type: { type: DataTypeType.Integer, autoincrement: true },
+      primaryKey: true,
+      required: true,
+    },
+    { name: 'name', type: { type: DataTypeType.String }, required: true },
+    { name: 'lastUpdate', type: { type: DataTypeType.DateTime }, required: true },
+  ],
+  associations: [
+    { type: AssociationType.HasMany, targetModelId: '8' },
+    {
+      type: AssociationType.ManyToMany,
+      targetModelId: '7',
+      through: { type: ThroughType.ThroughModel, modelId: '8' },
+    },
+  ],
+}
+
+const film: Model = {
+  id: '7',
+  name: 'film',
+  fields: [],
+  associations: [],
+}
+
+const filmCategory: Model = {
+  id: '8',
+  name: 'film_category',
+  fields: [],
+  associations: [],
+}
+
+const dvdSchema: Schema = {
+  id: '2',
+  name: 'dvd',
+  models: [category, film, filmCategory],
+}
+const dvdData: ModelTemplateArgs = {
+  model: category,
+  schema: dvdSchema,
+  options,
+}
+
+console.log(modelTemplate(dvdData))
