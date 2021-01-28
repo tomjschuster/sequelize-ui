@@ -1,24 +1,25 @@
+import { dbTemplate } from './codegen/sequelize/templates/db'
 import { modelTemplate, ModelTemplateArgs } from './codegen/sequelize/templates/model'
-import { AssociationType, DataTypeType, Model, Schema, SchemaOptions, ThroughType } from './schema'
+import { SqlDialect, DatabaseOptions } from './database'
+import { AssociationType, DataTypeType, Model, Schema, ThroughType } from './schema'
 
 /*
   TODO:
-    - Snake case
-    - Timestamps
-    - Singular table names
-    - Other files
+    - Init models file
+    - Static files
     - Default values
 */
 
-const options: SchemaOptions = {
+const options: DatabaseOptions = {
+  sqlDialect: SqlDialect.MariaDb,
   timestamps: true,
   caseStyle: 'camel',
-  nounForm: 'singular',
+  nounForm: 'plural',
 }
 
 const postOffice: Model = {
   id: '1',
-  name: 'Post Office',
+  name: 'Post',
   fields: [
     { name: 'id', type: { type: DataTypeType.Integer }, primaryKey: true },
     { name: 'other id', type: { type: DataTypeType.Integer }, primaryKey: true, unique: true },
@@ -138,3 +139,5 @@ const dvdData: ModelTemplateArgs = {
 }
 
 console.log(modelTemplate(dvdData))
+
+console.log(dbTemplate({ schema: dvdSchema, options }))

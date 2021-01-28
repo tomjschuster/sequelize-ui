@@ -14,9 +14,9 @@ import {
   Field,
   Model,
   Schema,
-  SchemaOptions,
 } from '../../../schema'
 import { indent, blank } from '../../helpers'
+import { DatabaseOptions } from '../../../database'
 
 // some association methods have singular and plural forms
 // for example: "has many deer" would have addDeer for both adding one or multiple der
@@ -31,7 +31,7 @@ export { modelTemplate, ModelTemplateArgs }
 type ModelTemplateArgs = {
   model: Model
   schema: Schema
-  options: SchemaOptions
+  options: DatabaseOptions
 }
 type ModelAssociation = { model: Model; association: Association }
 
@@ -62,7 +62,7 @@ const joinModelAssociations = ({
 type ModelTemplateArgs_ = {
   model: Model
   associations: ModelAssociation[]
-  options: SchemaOptions
+  options: DatabaseOptions
 }
 const modelTemplate_ = ({ model, associations, options }: ModelTemplateArgs_): string =>
   [
@@ -71,6 +71,7 @@ const modelTemplate_ = ({ model, associations, options }: ModelTemplateArgs_): s
     types({ modelName: model.name, fields: model.fields }),
     blank(),
     classDeclaration({ modelName: model.name, fields: model.fields, associations, options }),
+    blank(),
   ].join('\n')
 
 // Imports
@@ -197,7 +198,7 @@ type ClassDeclarationArgs = {
   modelName: string
   fields: Field[]
   associations: ModelAssociation[]
-  options: SchemaOptions
+  options: DatabaseOptions
 }
 const classDeclaration = ({
   modelName,
@@ -329,13 +330,13 @@ const primaryKeyField = (primaryKey: boolean): string => `primaryKey: ${primaryK
 const uniqueField = (unique: boolean): string => `unique: ${unique}`
 const autoincrementField = (autoincrement: boolean) => `autoIncrement: ${autoincrement}`
 
-type ModelOptionsArgs = { modelName: string; options: SchemaOptions }
+type ModelOptionsArgs = { modelName: string; options: DatabaseOptions }
 const modelOptions = ({ modelName, options }: ModelOptionsArgs): string =>
   ['sequelize', tableName({ modelName, options })].filter((x) => x).join(',\n')
 
 type TableNameArgs = {
   modelName: string
-  options: SchemaOptions
+  options: DatabaseOptions
 }
 const tableName = ({
   options: { caseStyle, nounForm },

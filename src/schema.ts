@@ -1,9 +1,3 @@
-export type SchemaOptions = {
-  timestamps: boolean
-  caseStyle: 'snake' | 'camel'
-  nounForm: 'singular' | 'plural'
-}
-
 export type Schema = { id: string; name: string; models: Model[] }
 
 export type Model = { id: string; name: string; fields: Field[]; associations: Association[] }
