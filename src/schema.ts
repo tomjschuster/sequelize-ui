@@ -84,6 +84,7 @@ type AssociationBase<T extends AssociationType> = {
   targetModelId: string
   foreignKey?: string
   alias?: string
+  inverse?: boolean
 }
 
 export type BelongsToAssociation = AssociationBase<AssociationType.BelongsTo>
@@ -101,7 +102,3 @@ export enum ThroughType {
   ThroughModel = 'THROUGH_MODEL',
   ThroughTable = 'THROUGH_TABLE',
 }
-
-export type ModelAssociation = {
-  modelName: string
-} & Association

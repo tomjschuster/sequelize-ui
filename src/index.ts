@@ -1,11 +1,11 @@
 import { dbTemplate } from './codegen/sequelize/templates/db'
 import { modelTemplate, ModelTemplateArgs } from './codegen/sequelize/templates/model'
+import { initModelsTemplate } from './codegen/sequelize/templates/initModels'
 import { SqlDialect, DatabaseOptions } from './database'
 import { AssociationType, DataTypeType, Model, Schema, ThroughType } from './schema'
 
 /*
   TODO:
-    - Init models file
     - Static files
     - Default values
 */
@@ -104,11 +104,14 @@ const category: Model = {
     { name: 'lastUpdate', type: { type: DataTypeType.DateTime }, required: true },
   ],
   associations: [
-    { type: AssociationType.HasMany, targetModelId: '8' },
+    { type: AssociationType.HasOne, targetModelId: '8', alias: 'cats' },
+    { type: AssociationType.HasMany, targetModelId: '8', foreignKey: 'blabla' },
     {
       type: AssociationType.ManyToMany,
       targetModelId: '7',
-      through: { type: ThroughType.ThroughModel, modelId: '8' },
+      // through: { type: ThroughType.ThroughModel, modelId: '8' },
+      through: { type: ThroughType.ThroughTable, table: 'foo' },
+      alias: 'cat',
     },
   ],
 }
@@ -141,3 +144,5 @@ const dvdData: ModelTemplateArgs = {
 console.log(modelTemplate(dvdData))
 
 console.log(dbTemplate({ schema: dvdSchema, options }))
+
+console.log(initModelsTemplate({ schema: dvdSchema, options }))
