@@ -15,7 +15,7 @@ import {
   Model,
   Schema,
 } from '../../../schema'
-import { indent, blank } from '../../helpers'
+import { indent, blank, lines } from '../../helpers'
 import { DatabaseOptions } from '../../../database'
 
 // some association methods have singular and plural forms
@@ -65,14 +65,14 @@ type ModelTemplateArgs_ = {
   options: DatabaseOptions
 }
 const modelTemplate_ = ({ model, associations, options }: ModelTemplateArgs_): string =>
-  [
+  lines([
     imports({ model, associations }),
     blank(),
     types({ modelName: model.name, fields: model.fields }),
     blank(),
     classDeclaration({ modelName: model.name, fields: model.fields, associations, options }),
     blank(),
-  ].join('\n')
+  ])
 
 // Imports
 type ImportsArgs = {
@@ -80,21 +80,17 @@ type ImportsArgs = {
   associations: ModelAssociation[]
 }
 const imports = ({ model, associations }: ImportsArgs): string =>
-  [
+  lines([
     sequelizeImports(),
-    ...getAssociationTypes({ currentModel: model, associations }).map(([filename, types]) =>
-      typeImports({ filename, types }),
-    ),
-  ].join('\n')
+    ...getAssociationTypes({ currentModel: model, associations }).map(typeImports),
+  ])
 
 const sequelizeImports = (): string =>
   `import Sequelize, { DataTypes, Model, Optional } from 'sequelize';`
 
-type TypeImportArgs = {
-  filename: string
-  types: string[]
-}
-const typeImports = ({ filename, types }: TypeImportArgs): string =>
+type TypeImportArgs = [filename: string, types: string[]]
+
+const typeImports = ([filename, types]: TypeImportArgs): string =>
   `import type { ${types.join(', ')} } from './${filename}'`
 
 type ModelAssociationTypes = { [modelName: string]: AssociationTypeLookup }
@@ -156,12 +152,12 @@ type TypesArgs = {
   fields: Field[]
 }
 const types = ({ modelName, fields }: TypesArgs): string =>
-  [
+  lines([
     modelAttributesType({ modelName, fields }),
     blank(),
     idTypes({ modelName, fields }),
     creationAttributeType(modelName),
-  ].join('\n')
+  ])
 
 type ModelAttributesTypeArgs = {
   modelName: string

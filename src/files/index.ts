@@ -19,11 +19,11 @@ export enum Language {
   TypeScript = 'TYPESCRIPT',
 }
 
-export function fileItem(name: string, content: string): FileItem {
+export function file(name: string, content: string): FileItem {
   return { type: FileSystemItemType.File, name, content }
 }
 
-export function directoryItem(name: string, files: FileSystemItem[]): DirectoryItem {
+export function directory(name: string, files: FileSystemItem[]): DirectoryItem {
   return { type: FileSystemItemType.Directory, name, files }
 }
 

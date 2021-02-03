@@ -10,8 +10,8 @@ export function blank(): string {
 }
 
 type LinesOptions = {
-  separator: string
-  depth: number
+  separator?: string
+  depth?: number
 }
 
 const defaultLinesOptions: LinesOptions = {
@@ -19,8 +19,8 @@ const defaultLinesOptions: LinesOptions = {
   depth: 0,
 }
 export function lines(
-  xs: string[],
+  xs: Array<string | null>,
   { separator = '', depth = 0 }: LinesOptions = defaultLinesOptions,
 ): string {
-  return indent(depth, xs.join(`${separator}\n`))
+  return indent(depth, xs.filter((x): x is string => x !== null).join(`${separator}\n`))
 }

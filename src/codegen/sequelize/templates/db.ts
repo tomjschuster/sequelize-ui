@@ -7,30 +7,28 @@ import {
   defaultSqlDialectUsername,
   defaultSqlDialectDatabase,
 } from '../../../database'
-import { indent, blank } from '../../helpers'
+import { blank, lines } from '../../helpers'
 
-export { dbTemplate, DbTemplateArgs }
-
-type DbTemplateArgs = {
+export type DbTemplateArgs = {
   schema: Schema
   options: DatabaseOptions
 }
-const dbTemplate = ({ schema, options }: DbTemplateArgs): string =>
-  [
+
+export const dbTemplate = ({ schema, options }: DbTemplateArgs): string =>
+  lines([
     imports(),
     blank(),
     instanceDeclaration({ schema, options }),
     blank(),
     exportInstance(),
     blank(),
-  ].join('\n')
+  ])
 
 const imports = (): string => `import { Sequelize } from 'sequelize';`
 
 const instanceDeclaration = ({ schema, options }: DbTemplateArgs) =>
   `const db: Sequelize = new Sequelize({
-  ${indent(
-    2,
+  ${lines(
     [
       dialectField(options.sqlDialect),
       storageField(options.sqlDialect),
@@ -40,9 +38,8 @@ const instanceDeclaration = ({ schema, options }: DbTemplateArgs) =>
       hostField(options.sqlDialect),
       portField(options.sqlDialect),
       hasOptions(options) ? defineField(options) : '',
-    ]
-      .filter((x) => x)
-      .join(',\n'),
+    ],
+    { separator: ',', depth: 2 },
   )}
 })`
 
@@ -50,59 +47,59 @@ const exportInstance = (): string => 'export default db;'
 
 const dialectField = (dialect: SqlDialect): string => `dialect: '${displaySqlDialect(dialect)}'`
 
-const storageField = (dialect: SqlDialect): string =>
-  dialect === SqlDialect.Sqlite ? 'storage: :memory' : ''
+const storageField = (dialect: SqlDialect): string | null =>
+  dialect !== SqlDialect.Sqlite ? null : 'storage: :memory'
 
-const databaseField = (schemaName: string, dialect: SqlDialect): string => {
+const databaseField = (schemaName: string, dialect: SqlDialect): string | null => {
   const defaultDatabase = defaultSqlDialectDatabase(schemaName, dialect)
   return dialect === SqlDialect.Sqlite
-    ? ''
+    ? null
     : `database: process.env.DB_NAME${defaultDatabase ? ` | '${defaultDatabase}'` : ''}`
 }
 
-const usernameField = (dialect: SqlDialect): string => {
+const usernameField = (dialect: SqlDialect): string | null => {
   const defaultUsername = defaultSqlDialectUsername(dialect)
   return dialect === SqlDialect.Sqlite
-    ? ''
+    ? null
     : `username: process.env.DB_USERNAME${defaultUsername ? ` || '${defaultUsername}'` : ''}`
 }
 
-const passwordField = (dialect: SqlDialect): string => {
+const passwordField = (dialect: SqlDialect): string | null => {
   const defaultUsername = defaultSqlDialectUsername(dialect)
   return dialect === SqlDialect.Sqlite
-    ? ''
+    ? null
     : `password: process.env.DB_PASSWORD${defaultUsername ? ` || '${defaultUsername}'` : ''}`
 }
 
-const hostField = (dialect: SqlDialect): string =>
-  dialect === SqlDialect.Sqlite ? '' : `host: process.env.DB_HOST || 'localhost'`
+const hostField = (dialect: SqlDialect): string | null =>
+  dialect === SqlDialect.Sqlite ? null : `host: process.env.DB_HOST || 'localhost'`
 
-const portField = (dialect: SqlDialect): string => {
-  const port = defaultSqlDialectPort(dialect)
-  return port ? `port: parseInt(process.env.DB_PORT || '${port}')` : ''
-}
+const portField = (dialect: SqlDialect): string | null =>
+  !defaultSqlDialectPort(dialect)
+    ? null
+    : `port: parseInt(process.env.DB_PORT || '${defaultSqlDialectPort(dialect)}')`
 
-const hasOptions = (options: DatabaseOptions): boolean => {
-  return !options.timestamps || options.caseStyle === 'snake' || options.nounForm === 'singular'
-}
+const hasOptions = (options: DatabaseOptions): boolean =>
+  !options.timestamps || options.caseStyle === 'snake' || options.nounForm === 'singular'
 
-const defineField = (options: DatabaseOptions): string =>
-  `define: {
-  ${indent(
-    2,
+const defineField = (options: DatabaseOptions): string | null =>
+  !hasOptions(options)
+    ? null
+    : `define: {
+  ${lines(
     [
       freezeTableNameField(options),
       underscoredField(options.caseStyle === 'snake'),
       timestampsField(options.timestamps),
       createdAtField(options),
       updatedAtField(options),
-    ]
-      .filter((x) => x)
-      .join(',\n'),
+    ],
+    { separator: ',', depth: 2 },
   )}
 }`
 
 const underscoredField = (underscored: boolean): string => (underscored ? 'underscored: true' : '')
+
 const timestampsField = (timestamps: boolean): string => (timestamps ? '' : 'timestamps: false')
 
 const createdAtField = ({ caseStyle, timestamps }: DatabaseOptions) =>

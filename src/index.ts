@@ -1,9 +1,6 @@
-import { dbTemplate } from './codegen/sequelize/templates/db'
-import { modelTemplate, ModelTemplateArgs } from './codegen/sequelize/templates/model'
-import { initModelsTemplate } from './codegen/sequelize/templates/initModels'
 import { SqlDialect, DatabaseOptions } from './database'
 import { AssociationType, DataTypeType, Model, Schema, ThroughType } from './schema'
-import { packageJsonTemplate } from './codegen/sequelize/templates/packageJson'
+import { generateSequelizeProject } from './codegen/sequelize/project'
 
 /*
   TODO:
@@ -83,13 +80,7 @@ const schema: Schema = {
   models: [postOffice, user, comment, deer, otherThing],
 }
 
-const data: ModelTemplateArgs = {
-  model: postOffice,
-  schema,
-  options,
-}
-
-console.log(modelTemplate(data))
+console.log(generateSequelizeProject({ schema, options }))
 
 const category: Model = {
   id: '6',
@@ -136,16 +127,8 @@ const dvdSchema: Schema = {
   name: 'dvd',
   models: [category, film, filmCategory],
 }
-const dvdData: ModelTemplateArgs = {
-  model: category,
-  schema: dvdSchema,
-  options,
-}
 
-console.log(modelTemplate(dvdData))
-
-console.log(dbTemplate({ schema: dvdSchema, options }))
-
-console.log(initModelsTemplate({ schema: dvdSchema, options }))
-
-console.log(packageJsonTemplate({ schema: dvdSchema, options }))
+console.log(
+  generateSequelizeProject({ schema: dvdSchema, options }),
+  generateSequelizeProject({ schema: dvdSchema, options }).files.find((x) => x.name === 'models'),
+)

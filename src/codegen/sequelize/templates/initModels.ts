@@ -7,7 +7,7 @@ import {
   Schema,
   ThroughType,
 } from '../../../schema'
-import { indent, blank } from '../../helpers'
+import { blank, lines } from '../../helpers'
 import { DatabaseOptions } from '../../../database'
 
 export { initModelsTemplate, InitModelsTemplateArgs }
@@ -18,7 +18,7 @@ type InitModelsTemplateArgs = {
 }
 
 const initModelsTemplate = ({ schema, options }: InitModelsTemplateArgs): string =>
-  [
+  lines([
     importSequelize(),
     importModels(schema),
     blank(),
@@ -28,7 +28,7 @@ const initModelsTemplate = ({ schema, options }: InitModelsTemplateArgs): string
     blank(),
     initModels({ schema, options }),
     blank(),
-  ].join('\n')
+  ])
 
 const importSequelize = (): string => `import type { Sequelize, Model } from 'sequelize'`
 
@@ -36,27 +36,29 @@ const importModels = ({ models }: Schema): string => models.map(importModel).joi
 
 const importModel = ({ name }: Model): string => {
   const modelName = singular(pascalCase(name))
-  return [
+
+  return lines([
     `import { ${modelName} } from './${modelName}'`,
     `import type { ${modelName}Attributes, ${modelName}CreationAttributes } from './${modelName}'`,
-  ].join('\n')
+  ])
 }
 
 const exportModels = ({ models }: Schema): string =>
   `export {
-  ${indent(2, models.map(modelExport).join(',\n'))}
+  ${lines(models.map(modelExport), { separator: ',', depth: 2 })}
 }`
 
 const modelExport = ({ name }: Model) => singular(pascalCase(name))
 
 const exportTypes = ({ models }: Schema): string =>
   `export type {
-  ${indent(2, models.map(modelTypeExport).join(',\n'))}
+  ${lines(models.map(modelTypeExport), { depth: 2, separator: ',' })}
 }`
 
 const modelTypeExport = ({ name }: Model) => {
   const modelName = singular(pascalCase(name))
-  return [`${modelName}Attributes`, `${modelName}CreationAttributes`].join(',\n')
+
+  return lines([`${modelName}Attributes`, `${modelName}CreationAttributes`], { separator: ',' })
 }
 
 type ModelById = { [key: string]: Model }
@@ -69,18 +71,17 @@ const initModels = ({ schema }: InitModelsArgs): string => {
   }, {})
 
   return `export function initModels(sequelize: Sequelize) {
-  ${indent(2, schema.models.map(initModel).join('\n'))}
+  ${lines(schema.models.map(initModel), { depth: 2 })}
 
-  ${indent(
-    2,
+  ${lines(
     schema.models
       .filter(({ associations }) => associations.length > 0)
-      .map((model) => modelAssociations({ model, modelById }))
-      .join('\n'),
+      .map((model) => modelAssociations({ model, modelById })),
+    { depth: 2 },
   )}
 
   return {
-    ${indent(4, schema.models.map(modelExport).join(',\n'))}
+    ${lines(schema.models.map(modelExport), { depth: 4, separator: ',' })}
   }
 }`
 }
@@ -92,9 +93,9 @@ type ModelAssociationsArgs = {
   modelById: ModelById
 }
 const modelAssociations = ({ model, modelById }: ModelAssociationsArgs): string =>
-  model.associations
-    .map((association) => modelAssociation({ association, model, modelById }))
-    .join('\n')
+  lines(
+    model.associations.map((association) => modelAssociation({ association, model, modelById })),
+  )
 
 type ModelAssociationArgs = {
   association: Association
