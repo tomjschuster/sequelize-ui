@@ -3,6 +3,7 @@ import { modelTemplate, ModelTemplateArgs } from './codegen/sequelize/templates/
 import { initModelsTemplate } from './codegen/sequelize/templates/initModels'
 import { SqlDialect, DatabaseOptions } from './database'
 import { AssociationType, DataTypeType, Model, Schema, ThroughType } from './schema'
+import { packageJsonTemplate } from './codegen/sequelize/templates/packageJson'
 
 /*
   TODO:
@@ -11,7 +12,7 @@ import { AssociationType, DataTypeType, Model, Schema, ThroughType } from './sch
 */
 
 const options: DatabaseOptions = {
-  sqlDialect: SqlDialect.MariaDb,
+  sqlDialect: SqlDialect.Postgres,
   timestamps: true,
   caseStyle: 'camel',
   nounForm: 'plural',
@@ -146,3 +147,5 @@ console.log(modelTemplate(dvdData))
 console.log(dbTemplate({ schema: dvdSchema, options }))
 
 console.log(initModelsTemplate({ schema: dvdSchema, options }))
+
+console.log(packageJsonTemplate({ schema: dvdSchema, options }))
