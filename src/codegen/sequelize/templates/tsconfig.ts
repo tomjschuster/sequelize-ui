@@ -4,7 +4,7 @@ export const tsconfigTemplate = (): string =>
       "target": "ES2020",
       "module": "commonjs",
       "lib": ["ES2020"],
-      "outDir": "dist"
+      "outDir": "dist",
       "strict": true,
       "moduleResolution": "node",
       "esModuleInterop": true,

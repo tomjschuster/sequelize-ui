@@ -4,11 +4,11 @@ export { serverTemplate }
 
 const serverTemplate = (): string =>
   lines([
-    `import db from './db';`,
-    `import {initModels} from './models/init-models';`,
+    `import db from './db'`,
+    `import { initModels } from './models'`,
     blank(),
-    `initModels(db);`,
+    `initModels(db)`,
     blank(),
-    `db.sync().then(() => console.log('done'));`,
+    `db.sync().then(() => console.log('done'))`,
     blank(),
   ])

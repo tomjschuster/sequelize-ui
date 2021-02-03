@@ -24,7 +24,7 @@ export const dbTemplate = ({ schema, options }: DbTemplateArgs): string =>
     blank(),
   ])
 
-const imports = (): string => `import { Sequelize } from 'sequelize';`
+const imports = (): string => `import { Sequelize } from 'sequelize'`
 
 const instanceDeclaration = ({ schema, options }: DbTemplateArgs) =>
   `const db: Sequelize = new Sequelize({
@@ -37,13 +37,13 @@ const instanceDeclaration = ({ schema, options }: DbTemplateArgs) =>
       passwordField(options.sqlDialect),
       hostField(options.sqlDialect),
       portField(options.sqlDialect),
-      hasOptions(options) ? defineField(options) : '',
+      defineField(options),
     ],
     { separator: ',', depth: 2 },
   )}
 })`
 
-const exportInstance = (): string => 'export default db;'
+const exportInstance = (): string => 'export default db'
 
 const dialectField = (dialect: SqlDialect): string => `dialect: '${displaySqlDialect(dialect)}'`
 
@@ -54,7 +54,7 @@ const databaseField = (schemaName: string, dialect: SqlDialect): string | null =
   const defaultDatabase = defaultSqlDialectDatabase(schemaName, dialect)
   return dialect === SqlDialect.Sqlite
     ? null
-    : `database: process.env.DB_NAME${defaultDatabase ? ` | '${defaultDatabase}'` : ''}`
+    : `database: process.env.DB_NAME${defaultDatabase ? ` || '${defaultDatabase}'` : ''}`
 }
 
 const usernameField = (dialect: SqlDialect): string | null => {
@@ -98,15 +98,17 @@ const defineField = (options: DatabaseOptions): string | null =>
   )}
 }`
 
-const underscoredField = (underscored: boolean): string => (underscored ? 'underscored: true' : '')
+const underscoredField = (underscored: boolean): string | null =>
+  underscored ? 'underscored: true' : null
 
-const timestampsField = (timestamps: boolean): string => (timestamps ? '' : 'timestamps: false')
+const timestampsField = (timestamps: boolean): string | null =>
+  timestamps ? null : 'timestamps: false'
 
-const createdAtField = ({ caseStyle, timestamps }: DatabaseOptions) =>
-  caseStyle === 'snake' && timestamps ? `timestamps: 'created_at'` : ''
+const createdAtField = ({ caseStyle, timestamps }: DatabaseOptions): string | null =>
+  caseStyle === 'snake' && timestamps ? `createdAt: 'created_at'` : null
 
-const updatedAtField = ({ caseStyle, timestamps }: DatabaseOptions) =>
-  caseStyle === 'snake' && timestamps ? `timestamps: 'updated_at'` : ''
+const updatedAtField = ({ caseStyle, timestamps }: DatabaseOptions): string | null =>
+  caseStyle === 'snake' && timestamps ? `updatedAt: 'updated_at'` : null
 
-const freezeTableNameField = ({ caseStyle, nounForm }: DatabaseOptions): string =>
-  caseStyle === 'camel' && nounForm === 'singular' ? `freezeTableName: true` : ''
+const freezeTableNameField = ({ caseStyle, nounForm }: DatabaseOptions): string | null =>
+  caseStyle === 'camel' && nounForm === 'singular' ? `freezeTableName: true` : null

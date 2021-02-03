@@ -1,6 +1,15 @@
-export type Schema = { id: string; name: string; models: Model[] }
+export type Schema = {
+  id: string
+  name: string
+  models: Model[]
+}
 
-export type Model = { id: string; name: string; fields: Field[]; associations: Association[] }
+export type Model = {
+  id: string
+  name: string
+  fields: Field[]
+  associations: Association[]
+}
 
 export type Field = {
   name: string
@@ -94,9 +103,17 @@ export type ManyToManyAssociation = AssociationBase<AssociationType.ManyToMany> 
   through: ManyToManyThrough
   targetFk?: string
 }
-export type ManyToManyThrough =
-  | { type: ThroughType.ThroughModel; modelId: string }
-  | { type: ThroughType.ThroughTable; table: string }
+export type ManyToManyThrough = ManyToManyThroughModel | ManyToManyThroughTable
+
+type ManyToManyThroughModel = {
+  type: ThroughType.ThroughModel
+  modelId: string
+}
+
+type ManyToManyThroughTable = {
+  type: ThroughType.ThroughTable
+  table: string
+}
 
 export enum ThroughType {
   ThroughModel = 'THROUGH_MODEL',

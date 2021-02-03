@@ -23,9 +23,9 @@ const generateSequelizeProject = ({
 }: GenerateSequelizeProjectArgs): DirectoryItem =>
   directory(kebabCase(schema.name), [
     directory('models', [
-      file('initModels', initModelsTemplate({ schema, options })),
+      file('index.ts', initModelsTemplate({ schema, options })),
       ...schema.models.map((model) =>
-        file(pascalCase(model.name), modelTemplate({ schema, options, model })),
+        file(`${pascalCase(model.name)}.ts`, modelTemplate({ schema, options, model })),
       ),
     ]),
     file('.gitignore', gitignoreTemplate()),

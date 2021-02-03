@@ -9,6 +9,7 @@ import {
 } from '../../../schema'
 import { blank, lines } from '../../helpers'
 import { DatabaseOptions } from '../../../database'
+import { modelName } from '../utils'
 
 export { initModelsTemplate, InitModelsTemplateArgs }
 
@@ -34,12 +35,12 @@ const importSequelize = (): string => `import type { Sequelize, Model } from 'se
 
 const importModels = ({ models }: Schema): string => models.map(importModel).join('\n')
 
-const importModel = ({ name }: Model): string => {
-  const modelName = singular(pascalCase(name))
+const importModel = (model: Model): string => {
+  const name = modelName(model)
 
   return lines([
-    `import { ${modelName} } from './${modelName}'`,
-    `import type { ${modelName}Attributes, ${modelName}CreationAttributes } from './${modelName}'`,
+    `import { ${name} } from './${name}'`,
+    `import type { ${name}Attributes, ${name}CreationAttributes } from './${name}'`,
   ])
 }
 
@@ -55,15 +56,18 @@ const exportTypes = ({ models }: Schema): string =>
   ${lines(models.map(modelTypeExport), { depth: 2, separator: ',' })}
 }`
 
-const modelTypeExport = ({ name }: Model) => {
-  const modelName = singular(pascalCase(name))
+const modelTypeExport = (model: Model) => {
+  const name = modelName(model)
 
-  return lines([`${modelName}Attributes`, `${modelName}CreationAttributes`], { separator: ',' })
+  return lines([`${name}Attributes`, `${name}CreationAttributes`], { separator: ',' })
 }
 
 type ModelById = { [key: string]: Model }
 
-type InitModelsArgs = { schema: Schema; options: DatabaseOptions }
+type InitModelsArgs = {
+  schema: Schema
+  options: DatabaseOptions
+}
 const initModels = ({ schema }: InitModelsArgs): string => {
   const modelById: ModelById = schema.models.reduce<ModelById>((acc, model) => {
     acc[model.id] = model
@@ -86,7 +90,7 @@ const initModels = ({ schema }: InitModelsArgs): string => {
 }`
 }
 
-const initModel = ({ name }: Model) => `${singular(pascalCase(name))}.initModel(sequelize);`
+const initModel = ({ name }: Model) => `${singular(pascalCase(name))}.initModel(sequelize)`
 
 type ModelAssociationsArgs = {
   model: Model
@@ -105,7 +109,7 @@ type ModelAssociationArgs = {
 const modelAssociation = ({ association, model, modelById }: ModelAssociationArgs): string =>
   `${singular(pascalCase(model.name))}.${associationLabel(association)}(${singular(
     pascalCase(modelById[association.targetModelId]['name']),
-  )}${associationOptions({ association, modelById })});`
+  )}${associationOptions({ association, modelById })})`
 
 const associationLabel = ({ type }: Association): string => {
   switch (type) {
@@ -137,15 +141,21 @@ const associationOptionsKvs = ({ association, modelById }: AssociationOptionsArg
     association.alias
       ? `as: '${aliasValue({ alias: association.alias, type: association.type })}'`
       : null,
-    association.foreignKey ? `foreignKey: '${association.foreignKey}'` : null,
     association.type === AssociationType.ManyToMany
       ? `through: ${throughValue({ association, modelById })}`
+      : null,
+    association.foreignKey ? `foreignKey: '${association.foreignKey}'` : null,
+    association.type === AssociationType.ManyToMany && association.targetFk
+      ? `otherKey: ${association.targetFk}`
       : null,
   ]
     .filter((x): x is string => !!x)
     .join(', ')
 
-type AliasValueArgs = { alias: string; type: AssociationType }
+type AliasValueArgs = {
+  alias: string
+  type: AssociationType
+}
 const aliasValue = ({ type, alias }: AliasValueArgs) => {
   const camelAlias = camelCase(alias)
   switch (type) {
@@ -165,4 +175,4 @@ type ThroughValueArgs = {
 const throughValue = ({ association, modelById }: ThroughValueArgs): string =>
   association.through.type === ThroughType.ThroughTable
     ? `'${association.through.table}'`
-    : singular(pascalCase(modelById[association.through.modelId].name))
+    : `${modelName(modelById[association.through.modelId])} as typeof Model`

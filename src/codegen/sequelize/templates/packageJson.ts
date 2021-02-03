@@ -25,7 +25,7 @@ const packageJsonTemplate = ({ schema, options }: PackageJsonTemplateArgs): stri
   "license": "ISC",
   "dependencies": {
     ${formatDeps(...commonDeps(), ...dialectDeps(options))}
-  }
+  },
   "devDependencies": {
     ${formatDeps(...commonDevDeps(), ...dialectDevDeps(options))}
   }
@@ -57,6 +57,7 @@ const dialectDeps = ({ sqlDialect }: DatabaseOptions): Dependency[] => {
 
 const commonDevDeps = (): Dependency[] => [
   ['@types/node', '^14.14.20'],
+  ['@types/validator', '^13.1.3'],
   ['typescript', '^4.1.3'],
 ]
 

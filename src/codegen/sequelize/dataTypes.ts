@@ -21,7 +21,10 @@ export enum SequelizeDataTypeType {
 
 type SequelizeStringType = { type: SequelizeDataTypeType.String }
 type SequelizeTextType = { type: SequelizeDataTypeType.Text }
-type SequelizeIntegerType = { type: SequelizeDataTypeType.Integer; autoincrement?: boolean }
+type SequelizeIntegerType = {
+  type: SequelizeDataTypeType.Integer
+  autoincrement?: boolean
+}
 type SequelizeFloatType = { type: SequelizeDataTypeType.Float }
 type SequelizeRealType = { type: SequelizeDataTypeType.Real }
 type SequelizeDoubleType = { type: SequelizeDataTypeType.Double }
@@ -30,8 +33,14 @@ type SequelizeDateType = { type: SequelizeDataTypeType.Date }
 type SequelizeDateonlyType = { type: SequelizeDataTypeType.Dateonly }
 type SequelizeTimeType = { type: SequelizeDataTypeType.Time }
 type SequelizeBooleanType = { type: SequelizeDataTypeType.Boolean }
-type SequelizeEnumType = { type: SequelizeDataTypeType.Enum; values: string[] }
-type SequelizeArrayType = { type: SequelizeDataTypeType.Array; arrayType: SequelizeDataType }
+type SequelizeEnumType = {
+  type: SequelizeDataTypeType.Enum
+  values: string[]
+}
+type SequelizeArrayType = {
+  type: SequelizeDataTypeType.Array
+  arrayType: SequelizeDataType
+}
 type SequelizeJsonType = { type: SequelizeDataTypeType.Json }
 type SequelizeBlobType = { type: SequelizeDataTypeType.Blob }
 type SequelizeUuidType = { type: SequelizeDataTypeType.Uuid }
