@@ -1,15 +1,4 @@
-import { SqlDialect, DatabaseOptions } from './database'
-import { AssociationType, DataTypeType, Model, Schema, ThroughType } from './schema'
-import { generateSequelizeProject } from './codegen/sequelize/project'
-import { createZip } from './files'
-import fs from 'fs'
-import path from 'path'
-/*
-  TODO:
-    - Test non-postgres db's
-    - Duplicate mixin method?
-    - Default values
-*/
+import { AssociationType, DataTypeType, Model, Schema, ThroughType } from '../../src/schema'
 
 const actor: Model = {
   id: '1',
@@ -274,9 +263,9 @@ const customer: Model = {
   ],
 }
 
-const schema: Schema = {
+const schema = (name: string): Schema => ({
   id: '1',
-  name: 'dvd',
+  name,
   models: [
     film,
     filmActor,
@@ -290,16 +279,6 @@ const schema: Schema = {
     staff,
     customer,
   ],
-}
-const options: DatabaseOptions = {
-  sqlDialect: SqlDialect.Postgres,
-  timestamps: true,
-  caseStyle: 'snake',
-  nounForm: 'singular',
-}
+})
 
-console.log(generateSequelizeProject({ schema, options }))
-
-createZip(generateSequelizeProject({ schema, options })).then((buffer) =>
-  fs.writeFileSync(path.join(__dirname, 'project.zip'), buffer),
-)
+export default schema

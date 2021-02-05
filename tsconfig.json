@@ -6,6 +6,8 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": false,
-    "forceConsistentCasingInFileNames": true
-  }
+    "forceConsistentCasingInFileNames": true,
+    "downlevelIteration": true
+  },
+  "exclude": ["./tests/", "./node_modules/", "./dist/"]
 }

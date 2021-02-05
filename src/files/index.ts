@@ -1,5 +1,5 @@
 import Zip from 'jszip'
-// import { saveAs } from 'file-saver'
+import { saveAs } from 'file-saver'
 
 export type FileSystemItem = FileItem | DirectoryItem
 
@@ -84,34 +84,33 @@ function languageFromKnownExtension(ext: KnownExtension) {
   }
 }
 
-// export const download = (item: FileSystemItem): Promise<void> =>
-//   item.type === FileSystemItemType.File ? downloadFile(item) : downloadDirectory(item)
+export const download = (item: FileSystemItem): Promise<void> =>
+  item.type === FileSystemItemType.File ? downloadFile(item) : downloadDirectory(item)
 
-// const downloadFile = (item: FileItem): Promise<void> =>
-//   new Promise((resolve, reject) => {
-//     try {
-//       saveAs(item.content, item.name)
-//       resolve()
-//     } catch (e) {
-//       reject(e)
-//     }
-//   })
+const downloadFile = (item: FileItem): Promise<void> =>
+  new Promise((resolve, reject) => {
+    try {
+      saveAs(item.content, item.name)
+      resolve()
+    } catch (e) {
+      reject(e)
+    }
+  })
 
-// const downloadDirectory = (item: DirectoryItem): Promise<void> =>
-//   createZip(item).then((blob: Blob) => saveAs(blob, item.name))
+export const downloadDirectory = (item: DirectoryItem): Promise<void> =>
+  zip(item)
+    .generateAsync({ type: 'blob' })
+    .then((blob: Blob) => saveAs(blob, item.name))
 
-// export const createZip = (item: FileSystemItem): Promise<Blob> =>
-//   zipItem(new Zip(), item).generateAsync({ type: 'blob' })
-export const createZip = (item: FileSystemItem): Promise<Buffer> =>
-  zipItem(new Zip(), item).generateAsync({ type: 'nodebuffer' })
+const zip = (item: FileSystemItem): Zip => zipItem(new Zip(), item)
 
-const zipItem = (zip: Zip, item: FileSystemItem): Zip =>
-  item.type === FileSystemItemType.File ? zipFile(zip, item) : zipDirectory(zip, item) || zip
+const zipItem = (z: Zip, item: FileSystemItem): Zip =>
+  isDirectory(item) ? zipDirectory(z, item) || z : zipFile(z, item)
 
-const zipFile = (zip: Zip, item: FileItem): Zip => zip.file(item.name, item.content)
+const zipFile = (z: Zip, item: FileItem): Zip => z.file(item.name, item.content)
 
-const zipDirectory = (zip: Zip, item: DirectoryItem): Zip | null => {
-  const folder = zip.folder(item.name)
+const zipDirectory = (z: Zip, item: DirectoryItem): Zip | null => {
+  const folder = z.folder(item.name)
 
   if (folder) {
     item.files.forEach((file) => zipItem(folder, file))

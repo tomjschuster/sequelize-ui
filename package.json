@@ -4,27 +4,34 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+    "test": "mocha -r ts-node/register 'tests/**/*.spec.ts' --exit",
+    "debug": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/debug.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^14.14.22",
     "change-case": "^4.1.2",
     "file-saver": "^2.0.5",
     "jszip": "^3.5.0",
     "pluralize": "^8.0.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.14",
     "@types/file-saver": "^2.0.1",
+    "@types/mocha": "^8.2.0",
+    "@types/node": "^14.14.22",
+    "@types/pg": "^7.14.9",
     "@types/pluralize": "0.0.29",
     "@typescript-eslint/eslint-plugin": "^4.11.0",
     "@typescript-eslint/parser": "^4.11.0",
+    "chai": "^4.3.0",
     "eslint": "^7.16.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.0",
+    "mocha": "^8.2.1",
     "nodemon": "^2.0.6",
+    "pg": "^8.5.1",
     "prettier": "^2.2.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3"
