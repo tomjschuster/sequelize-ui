@@ -9,6 +9,6 @@ const serverTemplate = (): string =>
     blank(),
     `initModels(db)`,
     blank(),
-    `db.sync().then(() => console.log('done'))`,
+    `db.sync({ force: true }).then(() => process.exit(0))`,
     blank(),
   ])

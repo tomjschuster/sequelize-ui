@@ -9,5 +9,5 @@
     "forceConsistentCasingInFileNames": true,
     "downlevelIteration": true
   },
-  "exclude": ["./tests/", "./node_modules/", "./dist/"]
+  "exclude": ["./node_modules/", "./dist/"]
 }

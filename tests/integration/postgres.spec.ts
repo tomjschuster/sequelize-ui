@@ -3,17 +3,27 @@ import { expect } from 'chai'
 import { SqlDialect, DatabaseOptions } from '../../src/database'
 import { generateSequelizeProject } from '../../src/codegen/sequelize/project'
 import schema from '../fixtures/dvdSchema'
-import { createPostgresDatabase, getPostgresColumns, getPostgresTables } from '../helpers/postgres'
-import { clearNpmProject, runNpmProject } from '../helpers/npm'
+import {
+  createPostgresDatabase,
+  dropPostgresDatabase,
+  getPostgresColumns,
+  getPostgresTables,
+} from '../helpers/postgres'
+import { deleteNpmProject, runNpmProject } from '../helpers/npm'
 import { Client } from 'pg'
 import { alpha } from '../helpers/generators'
 
 describe('postgres tests', () => {
+  const projectName = alpha(12)
+
+  after(async () => {
+    await deleteNpmProject(projectName)
+    await dropPostgresDatabase(projectName)
+  })
+
   describe('camel plural', async function () {
     this.timeout(30000)
 
-    const database = alpha(12)
-    const table = 'Customers'
     let client: Client
 
     const options: DatabaseOptions = {
@@ -23,16 +33,17 @@ describe('postgres tests', () => {
       nounForm: 'plural',
     }
 
-    const project = generateSequelizeProject({ schema: schema(database), options })
+    const table = 'Customers'
+
+    const project = generateSequelizeProject({ schema: schema(projectName), options })
 
     before(async () => {
-      client = await createPostgresDatabase(database)
+      client = await createPostgresDatabase(projectName)
       await runNpmProject(project)
     })
 
     after(async () => {
       await client.end()
-      await clearNpmProject(project)
     })
 
     it('should create pascal cased, plural table names', async () => {
@@ -72,8 +83,6 @@ describe('postgres tests', () => {
   describe('camel singular', async function () {
     this.timeout(30000)
 
-    const database = alpha(12)
-    const table = 'Customer'
     let client: Client
 
     const options: DatabaseOptions = {
@@ -83,16 +92,17 @@ describe('postgres tests', () => {
       nounForm: 'singular',
     }
 
-    const project = generateSequelizeProject({ schema: schema(database), options })
+    const table = 'Customer'
+
+    const project = generateSequelizeProject({ schema: schema(projectName), options })
 
     before(async () => {
-      client = await createPostgresDatabase(database)
+      client = await createPostgresDatabase(projectName)
       await runNpmProject(project)
     })
 
     after(async () => {
       await client.end()
-      await clearNpmProject(project)
     })
 
     it('should create pascal cased, plural table names', async () => {
@@ -132,8 +142,6 @@ describe('postgres tests', () => {
   describe('snake plural', async function () {
     this.timeout(30000)
 
-    const database = alpha(12)
-    const table = 'customers'
     let client: Client
 
     const options: DatabaseOptions = {
@@ -143,16 +151,17 @@ describe('postgres tests', () => {
       nounForm: 'plural',
     }
 
-    const project = generateSequelizeProject({ schema: schema(database), options })
+    const table = 'customers'
+
+    const project = generateSequelizeProject({ schema: schema(projectName), options })
 
     before(async () => {
-      client = await createPostgresDatabase(database)
+      client = await createPostgresDatabase(projectName)
       await runNpmProject(project)
     })
 
     after(async () => {
       await client.end()
-      await clearNpmProject(project)
     })
 
     it('should create snake cased, plural table names', async () => {
@@ -192,8 +201,6 @@ describe('postgres tests', () => {
   describe('snake singular', async function () {
     this.timeout(30000)
 
-    const database = alpha(12)
-    const table = 'customer'
     let client: Client
 
     const options: DatabaseOptions = {
@@ -203,16 +210,17 @@ describe('postgres tests', () => {
       nounForm: 'singular',
     }
 
-    const project = generateSequelizeProject({ schema: schema(database), options })
+    const table = 'customer'
+
+    const project = generateSequelizeProject({ schema: schema(projectName), options })
 
     before(async () => {
-      client = await createPostgresDatabase(database)
+      client = await createPostgresDatabase(projectName)
       await runNpmProject(project)
     })
 
     after(async () => {
       await client.end()
-      await clearNpmProject(project)
     })
 
     it('should create snake cased, singular table names', async () => {

@@ -1,6 +1,7 @@
 import { Client } from 'pg'
 
 export async function createPostgresDatabase(database: string): Promise<Client> {
+  // console.time('create db')
   const setupClient = new Client({
     user: 'postgres',
     database: 'postgres',
@@ -24,10 +25,13 @@ export async function createPostgresDatabase(database: string): Promise<Client> 
 
   await client.connect()
 
+  // console.timeEnd('create db')
   return client
 }
 
 export async function dropPostgresDatabase(database: string): Promise<void> {
+  // console.time('drop db')
+
   const client = new Client({
     user: 'postgres',
     database: 'postgres',
@@ -39,6 +43,7 @@ export async function dropPostgresDatabase(database: string): Promise<void> {
   await client.connect()
   await client.query(`DROP DATABASE IF EXISTS ${database}`)
   await client.end()
+  // console.timeEnd('drop db')
 }
 
 export async function getPostgresTables(client: Client): Promise<string[]> {
