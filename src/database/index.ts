@@ -30,6 +30,23 @@ export const displaySqlDialect = (dialect: SqlDialect): string => {
   }
 }
 
+export const parseSqlDialect = (dialect: string): SqlDialect | null => {
+  switch (dialect) {
+    case 'mariadb':
+      return SqlDialect.MariaDb
+    case 'mssql':
+      return SqlDialect.MsSql
+    case 'mysql':
+      return SqlDialect.MySql
+    case 'postgres':
+      return SqlDialect.Postgres
+    case 'sqlite':
+      return SqlDialect.Sqlite
+    default:
+      return null
+  }
+}
+
 export const defaultSqlDialectPort = (dialect: SqlDialect): string | null => {
   switch (dialect) {
     case SqlDialect.MariaDb:

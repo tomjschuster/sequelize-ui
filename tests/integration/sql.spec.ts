@@ -1,33 +1,35 @@
 import { expect } from 'chai'
 
-import { SqlDialect, DatabaseOptions } from '../../src/database'
+import { SqlDialect, DatabaseOptions, displaySqlDialect } from '../../src/database'
 import { generateSequelizeProject } from '../../src/codegen/sequelize/project'
 import schema from '../fixtures/dvdSchema'
-import {
-  createPostgresDatabase,
-  dropPostgresDatabase,
-  getPostgresColumns,
-  getPostgresTables,
-} from '../helpers/postgres'
 import { deleteNpmProject, runNpmProject } from '../helpers/npm'
-import { Client } from 'pg'
+import { createDbClient, DbClient, validateDialect } from '../helpers/sql'
 import { alpha } from '../helpers/generators'
 
-describe('postgres tests', () => {
+const sqlDialect: SqlDialect = validateDialect()
+
+const createTestClient = (database: string): DbClient => {
+  const client = createDbClient(database, sqlDialect)
+
+  return client
+}
+
+describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
   const projectName = alpha(12)
 
   after(async () => {
     await deleteNpmProject(projectName)
-    await dropPostgresDatabase(projectName)
+    // await dropPostgresDatabase(projectName)
   })
 
   describe('camel plural', async function () {
     this.timeout(30000)
 
-    let client: Client
+    let client: DbClient
 
     const options: DatabaseOptions = {
-      sqlDialect: SqlDialect.Postgres,
+      sqlDialect,
       timestamps: true,
       caseStyle: 'camel',
       nounForm: 'plural',
@@ -38,12 +40,12 @@ describe('postgres tests', () => {
     const project = generateSequelizeProject({ schema: schema(projectName), options })
 
     before(async () => {
-      client = await createPostgresDatabase(projectName)
+      client = await createTestClient(projectName)
       await runNpmProject(project)
     })
 
     after(async () => {
-      await client.end()
+      await client.close()
     })
 
     it('should create pascal cased, plural table names', async () => {
@@ -61,7 +63,7 @@ describe('postgres tests', () => {
         'Stores',
       ]
 
-      const tables = await getPostgresTables(client)
+      const tables = await client.getTables()
       expect(tables).to.have.members(expectedTables)
     })
     it('should create camel cased column names', async () => {
@@ -75,7 +77,7 @@ describe('postgres tests', () => {
         'StoreStoreId',
       ]
 
-      const columns = await getPostgresColumns(client, table)
+      const columns = await client.getColumns(table)
       expect(columns).to.have.members(expectedColumns)
     })
   })
@@ -83,10 +85,10 @@ describe('postgres tests', () => {
   describe('camel singular', async function () {
     this.timeout(30000)
 
-    let client: Client
+    let client: DbClient
 
     const options: DatabaseOptions = {
-      sqlDialect: SqlDialect.Postgres,
+      sqlDialect,
       timestamps: true,
       caseStyle: 'camel',
       nounForm: 'singular',
@@ -97,12 +99,12 @@ describe('postgres tests', () => {
     const project = generateSequelizeProject({ schema: schema(projectName), options })
 
     before(async () => {
-      client = await createPostgresDatabase(projectName)
+      client = await createTestClient(projectName)
       await runNpmProject(project)
     })
 
     after(async () => {
-      await client.end()
+      await client.close()
     })
 
     it('should create pascal cased, plural table names', async () => {
@@ -120,7 +122,7 @@ describe('postgres tests', () => {
         'Store',
       ]
 
-      const tables = await getPostgresTables(client)
+      const tables = await client.getTables()
       expect(tables).to.have.members(expectedTables)
     })
     it('should create camel cased column names', async () => {
@@ -134,7 +136,7 @@ describe('postgres tests', () => {
         'StoreStoreId',
       ]
 
-      const columns = await getPostgresColumns(client, table)
+      const columns = await client.getColumns(table)
       expect(columns).to.have.members(expectedColumns)
     })
   })
@@ -142,10 +144,10 @@ describe('postgres tests', () => {
   describe('snake plural', async function () {
     this.timeout(30000)
 
-    let client: Client
+    let client: DbClient
 
     const options: DatabaseOptions = {
-      sqlDialect: SqlDialect.Postgres,
+      sqlDialect,
       timestamps: true,
       caseStyle: 'snake',
       nounForm: 'plural',
@@ -156,12 +158,12 @@ describe('postgres tests', () => {
     const project = generateSequelizeProject({ schema: schema(projectName), options })
 
     before(async () => {
-      client = await createPostgresDatabase(projectName)
+      client = await createTestClient(projectName)
       await runNpmProject(project)
     })
 
     after(async () => {
-      await client.end()
+      await client.close()
     })
 
     it('should create snake cased, plural table names', async () => {
@@ -179,7 +181,7 @@ describe('postgres tests', () => {
         'stores',
       ]
 
-      const tables = await getPostgresTables(client)
+      const tables = await client.getTables()
       expect(tables).to.have.members(expectedTables)
     })
     it('should create snake cased column names', async () => {
@@ -193,7 +195,7 @@ describe('postgres tests', () => {
         'store_store_id',
       ]
 
-      const columns = await getPostgresColumns(client, table)
+      const columns = await client.getColumns(table)
       expect(columns).to.have.members(expectedColumns)
     })
   })
@@ -201,10 +203,10 @@ describe('postgres tests', () => {
   describe('snake singular', async function () {
     this.timeout(30000)
 
-    let client: Client
+    let client: DbClient
 
     const options: DatabaseOptions = {
-      sqlDialect: SqlDialect.Postgres,
+      sqlDialect,
       timestamps: true,
       caseStyle: 'snake',
       nounForm: 'singular',
@@ -215,12 +217,12 @@ describe('postgres tests', () => {
     const project = generateSequelizeProject({ schema: schema(projectName), options })
 
     before(async () => {
-      client = await createPostgresDatabase(projectName)
+      client = await createTestClient(projectName)
       await runNpmProject(project)
     })
 
     after(async () => {
-      await client.end()
+      await client.close()
     })
 
     it('should create snake cased, singular table names', async () => {
@@ -238,7 +240,7 @@ describe('postgres tests', () => {
         'store',
       ]
 
-      const tables = await getPostgresTables(client)
+      const tables = await client.getTables()
       expect(tables).to.have.members(expectedTables)
     })
     it('should create snake cased column names', async () => {
@@ -252,7 +254,40 @@ describe('postgres tests', () => {
         'store_store_id',
       ]
 
-      const columns = await getPostgresColumns(client, table)
+      const columns = await client.getColumns(table)
+      expect(columns).to.have.members(expectedColumns)
+    })
+  })
+
+  describe('no timestamps', async function () {
+    this.timeout(30000)
+
+    let client: DbClient
+
+    const options: DatabaseOptions = {
+      sqlDialect,
+      timestamps: false,
+      caseStyle: 'snake',
+      nounForm: 'plural',
+    }
+
+    const table = 'customers'
+
+    const project = generateSequelizeProject({ schema: schema(projectName), options })
+
+    before(async () => {
+      client = await createTestClient(projectName)
+      await runNpmProject(project)
+    })
+
+    after(async () => {
+      await client.close()
+    })
+
+    it('should not create timestamp column names', async () => {
+      const expectedColumns = ['customer_id', 'first_name', 'last_name', 'email', 'store_store_id']
+
+      const columns = await client.getColumns(table)
       expect(columns).to.have.members(expectedColumns)
     })
   })
