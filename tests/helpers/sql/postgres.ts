@@ -1,10 +1,31 @@
 import { DbClient } from './client'
 import { Client, QueryResult } from 'pg'
 
-export class PostgresClient extends DbClient {
+export class PostgresClient implements DbClient {
   constructor(database: string) {
-    super(database)
     this.client = this.initializeClient(database)
+  }
+
+  connected(): Promise<boolean> {
+    return this.connectedPromise
+  }
+
+  static async createDatabase(database: string): Promise<void> {
+    const client = new Client(defaultClientOptions)
+
+    await client.connect()
+    await client.query(`DROP DATABASE IF EXISTS ${database}`)
+    await client.query(`CREATE DATABASE ${database}`)
+    await client.end()
+  }
+
+  static async dropDatabase(database: string): Promise<void> {
+    const client = new Client(defaultClientOptions)
+
+    await client.connect()
+    await client.query(`DROP DATABASE IF EXISTS ${database}`)
+    await client.end()
+    return
   }
 
   async getTables(): Promise<string[]> {
@@ -19,7 +40,9 @@ export class PostgresClient extends DbClient {
 
   async close(): Promise<void> {
     const client = await this.client
-    return client.end()
+    await client.end()
+    this.connectedPromise = Promise.resolve(false)
+    return
   }
 
   private static tablesQuery(): string {
@@ -30,26 +53,26 @@ export class PostgresClient extends DbClient {
     return `SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '${table}';`
   }
 
-  private static COLUMNS_E = `SELECT * FROM information_schema.tables WHERE table_schema = 'public';`
   private client: Promise<Client>
+  // eslint-disable-next-line
+  // @ts-ignore
+  private resolveConnected: (connected: boolean) => void
+  private connectedPromise: Promise<boolean> = new Promise((resolve) => {
+    this.resolveConnected = resolve
+  })
 
   private async initializeClient(database: string): Promise<Client> {
-    await this.createDatabase(database)
+    await PostgresClient.createDatabase(database)
 
     const client = new Client({ ...defaultClientOptions, database })
-
-    await client.connect()
-
+    try {
+      await client.connect()
+      this.resolveConnected(true)
+    } catch (e) {
+      this.resolveConnected(false)
+      return Promise.reject(e)
+    }
     return client
-  }
-
-  private async createDatabase(database: string): Promise<void> {
-    const client = new Client(defaultClientOptions)
-
-    await client.connect()
-    await client.query(`DROP DATABASE IF EXISTS ${database}`)
-    await client.query(`CREATE DATABASE ${database}`)
-    await client.end()
   }
 
   private async query<T>(queryString: string): Promise<QueryResult<T>> {

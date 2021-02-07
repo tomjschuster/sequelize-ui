@@ -4,23 +4,19 @@ import { SqlDialect, DatabaseOptions, displaySqlDialect } from '../../src/databa
 import { generateSequelizeProject } from '../../src/codegen/sequelize/project'
 import schema from '../fixtures/dvdSchema'
 import { deleteNpmProject, runNpmProject } from '../helpers/npm'
-import { createDbClient, DbClient, validateDialect } from '../helpers/sql'
+import { createDatabase, DbClient, dropDatabase, validateDialect } from '../helpers/sql'
 import { alpha } from '../helpers/generators'
 
 const sqlDialect: SqlDialect = validateDialect()
-
-const createTestClient = (database: string): DbClient => {
-  const client = createDbClient(database, sqlDialect)
-
-  return client
-}
+const createTestDatabase = (db: string): Promise<DbClient> => createDatabase(db, sqlDialect)
+const dropTestDatabase = (db: string): Promise<void> => dropDatabase(db, sqlDialect)
 
 describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
   const projectName = alpha(12)
 
   after(async () => {
     await deleteNpmProject(projectName)
-    // await dropPostgresDatabase(projectName)
+    await dropTestDatabase(projectName)
   })
 
   describe('camel plural', async function () {
@@ -40,7 +36,7 @@ describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
     const project = generateSequelizeProject({ schema: schema(projectName), options })
 
     before(async () => {
-      client = await createTestClient(projectName)
+      client = await createTestDatabase(projectName)
       await runNpmProject(project)
     })
 
@@ -99,7 +95,7 @@ describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
     const project = generateSequelizeProject({ schema: schema(projectName), options })
 
     before(async () => {
-      client = await createTestClient(projectName)
+      client = await createTestDatabase(projectName)
       await runNpmProject(project)
     })
 
@@ -158,7 +154,7 @@ describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
     const project = generateSequelizeProject({ schema: schema(projectName), options })
 
     before(async () => {
-      client = await createTestClient(projectName)
+      client = await createTestDatabase(projectName)
       await runNpmProject(project)
     })
 
@@ -217,7 +213,7 @@ describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
     const project = generateSequelizeProject({ schema: schema(projectName), options })
 
     before(async () => {
-      client = await createTestClient(projectName)
+      client = await createTestDatabase(projectName)
       await runNpmProject(project)
     })
 
@@ -276,7 +272,7 @@ describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
     const project = generateSequelizeProject({ schema: schema(projectName), options })
 
     before(async () => {
-      client = await createTestClient(projectName)
+      client = await createTestDatabase(projectName)
       await runNpmProject(project)
     })
 
