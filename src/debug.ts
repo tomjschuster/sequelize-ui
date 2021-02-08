@@ -3,11 +3,10 @@ import { AssociationType, DataTypeType, Model, Schema, ThroughType } from './sch
 import { generateSequelizeProject } from './codegen/sequelize/project'
 /*
   TODO:
-    - Optimize/refactor tests
-    - Write timestamp tests
     - Test other db's
     - Duplicate mixin method?
     - Default values
+    - Abstract to support other frameworks
 */
 
 const actor: Model = {
