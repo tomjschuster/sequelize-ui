@@ -12,6 +12,7 @@ export function blank(): string {
 type LinesOptions = {
   separator?: string
   depth?: number
+  prefix?: string
 }
 
 const defaultLinesOptions: LinesOptions = {
@@ -20,7 +21,13 @@ const defaultLinesOptions: LinesOptions = {
 }
 export function lines(
   xs: Array<string | null>,
-  { separator = '', depth = 0 }: LinesOptions = defaultLinesOptions,
+  { separator = '', depth = 0, prefix = '' }: LinesOptions = defaultLinesOptions,
 ): string {
-  return indent(depth, xs.filter((x): x is string => x !== null).join(`${separator}\n`))
+  return indent(
+    depth,
+    xs
+      .filter((x): x is string => x !== null)
+      .map((x) => prefix + x)
+      .join(`${separator}\n`),
+  )
 }

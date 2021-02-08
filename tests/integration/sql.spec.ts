@@ -46,7 +46,7 @@ const snakePlural: TestConfig = {
     'email',
     'created_at',
     'updated_at',
-    'store_store_id',
+    'store_id',
   ],
 }
 
@@ -78,7 +78,7 @@ const snakeSingular: TestConfig = {
     'email',
     'created_at',
     'updated_at',
-    'store_store_id',
+    'store_id',
   ],
 }
 const camelPlural: TestConfig = {
@@ -109,7 +109,7 @@ const camelPlural: TestConfig = {
     'email',
     'createdAt',
     'updatedAt',
-    'StoreStoreId',
+    'storeId',
   ],
 }
 
@@ -141,7 +141,7 @@ const camelSingular: TestConfig = {
     'email',
     'createdAt',
     'updatedAt',
-    'StoreStoreId',
+    'storeId',
   ],
 }
 
@@ -166,7 +166,7 @@ const noTimestamps: TestConfig = {
     'staffs',
     'stores',
   ],
-  expectedColumns: ['customer_id', 'first_name', 'last_name', 'email', 'store_store_id'],
+  expectedColumns: ['customer_id', 'first_name', 'last_name', 'email', 'store_id'],
 }
 
 describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
@@ -191,12 +191,12 @@ describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
       this.timeout(15000)
       let client: DbClient
 
-      const project = generateSequelizeProject({
-        schema: schema(projectName),
-        options: databaseOptions,
-      })
-
       before(async () => {
+        const project = generateSequelizeProject({
+          schema: schema(projectName),
+          options: databaseOptions,
+        })
+
         client = await createTestDatabase(projectName)
         await buildNpmProject(project)
       })

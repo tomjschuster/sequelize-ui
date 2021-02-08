@@ -5,7 +5,12 @@ import {
   snakeCase,
   pascalCase,
 } from '../../../helpers/string'
-import { dataTypeToSequelize, dataTypeToTypeScript, displaySequelizeDataType } from '../dataTypes'
+import {
+  dataTypeNotSupported,
+  dataTypeToSequelize,
+  dataTypeToTypeScript,
+  displaySequelizeDataType,
+} from '../dataTypes'
 import {
   Association,
   AssociationType,
@@ -16,7 +21,7 @@ import {
   Schema,
 } from '../../../schema'
 import { indent, blank, lines } from '../../helpers'
-import { DatabaseOptions } from '../../../database'
+import { DatabaseOptions, displaySqlDialect, SqlDialect } from '../../../database'
 
 import { addIdField, modelName } from '../utils'
 
@@ -76,7 +81,7 @@ const modelTemplate_ = ({ model, associations, options }: ModelTemplateArgs_): s
   lines([
     imports({ model, associations }),
     blank(),
-    types(model),
+    types({ model, options }),
     blank(),
     classDeclaration({ model, associations, options }),
     blank(),
@@ -153,17 +158,33 @@ const associationTypes = ({ model, association }: ModelAssociation): string[] =>
   ].filter((x): x is string => !!x)
 
 // Types
-const types = (model: Model): string =>
-  lines([modelAttributesType(model), blank(), idTypes(model), creationAttributeType(model)])
+type TypesArgs = {
+  model: Model
+  options: DatabaseOptions
+}
+const types = ({ model, options }: TypesArgs): string =>
+  lines([
+    modelAttributesType({ model, options }),
+    blank(),
+    idTypes(model),
+    creationAttributeType(model),
+  ])
 
-const modelAttributesType = (model: Model): string => {
+const modelAttributesType = ({ model, options }: TypesArgs): string => {
   return `export interface ${modelName(model)}Attributes {
-  ${indent(2, model.fields.map(attributeType).join('\n'))}
+  ${indent(2, model.fields.map((field) => attributeType(field, options)).join('\n'))}
 }`
 }
 
-const attributeType = ({ name, type, required }: Field): string =>
-  `${camelCase(name)}${required ? '?' : ''}: ${dataTypeToTypeScript(type)}`
+const attributeType = ({ name, type, required }: Field, options: DatabaseOptions): string => {
+  const comment = notSupportedComment(type, options.sqlDialect)
+  const description = notSupporedDescription(type, options.sqlDialect)
+  const typeDisplay = dataTypeToTypeScript(type)
+
+  return `${comment}${camelCase(name)}${required ? '' : '?'}: ${typeDisplay}${
+    description ? ' ' + description : ''
+  }`
+}
 
 const idTypes = (model: Model): string => {
   const name = modelName(model)
@@ -201,14 +222,16 @@ const classDeclaration = ({ model, associations, options }: ClassDeclarationArgs
   const fieldsWithId = addIdField(model.fields)
 
   return `export class ${name} extends Model<${name}Attributes, ${name}CreationAttributes> implements ${name}Attributes {
-  ${indent(2, fieldsWithId.map(classFieldType).join('\n'))}${associations.length ? '\n' : ''}
+  ${indent(2, fieldsWithId.map((field) => classFieldType(field, options)).join('\n'))}${
+    associations.length ? '\n' : ''
+  }
   ${indent(
     2,
     associations.map((a) => associationType({ sourceModel: model, association: a })).join('\n'),
   )}
   static initModel(sequelize: Sequelize.Sequelize): typeof ${name} {
     ${name}.init({
-      ${indent(6, model.fields.map(fieldTemplate).join(',\n'))}
+      ${indent(6, model.fields.map((field) => fieldTemplate(field, options)).join(',\n'))}
     }, {
       ${indent(6, modelOptions({ model, options }))}
     })
@@ -218,10 +241,19 @@ const classDeclaration = ({ model, associations, options }: ClassDeclarationArgs
 }`
 }
 
-const classFieldType = ({ name, type, required, primaryKey }: Field): string =>
-  `public ${primaryKey ? 'readonly ' : ''}${camelCase(name)}${
-    required ? '?' : '!'
-  }: ${dataTypeToTypeScript(type)}`
+const classFieldType = (
+  { name, type, required, primaryKey }: Field,
+  options: DatabaseOptions,
+): string => {
+  const comment = notSupportedComment(type, options.sqlDialect)
+  const readonly = primaryKey ? 'readonly ' : ''
+  const optional = required ? '!' : '?'
+  const description = notSupporedDescription(type, options.sqlDialect)
+
+  return `${comment}public ${readonly}${camelCase(name)}${optional}: ${dataTypeToTypeScript(type)}${
+    description ? ' ' + description : ''
+  }`
+}
 
 type AssociationTypeArgs = {
   sourceModel: Model
@@ -295,23 +327,28 @@ const associationType = ({
 
 const aliasLabel = ({ alias }: Association): string => (alias ? ` (as ${pascalCase(alias)})` : '')
 
-const fieldTemplate = ({ name, type, required, primaryKey, unique }: Field): string =>
-  `${camelCase(name)}: {
-  ${indent(
-    2,
+const fieldTemplate = (
+  { name, type, required, primaryKey, unique }: Field,
+  { sqlDialect }: DatabaseOptions,
+): string => {
+  const comment = notSupportedComment(type, sqlDialect)
+  const description = notSupporedDescription(type, sqlDialect)
+
+  return `${description ? description + '\n' : ''}${comment}${camelCase(name)}: {
+  ${lines(
     [
       typeField(type),
-      primaryKey === undefined ? '' : primaryKeyField(primaryKey),
+      primaryKey === undefined ? null : primaryKeyField(primaryKey),
       type.type === DataTypeType.Integer && type.autoincrement !== undefined
         ? autoincrementField(type.autoincrement)
-        : '',
-      required === undefined ? '' : allowNullField(!required),
-      unique === undefined ? '' : uniqueField(unique),
-    ]
-      .filter((x) => x)
-      .join(',\n'),
+        : null,
+      required === undefined ? null : allowNullField(!required),
+      unique === undefined ? null : uniqueField(unique),
+    ],
+    { depth: 2, separator: ',', prefix: comment },
   )}
-}`
+${comment}}`
+}
 
 const typeField = (dataType: DataType): string =>
   `type: ${displaySequelizeDataType(dataTypeToSequelize(dataType))}`
@@ -338,4 +375,12 @@ const tableName = ({ options: { caseStyle, nounForm }, model }: TableNameArgs): 
   return null
 }
 
-export default modelTemplate
+const notSupportedComment = (type: DataType, dialect: SqlDialect): string =>
+  dataTypeNotSupported(type, dialect) ? '// ' : ''
+
+const notSupporedDescription = (type: DataType, dialect: SqlDialect): string => {
+  if (!dataTypeNotSupported(type, dialect)) return ''
+
+  const typeDisplay = displaySequelizeDataType(dataTypeToSequelize(type))
+  return `// ${typeDisplay} not supported for ${displaySqlDialect(dialect)}`
+}

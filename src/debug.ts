@@ -3,10 +3,14 @@ import { AssociationType, DataTypeType, Model, Schema, ThroughType } from './sch
 import { generateSequelizeProject } from './codegen/sequelize/project'
 /*
   TODO:
+    - create mysql test client
+    - verify mysql enum/json
     - Test other db's
     - Duplicate mixin method?
+    - Cleanup codegen code
     - Default values
     - Abstract to support other frameworks
+    - Cleanup 
 */
 
 const actor: Model = {

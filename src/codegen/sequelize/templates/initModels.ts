@@ -1,4 +1,4 @@
-import { singular, camelCase, pascalCase, plural } from '../../../helpers/string'
+import { singular, camelCase, pascalCase, plural, snakeCase } from '../../../helpers/string'
 import {
   Association,
   AssociationType,
@@ -68,7 +68,7 @@ type InitModelsArgs = {
   schema: Schema
   options: DatabaseOptions
 }
-const initModels = ({ schema }: InitModelsArgs): string => {
+const initModels = ({ schema, options }: InitModelsArgs): string => {
   const modelById: ModelById = schema.models.reduce<ModelById>((acc, model) => {
     acc[model.id] = model
     return acc
@@ -80,7 +80,7 @@ const initModels = ({ schema }: InitModelsArgs): string => {
   ${lines(
     schema.models
       .filter(({ associations }) => associations.length > 0)
-      .map((model) => modelAssociations({ model, modelById })),
+      .map((model) => modelAssociations({ model, modelById, options })),
     { depth: 2 },
   )}
 
@@ -95,21 +95,30 @@ const initModel = ({ name }: Model) => `${singular(pascalCase(name))}.initModel(
 type ModelAssociationsArgs = {
   model: Model
   modelById: ModelById
+  options: DatabaseOptions
 }
-const modelAssociations = ({ model, modelById }: ModelAssociationsArgs): string =>
+const modelAssociations = ({ model, modelById, options }: ModelAssociationsArgs): string =>
   lines(
-    model.associations.map((association) => modelAssociation({ association, model, modelById })),
+    model.associations.map((association) =>
+      modelAssociation({ association, model, modelById, options }),
+    ),
   )
 
 type ModelAssociationArgs = {
   association: Association
   model: Model
   modelById: ModelById
+  options: DatabaseOptions
 }
-const modelAssociation = ({ association, model, modelById }: ModelAssociationArgs): string =>
+const modelAssociation = ({
+  association,
+  model,
+  modelById,
+  options,
+}: ModelAssociationArgs): string =>
   `${singular(pascalCase(model.name))}.${associationLabel(association)}(${singular(
     pascalCase(modelById[association.targetModelId]['name']),
-  )}${associationOptions({ association, modelById })})`
+  )}${associationOptions({ model, association, modelById, options })})`
 
 const associationLabel = ({ type }: Association): string => {
   switch (type) {
@@ -125,32 +134,74 @@ const associationLabel = ({ type }: Association): string => {
 }
 
 type AssociationOptionsArgs = {
+  model: Model
   association: Association
   modelById: ModelById
+  options: DatabaseOptions
 }
-const associationOptions = ({ association, modelById }: AssociationOptionsArgs): string =>
-  associationHasOptions(association)
-    ? `, { ${associationOptionsKvs({ association, modelById })} }`
-    : ''
+const associationOptions = ({
+  model,
+  association,
+  modelById,
+  options,
+}: AssociationOptionsArgs): string =>
+  `, { ${associationOptionsKvs({ model, association, modelById, options })} }`
 
-const associationHasOptions = ({ alias, foreignKey, type }: Association): boolean =>
-  !!alias || !!foreignKey || type === AssociationType.ManyToMany
-
-const associationOptionsKvs = ({ association, modelById }: AssociationOptionsArgs): string =>
-  [
+const associationOptionsKvs = ({
+  model,
+  association,
+  modelById,
+  options,
+}: AssociationOptionsArgs): string => {
+  const foreignKey = getForeignKey({ model, association, modelById, options })
+  const otherKey = getOtherKey({ model, association, modelById, options })
+  return [
     association.alias
       ? `as: '${aliasValue({ alias: association.alias, type: association.type })}'`
       : null,
     association.type === AssociationType.ManyToMany
       ? `through: ${throughValue({ association, modelById })}`
       : null,
-    association.foreignKey ? `foreignKey: '${association.foreignKey}'` : null,
-    association.type === AssociationType.ManyToMany && association.targetFk
-      ? `otherKey: ${association.targetFk}`
-      : null,
+    `foreignKey: '${foreignKey}'`,
+    otherKey ? `otherKey: '${otherKey}'` : null,
+    association.type === AssociationType.ManyToMany ? `onDelete: 'CASCADE'` : null,
   ]
     .filter((x): x is string => !!x)
     .join(', ')
+}
+
+const getForeignKey = ({
+  model,
+  association,
+  modelById,
+  options,
+}: AssociationOptionsArgs): string => {
+  const name = association.foreignKey
+    ? association.foreignKey
+    : association.alias && association.type === AssociationType.BelongsTo
+    ? association.alias
+    : association.type === AssociationType.BelongsTo
+    ? modelById[association.targetModelId].name
+    : model.name
+
+  return options.caseStyle === 'snake' ? `${snakeCase(name)}_id` : `${camelCase(name)}Id`
+}
+
+const getOtherKey = ({
+  association,
+  modelById,
+  options,
+}: AssociationOptionsArgs): string | null => {
+  if (association.type !== AssociationType.ManyToMany) return null
+
+  const name = association.targetFk
+    ? association.targetFk
+    : association.alias
+    ? association.alias
+    : modelById[association.targetModelId].name
+
+  return options.caseStyle === 'snake' ? `${snakeCase(name)}_id` : `${camelCase(name)}Id`
+}
 
 type AliasValueArgs = {
   alias: string

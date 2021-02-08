@@ -1,3 +1,4 @@
+import { SqlDialect } from '../../database'
 import { DataType, DataTypeType } from '../../schema'
 
 export enum SequelizeDataTypeType {
@@ -146,4 +147,12 @@ export function dataTypeToTypeScript(dataType: DataType): string {
       // ?
       return 'Buffer'
   }
+}
+
+// TODO: Verify enum and json
+export function dataTypeNotSupported(dataType: DataType, dialect: SqlDialect): boolean {
+  return (
+    dialect !== SqlDialect.Postgres &&
+    [DataTypeType.Array, DataTypeType.Enum, DataTypeType.Json].includes(dataType.type)
+  )
 }
