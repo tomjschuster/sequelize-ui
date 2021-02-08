@@ -4,7 +4,7 @@ import { promisify } from 'util'
 import { exec as exec_ } from 'child_process'
 const exec = promisify(exec_)
 
-export async function runNpmProject(directory: DirectoryItem): Promise<void> {
+export async function buildNpmProject(directory: DirectoryItem): Promise<void> {
   const cwd = process.cwd()
 
   const dirname = testProjectDirname(name(directory))
@@ -27,5 +27,5 @@ const TEST_PROJECT_DIR = '/tmp/sequelize-ui-test'
 const testProjectDirname = (path: string) => `${TEST_PROJECT_DIR}/${path}`
 
 const install = (): Promise<void> => exec('npm install').then()
-const build = (): Promise<void> => exec('npm run build').then()
+const build = (): Promise<void> => exec('npm run build -- --incremental').then()
 const start = (): Promise<void> => exec('npm start').then()

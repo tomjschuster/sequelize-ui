@@ -1,14 +1,16 @@
 import { DbClient } from './client'
 import { Client, QueryResult } from 'pg'
 
-export class PostgresClient implements DbClient {
+export class PostgresClient extends DbClient {
   constructor(database: string) {
+    super()
     this.client = this.initializeClient(database)
   }
 
-  connected(): Promise<boolean> {
-    return this.connectedPromise
-  }
+  private resolveConnected: (connected: boolean) => void = () => undefined
+  connected: Promise<boolean> = new Promise((resolve) => {
+    this.resolveConnected = resolve
+  })
 
   static async createDatabase(database: string): Promise<void> {
     const client = new Client(defaultClientOptions)
@@ -41,7 +43,7 @@ export class PostgresClient implements DbClient {
   async close(): Promise<void> {
     const client = await this.client
     await client.end()
-    this.connectedPromise = Promise.resolve(false)
+    this.connected = Promise.resolve(false)
     return
   }
 
@@ -54,23 +56,14 @@ export class PostgresClient implements DbClient {
   }
 
   private client: Promise<Client>
-  // eslint-disable-next-line
-  // @ts-ignore
-  private resolveConnected: (connected: boolean) => void
-  private connectedPromise: Promise<boolean> = new Promise((resolve) => {
-    this.resolveConnected = resolve
-  })
 
   private async initializeClient(database: string): Promise<Client> {
-    await PostgresClient.createDatabase(database)
-
     const client = new Client({ ...defaultClientOptions, database })
     try {
       await client.connect()
       this.resolveConnected(true)
     } catch (e) {
       this.resolveConnected(false)
-      return Promise.reject(e)
     }
     return client
   }

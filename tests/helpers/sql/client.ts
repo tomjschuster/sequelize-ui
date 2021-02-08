@@ -1,8 +1,8 @@
-export interface DbClient {
-  connected: () => Promise<boolean>
-  getTables: () => Promise<string[]>
-  getColumns: (table: string) => Promise<string[]>
-  close: () => Promise<void>
+export abstract class DbClient {
+  abstract connected: Promise<boolean>
+  abstract getTables(): Promise<string[]>
+  abstract getColumns(table: string): Promise<string[]>
+  abstract close(): Promise<void>
 }
 
 export interface DbClientConstructor {

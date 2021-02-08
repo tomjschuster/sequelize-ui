@@ -5,10 +5,11 @@ import { PostgresClient } from './postgres'
 export { DbClient } from './client'
 
 export async function createDatabase(database: string, dialect: SqlDialect): Promise<DbClient> {
-  const constructor = getConstructor(dialect)
-  const client = new constructor(database)
-  await client.connected()
-  if (!client.connected) {
+  const Client = getConstructor(dialect)
+  await Client.createDatabase(database)
+  const client = new Client(database)
+
+  if (!(await client.connected)) {
     raiseClientNotConnected()
   }
 
@@ -16,8 +17,8 @@ export async function createDatabase(database: string, dialect: SqlDialect): Pro
 }
 
 export function dropDatabase(database: string, dialect: SqlDialect): Promise<void> {
-  const constructor = getConstructor(dialect)
-  return constructor.dropDatabase(database)
+  const Client = getConstructor(dialect)
+  return Client.dropDatabase(database)
 }
 
 export function validateDialect(
