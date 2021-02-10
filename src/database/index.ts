@@ -65,9 +65,24 @@ export const defaultSqlDialectPort = (dialect: SqlDialect): string | null => {
 export const defaultSqlDialectUsername = (dialect: SqlDialect): string | null => {
   switch (dialect) {
     case SqlDialect.MariaDb:
-      return 'mariadb'
+      return 'root'
     case SqlDialect.MsSql:
       return 'sa'
+    case SqlDialect.MySql:
+      return 'root'
+    case SqlDialect.Postgres:
+      return 'postgres'
+    case SqlDialect.Sqlite:
+      return null
+  }
+}
+
+export const defaultSqlDialectPassword = (dialect: SqlDialect): string | null => {
+  switch (dialect) {
+    case SqlDialect.MariaDb:
+      return 'root'
+    case SqlDialect.MsSql:
+      return 'Password1'
     case SqlDialect.MySql:
       return 'root'
     case SqlDialect.Postgres:

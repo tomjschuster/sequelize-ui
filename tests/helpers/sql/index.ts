@@ -1,19 +1,17 @@
 import { displaySqlDialect, parseSqlDialect, SqlDialect } from '../../../src/database'
-import { DbClient, DbClientConstructor } from './client'
-import { PostgresClient } from './postgres'
+import { DbConnection, DbConnectionConstructor } from './connection'
+import { MsSqlConnection } from './mssql'
+import { MySqlConnection } from './mysql'
+import { PostgresConnection } from './postgres'
 
-export { DbClient } from './client'
+export { DbConnection } from './connection'
 
-export async function createDatabase(database: string, dialect: SqlDialect): Promise<DbClient> {
-  const Client = getConstructor(dialect)
-  await Client.createDatabase(database)
-  const client = new Client(database)
-
-  if (!(await client.connected)) {
-    raiseClientNotConnected()
-  }
-
-  return client
+export async function createDatabase(database: string, dialect: SqlDialect): Promise<DbConnection> {
+  const Connection = getConstructor(dialect)
+  await Connection.createDatabase(database)
+  const connection = new Connection(database)
+  await connection.connected()
+  return connection
 }
 
 export function dropDatabase(database: string, dialect: SqlDialect): Promise<void> {
@@ -35,26 +33,28 @@ export function validateDialect(
   return dialect
 }
 
-function getConstructor(dialect: SqlDialect): DbClientConstructor {
+function getConstructor(dialect: SqlDialect): DbConnectionConstructor {
   switch (dialect) {
+    case SqlDialect.MariaDb:
+      return MySqlConnection
+    case SqlDialect.MsSql:
+      return MsSqlConnection
+    case SqlDialect.MySql:
+      return MySqlConnection
     case SqlDialect.Postgres:
-      return PostgresClient
+      return PostgresConnection
     default:
       raiseDialectNotImplemented(dialect)
   }
 }
 
 function dialectImplemented(dialect: SqlDialect): boolean {
-  switch (dialect) {
-    case SqlDialect.Postgres:
-      return true
-    default:
-      return false
+  try {
+    getConstructor(dialect)
+    return true
+  } catch (e) {
+    return false
   }
-}
-
-function raiseClientNotConnected(): never {
-  throw new Error('error connecting to database')
 }
 
 function raiseDialectRequired(): never {
@@ -62,7 +62,7 @@ function raiseDialectRequired(): never {
 }
 
 function raiseDialectNotImplemented(dialect: SqlDialect): never {
-  throw new Error(`DbClient not implemented for dialect ${displaySqlDialect(dialect)}`)
+  throw new Error(`DbConnection not implemented for dialect ${displaySqlDialect(dialect)}`)
 }
 
 function raiseInvalidDialect(dialect: string): never {

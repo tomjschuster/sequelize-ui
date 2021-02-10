@@ -6,6 +6,7 @@ import {
   DatabaseOptions,
   defaultSqlDialectUsername,
   defaultSqlDialectDatabase,
+  defaultSqlDialectPassword,
 } from '../../../database'
 import { blank, lines } from '../../helpers'
 
@@ -54,30 +55,40 @@ const databaseField = (schemaName: string, dialect: SqlDialect): string | null =
   const defaultDatabase = defaultSqlDialectDatabase(schemaName, dialect)
   return dialect === SqlDialect.Sqlite
     ? null
-    : `database: process.env.DB_NAME${defaultDatabase ? ` || '${defaultDatabase}'` : ''}`
+    : `database: process.env.${displaySqlDialect(dialect).toUpperCase()}_DB_NAME${
+        defaultDatabase ? ` || '${defaultDatabase}'` : ''
+      }`
 }
 
 const usernameField = (dialect: SqlDialect): string | null => {
   const defaultUsername = defaultSqlDialectUsername(dialect)
   return dialect === SqlDialect.Sqlite
     ? null
-    : `username: process.env.DB_USERNAME${defaultUsername ? ` || '${defaultUsername}'` : ''}`
+    : `username: process.env.${displaySqlDialect(dialect).toUpperCase()}_DB_USERNAME${
+        defaultUsername ? ` || '${defaultUsername}'` : ''
+      }`
 }
 
 const passwordField = (dialect: SqlDialect): string | null => {
-  const defaultUsername = defaultSqlDialectUsername(dialect)
+  const defaultPassword = defaultSqlDialectPassword(dialect)
   return dialect === SqlDialect.Sqlite
     ? null
-    : `password: process.env.DB_PASSWORD${defaultUsername ? ` || '${defaultUsername}'` : ''}`
+    : `password: process.env.${displaySqlDialect(dialect).toUpperCase()}_DB_PASSWORD${
+        defaultPassword ? ` || '${defaultPassword}'` : ''
+      }`
 }
 
 const hostField = (dialect: SqlDialect): string | null =>
-  dialect === SqlDialect.Sqlite ? null : `host: process.env.DB_HOST || 'localhost'`
+  dialect === SqlDialect.Sqlite
+    ? null
+    : `host: process.env.${displaySqlDialect(dialect).toUpperCase()}_DB_HOST || 'localhost'`
 
 const portField = (dialect: SqlDialect): string | null =>
   !defaultSqlDialectPort(dialect)
     ? null
-    : `port: parseInt(process.env.DB_PORT || '${defaultSqlDialectPort(dialect)}')`
+    : `port: parseInt(process.env.${displaySqlDialect(
+        dialect,
+      ).toUpperCase()}_DB_PORT || '${defaultSqlDialectPort(dialect)}')`
 
 const hasOptions = (options: DatabaseOptions): boolean =>
   !options.timestamps || options.caseStyle === 'snake' || options.nounForm === 'singular'

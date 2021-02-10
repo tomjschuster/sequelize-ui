@@ -1,70 +1,70 @@
-import { DbClient } from './client'
-import { Client, QueryResult } from 'pg'
+import { DbConnection } from './connection'
+import { Client, ClientConfig, QueryResult } from 'pg'
 
-export class PostgresClient extends DbClient {
+export class PostgresConnection extends DbConnection {
+  private static clientConfig: ClientConfig = {
+    user: process.env.POSTGRES_DB_USER || 'postgres',
+    password: process.env.POSTGRES_DB_PASSWORD || 'postgres',
+    port: parseInt(process.env.POSTGRES_DB_PORT || '5432'),
+    host: process.env.POSTGRES_DB_USER_PORT || 'localhost',
+  }
+
   constructor(database: string) {
     super()
     this.client = this.initializeClient(database)
   }
 
-  private resolveConnected: (connected: boolean) => void = () => undefined
-  connected: Promise<boolean> = new Promise((resolve) => {
-    this.resolveConnected = resolve
-  })
+  connected(): Promise<boolean> {
+    return this.client.then(() => true)
+  }
 
   static async createDatabase(database: string): Promise<void> {
-    const client = new Client(defaultClientOptions)
+    const client = new Client(PostgresConnection.clientConfig)
 
     await client.connect()
-    await client.query(`DROP DATABASE IF EXISTS ${database}`)
-    await client.query(`CREATE DATABASE ${database}`)
+    await client.query(`DROP DATABASE IF EXISTS ${database};`)
+    await client.query(`CREATE DATABASE ${database};`)
     await client.end()
   }
 
   static async dropDatabase(database: string): Promise<void> {
-    const client = new Client(defaultClientOptions)
+    const client = new Client(PostgresConnection.clientConfig)
 
     await client.connect()
-    await client.query(`DROP DATABASE IF EXISTS ${database}`)
+    await client.query(`DROP DATABASE IF EXISTS ${database};`)
     await client.end()
     return
   }
 
   async getTables(): Promise<string[]> {
-    const result = await this.query<TablesResult>(PostgresClient.tablesQuery())
+    const result = await this.query<TablesResult>(PostgresConnection.tablesQuery())
     return result.rows.map((r) => r.table_name)
   }
 
   async getColumns(table: string): Promise<string[]> {
-    const result = await this.query<ColumnsResult>(PostgresClient.columnsQuery(table))
+    const result = await this.query<ColumnsResult>(PostgresConnection.columnsQuery(table))
     return result.rows.map((r) => r.column_name)
   }
 
   async close(): Promise<void> {
     const client = await this.client
     await client.end()
-    this.connected = Promise.resolve(false)
     return
   }
 
   private static tablesQuery(): string {
-    return `SELECT * FROM information_schema.tables WHERE table_schema = 'public';`
+    return `SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';`
   }
 
   private static columnsQuery(table: string): string {
-    return `SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '${table}';`
+    return `SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '${table}';`
   }
 
   private client: Promise<Client>
 
   private async initializeClient(database: string): Promise<Client> {
-    const client = new Client({ ...defaultClientOptions, database })
-    try {
-      await client.connect()
-      this.resolveConnected(true)
-    } catch (e) {
-      this.resolveConnected(false)
-    }
+    const client = new Client({ ...PostgresConnection.clientConfig, database })
+    await client.connect()
     return client
   }
 
@@ -81,11 +81,3 @@ type TablesResult = {
 type ColumnsResult = {
   column_name: string
 }
-
-const defaultClientOptions = {
-  user: 'postgres',
-  database: 'postgres',
-  password: 'postgres',
-  port: 5432,
-  host: 'localhost',
-} as const

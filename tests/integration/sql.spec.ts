@@ -4,11 +4,11 @@ import { SqlDialect, DatabaseOptions, displaySqlDialect } from '../../src/databa
 import { generateSequelizeProject } from '../../src/codegen/sequelize/project'
 import schema from '../fixtures/dvdSchema'
 import { deleteNpmProject, buildNpmProject } from '../helpers/npm'
-import { createDatabase, DbClient, dropDatabase, validateDialect } from '../helpers/sql'
+import { createDatabase, DbConnection, dropDatabase, validateDialect } from '../helpers/sql'
 import { alpha } from '../helpers/generators'
 
 const sqlDialect: SqlDialect = validateDialect()
-const createTestDatabase = (db: string): Promise<DbClient> => createDatabase(db, sqlDialect)
+const createTestDatabase = (db: string): Promise<DbConnection> => createDatabase(db, sqlDialect)
 const dropTestDatabase = (db: string): Promise<void> => dropDatabase(db, sqlDialect)
 
 type TestConfig = {
@@ -188,8 +188,8 @@ describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
   forEach(cases).describe(
     '%s',
     function (_label, { databaseOptions, tableName, expectedTables, expectedColumns }) {
-      this.timeout(15000)
-      let client: DbClient
+      this.timeout(30000)
+      let client: DbConnection
 
       before(async () => {
         const project = generateSequelizeProject({
