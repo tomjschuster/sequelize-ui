@@ -188,7 +188,7 @@ describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
   forEach(cases).describe(
     '%s',
     function (_label, { databaseOptions, tableName, expectedTables, expectedColumns }) {
-      this.timeout(30000)
+      this.timeout(60000)
       let client: DbConnection
 
       before(async () => {
@@ -198,7 +198,14 @@ describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
         })
 
         client = await createTestDatabase(projectName)
-        await buildNpmProject(project)
+
+        const preinstall =
+          sqlDialect === SqlDialect.Sqlite
+            ? // sudo apt-get install libsqlite3-dev
+              'npm install sqlite3 --build-from-source --sqlite=/usr'
+            : undefined
+
+        await buildNpmProject(project, preinstall)
       })
 
       after(async () => {

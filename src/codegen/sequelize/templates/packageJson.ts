@@ -51,7 +51,7 @@ const dialectDeps = ({ sqlDialect }: DatabaseOptions): Dependency[] => {
         ['pg-hstore', '^2.3.3'],
       ]
     case SqlDialect.Sqlite:
-      return [['sqlite', '^5.0.1']]
+      return [['sqlite3', '^5.0.1']]
   }
 }
 

@@ -10,7 +10,8 @@
     "test:integration:mssql": "SQL_DIALECT=mssql npm run test:integration",
     "test:integration:mysql": "SQL_DIALECT=mysql npm run test:integration",
     "test:integration:postgres": "SQL_DIALECT=postgres npm run test:integration",
-    "test:integration:*": "npm run test:integration:mariadb && npm run test:integration:mssql && npm run test:integration:mysql && npm run test:integration:postgres",
+    "test:integration:sqlite": "SQL_DIALECT=sqlite npm run test:integration",
+    "test:integration:*": "npm run test:integration:mariadb && npm run test:integration:mssql && npm run test:integration:mysql && npm run test:integration:postgres && npm run test:integration:sqlite",
     "debug": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/debug.ts"
   },
   "keywords": [],
@@ -30,6 +31,7 @@
     "@types/node": "^14.14.22",
     "@types/pg": "^7.14.9",
     "@types/pluralize": "0.0.29",
+    "@types/sqlite3": "^3.1.7",
     "@types/tedious": "^4.0.3",
     "@typescript-eslint/eslint-plugin": "^4.11.0",
     "@typescript-eslint/parser": "^4.11.0",
@@ -43,6 +45,7 @@
     "nodemon": "^2.0.6",
     "pg": "^8.5.1",
     "prettier": "^2.2.1",
+    "sqlite3": "^5.0.1",
     "tedious": "^11.0.3",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3"

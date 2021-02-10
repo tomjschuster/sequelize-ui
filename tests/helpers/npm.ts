@@ -1,18 +1,21 @@
 import { DirectoryItem, name } from '../../src/files'
-import { clearDirectory, deleteDirectory, writeFiles } from './files'
+import { clearDirectory, deleteFileOrDirectory, tmpDirPath, writeFiles } from './files'
 import { promisify } from 'util'
 import { exec as exec_ } from 'child_process'
 const exec = promisify(exec_)
 
-export async function buildNpmProject(directory: DirectoryItem): Promise<void> {
+export async function buildNpmProject(
+  directory: DirectoryItem,
+  preinstall?: string,
+): Promise<void> {
   const cwd = process.cwd()
 
-  const dirname = testProjectDirname(name(directory))
-  await clearDirectory(dirname, ['node_modules', 'dist'])
-  await writeFiles(directory, TEST_PROJECT_DIR)
+  const dirname = tmpDirPath(name(directory))
+  await clearDirectory(dirname, ['node_modules', 'dist', 'db'])
+  await writeFiles(directory, tmpDirPath())
   process.chdir(dirname)
 
-  await install()
+  await install(preinstall)
   await build()
   await start()
 
@@ -20,12 +23,14 @@ export async function buildNpmProject(directory: DirectoryItem): Promise<void> {
 }
 
 export function deleteNpmProject(name: string): Promise<void> {
-  return deleteDirectory(testProjectDirname(name))
+  return deleteFileOrDirectory(tmpDirPath(name))
 }
 
-const TEST_PROJECT_DIR = '/tmp/sequelize-ui-test'
-const testProjectDirname = (path: string) => `${TEST_PROJECT_DIR}/${path}`
-
-const install = (): Promise<void> => exec('npm install').then()
+const install = async (preinstall?: string): Promise<void> => {
+  if (preinstall) {
+    await exec(preinstall)
+  }
+  return exec('npm install').then()
+}
 const build = (): Promise<void> => exec('npm run build -- --incremental').then()
 const start = (): Promise<void> => exec('npm start').then()

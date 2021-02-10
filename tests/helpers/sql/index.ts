@@ -1,8 +1,9 @@
-import { displaySqlDialect, parseSqlDialect, SqlDialect } from '../../../src/database'
+import { parseSqlDialect, SqlDialect } from '../../../src/database'
 import { DbConnection, DbConnectionConstructor } from './connection'
 import { MsSqlConnection } from './mssql'
 import { MySqlConnection } from './mysql'
 import { PostgresConnection } from './postgres'
+import { SqlLiteConnection } from './sqlite'
 
 export { DbConnection } from './connection'
 
@@ -28,8 +29,6 @@ export function validateDialect(
 
   if (!dialect) raiseInvalidDialect(dialectString)
 
-  if (!dialectImplemented(dialect)) raiseDialectNotImplemented(dialect)
-
   return dialect
 }
 
@@ -43,26 +42,13 @@ function getConstructor(dialect: SqlDialect): DbConnectionConstructor {
       return MySqlConnection
     case SqlDialect.Postgres:
       return PostgresConnection
-    default:
-      raiseDialectNotImplemented(dialect)
-  }
-}
-
-function dialectImplemented(dialect: SqlDialect): boolean {
-  try {
-    getConstructor(dialect)
-    return true
-  } catch (e) {
-    return false
+    case SqlDialect.Sqlite:
+      return SqlLiteConnection
   }
 }
 
 function raiseDialectRequired(): never {
   throw new Error('dialect must be provided or set as an environment variable SQL_DIALECT')
-}
-
-function raiseDialectNotImplemented(dialect: SqlDialect): never {
-  throw new Error(`DbConnection not implemented for dialect ${displaySqlDialect(dialect)}`)
 }
 
 function raiseInvalidDialect(dialect: string): never {

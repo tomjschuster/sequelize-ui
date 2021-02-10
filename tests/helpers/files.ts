@@ -2,6 +2,9 @@ import { FileSystemItem, isDirectory, name } from '../../src/files/'
 import fs from 'fs/promises'
 import { join } from 'path'
 
+export const mkdirp = async (path: string): Promise<void> =>
+  fs.mkdir(path, { recursive: true }).then()
+
 export const writeFiles = async (item: FileSystemItem, root: string = __dirname): Promise<void> => {
   const path = join(root, name(item))
 
@@ -14,7 +17,10 @@ export const writeFiles = async (item: FileSystemItem, root: string = __dirname)
   return fs.writeFile(path, item.content)
 }
 
-export const deleteDirectory = (path: string): Promise<void> => fs.rm(path, { recursive: true })
+export const deleteFileOrDirectory = (path: string): Promise<void> =>
+  fs
+    .rm(path, { recursive: true })
+    .catch((err) => (err.code === 'ENOENT' ? undefined : Promise.reject(err)))
 
 export const clearDirectory = async (path: string, keep: string[] = []): Promise<void> => {
   if (await exists(path)) {
@@ -36,3 +42,6 @@ const exists = (path: string): Promise<boolean> =>
     .stat(path)
     .then(() => true)
     .catch(() => false)
+
+const TEST_PROJECT_DIR = '/tmp/sequelize-ui-test/'
+export const tmpDirPath = (...path: string[]): string => join(TEST_PROJECT_DIR, ...path)
