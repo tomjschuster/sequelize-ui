@@ -17,6 +17,8 @@ export class MsSqlConnection extends DbConnection {
     },
   }
 
+  private connection: Promise<Connection>
+
   constructor(database: string) {
     super()
     this.connection = MsSqlConnection.connect(database)
@@ -24,6 +26,23 @@ export class MsSqlConnection extends DbConnection {
 
   connected(): Promise<boolean> {
     return this.connection.then(() => true)
+  }
+
+  async getTables(): Promise<string[]> {
+    const statement = `SELECT table_name FROM information_schema.tables`
+    const rows = await this.query<TablesResult>(statement)
+    return rows.map((r) => r.table_name)
+  }
+
+  async getColumns(table: string): Promise<string[]> {
+    const statement = `SELECT column_name FROM information_schema.columns WHERE table_name = '${table}';`
+    const rows = await this.query<ColumnsResult>(statement)
+    return rows.map((r) => r.column_name)
+  }
+
+  async close(): Promise<void> {
+    const connection = await this.connection
+    return MsSqlConnection.closeConnection(connection)
   }
 
   static async createDatabase(database: string): Promise<void> {
@@ -39,30 +58,10 @@ export class MsSqlConnection extends DbConnection {
     return MsSqlConnection.closeConnection(connection)
   }
 
-  async getTables(): Promise<string[]> {
-    const rows = await this.query<TablesResult>(MsSqlConnection.tablesQuery())
-    return rows.map((r) => r.table_name)
-  }
-
-  async getColumns(table: string): Promise<string[]> {
-    const rows = await this.query<ColumnsResult>(MsSqlConnection.columnsQuery(table))
-    return rows.map((r) => r.column_name)
-  }
-
-  async close(): Promise<void> {
+  private async query<T>(statement: string): Promise<T[]> {
     const connection = await this.connection
-    return MsSqlConnection.closeConnection(connection)
+    return MsSqlConnection.query<T>(connection, statement)
   }
-
-  private static tablesQuery(): string {
-    return `SELECT table_name FROM information_schema.tables`
-  }
-
-  private static columnsQuery(table: string): string {
-    return `SELECT column_name FROM information_schema.columns WHERE table_name = '${table}';`
-  }
-
-  private connection: Promise<Connection>
 
   private static connect(database?: string): Promise<Connection> {
     const { connectionConfig } = MsSqlConnection
@@ -72,39 +71,9 @@ export class MsSqlConnection extends DbConnection {
       options: { ...connectionConfig.options, database },
     })
 
-    return new Promise<Connection>((resolve, reject) => {
-      connection.on('error', reject)
-      connection.connect((err) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(connection)
-        }
-      })
-    })
-  }
-
-  private static query<T>(connection: Connection, statement: string): Promise<T[]> {
-    return new Promise((resolve, reject) => {
-      const rows: T[] = []
-      const request = new Request(statement, (err, _rowCount) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(rows)
-        }
-      })
-
-      request.on('row', (row: ColumnValue[]) => {
-        const value = row.reduce(
-          (acc, { value, metadata: { colName } }) => ({ ...acc, [colName]: value }),
-          {},
-        )
-        rows.push(value as T)
-      })
-
-      connection.execSql(request)
-    })
+    return new Promise<Connection>((resolve, reject) =>
+      connection.connect((err) => (err ? reject(err) : resolve(connection))),
+    )
   }
 
   private static closeConnection(connection: Connection): Promise<void> {
@@ -114,9 +83,20 @@ export class MsSqlConnection extends DbConnection {
     })
   }
 
-  private async query<T>(query: string): Promise<T[]> {
-    const connection = await this.connection
-    return MsSqlConnection.query<T>(connection, query)
+  private static query<T>(connection: Connection, statement: string): Promise<T[]> {
+    return new Promise((resolve, reject) => {
+      const rows: T[] = []
+      const request = new Request(statement, (err) => (err ? reject(err) : resolve(rows)))
+      request.on('row', (row: ColumnValue[]) => rows.push(MsSqlConnection.transformRow(row)))
+      connection.execSql(request)
+    })
+  }
+
+  private static transformRow<T extends { [key: string]: any }>(row: ColumnValue[]): T {
+    return row.reduce<T>(
+      (acc, { value, metadata: { colName } }) => ({ ...acc, [colName]: value }),
+      {} as T,
+    )
   }
 }
 
