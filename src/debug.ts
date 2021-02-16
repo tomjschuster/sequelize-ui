@@ -3,8 +3,6 @@ import { AssociationType, DataTypeType, Model, Schema, ThroughType } from './sch
 import { generateSequelizeProject } from './codegen/sequelize/project'
 /*
   TODO:
-    - Duplicate mixin method?
-    - Cleanup codegen code
     - Default values
     - Abstract to support other frameworks
     - Cleanup

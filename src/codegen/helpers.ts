@@ -1,8 +1,7 @@
 export function indent(depth: number, value: string, prefix = ''): string {
   return value
     .split('\n')
-    .map((x, i) => (i !== 0 && x ? ' '.repeat(depth) + x : x))
-    .map((x) => prefix + x)
+    .map((x) => prefix + ' '.repeat(depth) + x)
     .join('\n')
 }
 

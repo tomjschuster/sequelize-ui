@@ -33,7 +33,7 @@ const initModelsTemplate = ({ schema, options }: InitModelsTemplateArgs): string
 
 const importSequelize = (): string => `import type { Sequelize, Model } from 'sequelize'`
 
-const importModels = ({ models }: Schema): string => models.map(importModel).join('\n')
+const importModels = ({ models }: Schema): string => lines(models.map(importModel))
 
 const importModel = (model: Model): string => {
   const name = modelName(model)
@@ -45,16 +45,10 @@ const importModel = (model: Model): string => {
 }
 
 const exportModels = ({ models }: Schema): string =>
-  `export {
-  ${lines(models.map(modelExport), { separator: ',', depth: 2 })}
-}`
-
-const modelExport = ({ name }: Model) => singular(pascalCase(name))
+  lines(['export {', lines(models.map(modelName), { separator: ',', depth: 2 }), '}'])
 
 const exportTypes = ({ models }: Schema): string =>
-  `export type {
-  ${lines(models.map(modelTypeExport), { depth: 2, separator: ',' })}
-}`
+  lines(['export type {', lines(models.map(modelTypeExport), { depth: 2, separator: ',' }), '}'])
 
 const modelTypeExport = (model: Model) => {
   const name = modelName(model)
@@ -68,28 +62,30 @@ type InitModelsArgs = {
   schema: Schema
   options: DatabaseOptions
 }
-const initModels = ({ schema, options }: InitModelsArgs): string => {
-  const modelById: ModelById = schema.models.reduce<ModelById>((acc, model) => {
+const initModels = ({ schema: { models }, options }: InitModelsArgs): string => {
+  const modelById: ModelById = models.reduce<ModelById>((acc, model) => {
     acc[model.id] = model
     return acc
   }, {})
 
-  return `export function initModels(sequelize: Sequelize) {
-  ${lines(schema.models.map(initModel), { depth: 2 })}
+  return lines([
+    'export function initModels(sequelize: Sequelize) {',
+    lines(models.map(initModel), { depth: 2 }),
+    blank(),
 
-  ${lines(
-    schema.models
-      .filter(({ associations }) => associations.length > 0)
-      .map((model) => modelAssociations({ model, modelById, options })),
-    { depth: 2 },
-  )}
-
-  return {
-    ${lines(schema.models.map(modelExport), { depth: 4, separator: ',' })}
-  }
-}`
+    lines(
+      models
+        .filter(({ associations }) => associations.length > 0)
+        .map((model) => modelAssociations({ model, modelById, options })),
+      { depth: 2 },
+    ),
+    blank(),
+    lines(['return {', lines(models.map(modelName), { depth: 2, separator: ',' }), '}'], {
+      depth: 2,
+    }),
+    '}',
+  ])
 }
-
 const initModel = ({ name }: Model) => `${singular(pascalCase(name))}.initModel(sequelize)`
 
 type ModelAssociationsArgs = {
@@ -144,18 +140,20 @@ const associationOptions = ({
   modelById,
   options,
 }: AssociationOptionsArgs): string =>
-  `, {
-  ${lines(
-    [
-      asField(association.alias, association.type),
-      throughField(association, modelById),
-      foreignKeyField({ model, association, modelById, options }),
-      otherKeyField({ model, association, modelById, options }),
-      onDeleteField(association),
-    ],
-    { depth: 2, separator: ',' },
-  )}
-}`
+  lines([
+    ', {',
+    lines(
+      [
+        asField(association.alias, association.type),
+        throughField(association, modelById),
+        foreignKeyField({ model, association, modelById, options }),
+        otherKeyField({ model, association, modelById, options }),
+        onDeleteField(association),
+      ],
+      { depth: 2, separator: ',' },
+    ),
+    '}',
+  ])
 
 const asField = (alias: string | undefined, type: AssociationType): string | null =>
   alias ? `as: '${aliasValue({ alias: alias, type: type })}'` : null

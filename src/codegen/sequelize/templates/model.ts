@@ -20,13 +20,13 @@ import {
   Model,
   Schema,
 } from '../../../schema'
-import { indent, blank, lines } from '../../helpers'
+import { blank, lines } from '../../helpers'
 import { DatabaseOptions, displaySqlDialect, SqlDialect } from '../../../database'
 
 import { addIdField, hasJsonType, modelName } from '../utils'
 
 // some association methods have singular and plural forms
-// for example: "has many deer" would have addDeer for both adding one or multiple der
+// for example: "has many deer" would have addDeer for both adding one or multiple deer
 // so we must append an 's' for nouns whose plural is the same as their singular
 const plural = (v: string): string => {
   if (plural_(v) === singular(v)) return `${v}s`
@@ -58,19 +58,20 @@ type JoinModelAssociationsArgs = {
   associations: Association[]
   models: Model[]
 }
+type ModelById = { [id: string]: Model }
 const joinModelAssociations = ({
   associations,
   models,
-}: JoinModelAssociationsArgs): ModelAssociation[] =>
-  associations
-    .map((association) => {
-      const targetModel = models.find(({ id }) => id === association.targetModelId)
-      // model should always exist, will filter out nulls below for proper typing
-      if (!targetModel) return null
+}: JoinModelAssociationsArgs): ModelAssociation[] => {
+  const modelById: ModelById = models.reduce<ModelById>((acc, model) => {
+    acc[model.id] = model
+    return acc
+  }, {})
 
-      return { association, model: targetModel }
-    })
-    .filter((ma): ma is ModelAssociation => !!ma)
+  return associations.map((association) => {
+    return { association, model: modelById[association.targetModelId] }
+  })
+}
 
 type ModelTemplateArgs_ = {
   model: Model
@@ -178,14 +179,15 @@ const types = ({ model, options }: TypesArgs): string =>
     creationAttributeType(model),
   ])
 
-const modelAttributesType = ({ model, options }: TypesArgs): string => {
-  return `export interface ${modelName(model)}Attributes {
-  ${lines(
-    model.fields.map((field) => attributeType(field, options)),
-    { depth: 2 },
-  )}
-}`
-}
+const modelAttributesType = ({ model, options }: TypesArgs): string =>
+  lines([
+    `export interface ${modelName(model)}Attributes {`,
+    lines(
+      model.fields.map((field) => attributeType(field, options)),
+      { depth: 2 },
+    ),
+    '}',
+  ])
 
 const attributeType = (
   { name, type, required }: Field,
@@ -235,25 +237,41 @@ const classDeclaration = ({ model, associations, options }: ClassDeclarationArgs
   const name = modelName(model)
   const fieldsWithId = addIdField(model.fields)
 
-  return `export class ${name} extends Model<${name}Attributes, ${name}CreationAttributes> implements ${name}Attributes {
-  ${lines(
-    fieldsWithId.map((field) => classFieldType(field, options)),
-    { depth: 2 },
-  )}${associations.length ? '\n' : ''}
-  ${indent(
-    2,
-    associations.map((a) => associationType({ sourceModel: model, association: a })).join('\n'),
-  )}
-  static initModel(sequelize: Sequelize.Sequelize): typeof ${name} {
-    ${name}.init({
-      ${indent(6, model.fields.map((field) => fieldTemplate(field, options)).join(',\n'))}
-    }, {
-      ${indent(6, modelOptions({ model, options }))}
-    })
-
-    return ${name}
-  }
-}`
+  return lines([
+    `export class ${name} extends Model<${name}Attributes, ${name}CreationAttributes> implements ${name}Attributes {`,
+    lines(
+      fieldsWithId.map((field) => classFieldType(field, options)),
+      { depth: 2 },
+    ),
+    associations.length ? blank() : null,
+    lines(
+      associations.map((a) => associationType({ sourceModel: model, association: a })),
+      { depth: 2 },
+    ),
+    lines(
+      [
+        `static initModel(sequelize: Sequelize.Sequelize): typeof ${name} {`,
+        lines(
+          [
+            `${name}.init({`,
+            lines(
+              model.fields.map((field) => fieldTemplate(field, options)),
+              { depth: 2, separator: ',' },
+            ),
+            '}, {',
+            lines(['sequelize', tableName({ model, options })], { depth: 2, separator: ',' }),
+            '})',
+            blank(),
+            `return ${name}`,
+          ],
+          { depth: 2 },
+        ),
+        '}',
+      ],
+      { depth: 2 },
+    ),
+    '}',
+  ])
 }
 
 const classFieldType = (
@@ -373,13 +391,6 @@ const allowNullField = (allowNull: boolean): string => `allowNull: ${allowNull}`
 const primaryKeyField = (primaryKey: boolean): string => `primaryKey: ${primaryKey}`
 const uniqueField = (unique: boolean): string => `unique: ${unique}`
 const autoincrementField = (autoincrement: boolean) => `autoIncrement: ${autoincrement}`
-
-type ModelOptionsArgs = {
-  model: Model
-  options: DatabaseOptions
-}
-const modelOptions = ({ model, options }: ModelOptionsArgs): string =>
-  ['sequelize', tableName({ model, options })].filter((x) => x).join(',\n')
 
 type TableNameArgs = {
   model: Model
