@@ -97,12 +97,8 @@ type ModelAssociationsArgs = {
   modelById: ModelById
   options: DatabaseOptions
 }
-const modelAssociations = ({ model, modelById, options }: ModelAssociationsArgs): string =>
-  lines(
-    model.associations.map((association) =>
-      modelAssociation({ association, model, modelById, options }),
-    ),
-  )
+const modelAssociations = (args: ModelAssociationsArgs): string =>
+  lines(args.model.associations.map((association) => modelAssociation({ association, ...args })))
 
 type ModelAssociationArgs = {
   association: Association
@@ -115,10 +111,13 @@ const modelAssociation = ({
   model,
   modelById,
   options,
-}: ModelAssociationArgs): string =>
-  `${singular(pascalCase(model.name))}.${associationLabel(association)}(${singular(
-    pascalCase(modelById[association.targetModelId]['name']),
-  )}${associationOptions({ model, association, modelById, options })})`
+}: ModelAssociationArgs): string => {
+  const name = modelName(model)
+  const targetName = modelName(modelById[association.targetModelId])
+  const label = associationLabel(association)
+  const assocOptions = associationOptions({ model, association, modelById, options })
+  return `${name}.${label}(${targetName}${assocOptions})`
+}
 
 const associationLabel = ({ type }: Association): string => {
   switch (type) {
@@ -145,29 +144,44 @@ const associationOptions = ({
   modelById,
   options,
 }: AssociationOptionsArgs): string =>
-  `, { ${associationOptionsKvs({ model, association, modelById, options })} }`
+  `, {
+  ${lines(
+    [
+      asField(association.alias, association.type),
+      throughField(association, modelById),
+      foreignKeyField({ model, association, modelById, options }),
+      otherKeyField({ model, association, modelById, options }),
+      onDeleteField(association),
+    ],
+    { depth: 2, separator: ',' },
+  )}
+}`
 
-const associationOptionsKvs = ({
+const asField = (alias: string | undefined, type: AssociationType): string | null =>
+  alias ? `as: '${aliasValue({ alias: alias, type: type })}'` : null
+
+const throughField = (association: Association, modelById: ModelById): string | null =>
+  association.type === AssociationType.ManyToMany
+    ? `through: ${throughValue({ association, modelById })}`
+    : null
+
+type ThroughValueArgs = {
+  association: ManyToManyAssociation
+  modelById: ModelById
+}
+const throughValue = ({ association, modelById }: ThroughValueArgs): string =>
+  association.through.type === ThroughType.ThroughTable
+    ? `'${association.through.table}'`
+    : `${modelName(modelById[association.through.modelId])} as typeof Model`
+
+const foreignKeyField = ({
   model,
   association,
   modelById,
   options,
 }: AssociationOptionsArgs): string => {
   const foreignKey = getForeignKey({ model, association, modelById, options })
-  const otherKey = getOtherKey({ model, association, modelById, options })
-  return [
-    association.alias
-      ? `as: '${aliasValue({ alias: association.alias, type: association.type })}'`
-      : null,
-    association.type === AssociationType.ManyToMany
-      ? `through: ${throughValue({ association, modelById })}`
-      : null,
-    `foreignKey: '${foreignKey}'`,
-    otherKey ? `otherKey: '${otherKey}'` : null,
-    association.type === AssociationType.ManyToMany ? `onDelete: 'CASCADE'` : null,
-  ]
-    .filter((x): x is string => !!x)
-    .join(', ')
+  return `foreignKey: '${foreignKey}'`
 }
 
 const getForeignKey = ({
@@ -185,6 +199,16 @@ const getForeignKey = ({
     : model.name
 
   return options.caseStyle === 'snake' ? `${snakeCase(name)}_id` : `${camelCase(name)}Id`
+}
+
+const otherKeyField = ({
+  model,
+  association,
+  modelById,
+  options,
+}: AssociationOptionsArgs): string | null => {
+  const otherKey = getOtherKey({ model, association, modelById, options })
+  return otherKey ? `otherKey: '${otherKey}'` : null
 }
 
 const getOtherKey = ({
@@ -219,11 +243,5 @@ const aliasValue = ({ type, alias }: AliasValueArgs) => {
   }
 }
 
-type ThroughValueArgs = {
-  association: ManyToManyAssociation
-  modelById: ModelById
-}
-const throughValue = ({ association, modelById }: ThroughValueArgs): string =>
-  association.through.type === ThroughType.ThroughTable
-    ? `'${association.through.table}'`
-    : `${modelName(modelById[association.through.modelId])} as typeof Model`
+const onDeleteField = ({ type }: Association): string | null =>
+  type === AssociationType.ManyToMany ? `onDelete: 'CASCADE'` : null

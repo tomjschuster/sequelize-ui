@@ -8,5 +8,6 @@ export const gitignoreTemplate = (): string =>
     'yarn-debug.log*',
     'yarn-error.log*',
     '.npm',
+    '.tmp',
     blank(),
   ])
