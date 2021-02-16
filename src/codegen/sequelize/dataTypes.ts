@@ -143,7 +143,6 @@ export function dataTypeToTypeScript(dataType: DataType): string {
     case DataTypeType.Json:
       return 'Json'
     case DataTypeType.Blob:
-      // TODO
       return 'Buffer'
   }
 }

@@ -30,6 +30,21 @@ export const displaySqlDialect = (dialect: SqlDialect): string => {
   }
 }
 
+export const varSqlDialect = (dialect: SqlDialect): string => {
+  switch (dialect) {
+    case SqlDialect.MariaDb:
+      return 'MARIADB'
+    case SqlDialect.MsSql:
+      return 'MSSQL'
+    case SqlDialect.MySql:
+      return 'MYSQL'
+    case SqlDialect.Postgres:
+      return 'POSTGRES'
+    case SqlDialect.Sqlite:
+      return 'SQLITE'
+  }
+}
+
 export const parseSqlDialect = (dialect: string): SqlDialect | null => {
   switch (dialect) {
     case 'mariadb':
@@ -104,5 +119,35 @@ export const defaultSqlDialectDatabase = (name: string, dialect: SqlDialect): st
       return snakeCase(name)
     case SqlDialect.Sqlite:
       return null
+  }
+}
+
+export const defaultSqlDialectHost = (dialect: SqlDialect): string | null => {
+  switch (dialect) {
+    case SqlDialect.MariaDb:
+      return 'localhost'
+    case SqlDialect.MsSql:
+      return 'localhost'
+    case SqlDialect.MySql:
+      return 'localhost'
+    case SqlDialect.Postgres:
+      return 'localhost'
+    case SqlDialect.Sqlite:
+      return null
+  }
+}
+
+export const defaultSqlDialectStorage = (dialect: SqlDialect): string | null => {
+  switch (dialect) {
+    case SqlDialect.MariaDb:
+      return null
+    case SqlDialect.MsSql:
+      return null
+    case SqlDialect.MySql:
+      return null
+    case SqlDialect.Postgres:
+      return null
+    case SqlDialect.Sqlite:
+      return '.tmp/data.db'
   }
 }

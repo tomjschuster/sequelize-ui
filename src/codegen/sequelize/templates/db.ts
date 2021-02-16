@@ -4,9 +4,12 @@ import {
   defaultSqlDialectPort,
   displaySqlDialect,
   DatabaseOptions,
-  defaultSqlDialectUsername,
   defaultSqlDialectDatabase,
+  defaultSqlDialectHost,
   defaultSqlDialectPassword,
+  defaultSqlDialectStorage,
+  defaultSqlDialectUsername,
+  varSqlDialect,
 } from '../../../database'
 import { blank, lines } from '../../helpers'
 
@@ -28,67 +31,69 @@ export const dbTemplate = ({ schema, options }: DbTemplateArgs): string =>
 const imports = (): string => `import { Sequelize } from 'sequelize'`
 
 const instanceDeclaration = ({ schema, options }: DbTemplateArgs) =>
-  `const db: Sequelize = new Sequelize({
-  ${lines(
-    [
-      dialectField(options.sqlDialect),
-      storageField(options.sqlDialect),
-      databaseField(schema.name, options.sqlDialect),
-      usernameField(options.sqlDialect),
-      passwordField(options.sqlDialect),
-      hostField(options.sqlDialect),
-      portField(options.sqlDialect),
-      defineField(options),
-    ],
-    { separator: ',', depth: 2 },
-  )}
-})`
+  lines([
+    `const db: Sequelize = new Sequelize({`,
+    lines(
+      [
+        dialectField(options.sqlDialect),
+        storageField(options.sqlDialect),
+        databaseField(schema.name, options.sqlDialect),
+        usernameField(options.sqlDialect),
+        passwordField(options.sqlDialect),
+        hostField(options.sqlDialect),
+        portField(options.sqlDialect),
+        defineField(options),
+      ],
+      { separator: ',', depth: 2 },
+    ),
+    '})',
+  ])
 
 const exportInstance = (): string => 'export default db'
 
 const dialectField = (dialect: SqlDialect): string => `dialect: '${displaySqlDialect(dialect)}'`
 
-const storageField = (dialect: SqlDialect): string | null =>
-  dialect !== SqlDialect.Sqlite ? null : `storage: '.tmp/data.db'`
+const storageField = (dialect: SqlDialect): string | null => {
+  const defaultStorage = defaultSqlDialectStorage(dialect)
+  return defaultStorage
+    ? `storage: process.env.${varSqlDialect(dialect)} || '${defaultStorage}'`
+    : null
+}
 
 const databaseField = (schemaName: string, dialect: SqlDialect): string | null => {
   const defaultDatabase = defaultSqlDialectDatabase(schemaName, dialect)
-  return dialect === SqlDialect.Sqlite
-    ? null
-    : `database: process.env.${displaySqlDialect(dialect).toUpperCase()}_DB_NAME${
-        defaultDatabase ? ` || '${defaultDatabase}'` : ''
-      }`
+  return defaultDatabase
+    ? `database: process.env.${varSqlDialect(dialect)}_DB_NAME || '${defaultDatabase}'`
+    : null
 }
 
 const usernameField = (dialect: SqlDialect): string | null => {
   const defaultUsername = defaultSqlDialectUsername(dialect)
-  return dialect === SqlDialect.Sqlite
-    ? null
-    : `username: process.env.${displaySqlDialect(dialect).toUpperCase()}_DB_USERNAME${
-        defaultUsername ? ` || '${defaultUsername}'` : ''
-      }`
+  return defaultUsername
+    ? `username: process.env.${varSqlDialect(dialect)}_DB_USERNAME || '${defaultUsername}'`
+    : null
 }
 
 const passwordField = (dialect: SqlDialect): string | null => {
   const defaultPassword = defaultSqlDialectPassword(dialect)
-  return dialect === SqlDialect.Sqlite
-    ? null
-    : `password: process.env.${displaySqlDialect(dialect).toUpperCase()}_DB_PASSWORD${
-        defaultPassword ? ` || '${defaultPassword}'` : ''
-      }`
+  return defaultPassword
+    ? `password: process.env.${varSqlDialect(dialect)}_DB_PASSWORD || '${defaultPassword}'`
+    : null
 }
 
-const hostField = (dialect: SqlDialect): string | null =>
-  dialect === SqlDialect.Sqlite
-    ? null
-    : `host: process.env.${displaySqlDialect(dialect).toUpperCase()}_DB_HOST || 'localhost'`
+const hostField = (dialect: SqlDialect): string | null => {
+  const defaultHost = defaultSqlDialectHost(dialect)
+  return defaultHost
+    ? `host: process.env.${varSqlDialect(dialect)}_DB_HOST || '${defaultHost}'`
+    : null
+}
 
-const portField = (dialect: SqlDialect): string | null =>
-  !defaultSqlDialectPort(dialect)
-    ? null
-    : `port: parseInt(process.env.${displaySqlDialect(
-        dialect,
-      ).toUpperCase()}_DB_PORT || '${defaultSqlDialectPort(dialect)}')`
+const portField = (dialect: SqlDialect): string | null => {
+  const defaultPort = defaultSqlDialectPort(dialect)
+  return defaultPort
+    ? `port: parseInt(process.env.${varSqlDialect(dialect)}_DB_PORT || '${defaultPort}')`
+    : null
+}
 
 const hasOptions = (options: DatabaseOptions): boolean =>
   !options.timestamps || options.caseStyle === 'snake' || options.nounForm === 'singular'
@@ -96,18 +101,20 @@ const hasOptions = (options: DatabaseOptions): boolean =>
 const defineField = (options: DatabaseOptions): string | null =>
   !hasOptions(options)
     ? null
-    : `define: {
-  ${lines(
-    [
-      freezeTableNameField(options),
-      underscoredField(options.caseStyle === 'snake'),
-      timestampsField(options.timestamps),
-      createdAtField(options),
-      updatedAtField(options),
-    ],
-    { separator: ',', depth: 2 },
-  )}
-}`
+    : lines([
+        `define: {`,
+        lines(
+          [
+            freezeTableNameField(options),
+            underscoredField(options.caseStyle === 'snake'),
+            timestampsField(options.timestamps),
+            createdAtField(options),
+            updatedAtField(options),
+          ],
+          { separator: ',', depth: 2 },
+        ),
+        '}',
+      ])
 
 const underscoredField = (underscored: boolean): string | null =>
   underscored ? 'underscored: true' : null

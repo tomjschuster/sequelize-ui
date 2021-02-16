@@ -73,8 +73,12 @@ const film: Model = {
       type: { type: DataTypeType.Array, arrayType: { type: DataTypeType.String } },
     },
     {
-      name: 'meta',
+      name: 'metaData',
       type: { type: DataTypeType.Json },
+    },
+    {
+      name: 'preview',
+      type: { type: DataTypeType.Blob },
     },
   ],
   associations: [
