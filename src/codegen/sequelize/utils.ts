@@ -11,3 +11,6 @@ const idField = (): Field => ({
   type: { type: DataTypeType.Integer },
   primaryKey: true,
 })
+
+export const hasJsonType = (model: Model): boolean =>
+  model.fields.some((f) => f.type.type === DataTypeType.Json)

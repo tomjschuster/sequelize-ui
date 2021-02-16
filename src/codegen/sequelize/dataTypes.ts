@@ -141,18 +141,21 @@ export function dataTypeToTypeScript(dataType: DataType): string {
     case DataTypeType.Array:
       return `${dataTypeToTypeScript(dataType.arrayType)}[]`
     case DataTypeType.Json:
-      // TODO
-      return '?'
+      return 'Json'
     case DataTypeType.Blob:
-      // ?
+      // TODO
       return 'Buffer'
   }
 }
 
-// TODO: Verify enum and json
 export function dataTypeNotSupported(dataType: DataType, dialect: SqlDialect): boolean {
-  return (
-    dialect !== SqlDialect.Postgres &&
-    [DataTypeType.Array, DataTypeType.Enum, DataTypeType.Json].includes(dataType.type)
-  )
+  if (dataType.type === DataTypeType.Json) {
+    return dialect === SqlDialect.MsSql
+  }
+
+  if (dataType.type === DataTypeType.Array) {
+    return dialect !== SqlDialect.Postgres
+  }
+
+  return false
 }

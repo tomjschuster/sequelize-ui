@@ -72,6 +72,10 @@ const film: Model = {
       name: 'specialFeatures',
       type: { type: DataTypeType.Array, arrayType: { type: DataTypeType.String } },
     },
+    {
+      name: 'meta',
+      type: { type: DataTypeType.Json },
+    },
   ],
   associations: [
     { type: AssociationType.HasMany, targetModelId: '2' },

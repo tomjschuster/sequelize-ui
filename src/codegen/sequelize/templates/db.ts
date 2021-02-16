@@ -49,7 +49,7 @@ const exportInstance = (): string => 'export default db'
 const dialectField = (dialect: SqlDialect): string => `dialect: '${displaySqlDialect(dialect)}'`
 
 const storageField = (dialect: SqlDialect): string | null =>
-  dialect !== SqlDialect.Sqlite ? null : `storage: 'db'`
+  dialect !== SqlDialect.Sqlite ? null : `storage: '.tmp/data.db'`
 
 const databaseField = (schemaName: string, dialect: SqlDialect): string | null => {
   const defaultDatabase = defaultSqlDialectDatabase(schemaName, dialect)

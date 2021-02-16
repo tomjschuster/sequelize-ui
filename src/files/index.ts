@@ -26,7 +26,8 @@ export function file(name: string, content: string): FileItem {
   return { type: FileSystemItemType.File, name, content }
 }
 
-export function directory(name: string, files: FileSystemItem[]): DirectoryItem {
+export function directory(name: string, filesOrNull: (FileSystemItem | null)[]): DirectoryItem {
+  const files = filesOrNull.filter((x): x is FileSystemItem => x !== null)
   return { type: FileSystemItemType.Directory, name, files }
 }
 

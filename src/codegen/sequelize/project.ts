@@ -9,6 +9,8 @@ import { modelTemplate } from './templates/model'
 import { packageJsonTemplate } from './templates/packageJson'
 import { serverTemplate } from './templates/server'
 import { tsconfigTemplate } from './templates/tsconfig'
+import { typesTemplate } from './templates/types'
+import { hasJsonType } from './utils'
 
 export { generateSequelizeProject }
 
@@ -32,5 +34,6 @@ const generateSequelizeProject = ({
     file('db.ts', dbTemplate({ schema, options })),
     file('package.json', packageJsonTemplate({ schema, options })),
     file('server.ts', serverTemplate()),
+    schema.models.some(hasJsonType) ? file('types.ts', typesTemplate()) : null,
     file('tsconfig.json', tsconfigTemplate()),
   ])

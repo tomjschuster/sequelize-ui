@@ -37,7 +37,7 @@ const removeFileMaybe = async (filename: string, path: string, keep: string[]): 
   }
 }
 
-const exists = (path: string): Promise<boolean> =>
+export const exists = (path: string): Promise<boolean> =>
   fs
     .stat(path)
     .then(() => true)

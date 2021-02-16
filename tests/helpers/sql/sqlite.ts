@@ -1,17 +1,18 @@
 import { DbConnection } from './connection'
 import { Database } from 'sqlite3'
-import { deleteFileOrDirectory, mkdirp, tmpDirPath } from '../files'
+import { deleteFileOrDirectory, exists, mkdirp, tmpDirPath } from '../files'
 
 export class SqlLiteConnection extends DbConnection {
   constructor(database: string) {
     super()
-    this.db = SqlLiteConnection.createDb(database)
+    this.database = database
+    SqlLiteConnection.createDatabase(database)
   }
 
-  private db: Promise<Database>
+  private database: string
 
   connected(): Promise<boolean> {
-    return this.db.then(() => true)
+    return exists(tmpDirPath(this.database, '.tmp'))
   }
 
   async getTables(): Promise<string[]> {
@@ -26,36 +27,44 @@ export class SqlLiteConnection extends DbConnection {
     return rows.map((r) => r.name)
   }
 
-  async close(): Promise<void> {
-    return SqlLiteConnection.close(await this.db)
+  close(): Promise<void> {
+    return Promise.resolve()
   }
 
-  static async createDatabase(database: string): Promise<void> {
-    await SqlLiteConnection.dropDatabase(database)
-    await SqlLiteConnection.createDb(database)
+  static createDatabase(database: string): Promise<void> {
+    return mkdirp(tmpDirPath(database, '.tmp'))
   }
 
-  static async dropDatabase(database: string): Promise<void> {
-    await deleteFileOrDirectory(tmpDirPath(database, 'db'))
+  static dropDatabase(database: string): Promise<void> {
+    return deleteFileOrDirectory(tmpDirPath(database, '.tmp', 'data.db'))
   }
 
   private async query<T>(statement: string): Promise<T[]> {
-    return SqlLiteConnection.query(await this.db, statement)
+    return SqlLiteConnection.query(await this.database, statement)
   }
 
-  private static async createDb(database: string): Promise<Database> {
-    await mkdirp(tmpDirPath(database))
-    return new Database(tmpDirPath(database, 'db'))
+  private static async connect(database: string): Promise<Database> {
+    return new Promise((resolve, reject) => {
+      const db: Database = new Database(tmpDirPath(database, '.tmp', 'data.db'), (err) =>
+        err ? reject(err) : resolve(db),
+      )
+    })
   }
 
-  private static async close(db: Database): Promise<void> {
+  private static close(db: Database): Promise<void> {
     return new Promise((resolve, reject) => db.close((err) => (err ? reject(err) : resolve())))
   }
 
-  private static async query<T>(db: Database, statement: string): Promise<T[]> {
-    return new Promise((resolve, reject) => {
+  private static async query<T>(database: string, statement: string): Promise<T[]> {
+    const db = await SqlLiteConnection.connect(database)
+
+    const rows: Promise<T[]> = new Promise((resolve, reject) => {
       db.all(statement, (err, rows) => (err ? reject(err) : resolve(rows)))
     })
+
+    await SqlLiteConnection.close(db)
+
+    return rows
   }
 }
 
