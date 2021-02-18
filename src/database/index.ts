@@ -151,3 +151,7 @@ export const defaultSqlDialectStorage = (dialect: SqlDialect): string | null => 
       return '.tmp/data.db'
   }
 }
+
+export const sqlCurrentTimestamp = (): string => 'CURRENT_TIMESTAMP'
+export const sqlCurrentDate = (): string => 'CURRENT_DATE'
+export const sqlCurrentTime = (): string => 'CURRENT_TIME'

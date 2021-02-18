@@ -25,6 +25,11 @@ export type Association =
   | HasManyAssociation
   | ManyToManyAssociation
 
+export const isDateTimeType = (
+  dataType: DataType,
+): dataType is DateTimeDataType | DateDataType | TimeDataType =>
+  [DataTypeType.DateTime, DataTypeType.Date, DataTypeType.Time].includes(dataType.type)
+
 export type DataType =
   | StringDataType
   | TextDataType
@@ -44,6 +49,7 @@ export type DataType =
   | UuidDataType
 
 type DataTypeBase<T extends DataTypeType> = { type: T }
+type DateTimeBase = { defaultNow?: boolean }
 
 export type StringDataType = DataTypeBase<DataTypeType.String>
 export type TextDataType = DataTypeBase<DataTypeType.Text>
@@ -52,9 +58,9 @@ export type FloatDataType = DataTypeBase<DataTypeType.Float>
 export type RealDataType = DataTypeBase<DataTypeType.Real>
 export type DoubleDataType = DataTypeBase<DataTypeType.Double>
 export type DecimalDataType = DataTypeBase<DataTypeType.Decimal>
-export type DateTimeDataType = DataTypeBase<DataTypeType.DateTime>
-export type DateDataType = DataTypeBase<DataTypeType.Date>
-export type TimeDataType = DataTypeBase<DataTypeType.Time>
+export type DateTimeDataType = DataTypeBase<DataTypeType.DateTime> & DateTimeBase
+export type DateDataType = DataTypeBase<DataTypeType.Date> & DateTimeBase
+export type TimeDataType = DataTypeBase<DataTypeType.Time> & DateTimeBase
 export type BooleanDataType = DataTypeBase<DataTypeType.Boolean>
 export type EnumDataType = DataTypeBase<DataTypeType.Enum> & { values: string[] }
 export type ArrayDataType = DataTypeBase<DataTypeType.Array> & { arrayType: DataType }

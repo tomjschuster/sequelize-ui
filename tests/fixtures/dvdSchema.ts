@@ -202,6 +202,11 @@ const rental: Model = {
       primaryKey: true,
       required: true,
     },
+    {
+      name: 'rentedAt',
+      type: { type: DataTypeType.DateTime, defaultNow: true },
+      required: true,
+    },
   ],
   associations: [
     { type: AssociationType.BelongsTo, targetModelId: '7' },
