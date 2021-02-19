@@ -1,0 +1,23 @@
+version: '3.2'
+services:
+  mariadb:
+    image: mariadb:latest
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - '1433:1433'
+    environment:
+      SA_PASSWORD: 'Password1'
+      ACCEPT_EULA: 'Y'
+
+  postgres:
+    image: postgres
+    ports:
+      - '5435:5432'
+    environment:
+      POSTGRES_PASSWORD: postgres

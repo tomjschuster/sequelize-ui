@@ -3,6 +3,11 @@ import { Database } from 'sqlite3'
 import { deleteFileOrDirectory, exists, mkdirp, tmpDirPath } from '../files'
 
 export class SqlLiteConnection extends DbConnection {
+  static preinstall(): string {
+    // sudo apt-get install libsqlite3-dev
+    return 'npm install sqlite3 --build-from-source --sqlite=/usr'
+  }
+
   constructor(database: string) {
     super()
     this.database = database

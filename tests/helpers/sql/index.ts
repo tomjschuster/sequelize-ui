@@ -20,9 +20,7 @@ export function dropDatabase(database: string, dialect: SqlDialect): Promise<voi
   return Client.dropDatabase(database)
 }
 
-export function validateDialect(
-  dialectString: string | undefined = process.env.SQL_DIALECT,
-): SqlDialect {
+export function validateDialect(dialectString?: string): SqlDialect {
   if (!dialectString) raiseDialectRequired()
 
   const dialect = parseSqlDialect(dialectString)
@@ -30,6 +28,11 @@ export function validateDialect(
   if (!dialect) raiseInvalidDialect(dialectString)
 
   return dialect
+}
+
+export function preinstall(dialect: SqlDialect): string | null {
+  const Client = getConstructor(dialect)
+  return Client.preinstall ? Client.preinstall() : null
 }
 
 function getConstructor(dialect: SqlDialect): DbConnectionConstructor {

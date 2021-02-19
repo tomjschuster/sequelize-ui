@@ -4,12 +4,16 @@ import { SqlDialect, DatabaseOptions, displaySqlDialect } from '../../src/databa
 import { generateSequelizeProject } from '../../src/codegen/sequelize/project'
 import schema from '../fixtures/dvdSchema'
 import { deleteNpmProject, buildNpmProject } from '../helpers/npm'
-import { createDatabase, DbConnection, dropDatabase, validateDialect } from '../helpers/sql'
+import {
+  createDatabase,
+  DbConnection,
+  dropDatabase,
+  preinstall,
+  validateDialect,
+} from '../helpers/sql'
 import { alpha } from '../helpers/generators'
 
-const sqlDialect: SqlDialect = validateDialect()
-const createTestDatabase = (db: string): Promise<DbConnection> => createDatabase(db, sqlDialect)
-const dropTestDatabase = (db: string): Promise<void> => dropDatabase(db, sqlDialect)
+const sqlDialect: SqlDialect = validateDialect(process.env.SQL_DIALECT)
 
 type TestConfig = {
   databaseOptions: DatabaseOptions
@@ -174,7 +178,7 @@ describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
 
   after(async () => {
     await deleteNpmProject(projectName)
-    await dropTestDatabase(projectName)
+    await dropDatabase(projectName, sqlDialect)
   })
 
   const cases: [label: string, config: TestConfig][] = [
@@ -197,15 +201,8 @@ describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
           options: databaseOptions,
         })
 
-        client = await createTestDatabase(projectName)
-
-        const preinstall =
-          sqlDialect === SqlDialect.Sqlite
-            ? // sudo apt-get install libsqlite3-dev
-              'npm install sqlite3 --build-from-source --sqlite=/usr'
-            : undefined
-
-        await buildNpmProject(project, preinstall)
+        client = await createDatabase(projectName, sqlDialect)
+        await buildNpmProject(project, preinstall(sqlDialect))
       })
 
       after(async () => {

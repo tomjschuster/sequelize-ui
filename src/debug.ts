@@ -3,7 +3,6 @@ import { AssociationType, DataTypeType, Model, Schema, ThroughType } from './sch
 import { generateSequelizeProject } from './codegen/sequelize/project'
 /*
   TODO:
-    - Snapshot tests
     - Seed tests
     - Abstract to support other frameworks
     - npm workspaces

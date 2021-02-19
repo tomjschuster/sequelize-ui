@@ -6,7 +6,7 @@ const exec = promisify(exec_)
 
 export async function buildNpmProject(
   directory: DirectoryItem,
-  preinstall?: string,
+  preinstall: string | null,
 ): Promise<void> {
   const cwd = process.cwd()
 
@@ -26,7 +26,7 @@ export function deleteNpmProject(name: string): Promise<void> {
   return deleteFileOrDirectory(tmpDirPath(name))
 }
 
-const install = async (preinstall?: string): Promise<void> => {
+const install = async (preinstall: string | null): Promise<void> => {
   if (preinstall) {
     await exec(preinstall)
   }

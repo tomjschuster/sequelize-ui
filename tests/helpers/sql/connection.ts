@@ -9,4 +9,5 @@ export interface DbConnectionConstructor {
   new (database: string): DbConnection
   createDatabase(database: string): Promise<void>
   dropDatabase(database: string): Promise<void>
+  preinstall?(): string
 }
