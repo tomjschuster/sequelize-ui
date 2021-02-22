@@ -7,10 +7,10 @@ export { packageJsonTemplate, PackageJsonTemplateArgs }
 
 type PackageJsonTemplateArgs = {
   schema: Schema
-  options: DatabaseOptions
+  dbOptions: DatabaseOptions
 }
 
-const packageJsonTemplate = ({ schema, options }: PackageJsonTemplateArgs): string =>
+const packageJsonTemplate = ({ schema, dbOptions }: PackageJsonTemplateArgs): string =>
   `{
   "name": "${kebabCase(schema.name)}",
   "version": "0.0.1",
@@ -24,10 +24,10 @@ const packageJsonTemplate = ({ schema, options }: PackageJsonTemplateArgs): stri
   "author": "",
   "license": "ISC",
   "dependencies": {
-    ${formatDeps(...commonDeps(), ...dialectDeps(options))}
+    ${formatDeps(...commonDeps(), ...dialectDeps(dbOptions))}
   },
   "devDependencies": {
-    ${formatDeps(...commonDevDeps(), ...dialectDevDeps(options))}
+    ${formatDeps(...commonDevDeps(), ...dialectDevDeps(dbOptions))}
   }
 }
 

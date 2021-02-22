@@ -16,14 +16,14 @@ import { alpha } from '../helpers/generators'
 const sqlDialect: SqlDialect = validateDialect(process.env.SQL_DIALECT)
 
 type TestConfig = {
-  databaseOptions: DatabaseOptions
+  dbOptions: DatabaseOptions
   tableName: string
   expectedTables: string[]
   expectedColumns: string[]
 }
 
 const snakePlural: TestConfig = {
-  databaseOptions: {
+  dbOptions: {
     sqlDialect,
     timestamps: true,
     caseStyle: 'snake',
@@ -55,7 +55,7 @@ const snakePlural: TestConfig = {
 }
 
 const snakeSingular: TestConfig = {
-  databaseOptions: {
+  dbOptions: {
     sqlDialect,
     timestamps: true,
     caseStyle: 'snake',
@@ -86,7 +86,7 @@ const snakeSingular: TestConfig = {
   ],
 }
 const camelPlural: TestConfig = {
-  databaseOptions: {
+  dbOptions: {
     sqlDialect,
     timestamps: true,
     caseStyle: 'camel',
@@ -118,7 +118,7 @@ const camelPlural: TestConfig = {
 }
 
 const camelSingular: TestConfig = {
-  databaseOptions: {
+  dbOptions: {
     sqlDialect,
     timestamps: true,
     caseStyle: 'camel',
@@ -150,7 +150,7 @@ const camelSingular: TestConfig = {
 }
 
 const noTimestamps: TestConfig = {
-  databaseOptions: {
+  dbOptions: {
     sqlDialect,
     timestamps: false,
     caseStyle: 'snake',
@@ -191,14 +191,14 @@ describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
 
   forEach(cases).describe(
     '%s',
-    function (_label, { databaseOptions, tableName, expectedTables, expectedColumns }) {
+    function (_label, { dbOptions, tableName, expectedTables, expectedColumns }) {
       this.timeout(60000)
       let client: DbConnection
 
       before(async () => {
         const project = generateSequelizeProject({
           schema: schema(projectName),
-          options: databaseOptions,
+          dbOptions,
         })
 
         client = await createDatabase(projectName, sqlDialect)

@@ -10,16 +10,16 @@ import { ModelAssociation } from './common'
 export type ModelTemplateArgs = {
   model: Model
   schema: Schema
-  options: DatabaseOptions
+  dbOptions: DatabaseOptions
 }
 
-export const modelTemplate = ({ model, schema, options }: ModelTemplateArgs): string => {
+export const modelTemplate = ({ model, schema, dbOptions }: ModelTemplateArgs): string => {
   const associations = joinModelAssociations({
     associations: model.associations,
     models: schema.models,
   })
 
-  return modelTemplate_({ model, associations, options })
+  return modelTemplate_({ model, associations, dbOptions })
 }
 
 type JoinModelAssociationsArgs = {
@@ -44,14 +44,14 @@ const joinModelAssociations = ({
 type ModelTemplateArgs_ = {
   model: Model
   associations: ModelAssociation[]
-  options: DatabaseOptions
+  dbOptions: DatabaseOptions
 }
-const modelTemplate_ = ({ model, associations, options }: ModelTemplateArgs_): string =>
+const modelTemplate_ = ({ model, associations, dbOptions }: ModelTemplateArgs_): string =>
   lines([
-    modelImportsTemplate({ model, associations, options }),
+    modelImportsTemplate({ model, associations, dbOptions }),
     blank(),
-    modelTypesTemplate({ model, options }),
+    modelTypesTemplate({ model, dbOptions }),
     blank(),
-    modelClassTemplate({ model, associations, options }),
+    modelClassTemplate({ model, associations, dbOptions }),
     blank(),
   ])

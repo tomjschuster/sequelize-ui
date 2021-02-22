@@ -15,14 +15,14 @@ import { blank, lines } from '../../helpers'
 
 export type DbTemplateArgs = {
   schema: Schema
-  options: DatabaseOptions
+  dbOptions: DatabaseOptions
 }
 
-export const dbTemplate = ({ schema, options }: DbTemplateArgs): string =>
+export const dbTemplate = ({ schema, dbOptions }: DbTemplateArgs): string =>
   lines([
     imports(),
     blank(),
-    instanceDeclaration({ schema, options }),
+    instanceDeclaration({ schema, dbOptions }),
     blank(),
     exportInstance(),
     blank(),
@@ -30,19 +30,19 @@ export const dbTemplate = ({ schema, options }: DbTemplateArgs): string =>
 
 const imports = (): string => `import { Sequelize } from 'sequelize'`
 
-const instanceDeclaration = ({ schema, options }: DbTemplateArgs) =>
+const instanceDeclaration = ({ schema, dbOptions }: DbTemplateArgs) =>
   lines([
     `const db: Sequelize = new Sequelize({`,
     lines(
       [
-        dialectField(options.sqlDialect),
-        storageField(options.sqlDialect),
-        databaseField(schema.name, options.sqlDialect),
-        usernameField(options.sqlDialect),
-        passwordField(options.sqlDialect),
-        hostField(options.sqlDialect),
-        portField(options.sqlDialect),
-        defineField(options),
+        dialectField(dbOptions.sqlDialect),
+        storageField(dbOptions.sqlDialect),
+        databaseField(schema.name, dbOptions.sqlDialect),
+        usernameField(dbOptions.sqlDialect),
+        passwordField(dbOptions.sqlDialect),
+        hostField(dbOptions.sqlDialect),
+        portField(dbOptions.sqlDialect),
+        defineField(dbOptions),
       ],
       { separator: ',', depth: 2 },
     ),
@@ -95,21 +95,21 @@ const portField = (dialect: SqlDialect): string | null => {
     : null
 }
 
-const hasOptions = (options: DatabaseOptions): boolean =>
-  !options.timestamps || options.caseStyle === 'snake' || options.nounForm === 'singular'
+const hasOptions = (dbOptions: DatabaseOptions): boolean =>
+  !dbOptions.timestamps || dbOptions.caseStyle === 'snake' || dbOptions.nounForm === 'singular'
 
-const defineField = (options: DatabaseOptions): string | null =>
-  !hasOptions(options)
+const defineField = (dbOptions: DatabaseOptions): string | null =>
+  !hasOptions(dbOptions)
     ? null
     : lines([
         `define: {`,
         lines(
           [
-            freezeTableNameField(options),
-            underscoredField(options.caseStyle === 'snake'),
-            timestampsField(options.timestamps),
-            createdAtField(options),
-            updatedAtField(options),
+            freezeTableNameField(dbOptions),
+            underscoredField(dbOptions.caseStyle === 'snake'),
+            timestampsField(dbOptions.timestamps),
+            createdAtField(dbOptions),
+            updatedAtField(dbOptions),
           ],
           { separator: ',', depth: 2 },
         ),

@@ -10,21 +10,21 @@ import { notSupportedComment, noSupportedDetails } from './common'
 
 type ModelTypesTemplateArgs = {
   model: Model
-  options: DatabaseOptions
+  dbOptions: DatabaseOptions
 }
-export const modelTypesTemplate = ({ model, options }: ModelTypesTemplateArgs): string =>
+export const modelTypesTemplate = ({ model, dbOptions }: ModelTypesTemplateArgs): string =>
   lines([
-    modelAttributesType({ model, options }),
+    modelAttributesType({ model, dbOptions }),
     blank(),
     idTypes(model),
     creationAttributeType(model),
   ])
 
-const modelAttributesType = ({ model, options }: ModelTypesTemplateArgs): string =>
+const modelAttributesType = ({ model, dbOptions }: ModelTypesTemplateArgs): string =>
   lines([
     `export interface ${modelName(model)}Attributes {`,
     lines(
-      model.fields.map((field) => attributeType(field, options)),
+      model.fields.map((field) => attributeType(field, dbOptions)),
       { depth: 2 },
     ),
     '}',
@@ -32,14 +32,14 @@ const modelAttributesType = ({ model, options }: ModelTypesTemplateArgs): string
 
 const attributeType = (
   { name, type, required }: Field,
-  options: DatabaseOptions,
+  dbOptions: DatabaseOptions,
 ): Array<string | null> => {
   const optional = (isDateTimeType(type) && type.defaultNow) || !required
-  const comment = notSupportedComment(type, options.sqlDialect)
+  const comment = notSupportedComment(type, dbOptions.sqlDialect)
   const typeDisplay = dataTypeToTypeScript(type)
 
   return [
-    noSupportedDetails(type, options.sqlDialect),
+    noSupportedDetails(type, dbOptions.sqlDialect),
     `${comment}${camelCase(name)}${optional ? '?' : ''}: ${typeDisplay}`,
   ]
 }

@@ -8,16 +8,16 @@ import { notSupportedComment, noSupportedDetails, ModelAssociation } from './com
 export type ModelImportsTemplateArgs = {
   model: Model
   associations: ModelAssociation[]
-  options: DatabaseOptions
+  dbOptions: DatabaseOptions
 }
 export const modelImportsTemplate = ({
   model,
   associations,
-  options,
+  dbOptions,
 }: ModelImportsTemplateArgs): string =>
   lines([
     sequelizeImports(),
-    hasJsonType(model) ? importJsonType(options) : null,
+    hasJsonType(model) ? importJsonType(dbOptions) : null,
     ...getAssociationTypes({ currentModel: model, associations }).map(typeImports),
   ])
 

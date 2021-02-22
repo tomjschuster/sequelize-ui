@@ -27,12 +27,12 @@ import { ModelAssociation, noSupportedDetails, notSupportedComment } from './com
 export type ModelClassTempalteArgs = {
   model: Model
   associations: ModelAssociation[]
-  options: DatabaseOptions
+  dbOptions: DatabaseOptions
 }
 export const modelClassTemplate = ({
   model,
   associations,
-  options,
+  dbOptions,
 }: ModelClassTempalteArgs): string => {
   const name = modelName(model)
   const fieldsWithId = addIdField(model.fields)
@@ -40,7 +40,7 @@ export const modelClassTemplate = ({
   return lines([
     `export class ${name} extends Model<${name}Attributes, ${name}CreationAttributes> implements ${name}Attributes {`,
     lines(
-      fieldsWithId.map((field) => classFieldType(field, options)),
+      fieldsWithId.map((field) => classFieldType(field, dbOptions)),
       { depth: 2 },
     ),
     associations.length ? blank() : null,
@@ -55,11 +55,11 @@ export const modelClassTemplate = ({
           [
             `${name}.init({`,
             lines(
-              model.fields.map((field) => fieldTemplate(field, options)),
+              model.fields.map((field) => fieldTemplate(field, dbOptions)),
               { depth: 2, separator: ',' },
             ),
             '}, {',
-            lines(['sequelize', tableName({ model, options })], { depth: 2, separator: ',' }),
+            lines(['sequelize', tableName({ model, dbOptions })], { depth: 2, separator: ',' }),
             '})',
             blank(),
             `return ${name}`,
@@ -76,14 +76,14 @@ export const modelClassTemplate = ({
 
 const classFieldType = (
   { name, type, required, primaryKey }: Field,
-  options: DatabaseOptions,
+  dbOptions: DatabaseOptions,
 ): Array<string | null> => {
-  const comment = notSupportedComment(type, options.sqlDialect)
+  const comment = notSupportedComment(type, dbOptions.sqlDialect)
   const readonly = primaryKey ? 'readonly ' : ''
   const optional = required && !(isDateTimeType(type) && type.defaultNow) ? '!' : '?'
 
   return [
-    noSupportedDetails(type, options.sqlDialect),
+    noSupportedDetails(type, dbOptions.sqlDialect),
     `${comment}public ${readonly}${camelCase(name)}${optional}: ${dataTypeToTypeScript(type)}`,
   ]
 }
@@ -203,9 +203,9 @@ const autoincrementField = (dataType: DataType) =>
 
 type TableNameArgs = {
   model: Model
-  options: DatabaseOptions
+  dbOptions: DatabaseOptions
 }
-const tableName = ({ options: { caseStyle, nounForm }, model }: TableNameArgs): string | null => {
+const tableName = ({ dbOptions: { caseStyle, nounForm }, model }: TableNameArgs): string | null => {
   if (nounForm === 'singular' && caseStyle === 'snake') {
     return `tableName: '${singular(snakeCase(model.name))}'`
   }

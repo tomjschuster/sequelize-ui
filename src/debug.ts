@@ -3,8 +3,6 @@ import { AssociationType, DataTypeType, Model, Schema, ThroughType } from './sch
 import { generateSequelizeProject } from './codegen/sequelize/project'
 /*
   TODO:
-    - Seed tests
-    - Abstract to support other frameworks
     - npm workspaces
 */
 
@@ -288,13 +286,13 @@ const schema: Schema = {
     customer,
   ],
 }
-const options: DatabaseOptions = {
+const dbOptions: DatabaseOptions = {
   sqlDialect: SqlDialect.Postgres,
   timestamps: true,
   caseStyle: 'snake',
   nounForm: 'singular',
 }
 
-const project = generateSequelizeProject({ schema, options })
+const project = generateSequelizeProject({ schema, dbOptions })
 console.log(project.files.find((f) => f.name === 'models'))
 console.log(project)

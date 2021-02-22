@@ -16,23 +16,23 @@ export { generateSequelizeProject }
 
 type GenerateSequelizeProjectArgs = {
   schema: Schema
-  options: DatabaseOptions
+  dbOptions: DatabaseOptions
 }
 
 const generateSequelizeProject = ({
   schema,
-  options,
+  dbOptions,
 }: GenerateSequelizeProjectArgs): DirectoryItem =>
   directory(kebabCase(schema.name), [
     directory('models', [
-      file('index.ts', initModelsTemplate({ schema, options })),
+      file('index.ts', initModelsTemplate({ schema, dbOptions })),
       ...schema.models.map((model) =>
-        file(`${pascalCase(model.name)}.ts`, modelTemplate({ schema, options, model })),
+        file(`${pascalCase(model.name)}.ts`, modelTemplate({ schema, dbOptions, model })),
       ),
     ]),
     file('.gitignore', gitignoreTemplate()),
-    file('db.ts', dbTemplate({ schema, options })),
-    file('package.json', packageJsonTemplate({ schema, options })),
+    file('db.ts', dbTemplate({ schema, dbOptions })),
+    file('package.json', packageJsonTemplate({ schema, dbOptions })),
     file('server.ts', serverTemplate()),
     schema.models.some(hasJsonType) ? file('types.ts', typesTemplate()) : null,
     file('tsconfig.json', tsconfigTemplate()),

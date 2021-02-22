@@ -15,10 +15,10 @@ export { initModelsTemplate, InitModelsTemplateArgs }
 
 type InitModelsTemplateArgs = {
   schema: Schema
-  options: DatabaseOptions
+  dbOptions: DatabaseOptions
 }
 
-const initModelsTemplate = ({ schema, options }: InitModelsTemplateArgs): string =>
+const initModelsTemplate = ({ schema, dbOptions }: InitModelsTemplateArgs): string =>
   lines([
     importSequelize(),
     importModels(schema),
@@ -27,7 +27,7 @@ const initModelsTemplate = ({ schema, options }: InitModelsTemplateArgs): string
     blank(),
     exportTypes(schema),
     blank(),
-    initModels({ schema, options }),
+    initModels({ schema, dbOptions }),
     blank(),
   ])
 
@@ -60,9 +60,9 @@ type ModelById = { [key: string]: Model }
 
 type InitModelsArgs = {
   schema: Schema
-  options: DatabaseOptions
+  dbOptions: DatabaseOptions
 }
-const initModels = ({ schema: { models }, options }: InitModelsArgs): string => {
+const initModels = ({ schema: { models }, dbOptions }: InitModelsArgs): string => {
   const modelById: ModelById = models.reduce<ModelById>((acc, model) => {
     acc[model.id] = model
     return acc
@@ -76,7 +76,7 @@ const initModels = ({ schema: { models }, options }: InitModelsArgs): string => 
     lines(
       models
         .filter(({ associations }) => associations.length > 0)
-        .map((model) => modelAssociations({ model, modelById, options })),
+        .map((model) => modelAssociations({ model, modelById, dbOptions })),
       { depth: 2 },
     ),
     blank(),
@@ -91,7 +91,7 @@ const initModel = ({ name }: Model) => `${singular(pascalCase(name))}.initModel(
 type ModelAssociationsArgs = {
   model: Model
   modelById: ModelById
-  options: DatabaseOptions
+  dbOptions: DatabaseOptions
 }
 const modelAssociations = (args: ModelAssociationsArgs): string =>
   lines(args.model.associations.map((association) => modelAssociation({ association, ...args })))
@@ -100,18 +100,18 @@ type ModelAssociationArgs = {
   association: Association
   model: Model
   modelById: ModelById
-  options: DatabaseOptions
+  dbOptions: DatabaseOptions
 }
 const modelAssociation = ({
   association,
   model,
   modelById,
-  options,
+  dbOptions,
 }: ModelAssociationArgs): string => {
   const name = modelName(model)
   const targetName = modelName(modelById[association.targetModelId])
   const label = associationLabel(association)
-  const assocOptions = associationOptions({ model, association, modelById, options })
+  const assocOptions = associationOptions({ model, association, modelById, dbOptions })
   return `${name}.${label}(${targetName}${assocOptions})`
 }
 
@@ -132,13 +132,13 @@ type AssociationOptionsArgs = {
   model: Model
   association: Association
   modelById: ModelById
-  options: DatabaseOptions
+  dbOptions: DatabaseOptions
 }
 const associationOptions = ({
   model,
   association,
   modelById,
-  options,
+  dbOptions,
 }: AssociationOptionsArgs): string =>
   lines([
     ', {',
@@ -146,8 +146,8 @@ const associationOptions = ({
       [
         asField(association.alias, association.type),
         throughField(association, modelById),
-        foreignKeyField({ model, association, modelById, options }),
-        otherKeyField({ model, association, modelById, options }),
+        foreignKeyField({ model, association, modelById, dbOptions }),
+        otherKeyField({ model, association, modelById, dbOptions }),
         onDeleteField(association),
       ],
       { depth: 2, separator: ',' },
@@ -176,9 +176,9 @@ const foreignKeyField = ({
   model,
   association,
   modelById,
-  options,
+  dbOptions,
 }: AssociationOptionsArgs): string => {
-  const foreignKey = getForeignKey({ model, association, modelById, options })
+  const foreignKey = getForeignKey({ model, association, modelById, dbOptions })
   return `foreignKey: '${foreignKey}'`
 }
 
@@ -186,7 +186,7 @@ const getForeignKey = ({
   model,
   association,
   modelById,
-  options,
+  dbOptions,
 }: AssociationOptionsArgs): string => {
   const name = association.foreignKey
     ? association.foreignKey
@@ -196,23 +196,23 @@ const getForeignKey = ({
     ? modelById[association.targetModelId].name
     : model.name
 
-  return options.caseStyle === 'snake' ? `${snakeCase(name)}_id` : `${camelCase(name)}Id`
+  return dbOptions.caseStyle === 'snake' ? `${snakeCase(name)}_id` : `${camelCase(name)}Id`
 }
 
 const otherKeyField = ({
   model,
   association,
   modelById,
-  options,
+  dbOptions,
 }: AssociationOptionsArgs): string | null => {
-  const otherKey = getOtherKey({ model, association, modelById, options })
+  const otherKey = getOtherKey({ model, association, modelById, dbOptions })
   return otherKey ? `otherKey: '${otherKey}'` : null
 }
 
 const getOtherKey = ({
   association,
   modelById,
-  options,
+  dbOptions,
 }: AssociationOptionsArgs): string | null => {
   if (association.type !== AssociationType.ManyToMany) return null
 
@@ -222,7 +222,7 @@ const getOtherKey = ({
     ? association.alias
     : modelById[association.targetModelId].name
 
-  return options.caseStyle === 'snake' ? `${snakeCase(name)}_id` : `${camelCase(name)}Id`
+  return dbOptions.caseStyle === 'snake' ? `${snakeCase(name)}_id` : `${camelCase(name)}Id`
 }
 
 type AliasValueArgs = {
