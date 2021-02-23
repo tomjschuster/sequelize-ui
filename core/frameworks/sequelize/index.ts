@@ -1,0 +1,1 @@
+export { generateSequelizeProject } from './project'

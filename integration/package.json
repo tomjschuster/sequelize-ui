@@ -1,0 +1,34 @@
+{
+  "name": "@sequelize-ui/integration",
+  "description": "",
+  "scripts": {
+    "test": "npm run test:sql:*",
+    "test:sql": "mocha -r ts-node/register 'tests/**/*.spec.ts' --exit",
+    "test:sql:mariadb": "SQL_DIALECT=mariadb npm run test:sql",
+    "test:sql:mssql": "SQL_DIALECT=mssql npm run test:sql",
+    "test:sql:mysql": "SQL_DIALECT=mysql npm run test:sql",
+    "test:sql:postgres": "SQL_DIALECT=postgres POSTGRES_DB_PORT=5435 npm run test:sql",
+    "test:sql:sqlite": "SQL_DIALECT=sqlite npm run test:sql",
+    "test:sql:*": "npm run test:sql:mariadb && npm run test:sql:mssql && npm run test:sql:mysql && npm run test:sql:postgres && npm run test:sql:sqlite"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/chai": "^4.2.14",
+    "@types/file-saver": "^2.0.1",
+    "@types/mocha": "^8.2.0",
+    "@types/mocha-each": "^2.0.0",
+    "@types/node": "^14.14.22",
+    "@types/pg": "^7.14.9",
+    "@types/pluralize": "0.0.29",
+    "@types/sqlite3": "^3.1.7",
+    "@types/tedious": "^4.0.3",
+    "chai": "^4.3.0",
+    "mocha": "^8.2.1",
+    "mocha-each": "^2.0.1",
+    "mysql2": "^2.2.5",
+    "pg": "^8.5.1",
+    "sqlite3": "^5.0.1",
+    "tedious": "^11.0.3",
+    "ts-node": "^9.1.1"
+  }
+}

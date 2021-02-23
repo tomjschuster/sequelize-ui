@@ -1,0 +1,22 @@
+{
+  "name": "@sequelize-ui/core",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "nodemon --watch './**/*.ts' --exec 'ts-node' ./debug.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "change-case": "^4.1.2",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.5.0",
+    "pluralize": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/file-saver": "^2.0.1",
+    "@types/pluralize": "0.0.29",
+    "nodemon": "^2.0.6"
+  }
+}

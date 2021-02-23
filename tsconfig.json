@@ -7,7 +7,11 @@
     "esModuleInterop": true,
     "skipLibCheck": false,
     "forceConsistentCasingInFileNames": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "paths": {
+      "@sequelize-ui/core/*": ["./core"],
+      "@sequelize-ui/integration/*": ["./integration"]
+    }
   },
   "exclude": ["./node_modules/", "./dist/"]
 }
