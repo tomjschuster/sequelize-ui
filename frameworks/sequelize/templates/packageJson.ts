@@ -1,7 +1,7 @@
 import { lines } from '@sequelize-ui/core/codegen'
 import { DatabaseOptions, SqlDialect } from '@sequelize-ui/core/database'
-import { kebabCase } from '@sequelize-ui/core/helpers/string'
 import { Schema } from '@sequelize-ui/core/schema'
+import { kebabCase } from '@sequelize-ui/core/utils/string'
 
 export { packageJsonTemplate, PackageJsonTemplateArgs }
 

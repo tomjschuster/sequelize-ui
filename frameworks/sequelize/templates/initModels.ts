@@ -1,13 +1,6 @@
 import { blank, lines } from '@sequelize-ui/core/codegen'
 import { DatabaseOptions } from '@sequelize-ui/core/database'
 import {
-  camelCase,
-  pascalCase,
-  plural,
-  singular,
-  snakeCase,
-} from '@sequelize-ui/core/helpers/string'
-import {
   Association,
   AssociationType,
   ManyToManyAssociation,
@@ -15,6 +8,7 @@ import {
   Schema,
   ThroughType,
 } from '@sequelize-ui/core/schema'
+import { camelCase, pascalCase, plural, singular, snakeCase } from '@sequelize-ui/core/utils/string'
 import { modelName } from '../helpers'
 
 export { initModelsTemplate, InitModelsTemplateArgs }

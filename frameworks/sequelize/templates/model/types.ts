@@ -1,7 +1,7 @@
 import { blank, lines } from '@sequelize-ui/core/codegen'
 import { DatabaseOptions } from '@sequelize-ui/core/database'
-import { camelCase } from '@sequelize-ui/core/helpers/string'
 import { Field, isDateTimeType, Model } from '@sequelize-ui/core/schema'
+import { camelCase } from '@sequelize-ui/core/utils/string'
 import { dataTypeToTypeScript } from '../../dataTypes'
 import { modelName } from '../../helpers'
 import { noSupportedDetails, notSupportedComment } from './common'

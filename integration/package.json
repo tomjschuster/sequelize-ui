@@ -11,7 +11,10 @@
     "test:sql:sqlite": "SQL_DIALECT=sqlite npm run test:sql",
     "test:sql:*": "npm run test:sql:mariadb && npm run test:sql:mssql && npm run test:sql:mysql && npm run test:sql:postgres && npm run test:sql:sqlite"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@sequelize-ui/core": "",
+    "@sequelize-ui/frameworks": ""
+  },
   "devDependencies": {
     "@types/chai": "^4.2.14",
     "@types/file-saver": "^2.0.1",

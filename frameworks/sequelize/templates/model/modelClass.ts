@@ -5,7 +5,6 @@ import {
   sqlCurrentTime,
   sqlCurrentTimestamp,
 } from '@sequelize-ui/core/database'
-import { camelCase, pascalCase, singular, snakeCase } from '@sequelize-ui/core/helpers/string'
 import {
   Association,
   AssociationType,
@@ -15,6 +14,7 @@ import {
   isDateTimeType,
   Model,
 } from '@sequelize-ui/core/schema'
+import { camelCase, pascalCase, singular, snakeCase } from '@sequelize-ui/core/utils/string'
 import {
   dataTypeToSequelize,
   dataTypeToTypeScript,

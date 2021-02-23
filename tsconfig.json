@@ -9,8 +9,9 @@
     "forceConsistentCasingInFileNames": true,
     "downlevelIteration": true,
     "paths": {
-      "@sequelize-ui/core/*": ["./core"],
-      "@sequelize-ui/integration/*": ["./integration"]
+      "@sequelize-ui/core/*": ["./core/*"],
+      "@sequelize-ui/integration/*": ["./integration/*"],
+      "@sequelize-ui/frameworks/*": ["./frameworks/*"]
     }
   },
   "exclude": ["./node_modules/", "./dist/"]

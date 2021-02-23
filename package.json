@@ -1,10 +1,11 @@
 {
   "name": "@sequelize-ui/sequelize-ui",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "workspaces": [
     "core",
-    "integration"
+    "integration",
+    "frameworks"
   ],
   "scripts": {},
   "keywords": [],

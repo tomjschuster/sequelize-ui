@@ -1,5 +1,5 @@
 import { DatabaseOptions, displaySqlDialect, SqlDialect } from '@sequelize-ui/core/database'
-import { generateSequelizeProject } from '@sequelize-ui/core/frameworks/sequelize'
+import { generateSequelizeProject } from '@sequelize-ui/frameworks/sequelize'
 import schema from '@sequelize-ui/integration/fixtures/dvdSchema'
 import { alpha } from '@sequelize-ui/integration/helpers/generators'
 import { buildNpmProject, deleteNpmProject } from '@sequelize-ui/integration/helpers/npm'

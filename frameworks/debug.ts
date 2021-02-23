@@ -1,5 +1,4 @@
 import { DatabaseOptions, SqlDialect } from '@sequelize-ui/core/database'
-import { generateSequelizeProject } from '@sequelize-ui/core/frameworks/sequelize'
 import {
   AssociationType,
   DataTypeType,
@@ -7,6 +6,7 @@ import {
   Schema,
   ThroughType,
 } from '@sequelize-ui/core/schema'
+import { generateSequelizeProject } from '@sequelize-ui/frameworks/sequelize'
 
 const actor: Model = {
   id: '1',

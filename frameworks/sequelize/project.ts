@@ -1,7 +1,7 @@
 import { DatabaseOptions } from '@sequelize-ui/core/database'
 import { directory, DirectoryItem, file } from '@sequelize-ui/core/files'
-import { kebabCase, pascalCase } from '@sequelize-ui/core/helpers/string'
 import { Schema } from '@sequelize-ui/core/schema'
+import { kebabCase, pascalCase } from '@sequelize-ui/core/utils/string'
 import { hasJsonType } from './helpers'
 import { dbTemplate } from './templates/db'
 import { gitignoreTemplate } from './templates/gitignore'

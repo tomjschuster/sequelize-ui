@@ -1,5 +1,5 @@
-import { pascalCase, plural as plural_, singular } from '@sequelize-ui/core/helpers/string'
 import { DataTypeType, Field, Model } from '@sequelize-ui/core/schema'
+import { pascalCase, plural as plural_, singular } from '@sequelize-ui/core/utils/string'
 
 // some association methods have singular and plural forms
 // for example: "has many deer" would have addDeer for both adding one or multiple deer
