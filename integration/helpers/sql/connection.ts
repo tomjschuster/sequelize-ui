@@ -1,3 +1,5 @@
+import { ProjectType } from '@sequelize-ui/core/framework'
+
 export abstract class DbConnection {
   abstract connected(): Promise<boolean>
   abstract getTables(): Promise<string[]>
@@ -9,5 +11,5 @@ export interface DbConnectionConstructor {
   new (database: string): DbConnection
   createDatabase(database: string): Promise<void>
   dropDatabase(database: string): Promise<void>
-  preinstall?(): string
+  preinstall?(projectType: ProjectType): string | undefined
 }

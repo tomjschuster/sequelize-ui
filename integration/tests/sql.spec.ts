@@ -1,8 +1,8 @@
 import { DatabaseOptions, displaySqlDialect, SqlDialect } from '@sequelize-ui/core/database'
-import { generateSequelizeProject } from '@sequelize-ui/frameworks/sequelize'
-import schema from '@sequelize-ui/integration/fixtures/dvdSchema'
+import { Framework } from '@sequelize-ui/core/framework'
+import { SequelizeFramework } from '@sequelize-ui/frameworks/sequelize'
+import dvdSchema from '@sequelize-ui/integration/fixtures/dvdSchema'
 import { alpha } from '@sequelize-ui/integration/helpers/generators'
-import { buildNpmProject, deleteNpmProject } from '@sequelize-ui/integration/helpers/npm'
 import {
   createDatabase,
   DbConnection,
@@ -12,17 +12,18 @@ import {
 } from '@sequelize-ui/integration/helpers/sql'
 import { expect } from 'chai'
 import forEach from 'mocha-each'
+import { buildProject, destroyProject } from '../helpers/project'
 
 const sqlDialect: SqlDialect = validateDialect(process.env.SQL_DIALECT)
 
-type TestConfig = {
+type DbTestConfig = {
   dbOptions: DatabaseOptions
   tableName: string
   expectedTables: string[]
   expectedColumns: string[]
 }
 
-const snakePlural: TestConfig = {
+const snakePlural: DbTestConfig = {
   dbOptions: {
     sqlDialect,
     timestamps: true,
@@ -54,7 +55,7 @@ const snakePlural: TestConfig = {
   ],
 }
 
-const snakeSingular: TestConfig = {
+const snakeSingular: DbTestConfig = {
   dbOptions: {
     sqlDialect,
     timestamps: true,
@@ -85,7 +86,7 @@ const snakeSingular: TestConfig = {
     'store_id',
   ],
 }
-const camelPlural: TestConfig = {
+const camelPlural: DbTestConfig = {
   dbOptions: {
     sqlDialect,
     timestamps: true,
@@ -117,7 +118,7 @@ const camelPlural: TestConfig = {
   ],
 }
 
-const camelSingular: TestConfig = {
+const camelSingular: DbTestConfig = {
   dbOptions: {
     sqlDialect,
     timestamps: true,
@@ -149,7 +150,7 @@ const camelSingular: TestConfig = {
   ],
 }
 
-const noTimestamps: TestConfig = {
+const noTimestamps: DbTestConfig = {
   dbOptions: {
     sqlDialect,
     timestamps: false,
@@ -173,51 +174,55 @@ const noTimestamps: TestConfig = {
   expectedColumns: ['customer_id', 'first_name', 'last_name', 'email', 'store_id'],
 }
 
+const frameworks: [label: string, framework: Framework][] = [['Sequelize', SequelizeFramework]]
+
 describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
   const projectName = alpha(12)
 
-  after(async () => {
-    await deleteNpmProject(projectName)
-    await dropDatabase(projectName, sqlDialect)
-  })
+  forEach(frameworks).describe('%s', (_label, framework: Framework) => {
+    const projectType = framework.projectType()
 
-  const cases: [label: string, config: TestConfig][] = [
-    ['snake plural', snakePlural],
-    ['snake singular', snakeSingular],
-    ['camel plural', camelPlural],
-    ['camel singular', camelSingular],
-    ['no timestamps', noTimestamps],
-  ]
+    after(async () => {
+      await destroyProject(projectType, projectName)
+      await dropDatabase(projectName, sqlDialect)
+    })
 
-  forEach(cases).describe(
-    '%s',
-    function (_label, { dbOptions, tableName, expectedTables, expectedColumns }) {
-      this.timeout(60000)
-      let client: DbConnection
+    const cases: [label: string, config: DbTestConfig][] = [
+      ['snake plural', snakePlural],
+      ['snake singular', snakeSingular],
+      ['camel plural', camelPlural],
+      ['camel singular', camelSingular],
+      ['no timestamps', noTimestamps],
+    ]
 
-      before(async () => {
-        const project = generateSequelizeProject({
-          schema: schema(projectName),
-          dbOptions,
+    forEach(cases).describe(
+      '%s',
+      function (_label, { dbOptions, tableName, expectedTables, expectedColumns }) {
+        this.timeout(60000)
+        let client: DbConnection
+
+        before(async () => {
+          const schema = dvdSchema(projectName)
+          const directory = framework.generate({ schema, dbOptions })
+
+          client = await createDatabase(projectName, sqlDialect)
+          await buildProject(projectType, directory, preinstall(sqlDialect, projectType))
         })
 
-        client = await createDatabase(projectName, sqlDialect)
-        await buildNpmProject(project, preinstall(sqlDialect))
-      })
+        after(async () => {
+          await client.close()
+        })
 
-      after(async () => {
-        await client.close()
-      })
+        it('should create the correct tables with the correct names', async () => {
+          const tables = await client.getTables()
+          expect(tables).to.have.members(expectedTables)
+        })
 
-      it('should create the correct tables with the correct names', async () => {
-        const tables = await client.getTables()
-        expect(tables).to.have.members(expectedTables)
-      })
-
-      it('should create the correct columns with the correct names', async () => {
-        const tables = await client.getColumns(tableName)
-        expect(tables).to.have.members(expectedColumns)
-      })
-    },
-  )
+        it('should create the correct columns with the correct names', async () => {
+          const tables = await client.getColumns(tableName)
+          expect(tables).to.have.members(expectedColumns)
+        })
+      },
+    )
+  })
 })

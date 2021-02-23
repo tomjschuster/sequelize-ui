@@ -1,4 +1,5 @@
 import { parseSqlDialect, SqlDialect } from '@sequelize-ui/core/database'
+import { ProjectType } from '@sequelize-ui/core/framework'
 import { DbConnection, DbConnectionConstructor } from './connection'
 import { MsSqlConnection } from './mssql'
 import { MySqlConnection } from './mysql'
@@ -30,9 +31,9 @@ export function validateDialect(dialectString?: string): SqlDialect {
   return dialect
 }
 
-export function preinstall(dialect: SqlDialect): string | null {
+export function preinstall(dialect: SqlDialect, projectType: ProjectType): string | undefined {
   const Client = getConstructor(dialect)
-  return Client.preinstall ? Client.preinstall() : null
+  return Client.preinstall && Client.preinstall(projectType)
 }
 
 function getConstructor(dialect: SqlDialect): DbConnectionConstructor {

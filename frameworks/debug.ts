@@ -6,7 +6,7 @@ import {
   Schema,
   ThroughType,
 } from '@sequelize-ui/core/schema'
-import { generateSequelizeProject } from '@sequelize-ui/frameworks/sequelize'
+import { SequelizeFramework } from '@sequelize-ui/frameworks/sequelize'
 
 const actor: Model = {
   id: '1',
@@ -295,6 +295,6 @@ const dbOptions: DatabaseOptions = {
   nounForm: 'singular',
 }
 
-const project = generateSequelizeProject({ schema, dbOptions })
+const project = SequelizeFramework.generate({ schema, dbOptions })
 console.log(project.files.find((f) => f.name === 'models'))
 console.log(project)

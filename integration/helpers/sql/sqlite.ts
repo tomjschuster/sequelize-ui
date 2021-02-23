@@ -1,11 +1,14 @@
+import { ProjectType } from '@sequelize-ui/core/framework'
 import { Database } from 'sqlite3'
 import { deleteFileOrDirectory, exists, mkdirp, tmpDirPath } from '../files'
 import { DbConnection } from './connection'
 
 export class SqlLiteConnection extends DbConnection {
-  static preinstall(): string {
-    // sudo apt-get install libsqlite3-dev
-    return 'npm install sqlite3 --build-from-source --sqlite=/usr'
+  static preinstall(projectType: ProjectType): string | undefined {
+    return projectType === ProjectType.Npm
+      ? // sudo apt-get install libsqlite3-dev
+        'npm install sqlite3 --build-from-source --sqlite=/usr'
+      : undefined
   }
 
   constructor(database: string) {

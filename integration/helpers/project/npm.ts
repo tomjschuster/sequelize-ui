@@ -1,12 +1,19 @@
 import { DirectoryItem, name } from '@sequelize-ui/core/files'
 import { exec as exec_ } from 'child_process'
 import { promisify } from 'util'
-import { clearDirectory, deleteFileOrDirectory, tmpDirPath, writeFiles } from './files'
+import { clearDirectory, deleteFileOrDirectory, tmpDirPath, writeFiles } from '../files'
+import { Project } from './project'
+
 const exec = promisify(exec_)
+
+export const NpmProject: Project = class {
+  static build = buildNpmProject
+  static destroy = deleteNpmProject
+}
 
 export async function buildNpmProject(
   directory: DirectoryItem,
-  preinstall: string | null,
+  preinstall?: string,
 ): Promise<void> {
   const cwd = process.cwd()
 
@@ -26,7 +33,7 @@ export function deleteNpmProject(name: string): Promise<void> {
   return deleteFileOrDirectory(tmpDirPath(name))
 }
 
-const install = async (preinstall: string | null): Promise<void> => {
+const install = async (preinstall?: string): Promise<void> => {
   if (preinstall) {
     await exec(preinstall)
   }

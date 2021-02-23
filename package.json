@@ -7,14 +7,33 @@
     "integration",
     "frameworks"
   ],
-  "scripts": {},
+  "scripts": {
+    "type-check": "tsc",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --config .prettierrc './**/*.{ts, tsx}' --write",
+    "format-check": "prettier --config .prettierrc './**/*.{ts, tsx}' --check"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && npm run type-check"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js}": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.15.2",
     "eslint": "^7.16.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.0",
+    "husky": "^4.3.8",
+    "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
     "typescript": "^4.1.3"
   }

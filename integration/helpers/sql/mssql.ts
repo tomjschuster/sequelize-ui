@@ -87,11 +87,12 @@ export class MsSqlConnection extends DbConnection {
     return new Promise((resolve, reject) => {
       const rows: T[] = []
       const request = new Request(statement, (err) => (err ? reject(err) : resolve(rows)))
-      request.on('row', (row: ColumnValue[]) => rows.push(MsSqlConnection.transformRow(row)))
+      request.on('row', (row: ColumnValue[]) => rows.push(MsSqlConnection.transformRow<T>(row)))
       connection.execSql(request)
     })
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static transformRow<T extends { [key: string]: any }>(row: ColumnValue[]): T {
     return row.reduce<T>(
       (acc, { value, metadata: { colName } }) => ({ ...acc, [colName]: value }),
