@@ -7,9 +7,9 @@
     "test:sql:mariadb": "SQL_DIALECT=mariadb npm run test:sql",
     "test:sql:mssql": "SQL_DIALECT=mssql npm run test:sql",
     "test:sql:mysql": "SQL_DIALECT=mysql npm run test:sql",
-    "test:sql:postgres": "SQL_DIALECT=postgres POSTGRES_DB_PORT=5435 npm run test:sql",
+    "test:sql:postgres": "SQL_DIALECT=postgres npm run test:sql",
     "test:sql:sqlite": "SQL_DIALECT=sqlite npm run test:sql",
-    "test:sql:*": "npm run test:sql:mariadb && npm run test:sql:mssql && npm run test:sql:mysql && npm run test:sql:postgres && npm run test:sql:sqlite"
+    "test:sql:all": "npm run test:sql:mariadb && npm run test:sql:mssql && npm run test:sql:mysql && npm run test:sql:postgres && npm run test:sql:sqlite"
   },
   "dependencies": {
     "@sequelize-ui/core": "",
@@ -26,6 +26,7 @@
     "@types/sqlite3": "^3.1.7",
     "@types/tedious": "^4.0.3",
     "chai": "^4.3.0",
+    "check-os": "^1.0.1",
     "mocha": "^8.2.1",
     "mocha-each": "^2.0.1",
     "mysql2": "^2.2.5",

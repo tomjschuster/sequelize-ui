@@ -1,18 +1,22 @@
 import { ProjectType } from '@sequelize-ui/core/framework'
+import { isLinux } from 'check-os'
 import { Database } from 'sqlite3'
 import { deleteFileOrDirectory, exists, mkdirp, tmpDirPath } from '../files'
-import { DbConnection } from './connection'
+import { DbConnection, DbConnectionConstructor } from './connection'
 
-export class SqlLiteConnection extends DbConnection {
+const sqlitePaths = ['/usr/bin/sqlite3', '/usr/local/bin/sqlite3']
+
+export const SqlLiteConnection: DbConnectionConstructor = class SqlLiteConnection
+  implements DbConnection {
   static preinstall(projectType: ProjectType): string | undefined {
-    return projectType === ProjectType.Npm
-      ? // sudo apt-get install libsqlite3-dev
-        'npm install sqlite3 --build-from-source --sqlite=/usr'
+    // sqlite3 takes a long time to install on linux:
+    // sudo apt-get install libsqlite3-dev
+    return projectType === ProjectType.Npm && isLinux && sqlitePaths.some(exists)
+      ? 'npm install sqlite3 --build-from-source --sqlite=/usr'
       : undefined
   }
 
   constructor(database: string) {
-    super()
     this.database = database
     SqlLiteConnection.createDatabase(database)
   }

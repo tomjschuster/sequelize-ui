@@ -1,10 +1,10 @@
 import { ProjectType } from '@sequelize-ui/core/framework'
 
-export abstract class DbConnection {
-  abstract connected(): Promise<boolean>
-  abstract getTables(): Promise<string[]>
-  abstract getColumns(table: string): Promise<string[]>
-  abstract close(): Promise<void>
+export interface DbConnection {
+  connected(): Promise<boolean>
+  getTables(): Promise<string[]>
+  getColumns(table: string): Promise<string[]>
+  close(): Promise<void>
 }
 
 export interface DbConnectionConstructor {

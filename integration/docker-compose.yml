@@ -8,7 +8,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
 
   mssql:
-    image: mcr.microsoft.com/mssql/server
+    image: mcr.microsoft.com/azure-sql-edge
     ports:
       - '1433:1433'
     environment:
@@ -18,6 +18,6 @@ services:
   postgres:
     image: postgres
     ports:
-      - '5435:5432'
+      - '5432:5432'
     environment:
       POSTGRES_PASSWORD: postgres

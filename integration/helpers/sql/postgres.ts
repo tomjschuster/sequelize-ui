@@ -1,7 +1,8 @@
 import { Client, ClientConfig, QueryResult } from 'pg'
-import { DbConnection } from './connection'
+import { DbConnection, DbConnectionConstructor } from './connection'
 
-export class PostgresConnection extends DbConnection {
+export const PostgresConnection: DbConnectionConstructor = class PostgresConnection
+  implements DbConnection {
   private static clientConfig: ClientConfig = {
     user: process.env.POSTGRES_DB_USER || 'postgres',
     password: process.env.POSTGRES_DB_PASSWORD || 'postgres',
@@ -10,7 +11,6 @@ export class PostgresConnection extends DbConnection {
   }
 
   constructor(database: string) {
-    super()
     this.client = PostgresConnection.createClient(database)
   }
 
