@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "jsx": "react",
+    "jsxFactory": "h",
+    "skipLibCheck": true
+  },
+  "include": ["src", "../core", "../frameworks"],
+  "exclude": ["../node_modules", "www"]
+}

@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "target": "es2017",
     "module": "commonjs",
-    "lib": ["dom", "es2019"],
+    "lib": ["dom", "esnext"],
     "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "downlevelIteration": true,
-    "paths": {
-      "@sequelize-ui/core/*": ["./core/*"],
-      "@sequelize-ui/integration/*": ["./integration/*"],
-      "@sequelize-ui/frameworks/*": ["./frameworks/*"]
-    }
+    "moduleResolution": "node",
+    "jsx": "react",
+    "jsxFactory": "h"
   },
-  "exclude": ["./node_modules/", "./dist/"]
+  "exclude": ["node_modules", "dist"]
 }

@@ -12,7 +12,6 @@
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.1",
-    "@types/pluralize": "0.0.29",
-    "nodemon": "^2.0.6"
+    "@types/pluralize": "0.0.29"
   }
 }
