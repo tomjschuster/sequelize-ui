@@ -13,7 +13,7 @@ describe('app-home', () => {
     const page = await newE2EPage()
     await page.setContent('<app-home></app-home>')
 
-    const element = await page.find('app-home ion-content ion-button')
+    const element = await page.find('app-home >>> button')
     expect(element.textContent).toEqual('Profile page')
   })
 })

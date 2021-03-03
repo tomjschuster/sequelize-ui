@@ -1,15 +1,13 @@
 {
   "name": "@sequelize-ui/site",
-  "version": "0.0.0",
-  "description": "site",
-  "files": [
-    "dist/"
-  ],
+  "private": true,
+  "version": "0.0.1",
+  "description": "Stencil App Starter",
   "scripts": {
-    "build": "stencil build",
+    "build": "stencil build --prerender",
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
-    "test.watch": "stencil test --spec --e2e --watch",
+    "test.watch": "stencil test --spec --e2e --watchAll",
     "generate": "stencil generate"
   },
   "dependencies": {
@@ -17,12 +15,8 @@
     "@sequelize-ui/frameworks": ""
   },
   "devDependencies": {
-    "@ionic/core": "^5.3.2",
-    "@stencil/core": "^2.0.1",
-    "@types/jest": "^26.0.20",
-    "@types/puppeteer": "^5.4.2",
-    "jest": "^26.6.3",
-    "jest-cli": "^26.6.3",
-    "puppeteer": "^5.5.0"
-  }
+    "@stencil/core": "^2.0.0",
+    "@stencil/router": "^1.0.1"
+  },
+  "license": "MIT"
 }

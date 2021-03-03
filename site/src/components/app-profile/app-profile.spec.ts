@@ -8,31 +8,39 @@ describe('app-profile', () => {
         components: [AppProfile],
         html: '<app-profile></app-profile>',
       })
-      expect(rootInstance.formattedName()).toEqual('')
+      expect(rootInstance.normalize(undefined)).toEqual('')
+    })
+
+    it('returns a blank string if the name is null', async () => {
+      const { rootInstance } = await newSpecPage({
+        components: [AppProfile],
+        html: '<app-profile></app-profile>',
+      })
+      expect(rootInstance.normalize(null)).toEqual('')
     })
 
     it('capitalizes the first letter', async () => {
       const { rootInstance } = await newSpecPage({
         components: [AppProfile],
-        html: '<app-profile name="quincy"></app-profile>',
+        html: '<app-profile></app-profile>',
       })
-      expect(rootInstance.formattedName()).toEqual('Quincy')
+      expect(rootInstance.normalize('quincy')).toEqual('Quincy')
     })
 
     it('lower-cases the following letters', async () => {
       const { rootInstance } = await newSpecPage({
         components: [AppProfile],
-        html: '<app-profile name="JOSEPH"></app-profile>',
+        html: '<app-profile></app-profile>',
       })
-      expect(rootInstance.formattedName()).toEqual('Joseph')
+      expect(rootInstance.normalize('JOSEPH')).toEqual('Joseph')
     })
 
     it('handles single letter names', async () => {
       const { rootInstance } = await newSpecPage({
         components: [AppProfile],
-        html: '<app-profile name="Q"></app-profile>',
+        html: '<app-profile></app-profile>',
       })
-      expect(rootInstance.formattedName()).toEqual('Q')
+      expect(rootInstance.normalize('q')).toEqual('Q')
     })
   })
 })

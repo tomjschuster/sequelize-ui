@@ -1,7 +1,7 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "module": "ESNext",
+    "module": "esnext",
     "jsx": "react",
     "jsxFactory": "h",
     "skipLibCheck": true

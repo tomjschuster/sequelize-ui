@@ -12,7 +12,16 @@ describe('app-profile', () => {
   it('displays the specified name', async () => {
     const page = await newE2EPage({ url: '/profile/joseph' })
 
-    const element = await page.find('app-profile ion-content p')
-    expect(element.textContent).toContain('My name is Joseph.')
+    const profileElement = await page.find('app-root >>> app-profile')
+    const element = profileElement.shadowRoot.querySelector('div')
+    expect(element?.textContent).toContain('Hello! My name is Joseph.')
   })
+
+  // it('includes a div with the class "app-profile"', async () => {
+  //   const page = await newE2EPage({ url: '/profile/joseph' });
+
+  // I would like to use a selector like this above, but it does not seem to work
+  //   const element = await page.find('app-root >>> app-profile >>> div');
+  //   expect(element).toHaveClass('app-profile');
+  // });
 })

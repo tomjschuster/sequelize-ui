@@ -3,17 +3,25 @@ import { Component, h } from '@stencil/core'
 @Component({
   tag: 'app-root',
   styleUrl: 'app-root.css',
+  shadow: true,
 })
 export class AppRoot {
   render() {
     return (
-      <ion-app>
-        <ion-router useHash={false}>
-          <ion-route url="/" component="app-home" />
-          <ion-route url="/profile/:name" component="app-profile" />
-        </ion-router>
-        <ion-nav />
-      </ion-app>
+      <div>
+        <header>
+          <h1>Sequelize UI</h1>
+        </header>
+
+        <main>
+          <stencil-router>
+            <stencil-route-switch scrollTopOffset={0}>
+              <stencil-route url="/" component="app-home" exact={true} />
+              <stencil-route url="/profile/:name" component="app-profile" />
+            </stencil-route-switch>
+          </stencil-router>
+        </main>
+      </div>
     )
   }
 }
