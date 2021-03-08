@@ -1,21 +1,13 @@
 {
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
-  "extends": ["plugin:@stencil/recommended"],
-  "rules": {
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^h$" }
-    ],
-    "@typescript-eslint/explicit-module-boundary-types": [
-      "error",
-      {
-        "allowedNames": ["render"]
+  "overrides": [
+    {
+      "files": ["next.config.js", "postcss.config.js", "tailwind.config.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      },
+      "env": {
+        "node": true
       }
-    ],
-    "@stencil/render-returns-host": ["off"],
-    "@stencil/required-jsdoc": ["off"],
-    "react/jsx-no-bind": ["off"]
-  }
+    }
+  ]
 }

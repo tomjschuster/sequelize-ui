@@ -1,11 +1,15 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "forceConsistentCasingInFileNames": true,
     "module": "esnext",
-    "jsx": "react",
-    "jsxFactory": "h",
-    "skipLibCheck": true
+    "resolveJsonModule": true,
+    "jsx": "preserve",
+    "allowJs": true,
+    "noEmit": true,
+    "isolatedModules": true
   },
-  "include": ["src", "../core", "../frameworks"],
-  "exclude": ["../node_modules", "www"]
+  "exclude": ["node_modules"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

@@ -1,0 +1,20 @@
+{
+  "name": "@sequelize-ui/frameworks",
+  "description": "",
+  "version": "0.0.1",
+  "main": "src/index",
+  "types": "src/index",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "nodemon --watch './**/*.ts' --exec 'ts-node -r tsconfig-paths/register' ./src/debug.ts"
+  },
+  "dependencies": {
+    "@sequelize-ui/core": "*"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

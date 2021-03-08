@@ -1,0 +1,8 @@
+import { Framework, ProjectType } from '@sequelize-ui/core'
+import { generateSequelizeProject } from './project'
+
+export const SequelizeFramework: Framework = class {
+  static displayName = (): string => 'Sequelize'
+  static projectType = (): ProjectType => ProjectType.Npm
+  static generate = generateSequelizeProject
+}

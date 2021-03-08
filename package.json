@@ -3,9 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "workspaces": [
-    "core",
-    "integration",
-    "frameworks",
+    "libs/*",
     "site"
   ],
   "scripts": {
@@ -14,8 +12,6 @@
     "format": "prettier --config .prettierrc './**/*.{ts, tsx}' --write",
     "format-check": "prettier --config .prettierrc './**/*.{ts, tsx}' --check"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
   "husky": {
     "hooks": {
@@ -29,7 +25,7 @@
     ]
   },
   "devDependencies": {
-    "@stencil/eslint-plugin": "^0.3.1",
+    "@types/node": "^14.14.22",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
     "eslint": "^7.21.0",
@@ -39,6 +35,8 @@
     "husky": "^4.3.8",
     "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^4.1.3"
   }
 }
