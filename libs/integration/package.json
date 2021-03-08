@@ -2,11 +2,8 @@
   "name": "@sequelize-ui/integration",
   "description": "",
   "version": "0.0.1",
-  "main": "src/index",
-  "types": "src/index",
-  "files": [
-    "src"
-  ],
+  "main": "index",
+  "types": "index",
   "scripts": {
     "test": "npm run test:sql:*",
     "test:sql": "mocha -r ts-node/register -r tsconfig-paths/register 'tests/**/*.spec.ts' --exit",

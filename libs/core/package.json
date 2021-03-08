@@ -2,11 +2,8 @@
   "name": "@sequelize-ui/core",
   "description": "",
   "version": "0.0.1",
-  "main": "src/index",
-  "types": "src/index",
-  "files": [
-    "src"
-  ],
+  "main": "index",
+  "types": "index",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
