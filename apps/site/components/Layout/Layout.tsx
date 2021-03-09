@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import React, { ReactNode } from 'react'
+import * as styles from './styles'
 
 type Props = {
   title: string
@@ -14,13 +15,13 @@ function Layout({ children, title }: Props) {
         <title>{title}</title>
         <script async defer src="https://buttons.github.io/buttons.js"></script>
       </Head>
-      <div className="flex flex-col items-stretch h-screen">
-        <header className="shadow p-2">
+      <div className={styles.pageWrapper}>
+        <header className={styles.header}>
           <Link href="/">
-            <a title="Go to Sequelize UI Home" className="inline-block">
-              <h1 className="text-2xl">
+            <a title="Go to Sequelize UI Home" className={styles.logoLink}>
+              <h1 className={styles.logoHeading}>
                 <img
-                  className="inline mr-2 h-8"
+                  className={styles.logo}
                   src="https://sequelizeui.app/static/images/sequelize-ui-tiny-white.svg"
                 />
                 Sequelize UI
@@ -28,8 +29,8 @@ function Layout({ children, title }: Props) {
             </a>
           </Link>
         </header>
-        <main className="flex-1">{children}</main>
-        <footer className="shadow-inner bg-blue-100 p-4 flex justify-between items-center children:flex flex-col sm:flex-row ">
+        <main className={styles.main}>{children}</main>
+        <footer className={styles.footer}>
           <a
             className="github-button"
             href="https://github.com/tomjschuster/sequelize-ui"
@@ -39,9 +40,9 @@ function Layout({ children, title }: Props) {
           >
             Star
           </a>
-          <span className="mt-2 sm:mt-0">
+          <span className={styles.copyright}>
             Copyright &copy; {new Date().getFullYear()}
-            <a className="hover:underline font-bold ml-1.5" href="https://github.com/tomjschuster">
+            <a className={styles.authorLink} href="https://github.com/tomjschuster">
               Tom Schuster
             </a>
           </span>
