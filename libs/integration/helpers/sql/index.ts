@@ -1,4 +1,4 @@
-import { parseSqlDialect, ProjectType, SqlDialect } from '@sequelize-ui/core'
+import { parseSqlDialect, ProjectType, SqlDialect } from '@libs/core'
 import { DbConnection, DbConnectionConstructor } from './connection'
 import { MsSqlConnection } from './mssql'
 import { MySqlConnection } from './mysql'

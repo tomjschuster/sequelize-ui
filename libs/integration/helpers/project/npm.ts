@@ -1,4 +1,4 @@
-import { DirectoryItem, name } from '@sequelize-ui/core'
+import { DirectoryItem, name } from '@libs/core'
 import { exec as exec_ } from 'child_process'
 import { promisify } from 'util'
 import { clearDirectory, deleteFileOrDirectory, tmpDirPath, writeFiles } from '../files'

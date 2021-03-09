@@ -1,6 +1,6 @@
-import { file, FileItem } from '@sequelize-ui/core'
+import Layout from '@apps/site/components/Layout'
+import { file, FileItem } from '@libs/core'
 import React from 'react'
-import Layout from '../components/Layout'
 
 function IndexPage() {
   return (

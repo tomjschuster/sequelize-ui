@@ -1,4 +1,4 @@
-import { ProjectType } from '@sequelize-ui/core'
+import { ProjectType } from '@libs/core'
 import { isLinux } from 'check-os'
 import { Database } from 'sqlite3'
 import { deleteFileOrDirectory, exists, mkdirp, tmpDirPath } from '../files'

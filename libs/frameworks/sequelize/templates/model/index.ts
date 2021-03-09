@@ -1,4 +1,4 @@
-import { Association, blank, DatabaseOptions, lines, Model, Schema } from '@sequelize-ui/core'
+import { Association, blank, DatabaseOptions, lines, Model, Schema } from '@libs/core'
 import { ModelAssociation } from './common'
 import { modelImportsTemplate } from './imports'
 import { modelClassTemplate } from './modelClass'

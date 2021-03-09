@@ -1,4 +1,4 @@
-import { AssociationType, DataTypeType, Model, Schema, ThroughType } from '@sequelize-ui/core'
+import { AssociationType, DataTypeType, Model, Schema, ThroughType } from '@libs/core'
 
 const actor: Model = {
   id: '1',

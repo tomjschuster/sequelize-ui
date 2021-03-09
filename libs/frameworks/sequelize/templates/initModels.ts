@@ -13,7 +13,7 @@ import {
   singular,
   snakeCase,
   ThroughType,
-} from '@sequelize-ui/core'
+} from '@libs/core'
 import { modelName } from '../helpers'
 
 export type InitModelsTemplateArgs = {

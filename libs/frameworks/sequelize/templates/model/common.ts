@@ -1,4 +1,4 @@
-import { Association, DataType, displaySqlDialect, Model, SqlDialect } from '@sequelize-ui/core'
+import { Association, DataType, displaySqlDialect, Model, SqlDialect } from '@libs/core'
 import {
   dataTypeNotSupported,
   dataTypeToSequelize,

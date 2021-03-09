@@ -1,4 +1,4 @@
-import { DatabaseOptions, kebabCase, lines, Schema, SqlDialect } from '@sequelize-ui/core'
+import { DatabaseOptions, kebabCase, lines, Schema, SqlDialect } from '@libs/core'
 
 export type PackageJsonTemplateArgs = {
   schema: Schema

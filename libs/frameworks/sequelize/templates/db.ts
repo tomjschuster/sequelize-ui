@@ -12,7 +12,7 @@ import {
   DatabaseOptions,
   SqlDialect,
   Schema,
-} from '@sequelize-ui/core'
+} from '@libs/core'
 
 export type DbTemplateArgs = {
   schema: Schema

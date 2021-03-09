@@ -1,10 +1,10 @@
 {
   "extends": "./tsconfig.build.json",
-
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@sequelize-ui/*": ["libs/*"]
+      "@libs/*": ["libs/*"],
+      "@apps/*": ["apps/*"]
     },
     "jsx": "react",
     "esModuleInterop": true,

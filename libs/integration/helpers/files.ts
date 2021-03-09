@@ -1,4 +1,4 @@
-import { FileSystemItem, isDirectory, name } from '@sequelize-ui/core'
+import { FileSystemItem, isDirectory, name } from '@libs/core'
 import fs from 'fs/promises'
 import { join } from 'path'
 

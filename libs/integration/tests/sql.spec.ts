@@ -1,5 +1,5 @@
-import { displaySqlDialect, DatabaseOptions, Framework, SqlDialect } from '@sequelize-ui/core'
-import { SequelizeFramework } from '@sequelize-ui/frameworks'
+import { displaySqlDialect, DatabaseOptions, Framework, SqlDialect } from '@libs/core'
+import { SequelizeFramework } from '@libs/frameworks'
 import {
   alpha,
   buildProject,
@@ -10,7 +10,7 @@ import {
   preinstall,
   validateDialect,
   DbConnection,
-} from '@sequelize-ui/integration'
+} from '@libs/integration'
 import { expect } from 'chai'
 import forEach from 'mocha-each'
 

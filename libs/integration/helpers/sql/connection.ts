@@ -1,4 +1,4 @@
-import { ProjectType } from '@sequelize-ui/core'
+import { ProjectType } from '@libs/core'
 
 export interface DbConnection {
   connected(): Promise<boolean>

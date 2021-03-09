@@ -1,10 +1,10 @@
 {
-  "name": "@sequelize-ui/sequelize-ui",
+  "name": "@libs/sequelize-ui",
   "version": "0.0.1",
   "description": "",
   "workspaces": [
     "libs/*",
-    "site"
+    "apps/*"
   ],
   "scripts": {
     "type-check": "tsc",

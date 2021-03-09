@@ -6,7 +6,7 @@ import {
   kebabCase,
   pascalCase,
   Schema,
-} from '@sequelize-ui/core'
+} from '@libs/core'
 import { hasJsonType } from './helpers'
 import { dbTemplate } from './templates/db'
 import { gitignoreTemplate } from './templates/gitignore'

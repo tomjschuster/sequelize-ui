@@ -1,12 +1,4 @@
-import {
-  blank,
-  camelCase,
-  DatabaseOptions,
-  Field,
-  isDateTimeType,
-  lines,
-  Model,
-} from '@sequelize-ui/core'
+import { blank, camelCase, DatabaseOptions, Field, isDateTimeType, lines, Model } from '@libs/core'
 import { dataTypeToTypeScript } from '../../dataTypes'
 import { modelName } from '../../helpers'
 import { noSupportedDetails, notSupportedComment } from './common'

@@ -1,5 +1,5 @@
 {
-  "name": "@sequelize-ui/integration",
+  "name": "@libs/integration",
   "description": "",
   "version": "0.0.1",
   "main": "index",
@@ -15,8 +15,8 @@
     "test:sql:all": "npm run test:sql:mariadb && npm run test:sql:mssql && npm run test:sql:mysql && npm run test:sql:postgres && npm run test:sql:sqlite"
   },
   "dependencies": {
-    "@sequelize-ui/core": "*",
-    "@sequelize-ui/frameworks": "*"
+    "@libs/core": "*",
+    "@libs/frameworks": "*"
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",

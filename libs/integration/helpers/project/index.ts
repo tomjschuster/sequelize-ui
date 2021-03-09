@@ -1,4 +1,4 @@
-import { DirectoryItem, ProjectType } from '@sequelize-ui/core'
+import { DirectoryItem, ProjectType } from '@libs/core'
 import { NpmProject } from './npm'
 
 export const buildProject = (

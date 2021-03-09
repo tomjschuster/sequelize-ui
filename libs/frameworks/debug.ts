@@ -6,7 +6,7 @@ import {
   Schema,
   SqlDialect,
   ThroughType,
-} from '@sequelize-ui/core'
+} from '@libs/core'
 import { SequelizeFramework } from '.'
 
 const actor: Model = {

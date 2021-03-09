@@ -1,4 +1,4 @@
-import { Framework, ProjectType } from '@sequelize-ui/core'
+import { Framework, ProjectType } from '@libs/core'
 import { generateSequelizeProject } from './project'
 
 export const SequelizeFramework: Framework = class {

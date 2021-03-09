@@ -1,4 +1,4 @@
-import { blank, lines } from '@sequelize-ui/core'
+import { blank, lines } from '@libs/core'
 
 export const gitignoreTemplate = (): string =>
   lines([

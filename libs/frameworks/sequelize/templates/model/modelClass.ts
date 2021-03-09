@@ -16,7 +16,7 @@ import {
   sqlCurrentDate,
   sqlCurrentTime,
   sqlCurrentTimestamp,
-} from '@sequelize-ui/core'
+} from '@libs/core'
 import {
   dataTypeToSequelize,
   dataTypeToTypeScript,

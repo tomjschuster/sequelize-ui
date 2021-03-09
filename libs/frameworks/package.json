@@ -1,5 +1,5 @@
 {
-  "name": "@sequelize-ui/frameworks",
+  "name": "@libs/frameworks",
   "description": "",
   "version": "0.0.1",
   "main": "index",
@@ -9,7 +9,7 @@
     "debug": "nodemon --watch './**/*.ts' --exec 'ts-node -r tsconfig-paths/register' ./debug.ts"
   },
   "dependencies": {
-    "@sequelize-ui/core": "*"
+    "@libs/core": "*"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"

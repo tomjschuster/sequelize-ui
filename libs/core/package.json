@@ -1,5 +1,5 @@
 {
-  "name": "@sequelize-ui/core",
+  "name": "@libs/core",
   "description": "",
   "version": "0.0.1",
   "main": "index",

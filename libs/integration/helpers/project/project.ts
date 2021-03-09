@@ -1,4 +1,4 @@
-import { DirectoryItem } from '@sequelize-ui/core'
+import { DirectoryItem } from '@libs/core'
 
 export interface Project {
   build(directory: DirectoryItem, preinstall?: string): Promise<void>

@@ -1,4 +1,4 @@
-import { DatabaseOptions, DirectoryItem, Schema } from '@sequelize-ui/core'
+import { DatabaseOptions, DirectoryItem, Schema } from '@libs/core'
 
 type GenerateArgs = {
   schema: Schema

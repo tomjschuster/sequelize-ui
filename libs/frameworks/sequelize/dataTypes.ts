@@ -1,4 +1,4 @@
-import { DataType, DataTypeType, SqlDialect } from '@sequelize-ui/core'
+import { DataType, DataTypeType, SqlDialect } from '@libs/core'
 
 export enum SequelizeDataTypeType {
   String = 'STRING',

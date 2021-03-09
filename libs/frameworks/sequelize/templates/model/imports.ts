@@ -1,11 +1,4 @@
-import {
-  AssociationType,
-  DatabaseOptions,
-  DataType,
-  DataTypeType,
-  lines,
-  Model,
-} from '@sequelize-ui/core'
+import { AssociationType, DatabaseOptions, DataType, DataTypeType, lines, Model } from '@libs/core'
 import { hasJsonType, modelName } from '../../helpers'
 import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
 
