@@ -1,7 +1,12 @@
 import { DirectoryItem, name } from '@libs/core'
+import {
+  clearDirectory,
+  deleteFileOrDirectory,
+  tmpDirPath,
+  writeFiles,
+} from '@libs/test-utils/files'
 import { exec as exec_ } from 'child_process'
 import { promisify } from 'util'
-import { clearDirectory, deleteFileOrDirectory, tmpDirPath, writeFiles } from '../files'
 import { Project } from './project'
 
 const exec = promisify(exec_)

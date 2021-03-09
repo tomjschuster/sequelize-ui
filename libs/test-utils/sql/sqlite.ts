@@ -1,7 +1,7 @@
 import { ProjectType } from '@libs/core'
+import { deleteFileOrDirectory, exists, mkdirp, tmpDirPath } from '@libs/test-utils/files'
 import { isLinux } from 'check-os'
 import { Database } from 'sqlite3'
-import { deleteFileOrDirectory, exists, mkdirp, tmpDirPath } from '../files'
 import { DbConnection, DbConnectionConstructor } from './connection'
 
 const sqlitePaths = ['/usr/bin/sqlite3', '/usr/local/bin/sqlite3']

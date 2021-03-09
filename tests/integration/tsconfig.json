@@ -6,5 +6,9 @@
     "outDir": "../../dist/ts"
   },
   "include": ["**/*.ts"],
-  "references": []
+  "references": [
+    { "path": "../../libs/core" },
+    { "path": "../../libs/frameworks" },
+    { "path": "../../libs/test-utils" }
+  ]
 }

@@ -1,8 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "baseUrl": "../../",
+    "rootDir": "../../",
+    "outDir": "../../dist/ts",
     "lib": ["dom", "dom.iterable", "esnext"],
     "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
     "module": "esnext",
     "resolveJsonModule": true,
     "jsx": "preserve",
@@ -10,6 +14,7 @@
     "noEmit": true,
     "isolatedModules": true
   },
-  "exclude": ["node_modules"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["../../node_modules"],
+  "references": [{ "path": "../../libs/core" }, { "path": "../../libs/frameworks" }]
 }

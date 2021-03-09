@@ -1,14 +1,6 @@
 {
-  "extends": "./tsconfig.build.json",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@libs/*": ["libs/*"],
-      "@apps/*": ["apps/*"]
-    },
-    "jsx": "react",
-    "esModuleInterop": true,
-    "skipLibCheck": false,
-    "types": []
-  }
+  "extends": "./tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [{ "path": "./apps" }, { "path": "./libs" }, { "path": "./tests" }]
 }

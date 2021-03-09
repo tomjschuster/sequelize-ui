@@ -1,16 +1,16 @@
-import { displaySqlDialect, DatabaseOptions, Framework, SqlDialect } from '@libs/core'
+import { DatabaseOptions, displaySqlDialect, Framework, SqlDialect } from '@libs/core'
 import { SequelizeFramework } from '@libs/frameworks'
 import {
   alpha,
   buildProject,
   createDatabase,
+  DbConnection,
   destroyProject,
-  dvdSchema,
   dropDatabase,
   preinstall,
   validateDialect,
-  DbConnection,
-} from '@libs/integration'
+} from '@libs/test-utils'
+import { dvdSchema } from '@tests/integration/fixtures'
 import { expect } from 'chai'
 import forEach from 'mocha-each'
 

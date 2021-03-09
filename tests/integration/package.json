@@ -1,5 +1,5 @@
 {
-  "name": "@libs/integration",
+  "name": "@tests/integration",
   "description": "",
   "version": "0.0.1",
   "main": "index",
@@ -20,20 +20,10 @@
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",
-    "@types/file-saver": "^2.0.1",
     "@types/mocha": "^8.2.0",
     "@types/mocha-each": "^2.0.0",
-    "@types/pg": "^7.14.9",
-    "@types/pluralize": "0.0.29",
-    "@types/sqlite3": "^3.1.7",
-    "@types/tedious": "^4.0.3",
     "chai": "^4.3.0",
-    "check-os": "^1.0.1",
     "mocha": "^8.2.1",
-    "mocha-each": "^2.0.1",
-    "mysql2": "^2.2.5",
-    "pg": "^8.5.1",
-    "sqlite3": "^5.0.1",
-    "tedious": "^11.0.3"
+    "mocha-each": "^2.0.1"
   }
 }

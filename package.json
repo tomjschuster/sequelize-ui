@@ -3,11 +3,14 @@
   "version": "0.0.1",
   "description": "",
   "workspaces": [
+    "apps/*",
     "libs/*",
-    "apps/*"
+    "tests/*"
   ],
   "scripts": {
-    "type-check": "tsc",
+    "build": "npm run clean && npm run compile",
+    "clean": "rm -rf ./dist/ts",
+    "compile": "tsc -b tsconfig.json",
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --config .prettierrc './**/*.{ts, tsx}' --write",
     "format-check": "prettier --config .prettierrc './**/*.{ts, tsx}' --check"
@@ -15,7 +18,7 @@
   "license": "ISC",
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && npm run type-check"
+      "pre-commit": "lint-staged && npm run compile"
     }
   },
   "lint-staged": {
