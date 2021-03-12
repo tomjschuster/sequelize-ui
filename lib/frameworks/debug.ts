@@ -1,10 +1,13 @@
 import {
   AssociationType,
+  DatabaseOptions,
   DataTypeType,
   Model,
   Schema,
+  SqlDialect,
   ThroughType,
 } from "@lib/core";
+import { SequelizeFramework } from ".";
 
 const actor: Model = {
   id: "1",
@@ -83,14 +86,6 @@ const film: Model = {
         type: DataTypeType.Array,
         arrayType: { type: DataTypeType.String },
       },
-    },
-    {
-      name: "metaData",
-      type: { type: DataTypeType.Json },
-    },
-    {
-      name: "preview",
-      type: { type: DataTypeType.Blob },
     },
   ],
   associations: [
@@ -218,11 +213,6 @@ const rental: Model = {
       primaryKey: true,
       required: true,
     },
-    {
-      name: "rentedAt",
-      type: { type: DataTypeType.DateTime, defaultNow: true },
-      required: true,
-    },
   ],
   associations: [
     { type: AssociationType.BelongsTo, targetModelId: "7" },
@@ -296,9 +286,9 @@ const customer: Model = {
   ],
 };
 
-export const dvdSchema = (name: string): Schema => ({
+const schema: Schema = {
   id: "1",
-  name,
+  name: "dvd",
   models: [
     film,
     filmActor,
@@ -312,4 +302,14 @@ export const dvdSchema = (name: string): Schema => ({
     staff,
     customer,
   ],
-});
+};
+const dbOptions: DatabaseOptions = {
+  sqlDialect: SqlDialect.Postgres,
+  timestamps: true,
+  caseStyle: "snake",
+  nounForm: "singular",
+};
+
+const project = SequelizeFramework.generate({ schema, dbOptions });
+console.log(project.files.find((f) => f.name === "models"));
+console.log(project);

@@ -1,9 +1,7 @@
 {
-  "extends": "../tsconfig.base.json",
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "noEmit": true
+    "module": "commonjs"
   },
-  "files": [],
-  "include": [],
-  "references": [{ "path": "./integration" }]
+  "include": ["**/*.ts", "**/*.tsx"]
 }
