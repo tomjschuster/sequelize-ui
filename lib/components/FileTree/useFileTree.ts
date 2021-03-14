@@ -28,12 +28,9 @@ type UseFileTreeResult = {
 function useFileTree({ root }: UseFileTreeArgs): UseFileTreeResult {
   const [activePath, setActivePath] = React.useState<string | undefined>()
 
-  const [folderState, setFolderState] = React.useState<FolderState>(() =>
-    listPaths(root).reduce<{ [key: string]: boolean }>((acc, x) => {
-      acc[x] = true
-      return acc
-    }, {}),
-  )
+  const [folderState, setFolderState] = React.useState<FolderState>(() => createFolderState(root))
+
+  React.useEffect(() => setFolderState(createFolderState(root)), [root])
 
   const toggleFolder = React.useCallback(
     (path: string) =>
@@ -64,6 +61,13 @@ function useFileTree({ root }: UseFileTreeArgs): UseFileTreeResult {
   }, [activePath, root])
 
   return { activeFile, folderState, selectItem }
+}
+
+function createFolderState(root: FileSystemItem): FolderState {
+  return listPaths(root).reduce<{ [key: string]: boolean }>((acc, x) => {
+    acc[x] = true
+    return acc
+  }, {})
 }
 
 export default useFileTree

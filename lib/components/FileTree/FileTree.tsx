@@ -1,4 +1,4 @@
-import { FileSystemItem, isDirectory, itemName } from '@lib/core'
+import { FileSystemItem, isDirectory, isFile, itemName } from '@lib/core'
 import React from 'react'
 import { classnames } from 'tailwindcss-classnames'
 import { FolderState } from './types'
@@ -51,21 +51,30 @@ function FileTreeItem({
       </span>
       {isDirectory(item) && item.files.length > 0 && folderState[path] && (
         <ul className="pl-8">
-          {item.files.map((item) => (
-            <li key={itemName(item)}>
-              <FileTreeItem
-                item={item}
-                onSelect={onSelect}
-                path={path + '/' + itemName(item)}
-                activePath={activePath}
-                folderState={folderState}
-              />
-            </li>
-          ))}
+          {item.files
+            .slice()
+            .sort(compareItems)
+            .map((item) => (
+              <li key={itemName(item)}>
+                <FileTreeItem
+                  item={item}
+                  onSelect={onSelect}
+                  path={path + '/' + itemName(item)}
+                  activePath={activePath}
+                  folderState={folderState}
+                />
+              </li>
+            ))}
         </ul>
       )}
     </>
   )
+}
+
+function compareItems(a: FileSystemItem, b: FileSystemItem): number {
+  if (isDirectory(a) && isFile(b)) return -1
+  if (isDirectory(b) && isFile(a)) return 1
+  return itemName(a).localeCompare(itemName(b))
 }
 
 export default React.memo(FileTree)
