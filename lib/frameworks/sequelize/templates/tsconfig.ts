@@ -11,4 +11,4 @@ export const tsconfigTemplate = (): string =>
       "forceConsistentCasingInFileNames": true
     }
   }
-`;
+`

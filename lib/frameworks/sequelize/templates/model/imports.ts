@@ -1,23 +1,12 @@
-import {
-  AssociationType,
-  DatabaseOptions,
-  DataType,
-  DataTypeType,
-  lines,
-  Model,
-} from "@lib/core";
-import { hasJsonType, modelName } from "../../helpers";
-import {
-  ModelAssociation,
-  noSupportedDetails,
-  notSupportedComment,
-} from "./common";
+import { AssociationType, DatabaseOptions, DataType, DataTypeType, lines, Model } from '@lib/core'
+import { hasJsonType, modelName } from '../../helpers'
+import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
 
 export type ModelImportsTemplateArgs = {
-  model: Model;
-  associations: ModelAssociation[];
-  dbOptions: DatabaseOptions;
-};
+  model: Model
+  associations: ModelAssociation[]
+  dbOptions: DatabaseOptions
+}
 export const modelImportsTemplate = ({
   model,
   associations,
@@ -26,37 +15,30 @@ export const modelImportsTemplate = ({
   lines([
     sequelizeImports(),
     hasJsonType(model) ? importJsonType(dbOptions) : null,
-    ...getAssociationTypes({ currentModel: model, associations }).map(
-      typeImports
-    ),
-  ]);
+    ...getAssociationTypes({ currentModel: model, associations }).map(typeImports),
+  ])
 
 const sequelizeImports = (): string =>
-  `import Sequelize, { DataTypes, Model, Optional } from 'sequelize'`;
+  `import Sequelize, { DataTypes, Model, Optional } from 'sequelize'`
 
-type TypeImportArgs = [filename: string, types: string[]];
+type TypeImportArgs = [filename: string, types: string[]]
 
-const importJsonType = ({
-  sqlDialect,
-}: DatabaseOptions): Array<string | null> => {
-  const json: DataType = { type: DataTypeType.Json };
-  const comment = notSupportedComment(json, sqlDialect);
-  return [
-    noSupportedDetails(json, sqlDialect),
-    `${comment}import { Json } from '../types'`,
-  ];
-};
+const importJsonType = ({ sqlDialect }: DatabaseOptions): Array<string | null> => {
+  const json: DataType = { type: DataTypeType.Json }
+  const comment = notSupportedComment(json, sqlDialect)
+  return [noSupportedDetails(json, sqlDialect), `${comment}import { Json } from '../types'`]
+}
 
 const typeImports = ([filename, types]: TypeImportArgs): string =>
-  `import type { ${types.join(", ")} } from './${filename}'`;
+  `import type { ${types.join(', ')} } from './${filename}'`
 
-type ModelAssociationTypes = { [modelName: string]: AssociationTypeLookup };
-type AssociationTypeLookup = { [type: string]: boolean };
+type ModelAssociationTypes = { [modelName: string]: AssociationTypeLookup }
+type AssociationTypeLookup = { [type: string]: boolean }
 
 type GetAssociationTypes = {
-  currentModel: Model;
-  associations: ModelAssociation[];
-};
+  currentModel: Model
+  associations: ModelAssociation[]
+}
 const getAssociationTypes = ({
   currentModel,
   associations,
@@ -65,42 +47,38 @@ const getAssociationTypes = ({
   const associationTypesByModel = associations.reduce<ModelAssociationTypes>(
     (acc, { model, association }) => {
       // Don't import types for current model
-      if (association.targetModelId === currentModel.id) return acc;
+      if (association.targetModelId === currentModel.id) return acc
 
       const types = associationTypes({
         association,
         model,
       }).reduce<AssociationTypeLookup>((acc, type) => {
-        acc[type] = true;
-        return acc;
-      }, acc[modelName(model)] || {});
+        acc[type] = true
+        return acc
+      }, acc[modelName(model)] || {})
 
-      acc[modelName(model)] = types;
+      acc[modelName(model)] = types
 
-      return acc;
+      return acc
     },
-    {}
-  );
+    {},
+  )
 
   return (
     Object.entries(associationTypesByModel)
       // Sort model imports alphabetically
-      .sort(([modelNameA], [modelNameB]) =>
-        modelNameA.localeCompare(modelNameB)
-      )
+      .sort(([modelNameA], [modelNameB]) => modelNameA.localeCompare(modelNameB))
       .map(([modelName, types]) => [
         modelName,
         // Sort type imports alphabetically
         Object.keys(types).sort((a, b) => a.localeCompare(b)),
       ])
-  );
-};
+  )
+}
 
 const associationTypes = ({ model, association }: ModelAssociation): string[] =>
   [
     modelName(model),
     `${modelName(model)}Id`,
-    association.type === AssociationType.HasOne
-      ? `${modelName(model)}CreationAttributes`
-      : null,
-  ].filter((x): x is string => !!x);
+    association.type === AssociationType.HasOne ? `${modelName(model)}CreationAttributes` : null,
+  ].filter((x): x is string => !!x)

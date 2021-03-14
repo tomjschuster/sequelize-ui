@@ -12,45 +12,39 @@ import {
   sqlCurrentDate,
   sqlCurrentTime,
   sqlCurrentTimestamp,
-} from "@lib/core";
-import { camelCase, pascalCase, singular, snakeCase } from "@lib/utils";
+} from '@lib/core'
+import { camelCase, pascalCase, singular, snakeCase } from '@lib/utils'
 import {
   dataTypeToSequelize,
   dataTypeToTypeScript,
   displaySequelizeDataType,
-} from "../../dataTypes";
-import { addIdField, literalFunction, modelName, plural } from "../../helpers";
-import {
-  ModelAssociation,
-  noSupportedDetails,
-  notSupportedComment,
-} from "./common";
+} from '../../dataTypes'
+import { addIdField, literalFunction, modelName, plural } from '../../helpers'
+import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
 
 export type ModelClassTempalteArgs = {
-  model: Model;
-  associations: ModelAssociation[];
-  dbOptions: DatabaseOptions;
-};
+  model: Model
+  associations: ModelAssociation[]
+  dbOptions: DatabaseOptions
+}
 export const modelClassTemplate = ({
   model,
   associations,
   dbOptions,
 }: ModelClassTempalteArgs): string => {
-  const name = modelName(model);
-  const fieldsWithId = addIdField(model.fields);
+  const name = modelName(model)
+  const fieldsWithId = addIdField(model.fields)
 
   return lines([
     `export class ${name} extends Model<${name}Attributes, ${name}CreationAttributes> implements ${name}Attributes {`,
     lines(
       fieldsWithId.map((field) => classFieldType(field, dbOptions)),
-      { depth: 2 }
+      { depth: 2 },
     ),
     associations.length ? blank() : null,
     lines(
-      associations.map((a) =>
-        associationType({ sourceModel: model, association: a })
-      ),
-      { depth: 2 }
+      associations.map((a) => associationType({ sourceModel: model, association: a })),
+      { depth: 2 },
     ),
     lines(
       [
@@ -60,59 +54,56 @@ export const modelClassTemplate = ({
             `${name}.init({`,
             lines(
               model.fields.map((field) => fieldTemplate(field, dbOptions)),
-              { depth: 2, separator: "," }
+              { depth: 2, separator: ',' },
             ),
-            "}, {",
-            lines(["sequelize", tableName({ model, dbOptions })], {
+            '}, {',
+            lines(['sequelize', tableName({ model, dbOptions })], {
               depth: 2,
-              separator: ",",
+              separator: ',',
             }),
-            "})",
+            '})',
             blank(),
             `return ${name}`,
           ],
-          { depth: 2 }
+          { depth: 2 },
         ),
-        "}",
+        '}',
       ],
-      { depth: 2 }
+      { depth: 2 },
     ),
-    "}",
-  ]);
-};
+    '}',
+  ])
+}
 
 const classFieldType = (
   { name, type, required, primaryKey }: Field,
-  dbOptions: DatabaseOptions
+  dbOptions: DatabaseOptions,
 ): Array<string | null> => {
-  const comment = notSupportedComment(type, dbOptions.sqlDialect);
-  const readonly = primaryKey ? "readonly " : "";
-  const optional =
-    required && !(isDateTimeType(type) && type.defaultNow) ? "!" : "?";
+  const comment = notSupportedComment(type, dbOptions.sqlDialect)
+  const readonly = primaryKey ? 'readonly ' : ''
+  const optional = required && !(isDateTimeType(type) && type.defaultNow) ? '!' : '?'
 
   return [
     noSupportedDetails(type, dbOptions.sqlDialect),
-    `${comment}public ${readonly}${camelCase(
-      name
-    )}${optional}: ${dataTypeToTypeScript(type)}`,
-  ];
-};
+    `${comment}public ${readonly}${camelCase(name)}${optional}: ${dataTypeToTypeScript(type)}`,
+  ]
+}
 
 type AssociationTypeArgs = {
-  sourceModel: Model;
-  association: ModelAssociation;
-};
+  sourceModel: Model
+  association: ModelAssociation
+}
 const associationType = ({
   sourceModel,
   association: { model: targetModel, association },
 }: AssociationTypeArgs): string => {
-  const sourceName = modelName(sourceModel);
-  const targetName = modelName(targetModel);
-  const associationName = association.alias || targetName;
-  const singularAssociationField = singular(camelCase(associationName));
-  const pluralAssociationField = plural(camelCase(associationName));
-  const singularAssociationMethod = singular(pascalCase(associationName));
-  const pluralAssociationMethod = plural(pascalCase(associationName));
+  const sourceName = modelName(sourceModel)
+  const targetName = modelName(targetModel)
+  const associationName = association.alias || targetName
+  const singularAssociationField = singular(camelCase(associationName))
+  const pluralAssociationField = plural(camelCase(associationName))
+  const singularAssociationMethod = singular(pascalCase(associationName))
+  const pluralAssociationMethod = plural(pascalCase(associationName))
 
   switch (association.type) {
     case AssociationType.BelongsTo:
@@ -123,7 +114,7 @@ const associationType = ({
         `public set${singularAssociationMethod}!: Sequelize.BelongsToSetAssociationMixin<${targetName}, ${targetName}Id>`,
         `public create${singularAssociationMethod}!: Sequelize.BelongsToCreateAssociationMixin<${targetName}>`,
         blank(),
-      ].join("\n");
+      ].join('\n')
     case AssociationType.HasMany:
       return [
         `// ${sourceName} hasMany ${targetName}${aliasLabel(association)}`,
@@ -139,7 +130,7 @@ const associationType = ({
         `public has${pluralAssociationMethod}!: Sequelize.HasManyHasAssociationsMixin<${targetName}, ${targetName}Id>`,
         `public count${pluralAssociationMethod}!: Sequelize.HasManyCountAssociationsMixin`,
         blank(),
-      ].join("\n");
+      ].join('\n')
     case AssociationType.HasOne:
       return [
         `// ${sourceName} hasOne ${targetName}${aliasLabel(association)}`,
@@ -148,12 +139,10 @@ const associationType = ({
         `public set${singularAssociationMethod}!: Sequelize.HasOneSetAssociationMixin<${targetName}, ${targetName}Id>`,
         `public create${singularAssociationMethod}!: Sequelize.HasOneCreateAssociationMixin<${targetName}CreationAttributes>`,
         blank(),
-      ].join("\n");
+      ].join('\n')
     case AssociationType.ManyToMany:
       return [
-        `// ${sourceName} belongsToMany ${targetName}${aliasLabel(
-          association
-        )}`,
+        `// ${sourceName} belongsToMany ${targetName}${aliasLabel(association)}`,
         `public readonly ${pluralAssociationField}?: ${targetName}[]`,
         `public get${pluralAssociationMethod}!: Sequelize.BelongsToManyGetAssociationsMixin<${targetName}>`,
         `public set${pluralAssociationMethod}!: Sequelize.BelongsToManySetAssociationsMixin<${targetName}, ${targetName}Id>`,
@@ -166,18 +155,17 @@ const associationType = ({
         `public has${pluralAssociationMethod}!: Sequelize.BelongsToManyHasAssociationsMixin<${targetName}, ${targetName}Id>`,
         `public count${pluralAssociationMethod}!: Sequelize.BelongsToManyCountAssociationsMixin`,
         blank(),
-      ].join("\n");
+      ].join('\n')
   }
-};
+}
 
-const aliasLabel = ({ alias }: Association): string =>
-  alias ? ` (as ${pascalCase(alias)})` : "";
+const aliasLabel = ({ alias }: Association): string => (alias ? ` (as ${pascalCase(alias)})` : '')
 
 const fieldTemplate = (
   { name, type, required, primaryKey, unique }: Field,
-  { sqlDialect }: DatabaseOptions
+  { sqlDialect }: DatabaseOptions,
 ): string => {
-  const comment = notSupportedComment(type, sqlDialect);
+  const comment = notSupportedComment(type, sqlDialect)
 
   return lines([
     noSupportedDetails(type, sqlDialect),
@@ -191,55 +179,52 @@ const fieldTemplate = (
         uniqueField(unique),
         defaultField(type),
       ],
-      { depth: 2, separator: ",", prefix: comment }
+      { depth: 2, separator: ',', prefix: comment },
     ),
     `${comment}}`,
-  ]);
-};
+  ])
+}
 
 const typeField = (dataType: DataType): string =>
-  `type: ${displaySequelizeDataType(dataTypeToSequelize(dataType))}`;
+  `type: ${displaySequelizeDataType(dataTypeToSequelize(dataType))}`
 
 const allowNullField = (required?: boolean): string | null =>
-  required === undefined ? null : `allowNull: ${!required}`;
+  required === undefined ? null : `allowNull: ${!required}`
 
 const primaryKeyField = (primaryKey?: boolean): string | null =>
-  primaryKey ? `primaryKey: ${primaryKey}` : null;
+  primaryKey ? `primaryKey: ${primaryKey}` : null
 
 const uniqueField = (unique?: boolean): string | null =>
-  unique === undefined ? null : `unique: ${unique}`;
+  unique === undefined ? null : `unique: ${unique}`
 
 const autoincrementField = (dataType: DataType) =>
   dataType.type === DataTypeType.Integer && dataType.autoincrement !== undefined
     ? `autoIncrement: ${dataType.autoincrement}`
-    : null;
+    : null
 
 type TableNameArgs = {
-  model: Model;
-  dbOptions: DatabaseOptions;
-};
-const tableName = ({
-  dbOptions: { caseStyle, nounForm },
-  model,
-}: TableNameArgs): string | null => {
-  if (nounForm === "singular" && caseStyle === "snake") {
-    return `tableName: '${singular(snakeCase(model.name))}'`;
+  model: Model
+  dbOptions: DatabaseOptions
+}
+const tableName = ({ dbOptions: { caseStyle, nounForm }, model }: TableNameArgs): string | null => {
+  if (nounForm === 'singular' && caseStyle === 'snake') {
+    return `tableName: '${singular(snakeCase(model.name))}'`
   }
-  return null;
-};
+  return null
+}
 
 const defaultField = (dataType: DataType) => {
   if (dataType.type === DataTypeType.DateTime && dataType.defaultNow) {
-    return `defaultValue: ${literalFunction(sqlCurrentTimestamp())}`;
+    return `defaultValue: ${literalFunction(sqlCurrentTimestamp())}`
   }
 
   if (dataType.type === DataTypeType.Date && dataType.defaultNow) {
-    return `defaultValue: ${literalFunction(sqlCurrentDate())}`;
+    return `defaultValue: ${literalFunction(sqlCurrentDate())}`
   }
 
   if (dataType.type === DataTypeType.Time && dataType.defaultNow) {
-    return `defaultValue: ${literalFunction(sqlCurrentTime())}`;
+    return `defaultValue: ${literalFunction(sqlCurrentTime())}`
   }
 
-  return null;
-};
+  return null
+}

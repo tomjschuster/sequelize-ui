@@ -1,166 +1,157 @@
-import { pascalCase, snakeCase } from "change-case";
+import { pascalCase, snakeCase } from 'change-case'
 
 export type DatabaseOptions = {
-  sqlDialect: SqlDialect;
-  timestamps: boolean;
-  caseStyle: "snake" | "camel";
-  nounForm: "singular" | "plural";
-};
+  sqlDialect: SqlDialect
+  timestamps: boolean
+  caseStyle: 'snake' | 'camel'
+  nounForm: 'singular' | 'plural'
+}
 
 export enum SqlDialect {
-  MariaDb = "MARIADB",
-  MsSql = "MSSQL",
-  MySql = "MYSQL",
-  Postgres = "POSTGRES",
-  Sqlite = "SQLITE",
+  MariaDb = 'MARIADB',
+  MsSql = 'MSSQL',
+  MySql = 'MYSQL',
+  Postgres = 'POSTGRES',
+  Sqlite = 'SQLITE',
 }
 
 export const displaySqlDialect = (dialect: SqlDialect): string => {
   switch (dialect) {
     case SqlDialect.MariaDb:
-      return "mariadb";
+      return 'mariadb'
     case SqlDialect.MsSql:
-      return "mssql";
+      return 'mssql'
     case SqlDialect.MySql:
-      return "mysql";
+      return 'mysql'
     case SqlDialect.Postgres:
-      return "postgres";
+      return 'postgres'
     case SqlDialect.Sqlite:
-      return "sqlite";
+      return 'sqlite'
   }
-};
+}
 
 export const varSqlDialect = (dialect: SqlDialect): string => {
   switch (dialect) {
     case SqlDialect.MariaDb:
-      return "MARIADB";
+      return 'MARIADB'
     case SqlDialect.MsSql:
-      return "MSSQL";
+      return 'MSSQL'
     case SqlDialect.MySql:
-      return "MYSQL";
+      return 'MYSQL'
     case SqlDialect.Postgres:
-      return "POSTGRES";
+      return 'POSTGRES'
     case SqlDialect.Sqlite:
-      return "SQLITE";
+      return 'SQLITE'
   }
-};
+}
 
 export const parseSqlDialect = (dialect: string): SqlDialect | null => {
   switch (dialect) {
-    case "mariadb":
-      return SqlDialect.MariaDb;
-    case "mssql":
-      return SqlDialect.MsSql;
-    case "mysql":
-      return SqlDialect.MySql;
-    case "postgres":
-      return SqlDialect.Postgres;
-    case "sqlite":
-      return SqlDialect.Sqlite;
+    case 'mariadb':
+      return SqlDialect.MariaDb
+    case 'mssql':
+      return SqlDialect.MsSql
+    case 'mysql':
+      return SqlDialect.MySql
+    case 'postgres':
+      return SqlDialect.Postgres
+    case 'sqlite':
+      return SqlDialect.Sqlite
     default:
-      return null;
+      return null
   }
-};
+}
 
 export const defaultSqlDialectPort = (dialect: SqlDialect): string | null => {
   switch (dialect) {
     case SqlDialect.MariaDb:
-      return "3306";
+      return '3306'
     case SqlDialect.MsSql:
-      return "1433";
+      return '1433'
     case SqlDialect.MySql:
-      return "3306";
+      return '3306'
     case SqlDialect.Postgres:
-      return "5432";
+      return '5432'
     case SqlDialect.Sqlite:
-      return null;
+      return null
   }
-};
+}
 
-export const defaultSqlDialectUsername = (
-  dialect: SqlDialect
-): string | null => {
+export const defaultSqlDialectUsername = (dialect: SqlDialect): string | null => {
   switch (dialect) {
     case SqlDialect.MariaDb:
-      return "root";
+      return 'root'
     case SqlDialect.MsSql:
-      return "sa";
+      return 'sa'
     case SqlDialect.MySql:
-      return "root";
+      return 'root'
     case SqlDialect.Postgres:
-      return "postgres";
+      return 'postgres'
     case SqlDialect.Sqlite:
-      return null;
+      return null
   }
-};
+}
 
-export const defaultSqlDialectPassword = (
-  dialect: SqlDialect
-): string | null => {
+export const defaultSqlDialectPassword = (dialect: SqlDialect): string | null => {
   switch (dialect) {
     case SqlDialect.MariaDb:
-      return "root";
+      return 'root'
     case SqlDialect.MsSql:
-      return "Password1";
+      return 'Password1'
     case SqlDialect.MySql:
-      return "root";
+      return 'root'
     case SqlDialect.Postgres:
-      return "postgres";
+      return 'postgres'
     case SqlDialect.Sqlite:
-      return null;
+      return null
   }
-};
+}
 
-export const defaultSqlDialectDatabase = (
-  name: string,
-  dialect: SqlDialect
-): string | null => {
+export const defaultSqlDialectDatabase = (name: string, dialect: SqlDialect): string | null => {
   switch (dialect) {
     case SqlDialect.MariaDb:
-      return snakeCase(name);
+      return snakeCase(name)
     case SqlDialect.MsSql:
-      return pascalCase(name);
+      return pascalCase(name)
     case SqlDialect.MySql:
-      return snakeCase(name);
+      return snakeCase(name)
     case SqlDialect.Postgres:
-      return snakeCase(name);
+      return snakeCase(name)
     case SqlDialect.Sqlite:
-      return null;
+      return null
   }
-};
+}
 
 export const defaultSqlDialectHost = (dialect: SqlDialect): string | null => {
   switch (dialect) {
     case SqlDialect.MariaDb:
-      return "localhost";
+      return 'localhost'
     case SqlDialect.MsSql:
-      return "localhost";
+      return 'localhost'
     case SqlDialect.MySql:
-      return "localhost";
+      return 'localhost'
     case SqlDialect.Postgres:
-      return "localhost";
+      return 'localhost'
     case SqlDialect.Sqlite:
-      return null;
+      return null
   }
-};
+}
 
-export const defaultSqlDialectStorage = (
-  dialect: SqlDialect
-): string | null => {
+export const defaultSqlDialectStorage = (dialect: SqlDialect): string | null => {
   switch (dialect) {
     case SqlDialect.MariaDb:
-      return null;
+      return null
     case SqlDialect.MsSql:
-      return null;
+      return null
     case SqlDialect.MySql:
-      return null;
+      return null
     case SqlDialect.Postgres:
-      return null;
+      return null
     case SqlDialect.Sqlite:
-      return ".tmp/data.db";
+      return '.tmp/data.db'
   }
-};
+}
 
-export const sqlCurrentTimestamp = (): string => "CURRENT_TIMESTAMP";
-export const sqlCurrentDate = (): string => "CURRENT_DATE";
-export const sqlCurrentTime = (): string => "CURRENT_TIME";
+export const sqlCurrentTimestamp = (): string => 'CURRENT_TIMESTAMP'
+export const sqlCurrentDate = (): string => 'CURRENT_DATE'
+export const sqlCurrentTime = (): string => 'CURRENT_TIME'

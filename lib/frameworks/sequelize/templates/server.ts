@@ -1,6 +1,6 @@
-import { blank, lines } from "@lib/core";
+import { blank, lines } from '@lib/core'
 
-export { serverTemplate };
+export { serverTemplate }
 
 const serverTemplate = (): string =>
   lines([
@@ -11,4 +11,4 @@ const serverTemplate = (): string =>
     blank(),
     `db.sync({ force: true })`,
     blank(),
-  ]);
+  ])

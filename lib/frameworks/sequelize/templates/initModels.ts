@@ -8,19 +8,16 @@ import {
   Model,
   Schema,
   ThroughType,
-} from "@lib/core";
-import { camelCase, pascalCase, plural, singular, snakeCase } from "@lib/utils";
-import { modelName } from "../helpers";
+} from '@lib/core'
+import { camelCase, pascalCase, plural, singular, snakeCase } from '@lib/utils'
+import { modelName } from '../helpers'
 
 export type InitModelsTemplateArgs = {
-  schema: Schema;
-  dbOptions: DatabaseOptions;
-};
+  schema: Schema
+  dbOptions: DatabaseOptions
+}
 
-export const initModelsTemplate = ({
-  schema,
-  dbOptions,
-}: InitModelsTemplateArgs): string =>
+export const initModelsTemplate = ({ schema, dbOptions }: InitModelsTemplateArgs): string =>
   lines([
     importSequelize(),
     importModels(schema),
@@ -31,62 +28,49 @@ export const initModelsTemplate = ({
     blank(),
     initModels({ schema, dbOptions }),
     blank(),
-  ]);
+  ])
 
-const importSequelize = (): string =>
-  `import type { Sequelize, Model } from 'sequelize'`;
+const importSequelize = (): string => `import type { Sequelize, Model } from 'sequelize'`
 
-const importModels = ({ models }: Schema): string =>
-  lines(models.map(importModel));
+const importModels = ({ models }: Schema): string => lines(models.map(importModel))
 
 const importModel = (model: Model): string => {
-  const name = modelName(model);
+  const name = modelName(model)
 
   return lines([
     `import { ${name} } from './${name}'`,
     `import type { ${name}Attributes, ${name}CreationAttributes } from './${name}'`,
-  ]);
-};
+  ])
+}
 
 const exportModels = ({ models }: Schema): string =>
-  lines([
-    "export {",
-    lines(models.map(modelName), { separator: ",", depth: 2 }),
-    "}",
-  ]);
+  lines(['export {', lines(models.map(modelName), { separator: ',', depth: 2 }), '}'])
 
 const exportTypes = ({ models }: Schema): string =>
-  lines([
-    "export type {",
-    lines(models.map(modelTypeExport), { depth: 2, separator: "," }),
-    "}",
-  ]);
+  lines(['export type {', lines(models.map(modelTypeExport), { depth: 2, separator: ',' }), '}'])
 
 const modelTypeExport = (model: Model) => {
-  const name = modelName(model);
+  const name = modelName(model)
 
   return lines([`${name}Attributes`, `${name}CreationAttributes`], {
-    separator: ",",
-  });
-};
+    separator: ',',
+  })
+}
 
-type ModelById = { [key: string]: Model };
+type ModelById = { [key: string]: Model }
 
 type InitModelsArgs = {
-  schema: Schema;
-  dbOptions: DatabaseOptions;
-};
-const initModels = ({
-  schema: { models },
-  dbOptions,
-}: InitModelsArgs): string => {
+  schema: Schema
+  dbOptions: DatabaseOptions
+}
+const initModels = ({ schema: { models }, dbOptions }: InitModelsArgs): string => {
   const modelById: ModelById = models.reduce<ModelById>((acc, model) => {
-    acc[model.id] = model;
-    return acc;
-  }, {});
+    acc[model.id] = model
+    return acc
+  }, {})
 
   return lines([
-    "export function initModels(sequelize: Sequelize) {",
+    'export function initModels(sequelize: Sequelize) {',
     lines(models.map(initModel), { depth: 2 }),
     blank(),
 
@@ -94,80 +78,68 @@ const initModels = ({
       models
         .filter(({ associations }) => associations.length > 0)
         .map((model) => modelAssociations({ model, modelById, dbOptions })),
-      { depth: 2 }
+      { depth: 2 },
     ),
     blank(),
-    lines(
-      [
-        "return {",
-        lines(models.map(modelName), { depth: 2, separator: "," }),
-        "}",
-      ],
-      {
-        depth: 2,
-      }
-    ),
-    "}",
-  ]);
-};
-const initModel = ({ name }: Model) =>
-  `${singular(pascalCase(name))}.initModel(sequelize)`;
+    lines(['return {', lines(models.map(modelName), { depth: 2, separator: ',' }), '}'], {
+      depth: 2,
+    }),
+    '}',
+  ])
+}
+const initModel = ({ name }: Model) => `${singular(pascalCase(name))}.initModel(sequelize)`
 
 type ModelAssociationsArgs = {
-  model: Model;
-  modelById: ModelById;
-  dbOptions: DatabaseOptions;
-};
+  model: Model
+  modelById: ModelById
+  dbOptions: DatabaseOptions
+}
 const modelAssociations = (args: ModelAssociationsArgs): string =>
-  lines(
-    args.model.associations.map((association) =>
-      modelAssociation({ association, ...args })
-    )
-  );
+  lines(args.model.associations.map((association) => modelAssociation({ association, ...args })))
 
 type ModelAssociationArgs = {
-  association: Association;
-  model: Model;
-  modelById: ModelById;
-  dbOptions: DatabaseOptions;
-};
+  association: Association
+  model: Model
+  modelById: ModelById
+  dbOptions: DatabaseOptions
+}
 const modelAssociation = ({
   association,
   model,
   modelById,
   dbOptions,
 }: ModelAssociationArgs): string => {
-  const name = modelName(model);
-  const targetName = modelName(modelById[association.targetModelId]);
-  const label = associationLabel(association);
+  const name = modelName(model)
+  const targetName = modelName(modelById[association.targetModelId])
+  const label = associationLabel(association)
   const assocOptions = associationOptions({
     model,
     association,
     modelById,
     dbOptions,
-  });
-  return `${name}.${label}(${targetName}${assocOptions})`;
-};
+  })
+  return `${name}.${label}(${targetName}${assocOptions})`
+}
 
 const associationLabel = ({ type }: Association): string => {
   switch (type) {
     case AssociationType.BelongsTo:
-      return "belongsTo";
+      return 'belongsTo'
     case AssociationType.HasOne:
-      return "hasOne";
+      return 'hasOne'
     case AssociationType.HasMany:
-      return "hasMany";
+      return 'hasMany'
     case AssociationType.ManyToMany:
-      return "belongsToMany";
+      return 'belongsToMany'
   }
-};
+}
 
 type AssociationOptionsArgs = {
-  model: Model;
-  association: Association;
-  modelById: ModelById;
-  dbOptions: DatabaseOptions;
-};
+  model: Model
+  association: Association
+  modelById: ModelById
+  dbOptions: DatabaseOptions
+}
 const associationOptions = ({
   model,
   association,
@@ -175,7 +147,7 @@ const associationOptions = ({
   dbOptions,
 }: AssociationOptionsArgs): string =>
   lines([
-    ", {",
+    ', {',
     lines(
       [
         asField(association.alias, association.type),
@@ -184,33 +156,27 @@ const associationOptions = ({
         otherKeyField({ model, association, modelById, dbOptions }),
         onDeleteField(association),
       ],
-      { depth: 2, separator: "," }
+      { depth: 2, separator: ',' },
     ),
-    "}",
-  ]);
+    '}',
+  ])
 
-const asField = (
-  alias: string | undefined,
-  type: AssociationType
-): string | null =>
-  alias ? `as: '${aliasValue({ alias: alias, type: type })}'` : null;
+const asField = (alias: string | undefined, type: AssociationType): string | null =>
+  alias ? `as: '${aliasValue({ alias: alias, type: type })}'` : null
 
-const throughField = (
-  association: Association,
-  modelById: ModelById
-): string | null =>
+const throughField = (association: Association, modelById: ModelById): string | null =>
   association.type === AssociationType.ManyToMany
     ? `through: ${throughValue({ association, modelById })}`
-    : null;
+    : null
 
 type ThroughValueArgs = {
-  association: ManyToManyAssociation;
-  modelById: ModelById;
-};
+  association: ManyToManyAssociation
+  modelById: ModelById
+}
 const throughValue = ({ association, modelById }: ThroughValueArgs): string =>
   association.through.type === ThroughType.ThroughTable
     ? `'${association.through.table}'`
-    : `${modelName(modelById[association.through.modelId])} as typeof Model`;
+    : `${modelName(modelById[association.through.modelId])} as typeof Model`
 
 const foreignKeyField = ({
   model,
@@ -223,9 +189,9 @@ const foreignKeyField = ({
     association,
     modelById,
     dbOptions,
-  });
-  return `foreignKey: '${foreignKey}'`;
-};
+  })
+  return `foreignKey: '${foreignKey}'`
+}
 
 const getForeignKey = ({
   model,
@@ -239,12 +205,10 @@ const getForeignKey = ({
     ? association.alias
     : association.type === AssociationType.BelongsTo
     ? modelById[association.targetModelId].name
-    : model.name;
+    : model.name
 
-  return dbOptions.caseStyle === "snake"
-    ? `${snakeCase(name)}_id`
-    : `${camelCase(name)}Id`;
-};
+  return dbOptions.caseStyle === 'snake' ? `${snakeCase(name)}_id` : `${camelCase(name)}Id`
+}
 
 const otherKeyField = ({
   model,
@@ -252,43 +216,41 @@ const otherKeyField = ({
   modelById,
   dbOptions,
 }: AssociationOptionsArgs): string | null => {
-  const otherKey = getOtherKey({ model, association, modelById, dbOptions });
-  return otherKey ? `otherKey: '${otherKey}'` : null;
-};
+  const otherKey = getOtherKey({ model, association, modelById, dbOptions })
+  return otherKey ? `otherKey: '${otherKey}'` : null
+}
 
 const getOtherKey = ({
   association,
   modelById,
   dbOptions,
 }: AssociationOptionsArgs): string | null => {
-  if (association.type !== AssociationType.ManyToMany) return null;
+  if (association.type !== AssociationType.ManyToMany) return null
 
   const name = association.targetFk
     ? association.targetFk
     : association.alias
     ? association.alias
-    : modelById[association.targetModelId].name;
+    : modelById[association.targetModelId].name
 
-  return dbOptions.caseStyle === "snake"
-    ? `${snakeCase(name)}_id`
-    : `${camelCase(name)}Id`;
-};
+  return dbOptions.caseStyle === 'snake' ? `${snakeCase(name)}_id` : `${camelCase(name)}Id`
+}
 
 type AliasValueArgs = {
-  alias: string;
-  type: AssociationType;
-};
+  alias: string
+  type: AssociationType
+}
 const aliasValue = ({ type, alias }: AliasValueArgs) => {
-  const camelAlias = camelCase(alias);
+  const camelAlias = camelCase(alias)
   switch (type) {
     case AssociationType.HasMany:
     case AssociationType.ManyToMany:
-      return plural(camelAlias);
+      return plural(camelAlias)
     case AssociationType.BelongsTo:
     case AssociationType.HasOne:
-      return singular(camelAlias);
+      return singular(camelAlias)
   }
-};
+}
 
 const onDeleteField = ({ type }: Association): string | null =>
-  type === AssociationType.ManyToMany ? `onDelete: 'CASCADE'` : null;
+  type === AssociationType.ManyToMany ? `onDelete: 'CASCADE'` : null

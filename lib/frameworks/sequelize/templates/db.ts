@@ -12,12 +12,12 @@ import {
   Schema,
   SqlDialect,
   varSqlDialect,
-} from "@lib/core";
+} from '@lib/core'
 
 export type DbTemplateArgs = {
-  schema: Schema;
-  dbOptions: DatabaseOptions;
-};
+  schema: Schema
+  dbOptions: DatabaseOptions
+}
 
 export const dbTemplate = ({ schema, dbOptions }: DbTemplateArgs): string =>
   lines([
@@ -27,9 +27,9 @@ export const dbTemplate = ({ schema, dbOptions }: DbTemplateArgs): string =>
     blank(),
     exportInstance(),
     blank(),
-  ]);
+  ])
 
-const imports = (): string => `import { Sequelize } from 'sequelize'`;
+const imports = (): string => `import { Sequelize } from 'sequelize'`
 
 const instanceDeclaration = ({ schema, dbOptions }: DbTemplateArgs) =>
   lines([
@@ -45,73 +45,59 @@ const instanceDeclaration = ({ schema, dbOptions }: DbTemplateArgs) =>
         portField(dbOptions.sqlDialect),
         defineField(dbOptions),
       ],
-      { separator: ",", depth: 2 }
+      { separator: ',', depth: 2 },
     ),
-    "})",
-  ]);
+    '})',
+  ])
 
-const exportInstance = (): string => "export default db";
+const exportInstance = (): string => 'export default db'
 
-const dialectField = (dialect: SqlDialect): string =>
-  `dialect: '${displaySqlDialect(dialect)}'`;
+const dialectField = (dialect: SqlDialect): string => `dialect: '${displaySqlDialect(dialect)}'`
 
 const storageField = (dialect: SqlDialect): string | null => {
-  const defaultStorage = defaultSqlDialectStorage(dialect);
+  const defaultStorage = defaultSqlDialectStorage(dialect)
   return defaultStorage
     ? `storage: process.env.${varSqlDialect(dialect)} || '${defaultStorage}'`
-    : null;
-};
+    : null
+}
 
-const databaseField = (
-  schemaName: string,
-  dialect: SqlDialect
-): string | null => {
-  const defaultDatabase = defaultSqlDialectDatabase(schemaName, dialect);
+const databaseField = (schemaName: string, dialect: SqlDialect): string | null => {
+  const defaultDatabase = defaultSqlDialectDatabase(schemaName, dialect)
   return defaultDatabase
-    ? `database: process.env.${varSqlDialect(
-        dialect
-      )}_DB_NAME || '${defaultDatabase}'`
-    : null;
-};
+    ? `database: process.env.${varSqlDialect(dialect)}_DB_NAME || '${defaultDatabase}'`
+    : null
+}
 
 const usernameField = (dialect: SqlDialect): string | null => {
-  const defaultUsername = defaultSqlDialectUsername(dialect);
+  const defaultUsername = defaultSqlDialectUsername(dialect)
   return defaultUsername
-    ? `username: process.env.${varSqlDialect(
-        dialect
-      )}_DB_USERNAME || '${defaultUsername}'`
-    : null;
-};
+    ? `username: process.env.${varSqlDialect(dialect)}_DB_USERNAME || '${defaultUsername}'`
+    : null
+}
 
 const passwordField = (dialect: SqlDialect): string | null => {
-  const defaultPassword = defaultSqlDialectPassword(dialect);
+  const defaultPassword = defaultSqlDialectPassword(dialect)
   return defaultPassword
-    ? `password: process.env.${varSqlDialect(
-        dialect
-      )}_DB_PASSWORD || '${defaultPassword}'`
-    : null;
-};
+    ? `password: process.env.${varSqlDialect(dialect)}_DB_PASSWORD || '${defaultPassword}'`
+    : null
+}
 
 const hostField = (dialect: SqlDialect): string | null => {
-  const defaultHost = defaultSqlDialectHost(dialect);
+  const defaultHost = defaultSqlDialectHost(dialect)
   return defaultHost
     ? `host: process.env.${varSqlDialect(dialect)}_DB_HOST || '${defaultHost}'`
-    : null;
-};
+    : null
+}
 
 const portField = (dialect: SqlDialect): string | null => {
-  const defaultPort = defaultSqlDialectPort(dialect);
+  const defaultPort = defaultSqlDialectPort(dialect)
   return defaultPort
-    ? `port: parseInt(process.env.${varSqlDialect(
-        dialect
-      )}_DB_PORT || '${defaultPort}')`
-    : null;
-};
+    ? `port: parseInt(process.env.${varSqlDialect(dialect)}_DB_PORT || '${defaultPort}')`
+    : null
+}
 
 const hasOptions = (dbOptions: DatabaseOptions): boolean =>
-  !dbOptions.timestamps ||
-  dbOptions.caseStyle === "snake" ||
-  dbOptions.nounForm === "singular";
+  !dbOptions.timestamps || dbOptions.caseStyle === 'snake' || dbOptions.nounForm === 'singular'
 
 const defineField = (dbOptions: DatabaseOptions): string | null =>
   !hasOptions(dbOptions)
@@ -121,38 +107,27 @@ const defineField = (dbOptions: DatabaseOptions): string | null =>
         lines(
           [
             freezeTableNameField(dbOptions),
-            underscoredField(dbOptions.caseStyle === "snake"),
+            underscoredField(dbOptions.caseStyle === 'snake'),
             timestampsField(dbOptions.timestamps),
             createdAtField(dbOptions),
             updatedAtField(dbOptions),
           ],
-          { separator: ",", depth: 2 }
+          { separator: ',', depth: 2 },
         ),
-        "}",
-      ]);
+        '}',
+      ])
 
 const underscoredField = (underscored: boolean): string | null =>
-  underscored ? "underscored: true" : null;
+  underscored ? 'underscored: true' : null
 
 const timestampsField = (timestamps: boolean): string | null =>
-  timestamps ? null : "timestamps: false";
+  timestamps ? null : 'timestamps: false'
 
-const createdAtField = ({
-  caseStyle,
-  timestamps,
-}: DatabaseOptions): string | null =>
-  caseStyle === "snake" && timestamps ? `createdAt: 'created_at'` : null;
+const createdAtField = ({ caseStyle, timestamps }: DatabaseOptions): string | null =>
+  caseStyle === 'snake' && timestamps ? `createdAt: 'created_at'` : null
 
-const updatedAtField = ({
-  caseStyle,
-  timestamps,
-}: DatabaseOptions): string | null =>
-  caseStyle === "snake" && timestamps ? `updatedAt: 'updated_at'` : null;
+const updatedAtField = ({ caseStyle, timestamps }: DatabaseOptions): string | null =>
+  caseStyle === 'snake' && timestamps ? `updatedAt: 'updated_at'` : null
 
-const freezeTableNameField = ({
-  caseStyle,
-  nounForm,
-}: DatabaseOptions): string | null =>
-  caseStyle === "camel" && nounForm === "singular"
-    ? `freezeTableName: true`
-    : null;
+const freezeTableNameField = ({ caseStyle, nounForm }: DatabaseOptions): string | null =>
+  caseStyle === 'camel' && nounForm === 'singular' ? `freezeTableName: true` : null

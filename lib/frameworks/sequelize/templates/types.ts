@@ -1,6 +1,6 @@
-import { blank, lines } from "@lib/core";
+import { blank, lines } from '@lib/core'
 
-export const typesTemplate = (): string => lines([jsonType()]);
+export const typesTemplate = (): string => lines([jsonType()])
 
 const jsonType = (): string =>
   lines([
@@ -10,4 +10,4 @@ const jsonType = (): string =>
     blank(),
     `export type Json = JsonMap | JsonArray | string | number | boolean | null`,
     blank(),
-  ]);
+  ])

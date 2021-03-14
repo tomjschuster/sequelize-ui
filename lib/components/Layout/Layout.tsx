@@ -1,12 +1,12 @@
-import Head from "next/head";
-import Link from "next/link";
-import React, { ReactNode } from "react";
-import * as styles from "./styles";
+import Head from 'next/head'
+import Link from 'next/link'
+import React, { ReactNode } from 'react'
+import * as styles from './styles'
 
 type Props = {
-  title: string;
-  children?: ReactNode;
-};
+  title: string
+  children?: ReactNode
+}
 
 function Layout({ children, title }: Props): React.ReactElement {
   return (
@@ -42,17 +42,14 @@ function Layout({ children, title }: Props): React.ReactElement {
           </a>
           <span className={styles.copyright}>
             Copyright &copy; {new Date().getFullYear()}
-            <a
-              className={styles.authorLink}
-              href="https://github.com/tomjschuster"
-            >
+            <a className={styles.authorLink} href="https://github.com/tomjschuster">
               Tom Schuster
             </a>
           </span>
         </footer>
       </div>
     </>
-  );
+  )
 }
 
-export default Layout;
+export default Layout

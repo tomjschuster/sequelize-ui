@@ -1,14 +1,11 @@
-import { DatabaseOptions, lines, Schema, SqlDialect } from "@lib/core";
-import { kebabCase } from "@lib/utils";
+import { DatabaseOptions, lines, Schema, SqlDialect } from '@lib/core'
+import { kebabCase } from '@lib/utils'
 export type PackageJsonTemplateArgs = {
-  schema: Schema;
-  dbOptions: DatabaseOptions;
-};
+  schema: Schema
+  dbOptions: DatabaseOptions
+}
 
-export const packageJsonTemplate = ({
-  schema,
-  dbOptions,
-}: PackageJsonTemplateArgs): string =>
+export const packageJsonTemplate = ({ schema, dbOptions }: PackageJsonTemplateArgs): string =>
   `{
   "name": "${kebabCase(schema.name)}",
   "version": "0.0.1",
@@ -29,50 +26,50 @@ export const packageJsonTemplate = ({
   }
 }
 
-`;
+`
 
-type Dependency = [name: string, version: string];
+type Dependency = [name: string, version: string]
 
-const commonDeps = (): Dependency[] => [["sequelize", "^6.3.5"]];
+const commonDeps = (): Dependency[] => [['sequelize', '^6.3.5']]
 
 const dialectDeps = ({ sqlDialect }: DatabaseOptions): Dependency[] => {
   switch (sqlDialect) {
     case SqlDialect.MariaDb:
-      return [["mariadb", "^2.5.2"]];
+      return [['mariadb', '^2.5.2']]
     case SqlDialect.MsSql:
-      return [["tedious", "^11.0.3"]];
+      return [['tedious', '^11.0.3']]
     case SqlDialect.MySql:
-      return [["mysql2", "^2.2.5"]];
+      return [['mysql2', '^2.2.5']]
     case SqlDialect.Postgres:
       return [
-        ["pg", "^8.5.1"],
-        ["pg-hstore", "^2.3.3"],
-      ];
+        ['pg', '^8.5.1'],
+        ['pg-hstore', '^2.3.3'],
+      ]
     case SqlDialect.Sqlite:
-      return [["sqlite3", "^5.0.1"]];
+      return [['sqlite3', '^5.0.1']]
   }
-};
+}
 
 const commonDevDeps = (): Dependency[] => [
-  ["@types/node", "^14.14.20"],
-  ["@types/validator", "^13.1.3"],
-  ["typescript", "^4.1.3"],
-];
+  ['@types/node', '^14.14.20'],
+  ['@types/validator', '^13.1.3'],
+  ['typescript', '^4.1.3'],
+]
 
 const dialectDevDeps = ({ sqlDialect }: DatabaseOptions): Dependency[] => {
   switch (sqlDialect) {
     case SqlDialect.MariaDb:
-      return [];
+      return []
     case SqlDialect.MsSql:
-      return [["@types/tedious", "^4.0.3"]];
+      return [['@types/tedious', '^4.0.3']]
     case SqlDialect.MySql:
-      return [];
+      return []
     case SqlDialect.Postgres:
-      return [];
+      return []
     case SqlDialect.Sqlite:
-      return [["@types/sqlite3", "^3.1.7"]];
+      return [['@types/sqlite3', '^3.1.7']]
   }
-};
+}
 
 const formatDeps = (...ds: Dependency[]): string =>
   lines(
@@ -80,8 +77,7 @@ const formatDeps = (...ds: Dependency[]): string =>
       .slice()
       .sort(([a], [b]) => a.localeCompare(b))
       .map(depKv),
-    { separator: ",", depth: 4 }
-  );
+    { separator: ',', depth: 4 },
+  )
 
-const depKv = ([name, version]: Dependency): string =>
-  `"${name}": "${version}"`;
+const depKv = ([name, version]: Dependency): string => `"${name}": "${version}"`
