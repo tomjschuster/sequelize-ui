@@ -1,13 +1,28 @@
-import Layout from "@lib/components/Layout";
-import { file, FileItem } from "@lib/core";
-import React from "react";
+import CodeViewer from '@lib/components/CodeViewer'
+import Layout from '@lib/components/Layout'
+import { DatabaseOptions, SqlDialect } from '@lib/core'
+import employee from '@lib/data/schemas/employee'
+import { SequelizeFramework } from '@lib/frameworks'
+import React from 'react'
 
-function IndexPage(): React.ReactElement {
-  return (
-    <Layout title="Home | Sequelize UI">
-      {JSON.stringify(file("foo", "bar") as FileItem)}
-    </Layout>
-  );
+const dbOptions: DatabaseOptions = {
+  sqlDialect: SqlDialect.MariaDb,
+  caseStyle: 'snake',
+  nounForm: 'plural',
+  timestamps: false,
 }
 
-export default IndexPage;
+function IndexPage(): React.ReactElement {
+  const root = React.useMemo(() => SequelizeFramework.generate({ schema: employee, dbOptions }), [
+    employee,
+    dbOptions,
+  ])
+
+  return (
+    <Layout title="Home | Sequelize UI">
+      <CodeViewer root={root} />
+    </Layout>
+  )
+}
+
+export default IndexPage

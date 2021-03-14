@@ -9,7 +9,9 @@
     "start": "next start",
     "debug:framewokrs": "ts-node ./lib/frameworks/debug.ts",
     "generate:css-types": "tailwindcss-classnames -i tailwind.config.js -o typings/__generated__/tailwindcss-classnames.d.ts",
-    "test:sql": "TS_NODE_PROJECT=\"tests/tsconfig.json\" mocha -r ts-node/register -r tsconfig-paths/register 'tests/integration/sql.spec.ts' --exit",
+    "test:unit": "npm run test:ts -- 'lib/**/*.spec.ts' --watch ",
+    "test:sql": "npm run test:ts -- 'tests/integration/sql.spec.ts' --exit",
+    "test:ts": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha",
     "type:check": "tsc"
   },
   "husky": {
@@ -30,6 +32,7 @@
     "jszip": "^3.5.0",
     "next": "~10.0.8",
     "pluralize": "^8.0.0",
+    "prism-react-renderer": "^1.2.0",
     "react": "~17.0.1",
     "react-dom": "~17.0.1",
     "tailwindcss": "^2.0.3",
