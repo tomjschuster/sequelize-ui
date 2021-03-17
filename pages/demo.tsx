@@ -1,41 +1,79 @@
 import CodeViewer from '@lib/components/CodeViewer'
-import DemoSchemaSelector from '@lib/components/DemoSchemaSelector'
+import EnumRadio from '@lib/components/EnumRadio'
 import Layout from '@lib/components/Layout'
-import { DatabaseOptions, SqlDialect } from '@lib/core'
-import { DemoSchemaType, getDemoSchema } from '@lib/data/schemas'
+import {
+  DatabaseCaseStyle,
+  DatabaseNounForm,
+  displayDatabaseCaseStyle,
+  displayDatabaseNounForm,
+  displaySqlDialect,
+  SqlDialect,
+} from '@lib/core'
+import { DemoSchemaType, displayDemoSchemaType, getDemoSchema } from '@lib/data/schemas'
 import { SequelizeFramework } from '@lib/frameworks'
-import { qsValueToStringEnum } from '@lib/utils'
-import { useRouter } from 'next/router'
-import React from 'react'
-
-const dbOptions: DatabaseOptions = {
-  sqlDialect: SqlDialect.MariaDb,
-  caseStyle: 'snake',
-  nounForm: 'plural',
-  timestamps: false,
-}
+import useEnumQueryString from '@lib/hooks/useEnumQueryString'
+import React, { useMemo, useState } from 'react'
 
 function IndexPage(): React.ReactElement {
-  const { query, push } = useRouter()
+  const [schemaType, setSchemaType] = useEnumQueryString<DemoSchemaType>({
+    enumConst: DemoSchemaType,
+    key: 'schema',
+    defaultValue: DemoSchemaType.Sakila,
+  })
 
-  const [schemaType, setSchemaType] = React.useState<DemoSchemaType>(DemoSchemaType.Sakila)
+  const [sqlDialect, setSqlDialect] = useState<SqlDialect>(SqlDialect.Postgres)
+  const [nounForm, setNounForm] = useState<DatabaseNounForm>(DatabaseNounForm.Singular)
+  const [caseStyle, setCaseStyle] = useState<DatabaseCaseStyle>(DatabaseCaseStyle.Snake)
+  const [timestamps, setTimestamps] = useState<boolean>(true)
 
-  React.useEffect(() => {
-    if (schemaType !== qsValueToStringEnum(DemoSchemaType, query.schema)) {
-      push(`/demo?schema=${schemaType}`, undefined, { shallow: true })
-      return
-    }
-  }, [query, schemaType])
+  const dbOptions = useMemo(() => ({ sqlDialect, nounForm, caseStyle, timestamps }), [
+    schemaType,
+    sqlDialect,
+    nounForm,
+    caseStyle,
+    timestamps,
+  ])
 
-  const root = React.useMemo(
-    () => SequelizeFramework.generate({ schema: getDemoSchema(schemaType), dbOptions }),
-    [schemaType, dbOptions],
-  )
+  const schema = useMemo(() => getDemoSchema(schemaType), [schemaType])
+
+  const root = React.useMemo(() => SequelizeFramework.generate({ schema, dbOptions }), [
+    schema,
+    dbOptions,
+  ])
 
   return (
     <Layout title="Demo | Sequelize UI">
-      <DemoSchemaSelector schema={schemaType} onChange={setSchemaType} />
-      <CodeViewer root={root} />
+      <EnumRadio
+        value={schemaType}
+        enumConst={DemoSchemaType}
+        display={displayDemoSchemaType}
+        onChange={setSchemaType}
+      />
+      <EnumRadio
+        value={sqlDialect}
+        enumConst={SqlDialect}
+        display={displaySqlDialect}
+        onChange={setSqlDialect}
+      />
+      <EnumRadio
+        value={caseStyle}
+        enumConst={DatabaseCaseStyle}
+        display={displayDatabaseCaseStyle}
+        onChange={setCaseStyle}
+      />
+      <EnumRadio
+        value={nounForm}
+        enumConst={DatabaseNounForm}
+        display={displayDatabaseNounForm}
+        onChange={setNounForm}
+      />
+      <EnumRadio
+        value={timestamps}
+        enumConst={{ true: true, false: false }}
+        display={(x) => (x ? 'timestamps' : 'no timestamps')}
+        onChange={setTimestamps}
+      />
+      <CodeViewer cacheKey={schemaType} root={root} />
     </Layout>
   )
 }

@@ -1,4 +1,11 @@
-import { DatabaseOptions, displaySqlDialect, Framework, SqlDialect } from '@lib/core'
+import {
+  DatabaseCaseStyle,
+  DatabaseNounForm,
+  DatabaseOptions,
+  displaySqlDialect,
+  Framework,
+  SqlDialect,
+} from '@lib/core'
 import { SequelizeFramework } from '@lib/frameworks'
 import {
   alpha,
@@ -27,8 +34,8 @@ const snakePlural: DbTestConfig = {
   dbOptions: {
     sqlDialect,
     timestamps: true,
-    caseStyle: 'snake',
-    nounForm: 'plural',
+    caseStyle: DatabaseCaseStyle.Snake,
+    nounForm: DatabaseNounForm.Plural,
   },
   tableName: 'customers',
   expectedTables: [
@@ -59,8 +66,8 @@ const snakeSingular: DbTestConfig = {
   dbOptions: {
     sqlDialect,
     timestamps: true,
-    caseStyle: 'snake',
-    nounForm: 'singular',
+    caseStyle: DatabaseCaseStyle.Snake,
+    nounForm: DatabaseNounForm.Singular,
   },
   tableName: 'customer',
   expectedTables: [
@@ -90,8 +97,8 @@ const camelPlural: DbTestConfig = {
   dbOptions: {
     sqlDialect,
     timestamps: true,
-    caseStyle: 'camel',
-    nounForm: 'plural',
+    caseStyle: DatabaseCaseStyle.Camel,
+    nounForm: DatabaseNounForm.Plural,
   },
   tableName: 'Customers',
   expectedTables: [
@@ -122,8 +129,8 @@ const camelSingular: DbTestConfig = {
   dbOptions: {
     sqlDialect,
     timestamps: true,
-    caseStyle: 'camel',
-    nounForm: 'singular',
+    caseStyle: DatabaseCaseStyle.Camel,
+    nounForm: DatabaseNounForm.Singular,
   },
   tableName: 'Customer',
   expectedTables: [
@@ -154,8 +161,8 @@ const noTimestamps: DbTestConfig = {
   dbOptions: {
     sqlDialect,
     timestamps: false,
-    caseStyle: 'snake',
-    nounForm: 'plural',
+    caseStyle: DatabaseCaseStyle.Snake,
+    nounForm: DatabaseNounForm.Plural,
   },
   tableName: 'customers',
   expectedTables: [

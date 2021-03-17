@@ -5,10 +5,11 @@ import React from 'react'
 
 type CodeViewerProps = {
   root: FileSystemItem
+  cacheKey?: string
 }
 
-export default function CodeViewer({ root }: CodeViewerProps): React.ReactElement {
-  const { activeFile, folderState, selectItem } = useFileTree({ root })
+export default function CodeViewer({ root, cacheKey }: CodeViewerProps): React.ReactElement {
+  const { activeFile, folderState, selectItem } = useFileTree({ root, cacheKey })
 
   return (
     <>

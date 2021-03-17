@@ -1,7 +1,30 @@
 Todo:
 
+UI
+
+- [ ] Export
+- [ ] Copy
+- [ ] Fork
+- [ ] Edit
+
+DB Options
+
 - [ ] prefix id name option
-- [ ] set type
+- [ ] SET type
 - [ ] default value
 - [ ] decimal precision
-- [ ] test data
+
+Testing
+
+- [ ] Use data schemas in integration tests
+
+Bugs
+
+- id_id?
+
+```ts
+Language.hasMany(Film, {
+  as: 'originalLanguageFilms',
+  foreignKey: 'original_language_id_id',
+})
+```

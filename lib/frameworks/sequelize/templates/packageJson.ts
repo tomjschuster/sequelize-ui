@@ -19,10 +19,10 @@ export const packageJsonTemplate = ({ schema, dbOptions }: PackageJsonTemplateAr
   "author": "",
   "license": "ISC",
   "dependencies": {
-    ${formatDeps(...commonDeps(), ...dialectDeps(dbOptions))}
+${formatDeps(...commonDeps(), ...dialectDeps(dbOptions))}
   },
   "devDependencies": {
-    ${formatDeps(...commonDevDeps(), ...dialectDevDeps(dbOptions))}
+${formatDeps(...commonDevDeps(), ...dialectDevDeps(dbOptions))}
   }
 }
 

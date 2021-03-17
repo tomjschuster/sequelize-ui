@@ -7,11 +7,13 @@ import {
   isFile,
   listPaths,
 } from '@lib/core'
+import usePrevious from '@lib/hooks/usePrevious'
 import React from 'react'
 import { FolderState } from './types'
 
 type UseFileTreeArgs = {
   root: FileSystemItem
+  cacheKey?: string
 }
 
 type ActiveFile = {
@@ -25,12 +27,17 @@ type UseFileTreeResult = {
   activeFile?: ActiveFile
 }
 
-function useFileTree({ root }: UseFileTreeArgs): UseFileTreeResult {
+function useFileTree({ root, cacheKey }: UseFileTreeArgs): UseFileTreeResult {
+  const previousCacheKey = usePrevious(cacheKey)
   const [activePath, setActivePath] = React.useState<string | undefined>()
 
   const [folderState, setFolderState] = React.useState<FolderState>(() => createFolderState(root))
 
-  React.useEffect(() => setFolderState(createFolderState(root)), [root])
+  React.useEffect(() => {
+    if (cacheKey && (!previousCacheKey || cacheKey === previousCacheKey)) return
+    setActivePath(undefined)
+    setFolderState(createFolderState(root))
+  }, [root, cacheKey, previousCacheKey])
 
   const toggleFolder = React.useCallback(
     (path: string) =>

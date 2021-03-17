@@ -1,5 +1,7 @@
 import {
   blank,
+  DatabaseCaseStyle,
+  DatabaseNounForm,
   DatabaseOptions,
   defaultSqlDialectDatabase,
   defaultSqlDialectHost,
@@ -97,7 +99,9 @@ const portField = (dialect: SqlDialect): string | null => {
 }
 
 const hasOptions = (dbOptions: DatabaseOptions): boolean =>
-  !dbOptions.timestamps || dbOptions.caseStyle === 'snake' || dbOptions.nounForm === 'singular'
+  !dbOptions.timestamps ||
+  dbOptions.caseStyle === DatabaseCaseStyle.Snake ||
+  dbOptions.nounForm === DatabaseNounForm.Singular
 
 const defineField = (dbOptions: DatabaseOptions): string | null =>
   !hasOptions(dbOptions)
@@ -107,7 +111,7 @@ const defineField = (dbOptions: DatabaseOptions): string | null =>
         lines(
           [
             freezeTableNameField(dbOptions),
-            underscoredField(dbOptions.caseStyle === 'snake'),
+            underscoredField(dbOptions.caseStyle === DatabaseCaseStyle.Snake),
             timestampsField(dbOptions.timestamps),
             createdAtField(dbOptions),
             updatedAtField(dbOptions),
@@ -124,10 +128,12 @@ const timestampsField = (timestamps: boolean): string | null =>
   timestamps ? null : 'timestamps: false'
 
 const createdAtField = ({ caseStyle, timestamps }: DatabaseOptions): string | null =>
-  caseStyle === 'snake' && timestamps ? `createdAt: 'created_at'` : null
+  caseStyle === DatabaseCaseStyle.Snake && timestamps ? `createdAt: 'created_at'` : null
 
 const updatedAtField = ({ caseStyle, timestamps }: DatabaseOptions): string | null =>
-  caseStyle === 'snake' && timestamps ? `updatedAt: 'updated_at'` : null
+  caseStyle === DatabaseCaseStyle.Snake && timestamps ? `updatedAt: 'updated_at'` : null
 
 const freezeTableNameField = ({ caseStyle, nounForm }: DatabaseOptions): string | null =>
-  caseStyle === 'camel' && nounForm === 'singular' ? `freezeTableName: true` : null
+  caseStyle === DatabaseCaseStyle.Camel && nounForm === DatabaseNounForm.Singular
+    ? `freezeTableName: true`
+    : null

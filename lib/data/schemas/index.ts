@@ -3,8 +3,8 @@ import { default as employee } from './employeeTemporalDataSet'
 import { default as sakila } from './sakila'
 
 export enum DemoSchemaType {
-  Employee = 'employee',
   Sakila = 'sakila',
+  Employee = 'employee',
 }
 
 export function getDemoSchema(type?: DemoSchemaType): Schema {
@@ -15,5 +15,14 @@ export function getDemoSchema(type?: DemoSchemaType): Schema {
       return sakila
     default:
       return sakila
+  }
+}
+
+export function displayDemoSchemaType(type: DemoSchemaType): string {
+  switch (type) {
+    case DemoSchemaType.Employee:
+      return 'Temporal Employee Data Set'
+    case DemoSchemaType.Sakila:
+      return 'Sakila'
   }
 }

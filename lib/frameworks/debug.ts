@@ -1,5 +1,7 @@
 import {
   AssociationType,
+  DatabaseCaseStyle,
+  DatabaseNounForm,
   DatabaseOptions,
   DataTypeType,
   Model,
@@ -306,8 +308,8 @@ const schema: Schema = {
 const dbOptions: DatabaseOptions = {
   sqlDialect: SqlDialect.Postgres,
   timestamps: true,
-  caseStyle: 'snake',
-  nounForm: 'singular',
+  caseStyle: DatabaseCaseStyle.Snake,
+  nounForm: DatabaseNounForm.Singular,
 }
 
 const project = SequelizeFramework.generate({ schema, dbOptions })

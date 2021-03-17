@@ -141,6 +141,9 @@ export function dataTypeToTypeScript(dataType: DataType): string {
     case DataTypeType.Enum:
       return dataType.values.map((x) => `'${x}'`).join(' | ')
     case DataTypeType.Array:
+      if (dataType.arrayType.type === DataTypeType.Enum) {
+        return `Array<${dataTypeToTypeScript(dataType.arrayType)}>`
+      }
       return `${dataTypeToTypeScript(dataType.arrayType)}[]`
     case DataTypeType.Json:
       return 'Json'

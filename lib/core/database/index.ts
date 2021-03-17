@@ -3,8 +3,18 @@ import { pascalCase, snakeCase } from 'change-case'
 export type DatabaseOptions = {
   sqlDialect: SqlDialect
   timestamps: boolean
-  caseStyle: 'snake' | 'camel'
-  nounForm: 'singular' | 'plural'
+  caseStyle: DatabaseCaseStyle
+  nounForm: DatabaseNounForm
+}
+
+export enum DatabaseCaseStyle {
+  Snake = 'SNAKE',
+  Camel = 'CAMEL',
+}
+
+export enum DatabaseNounForm {
+  Singular = 'SINGULAR',
+  Plural = 'PLURAL',
 }
 
 export enum SqlDialect {
@@ -155,3 +165,21 @@ export const defaultSqlDialectStorage = (dialect: SqlDialect): string | null => 
 export const sqlCurrentTimestamp = (): string => 'CURRENT_TIMESTAMP'
 export const sqlCurrentDate = (): string => 'CURRENT_DATE'
 export const sqlCurrentTime = (): string => 'CURRENT_TIME'
+
+export const displayDatabaseNounForm = (nounForm: DatabaseNounForm): string => {
+  switch (nounForm) {
+    case DatabaseNounForm.Singular:
+      return 'singular'
+    case DatabaseNounForm.Plural:
+      return 'plural'
+  }
+}
+
+export const displayDatabaseCaseStyle = (caseStyle: DatabaseCaseStyle): string => {
+  switch (caseStyle) {
+    case DatabaseCaseStyle.Snake:
+      return 'snake'
+    case DatabaseCaseStyle.Camel:
+      return 'camel'
+  }
+}

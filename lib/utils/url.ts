@@ -1,22 +1,22 @@
 import { ParsedQs } from 'qs'
 import { toEnum } from './enum'
 
-export function qsValueToStringEnum<T extends { [key: string]: string }>(
-  value: T,
+export function qsValueToEnum<T>(
+  enumConst: { [key: string]: T },
   qs: ParsedQs[keyof ParsedQs],
-): T[keyof T] | undefined {
+): T | undefined {
   if (typeof qs !== 'string') return undefined
   if (qs === undefined) return undefined
-  return toEnum<string, T>(value, qs)
+  return toEnum<T>(enumConst, qs)
 }
 
-export function qsValueToIntEnum<T extends { [key: string]: number }>(
-  value: T,
+export function qsValueToIntEnum<T extends number>(
+  enumConst: { [key: string]: T },
   qs: ParsedQs[keyof ParsedQs],
-): T[keyof T] | undefined {
+): T | undefined {
   if (typeof qs !== 'string') return undefined
   if (qs === undefined) return undefined
   const int = parseInt(qs)
   if (isNaN(int)) return undefined
-  return toEnum<number, T>(value, int)
+  return toEnum<T>(enumConst, int)
 }

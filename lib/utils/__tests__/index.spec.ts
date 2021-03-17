@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import forEach from 'mocha-each'
-import { qsValueToIntEnum, qsValueToStringEnum, toEnum } from '..'
+import { qsValueToEnum, qsValueToIntEnum, toEnum } from '..'
 
 enum IntEnum {
   Foo,
@@ -53,7 +53,7 @@ describe('utils', () => {
   })
 
   describe('url', () => {
-    describe('qsValueToStringEnum', () => {
+    describe('qsValueToEnum', () => {
       const cases = [
         ['FOO', StringEnum, StringEnum.Foo],
         ['BAR', StringEnum, StringEnum.Bar],
@@ -64,7 +64,7 @@ describe('utils', () => {
       ]
       forEach(cases).describe(`(IntEnum, %s)`, (key, object, expected) => {
         it(`=== ${expected}`, () => {
-          expect(qsValueToStringEnum(object, key)).to.equal(expected)
+          expect(qsValueToEnum(object, key)).to.equal(expected)
         })
       })
 

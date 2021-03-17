@@ -2,6 +2,7 @@ import {
   Association,
   AssociationType,
   blank,
+  DatabaseCaseStyle,
   DatabaseOptions,
   lines,
   ManyToManyAssociation,
@@ -207,7 +208,9 @@ const getForeignKey = ({
     ? modelById[association.targetModelId].name
     : model.name
 
-  return dbOptions.caseStyle === 'snake' ? `${snakeCase(name)}_id` : `${camelCase(name)}Id`
+  return dbOptions.caseStyle === DatabaseCaseStyle.Snake
+    ? `${snakeCase(name)}_id`
+    : `${camelCase(name)}Id`
 }
 
 const otherKeyField = ({
@@ -233,7 +236,9 @@ const getOtherKey = ({
     ? association.alias
     : modelById[association.targetModelId].name
 
-  return dbOptions.caseStyle === 'snake' ? `${snakeCase(name)}_id` : `${camelCase(name)}Id`
+  return dbOptions.caseStyle === DatabaseCaseStyle.Snake
+    ? `${snakeCase(name)}_id`
+    : `${camelCase(name)}Id`
 }
 
 type AliasValueArgs = {

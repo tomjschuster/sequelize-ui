@@ -2,6 +2,8 @@ import {
   Association,
   AssociationType,
   blank,
+  DatabaseCaseStyle,
+  DatabaseNounForm,
   DatabaseOptions,
   DataType,
   DataTypeType,
@@ -207,7 +209,7 @@ type TableNameArgs = {
   dbOptions: DatabaseOptions
 }
 const tableName = ({ dbOptions: { caseStyle, nounForm }, model }: TableNameArgs): string | null => {
-  if (nounForm === 'singular' && caseStyle === 'snake') {
+  if (nounForm === DatabaseNounForm.Singular && caseStyle === DatabaseCaseStyle.Snake) {
     return `tableName: '${singular(snakeCase(model.name))}'`
   }
   return null
