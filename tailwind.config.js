@@ -29,5 +29,5 @@ module.exports = {
       'responsive',
     ],
   },
-  plugins: [require('tailwindcss-children')],
+  plugins: [require('tailwindcss-children'), require('@tailwindcss/forms')],
 }
