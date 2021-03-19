@@ -1,6 +1,6 @@
 import { DatabaseOptions, directory, DirectoryItem, file, Schema } from '@lib/core'
-import { kebabCase, pascalCase } from '@lib/utils'
-import { hasJsonType } from './helpers'
+import { kebabCase } from '@lib/utils'
+import { hasJsonType, modelName } from './helpers'
 import { dbTemplate } from './templates/db'
 import { gitignoreTemplate } from './templates/gitignore'
 import { initModelsTemplate } from './templates/initModels'
@@ -23,7 +23,7 @@ export const generateSequelizeProject = ({
     directory('models', [
       file('index.ts', initModelsTemplate({ schema, dbOptions })),
       ...schema.models.map((model) =>
-        file(`${pascalCase(model.name)}.ts`, modelTemplate({ schema, dbOptions, model })),
+        file(`${modelName(model)}.ts`, modelTemplate({ schema, dbOptions, model })),
       ),
     ]),
     file('.gitignore', gitignoreTemplate()),

@@ -1,3 +1,4 @@
+import copy from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
 import Zip from 'jszip'
 
@@ -85,6 +86,10 @@ export function listPaths(item: FileSystemItem): string[] {
   }
 
   return [name].concat(item.files.flatMap(listPaths).map((path) => `${name}/${path}`))
+}
+
+export const copyFile = (file: FileItem): void => {
+  copy(file.content)
 }
 
 export const download = (item: FileSystemItem): Promise<void> =>

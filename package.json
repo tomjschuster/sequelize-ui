@@ -13,7 +13,7 @@
     "test:unit": "npm run test:ts -- 'lib/**/*.spec.ts' --watch ",
     "test:sql": "npm run test:ts -- 'tests/integration/sql.spec.ts' --exit",
     "test:ts": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha",
-    "type:check": "tsc"
+    "type:check": "tsc -b tsconfig.check.json"
   },
   "husky": {
     "hooks": {
@@ -30,6 +30,7 @@
     "@tailwindcss/forms": "^0.2.1",
     "change-case": "^4.1.2",
     "classnames": "~2.2.6",
+    "copy-to-clipboard": "^3.3.1",
     "file-saver": "^2.0.5",
     "jszip": "^3.5.0",
     "next": "~10.0.8",
