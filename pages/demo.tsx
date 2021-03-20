@@ -1,3 +1,4 @@
+import { createSchema } from '@lib/api/schema'
 import CodeViewer from '@lib/components/CodeViewer'
 import DbOptionsForm from '@lib/components/DbOptionsForm'
 import EnumRadio from '@lib/components/EnumRadio'
@@ -6,6 +7,7 @@ import { DatabaseCaseStyle, DatabaseNounForm, DatabaseOptions, SqlDialect } from
 import { DemoSchemaType, displayDemoSchemaType, getDemoSchema } from '@lib/data/schemas'
 import { SequelizeFramework } from '@lib/frameworks'
 import useEnumQueryString from '@lib/hooks/useEnumQueryString'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 
 const defaultDbOptions: DatabaseOptions = {
@@ -16,6 +18,8 @@ const defaultDbOptions: DatabaseOptions = {
 }
 
 function IndexPage(): React.ReactElement {
+  const router = useRouter()
+
   const [schemaType, setSchemaType] = useEnumQueryString<DemoSchemaType>({
     enumConst: DemoSchemaType,
     key: 'schema',
@@ -24,13 +28,21 @@ function IndexPage(): React.ReactElement {
 
   const [dbOptions, setDbOptions] = useState<DatabaseOptions>(defaultDbOptions)
 
-  const root = React.useMemo(() => {
-    const schema = getDemoSchema(schemaType)
-    return SequelizeFramework.generate({ schema, dbOptions })
-  }, [schemaType, dbOptions])
+  const schema = React.useMemo(() => getDemoSchema(schemaType), [schemaType])
+
+  const root = React.useMemo(() => SequelizeFramework.generate({ schema, dbOptions }), [
+    schemaType,
+    dbOptions,
+  ])
+
+  const handleClickFork = async () => {
+    await createSchema(schema)
+    router.push('/')
+  }
 
   return (
     <Layout title="Demo | Sequelize UI">
+      <button onClick={handleClickFork}>Fork</button>
       <EnumRadio
         value={schemaType}
         enumConst={DemoSchemaType}

@@ -1,35 +1,51 @@
-import CodeViewer from '@lib/components/CodeViewer'
+import { listSchemas } from '@lib/api/schema'
 import Layout from '@lib/components/Layout'
-import { DatabaseCaseStyle, DatabaseNounForm, DatabaseOptions, SqlDialect } from '@lib/core'
-import employee from '@lib/data/schemas/employeeTemporalDataSet'
-import sakila from '@lib/data/schemas/sakila'
-import { SequelizeFramework } from '@lib/frameworks'
-import { useRouter } from 'next/router'
-import React from 'react'
-
-const dbOptions: DatabaseOptions = {
-  sqlDialect: SqlDialect.MariaDb,
-  caseStyle: DatabaseCaseStyle.Snake,
-  nounForm: DatabaseNounForm.Plural,
-  timestamps: false,
-}
+import { Schema } from '@lib/core'
+import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
 
 function IndexPage(): React.ReactElement {
-  const {
-    query: { schema: schemaParam },
-  } = useRouter()
+  const [schemas, setSchemas] = useState<Schema[] | undefined>()
+  const [error, setError] = useState<string | undefined>()
 
-  const schema = schemaParam === 'sakila' ? sakila : employee
-
-  const root = React.useMemo(() => SequelizeFramework.generate({ schema, dbOptions }), [
-    schema,
-    dbOptions,
-  ])
+  useEffect(() => {
+    listSchemas()
+      .then(setSchemas)
+      .catch((e) => setError(e.message || 'Sorry, something went wrong.'))
+  }, [])
 
   return (
     <Layout title="Home | Sequelize UI">
-      <CodeViewer root={root} />
+      <IndexPageContent schemas={schemas} error={error} />
     </Layout>
+  )
+}
+
+type IndexPageContentProps = {
+  schemas?: Schema[]
+  error?: string
+}
+function IndexPageContent({ schemas, error }: IndexPageContentProps): React.ReactElement {
+  if (error) return <p>{error}</p>
+  if (schemas === undefined) return <p>Loading Schemas</p>
+  if (schemas.length === 0) {
+    return (
+      <>
+        <Link href="/demo">Demos</Link>
+        <p>You have no schemas</p>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <Link href="/demo">Demos</Link>
+      <ul>
+        {schemas.map((s) => (
+          <li key={s.id}>{s.name}</li>
+        ))}
+      </ul>
+    </>
   )
 }
 

@@ -2,8 +2,6 @@ Todo:
 
 UI
 
-- [ ] Export
-- [ ] Copy
 - [ ] Fork
 - [ ] Edit
 
