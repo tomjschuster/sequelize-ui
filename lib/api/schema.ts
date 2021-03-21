@@ -1,4 +1,5 @@
 import { Schema } from '@lib/core'
+import { versionedName } from '@lib/utils'
 import shortid from 'shortid'
 
 export async function listSchemas(): Promise<Schema[]> {
@@ -11,9 +12,13 @@ export async function getSchema(id: string): Promise<Schema | undefined> {
 }
 
 export async function createSchema(schemaPayload: Omit<Schema, 'id'>): Promise<Schema> {
-  const id = shortid()
-  const schema: Schema = { id, ...schemaPayload }
   const schemas = await listSchemas()
+  const name = versionedName(
+    schemaPayload.name,
+    schemas.map((s) => s.name),
+  )
+  const id = shortid()
+  const schema: Schema = { id, ...schemaPayload, name }
   await set(schemasKey(), [...schemas, schema])
   return schema
 }

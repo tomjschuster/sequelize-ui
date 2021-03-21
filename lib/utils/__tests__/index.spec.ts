@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import forEach from 'mocha-each'
 import { qsValueToEnum, qsValueToIntEnum, toEnum } from '..'
+import { versionedName } from '../string'
 
 enum IntEnum {
   Foo,
@@ -82,6 +83,24 @@ describe('utils', () => {
           it(`=== ${expected}`, () => {
             expect(qsValueToIntEnum(object, key)).to.equal(expected)
           })
+        })
+      })
+    })
+  })
+
+  describe('string', () => {
+    describe('versionedName', () => {
+      const cases = [
+        ['foo', ['bar'], 'foo'],
+        ['foo', ['foo (0)', 'bar'], 'foo'],
+        ['foo', ['foo (-1)', 'bar'], 'foo'],
+        ['foo', ['foo (a)', 'bar'], 'foo'],
+        ['foo', ['foo', 'bar'], 'foo (1)'],
+        ['foo', ['foo (1)', 'foo (3)', 'bar'], 'foo (4)'],
+      ]
+      forEach(cases).describe(`(%s, %s)`, (name, names, expected) => {
+        it(`=== ${expected}`, () => {
+          expect(versionedName(name, names)).to.equal(expected)
         })
       })
     })
