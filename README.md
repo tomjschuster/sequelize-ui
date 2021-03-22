@@ -2,8 +2,8 @@ Todo:
 
 UI
 
-- [ ] Fork
-- [ ] Edit
+- [ ] View schema
+- [ ] Edit schema
 
 DB Options
 
@@ -15,6 +15,7 @@ DB Options
 Testing
 
 - [ ] Use data schemas in integration tests
+- [ ] Browser tests
 
 Bugs
 
