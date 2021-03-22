@@ -1,6 +1,7 @@
 import { getSchema } from '@lib/api/schema'
 import CodeViewer from '@lib/components/CodeViewer'
 import Layout from '@lib/components/Layout'
+import ModelList from '@lib/components/ModelList'
 import { DatabaseCaseStyle, DatabaseNounForm, DatabaseOptions, Schema, SqlDialect } from '@lib/core'
 import { SequelizeFramework } from '@lib/frameworks'
 import useDidMount from '@lib/hooks/useDidMount'
@@ -59,7 +60,6 @@ function SchemaPageContent({ schema, error }: SchemaPageContentProps): React.Rea
   if (error) return <p>{error}</p>
   if (schema === undefined) return <p>Loading Schemas</p>
 
-  const [expanded, setExpanded] = useState<{ [id: string]: boolean }>({})
   const [viewCode, setViewCode] = useState<boolean>(false)
   const handleClickViewCode = () => setViewCode((x) => !x)
 
@@ -73,24 +73,7 @@ function SchemaPageContent({ schema, error }: SchemaPageContentProps): React.Rea
       <button onClick={handleClickViewCode}>{viewCode ? 'Hide Code' : 'View Code'}</button>
       {viewCode && <CodeViewer cacheKey={schema.id} root={root} />}
       <h3>Model</h3>
-      <ul className="p-4 border-solid ">
-        {schema.models.map((m, i) => (
-          <li
-            onClick={() => setExpanded((x) => ({ ...x, [m.id]: !x[m.id] }))}
-            key={m.name}
-            className={`p-2 border-solid border-black border ${i === 0 ? '' : ' border-t-0'}`}
-          >
-            {m.name}
-            {expanded[m.id] && (
-              <ul className="list-disc pl-8 ">
-                {m.fields.map((f) => (
-                  <li key={f.name}>{f.name}</li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ))}
-      </ul>
+      <ModelList schema={schema} />
     </>
   )
 }
