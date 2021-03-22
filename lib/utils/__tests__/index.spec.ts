@@ -96,9 +96,11 @@ describe('utils', () => {
         ['foo', ['foo (-1)', 'bar'], 'foo'],
         ['foo', ['foo (a)', 'bar'], 'foo'],
         ['foo', ['foo', 'bar'], 'foo (1)'],
-        ['foo', ['foo (1)', 'foo (3)', 'bar'], 'foo (4)'],
+        ['foo', ['foo', 'foo (1)', 'bar'], 'foo (2)'],
+        ['foo', ['foo', 'foo (1)', 'foo (2)', 'bar'], 'foo (3)'],
+        ['foo', ['foo (1)', 'bar'], 'foo'],
       ]
-      forEach(cases).describe(`(%s, %s)`, (name, names, expected) => {
+      forEach(cases).describe(`(%s, [%s])`, (name, names, expected) => {
         it(`=== ${expected}`, () => {
           expect(versionedName(name, names)).to.equal(expected)
         })
