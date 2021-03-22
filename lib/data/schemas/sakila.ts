@@ -600,7 +600,7 @@ const film_category: Model = {
 
 // https://dev.mysql.com/doc/sakila/en/
 const schema: Schema = {
-  id: '1',
+  id: 'demo-sakila',
   name: 'sakila',
   models: [
     actor,

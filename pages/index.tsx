@@ -42,7 +42,9 @@ function IndexPageContent({ schemas, error }: IndexPageContentProps): React.Reac
       <Link href="/demo">Demos</Link>
       <ul>
         {schemas.map((s) => (
-          <li key={s.id}>{s.name}</li>
+          <li key={s.id}>
+            <Link href={`/schema?id=${s.id}`}>{s.name}</Link>
+          </li>
         ))}
       </ul>
     </>

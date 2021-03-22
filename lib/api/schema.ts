@@ -18,7 +18,7 @@ export async function createSchema(schemaPayload: Omit<Schema, 'id'>): Promise<S
     schemas.map((s) => s.name),
   )
   const id = shortid()
-  const schema: Schema = { id, ...schemaPayload, name }
+  const schema: Schema = { ...schemaPayload, id, name }
   await set(schemasKey(), [...schemas, schema])
   return schema
 }
