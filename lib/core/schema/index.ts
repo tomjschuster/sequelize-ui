@@ -25,10 +25,52 @@ export type Association =
   | HasManyAssociation
   | ManyToManyAssociation
 
-export const isDateTimeType = (
+export function displayDataType(dataType: DataType): string {
+  switch (dataType.type) {
+    case DataTypeType.String:
+      return 'String'
+    case DataTypeType.Text:
+      return 'Text'
+    case DataTypeType.Uuid:
+      return 'UUID'
+    case DataTypeType.DateTime:
+      return 'Date Time'
+    case DataTypeType.Time:
+      return 'Time'
+    case DataTypeType.Date:
+      return 'Date'
+    case DataTypeType.Integer:
+      return 'Integer'
+    case DataTypeType.Float:
+      return 'Float'
+    case DataTypeType.Real:
+      return 'Real'
+    case DataTypeType.Double:
+      return 'Double'
+    case DataTypeType.Decimal:
+      return 'Decimal'
+    case DataTypeType.Boolean:
+      return 'Boolean'
+    case DataTypeType.Enum: {
+      const types = dataType.values.length > 0 ? dataType.values.join(', ') : undefined
+      return `Enum ${types ? ` (${types})` : ''}`
+    }
+    case DataTypeType.Array: {
+      const type = displayDataType(dataType.arrayType)
+      return `Array ${type}`
+    }
+    case DataTypeType.Json:
+      return 'JSON'
+    case DataTypeType.Blob:
+      return 'Buffer'
+  }
+}
+
+export function isDateTimeType(
   dataType: DataType,
-): dataType is DateTimeDataType | DateDataType | TimeDataType =>
-  [DataTypeType.DateTime, DataTypeType.Date, DataTypeType.Time].includes(dataType.type)
+): dataType is DateTimeDataType | DateDataType | TimeDataType {
+  return [DataTypeType.DateTime, DataTypeType.Date, DataTypeType.Time].includes(dataType.type)
+}
 
 export type DataType =
   | StringDataType

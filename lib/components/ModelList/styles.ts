@@ -2,13 +2,20 @@ import { classnames } from 'tailwindcss-classnames'
 
 export const modelList = classnames('p-4', 'border-solid')
 
-export const modelItem = (first: boolean): string =>
+export const modelItem = (last: boolean): string =>
   classnames({
-    'p-2': true,
     'border-solid': true,
     'border-black': true,
     border: true,
-    'border-t-0': !first,
+    'border-b-0': !last,
   })
 
-export const fieldList = classnames('list-disc', 'pl-8')
+export const modelName = classnames([
+  'block',
+  'p-2',
+  'border-solid',
+  'hover:bg-gray-200',
+  'cursor-pointer',
+])
+
+export const fieldList = classnames('list-disc', 'pl-8', 'border-t', 'border-black', 'border-solid')
