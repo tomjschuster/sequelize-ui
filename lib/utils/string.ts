@@ -1,5 +1,21 @@
-export { camelCase, paramCase as kebabCase, pascalCase, snakeCase } from 'change-case'
+import { noCase, sentenceCase } from 'change-case'
+
+export {
+  camelCase,
+  noCase,
+  paramCase as kebabCase,
+  pascalCase,
+  sentenceCase,
+  snakeCase,
+} from 'change-case'
 export { plural, singular } from 'pluralize'
+
+export function titleCase(value: string): string {
+  return noCase(value)
+    .split(' ')
+    .map((input) => sentenceCase(input))
+    .join(' ')
+}
 
 /**
  * Given a name and a list of existing names, find the lowest "version" name available

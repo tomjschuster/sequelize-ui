@@ -1,4 +1,6 @@
+import AssociationList from '@lib/components/AssociationList'
 import { displayDataType, Field, Model, Schema } from '@lib/core'
+import { noCase, titleCase } from '@lib/utils'
 import React, { useState } from 'react'
 import * as styles from './styles'
 
@@ -13,6 +15,7 @@ export default function ModelList({ schema }: ModelListProps): React.ReactElemen
       {schema.models.map((m, i) => (
         <ModelItem
           key={m.name}
+          schema={schema}
           model={m}
           expanded={!!expanded[m.id]}
           first={i === schema.models.length - 1}
@@ -24,16 +27,30 @@ export default function ModelList({ schema }: ModelListProps): React.ReactElemen
 }
 
 type ModelItemProps = {
+  schema: Schema
   model: Model
   expanded: boolean
   first: boolean
   onClick: () => void
 }
-export function ModelItem({ model, expanded, first, onClick }: ModelItemProps): React.ReactElement {
+export function ModelItem({
+  schema,
+  model,
+  expanded,
+  first,
+  onClick,
+}: ModelItemProps): React.ReactElement {
   return (
     <li className={styles.modelItem(first)} onClick={onClick} key={model.name}>
-      <span className={styles.modelName}>{model.name}</span>
-      {expanded && <FieldList fields={model.fields} />}
+      <span className={styles.modelName}>{titleCase(model.name)}</span>
+      {expanded && (
+        <>
+          <p>Fields</p>
+          <FieldList fields={model.fields} />
+          <p>Associations</p>
+          <AssociationList schema={schema} modelId={model.id} />
+        </>
+      )}
     </li>
   )
 }
@@ -58,7 +75,7 @@ export function FieldItem({ field }: FieldItemProps): React.ReactElement {
   const attributes = fieldAttributes(field)
   return (
     <li key={field.name}>
-      <span>{field.name}: </span>
+      <span>{noCase(field.name)}: </span>
       <span>{displayDataType(field.type)}</span>
       {attributes ? ` (${attributes})` : undefined}
     </li>

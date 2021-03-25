@@ -66,6 +66,19 @@ export function displayDataType(dataType: DataType): string {
   }
 }
 
+export function displayAssociation(association: Association): string {
+  switch (association.type) {
+    case AssociationType.BelongsTo:
+      return 'belongs to'
+    case AssociationType.HasMany:
+      return 'has many'
+    case AssociationType.HasOne:
+      return 'has one'
+    case AssociationType.ManyToMany:
+      return 'many to many'
+  }
+}
+
 export function isDateTimeType(
   dataType: DataType,
 ): dataType is DateTimeDataType | DateDataType | TimeDataType {
@@ -147,7 +160,6 @@ type AssociationBase<T extends AssociationType> = {
   targetModelId: string
   foreignKey?: string
   alias?: string
-  inverse?: boolean
 }
 
 export type BelongsToAssociation = AssociationBase<AssociationType.BelongsTo>
