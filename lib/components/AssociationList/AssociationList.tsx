@@ -40,6 +40,9 @@ export default function AssociationList({
                   : titleCase(modelById[association.through.modelId]?.name || '')
                 : undefined
             }
+            targetFk={
+              association.type === AssociationType.ManyToMany ? association.targetFk : undefined
+            }
           />
         )
       })}
@@ -51,17 +54,21 @@ type AssociationItemProps = {
   targetModel: Model
   association: Association
   through?: string
+  targetFk?: string
 }
 export function AssociationItem({
   targetModel,
   association,
   through,
+  targetFk,
 }: AssociationItemProps): React.ReactElement {
   return (
     <li key={targetModel.name}>
       <span>{displayAssociation(association)}</span> <span>{titleCase(targetModel.name)}</span>
       {association.alias ? <span> (as {titleCase(association.alias)})</span> : null}
       {through ? <span> through {through}</span> : null}
+      {association.foreignKey ? <span> (foreign key: {association.foreignKey})</span> : null}
+      {targetFk ? <span> (target foreign key: {targetFk})</span> : null}
     </li>
   )
 }

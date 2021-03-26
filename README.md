@@ -2,8 +2,6 @@ Todo:
 
 UI
 
-- [ ] View field config
-- [ ] View Associations
 - [ ] Edit schema
 
 DB Options
