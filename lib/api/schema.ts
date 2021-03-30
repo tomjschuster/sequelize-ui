@@ -1,4 +1,4 @@
-import { Schema } from '@lib/core'
+import { Model, Schema } from '@lib/core'
 import { versionedName } from '@lib/utils'
 import shortid from 'shortid'
 
@@ -38,6 +38,10 @@ export async function deleteSchema(id: string): Promise<void> {
 
 export async function clearSchemas(): Promise<void> {
   return await remove(schemasKey())
+}
+
+export function emptyModel(): Model {
+  return { id: shortid(), name: '', fields: [], associations: [] }
 }
 
 function get<T>(key: string): Promise<T | null> {
