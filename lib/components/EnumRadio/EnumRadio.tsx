@@ -1,7 +1,7 @@
 import React from 'react'
 
 type EnumRadioProps<T> = {
-  value: T
+  value: T | undefined
   enumConst: { [key: string]: T }
   display: (value: T) => string
   onChange: (value: T) => void

@@ -7,10 +7,10 @@ import { useCallback, useEffect, useState } from 'react'
 type UseEnumQueryStringArgs<T> = {
   key: string
   enumConst: { [key: string]: T }
-  defaultValue: T
+  defaultValue?: T
 }
 
-type UseEnumQueryStringResult<T> = [value: T, updateValue: (x: T) => void]
+type UseEnumQueryStringResult<T> = [value: T | undefined, updateValue: (x: T) => void]
 
 export default function useEnumQueryString<T>({
   enumConst,
@@ -19,7 +19,7 @@ export default function useEnumQueryString<T>({
 }: UseEnumQueryStringArgs<T>): UseEnumQueryStringResult<T> {
   const router = useRouter()
 
-  const [value, setValue] = useState<T>(defaultValue)
+  const [value, setValue] = useState<T | undefined>(defaultValue)
   const previousValue = usePrevious(value)
 
   // Update value if query string changes
@@ -48,7 +48,13 @@ export default function useEnumQueryString<T>({
     const qsValue = qsValueToEnum(enumConst, query[key])
 
     if (previousValue !== value && value !== qsValue) {
-      return navigate(value)
+      if (value) {
+        return navigate(value)
+      }
+
+      if (defaultValue) {
+        return navigate(defaultValue)
+      }
     }
   }, [router, key, navigate, value, previousValue])
 
