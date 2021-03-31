@@ -1,8 +1,8 @@
-import { getSchema, updateSchema } from '@lib/api/schema'
+import { emptyModel, getSchema, updateSchema } from '@lib/api/schema'
 import CodeViewer from '@lib/components/CodeViewer'
 import Layout from '@lib/components/Layout'
-import ModelList from '@lib/components/ModelList'
-import SchemaForm from '@lib/components/SchemaForm'
+import ModelModule from '@lib/components/ModelModule'
+import SchemaModule from '@lib/components/SchemaModule'
 import { DatabaseCaseStyle, DatabaseNounForm, DatabaseOptions, Schema, SqlDialect } from '@lib/core'
 import { SequelizeFramework } from '@lib/frameworks'
 import useDidMount from '@lib/hooks/useDidMount'
@@ -72,28 +72,35 @@ function SchemaPageContent({
   if (schema === undefined) return <p>Loading Schemas</p>
 
   const [viewCode, setViewCode] = useState<boolean>(false)
-  const [editing, setEditing] = useState<boolean>(false)
   const handleClickViewCode = () => setViewCode((x) => !x)
-  const handleClickEdit = () => setEditing(true)
-  const handleSubmit = async (schema: Schema): Promise<void> => {
-    await onUpdate(schema)
-    setEditing(false)
-  }
+  const handleClickAddModel = () =>
+    onUpdate({ ...schema, models: [emptyModel(), ...schema.models] })
 
   const root = useMemo(() => SequelizeFramework.generate({ schema, dbOptions: defaultDbOptions }), [
     schema,
   ])
 
-  return editing ? (
-    <SchemaForm schema={schema} onSubmit={handleSubmit} />
-  ) : (
+  return (
     <>
-      <h2>{schema.name} schema</h2>
       <button onClick={handleClickViewCode}>{viewCode ? 'Hide Code' : 'View Code'}</button>
-      <button onClick={handleClickEdit}>Edit</button>
+      <SchemaModule schema={schema} onUpdate={onUpdate} />
       {viewCode && <CodeViewer cacheKey={schema.id} root={root} />}
-      <h3>Model</h3>
-      <ModelList schema={schema} />
+      <h3>Models</h3>
+      <button type="button" onClick={handleClickAddModel}>
+        Add model
+      </button>
+      {schema.models.length ? (
+        <ul>
+          {schema.models.map((model) => (
+            <ModelModule
+              key={`model-module-${model.id}`}
+              model={model}
+              schema={schema}
+              onUpdate={onUpdate}
+            />
+          ))}
+        </ul>
+      ) : null}
     </>
   )
 }

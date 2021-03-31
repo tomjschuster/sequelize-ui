@@ -1,4 +1,4 @@
-import { Model, Schema } from '@lib/core'
+import { DataTypeType, Field, Model, Schema } from '@lib/core'
 import { versionedName } from '@lib/utils'
 import shortid from 'shortid'
 
@@ -42,6 +42,10 @@ export async function clearSchemas(): Promise<void> {
 
 export function emptyModel(): Model {
   return { id: shortid(), name: '', fields: [], associations: [] }
+}
+
+export function emptyField(): Field {
+  return { id: shortid(), name: '', type: { type: DataTypeType.String } }
 }
 
 function get<T>(key: string): Promise<T | null> {

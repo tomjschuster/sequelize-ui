@@ -30,7 +30,7 @@ export default function AssociationList({
         const targetModel = modelById[association.targetModelId]
         return (
           <AssociationItem
-            key={targetModel.id}
+            key={`association-item-${model.id}-${targetModel.id}-${association.alias}`}
             association={association}
             targetModel={targetModel}
             through={
@@ -63,7 +63,7 @@ export function AssociationItem({
   targetFk,
 }: AssociationItemProps): React.ReactElement {
   return (
-    <li key={targetModel.name}>
+    <li>
       <span>{displayAssociation(association)}</span> <span>{titleCase(targetModel.name)}</span>
       {association.alias ? <span> (as {titleCase(association.alias)})</span> : null}
       {through ? <span> through {through}</span> : null}

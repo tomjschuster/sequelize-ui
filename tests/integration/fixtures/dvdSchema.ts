@@ -5,17 +5,20 @@ const actor: Model = {
   name: 'actor',
   fields: [
     {
+      id: '1',
       name: 'actorId',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
+      id: '2',
       name: 'firstName',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
+      id: '3',
       name: 'lastName',
       type: { type: DataTypeType.String },
       required: true,
@@ -46,25 +49,30 @@ const film: Model = {
   name: 'film',
   fields: [
     {
+      id: '4',
       name: 'filmId',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
+      id: '5',
       name: 'title',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
+      id: '6',
       name: 'description',
       type: { type: DataTypeType.String },
     },
     {
+      id: '7',
       name: 'releaseYear',
       type: { type: DataTypeType.Integer },
     },
     {
+      id: '8',
       name: 'rating',
       type: {
         type: DataTypeType.Enum,
@@ -72,6 +80,7 @@ const film: Model = {
       },
     },
     {
+      id: '9',
       name: 'specialFeatures',
       type: {
         type: DataTypeType.Array,
@@ -79,10 +88,12 @@ const film: Model = {
       },
     },
     {
+      id: '10',
       name: 'metaData',
       type: { type: DataTypeType.Json },
     },
     {
+      id: '11',
       name: 'preview',
       type: { type: DataTypeType.Blob },
     },
@@ -123,12 +134,14 @@ const category: Model = {
   name: 'category',
   fields: [
     {
+      id: '12',
       name: 'categoryId',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
+      id: '13',
       name: 'name',
       type: { type: DataTypeType.String },
       required: true,
@@ -149,12 +162,14 @@ const language: Model = {
   name: 'language',
   fields: [
     {
+      id: '14',
       name: 'languageId',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
+      id: '15',
       name: 'name',
       type: { type: DataTypeType.String },
       required: true,
@@ -168,6 +183,7 @@ const inventory: Model = {
   name: 'inventory',
   fields: [
     {
+      id: '16',
       name: 'inventoryId',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
@@ -186,6 +202,7 @@ const store: Model = {
   name: 'store',
   fields: [
     {
+      id: '17',
       name: 'storeId',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
@@ -207,12 +224,14 @@ const rental: Model = {
   name: 'rental',
   fields: [
     {
+      id: '18',
       name: 'rentalId',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
+      id: '19',
       name: 'rentedAt',
       type: { type: DataTypeType.DateTime, defaultNow: true },
       required: true,
@@ -229,22 +248,26 @@ const staff: Model = {
   name: 'staff',
   fields: [
     {
+      id: '20',
       name: 'staffId',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
+      id: '21',
       name: 'firstName',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
+      id: '22',
       name: 'lastName',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
+      id: '23',
       name: 'email',
       type: { type: DataTypeType.String },
     },
@@ -264,22 +287,26 @@ const customer: Model = {
   name: 'customer',
   fields: [
     {
+      id: '24',
       name: 'customerId',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
+      id: '25',
       name: 'firstName',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
+      id: '26',
       name: 'lastName',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
+      id: '27',
       name: 'email',
       type: { type: DataTypeType.String },
     },

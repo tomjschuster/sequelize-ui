@@ -13,32 +13,38 @@ const employee: Model = {
   name: 'employees',
   fields: [
     {
+      id: '1',
       name: 'emp_no',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
+      id: '2',
       name: 'birth_date',
       type: { type: DataTypeType.Date },
       required: true,
     },
     {
+      id: '3',
       name: 'first_name',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
+      id: '4',
       name: 'last_name',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
+      id: '5',
       name: 'gender',
       type: { type: DataTypeType.Enum, values: ['M', 'F', 'O'] },
       required: true,
     },
     {
+      id: '6',
       name: 'hire_date',
       type: { type: DataTypeType.Date },
       required: true,
@@ -71,12 +77,14 @@ const department: Model = {
   name: 'departments',
   fields: [
     {
+      id: '7',
       name: 'dept_no',
       type: { type: DataTypeType.String },
       primaryKey: true,
       required: true,
     },
     {
+      id: '8',
       name: 'dept_name',
       type: { type: DataTypeType.String },
       required: true,
@@ -109,23 +117,27 @@ const departmentEmployee: Model = {
   name: 'dept_emp',
   fields: [
     {
+      id: '9',
       name: 'emp_no',
       type: { type: DataTypeType.Integer },
       primaryKey: true,
       required: true,
     },
     {
+      id: '10',
       name: 'dept_no',
       type: { type: DataTypeType.String },
       primaryKey: true,
       required: true,
     },
     {
+      id: '11',
       name: 'from_date',
       type: { type: DataTypeType.Date },
       required: true,
     },
     {
+      id: '12',
       name: 'to_date',
       type: { type: DataTypeType.Date },
       required: true,
@@ -142,23 +154,27 @@ const departmentManager: Model = {
   name: 'dept_manager',
   fields: [
     {
+      id: '13',
       name: 'emp_no',
       type: { type: DataTypeType.Integer },
       primaryKey: true,
       required: true,
     },
     {
+      id: '14',
       name: 'dept_no',
       type: { type: DataTypeType.String },
       primaryKey: true,
       required: true,
     },
     {
+      id: '15',
       name: 'from_date',
       type: { type: DataTypeType.Date },
       required: true,
     },
     {
+      id: '16',
       name: 'to_date',
       type: { type: DataTypeType.Date },
       required: true,
@@ -175,23 +191,27 @@ const title: Model = {
   name: 'titles',
   fields: [
     {
+      id: '17',
       name: 'emp_no',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
+      id: '18',
       name: 'title',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
+      id: '19',
       name: 'from_date',
       type: { type: DataTypeType.Date },
       primaryKey: true,
       required: true,
     },
     {
+      id: '20',
       name: 'to_date',
       type: { type: DataTypeType.Date },
     },
@@ -206,23 +226,27 @@ const salary: Model = {
   name: 'salaries',
   fields: [
     {
+      id: '21',
       name: 'emp_no',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
+      id: '22',
       name: 'salary',
       type: { type: DataTypeType.Integer },
       required: true,
     },
     {
+      id: '23',
       name: 'from_date',
       type: { type: DataTypeType.Date },
       primaryKey: true,
       required: true,
     },
     {
+      id: '24',
       name: 'to_date',
       type: { type: DataTypeType.Date },
     },
