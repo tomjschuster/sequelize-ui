@@ -3,7 +3,14 @@ import CodeViewer from '@lib/components/CodeViewer'
 import Layout from '@lib/components/Layout'
 import ModelModule from '@lib/components/ModelModule'
 import SchemaModule from '@lib/components/SchemaModule'
-import { DatabaseCaseStyle, DatabaseNounForm, DatabaseOptions, Schema, SqlDialect } from '@lib/core'
+import {
+  DatabaseCaseStyle,
+  DatabaseNounForm,
+  DatabaseOptions,
+  Model,
+  Schema,
+  SqlDialect,
+} from '@lib/core'
 import { SequelizeFramework } from '@lib/frameworks'
 import useDidMount from '@lib/hooks/useDidMount'
 import { useRouter } from 'next/router'
@@ -80,6 +87,16 @@ function SchemaPageContent({
     schema,
   ])
 
+  const [editingModel, setEditingModel] = useState<Model['id'] | undefined>()
+  const handleChange = async (model: Model): Promise<void> => {
+    const updatedSchema = {
+      ...schema,
+      models: schema.models.map((m) => (m.id === model.id ? model : m)),
+    }
+    await onUpdate(updatedSchema)
+    setEditingModel(undefined)
+  }
+
   return (
     <>
       <button onClick={handleClickViewCode}>{viewCode ? 'Hide Code' : 'View Code'}</button>
@@ -96,7 +113,11 @@ function SchemaPageContent({
               key={`model-module-${model.id}`}
               model={model}
               schema={schema}
-              onUpdate={onUpdate}
+              editing={editingModel === model.id}
+              disabled={editingModel ? editingModel !== model.id : false}
+              onRequestEdit={() => setEditingModel(model.id)}
+              onRequestCancel={() => setEditingModel(undefined)}
+              onChange={handleChange}
             />
           ))}
         </ul>

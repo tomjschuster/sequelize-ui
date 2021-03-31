@@ -2,7 +2,11 @@ Todo:
 
 UI
 
-- [ ] Edit schema
+- [ ] Edit Associations
+- [ ] Form validation
+  - [ ] Name format
+  - [ ] Name uniqueness
+  - [ ] Name length
 
 DB Options
 

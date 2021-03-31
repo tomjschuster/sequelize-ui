@@ -20,46 +20,44 @@ import * as styles from './styles'
 type ModelModuleProps = {
   schema: Schema
   model: Model
-  onUpdate: (model: Schema) => Promise<void>
+  editing: boolean
+  disabled: boolean
+  onRequestEdit: () => void
+  onChange: (model: Model) => Promise<void>
+  onRequestCancel: () => void
 }
 export default function ModelModule({
   schema,
   model,
-  onUpdate,
+  editing,
+  disabled,
+  onChange,
+  onRequestEdit,
+  onRequestCancel,
 }: ModelModuleProps): React.ReactElement {
-  const [editing, setEditing] = useState<boolean>(false)
-  const handleEdit = () => setEditing(true)
-  const handleSubmit = async (model: Model): Promise<void> => {
-    const updatedSchema = {
-      ...schema,
-      models: schema.models.map((m) => (m.id === model.id ? model : m)),
-    }
-    await onUpdate(updatedSchema)
-    setEditing(false)
-  }
-
   return editing ? (
-    <ModelForm model={model} onSubmit={handleSubmit} />
+    <ModelForm model={model} onSubmit={onChange} onCancel={onRequestCancel} />
   ) : (
-    <ModelItem schema={schema} model={model} onEdit={handleEdit} />
+    <ModelItem disabled={disabled} schema={schema} model={model} onEdit={onRequestEdit} />
   )
 }
 
 type ModelItemProps = {
   schema: Schema
   model: Model
+  disabled: boolean
   onEdit: () => void
 }
-export function ModelItem({ schema, model, onEdit }: ModelItemProps): React.ReactElement {
+export function ModelItem({ schema, model, disabled, onEdit }: ModelItemProps): React.ReactElement {
   const [expanded, setExpanded] = useState<boolean>(false)
-  const handleClick = () => setExpanded((e) => !e)
+  const handleClick = () => !disabled && setExpanded((e) => !e)
   return (
     <li className={styles.modelItem} onClick={handleClick}>
-      <span className={styles.modelName}>{titleCase(model.name)}</span>
+      <span className={styles.modelName(disabled)}>{titleCase(model.name)}</span>
 
-      {expanded && (
+      {expanded && !disabled && (
         <>
-          <button type="button" onClick={onEdit}>
+          <button type="button" onClick={onEdit} disabled={disabled}>
             Edit
           </button>
           <p>Fields</p>
@@ -78,11 +76,9 @@ type FieldListProps = {
 export function FieldList({ fields }: FieldListProps): React.ReactElement {
   return (
     <ul className={styles.fieldList}>
-      {fields.map(
-        (f) =>
-          f.id === undefined &&
-          console.log({ f }) === undefined && <FieldItem key={`field-item-${f.id}`} field={f} />,
-      )}
+      {fields.map((f) => (
+        <FieldItem key={`field-item-${f.id}`} field={f} />
+      ))}
     </ul>
   )
 }
@@ -119,9 +115,10 @@ function fieldAttributes(field: Field): string | undefined {
 type ModelFormProps = {
   model: Model
   onSubmit: (model: Model) => void
+  onCancel: () => void
 }
 
-function ModelForm({ model, onSubmit }: ModelFormProps): React.ReactElement {
+function ModelForm({ model, onSubmit, onCancel }: ModelFormProps): React.ReactElement {
   const [formModel, setFormModel] = React.useState<Model>(model)
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
@@ -169,7 +166,13 @@ function ModelForm({ model, onSubmit }: ModelFormProps): React.ReactElement {
     setFormModel((m) => ({ ...m, fields: [...m.fields, emptyField()] }))
 
   return (
-    <form onSubmit={handleSubmit} className={classnames('bg-white', 'h-full')}>
+    <form onSubmit={handleSubmit} className={classnames('bg-white', 'inset-0', 'fixed', 'z-10')}>
+      <h2>Edit Model</h2>
+      <button type="button" onClick={onCancel}>
+        Cancel
+      </button>
+      <button type="submit">Save</button>
+
       <fieldset>
         <label htmlFor="schema-name">
           Model name
@@ -178,6 +181,9 @@ function ModelForm({ model, onSubmit }: ModelFormProps): React.ReactElement {
       </fieldset>
 
       <h3>Fields</h3>
+      <button type="button" onClick={handleClickAddField}>
+        Add field
+      </button>
       {formModel.fields.map((field) => {
         return (
           <fieldset key={`field-form-${field.id}`}>
@@ -237,10 +243,6 @@ function ModelForm({ model, onSubmit }: ModelFormProps): React.ReactElement {
           </fieldset>
         )
       })}
-      <button type="button" onClick={handleClickAddField}>
-        Add Field
-      </button>
-      <button type="submit">Save</button>
     </form>
   )
 }
