@@ -3,9 +3,6 @@ export function toEnum<T>(enumConst: { [key: string]: T }, x: unknown): T | unde
   return key ? enumConst[key] : undefined
 }
 
-export function keyFromEnum<T, C extends { [key: string]: T } = { [key: string]: T }>(
-  enumConst: C,
-  value: T,
-): keyof C | undefined {
+export function keyFromEnum<T>(enumConst: { [key: string]: T }, value: T): string | undefined {
   return Object.entries(enumConst).find(([_k, v]) => v === value)?.[0]
 }

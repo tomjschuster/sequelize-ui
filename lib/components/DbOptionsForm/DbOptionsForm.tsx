@@ -1,4 +1,4 @@
-import EnumRadio from '@lib/components/EnumRadio'
+import EnumRadio from '@lib/components/form/Radio'
 import {
   DatabaseCaseStyle,
   DatabaseNounForm,
@@ -20,27 +20,27 @@ export default function DbOptionsForm({
 }: DbOptionsFormProps): React.ReactElement {
   return (
     <>
-      <EnumRadio
+      <EnumRadio<SqlDialect>
         value={dbOptions.sqlDialect}
-        enumConst={SqlDialect}
+        options={SqlDialect}
         display={displaySqlDialect}
         onChange={(sqlDialect) => onChange({ ...dbOptions, sqlDialect })}
       />
-      <EnumRadio
+      <EnumRadio<DatabaseCaseStyle>
         value={dbOptions.caseStyle}
-        enumConst={DatabaseCaseStyle}
+        options={DatabaseCaseStyle}
         display={displayDatabaseCaseStyle}
         onChange={(caseStyle) => onChange({ ...dbOptions, caseStyle })}
       />
-      <EnumRadio
+      <EnumRadio<DatabaseNounForm>
         value={dbOptions.nounForm}
-        enumConst={DatabaseNounForm}
+        options={DatabaseNounForm}
         display={displayDatabaseNounForm}
         onChange={(nounForm) => onChange({ ...dbOptions, nounForm })}
       />
-      <EnumRadio
+      <EnumRadio<boolean>
         value={dbOptions.timestamps}
-        enumConst={{ true: true, false: false }}
+        options={{ true: true, false: false }}
         display={(x) => (x ? 'timestamps' : 'no timestamps')}
         onChange={(timestamps) => onChange({ ...dbOptions, timestamps })}
       />

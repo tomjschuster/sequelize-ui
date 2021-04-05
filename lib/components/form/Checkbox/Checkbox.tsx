@@ -7,12 +7,7 @@ type CheckboxProps = {
   onChange: (checked: boolean) => void
 }
 
-export default function Checkbox({
-  id,
-  label,
-  checked,
-  onChange,
-}: CheckboxProps): React.ReactElement {
+function Checkbox({ id, label, checked, onChange }: CheckboxProps): React.ReactElement {
   const handleChange = React.useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => onChange(evt.target.checked),
     [onChange],
@@ -25,3 +20,5 @@ export default function Checkbox({
     </label>
   )
 }
+
+export default React.memo(Checkbox) as typeof Checkbox

@@ -1,7 +1,7 @@
 import { createSchema, listSchemas } from '@lib/api/schema'
 import CodeViewer from '@lib/components/CodeViewer'
 import DbOptionsForm from '@lib/components/DbOptionsForm'
-import EnumRadio from '@lib/components/EnumRadio'
+import Radio from '@lib/components/form/Radio'
 import Layout from '@lib/components/Layout'
 import { DatabaseCaseStyle, DatabaseNounForm, DatabaseOptions, Schema, SqlDialect } from '@lib/core'
 import { DemoSchemaType, displayDemoSchemaType, getDemoSchema } from '@lib/data/schemas'
@@ -81,9 +81,9 @@ function IndexPageDemoContent(): React.ReactElement {
 
   return (
     <>
-      <EnumRadio
+      <Radio
         value={schemaType}
-        enumConst={DemoSchemaType}
+        options={DemoSchemaType}
         display={displayDemoSchemaType}
         onChange={setSchemaType}
       />
