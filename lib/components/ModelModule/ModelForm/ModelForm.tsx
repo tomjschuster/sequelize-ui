@@ -1,7 +1,8 @@
-import { emptyField } from '@lib/api/schema'
-import { Field, Model } from '@lib/core'
+import { emptyAssociation, emptyField } from '@lib/api/schema'
+import { Association, Field, Model } from '@lib/core'
 import React from 'react'
 import { classnames } from 'tailwindcss-classnames'
+import AssociationFieldset from './AssociationFieldset'
 import FieldFieldset from './FieldFieldset'
 import ModelFieldset from './ModelFieldset'
 
@@ -37,8 +38,23 @@ export default function ModelForm({
     [setFormModel],
   )
 
+  const handleChangeAssociation = React.useCallback(
+    (id: Association['id'], changes: Association) =>
+      setFormModel((m) => ({
+        ...m,
+        associations: m.associations.map((a) => (a.id === id ? changes : a)),
+      })),
+    [setFormModel],
+  )
+
   const handleClickAddField = React.useCallback(
     () => setFormModel((m) => ({ ...m, fields: [...m.fields, emptyField()] })),
+    [],
+  )
+
+  const handleClickAddAssociation = React.useCallback(
+    () =>
+      setFormModel((m) => ({ ...m, associations: [...m.associations, emptyAssociation(m.id)] })),
     [],
   )
 
@@ -65,6 +81,21 @@ export default function ModelForm({
             key={`field-form-${field.id}`}
             field={field}
             onChange={handleChangeField}
+          />
+        )
+      })}
+
+      <h3>Associations</h3>
+      <button type="button" onClick={handleClickAddAssociation}>
+        Add association
+      </button>
+
+      {formModel.associations.map((association) => {
+        return (
+          <AssociationFieldset
+            key={`association-form-${association.id}`}
+            association={association}
+            onChange={handleChangeAssociation}
           />
         )
       })}

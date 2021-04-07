@@ -25,8 +25,9 @@ const actor: Model = {
     },
   ],
   associations: [
-    { type: AssociationType.HasMany, targetModelId: '2' },
+    { id: '-1', type: AssociationType.HasMany, targetModelId: '2' },
     {
+      id: '0',
       type: AssociationType.ManyToMany,
       through: { type: ThroughType.ThroughModel, modelId: '2' },
       targetModelId: '3',
@@ -39,8 +40,8 @@ const filmActor: Model = {
   name: 'film actor',
   fields: [],
   associations: [
-    { type: AssociationType.BelongsTo, targetModelId: '1' },
-    { type: AssociationType.BelongsTo, targetModelId: '3' },
+    { id: '1', type: AssociationType.BelongsTo, targetModelId: '1' },
+    { id: '2', type: AssociationType.BelongsTo, targetModelId: '3' },
   ],
 }
 
@@ -99,23 +100,26 @@ const film: Model = {
     },
   ],
   associations: [
-    { type: AssociationType.HasMany, targetModelId: '2' },
+    { id: '3', type: AssociationType.HasMany, targetModelId: '2' },
     {
+      id: '4',
       type: AssociationType.ManyToMany,
       through: { type: ThroughType.ThroughModel, modelId: '2' },
       targetModelId: '1',
     },
-    { type: AssociationType.HasMany, targetModelId: '4' },
+    { id: '5', type: AssociationType.HasMany, targetModelId: '4' },
     {
+      id: '6',
       type: AssociationType.ManyToMany,
       through: { type: ThroughType.ThroughModel, modelId: '4' },
       targetModelId: '5',
     },
     {
+      id: '7',
       type: AssociationType.BelongsTo,
       targetModelId: '6',
     },
-    { type: AssociationType.HasMany, targetModelId: '7' },
+    { id: '8', type: AssociationType.HasMany, targetModelId: '7' },
   ],
 }
 
@@ -124,8 +128,8 @@ const filmCategory: Model = {
   name: 'film category',
   fields: [],
   associations: [
-    { type: AssociationType.BelongsTo, targetModelId: '3' },
-    { type: AssociationType.BelongsTo, targetModelId: '5' },
+    { id: '9', type: AssociationType.BelongsTo, targetModelId: '3' },
+    { id: '10', type: AssociationType.BelongsTo, targetModelId: '5' },
   ],
 }
 
@@ -148,8 +152,9 @@ const category: Model = {
     },
   ],
   associations: [
-    { type: AssociationType.HasMany, targetModelId: '4' },
+    { id: '11', type: AssociationType.HasMany, targetModelId: '4' },
     {
+      id: '12',
       type: AssociationType.ManyToMany,
       through: { type: ThroughType.ThroughModel, modelId: '4' },
       targetModelId: '3',
@@ -175,7 +180,7 @@ const language: Model = {
       required: true,
     },
   ],
-  associations: [{ type: AssociationType.HasMany, targetModelId: '4' }],
+  associations: [{ id: '13', type: AssociationType.HasMany, targetModelId: '4' }],
 }
 
 const inventory: Model = {
@@ -191,9 +196,9 @@ const inventory: Model = {
     },
   ],
   associations: [
-    { type: AssociationType.BelongsTo, targetModelId: '4' },
-    { type: AssociationType.BelongsTo, targetModelId: '8' },
-    { type: AssociationType.HasMany, targetModelId: '9' },
+    { id: '14', type: AssociationType.BelongsTo, targetModelId: '4' },
+    { id: '15', type: AssociationType.BelongsTo, targetModelId: '8' },
+    { id: '16', type: AssociationType.HasMany, targetModelId: '9' },
   ],
 }
 
@@ -210,8 +215,9 @@ const store: Model = {
     },
   ],
   associations: [
-    { type: AssociationType.HasMany, targetModelId: '7' },
+    { id: '17', type: AssociationType.HasMany, targetModelId: '7' },
     {
+      id: '18',
       type: AssociationType.BelongsTo,
       targetModelId: '10',
       foreignKey: 'managerStaffId',
@@ -238,8 +244,8 @@ const rental: Model = {
     },
   ],
   associations: [
-    { type: AssociationType.BelongsTo, targetModelId: '7' },
-    { type: AssociationType.BelongsTo, targetModelId: '10' },
+    { id: '19', type: AssociationType.BelongsTo, targetModelId: '7' },
+    { id: '20', type: AssociationType.BelongsTo, targetModelId: '10' },
   ],
 }
 
@@ -274,11 +280,12 @@ const staff: Model = {
   ],
   associations: [
     {
+      id: '21',
       type: AssociationType.HasMany,
       targetModelId: '8',
       foreignKey: 'managerStaffId',
     },
-    { type: AssociationType.HasMany, targetModelId: '9' },
+    { id: '22', type: AssociationType.HasMany, targetModelId: '9' },
   ],
 }
 
@@ -312,8 +319,8 @@ const customer: Model = {
     },
   ],
   associations: [
-    { type: AssociationType.BelongsTo, targetModelId: '8' },
-    { type: AssociationType.HasMany, targetModelId: '9' },
+    { id: '23', type: AssociationType.BelongsTo, targetModelId: '8' },
+    { id: '24', type: AssociationType.HasMany, targetModelId: '9' },
   ],
 }
 

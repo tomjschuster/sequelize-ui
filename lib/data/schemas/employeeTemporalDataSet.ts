@@ -51,9 +51,10 @@ const employee: Model = {
     },
   ],
   associations: [
-    { foreignKey: 'emp_no', type: AssociationType.HasMany, targetModelId: Id.Salaries },
-    { foreignKey: 'emp_no', type: AssociationType.HasMany, targetModelId: Id.Titles },
+    { id: '1', foreignKey: 'emp_no', type: AssociationType.HasMany, targetModelId: Id.Salaries },
+    { id: '2', foreignKey: 'emp_no', type: AssociationType.HasMany, targetModelId: Id.Titles },
     {
+      id: '3',
       alias: 'employingDepartment',
       foreignKey: 'emp_no',
       targetFk: 'dept_no',
@@ -62,6 +63,7 @@ const employee: Model = {
       targetModelId: Id.Departments,
     },
     {
+      id: '4',
       alias: 'managedDepartment',
       foreignKey: 'emp_no',
       targetFk: 'dept_no',
@@ -92,23 +94,31 @@ const department: Model = {
   ],
   associations: [
     {
+      id: '5',
       alias: 'employee',
       type: AssociationType.ManyToMany,
       through: { type: ThroughType.ThroughModel, modelId: Id.DepartmentEmployees },
       targetModelId: Id.Employees,
     },
     {
+      id: '5',
       alias: 'manager',
       type: AssociationType.ManyToMany,
       through: { type: ThroughType.ThroughModel, modelId: Id.DepartmentManagers },
       targetModelId: Id.Employees,
     },
     {
+      id: '6',
       foreignKey: 'dept_no',
       type: AssociationType.HasMany,
       targetModelId: Id.DepartmentEmployees,
     },
-    { foreignKey: 'dept_no', type: AssociationType.HasMany, targetModelId: Id.DepartmentManagers },
+    {
+      id: '7',
+      foreignKey: 'dept_no',
+      type: AssociationType.HasMany,
+      targetModelId: Id.DepartmentManagers,
+    },
   ],
 }
 
@@ -144,8 +154,13 @@ const departmentEmployee: Model = {
     },
   ],
   associations: [
-    { foreignKey: 'emp_no', type: AssociationType.BelongsTo, targetModelId: Id.Employees },
-    { foreignKey: 'dept_no', type: AssociationType.BelongsTo, targetModelId: Id.Departments },
+    { id: '8', foreignKey: 'emp_no', type: AssociationType.BelongsTo, targetModelId: Id.Employees },
+    {
+      id: '9',
+      foreignKey: 'dept_no',
+      type: AssociationType.BelongsTo,
+      targetModelId: Id.Departments,
+    },
   ],
 }
 
@@ -181,8 +196,18 @@ const departmentManager: Model = {
     },
   ],
   associations: [
-    { foreignKey: 'emp_no', type: AssociationType.BelongsTo, targetModelId: Id.Employees },
-    { foreignKey: 'dept_no', type: AssociationType.BelongsTo, targetModelId: Id.Departments },
+    {
+      id: '10',
+      foreignKey: 'emp_no',
+      type: AssociationType.BelongsTo,
+      targetModelId: Id.Employees,
+    },
+    {
+      id: '11',
+      foreignKey: 'dept_no',
+      type: AssociationType.BelongsTo,
+      targetModelId: Id.Departments,
+    },
   ],
 }
 
@@ -217,7 +242,12 @@ const title: Model = {
     },
   ],
   associations: [
-    { foreignKey: 'emp_no', type: AssociationType.BelongsTo, targetModelId: Id.Employees },
+    {
+      id: '12',
+      foreignKey: 'emp_no',
+      type: AssociationType.BelongsTo,
+      targetModelId: Id.Employees,
+    },
   ],
 }
 
@@ -252,7 +282,12 @@ const salary: Model = {
     },
   ],
   associations: [
-    { foreignKey: 'emp_no', type: AssociationType.BelongsTo, targetModelId: Id.Employees },
+    {
+      id: '13',
+      foreignKey: 'emp_no',
+      type: AssociationType.BelongsTo,
+      targetModelId: Id.Employees,
+    },
   ],
 }
 

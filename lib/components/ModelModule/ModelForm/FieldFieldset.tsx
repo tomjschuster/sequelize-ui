@@ -1,3 +1,5 @@
+import Checkbox from '@lib/components/form/Checkbox'
+import Select from '@lib/components/form/Select'
 import {
   dataTypeFromDataTypeType,
   DataTypeType,
@@ -6,8 +8,6 @@ import {
   isDateTimeType,
 } from '@lib/core'
 import React from 'react'
-import Checkbox from '../form/Checkbox'
-import Select from '../form/Select'
 
 type FieldFieldsetProps = {
   field: Field

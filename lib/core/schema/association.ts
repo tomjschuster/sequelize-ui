@@ -25,6 +25,7 @@ export enum AssociationType {
 }
 
 type AssociationBase<T extends AssociationType> = {
+  id: string
   type: T
   targetModelId: string
   foreignKey?: string
