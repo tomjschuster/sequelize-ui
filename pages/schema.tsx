@@ -34,7 +34,6 @@ function SchemaPage(): React.ReactElement {
 
     const schemaId = query.id
     if (!schemaId || typeof schemaId !== 'string') {
-      console.log('NO ID', query)
       push('/')
       return
     }
