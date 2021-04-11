@@ -1,5 +1,6 @@
 import Checkbox from '@lib/components/form/Checkbox'
 import Select from '@lib/components/form/Select'
+import TextInput from '@lib/components/form/TextInput'
 import {
   dataTypeFromDataTypeType,
   DataTypeType,
@@ -19,10 +20,9 @@ function FieldFieldset({ field, onChange }: FieldFieldsetProps) {
     [field, onChange],
   )
 
-  const handleChangeFieldName = React.useCallback(
-    (evt: React.ChangeEvent<HTMLInputElement>) => handleChange({ name: evt.target.value }),
-    [handleChange],
-  )
+  const handleChangeFieldName = React.useCallback((name: string) => handleChange({ name }), [
+    handleChange,
+  ])
 
   const handleChangeFieldDataType = React.useCallback(
     (type: DataTypeType) => handleChange({ type: dataTypeFromDataTypeType(type) }),
@@ -63,15 +63,12 @@ function FieldFieldset({ field, onChange }: FieldFieldsetProps) {
 
   return (
     <fieldset>
-      <label htmlFor={`field-name-${field.id}`}>
-        Field name
-        <input
-          id={`field-name-${field.id}`}
-          type="text"
-          value={field.name}
-          onChange={handleChangeFieldName}
-        />
-      </label>
+      <TextInput
+        id={`field-name-${field.id}`}
+        label="Field name"
+        value={field.name}
+        onChange={handleChangeFieldName}
+      />
 
       <Select<DataTypeType>
         id={`field-type-${field.id}`}

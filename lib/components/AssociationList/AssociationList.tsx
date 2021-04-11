@@ -30,7 +30,7 @@ export default function AssociationList({
         const targetModel = modelById[association.targetModelId]
         return (
           <AssociationItem
-            key={`association-item-${model.id}-${targetModel.id}-${association.alias}`}
+            key={`association-item-${association.id}`}
             association={association}
             targetModel={targetModel}
             through={

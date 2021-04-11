@@ -2,7 +2,7 @@ Todo:
 
 UI
 
-- [ ] Edit Associations
+- [ ] Refactor Association form
 - [ ] Form validation
   - [ ] Name format
   - [ ] Name uniqueness

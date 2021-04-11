@@ -1,5 +1,5 @@
 import { emptyAssociation, emptyField } from '@lib/api/schema'
-import { Association, Field, Model } from '@lib/core'
+import { Association, Field, Model, Schema } from '@lib/core'
 import React from 'react'
 import { classnames } from 'tailwindcss-classnames'
 import AssociationFieldset from './AssociationFieldset'
@@ -8,12 +8,14 @@ import ModelFieldset from './ModelFieldset'
 
 type ModelFormProps = {
   model: Model
+  schema: Schema
   onSubmit: (model: Model) => void
   onCancel: () => void
 }
 
 export default function ModelForm({
   model,
+  schema,
   onSubmit,
   onCancel,
 }: ModelFormProps): React.ReactElement {
@@ -91,11 +93,13 @@ export default function ModelForm({
       </button>
 
       {formModel.associations.map((association) => {
+        console.log('id', association.id)
         return (
           <AssociationFieldset
             key={`association-form-${association.id}`}
             association={association}
             onChange={handleChangeAssociation}
+            schema={schema}
           />
         )
       })}

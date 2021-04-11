@@ -4,8 +4,46 @@ export type Association =
   | HasManyAssociation
   | ManyToManyAssociation
 
+type ChangeAssociationArgs =
+  | {
+      type: Exclude<AssociationType, AssociationType.ManyToMany>
+    }
+  | {
+      type: AssociationType.ManyToMany
+      table: string
+    }
+
+export function changeAssociationType(
+  association: Association,
+  change: ChangeAssociationArgs,
+): Association {
+  if (change.type === AssociationType.ManyToMany) {
+    return {
+      ...associationBase(association),
+      type: change.type,
+      through: { type: ThroughType.ThroughTable, table: change.table },
+    }
+  }
+
+  return { ...associationBase(association), type: change.type }
+}
+
+function associationBase(association: Association): Omit<AssociationBase<never>, 'type'> {
+  return {
+    id: association.id,
+    sourceModelId: association.sourceModelId,
+    targetModelId: association.targetModelId,
+    foreignKey: association.foreignKey,
+    alias: association.alias,
+  }
+}
+
 export function displayAssociation(association: Association): string {
-  switch (association.type) {
+  return displayAssociationType(association.type)
+}
+
+export function displayAssociationType(type: AssociationType): string {
+  switch (type) {
     case AssociationType.BelongsTo:
       return 'belongs to'
     case AssociationType.HasMany:
@@ -14,6 +52,15 @@ export function displayAssociation(association: Association): string {
       return 'has one'
     case AssociationType.ManyToMany:
       return 'many to many'
+  }
+}
+
+export function displayThroughType(type: ThroughType): string {
+  switch (type) {
+    case ThroughType.ThroughModel:
+      return 'Through model'
+    case ThroughType.ThroughTable:
+      return 'Through table'
   }
 }
 
@@ -27,6 +74,7 @@ export enum AssociationType {
 type AssociationBase<T extends AssociationType> = {
   id: string
   type: T
+  sourceModelId: string
   targetModelId: string
   foreignKey?: string
   alias?: string

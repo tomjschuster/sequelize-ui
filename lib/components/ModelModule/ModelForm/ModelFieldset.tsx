@@ -1,3 +1,4 @@
+import TextInput from '@lib/components/form/TextInput'
 import { Model } from '@lib/core'
 import React from 'react'
 
@@ -7,17 +8,16 @@ type ModelFieldsetProps = {
 }
 
 function ModelFieldset({ model, onChange }: ModelFieldsetProps): React.ReactElement {
-  const handleChangeName = React.useCallback(
-    (evt: React.ChangeEvent<HTMLInputElement>) => onChange({ name: evt.target.value }),
-    [onChange],
-  )
+  const handleChangeName = React.useCallback((name: string) => onChange({ name }), [onChange])
 
   return (
     <fieldset>
-      <label htmlFor="model-name">
-        Model name
-        <input id="model-name" type="text" value={model.name} onChange={handleChangeName} />
-      </label>
+      <TextInput
+        id="model-name"
+        label="Model name"
+        value={model.name}
+        onChange={handleChangeName}
+      />
     </fieldset>
   )
 }

@@ -22,7 +22,7 @@ export default function ModelModule({
   onRequestCancel,
 }: ModelModuleProps): React.ReactElement {
   return editing ? (
-    <ModelForm model={model} onSubmit={onChange} onCancel={onRequestCancel} />
+    <ModelForm model={model} schema={schema} onSubmit={onChange} onCancel={onRequestCancel} />
   ) : (
     <ModelItem disabled={disabled} schema={schema} model={model} onEdit={onRequestEdit} />
   )

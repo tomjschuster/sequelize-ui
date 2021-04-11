@@ -1,5 +1,6 @@
 import { Schema } from '@lib/core'
 import React, { useState } from 'react'
+import TextInput from '../form/TextInput'
 
 type SchemaModuleProps = {
   schema: Schema
@@ -47,21 +48,16 @@ function SchemaForm({ schema, onSubmit }: SchemaFormProps): React.ReactElement {
     onSubmit(formSchema)
   }
 
-  const handleChangeSchemaName = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setFormSchema((s) => ({ ...s, name: evt.target.value }))
-  }
+  const handleChangeSchemaName = (name: string): void => setFormSchema((s) => ({ ...s, name }))
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="schema-name">
-        Schema name
-        <input
-          id="schema-name"
-          type="text"
-          value={formSchema.name}
-          onChange={handleChangeSchemaName}
-        />
-      </label>
+      <TextInput
+        id="schema-name"
+        label="Schema name"
+        value={formSchema.name}
+        onChange={handleChangeSchemaName}
+      />
       <button type="submit">Save</button>
     </form>
   )

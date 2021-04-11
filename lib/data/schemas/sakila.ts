@@ -50,6 +50,7 @@ const actor: Model = {
       targetFk: 'film_id',
       type: AssociationType.ManyToMany,
       through: { type: ThroughType.ThroughModel, modelId: Id.FilmActor },
+      sourceModelId: Id.Actor,
       targetModelId: Id.Film,
     },
   ],
@@ -133,6 +134,7 @@ const film: Model = {
     {
       id: '-19',
       type: AssociationType.BelongsTo,
+      sourceModelId: Id.Film,
       targetModelId: Id.Language,
     },
     {
@@ -140,12 +142,14 @@ const film: Model = {
       alias: 'original_language',
       foreignKey: 'original_language_id',
       type: AssociationType.BelongsTo,
+      sourceModelId: Id.Film,
       targetModelId: Id.Language,
     },
     {
       id: '-17',
       foreignKey: 'film_id',
       type: AssociationType.HasMany,
+      sourceModelId: Id.Film,
       targetModelId: Id.Inventory,
     },
     {
@@ -154,6 +158,7 @@ const film: Model = {
       targetFk: 'actor_id',
       type: AssociationType.ManyToMany,
       through: { type: ThroughType.ThroughModel, modelId: Id.FilmActor },
+      sourceModelId: Id.Film,
       targetModelId: Id.Actor,
     },
     {
@@ -162,6 +167,7 @@ const film: Model = {
       targetFk: 'category_id',
       type: AssociationType.ManyToMany,
       through: { type: ThroughType.ThroughModel, modelId: Id.FilmCategory },
+      sourceModelId: Id.Film,
       targetModelId: Id.Category,
     },
   ],
@@ -183,6 +189,7 @@ const language: Model = {
     {
       id: '-14',
       type: AssociationType.HasMany,
+      sourceModelId: Id.Language,
       targetModelId: Id.Film,
     },
     {
@@ -190,6 +197,7 @@ const language: Model = {
       alias: 'original_language_film',
       foreignKey: 'original_language_id',
       type: AssociationType.HasMany,
+      sourceModelId: Id.Language,
       targetModelId: Id.Film,
     },
   ],
@@ -214,6 +222,7 @@ const category: Model = {
       targetFk: 'film_id',
       type: AssociationType.ManyToMany,
       through: { type: ThroughType.ThroughModel, modelId: Id.FilmCategory },
+      sourceModelId: Id.Category,
       targetModelId: Id.Film,
     },
   ],
@@ -235,11 +244,13 @@ const inventory: Model = {
     {
       id: '-11',
       type: AssociationType.BelongsTo,
+      sourceModelId: Id.Inventory,
       targetModelId: Id.Film,
     },
     {
       id: '-10',
       type: AssociationType.BelongsTo,
+      sourceModelId: Id.Inventory,
       targetModelId: Id.Store,
     },
   ],
@@ -261,16 +272,19 @@ const store: Model = {
     {
       id: '-9',
       type: AssociationType.HasMany,
+      sourceModelId: Id.Store,
       targetModelId: Id.Inventory,
     },
     {
       id: '-8',
       type: AssociationType.HasMany,
+      sourceModelId: Id.Store,
       targetModelId: Id.Staff,
     },
     {
       id: '-7',
       type: AssociationType.HasMany,
+      sourceModelId: Id.Store,
       targetModelId: Id.Customer,
     },
     {
@@ -278,11 +292,13 @@ const store: Model = {
       alias: 'manager',
       foreignKey: 'manager_staff_id',
       type: AssociationType.BelongsTo,
+      sourceModelId: Id.Store,
       targetModelId: Id.Staff,
     },
     {
       id: '-5',
       type: AssociationType.BelongsTo,
+      sourceModelId: Id.Store,
       targetModelId: Id.Address,
     },
   ],
@@ -344,6 +360,7 @@ const staff: Model = {
       id: '-4',
       type: AssociationType.BelongsTo,
       targetModelId: Id.Store,
+      sourceModelId: Id.Staff,
     },
     {
       id: '-3',
@@ -351,21 +368,25 @@ const staff: Model = {
       foreignKey: 'manager_staff_id',
       type: AssociationType.HasMany,
       targetModelId: Id.Store,
+      sourceModelId: Id.Staff,
     },
     {
       id: '-2',
       type: AssociationType.BelongsTo,
       targetModelId: Id.Address,
+      sourceModelId: Id.Staff,
     },
     {
       id: '1',
       type: AssociationType.HasMany,
       targetModelId: Id.Rental,
+      sourceModelId: Id.Staff,
     },
     {
       id: '0',
       type: AssociationType.HasMany,
       targetModelId: Id.Payment,
+      sourceModelId: Id.Staff,
     },
   ],
 }
@@ -410,21 +431,25 @@ const customer: Model = {
       id: '1',
       type: AssociationType.BelongsTo,
       targetModelId: Id.Store,
+      sourceModelId: Id.Customer,
     },
     {
       id: '2',
       type: AssociationType.BelongsTo,
       targetModelId: Id.Address,
+      sourceModelId: Id.Customer,
     },
     {
       id: '3',
       type: AssociationType.HasMany,
       targetModelId: Id.Rental,
+      sourceModelId: Id.Customer,
     },
     {
       id: '4',
       type: AssociationType.HasMany,
       targetModelId: Id.Payment,
+      sourceModelId: Id.Customer,
     },
   ],
 }
@@ -469,21 +494,25 @@ const address: Model = {
       id: '5',
       type: AssociationType.BelongsTo,
       targetModelId: Id.City,
+      sourceModelId: Id.Address,
     },
     {
       id: '6',
       type: AssociationType.HasOne,
       targetModelId: Id.Customer,
+      sourceModelId: Id.Address,
     },
     {
       id: '7',
       type: AssociationType.HasOne,
       targetModelId: Id.Staff,
+      sourceModelId: Id.Address,
     },
     {
       id: '8',
       type: AssociationType.HasOne,
       targetModelId: Id.Store,
+      sourceModelId: Id.Address,
     },
   ],
 }
@@ -516,21 +545,25 @@ const rental: Model = {
       id: '9',
       type: AssociationType.BelongsTo,
       targetModelId: Id.Inventory,
+      sourceModelId: Id.Rental,
     },
     {
       id: '10',
       type: AssociationType.BelongsTo,
       targetModelId: Id.Customer,
+      sourceModelId: Id.Rental,
     },
     {
       id: '11',
       type: AssociationType.BelongsTo,
       targetModelId: Id.Staff,
+      sourceModelId: Id.Rental,
     },
     {
       id: '12',
       type: AssociationType.HasMany,
       targetModelId: Id.Payment,
+      sourceModelId: Id.Rental,
     },
   ],
 }
@@ -564,16 +597,19 @@ const payment: Model = {
       id: '13',
       type: AssociationType.BelongsTo,
       targetModelId: Id.Customer,
+      sourceModelId: Id.Payment,
     },
     {
       id: '14',
       type: AssociationType.BelongsTo,
       targetModelId: Id.Staff,
+      sourceModelId: Id.Payment,
     },
     {
       id: '15',
       type: AssociationType.BelongsTo,
       targetModelId: Id.Rental,
+      sourceModelId: Id.Payment,
     },
   ],
 }
@@ -601,11 +637,13 @@ const city: Model = {
       id: '16',
       type: AssociationType.BelongsTo,
       targetModelId: Id.Country,
+      sourceModelId: Id.City,
     },
     {
       id: '17',
       type: AssociationType.HasMany,
       targetModelId: Id.Address,
+      sourceModelId: Id.City,
     },
   ],
 }
@@ -633,6 +671,7 @@ const country: Model = {
       id: '18',
       type: AssociationType.HasMany,
       targetModelId: Id.City,
+      sourceModelId: Id.Country,
     },
   ],
 }
@@ -653,11 +692,13 @@ const film_actor: Model = {
     {
       id: '19',
       type: AssociationType.BelongsTo,
+      sourceModelId: Id.FilmActor,
       targetModelId: Id.Film,
     },
     {
       id: '20',
       type: AssociationType.BelongsTo,
+      sourceModelId: Id.FilmActor,
       targetModelId: Id.Actor,
     },
   ],
@@ -679,11 +720,13 @@ const film_category: Model = {
     {
       id: '21',
       type: AssociationType.BelongsTo,
+      sourceModelId: Id.FilmCategory,
       targetModelId: Id.Film,
     },
     {
       id: '22',
       type: AssociationType.BelongsTo,
+      sourceModelId: Id.FilmCategory,
       targetModelId: Id.Category,
     },
   ],
