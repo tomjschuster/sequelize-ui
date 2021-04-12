@@ -1,4 +1,4 @@
-import { AssociationType, DataTypeType, Model, Schema, ThroughType } from '@lib/core'
+import { AssociationTypeType, DataTypeType, Model, Schema, ThroughType } from '@lib/core'
 
 const actor: Model = {
   id: '1',
@@ -25,11 +25,18 @@ const actor: Model = {
     },
   ],
   associations: [
-    { id: '-1', type: AssociationType.HasMany, sourceModelId: '1', targetModelId: '2' },
+    {
+      id: '-1',
+      type: { type: AssociationTypeType.HasMany },
+      sourceModelId: '1',
+      targetModelId: '2',
+    },
     {
       id: '0',
-      type: AssociationType.ManyToMany,
-      through: { type: ThroughType.ThroughModel, modelId: '2' },
+      type: {
+        type: AssociationTypeType.ManyToMany,
+        through: { type: ThroughType.ThroughModel, modelId: '2' },
+      },
       sourceModelId: '1',
       targetModelId: '3',
     },
@@ -41,8 +48,18 @@ const filmActor: Model = {
   name: 'film actor',
   fields: [],
   associations: [
-    { id: '1', type: AssociationType.BelongsTo, sourceModelId: '2', targetModelId: '1' },
-    { id: '2', type: AssociationType.BelongsTo, sourceModelId: '2', targetModelId: '3' },
+    {
+      id: '1',
+      type: { type: AssociationTypeType.BelongsTo },
+      sourceModelId: '2',
+      targetModelId: '1',
+    },
+    {
+      id: '2',
+      type: { type: AssociationTypeType.BelongsTo },
+      sourceModelId: '2',
+      targetModelId: '3',
+    },
   ],
 }
 
@@ -101,29 +118,48 @@ const film: Model = {
     },
   ],
   associations: [
-    { id: '3', type: AssociationType.HasMany, sourceModelId: '3', targetModelId: '2' },
+    {
+      id: '3',
+      type: { type: AssociationTypeType.HasMany },
+      sourceModelId: '3',
+      targetModelId: '2',
+    },
     {
       id: '4',
-      type: AssociationType.ManyToMany,
-      through: { type: ThroughType.ThroughModel, modelId: '2' },
+      type: {
+        type: AssociationTypeType.ManyToMany,
+        through: { type: ThroughType.ThroughModel, modelId: '2' },
+      },
       sourceModelId: '3',
       targetModelId: '1',
     },
-    { id: '5', type: AssociationType.HasMany, sourceModelId: '3', targetModelId: '4' },
+    {
+      id: '5',
+      type: { type: AssociationTypeType.HasMany },
+      sourceModelId: '3',
+      targetModelId: '4',
+    },
     {
       id: '6',
-      type: AssociationType.ManyToMany,
-      through: { type: ThroughType.ThroughModel, modelId: '4' },
+      type: {
+        type: AssociationTypeType.ManyToMany,
+        through: { type: ThroughType.ThroughModel, modelId: '4' },
+      },
       sourceModelId: '3',
       targetModelId: '5',
     },
     {
       id: '7',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: '3',
       targetModelId: '6',
     },
-    { id: '8', type: AssociationType.HasMany, sourceModelId: '3', targetModelId: '7' },
+    {
+      id: '8',
+      type: { type: AssociationTypeType.HasMany },
+      sourceModelId: '3',
+      targetModelId: '7',
+    },
   ],
 }
 
@@ -132,8 +168,18 @@ const filmCategory: Model = {
   name: 'film category',
   fields: [],
   associations: [
-    { id: '9', type: AssociationType.BelongsTo, sourceModelId: '4', targetModelId: '3' },
-    { id: '10', type: AssociationType.BelongsTo, sourceModelId: '4', targetModelId: '5' },
+    {
+      id: '9',
+      type: { type: AssociationTypeType.BelongsTo },
+      sourceModelId: '4',
+      targetModelId: '3',
+    },
+    {
+      id: '10',
+      type: { type: AssociationTypeType.BelongsTo },
+      sourceModelId: '4',
+      targetModelId: '5',
+    },
   ],
 }
 
@@ -156,11 +202,18 @@ const category: Model = {
     },
   ],
   associations: [
-    { id: '11', type: AssociationType.HasMany, sourceModelId: '5', targetModelId: '4' },
+    {
+      id: '11',
+      type: { type: AssociationTypeType.HasMany },
+      sourceModelId: '5',
+      targetModelId: '4',
+    },
     {
       id: '12',
-      type: AssociationType.ManyToMany,
-      through: { type: ThroughType.ThroughModel, modelId: '4' },
+      type: {
+        type: AssociationTypeType.ManyToMany,
+        through: { type: ThroughType.ThroughModel, modelId: '4' },
+      },
       sourceModelId: '5',
       targetModelId: '3',
     },
@@ -186,7 +239,12 @@ const language: Model = {
     },
   ],
   associations: [
-    { id: '13', type: AssociationType.HasMany, sourceModelId: '6', targetModelId: '4' },
+    {
+      id: '13',
+      type: { type: AssociationTypeType.HasMany },
+      sourceModelId: '6',
+      targetModelId: '4',
+    },
   ],
 }
 
@@ -203,9 +261,24 @@ const inventory: Model = {
     },
   ],
   associations: [
-    { id: '14', type: AssociationType.BelongsTo, sourceModelId: '7', targetModelId: '4' },
-    { id: '15', type: AssociationType.BelongsTo, sourceModelId: '7', targetModelId: '8' },
-    { id: '16', type: AssociationType.HasMany, sourceModelId: '7', targetModelId: '9' },
+    {
+      id: '14',
+      type: { type: AssociationTypeType.BelongsTo },
+      sourceModelId: '7',
+      targetModelId: '4',
+    },
+    {
+      id: '15',
+      type: { type: AssociationTypeType.BelongsTo },
+      sourceModelId: '7',
+      targetModelId: '8',
+    },
+    {
+      id: '16',
+      type: { type: AssociationTypeType.HasMany },
+      sourceModelId: '7',
+      targetModelId: '9',
+    },
   ],
 }
 
@@ -222,10 +295,15 @@ const store: Model = {
     },
   ],
   associations: [
-    { id: '17', type: AssociationType.HasMany, sourceModelId: '8', targetModelId: '7' },
+    {
+      id: '17',
+      type: { type: AssociationTypeType.HasMany },
+      sourceModelId: '8',
+      targetModelId: '7',
+    },
     {
       id: '18',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: '8',
       targetModelId: '10',
       foreignKey: 'managerStaffId',
@@ -252,8 +330,18 @@ const rental: Model = {
     },
   ],
   associations: [
-    { id: '19', type: AssociationType.BelongsTo, sourceModelId: '9', targetModelId: '7' },
-    { id: '20', type: AssociationType.BelongsTo, sourceModelId: '9', targetModelId: '10' },
+    {
+      id: '19',
+      type: { type: AssociationTypeType.BelongsTo },
+      sourceModelId: '9',
+      targetModelId: '7',
+    },
+    {
+      id: '20',
+      type: { type: AssociationTypeType.BelongsTo },
+      sourceModelId: '9',
+      targetModelId: '10',
+    },
   ],
 }
 
@@ -289,12 +377,17 @@ const staff: Model = {
   associations: [
     {
       id: '21',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       sourceModelId: '10',
       targetModelId: '8',
       foreignKey: 'managerStaffId',
     },
-    { id: '22', type: AssociationType.HasMany, sourceModelId: '10', targetModelId: '9' },
+    {
+      id: '22',
+      type: { type: AssociationTypeType.HasMany },
+      sourceModelId: '10',
+      targetModelId: '9',
+    },
   ],
 }
 
@@ -328,8 +421,18 @@ const customer: Model = {
     },
   ],
   associations: [
-    { id: '23', type: AssociationType.BelongsTo, sourceModelId: '11', targetModelId: '8' },
-    { id: '24', type: AssociationType.HasMany, sourceModelId: '11', targetModelId: '9' },
+    {
+      id: '23',
+      type: { type: AssociationTypeType.BelongsTo },
+      sourceModelId: '11',
+      targetModelId: '8',
+    },
+    {
+      id: '24',
+      type: { type: AssociationTypeType.HasMany },
+      sourceModelId: '11',
+      targetModelId: '9',
+    },
   ],
 }
 

@@ -1,4 +1,11 @@
-import { AssociationType, DatabaseOptions, DataType, DataTypeType, lines, Model } from '@lib/core'
+import {
+  AssociationTypeType,
+  DatabaseOptions,
+  DataType,
+  DataTypeType,
+  lines,
+  Model,
+} from '@lib/core'
 import { hasJsonType, modelName } from '../../helpers'
 import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
 
@@ -80,5 +87,7 @@ const associationTypes = ({ model, association }: ModelAssociation): string[] =>
   [
     modelName(model),
     `${modelName(model)}Id`,
-    association.type === AssociationType.HasOne ? `${modelName(model)}CreationAttributes` : null,
+    association.type.type === AssociationTypeType.HasOne
+      ? `${modelName(model)}CreationAttributes`
+      : null,
   ].filter((x): x is string => !!x)

@@ -1,4 +1,4 @@
-import { Association, AssociationType, DataTypeType, Field, Model, Schema } from '@lib/core'
+import { Association, AssociationTypeType, DataTypeType, Field, Model, Schema } from '@lib/core'
 import { versionedName } from '@lib/utils'
 import shortid from 'shortid'
 
@@ -48,8 +48,16 @@ export function emptyField(): Field {
   return { id: shortid(), name: '', type: { type: DataTypeType.String } }
 }
 
-export function emptyAssociation(targetModelId: Model['id']): Association {
-  return { id: shortid(), type: AssociationType.BelongsTo, targetModelId }
+export function emptyAssociation(
+  sourceModelId: Model['id'],
+  targetModelId: Model['id'],
+): Association {
+  return {
+    id: shortid(),
+    sourceModelId,
+    type: { type: AssociationTypeType.BelongsTo },
+    targetModelId,
+  }
 }
 
 function get<T>(key: string): Promise<T | null> {

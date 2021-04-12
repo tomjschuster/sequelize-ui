@@ -1,5 +1,6 @@
 import { DataTypeType, Field, Model } from '@lib/core'
 import { pascalCase, plural as plural_, singular } from '@lib/utils'
+import shortid from 'shortid'
 
 // some association methods have singular and plural forms
 // for example: "has many deer" would have addDeer for both adding one or multiple deer
@@ -15,6 +16,7 @@ export const addIdField = (fields: Field[]): Field[] =>
   fields.some((f) => f.primaryKey) ? fields : [idField(), ...fields]
 
 const idField = (): Field => ({
+  id: shortid(),
   name: 'id',
   type: { type: DataTypeType.Integer },
   primaryKey: true,

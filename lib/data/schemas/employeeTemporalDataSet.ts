@@ -1,4 +1,4 @@
-import { AssociationType, DataTypeType, Model, Schema, ThroughType } from '@lib/core'
+import { AssociationTypeType, DataTypeType, Model, Schema, ThroughType } from '@lib/core'
 
 enum Id {
   Employees = '1',
@@ -54,14 +54,14 @@ const employee: Model = {
     {
       id: '1',
       foreignKey: 'emp_no',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Employees,
       targetModelId: Id.Salaries,
     },
     {
       id: '2',
       foreignKey: 'emp_no',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Employees,
       targetModelId: Id.Titles,
     },
@@ -69,21 +69,25 @@ const employee: Model = {
       id: '3',
       alias: 'employingDepartment',
       foreignKey: 'emp_no',
-      targetFk: 'dept_no',
-      type: AssociationType.ManyToMany,
-      through: { type: ThroughType.ThroughModel, modelId: Id.DepartmentEmployees },
       sourceModelId: Id.Employees,
       targetModelId: Id.Departments,
+      type: {
+        type: AssociationTypeType.ManyToMany,
+        through: { type: ThroughType.ThroughModel, modelId: Id.DepartmentEmployees },
+        targetFk: 'dept_no',
+      },
     },
     {
       id: '4',
       alias: 'managedDepartment',
       foreignKey: 'emp_no',
-      targetFk: 'dept_no',
-      type: AssociationType.ManyToMany,
-      through: { type: ThroughType.ThroughModel, modelId: Id.DepartmentManagers },
       sourceModelId: Id.Employees,
       targetModelId: Id.Departments,
+      type: {
+        type: AssociationTypeType.ManyToMany,
+        through: { type: ThroughType.ThroughModel, modelId: Id.DepartmentManagers },
+        targetFk: 'dept_no',
+      },
     },
   ],
 }
@@ -110,30 +114,34 @@ const department: Model = {
     {
       id: '5',
       alias: 'employee',
-      type: AssociationType.ManyToMany,
-      through: { type: ThroughType.ThroughModel, modelId: Id.DepartmentEmployees },
       sourceModelId: Id.Departments,
       targetModelId: Id.Employees,
+      type: {
+        type: AssociationTypeType.ManyToMany,
+        through: { type: ThroughType.ThroughModel, modelId: Id.DepartmentEmployees },
+      },
     },
     {
       id: '5',
       alias: 'manager',
-      type: AssociationType.ManyToMany,
-      through: { type: ThroughType.ThroughModel, modelId: Id.DepartmentManagers },
       sourceModelId: Id.Departments,
       targetModelId: Id.Employees,
+      type: {
+        type: AssociationTypeType.ManyToMany,
+        through: { type: ThroughType.ThroughModel, modelId: Id.DepartmentManagers },
+      },
     },
     {
       id: '6',
       foreignKey: 'dept_no',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Departments,
       targetModelId: Id.DepartmentEmployees,
     },
     {
       id: '7',
       foreignKey: 'dept_no',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Departments,
       targetModelId: Id.DepartmentManagers,
     },
@@ -175,14 +183,14 @@ const departmentEmployee: Model = {
     {
       id: '8',
       foreignKey: 'emp_no',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.DepartmentEmployees,
       targetModelId: Id.Employees,
     },
     {
       id: '9',
       foreignKey: 'dept_no',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.DepartmentEmployees,
       targetModelId: Id.Departments,
     },
@@ -224,14 +232,14 @@ const departmentManager: Model = {
     {
       id: '10',
       foreignKey: 'emp_no',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.DepartmentManagers,
       targetModelId: Id.Employees,
     },
     {
       id: '11',
       foreignKey: 'dept_no',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.DepartmentManagers,
       targetModelId: Id.Departments,
     },
@@ -272,7 +280,7 @@ const title: Model = {
     {
       id: '12',
       foreignKey: 'emp_no',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.Titles,
       targetModelId: Id.Employees,
     },
@@ -313,7 +321,7 @@ const salary: Model = {
     {
       id: '13',
       foreignKey: 'emp_no',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.Salaries,
       targetModelId: Id.Employees,
     },

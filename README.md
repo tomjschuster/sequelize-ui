@@ -2,7 +2,7 @@ Todo:
 
 UI
 
-- [ ] Refactor Association form
+- [ ] Delete schema, model, field, association
 - [ ] Form validation
   - [ ] Name format
   - [ ] Name uniqueness

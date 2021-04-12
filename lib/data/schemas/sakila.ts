@@ -1,4 +1,4 @@
-import { AssociationType, DataTypeType, Model, Schema, ThroughType } from '@lib/core'
+import { AssociationTypeType, DataTypeType, Model, Schema, ThroughType } from '@lib/core'
 
 enum Id {
   Actor = '1',
@@ -47,11 +47,13 @@ const actor: Model = {
     {
       id: '-20',
       foreignKey: 'actor_id',
-      targetFk: 'film_id',
-      type: AssociationType.ManyToMany,
-      through: { type: ThroughType.ThroughModel, modelId: Id.FilmActor },
       sourceModelId: Id.Actor,
       targetModelId: Id.Film,
+      type: {
+        type: AssociationTypeType.ManyToMany,
+        targetFk: 'film_id',
+        through: { type: ThroughType.ThroughModel, modelId: Id.FilmActor },
+      },
     },
   ],
 }
@@ -133,7 +135,7 @@ const film: Model = {
   associations: [
     {
       id: '-19',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.Film,
       targetModelId: Id.Language,
     },
@@ -141,34 +143,38 @@ const film: Model = {
       id: '-18',
       alias: 'original_language',
       foreignKey: 'original_language_id',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.Film,
       targetModelId: Id.Language,
     },
     {
       id: '-17',
       foreignKey: 'film_id',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Film,
       targetModelId: Id.Inventory,
     },
     {
       id: '-16',
       foreignKey: 'film_id',
-      targetFk: 'actor_id',
-      type: AssociationType.ManyToMany,
-      through: { type: ThroughType.ThroughModel, modelId: Id.FilmActor },
       sourceModelId: Id.Film,
       targetModelId: Id.Actor,
+      type: {
+        type: AssociationTypeType.ManyToMany,
+        targetFk: 'actor_id',
+        through: { type: ThroughType.ThroughModel, modelId: Id.FilmActor },
+      },
     },
     {
       id: '-15',
       foreignKey: 'film_id',
-      targetFk: 'category_id',
-      type: AssociationType.ManyToMany,
-      through: { type: ThroughType.ThroughModel, modelId: Id.FilmCategory },
       sourceModelId: Id.Film,
       targetModelId: Id.Category,
+      type: {
+        type: AssociationTypeType.ManyToMany,
+        targetFk: 'category_id',
+        through: { type: ThroughType.ThroughModel, modelId: Id.FilmCategory },
+      },
     },
   ],
 }
@@ -188,7 +194,7 @@ const language: Model = {
   associations: [
     {
       id: '-14',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Language,
       targetModelId: Id.Film,
     },
@@ -196,7 +202,7 @@ const language: Model = {
       id: '-13',
       alias: 'original_language_film',
       foreignKey: 'original_language_id',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Language,
       targetModelId: Id.Film,
     },
@@ -219,11 +225,13 @@ const category: Model = {
     {
       id: '-12',
       foreignKey: 'category_id',
-      targetFk: 'film_id',
-      type: AssociationType.ManyToMany,
-      through: { type: ThroughType.ThroughModel, modelId: Id.FilmCategory },
       sourceModelId: Id.Category,
       targetModelId: Id.Film,
+      type: {
+        type: AssociationTypeType.ManyToMany,
+        targetFk: 'film_id',
+        through: { type: ThroughType.ThroughModel, modelId: Id.FilmCategory },
+      },
     },
   ],
 }
@@ -243,13 +251,13 @@ const inventory: Model = {
   associations: [
     {
       id: '-11',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.Inventory,
       targetModelId: Id.Film,
     },
     {
       id: '-10',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.Inventory,
       targetModelId: Id.Store,
     },
@@ -271,19 +279,19 @@ const store: Model = {
   associations: [
     {
       id: '-9',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Store,
       targetModelId: Id.Inventory,
     },
     {
       id: '-8',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Store,
       targetModelId: Id.Staff,
     },
     {
       id: '-7',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Store,
       targetModelId: Id.Customer,
     },
@@ -291,13 +299,13 @@ const store: Model = {
       id: '-6',
       alias: 'manager',
       foreignKey: 'manager_staff_id',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.Store,
       targetModelId: Id.Staff,
     },
     {
       id: '-5',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.Store,
       targetModelId: Id.Address,
     },
@@ -358,7 +366,7 @@ const staff: Model = {
   associations: [
     {
       id: '-4',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Store,
       sourceModelId: Id.Staff,
     },
@@ -366,25 +374,25 @@ const staff: Model = {
       id: '-3',
       alias: 'managed_store',
       foreignKey: 'manager_staff_id',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.Store,
       sourceModelId: Id.Staff,
     },
     {
       id: '-2',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Address,
       sourceModelId: Id.Staff,
     },
     {
       id: '1',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.Rental,
       sourceModelId: Id.Staff,
     },
     {
       id: '0',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.Payment,
       sourceModelId: Id.Staff,
     },
@@ -429,25 +437,25 @@ const customer: Model = {
   associations: [
     {
       id: '1',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Store,
       sourceModelId: Id.Customer,
     },
     {
       id: '2',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Address,
       sourceModelId: Id.Customer,
     },
     {
       id: '3',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.Rental,
       sourceModelId: Id.Customer,
     },
     {
       id: '4',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.Payment,
       sourceModelId: Id.Customer,
     },
@@ -492,25 +500,25 @@ const address: Model = {
   associations: [
     {
       id: '5',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.City,
       sourceModelId: Id.Address,
     },
     {
       id: '6',
-      type: AssociationType.HasOne,
+      type: { type: AssociationTypeType.HasOne },
       targetModelId: Id.Customer,
       sourceModelId: Id.Address,
     },
     {
       id: '7',
-      type: AssociationType.HasOne,
+      type: { type: AssociationTypeType.HasOne },
       targetModelId: Id.Staff,
       sourceModelId: Id.Address,
     },
     {
       id: '8',
-      type: AssociationType.HasOne,
+      type: { type: AssociationTypeType.HasOne },
       targetModelId: Id.Store,
       sourceModelId: Id.Address,
     },
@@ -543,25 +551,25 @@ const rental: Model = {
   associations: [
     {
       id: '9',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Inventory,
       sourceModelId: Id.Rental,
     },
     {
       id: '10',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Customer,
       sourceModelId: Id.Rental,
     },
     {
       id: '11',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Staff,
       sourceModelId: Id.Rental,
     },
     {
       id: '12',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.Payment,
       sourceModelId: Id.Rental,
     },
@@ -595,19 +603,19 @@ const payment: Model = {
   associations: [
     {
       id: '13',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Customer,
       sourceModelId: Id.Payment,
     },
     {
       id: '14',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Staff,
       sourceModelId: Id.Payment,
     },
     {
       id: '15',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Rental,
       sourceModelId: Id.Payment,
     },
@@ -635,13 +643,13 @@ const city: Model = {
   associations: [
     {
       id: '16',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Country,
       sourceModelId: Id.City,
     },
     {
       id: '17',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.Address,
       sourceModelId: Id.City,
     },
@@ -669,7 +677,7 @@ const country: Model = {
   associations: [
     {
       id: '18',
-      type: AssociationType.HasMany,
+      type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.City,
       sourceModelId: Id.Country,
     },
@@ -691,13 +699,13 @@ const film_actor: Model = {
   associations: [
     {
       id: '19',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.FilmActor,
       targetModelId: Id.Film,
     },
     {
       id: '20',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.FilmActor,
       targetModelId: Id.Actor,
     },
@@ -719,13 +727,13 @@ const film_category: Model = {
   associations: [
     {
       id: '21',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.FilmCategory,
       targetModelId: Id.Film,
     },
     {
       id: '22',
-      type: AssociationType.BelongsTo,
+      type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.FilmCategory,
       targetModelId: Id.Category,
     },

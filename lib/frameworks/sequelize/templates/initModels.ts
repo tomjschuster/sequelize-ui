@@ -1,6 +1,6 @@
 import {
   Association,
-  AssociationType,
+  AssociationTypeType,
   blank,
   DatabaseCaseStyle,
   DatabaseOptions,
@@ -123,14 +123,14 @@ const modelAssociation = ({
 }
 
 const associationLabel = ({ type }: Association): string => {
-  switch (type) {
-    case AssociationType.BelongsTo:
+  switch (type.type) {
+    case AssociationTypeType.BelongsTo:
       return 'belongsTo'
-    case AssociationType.HasOne:
+    case AssociationTypeType.HasOne:
       return 'hasOne'
-    case AssociationType.HasMany:
+    case AssociationTypeType.HasMany:
       return 'hasMany'
-    case AssociationType.ManyToMany:
+    case AssociationTypeType.ManyToMany:
       return 'belongsToMany'
   }
 }
@@ -151,7 +151,7 @@ const associationOptions = ({
     ', {',
     lines(
       [
-        asField(association.alias, association.type),
+        asField(association.alias, association.type.type),
         throughField(association, modelById),
         foreignKeyField({ model, association, modelById, dbOptions }),
         otherKeyField({ model, association, modelById, dbOptions }),
@@ -162,22 +162,22 @@ const associationOptions = ({
     '}',
   ])
 
-const asField = (alias: string | undefined, type: AssociationType): string | null =>
+const asField = (alias: string | undefined, type: AssociationTypeType): string | null =>
   alias ? `as: '${aliasValue({ alias: alias, type: type })}'` : null
 
 const throughField = (association: Association, modelById: ModelById): string | null =>
-  association.type === AssociationType.ManyToMany
-    ? `through: ${throughValue({ association, modelById })}`
+  association.type.type === AssociationTypeType.ManyToMany
+    ? `through: ${throughValue({ type: association.type, modelById })}`
     : null
 
 type ThroughValueArgs = {
-  association: ManyToManyAssociation
+  type: ManyToManyAssociation
   modelById: ModelById
 }
-const throughValue = ({ association, modelById }: ThroughValueArgs): string =>
-  association.through.type === ThroughType.ThroughTable
-    ? `'${association.through.table}'`
-    : `${modelName(modelById[association.through.modelId])} as typeof Model`
+const throughValue = ({ type, modelById }: ThroughValueArgs): string =>
+  type.through.type === ThroughType.ThroughTable
+    ? `'${type.through.table}'`
+    : `${modelName(modelById[type.through.modelId])} as typeof Model`
 
 const foreignKeyField = ({
   model,
@@ -202,9 +202,9 @@ const getForeignKey = ({
 }: AssociationOptionsArgs): string => {
   const name = association.foreignKey
     ? association.foreignKey
-    : association.alias && association.type === AssociationType.BelongsTo
+    : association.alias && association.type.type === AssociationTypeType.BelongsTo
     ? association.alias
-    : association.type === AssociationType.BelongsTo
+    : association.type.type === AssociationTypeType.BelongsTo
     ? modelById[association.targetModelId].name
     : model.name
 
@@ -228,10 +228,10 @@ const getOtherKey = ({
   modelById,
   dbOptions,
 }: AssociationOptionsArgs): string | null => {
-  if (association.type !== AssociationType.ManyToMany) return null
+  if (association.type.type !== AssociationTypeType.ManyToMany) return null
 
-  const name = association.targetFk
-    ? association.targetFk
+  const name = association.type.targetFk
+    ? association.type.targetFk
     : association.alias
     ? association.alias
     : modelById[association.targetModelId].name
@@ -243,19 +243,19 @@ const getOtherKey = ({
 
 type AliasValueArgs = {
   alias: string
-  type: AssociationType
+  type: AssociationTypeType
 }
 const aliasValue = ({ type, alias }: AliasValueArgs) => {
   const camelAlias = camelCase(alias)
   switch (type) {
-    case AssociationType.HasMany:
-    case AssociationType.ManyToMany:
+    case AssociationTypeType.HasMany:
+    case AssociationTypeType.ManyToMany:
       return plural(camelAlias)
-    case AssociationType.BelongsTo:
-    case AssociationType.HasOne:
+    case AssociationTypeType.BelongsTo:
+    case AssociationTypeType.HasOne:
       return singular(camelAlias)
   }
 }
 
 const onDeleteField = ({ type }: Association): string | null =>
-  type === AssociationType.ManyToMany ? `onDelete: 'CASCADE'` : null
+  type.type === AssociationTypeType.ManyToMany ? `onDelete: 'CASCADE'` : null

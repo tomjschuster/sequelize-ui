@@ -41,10 +41,10 @@ export default function ModelForm({
   )
 
   const handleChangeAssociation = React.useCallback(
-    (id: Association['id'], changes: Association) =>
+    (id: Association['id'], changes: Partial<Association>) =>
       setFormModel((m) => ({
         ...m,
-        associations: m.associations.map((a) => (a.id === id ? changes : a)),
+        associations: m.associations.map((a) => (a.id === id ? { ...a, ...changes } : a)),
       })),
     [setFormModel],
   )
@@ -56,7 +56,10 @@ export default function ModelForm({
 
   const handleClickAddAssociation = React.useCallback(
     () =>
-      setFormModel((m) => ({ ...m, associations: [...m.associations, emptyAssociation(m.id)] })),
+      setFormModel((m) => ({
+        ...m,
+        associations: [...m.associations, emptyAssociation(m.id, m.id)],
+      })),
     [],
   )
 
@@ -73,7 +76,7 @@ export default function ModelForm({
 
       <button type="submit">Save</button>
 
-      <ModelFieldset model={model} onChange={handleChangeModel} />
+      <ModelFieldset name={formModel.name} onChange={handleChangeModel} />
 
       <h3>Fields</h3>
       <button type="button" onClick={handleClickAddField}>
@@ -95,17 +98,14 @@ export default function ModelForm({
         Add association
       </button>
 
-      {formModel.associations.map((association) => {
-        console.log('id', association.id)
-        return (
-          <AssociationFieldset
-            key={`association-form-${association.id}`}
-            association={association}
-            onChange={handleChangeAssociation}
-            schema={schema}
-          />
-        )
-      })}
+      {formModel.associations.map((association) => (
+        <AssociationFieldset
+          key={`association-form-${association.id}`}
+          association={association}
+          onChange={handleChangeAssociation}
+          schema={schema}
+        />
+      ))}
     </form>
   )
 }

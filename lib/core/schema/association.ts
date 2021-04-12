@@ -1,89 +1,30 @@
-export type Association =
-  | BelongsToAssociation
-  | HasOneAssociation
-  | HasManyAssociation
-  | ManyToManyAssociation
-
-type ChangeAssociationArgs =
-  | {
-      type: Exclude<AssociationType, AssociationType.ManyToMany>
-    }
-  | {
-      type: AssociationType.ManyToMany
-      table: string
-    }
-
-export function changeAssociationType(
-  association: Association,
-  change: ChangeAssociationArgs,
-): Association {
-  if (change.type === AssociationType.ManyToMany) {
-    return {
-      ...associationBase(association),
-      type: change.type,
-      through: { type: ThroughType.ThroughTable, table: change.table },
-    }
-  }
-
-  return { ...associationBase(association), type: change.type }
-}
-
-function associationBase(association: Association): Omit<AssociationBase<never>, 'type'> {
-  return {
-    id: association.id,
-    sourceModelId: association.sourceModelId,
-    targetModelId: association.targetModelId,
-    foreignKey: association.foreignKey,
-    alias: association.alias,
-  }
-}
-
-export function displayAssociation(association: Association): string {
-  return displayAssociationType(association.type)
-}
-
-export function displayAssociationType(type: AssociationType): string {
-  switch (type) {
-    case AssociationType.BelongsTo:
-      return 'belongs to'
-    case AssociationType.HasMany:
-      return 'has many'
-    case AssociationType.HasOne:
-      return 'has one'
-    case AssociationType.ManyToMany:
-      return 'many to many'
-  }
-}
-
-export function displayThroughType(type: ThroughType): string {
-  switch (type) {
-    case ThroughType.ThroughModel:
-      return 'Through model'
-    case ThroughType.ThroughTable:
-      return 'Through table'
-  }
-}
-
-export enum AssociationType {
-  BelongsTo = 'BELONGS_TO',
-  HasOne = 'HAS_ONE',
-  HasMany = 'HAS_MANY',
-  ManyToMany = 'MANY_TO_MANY',
-}
-
-type AssociationBase<T extends AssociationType> = {
+export type Association = {
   id: string
-  type: T
+  type: AssociationType
   sourceModelId: string
   targetModelId: string
   foreignKey?: string
   alias?: string
 }
 
-export type BelongsToAssociation = AssociationBase<AssociationType.BelongsTo>
-export type HasOneAssociation = AssociationBase<AssociationType.HasOne>
-export type HasManyAssociation = AssociationBase<AssociationType.HasMany>
-export type ManyToManyAssociation = AssociationBase<AssociationType.ManyToMany> & {
+export enum AssociationTypeType {
+  BelongsTo = 'BELONGS_TO',
+  HasOne = 'HAS_ONE',
+  HasMany = 'HAS_MANY',
+  ManyToMany = 'MANY_TO_MANY',
+}
+
+export type AssociationType =
+  | BelongsToAssociation
+  | HasOneAssociation
+  | HasManyAssociation
+  | ManyToManyAssociation
+
+export type BelongsToAssociation = { type: AssociationTypeType.BelongsTo }
+export type HasOneAssociation = { type: AssociationTypeType.HasOne }
+export type HasManyAssociation = { type: AssociationTypeType.HasMany }
+export type ManyToManyAssociation = {
+  type: AssociationTypeType.ManyToMany
   through: ManyToManyThrough
   targetFk?: string
 }
@@ -102,4 +43,30 @@ type ManyToManyThroughTable = {
 export enum ThroughType {
   ThroughModel = 'THROUGH_MODEL',
   ThroughTable = 'THROUGH_TABLE',
+}
+
+export function displayAssociation(association: Association): string {
+  return displayAssociationType(association.type.type)
+}
+
+export function displayAssociationType(type: AssociationTypeType): string {
+  switch (type) {
+    case AssociationTypeType.BelongsTo:
+      return 'belongs to'
+    case AssociationTypeType.HasMany:
+      return 'has many'
+    case AssociationTypeType.HasOne:
+      return 'has one'
+    case AssociationTypeType.ManyToMany:
+      return 'many to many'
+  }
+}
+
+export function displayThroughType(type: ThroughType): string {
+  switch (type) {
+    case ThroughType.ThroughModel:
+      return 'Through model'
+    case ThroughType.ThroughTable:
+      return 'Through table'
+  }
 }

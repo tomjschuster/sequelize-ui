@@ -1,6 +1,6 @@
 import {
   Association,
-  AssociationType,
+  AssociationTypeType,
   blank,
   DatabaseCaseStyle,
   DatabaseNounForm,
@@ -107,8 +107,8 @@ const associationType = ({
   const singularAssociationMethod = singular(pascalCase(associationName))
   const pluralAssociationMethod = plural(pascalCase(associationName))
 
-  switch (association.type) {
-    case AssociationType.BelongsTo:
+  switch (association.type.type) {
+    case AssociationTypeType.BelongsTo:
       return [
         `// ${sourceName} belongsTo ${targetName}${aliasLabel(association)}`,
         `public readonly ${singularAssociationField}?: ${targetName}`,
@@ -117,7 +117,7 @@ const associationType = ({
         `public create${singularAssociationMethod}!: Sequelize.BelongsToCreateAssociationMixin<${targetName}>`,
         blank(),
       ].join('\n')
-    case AssociationType.HasMany:
+    case AssociationTypeType.HasMany:
       return [
         `// ${sourceName} hasMany ${targetName}${aliasLabel(association)}`,
         `public readonly ${pluralAssociationField}?: ${targetName}[]`,
@@ -133,7 +133,7 @@ const associationType = ({
         `public count${pluralAssociationMethod}!: Sequelize.HasManyCountAssociationsMixin`,
         blank(),
       ].join('\n')
-    case AssociationType.HasOne:
+    case AssociationTypeType.HasOne:
       return [
         `// ${sourceName} hasOne ${targetName}${aliasLabel(association)}`,
         `public readonly ${singularAssociationField}?: ${targetName}`,
@@ -142,7 +142,7 @@ const associationType = ({
         `public create${singularAssociationMethod}!: Sequelize.HasOneCreateAssociationMixin<${targetName}CreationAttributes>`,
         blank(),
       ].join('\n')
-    case AssociationType.ManyToMany:
+    case AssociationTypeType.ManyToMany:
       return [
         `// ${sourceName} belongsToMany ${targetName}${aliasLabel(association)}`,
         `public readonly ${pluralAssociationField}?: ${targetName}[]`,

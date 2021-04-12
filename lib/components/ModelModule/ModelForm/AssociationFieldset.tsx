@@ -3,22 +3,21 @@ import Select from '@lib/components/form/Select'
 import TextInput from '@lib/components/form/TextInput'
 import {
   Association,
-  AssociationType,
-  changeAssociationType,
+  AssociationTypeType,
   displayAssociationType,
   displayThroughType,
-  ManyToManyThrough,
+  ManyToManyAssociation,
   Model,
   Schema,
   ThroughType,
 } from '@lib/core'
 import { snakeCase } from '@lib/utils'
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 type AssociationFieldsetProps = {
   association: Association
   schema: Schema
-  onChange: (id: Association['id'], changes: Association) => void
+  onChange: (id: Association['id'], changes: Partial<Association>) => void
 }
 
 function AssociationFieldset({
@@ -31,78 +30,142 @@ function AssociationFieldset({
     [schema.models],
   )
 
-  const model = schema.models.find((m) => m.id === association.sourceModelId) as Model
-  const targetModel = schema.models.find((m) => m.id === association.targetModelId) as Model
-
-  const handleChangeType = (type: AssociationType) => {
-    const change =
-      type === AssociationType.ManyToMany
-        ? { type, table: snakeCase(`${model.name} ${targetModel.name}`) }
-        : { type }
-
-    onChange(association.id, changeAssociationType(association, change))
-  }
-
-  const handleChangeTarget = (model: Model) =>
-    onChange(association.id, { ...association, targetModelId: model.id })
-
-  const handleChangeAlias = (alias: string) =>
-    onChange(association.id, { ...association, alias: alias || undefined })
-
-  const handleChangeForeignKey = (foreignKey: string) =>
-    onChange(association.id, {
-      ...association,
-      foreignKey: foreignKey || undefined,
-    })
-
-  const handleChangeThroughType = (type: ThroughType) => {
-    const table = snakeCase(`${model.name} ${targetModel.name}`)
-
-    const throughModel =
-      schema.models.find((m) => snakeCase(m.name) === table) || (schema.models[0] as Model)
-
-    const through: ManyToManyThrough =
-      type === ThroughType.ThroughModel ? { type, modelId: throughModel.id } : { type, table }
-    onChange(association.id, {
-      ...association,
-      type: AssociationType.ManyToMany,
-      through,
-    })
-  }
-
-  const throughModel = schema.models.find(
-    (m) =>
-      association.type === AssociationType.ManyToMany &&
-      association.through.type === ThroughType.ThroughModel &&
-      m.id === association.through.modelId,
+  const model: Model = useMemo(
+    () => schema.models.find((m) => m.id === association.sourceModelId) as Model,
+    [schema.models, association.sourceModelId],
   )
 
-  const handleChangeThroughModel = (model: Model) =>
-    onChange(association.id, {
-      ...association,
-      type: AssociationType.ManyToMany,
-      through: { type: ThroughType.ThroughModel, modelId: model.id },
-    })
+  const targetModel: Model = useMemo(
+    () => schema.models.find((m) => m.id === association.targetModelId) as Model,
+    [schema.models, association.targetModelId],
+  )
 
-  const handleChangeThroughTable = (table: string) =>
-    onChange(association.id, {
-      ...association,
-      type: AssociationType.ManyToMany,
-      through: { type: ThroughType.ThroughTable, table },
-    })
+  const throughModel: Model | undefined = useMemo(
+    () =>
+      schema.models.find(
+        (m) =>
+          association.type.type === AssociationTypeType.ManyToMany &&
+          association.type.through.type === ThroughType.ThroughModel &&
+          m.id === association.type.through.modelId,
+      ),
+    [schema.models, association.type],
+  )
 
-  const handleChangeTargetForeignKey = (targetFk: string) =>
-    association.type === AssociationType.ManyToMany &&
-    onChange(association.id, { ...association, targetFk: targetFk || undefined })
+  const handleChange = useCallback(
+    (changes: Partial<Association>): void => {
+      onChange(association.id, changes)
+    },
+    [association.id, onChange],
+  )
+
+  const handleChangeManyToMany = useCallback(
+    (cb: (type: ManyToManyAssociation) => ManyToManyAssociation): void => {
+      if (association.type.type !== AssociationTypeType.ManyToMany) {
+        const table = snakeCase(`${model.name} ${targetModel.name}`)
+
+        handleChange({
+          type: cb({
+            type: AssociationTypeType.ManyToMany,
+            through: { type: ThroughType.ThroughTable, table },
+          }),
+        })
+        return
+      }
+      handleChange({ type: cb(association.type) })
+    },
+    [model, targetModel, association.type, handleChange],
+  )
+
+  const handleChangeType = useCallback(
+    (type: AssociationTypeType) => {
+      handleChange({
+        type:
+          type === AssociationTypeType.ManyToMany
+            ? {
+                type,
+                through: {
+                  type: ThroughType.ThroughTable,
+                  table: snakeCase(`${model.name} ${targetModel.name}`),
+                },
+              }
+            : { type },
+      })
+    },
+    [model, targetModel, handleChange],
+  )
+
+  const handleChangeTarget = useCallback(
+    (model: Model) => handleChange({ targetModelId: model.id }),
+    [handleChange],
+  )
+
+  const handleChangeAlias = useCallback(
+    (alias: string) => handleChange({ alias: alias || undefined }),
+    [handleChange],
+  )
+
+  const handleChangeForeignKey = useCallback(
+    (foreignKey: string) => handleChange({ foreignKey: foreignKey || undefined }),
+    [handleChange],
+  )
+
+  const handleChangeThroughType = useCallback(
+    (type: ThroughType) => {
+      const table = snakeCase(`${model.name} ${targetModel.name}`)
+
+      const throughModel =
+        schema.models.find((m) => snakeCase(m.name) === table) || schema.models[0]
+
+      console.log({ throughModel })
+
+      if (type === ThroughType.ThroughModel && throughModel) {
+        handleChangeManyToMany((currType) => ({
+          ...currType,
+          through: { type, modelId: throughModel.id },
+        }))
+        return
+      }
+
+      if (type === ThroughType.ThroughTable) {
+        handleChangeManyToMany((currType) => ({ ...currType, through: { type, table } }))
+      }
+    },
+    [model, targetModel, schema.models, handleChangeManyToMany],
+  )
+
+  const handleChangeThroughModel = useCallback(
+    (model: Model) => {
+      handleChangeManyToMany((type) => ({
+        ...type,
+        through: { type: ThroughType.ThroughModel, modelId: model.id },
+      }))
+    },
+    [handleChangeManyToMany],
+  )
+
+  const handleChangeThroughTable = useCallback(
+    (table: string) =>
+      handleChangeManyToMany((type) => ({
+        ...type,
+        through: { type: ThroughType.ThroughTable, table },
+      })),
+    [handleChangeManyToMany],
+  )
+
+  const handleChangeTargetForeignKey = useCallback(
+    (targetFk: string) =>
+      handleChangeManyToMany((type) => ({ ...type, targetFk: targetFk || undefined })),
+    [handleChangeManyToMany],
+  )
 
   return (
     <fieldset>
       <Select
         id="association-type"
         label="Type"
-        options={AssociationType}
+        options={AssociationTypeType}
         display={displayAssociationType}
-        value={association.type}
+        value={association.type.type}
         onChange={handleChangeType}
       />
       <Select
@@ -125,15 +188,15 @@ function AssociationFieldset({
         value={association.foreignKey || ''}
         onChange={handleChangeForeignKey}
       />
-      {association.type === AssociationType.ManyToMany && schema.models.length > 0 && (
+      {association.type.type === AssociationTypeType.ManyToMany && schema.models.length > 0 && (
         <>
           <Radio
             options={ThroughType}
-            value={association.through.type}
+            value={association.type.through.type}
             display={displayThroughType}
             onChange={handleChangeThroughType}
           />
-          {association.through.type === ThroughType.ThroughModel && (
+          {association.type.through.type === ThroughType.ThroughModel && (
             <Select
               id="association-through-model"
               label="Through model"
@@ -143,18 +206,18 @@ function AssociationFieldset({
               onChange={handleChangeThroughModel}
             />
           )}
-          {association.through.type === ThroughType.ThroughTable && (
+          {association.type.through.type === ThroughType.ThroughTable && (
             <TextInput
               id="association-through-table"
               label="Through table"
-              value={association.through.table}
+              value={association.type.through.table}
               onChange={handleChangeThroughTable}
             />
           )}
           <TextInput
             id="association-target-fk"
             label="Target foreign key"
-            value={association.targetFk || ''}
+            value={association.type.targetFk || ''}
             onChange={handleChangeTargetForeignKey}
           />
         </>

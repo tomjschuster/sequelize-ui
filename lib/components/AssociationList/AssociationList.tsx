@@ -1,6 +1,6 @@
 import {
   Association,
-  AssociationType,
+  AssociationTypeType,
   displayAssociation,
   Model,
   Schema,
@@ -34,14 +34,16 @@ export default function AssociationList({
             association={association}
             targetModel={targetModel}
             through={
-              association.type === AssociationType.ManyToMany
-                ? association.through.type === ThroughType.ThroughTable
-                  ? association.through.table
-                  : titleCase(modelById[association.through.modelId]?.name || '')
+              association.type.type === AssociationTypeType.ManyToMany
+                ? association.type.through.type === ThroughType.ThroughTable
+                  ? association.type.through.table
+                  : titleCase(modelById[association.type.through.modelId]?.name || '')
                 : undefined
             }
             targetFk={
-              association.type === AssociationType.ManyToMany ? association.targetFk : undefined
+              association.type.type === AssociationTypeType.ManyToMany
+                ? association.type.targetFk
+                : undefined
             }
           />
         )
