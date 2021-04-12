@@ -1,14 +1,14 @@
 import AssociationList from '@lib/components/AssociationList'
 import { DataTypeType, displayDataType, Field, Model, Schema } from '@lib/core'
 import { noCase, titleCase } from '@lib/utils'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import * as styles from './styles'
 
 type ModelItemProps = {
   schema: Schema
   model: Model
   disabled: boolean
-  onEdit: () => void
+  onEdit: (id: Model['id']) => void
 }
 export default function ModelItem({
   schema,
@@ -17,14 +17,16 @@ export default function ModelItem({
   onEdit,
 }: ModelItemProps): React.ReactElement {
   const [expanded, setExpanded] = useState<boolean>(false)
-  const handleClick = () => !disabled && setExpanded((e) => !e)
+  const handleClick = useCallback(() => !disabled && setExpanded((e) => !e), [disabled])
+  const handleClickEdit = useCallback(() => onEdit(model.id), [model.id])
+
   return (
     <li className={styles.modelItem} onClick={handleClick}>
       <span className={styles.modelName(disabled)}>{titleCase(model.name)}</span>
 
       {expanded && !disabled && (
         <>
-          <button type="button" onClick={onEdit} disabled={disabled}>
+          <button type="button" onClick={handleClickEdit} disabled={disabled}>
             Edit
           </button>
           <p>Fields</p>

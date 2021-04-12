@@ -61,7 +61,10 @@ export default function ModelForm({
   )
 
   return (
-    <form onSubmit={handleSubmit} className={classnames('bg-white', 'inset-0', 'fixed', 'z-10')}>
+    <form
+      onSubmit={handleSubmit}
+      className={classnames('bg-white', 'inset-0', 'fixed', 'z-10', 'overflow-y-scroll')}
+    >
       <h2>Edit Model</h2>
 
       <button type="button" onClick={onCancel}>

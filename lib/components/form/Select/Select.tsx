@@ -1,10 +1,11 @@
 import React from 'react'
+import { classnames } from 'tailwindcss-classnames'
 import { lookupOptionKey, lookupOptionValue, Options, optionsToList } from '../shared/options'
 
 type SelectProps<T> = {
   id: string
   label: string
-  value: T
+  value: T | undefined
   options: Options<T>
   display: (value: T) => string
   onChange: (value: T) => void
@@ -25,7 +26,7 @@ function Select<T>({
   }
 
   return (
-    <label htmlFor={id}>
+    <label htmlFor={id} className={classnames('flex flex-col items-start')}>
       {label}
       <select id={id} onChange={handleChange} value={lookupOptionKey(options, value)}>
         {optionsToList(options).map(([k, v]) => (

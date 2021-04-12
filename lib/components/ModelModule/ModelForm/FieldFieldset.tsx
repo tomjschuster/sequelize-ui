@@ -15,51 +15,29 @@ type FieldFieldsetProps = {
   onChange: (field: Field, changes: Partial<Field>) => void
 }
 function FieldFieldset({ field, onChange }: FieldFieldsetProps) {
-  const handleChange = React.useCallback(
-    (change: Partial<Field>): void => onChange(field, change),
-    [field, onChange],
-  )
+  const handleChange = (change: Partial<Field>): void => onChange(field, change)
 
-  const handleChangeFieldName = React.useCallback((name: string) => handleChange({ name }), [
-    handleChange,
-  ])
+  const handleChangeFieldName = (name: string) => handleChange({ name })
 
-  const handleChangeFieldDataType = React.useCallback(
-    (type: DataTypeType) => handleChange({ type: dataTypeFromDataTypeType(type) }),
-    [handleChange],
-  )
+  const handleChangeFieldDataType = (type: DataTypeType) =>
+    handleChange({ type: dataTypeFromDataTypeType(type) })
 
-  const handleChangeFieldPrimaryKey = React.useCallback(
-    (primaryKey: boolean) => handleChange({ primaryKey }),
-    [handleChange],
-  )
+  const handleChangeFieldPrimaryKey = (primaryKey: boolean) => handleChange({ primaryKey })
 
-  const handleChangeFieldRequired = React.useCallback(
-    (required: boolean) => handleChange({ required }),
-    [handleChange],
-  )
+  const handleChangeFieldRequired = (required: boolean) => handleChange({ required })
 
-  const handleChangeFieldUnique = React.useCallback(
-    (unique: boolean) => handleChange({ unique }),
-    [],
-  )
+  const handleChangeFieldUnique = (unique: boolean) => handleChange({ unique })
 
-  const handleChangeFieldAutoincrement = React.useCallback(
-    (autoincrement: boolean) =>
-      handleChange({
-        type:
-          field.type.type === DataTypeType.Integer ? { ...field.type, autoincrement } : field.type,
-      }),
-    [handleChange, field],
-  )
+  const handleChangeFieldAutoincrement = (autoincrement: boolean) =>
+    handleChange({
+      type:
+        field.type.type === DataTypeType.Integer ? { ...field.type, autoincrement } : field.type,
+    })
 
-  const handleChangeFieldDefaultNow = React.useCallback(
-    (defaultNow: boolean) =>
-      handleChange({
-        type: isDateTimeType(field.type) ? { ...field.type, defaultNow } : field.type,
-      }),
-    [handleChange, field],
-  )
+  const handleChangeFieldDefaultNow = (defaultNow: boolean) =>
+    handleChange({
+      type: isDateTimeType(field.type) ? { ...field.type, defaultNow } : field.type,
+    })
 
   return (
     <fieldset>

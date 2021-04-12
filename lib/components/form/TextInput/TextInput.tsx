@@ -1,4 +1,5 @@
 import React from 'react'
+import { classnames } from 'tailwindcss-classnames'
 
 type TextInputProps = {
   id: string
@@ -14,7 +15,7 @@ function TextInput({ id, label, value, onChange }: TextInputProps): React.ReactE
   )
 
   return (
-    <label htmlFor={id}>
+    <label htmlFor={id} className={classnames('flex flex-col items-start')}>
       {label}
       <input id={id} type="text" value={value} onChange={handleChange} />
     </label>

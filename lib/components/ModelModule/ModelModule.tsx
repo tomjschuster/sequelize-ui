@@ -8,7 +8,7 @@ type ModelModuleProps = {
   model: Model
   editing: boolean
   disabled: boolean
-  onRequestEdit: () => void
+  onRequestEdit: (id: Model['id']) => void
   onChange: (model: Model) => Promise<void>
   onRequestCancel: () => void
 }

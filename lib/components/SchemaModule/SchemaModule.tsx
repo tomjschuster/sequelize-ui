@@ -1,23 +1,25 @@
 import { Schema } from '@lib/core'
-import React, { useState } from 'react'
+import React from 'react'
 import TextInput from '../form/TextInput'
 
 type SchemaModuleProps = {
   schema: Schema
+  editing: boolean
+  onEdit: () => void
   onUpdate: (schema: Schema) => Promise<void>
+  onCancel: () => void
 }
-export default function SchemaModule({ schema, onUpdate }: SchemaModuleProps): React.ReactElement {
-  const [editing, setEditing] = useState<boolean>(false)
-  const handleEdit = () => setEditing(true)
-  const handleSubmit = async (schema: Schema): Promise<void> => {
-    await onUpdate(schema)
-    setEditing(false)
-  }
-
+export default function SchemaModule({
+  schema,
+  editing,
+  onEdit,
+  onUpdate,
+  onCancel,
+}: SchemaModuleProps): React.ReactElement {
   return editing ? (
-    <SchemaForm schema={schema} onSubmit={handleSubmit} />
+    <SchemaForm schema={schema} onSubmit={onUpdate} onCancel={onCancel} />
   ) : (
-    <SchemaItem schema={schema} onEdit={handleEdit} />
+    <SchemaItem schema={schema} onEdit={onEdit} />
   )
 }
 
@@ -38,9 +40,10 @@ function SchemaItem({ schema, onEdit }: SchemaItemProps): React.ReactElement {
 type SchemaFormProps = {
   schema: Schema
   onSubmit: (schema: Schema) => void
+  onCancel: () => void
 }
 
-function SchemaForm({ schema, onSubmit }: SchemaFormProps): React.ReactElement {
+function SchemaForm({ schema, onSubmit, onCancel }: SchemaFormProps): React.ReactElement {
   const [formSchema, setFormSchema] = React.useState<Schema>(schema)
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
@@ -59,6 +62,9 @@ function SchemaForm({ schema, onSubmit }: SchemaFormProps): React.ReactElement {
         onChange={handleChangeSchemaName}
       />
       <button type="submit">Save</button>
+      <button type="button" onClick={onCancel}>
+        Cancel
+      </button>
     </form>
   )
 }
