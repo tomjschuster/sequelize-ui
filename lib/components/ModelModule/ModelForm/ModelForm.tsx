@@ -32,10 +32,10 @@ export default function ModelForm({
   )
 
   const handleChangeField = React.useCallback(
-    (field: Field, changes: Partial<Field>) =>
+    (id: Field['id'], changes: Partial<Field>) =>
       setFormModel((m) => ({
         ...m,
-        fields: m.fields.map((f) => (f.id === field.id ? { ...f, ...changes } : f)),
+        fields: m.fields.map((f) => (f.id === id ? { ...f, ...changes } : f)),
       })),
     [setFormModel],
   )

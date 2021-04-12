@@ -8,37 +8,56 @@ import {
   Field,
   isDateTimeType,
 } from '@lib/core'
-import React from 'react'
+import React, { useCallback } from 'react'
 
 type FieldFieldsetProps = {
   field: Field
-  onChange: (field: Field, changes: Partial<Field>) => void
+  onChange: (id: Field['id'], changes: Partial<Field>) => void
 }
 function FieldFieldset({ field, onChange }: FieldFieldsetProps) {
-  const handleChange = (change: Partial<Field>): void => onChange(field, change)
+  const handleChange = useCallback((change: Partial<Field>): void => onChange(field.id, change), [
+    field.id,
+    onChange,
+  ])
 
-  const handleChangeFieldName = (name: string) => handleChange({ name })
+  const handleChangeFieldName = useCallback((name: string) => handleChange({ name }), [
+    handleChange,
+  ])
 
-  const handleChangeFieldDataType = (type: DataTypeType) =>
-    handleChange({ type: dataTypeFromDataTypeType(type) })
+  const handleChangeFieldDataType = useCallback(
+    (type: DataTypeType) => handleChange({ type: dataTypeFromDataTypeType(type) }),
+    [handleChange],
+  )
 
-  const handleChangeFieldPrimaryKey = (primaryKey: boolean) => handleChange({ primaryKey })
+  const handleChangeFieldPrimaryKey = useCallback(
+    (primaryKey: boolean) => handleChange({ primaryKey }),
+    [handleChange],
+  )
 
-  const handleChangeFieldRequired = (required: boolean) => handleChange({ required })
+  const handleChangeFieldRequired = useCallback((required: boolean) => handleChange({ required }), [
+    handleChange,
+  ])
 
-  const handleChangeFieldUnique = (unique: boolean) => handleChange({ unique })
+  const handleChangeFieldUnique = useCallback((unique: boolean) => handleChange({ unique }), [
+    handleChange,
+  ])
 
-  const handleChangeFieldAutoincrement = (autoincrement: boolean) =>
-    handleChange({
-      type:
-        field.type.type === DataTypeType.Integer ? { ...field.type, autoincrement } : field.type,
-    })
+  const handleChangeFieldAutoincrement = useCallback(
+    (autoincrement: boolean) =>
+      handleChange({
+        type:
+          field.type.type === DataTypeType.Integer ? { ...field.type, autoincrement } : field.type,
+      }),
+    [field.type, handleChange],
+  )
 
-  const handleChangeFieldDefaultNow = (defaultNow: boolean) =>
-    handleChange({
-      type: isDateTimeType(field.type) ? { ...field.type, defaultNow } : field.type,
-    })
-
+  const handleChangeFieldDefaultNow = useCallback(
+    (defaultNow: boolean) =>
+      handleChange({
+        type: isDateTimeType(field.type) ? { ...field.type, defaultNow } : field.type,
+      }),
+    [field.type, handleChange],
+  )
   return (
     <fieldset>
       <TextInput

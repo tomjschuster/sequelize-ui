@@ -57,8 +57,10 @@ function AssociationFieldset({
 
   const handleChangeThroughType = (type: ThroughType) => {
     const table = snakeCase(`${model.name} ${targetModel.name}`)
+
     const throughModel =
       schema.models.find((m) => snakeCase(m.name) === table) || (schema.models[0] as Model)
+
     const through: ManyToManyThrough =
       type === ThroughType.ThroughModel ? { type, modelId: throughModel.id } : { type, table }
     onChange(association.id, {
