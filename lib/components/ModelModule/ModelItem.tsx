@@ -9,26 +9,41 @@ type ModelItemProps = {
   model: Model
   disabled: boolean
   onEdit: (id: Model['id']) => void
+  onDelete: (id: Model['id']) => void
 }
 export default function ModelItem({
   schema,
   model,
   disabled,
   onEdit,
+  onDelete,
 }: ModelItemProps): React.ReactElement {
   const [expanded, setExpanded] = useState<boolean>(false)
   const handleClick = useCallback(() => !disabled && setExpanded((e) => !e), [disabled])
   const handleClickEdit = useCallback(() => onEdit(model.id), [model.id])
 
+  const handleDelete = useCallback(
+    (evt: React.FormEvent<HTMLFormElement>) => {
+      evt.preventDefault()
+      onDelete(model.id)
+    },
+    [onDelete, model.id],
+  )
+
   return (
-    <li className={styles.modelItem} onClick={handleClick}>
-      <span className={styles.modelName(disabled)}>{titleCase(model.name)}</span>
+    <li className={styles.modelItem}>
+      <span className={styles.modelName(disabled)} onClick={handleClick}>
+        {titleCase(model.name)}
+      </span>
 
       {expanded && !disabled && (
         <>
           <button type="button" onClick={handleClickEdit} disabled={disabled}>
             Edit
           </button>
+          <form onSubmit={handleDelete}>
+            <button type="submit">Delete</button>
+          </form>
           <p>Fields</p>
           <FieldList fields={model.fields} />
           <p>Associations</p>

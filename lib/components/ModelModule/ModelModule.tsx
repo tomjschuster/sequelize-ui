@@ -9,7 +9,8 @@ type ModelModuleProps = {
   editing: boolean
   disabled: boolean
   onRequestEdit: (id: Model['id']) => void
-  onChange: (model: Model) => Promise<void>
+  onRequestDelete: (id: Model['id']) => void
+  onChange: (model: Model) => void
   onRequestCancel: () => void
 }
 export default function ModelModule({
@@ -19,11 +20,18 @@ export default function ModelModule({
   disabled,
   onChange,
   onRequestEdit,
+  onRequestDelete,
   onRequestCancel,
 }: ModelModuleProps): React.ReactElement {
   return editing ? (
     <ModelForm model={model} schema={schema} onSubmit={onChange} onCancel={onRequestCancel} />
   ) : (
-    <ModelItem disabled={disabled} schema={schema} model={model} onEdit={onRequestEdit} />
+    <ModelItem
+      disabled={disabled}
+      schema={schema}
+      model={model}
+      onEdit={onRequestEdit}
+      onDelete={onRequestDelete}
+    />
   )
 }

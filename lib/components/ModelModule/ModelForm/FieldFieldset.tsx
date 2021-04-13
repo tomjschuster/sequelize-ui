@@ -13,8 +13,9 @@ import React, { useCallback } from 'react'
 type FieldFieldsetProps = {
   field: Field
   onChange: (id: Field['id'], changes: Partial<Field>) => void
+  onDelete: (id: Field['id']) => void
 }
-function FieldFieldset({ field, onChange }: FieldFieldsetProps) {
+function FieldFieldset({ field, onChange, onDelete }: FieldFieldsetProps) {
   const handleChange = useCallback((change: Partial<Field>): void => onChange(field.id, change), [
     field.id,
     onChange,
@@ -58,6 +59,9 @@ function FieldFieldset({ field, onChange }: FieldFieldsetProps) {
       }),
     [field.type, handleChange],
   )
+
+  const handleDelete = useCallback(() => onDelete(field.id), [onDelete, field.id])
+
   return (
     <fieldset>
       <TextInput
@@ -110,6 +114,9 @@ function FieldFieldset({ field, onChange }: FieldFieldsetProps) {
         checked={!!field.unique}
         onChange={handleChangeFieldUnique}
       />
+      <button type="button" onClick={handleDelete}>
+        Delete
+      </button>
     </fieldset>
   )
 }

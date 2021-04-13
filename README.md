@@ -2,7 +2,6 @@ Todo:
 
 UI
 
-- [ ] Delete schema, model, field, association
 - [ ] Form validation
   - [ ] Name format
   - [ ] Name uniqueness
@@ -14,6 +13,11 @@ DB Options
 - [ ] SET type
 - [ ] default value
 - [ ] decimal precision
+
+Codegen
+
+- [ ] Migrations
+- [ ] JavaScript
 
 Testing
 

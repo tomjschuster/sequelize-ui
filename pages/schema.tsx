@@ -1,4 +1,4 @@
-import { emptyModel, getSchema, updateSchema } from '@lib/api/schema'
+import { deleteSchema, emptyModel, getSchema, updateSchema } from '@lib/api/schema'
 import CodeViewer from '@lib/components/CodeViewer'
 import Layout from '@lib/components/Layout'
 import ModelModule from '@lib/components/ModelModule'
@@ -14,7 +14,7 @@ import {
 import { SequelizeFramework } from '@lib/frameworks'
 import usePrevious from '@lib/hooks/usePrevious'
 import { useRouter } from 'next/router'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 type SchemaPageEditState =
   | { type: SchemaPageEditStateType.NotEditing }
@@ -45,6 +45,13 @@ function SchemaPage(): React.ReactElement {
   }
 
   const handleEditSchema = () => setEditState({ type: SchemaPageEditStateType.EditingSchema })
+
+  const handleDeleteSchema = useCallback(async () => {
+    if (schema?.id) {
+      await deleteSchema(schema.id)
+      replace('/')
+    }
+  }, [schema?.id, deleteSchema, replace])
 
   const handleEditModel = (id: Model['id']) =>
     setEditState({ type: SchemaPageEditStateType.EditingModel, id })
@@ -128,6 +135,7 @@ function SchemaPage(): React.ReactElement {
         editState={editState}
         error={error}
         onEditSchema={handleEditSchema}
+        onDeleteSchema={handleDeleteSchema}
         onEditModel={handleEditModel}
         onUpdate={handleUpdate}
         onCancel={handleCancelEdit}
@@ -148,8 +156,9 @@ type SchemaPageContentProps = {
   editState: SchemaPageEditState
   error?: string
   onEditSchema: () => void
+  onDeleteSchema: () => void
   onEditModel: (id: Model['id']) => void
-  onUpdate: (schema: Schema) => Promise<void>
+  onUpdate: (schema: Schema) => void
   onCancel: () => void
 }
 function SchemaPageContent({
@@ -157,6 +166,7 @@ function SchemaPageContent({
   editState,
   error,
   onEditSchema,
+  onDeleteSchema,
   onEditModel,
   onUpdate,
   onCancel,
@@ -173,13 +183,29 @@ function SchemaPageContent({
     schema,
   ])
 
-  const handleChange = async (model: Model): Promise<void> => {
+  const handleChange = (model: Model): void => {
     const updatedSchema = {
       ...schema,
       models: schema.models.map((m) => (m.id === model.id ? model : m)),
     }
-    await onUpdate(updatedSchema)
+    onUpdate(updatedSchema)
   }
+
+  const handleDeleteSchema = useCallback(
+    async (evt: React.FormEvent<HTMLFormElement>) => {
+      evt.preventDefault()
+      onDeleteSchema()
+    },
+    [onDeleteSchema],
+  )
+
+  const handleDeleteModel = useCallback((id: Model['id']) => {
+    const updatedSchema = {
+      ...schema,
+      models: schema.models.filter((m) => m.id !== id),
+    }
+    onUpdate(updatedSchema)
+  }, [])
 
   return (
     <>
@@ -191,6 +217,10 @@ function SchemaPageContent({
         onUpdate={onUpdate}
         onCancel={onCancel}
       />
+
+      <form onSubmit={handleDeleteSchema}>
+        <button>Delete</button>
+      </form>
       {viewCode && <CodeViewer cacheKey={schema.id} root={root} />}
       <h3>Models</h3>
       <button type="button" onClick={handleClickAddModel}>
@@ -212,6 +242,7 @@ function SchemaPageContent({
                   editState.id !== model.id)
               }
               onRequestEdit={onEditModel}
+              onRequestDelete={handleDeleteModel}
               onRequestCancel={onCancel}
               onChange={handleChange}
             />

@@ -40,11 +40,29 @@ export default function ModelForm({
     [setFormModel],
   )
 
+  const handleDeleteField = React.useCallback(
+    (id: Field['id']) =>
+      setFormModel((m) => ({
+        ...m,
+        fields: m.fields.filter((f) => f.id !== id),
+      })),
+    [setFormModel],
+  )
+
   const handleChangeAssociation = React.useCallback(
     (id: Association['id'], changes: Partial<Association>) =>
       setFormModel((m) => ({
         ...m,
         associations: m.associations.map((a) => (a.id === id ? { ...a, ...changes } : a)),
+      })),
+    [setFormModel],
+  )
+
+  const handleDeleteAssociation = React.useCallback(
+    (id: Association['id']) =>
+      setFormModel((m) => ({
+        ...m,
+        associations: m.associations.filter((a) => a.id !== id),
       })),
     [setFormModel],
   )
@@ -89,6 +107,7 @@ export default function ModelForm({
             key={`field-form-${field.id}`}
             field={field}
             onChange={handleChangeField}
+            onDelete={handleDeleteField}
           />
         )
       })}
@@ -102,8 +121,9 @@ export default function ModelForm({
         <AssociationFieldset
           key={`association-form-${association.id}`}
           association={association}
-          onChange={handleChangeAssociation}
           schema={schema}
+          onChange={handleChangeAssociation}
+          onDelete={handleDeleteAssociation}
         />
       ))}
     </form>

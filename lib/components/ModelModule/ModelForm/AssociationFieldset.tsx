@@ -18,12 +18,14 @@ type AssociationFieldsetProps = {
   association: Association
   schema: Schema
   onChange: (id: Association['id'], changes: Partial<Association>) => void
+  onDelete: (id: Association['id']) => void
 }
 
 function AssociationFieldset({
   association,
   schema,
   onChange,
+  onDelete,
 }: AssociationFieldsetProps): React.ReactElement {
   const modelOptions = React.useMemo(
     () => schema.models.map<[string, Model]>((m) => [m.id, m]),
@@ -158,6 +160,8 @@ function AssociationFieldset({
     [handleChangeManyToMany],
   )
 
+  const handleDelete = useCallback(() => onDelete(association.id), [onDelete, association.id])
+
   return (
     <fieldset>
       <Select
@@ -222,6 +226,9 @@ function AssociationFieldset({
           />
         </>
       )}
+      <button type="button" onClick={handleDelete}>
+        Delete
+      </button>
     </fieldset>
   )
 }

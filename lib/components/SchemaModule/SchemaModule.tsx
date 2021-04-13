@@ -6,7 +6,7 @@ type SchemaModuleProps = {
   schema: Schema
   editing: boolean
   onEdit: () => void
-  onUpdate: (schema: Schema) => Promise<void>
+  onUpdate: (schema: Schema) => void
   onCancel: () => void
 }
 export default function SchemaModule({
