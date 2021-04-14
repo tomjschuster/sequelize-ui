@@ -5,6 +5,7 @@ import { classnames } from 'tailwindcss-classnames'
 import AssociationFieldset from './AssociationFieldset'
 import FieldFieldset from './FieldFieldset'
 import ModelFieldset from './ModelFieldset'
+import { emptyErrors, ModelFormErrors, noModelFormErrors, validateModel } from './validation'
 
 type ModelFormProps = {
   model: Model
@@ -20,10 +21,13 @@ export default function ModelForm({
   onCancel,
 }: ModelFormProps): React.ReactElement {
   const [formModel, setFormModel] = React.useState<Model>(model)
+  const [errors, setErrors] = React.useState<ModelFormErrors>(emptyErrors)
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
-    onSubmit(formModel)
+    const newErrors = validateModel(formModel, schema)
+    setErrors(newErrors)
+    if (noModelFormErrors(newErrors)) onSubmit(formModel)
   }
 
   const handleChangeModel = React.useCallback(
@@ -94,7 +98,7 @@ export default function ModelForm({
 
       <button type="submit">Save</button>
 
-      <ModelFieldset name={formModel.name} onChange={handleChangeModel} />
+      <ModelFieldset name={formModel.name} onChange={handleChangeModel} errors={errors} />
 
       <h3>Fields</h3>
       <button type="button" onClick={handleClickAddField}>
@@ -108,6 +112,7 @@ export default function ModelForm({
             field={field}
             onChange={handleChangeField}
             onDelete={handleDeleteField}
+            errors={errors.fields[field.id]}
           />
         )
       })}
@@ -124,6 +129,7 @@ export default function ModelForm({
           schema={schema}
           onChange={handleChangeAssociation}
           onDelete={handleDeleteAssociation}
+          errors={errors.associations[association.id]}
         />
       ))}
     </form>

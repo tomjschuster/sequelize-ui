@@ -3,9 +3,10 @@ Todo:
 UI
 
 - [ ] Form validation
-  - [ ] Name format
+  - [x] Name format
+  - [x] Min name length
+  - [ ] Max name length
   - [ ] Name uniqueness
-  - [ ] Name length
 
 DB Options
 

@@ -13,10 +13,12 @@ import {
 } from '@lib/core'
 import { snakeCase } from '@lib/utils'
 import React, { useCallback, useMemo } from 'react'
+import { AssociationFormErrors } from './validation'
 
 type AssociationFieldsetProps = {
   association: Association
   schema: Schema
+  errors?: AssociationFormErrors
   onChange: (id: Association['id'], changes: Partial<Association>) => void
   onDelete: (id: Association['id']) => void
 }
@@ -24,6 +26,7 @@ type AssociationFieldsetProps = {
 function AssociationFieldset({
   association,
   schema,
+  errors,
   onChange,
   onDelete,
 }: AssociationFieldsetProps): React.ReactElement {
@@ -186,12 +189,14 @@ function AssociationFieldset({
         value={association.alias || ''}
         onChange={handleChangeAlias}
       />
+      {errors?.alias && <p>{errors.alias}</p>}
       <TextInput
         id="association-fk"
         label="Foreign key"
         value={association.foreignKey || ''}
         onChange={handleChangeForeignKey}
       />
+      {errors?.foreignKey && <p>{errors.foreignKey}</p>}
       {association.type.type === AssociationTypeType.ManyToMany && schema.models.length > 0 && (
         <>
           <Radio
@@ -211,12 +216,15 @@ function AssociationFieldset({
             />
           )}
           {association.type.through.type === ThroughType.ThroughTable && (
-            <TextInput
-              id="association-through-table"
-              label="Through table"
-              value={association.type.through.table}
-              onChange={handleChangeThroughTable}
-            />
+            <>
+              <TextInput
+                id="association-through-table"
+                label="Through table"
+                value={association.type.through.table}
+                onChange={handleChangeThroughTable}
+              />
+              {errors?.throughTable && <p>{errors.throughTable}</p>}
+            </>
           )}
           <TextInput
             id="association-target-fk"
@@ -224,6 +232,7 @@ function AssociationFieldset({
             value={association.type.targetFk || ''}
             onChange={handleChangeTargetForeignKey}
           />
+          {errors?.targetForeignKey && <p>{errors.targetForeignKey}</p>}
         </>
       )}
       <button type="button" onClick={handleDelete}>

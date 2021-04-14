@@ -9,13 +9,15 @@ import {
   isDateTimeType,
 } from '@lib/core'
 import React, { useCallback } from 'react'
+import { FieldFormErrors } from './validation'
 
 type FieldFieldsetProps = {
   field: Field
+  errors?: FieldFormErrors
   onChange: (id: Field['id'], changes: Partial<Field>) => void
   onDelete: (id: Field['id']) => void
 }
-function FieldFieldset({ field, onChange, onDelete }: FieldFieldsetProps) {
+function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps) {
   const handleChange = useCallback((change: Partial<Field>): void => onChange(field.id, change), [
     field.id,
     onChange,
@@ -70,6 +72,7 @@ function FieldFieldset({ field, onChange, onDelete }: FieldFieldsetProps) {
         value={field.name}
         onChange={handleChangeFieldName}
       />
+      {errors?.name && <p>{errors.name}</p>}
 
       <Select<DataTypeType>
         id={`field-type-${field.id}`}

@@ -202,8 +202,11 @@ function SchemaPageContent({
   const handleDeleteModel = useCallback((id: Model['id']) => {
     const updatedSchema = {
       ...schema,
-      models: schema.models.filter((m) => m.id !== id),
+      models: schema.models
+        .filter((m) => m.id !== id)
+        .map((m) => ({ ...m, associations: m.associations.filter((a) => a.targetModelId !== id) })),
     }
+
     onUpdate(updatedSchema)
   }, [])
 
