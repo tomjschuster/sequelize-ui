@@ -2,11 +2,7 @@ Todo:
 
 UI
 
-- [ ] Form validation
-  - [x] Name format
-  - [x] Min name length
-  - [ ] Max name length
-  - [ ] Name uniqueness
+- [ ] Form element error fields
 
 DB Options
 

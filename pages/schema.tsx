@@ -1,4 +1,4 @@
-import { deleteSchema, emptyModel, getSchema, updateSchema } from '@lib/api/schema'
+import { deleteSchema, emptyModel, listSchemas, updateSchema } from '@lib/api/schema'
 import CodeViewer from '@lib/components/CodeViewer'
 import Layout from '@lib/components/Layout'
 import ModelModule from '@lib/components/ModelModule'
@@ -30,6 +30,7 @@ enum SchemaPageEditStateType {
 function SchemaPage(): React.ReactElement {
   const { push, replace, isReady, query } = useRouter()
   const [schema, setSchema] = useState<Schema | undefined>()
+  const [schemas, setSchemas] = useState<Schema[] | undefined>()
   const [error, setError] = useState<string | undefined>()
   const [editState, setEditState] = useState<SchemaPageEditState>({
     type: SchemaPageEditStateType.NotEditing,
@@ -66,15 +67,17 @@ function SchemaPage(): React.ReactElement {
       return
     }
 
-    if (!schema?.id) {
-      getSchema(query.id)
-        .then((schema) => {
+    if (!schema) {
+      listSchemas()
+        .then((schemas) => {
+          const schema = schemas.find((s) => s.id === query.id)
           if (!schema) {
             replace('/')
             return
           }
 
           setSchema(schema)
+          setSchemas(schemas)
         })
         .catch(() => setError('Sorry, something went wrong.'))
       return
@@ -132,6 +135,7 @@ function SchemaPage(): React.ReactElement {
     <Layout title="Schema | Sequelize UI">
       <SchemaPageContent
         schema={schema}
+        schemas={schemas}
         editState={editState}
         error={error}
         onEditSchema={handleEditSchema}
@@ -153,6 +157,7 @@ const defaultDbOptions: DatabaseOptions = {
 
 type SchemaPageContentProps = {
   schema?: Schema
+  schemas?: Schema[]
   editState: SchemaPageEditState
   error?: string
   onEditSchema: () => void
@@ -163,6 +168,7 @@ type SchemaPageContentProps = {
 }
 function SchemaPageContent({
   schema,
+  schemas,
   editState,
   error,
   onEditSchema,
@@ -215,6 +221,7 @@ function SchemaPageContent({
       <button onClick={handleClickViewCode}>{viewCode ? 'Hide Code' : 'View Code'}</button>
       <SchemaModule
         schema={schema}
+        schemas={schemas || []}
         editing={editState.type === SchemaPageEditStateType.EditingSchema}
         onEdit={onEditSchema}
         onUpdate={onUpdate}

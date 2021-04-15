@@ -70,3 +70,18 @@ export function displayThroughType(type: ThroughType): string {
       return 'Through table'
   }
 }
+
+export function associationsHaveSameForm(a: Association, b: Association): boolean {
+  return (
+    (associationTypeIsSingular(a.type) && associationTypeIsSingular(b.type)) ||
+    (associationTypeIsPlural(a.type) && associationTypeIsPlural(b.type))
+  )
+}
+
+export function associationTypeIsSingular(type: AssociationType): boolean {
+  return [AssociationTypeType.BelongsTo, AssociationTypeType.HasOne].includes(type.type)
+}
+
+export function associationTypeIsPlural(type: AssociationType): boolean {
+  return [AssociationTypeType.HasMany, AssociationTypeType.ManyToMany].includes(type.type)
+}

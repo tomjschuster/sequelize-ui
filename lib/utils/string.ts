@@ -1,4 +1,5 @@
-import { noCase, sentenceCase } from 'change-case'
+import { noCase, sentenceCase, snakeCase } from 'change-case'
+import { plural, singular } from 'pluralize'
 
 export {
   camelCase,
@@ -53,4 +54,35 @@ function getNameVersion(name: string, matchName: string): number | undefined {
 
   // Only names with postive versions are created, so ignore any other numbers
   return version > 0 ? version : undefined
+}
+
+/** Check if normalized names are equal */
+export function namesEq(a?: string, b?: string): boolean {
+  if (!a && !b) return true
+  if (!a || !b) return false
+  return snakeCase(a) === snakeCase(b)
+}
+
+/** Check if normalized names are equal */
+export function namesEqSingular(a?: string, b?: string): boolean {
+  if (!a && !b) return true
+  if (!a || !b) return false
+  return singular(snakeCase(a)) === singular(snakeCase(b))
+}
+
+/** Check if normalized name is empty */
+export function nameEmpty(a?: string): boolean {
+  if (!a) return true
+  return !snakeCase(a)
+}
+
+export function nameLongerThan(a: string | undefined, length: number): boolean {
+  if (!a) return false
+  return singular(snakeCase(a)).length > length && plural(snakeCase(a)).length > length
+}
+
+/** Check if normalized name starts with a number */
+export function nameStartsWithNumber(x?: string): boolean {
+  if (!x) return false
+  return /^\d/.test(snakeCase(x))
 }

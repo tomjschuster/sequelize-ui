@@ -183,3 +183,5 @@ export const displayDatabaseCaseStyle = (caseStyle: DatabaseCaseStyle): string =
       return 'camel'
   }
 }
+
+export const MAX_IDENTIFIER_LENGTH = 63

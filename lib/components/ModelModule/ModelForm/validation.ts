@@ -1,4 +1,21 @@
-import { Association, AssociationTypeType, Field, Model, Schema, ThroughType } from '@lib/core'
+import {
+  Association,
+  associationsHaveSameForm,
+  AssociationTypeType,
+  Field,
+  MAX_IDENTIFIER_LENGTH,
+  Model,
+  Schema,
+  ThroughType,
+} from '@lib/core'
+import {
+  deepEmpty,
+  nameEmpty,
+  nameLongerThan,
+  namesEq,
+  namesEqSingular,
+  nameStartsWithNumber,
+} from '@lib/utils'
 
 export type ModelFormErrors = {
   name?: string
@@ -35,13 +52,21 @@ export function noModelFormErrors(errors: ModelFormErrors): boolean {
   return deepEmpty(errors)
 }
 
-function validateModelName(model: Model, _schema: Schema): string | undefined {
-  if (!model.name.trim()) {
-    return 'Name is required'
+function validateModelName(model: Model, schema: Schema): string | undefined {
+  if (nameEmpty(model.name)) {
+    return 'Model name is required'
   }
 
-  if (/^([^A-Za-z])*\d/.test(model.name.trim())) {
-    return 'Name cannot start with a number'
+  if (nameLongerThan(model.name, MAX_IDENTIFIER_LENGTH)) {
+    return 'Name cannot be longer than 63 characters'
+  }
+
+  if (nameStartsWithNumber(model.name)) {
+    return 'Model name cannot start with a number'
+  }
+
+  if (findDuplicateModel(model, schema)) {
+    return 'Model name must be unique in schema'
   }
 }
 
@@ -58,13 +83,21 @@ function validateField(field: Field, model: Model): FieldFormErrors {
   }
 }
 
-function validateFieldName(field: Field, _model: Model): string | undefined {
-  if (!field.name.trim()) {
-    return 'Name is required'
+function validateFieldName(field: Field, model: Model): string | undefined {
+  if (nameEmpty(field.name)) {
+    return 'Field name is required'
   }
 
-  if (/^([^A-Za-z])*\d/.test(field.name.trim())) {
-    return 'Name cannot start with a number'
+  if (nameLongerThan(field.name, MAX_IDENTIFIER_LENGTH)) {
+    return 'Name cannot be longer than 63 characters'
+  }
+
+  if (nameStartsWithNumber(field.name)) {
+    return 'Field name cannot start with a number'
+  }
+
+  if (findDuplicateField(field, model)) {
+    return 'Field name must be unique in model'
   }
 }
 
@@ -78,67 +111,96 @@ function validateModelAssociations(model: Model): { [id: string]: AssociationFor
 function validateAssociation(association: Association, model: Model): AssociationFormErrors {
   return {
     alias: validateAssociationAlias(association, model),
-    foreignKey: validateAssociationForeignKey(association, model),
-    targetForeignKey: validateAssociationTargetForeignKey(association, model),
-    throughTable: validateAssociationThroughTable(association, model),
+    foreignKey: validateAssociationForeignKey(association),
+    targetForeignKey: validateAssociationTargetForeignKey(association),
+    throughTable: validateAssociationThroughTable(association),
   }
 }
 
-function validateAssociationAlias(association: Association, _model: Model): string | undefined {
-  if (association.alias && /^([^A-Za-z])*\d/.test(association.alias.trim())) {
+function validateAssociationAlias(association: Association, model: Model): string | undefined {
+  if (nameLongerThan(association.alias, MAX_IDENTIFIER_LENGTH)) {
+    return 'Name cannot be longer than 63 characters'
+  }
+
+  if (nameStartsWithNumber(association.alias)) {
     return 'Alias cannot start with a number'
   }
+
+  if (findDuplicateAlias(association, model)) {
+    return `Alias must be unique across the model's associations`
+  }
+
+  if (findDuplicateTarget(association, model)) {
+    return 'Cannot have two associations of the same type to the same model without an alias'
+  }
 }
 
-function validateAssociationForeignKey(
-  association: Association,
-  _model: Model,
-): string | undefined {
-  if (association.foreignKey && /^([^A-Za-z])*\d/.test(association.foreignKey.trim())) {
+function validateAssociationForeignKey(association: Association): string | undefined {
+  if (nameLongerThan(association.foreignKey, MAX_IDENTIFIER_LENGTH)) {
+    return 'Name cannot be longer than 63 characters'
+  }
+
+  if (nameStartsWithNumber(association.foreignKey)) {
     return 'Foreign key cannot start with a number'
   }
 }
 
-function validateAssociationTargetForeignKey(
-  association: Association,
-  _model: Model,
-): string | undefined {
-  if (
-    association.type.type === AssociationTypeType.ManyToMany &&
-    association.type.targetFk &&
-    /^([^A-Za-z])*\d/.test(association.type.targetFk.trim())
-  ) {
-    return 'Target foreign key cannot start with a number'
+function validateAssociationTargetForeignKey(association: Association): string | undefined {
+  if (association.type.type === AssociationTypeType.ManyToMany) {
+    if (nameLongerThan(association.type.targetFk, MAX_IDENTIFIER_LENGTH)) {
+      return 'Name cannot be longer than 63 characters'
+    }
+
+    if (nameStartsWithNumber(association.type.targetFk)) {
+      return 'Target foreign key cannot start with a number'
+    }
   }
 }
 
-function validateAssociationThroughTable(
-  association: Association,
-  _model: Model,
-): string | undefined {
+function validateAssociationThroughTable(association: Association): string | undefined {
   if (
     association.type.type === AssociationTypeType.ManyToMany &&
     association.type.through.type === ThroughType.ThroughTable
   ) {
-    if (!association.type.through.table.trim()) {
+    if (nameLongerThan(association.type.through.table, MAX_IDENTIFIER_LENGTH)) {
+      return 'Name cannot be longer than 63 characters'
+    }
+
+    if (nameEmpty(association.type.through.table)) {
       return 'Through table is required'
     }
 
-    if (
-      association.type.through.table &&
-      /^([^A-Za-z])*\d/.test(association.type.through.table.trim())
-    ) {
+    if (nameStartsWithNumber(association.type.through.table)) {
       return 'Through table cannot start with a number'
     }
   }
 }
 
-function deepEmpty(x: { [key: string]: unknown } | unknown[]): boolean {
-  return Object.values(x).reduce<boolean>((acc, v) => {
-    if (!acc) return acc
-    if (typeof v === 'string') return !v.trim()
-    if (Array.isArray(v)) return v.every(deepEmpty)
-    if (typeof v === 'object' && v !== null) return deepEmpty(Object.values(v))
-    return v === null || v === undefined || v == false
-  }, true)
+function findDuplicateModel(model: Model, schema: Schema): Model | undefined {
+  return schema.models.find((m) => m.id !== model.id && namesEqSingular(m.name, model.name))
+}
+
+function findDuplicateField(field: Field, model: Model): Field | undefined {
+  return model.fields.find((f) => f.id !== field.id && namesEq(f.name, field.name))
+}
+
+function findDuplicateAlias(association: Association, model: Model): Association | undefined {
+  return model.associations.find(
+    (a) =>
+      association.alias &&
+      association.id !== a.id &&
+      namesEq(a.alias, association.alias) &&
+      associationsHaveSameForm(association, a),
+  )
+}
+
+function findDuplicateTarget(association: Association, model: Model): Association | undefined {
+  return model.associations.find(
+    (a) =>
+      !association.alias &&
+      !a.alias &&
+      association.id !== a.id &&
+      association.targetModelId === a.targetModelId &&
+      associationsHaveSameForm(association, a),
+  )
 }
