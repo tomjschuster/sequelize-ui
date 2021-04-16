@@ -67,9 +67,9 @@ function SchemaForm({ schema, schemas, onSubmit, onCancel }: SchemaFormProps): R
         id="schema-name"
         label="Schema name"
         value={formSchema.name}
+        error={errors.name}
         onChange={handleChangeSchemaName}
       />
-      {errors.name && <p>{errors.name}</p>}
       <button type="submit">Save</button>
       <button type="button" onClick={onCancel}>
         Cancel

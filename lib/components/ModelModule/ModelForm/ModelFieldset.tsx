@@ -14,8 +14,13 @@ function ModelFieldset({ name, errors, onChange }: ModelFieldsetProps): React.Re
 
   return (
     <fieldset>
-      <TextInput id="model-name" label="Model name" value={name} onChange={handleChangeName} />
-      {errors.name && <p>{errors.name}</p>}
+      <TextInput
+        id="model-name"
+        label="Model name"
+        value={name}
+        error={errors.name}
+        onChange={handleChangeName}
+      />
     </fieldset>
   )
 }

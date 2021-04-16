@@ -70,10 +70,9 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         id={`field-name-${field.id}`}
         label="Field name"
         value={field.name}
+        error={errors?.name}
         onChange={handleChangeFieldName}
       />
-      {errors?.name && <p>{errors.name}</p>}
-
       <Select<DataTypeType>
         id={`field-type-${field.id}`}
         label="Data type"

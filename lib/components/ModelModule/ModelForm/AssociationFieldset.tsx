@@ -187,16 +187,16 @@ function AssociationFieldset({
         id="association-alias"
         label="as"
         value={association.alias || ''}
+        error={errors?.alias}
         onChange={handleChangeAlias}
       />
-      {errors?.alias && <p>{errors.alias}</p>}
       <TextInput
         id="association-fk"
         label="Foreign key"
         value={association.foreignKey || ''}
+        error={errors?.foreignKey}
         onChange={handleChangeForeignKey}
       />
-      {errors?.foreignKey && <p>{errors.foreignKey}</p>}
       {association.type.type === AssociationTypeType.ManyToMany && schema.models.length > 0 && (
         <>
           <Radio
@@ -221,18 +221,18 @@ function AssociationFieldset({
                 id="association-through-table"
                 label="Through table"
                 value={association.type.through.table}
+                error={errors?.throughTable}
                 onChange={handleChangeThroughTable}
               />
-              {errors?.throughTable && <p>{errors.throughTable}</p>}
             </>
           )}
           <TextInput
             id="association-target-fk"
             label="Target foreign key"
             value={association.type.targetFk || ''}
+            error={errors?.targetForeignKey}
             onChange={handleChangeTargetForeignKey}
           />
-          {errors?.targetForeignKey && <p>{errors.targetForeignKey}</p>}
         </>
       )}
       <button type="button" onClick={handleDelete}>

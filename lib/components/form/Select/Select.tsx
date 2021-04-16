@@ -7,15 +7,16 @@ type SelectProps<T> = {
   label: string
   value: T | undefined
   options: Options<T>
+  error?: string
   display: (value: T) => string
   onChange: (value: T) => void
 }
-
 function Select<T>({
   id,
   label,
   value,
   options,
+  error,
   display,
   onChange,
 }: SelectProps<T>): React.ReactElement {
@@ -26,16 +27,27 @@ function Select<T>({
   }
 
   return (
-    <label htmlFor={id} className={classnames('flex flex-col items-start')}>
-      {label}
-      <select id={id} onChange={handleChange} value={lookupOptionKey(options, value)}>
-        {optionsToList(options).map(([k, v]) => (
-          <option key={id + k} value={k}>
-            {display(v)}
-          </option>
-        ))}
-      </select>
-    </label>
+    <>
+      <label htmlFor={id} className={classnames('flex', 'flex-col', 'items-start')}>
+        {label}
+        <select
+          id={id}
+          onChange={handleChange}
+          value={lookupOptionKey(options, value)}
+          aria-invalid={!!error}
+          aria-describedby={`${id}-alert`}
+        >
+          {optionsToList(options).map(([k, v]) => (
+            <option key={id + k} value={k}>
+              {display(v)}
+            </option>
+          ))}
+        </select>
+      </label>
+      <span id={`${id}-alert`} role={error ? 'alert' : undefined} aria-hidden={!error}>
+        {error}
+      </span>
+    </>
   )
 }
 
