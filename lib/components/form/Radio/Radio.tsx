@@ -12,14 +12,14 @@ function Radio<T>({ value, options, display, onChange }: RadioProps<T>): React.R
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const key = evt.target.value
     const option = lookupOptionValue(options, key)
-    if (option) onChange(option)
+    if (option !== undefined) onChange(option)
   }
 
   return (
     <div>
       {optionsToList(options).map(([k, v]) => (
         <label key={k}>
-          <input type="radio" value={k} checked={v == value} onChange={handleChange} />
+          <input type="radio" value={k} checked={v === value} onChange={handleChange} />
           {display(v)}
         </label>
       ))}
