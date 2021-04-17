@@ -1,4 +1,4 @@
-import { DataType, DataTypeType, SqlDialect } from '@lib/core'
+import { DataType, DataTypeType, SqlDialect, UuidType } from '@lib/core'
 
 export enum SequelizeDataTypeType {
   String = 'STRING',
@@ -149,6 +149,15 @@ export function dataTypeToTypeScript(dataType: DataType): string {
       return 'Json'
     case DataTypeType.Blob:
       return 'Buffer'
+  }
+}
+
+export function sequelizeUuidVersion(uuidType: UuidType): string {
+  switch (uuidType) {
+    case UuidType.V1:
+      return `DataTypes.UUIDV1`
+    case UuidType.V4:
+      return `DataTypes.UUIDV4`
   }
 }
 

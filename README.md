@@ -14,11 +14,14 @@ UI
   - [ ] DB options
   - [ ] Copy/download alerts
   - [ ] a11y (aria-controls?)
+- [ ] Home page
+  - [ ] Intro
+  - [ ] Demo section
+  - [ ] Current schemas
 
 DB Options
 
 - [ ] prefix id name option
-- [ ] SET type
 - [ ] default value
 - [ ] decimal precision
 

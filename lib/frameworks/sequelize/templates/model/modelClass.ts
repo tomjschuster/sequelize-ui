@@ -8,7 +8,6 @@ import {
   DataType,
   DataTypeType,
   Field,
-  isDateTimeType,
   lines,
   Model,
   sqlCurrentDate,
@@ -20,6 +19,7 @@ import {
   dataTypeToSequelize,
   dataTypeToTypeScript,
   displaySequelizeDataType,
+  sequelizeUuidVersion,
 } from '../../dataTypes'
 import { addIdField, literalFunction, modelName, plural } from '../../helpers'
 import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
@@ -83,7 +83,7 @@ const classFieldType = (
 ): Array<string | null> => {
   const comment = notSupportedComment(type, dbOptions.sqlDialect)
   const readonly = primaryKey ? 'readonly ' : ''
-  const optional = required && !(isDateTimeType(type) && type.defaultNow) ? '!' : '?'
+  const optional = required ? '!' : '?'
 
   return [
     noSupportedDetails(type, dbOptions.sqlDialect),
@@ -226,6 +226,10 @@ const defaultField = (dataType: DataType) => {
 
   if (dataType.type === DataTypeType.Time && dataType.defaultNow) {
     return `defaultValue: ${literalFunction(sqlCurrentTime())}`
+  }
+
+  if (dataType.type === DataTypeType.Uuid && dataType.defaultVersion) {
+    return `defaultValue: ${sequelizeUuidVersion(dataType.defaultVersion)}`
   }
 
   return null

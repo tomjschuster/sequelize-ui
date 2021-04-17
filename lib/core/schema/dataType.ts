@@ -43,7 +43,7 @@ export type ArrayDataType = DataTypeBase<DataTypeType.Array> & {
 
 export type JsonDataType = DataTypeBase<DataTypeType.Json>
 export type BlobDataType = DataTypeBase<DataTypeType.Blob>
-export type UuidDataType = DataTypeBase<DataTypeType.Uuid>
+export type UuidDataType = DataTypeBase<DataTypeType.Uuid> & { defaultVersion?: UuidType }
 
 export enum DataTypeType {
   String = 'STRING',
@@ -62,6 +62,11 @@ export enum DataTypeType {
   Json = 'JSON',
   Blob = 'BLOB',
   Uuid = 'UUID',
+}
+
+export enum UuidType {
+  V1 = 'V1',
+  V4 = 'V4',
 }
 
 export function displayDataType(dataType: DataType): string {
