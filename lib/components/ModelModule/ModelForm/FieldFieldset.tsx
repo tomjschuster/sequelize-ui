@@ -1,4 +1,5 @@
 import Checkbox from '@lib/components/form/Checkbox'
+import IntegerInput from '@lib/components/form/IntegerInput'
 import Radio from '@lib/components/form/Radio'
 import Select from '@lib/components/form/Select'
 import TextInput from '@lib/components/form/TextInput'
@@ -8,6 +9,9 @@ import {
   displayDataTypeType,
   Field,
   isDateTimeType,
+  isIntegerType,
+  isNumberType,
+  isNumericType,
   UuidType,
 } from '@lib/core'
 import React, { useCallback } from 'react'
@@ -45,12 +49,39 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
     handleChange,
   ])
 
+  const handleChangeUnsigned = useCallback(
+    (unsigned: boolean) =>
+      handleChange({
+        type: isNumberType(field.type) ? { ...field.type, unsigned } : field.type,
+      }),
+    [field.type, handleChange],
+  )
+
   const handleChangeAutoincrement = useCallback(
     (autoincrement: boolean) =>
       handleChange({
-        type:
-          field.type.type === DataTypeType.Integer ? { ...field.type, autoincrement } : field.type,
+        type: isIntegerType(field.type) ? { ...field.type, autoincrement } : field.type,
       }),
+    [field.type, handleChange],
+  )
+
+  const handleChangePrecision = useCallback(
+    (precision?: number) => {
+      if (!isNumericType(field.type)) return
+      if (precision === undefined) return { ...field.type, precision: undefined }
+      handleChange({
+        type: { ...field.type, precision: { ...field.type.precision, precision } },
+      })
+    },
+    [field.type, handleChange],
+  )
+
+  const handleChangeScale = useCallback(
+    (scale?: number) => {
+      if (!isNumericType(field.type)) return
+      if (field.type.precision === undefined) return
+      handleChange({ type: { ...field.type, precision: { ...field.type.precision, scale } } })
+    },
     [field.type, handleChange],
   )
 
@@ -90,13 +121,41 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         value={field.type.type}
         onChange={handleChangeDataType}
       />
-      {field.type.type === DataTypeType.Integer && (
+      {isNumberType(field.type) && (
+        <Checkbox
+          id={`field-unsigned-${field.id}`}
+          label="Unsigned"
+          checked={!!field.type.unsigned}
+          onChange={handleChangeUnsigned}
+        />
+      )}
+      {isIntegerType(field.type) && (
         <Checkbox
           id={`field-autoincrement-${field.id}`}
           label="Autoincrement"
           checked={!!field.type.autoincrement}
           onChange={handleChangeAutoincrement}
         />
+      )}
+      {isNumericType(field.type) && (
+        <>
+          <IntegerInput
+            id={`field-precision-${field.id}`}
+            label="Precision"
+            value={field.type.precision?.precision}
+            min={1}
+            max={1000}
+            onChange={handleChangePrecision}
+          />
+          <IntegerInput
+            id={`field-scale-${field.id}`}
+            label="Precision"
+            value={field.type.precision?.scale}
+            min={0}
+            max={field.type.precision?.precision || 1000}
+            onChange={handleChangeScale}
+          />
+        </>
       )}
       {field.type.type === DataTypeType.Uuid && (
         <Radio

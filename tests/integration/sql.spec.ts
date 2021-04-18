@@ -22,6 +22,7 @@ import forEach from 'mocha-each'
 import { dvdSchema } from './fixtures'
 
 const sqlDialect: SqlDialect = validateDialect(process.env.SQL_DIALECT)
+const keepAssets: boolean = process.env.KEEP_ASSETS === 'true'
 
 type DbTestConfig = {
   dbOptions: DatabaseOptions
@@ -190,8 +191,8 @@ describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
     const projectType = framework.projectType()
 
     after(async () => {
-      await destroyProject(projectType, projectName)
-      await dropDatabase(projectName, sqlDialect)
+      !keepAssets && (await destroyProject(projectType, projectName))
+      !keepAssets && (await dropDatabase(projectName, sqlDialect))
     })
 
     const cases: [label: string, config: DbTestConfig][] = [

@@ -121,8 +121,6 @@ function AssociationFieldset({
       const throughModel =
         schema.models.find((m) => snakeCase(m.name) === table) || schema.models[0]
 
-      console.log({ throughModel })
-
       if (type === ThroughType.ThroughModel && throughModel) {
         handleChangeManyToMany((currType) => ({
           ...currType,

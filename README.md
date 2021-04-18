@@ -23,7 +23,7 @@ DB Options
 
 - [ ] prefix id name option
 - [ ] default value
-- [ ] decimal precision
+  - [ ] Fix default date/time to use DataTypes.NOW
 
 Codegen
 

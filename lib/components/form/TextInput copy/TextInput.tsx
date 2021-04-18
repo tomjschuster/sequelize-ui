@@ -1,8 +1,13 @@
 import React from 'react'
 import { classnames } from 'tailwindcss-classnames'
-import { CommonFieldProps, CommonInputProps } from '../shared/types'
 
-type TextInputProps = CommonInputProps<string> & CommonFieldProps
+type TextInputProps = {
+  id: string
+  label: string
+  value: string
+  error?: string
+  onChange: (value: string) => void
+}
 
 function TextInput({ id, label, value, error, onChange }: TextInputProps): React.ReactElement {
   const handleChange = React.useCallback(
@@ -12,7 +17,7 @@ function TextInput({ id, label, value, error, onChange }: TextInputProps): React
 
   return (
     <>
-      <label htmlFor={id} className={classnames('flex flex-col items-start')}>
+      <label htmlFor={id} className={classnames('flex', 'flex-col', 'items-start')}>
         {label}
         <input
           id={id}

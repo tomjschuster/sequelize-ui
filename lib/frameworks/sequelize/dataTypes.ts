@@ -4,6 +4,8 @@ export enum SequelizeDataTypeType {
   String = 'STRING',
   Text = 'TEXT',
   Integer = 'INTEGER',
+  BigInt = 'BIGINT',
+  SmallInt = 'SMALLINT',
   Float = 'FLOAT',
   Real = 'REAL',
   Double = 'DOUBLE',
@@ -19,16 +21,18 @@ export enum SequelizeDataTypeType {
   Uuid = 'UUID',
 }
 
+type SequelizeNumberOptions = { unsigned?: boolean }
+type SequelizeNumericOptions = SequelizeNumberOptions & { precision?: number; scale?: number }
+
 type SequelizeStringType = { type: SequelizeDataTypeType.String }
 type SequelizeTextType = { type: SequelizeDataTypeType.Text }
-type SequelizeIntegerType = {
-  type: SequelizeDataTypeType.Integer
-  autoincrement?: boolean
-}
-type SequelizeFloatType = { type: SequelizeDataTypeType.Float }
-type SequelizeRealType = { type: SequelizeDataTypeType.Real }
-type SequelizeDoubleType = { type: SequelizeDataTypeType.Double }
-type SequelizeDecimalType = { type: SequelizeDataTypeType.Decimal }
+type SequelizeIntegerType = { type: SequelizeDataTypeType.Integer } & SequelizeNumberOptions
+type SequelizeBigIntType = { type: SequelizeDataTypeType.BigInt } & SequelizeNumberOptions
+type SequelizeSmallIntType = { type: SequelizeDataTypeType.SmallInt } & SequelizeNumberOptions
+type SequelizeFloatType = { type: SequelizeDataTypeType.Float } & SequelizeNumberOptions
+type SequelizeRealType = { type: SequelizeDataTypeType.Real } & SequelizeNumberOptions
+type SequelizeDoubleType = { type: SequelizeDataTypeType.Double } & SequelizeNumberOptions
+type SequelizeDecimalType = { type: SequelizeDataTypeType.Decimal } & SequelizeNumericOptions
 type SequelizeDateType = { type: SequelizeDataTypeType.Date }
 type SequelizeDateonlyType = { type: SequelizeDataTypeType.Dateonly }
 type SequelizeTimeType = { type: SequelizeDataTypeType.Time }
@@ -49,6 +53,8 @@ export type SequelizeDataType =
   | SequelizeStringType
   | SequelizeTextType
   | SequelizeIntegerType
+  | SequelizeBigIntType
+  | SequelizeSmallIntType
   | SequelizeFloatType
   | SequelizeRealType
   | SequelizeDoubleType
@@ -63,8 +69,28 @@ export type SequelizeDataType =
   | SequelizeBlobType
   | SequelizeUuidType
 
+function displayNumber(options: SequelizeNumberOptions): string {
+  return options.unsigned ? '.UNSIGNED' : ''
+}
+
+function displayNumeric(options: SequelizeNumericOptions): string {
+  return options.precision
+    ? `.PRECISION(${options.precision}${options.scale ? `, ${options.scale})` : ''})`
+    : ''
+}
+
 export function displaySequelizeDataType(dataType: SequelizeDataType): string {
   switch (dataType.type) {
+    case SequelizeDataTypeType.Integer:
+    case SequelizeDataTypeType.BigInt:
+    case SequelizeDataTypeType.SmallInt:
+    case SequelizeDataTypeType.Float:
+    case SequelizeDataTypeType.Real:
+    case SequelizeDataTypeType.Double:
+      return `DataTypes.${dataType.type}${displayNumber(dataType)}`
+    case SequelizeDataTypeType.Decimal:
+      return `DataTypes.${dataType.type}${displayNumber(dataType)}${displayNumeric(dataType)}`
+
     case SequelizeDataTypeType.Enum:
       return `DataTypes.${SequelizeDataTypeType.Enum}(${dataType.values
         .map((x) => `'${x}'`)
@@ -87,16 +113,31 @@ export function dataTypeToSequelize(dataType: DataType): SequelizeDataType {
     case DataTypeType.Integer:
       return {
         type: SequelizeDataTypeType.Integer,
-        autoincrement: dataType.autoincrement,
+        unsigned: dataType.unsigned,
+      }
+    case DataTypeType.BigInt:
+      return {
+        type: SequelizeDataTypeType.BigInt,
+        unsigned: dataType.unsigned,
+      }
+    case DataTypeType.SmallInt:
+      return {
+        type: SequelizeDataTypeType.SmallInt,
+        unsigned: dataType.unsigned,
       }
     case DataTypeType.Float:
-      return { type: SequelizeDataTypeType.Float }
+      return { type: SequelizeDataTypeType.Float, unsigned: dataType.unsigned }
     case DataTypeType.Real:
-      return { type: SequelizeDataTypeType.Real }
+      return { type: SequelizeDataTypeType.Real, unsigned: dataType.unsigned }
     case DataTypeType.Double:
-      return { type: SequelizeDataTypeType.Double }
+      return { type: SequelizeDataTypeType.Double, unsigned: dataType.unsigned }
     case DataTypeType.Decimal:
-      return { type: SequelizeDataTypeType.Decimal }
+      return {
+        type: SequelizeDataTypeType.Decimal,
+        unsigned: dataType.unsigned,
+        precision: dataType.precision?.precision,
+        scale: dataType.precision?.scale,
+      }
     case DataTypeType.DateTime:
       return { type: SequelizeDataTypeType.Date }
     case DataTypeType.Date:
@@ -131,6 +172,8 @@ export function dataTypeToTypeScript(dataType: DataType): string {
     case DataTypeType.Date:
       return 'string'
     case DataTypeType.Integer:
+    case DataTypeType.BigInt:
+    case DataTypeType.SmallInt:
     case DataTypeType.Float:
     case DataTypeType.Real:
     case DataTypeType.Double:

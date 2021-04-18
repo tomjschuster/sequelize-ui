@@ -2,6 +2,8 @@ export type DataType =
   | StringDataType
   | TextDataType
   | IntegerDataType
+  | BigIntDataType
+  | SmallIntDataType
   | FloatDataType
   | RealDataType
   | DoubleDataType
@@ -17,21 +19,24 @@ export type DataType =
   | UuidDataType
 
 type DataTypeBase<T extends DataTypeType> = { type: T }
-type DateTimeBase = { defaultNow?: boolean }
+type DateTypeOptions = { defaultNow?: boolean }
+type NumberOptions = { unsigned?: boolean }
+type IntegerOptions = NumberOptions & { autoincrement?: boolean }
+type NumericOptions = NumberOptions & { precision?: Precision }
+export type Precision = { precision: number; scale?: number }
 
 export type StringDataType = DataTypeBase<DataTypeType.String>
 export type TextDataType = DataTypeBase<DataTypeType.Text>
-export type IntegerDataType = DataTypeBase<DataTypeType.Integer> & {
-  autoincrement?: boolean
-}
-
-export type FloatDataType = DataTypeBase<DataTypeType.Float>
-export type RealDataType = DataTypeBase<DataTypeType.Real>
-export type DoubleDataType = DataTypeBase<DataTypeType.Double>
-export type DecimalDataType = DataTypeBase<DataTypeType.Decimal>
-export type DateTimeDataType = DataTypeBase<DataTypeType.DateTime> & DateTimeBase
-export type DateDataType = DataTypeBase<DataTypeType.Date> & DateTimeBase
-export type TimeDataType = DataTypeBase<DataTypeType.Time> & DateTimeBase
+export type IntegerDataType = DataTypeBase<DataTypeType.Integer> & IntegerOptions
+export type SmallIntDataType = DataTypeBase<DataTypeType.SmallInt> & IntegerOptions
+export type BigIntDataType = DataTypeBase<DataTypeType.BigInt> & IntegerOptions
+export type FloatDataType = DataTypeBase<DataTypeType.Float> & NumberOptions
+export type RealDataType = DataTypeBase<DataTypeType.Real> & NumberOptions
+export type DoubleDataType = DataTypeBase<DataTypeType.Double> & NumberOptions
+export type DecimalDataType = DataTypeBase<DataTypeType.Decimal> & NumericOptions
+export type DateTimeDataType = DataTypeBase<DataTypeType.DateTime> & DateTypeOptions
+export type DateDataType = DataTypeBase<DataTypeType.Date> & DateTypeOptions
+export type TimeDataType = DataTypeBase<DataTypeType.Time> & DateTypeOptions
 export type BooleanDataType = DataTypeBase<DataTypeType.Boolean>
 export type EnumDataType = DataTypeBase<DataTypeType.Enum> & {
   values: string[]
@@ -49,6 +54,8 @@ export enum DataTypeType {
   String = 'STRING',
   Text = 'TEXT',
   Integer = 'INTEGER',
+  BigInt = 'BIGINT',
+  SmallInt = 'SMALLINT',
   Float = 'FLOAT',
   Real = 'REAL',
   Double = 'DOUBLE',
@@ -85,6 +92,10 @@ export function displayDataType(dataType: DataType): string {
       return 'Date'
     case DataTypeType.Integer:
       return 'Integer'
+    case DataTypeType.BigInt:
+      return 'Big Int'
+    case DataTypeType.SmallInt:
+      return 'Small Int'
     case DataTypeType.Float:
       return 'Float'
     case DataTypeType.Real:
@@ -126,6 +137,10 @@ export function displayDataTypeType(type: DataTypeType): string {
       return 'Date'
     case DataTypeType.Integer:
       return 'Integer'
+    case DataTypeType.BigInt:
+      return 'Big Int'
+    case DataTypeType.SmallInt:
+      return 'Small Int'
     case DataTypeType.Float:
       return 'Float'
     case DataTypeType.Real:
@@ -153,6 +168,40 @@ export function isDateTimeType(
   return [DataTypeType.DateTime, DataTypeType.Date, DataTypeType.Time].includes(dataType.type)
 }
 
+type NumberType =
+  | IntegerDataType
+  | BigIntDataType
+  | SmallIntDataType
+  | FloatDataType
+  | RealDataType
+  | DoubleDataType
+  | FloatDataType
+  | DecimalDataType
+
+export function isNumberType(dataType: DataType): dataType is NumberType {
+  return [
+    DataTypeType.Integer,
+    DataTypeType.BigInt,
+    DataTypeType.SmallInt,
+    DataTypeType.Float,
+    DataTypeType.Real,
+    DataTypeType.Double,
+    DataTypeType.Float,
+    DataTypeType.Decimal,
+  ].includes(dataType.type)
+}
+
+type IntegerType = IntegerDataType | BigIntDataType | SmallIntDataType
+
+export function isIntegerType(dataType: DataType): dataType is IntegerType {
+  return [DataTypeType.Integer, DataTypeType.BigInt, DataTypeType.SmallInt].includes(dataType.type)
+}
+
+type NumericType = DecimalDataType
+
+export function isNumericType(dataType: DataType): dataType is NumericType {
+  return [DataTypeType.Decimal].includes(dataType.type)
+}
 export function stringDataType(): StringDataType {
   return { type: DataTypeType.String }
 }
@@ -163,6 +212,14 @@ export function textDataType(): TextDataType {
 
 export function integerDataType(): IntegerDataType {
   return { type: DataTypeType.Integer }
+}
+
+export function bigIntDataType(): BigIntDataType {
+  return { type: DataTypeType.BigInt }
+}
+
+export function smallIntDataType(): SmallIntDataType {
+  return { type: DataTypeType.SmallInt }
 }
 
 export function floatDataType(): FloatDataType {
@@ -233,6 +290,10 @@ export function dataTypeFromDataTypeType(type: DataTypeType): DataType {
       return dateDataType()
     case DataTypeType.Integer:
       return integerDataType()
+    case DataTypeType.BigInt:
+      return bigIntDataType()
+    case DataTypeType.SmallInt:
+      return smallIntDataType()
     case DataTypeType.Float:
       return floatDataType()
     case DataTypeType.Real:

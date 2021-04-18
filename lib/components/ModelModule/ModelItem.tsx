@@ -1,5 +1,14 @@
 import AssociationList from '@lib/components/AssociationList'
-import { DataTypeType, displayDataType, Field, Model, Schema } from '@lib/core'
+import {
+  displayDataType,
+  Field,
+  isIntegerType,
+  isNumberType,
+  isNumericType,
+  Model,
+  Precision,
+  Schema,
+} from '@lib/core'
 import { noCase, titleCase } from '@lib/utils'
 import React, { useCallback, useState } from 'react'
 import * as styles from './styles'
@@ -87,11 +96,17 @@ function fieldAttributes(field: Field): string | undefined {
       field.primaryKey ? 'primary key' : undefined,
       field.required ? 'required' : undefined,
       field.unique ? 'unique' : undefined,
-      field.type.type === DataTypeType.Integer && field.type.autoincrement
-        ? 'autoincrement'
+      isNumberType(field.type) && field.type.unsigned ? 'unsigned' : undefined,
+      isIntegerType(field.type) && field.type.autoincrement ? 'autoincrement' : undefined,
+      isNumericType(field.type) && field.type.precision
+        ? displayPrecision(field.type.precision)
         : undefined,
     ]
       .filter((x) => x)
-      .join(', ') || undefined
+      .join('; ') || undefined
   )
+}
+
+function displayPrecision(precision: Precision): string {
+  return `precision: ${precision.precision}${precision.scale ? `,${precision.scale}` : ''}`
 }
