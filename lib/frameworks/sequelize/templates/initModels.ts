@@ -177,7 +177,7 @@ type ThroughValueArgs = {
 const throughValue = ({ type, modelById }: ThroughValueArgs): string =>
   type.through.type === ThroughType.ThroughTable
     ? `'${type.through.table}'`
-    : `${modelName(modelById[type.through.modelId])} as typeof Model`
+    : modelName(modelById[type.through.modelId])
 
 const foreignKeyField = ({
   model,
