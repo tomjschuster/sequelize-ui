@@ -28,12 +28,15 @@ DB Options
 
 Codegen
 
+- [ ] Review sequelize cli format for init models and config
 - [ ] Migrations
 - [ ] JavaScript
 
 Testing
 
 - [ ] Use data schemas in integration tests
+  - [ ] Create schema with all data types
+- [ ] Review missing unit tests
 - [ ] Browser tests
 
 Bugs
