@@ -1,6 +1,7 @@
 export type DataType =
   | StringDataType
   | TextDataType
+  | CiTextDataType
   | IntegerDataType
   | BigIntDataType
   | SmallIntDataType
@@ -15,18 +16,25 @@ export type DataType =
   | EnumDataType
   | ArrayDataType
   | JsonDataType
+  | JsonBDataType
   | BlobDataType
   | UuidDataType
 
+export type Precision = { precision: number; scale?: number }
+
 type DataTypeBase<T extends DataTypeType> = { type: T }
+type StringOptions = { length?: number }
 type DateTypeOptions = { defaultNow?: boolean }
 type NumberOptions = { unsigned?: boolean }
 type IntegerOptions = NumberOptions & { autoincrement?: boolean }
 type NumericOptions = NumberOptions & { precision?: Precision }
-export type Precision = { precision: number; scale?: number }
+type EnumOptions = { values: string[] }
+type ArrayOptions = { arrayType: DataType }
+type UuidOptions = { defaultVersion?: UuidType }
 
-export type StringDataType = DataTypeBase<DataTypeType.String>
+export type StringDataType = DataTypeBase<DataTypeType.String> & StringOptions
 export type TextDataType = DataTypeBase<DataTypeType.Text>
+export type CiTextDataType = DataTypeBase<DataTypeType.CiText>
 export type IntegerDataType = DataTypeBase<DataTypeType.Integer> & IntegerOptions
 export type SmallIntDataType = DataTypeBase<DataTypeType.SmallInt> & IntegerOptions
 export type BigIntDataType = DataTypeBase<DataTypeType.BigInt> & IntegerOptions
@@ -38,21 +46,17 @@ export type DateTimeDataType = DataTypeBase<DataTypeType.DateTime> & DateTypeOpt
 export type DateDataType = DataTypeBase<DataTypeType.Date> & DateTypeOptions
 export type TimeDataType = DataTypeBase<DataTypeType.Time> & DateTypeOptions
 export type BooleanDataType = DataTypeBase<DataTypeType.Boolean>
-export type EnumDataType = DataTypeBase<DataTypeType.Enum> & {
-  values: string[]
-}
-
-export type ArrayDataType = DataTypeBase<DataTypeType.Array> & {
-  arrayType: DataType
-}
-
+export type EnumDataType = DataTypeBase<DataTypeType.Enum> & EnumOptions
+export type ArrayDataType = DataTypeBase<DataTypeType.Array> & ArrayOptions
 export type JsonDataType = DataTypeBase<DataTypeType.Json>
+export type JsonBDataType = DataTypeBase<DataTypeType.JsonB>
 export type BlobDataType = DataTypeBase<DataTypeType.Blob>
-export type UuidDataType = DataTypeBase<DataTypeType.Uuid> & { defaultVersion?: UuidType }
+export type UuidDataType = DataTypeBase<DataTypeType.Uuid> & UuidOptions
 
 export enum DataTypeType {
   String = 'STRING',
   Text = 'TEXT',
+  CiText = 'CITEXT',
   Integer = 'INTEGER',
   BigInt = 'BIGINT',
   SmallInt = 'SMALLINT',
@@ -67,6 +71,7 @@ export enum DataTypeType {
   Enum = 'ENUM',
   Array = 'ARRAY',
   Json = 'JSON',
+  JsonB = 'JSONB',
   Blob = 'BLOB',
   Uuid = 'UUID',
 }
@@ -82,6 +87,8 @@ export function displayDataType(dataType: DataType): string {
       return 'String'
     case DataTypeType.Text:
       return 'Text'
+    case DataTypeType.CiText:
+      return 'CI Text'
     case DataTypeType.Uuid:
       return 'UUID'
     case DataTypeType.DateTime:
@@ -116,6 +123,8 @@ export function displayDataType(dataType: DataType): string {
     }
     case DataTypeType.Json:
       return 'JSON'
+    case DataTypeType.JsonB:
+      return 'JSONB'
     case DataTypeType.Blob:
       return 'Buffer'
   }
@@ -127,6 +136,8 @@ export function displayDataTypeType(type: DataTypeType): string {
       return 'String'
     case DataTypeType.Text:
       return 'Text'
+    case DataTypeType.CiText:
+      return 'CI Text'
     case DataTypeType.Uuid:
       return 'UUID'
     case DataTypeType.DateTime:
@@ -157,18 +168,27 @@ export function displayDataTypeType(type: DataTypeType): string {
       return 'Array'
     case DataTypeType.Json:
       return 'JSON'
+    case DataTypeType.JsonB:
+      return 'JSONB'
     case DataTypeType.Blob:
       return 'Buffer'
   }
 }
 
-export function isDateTimeType(
-  dataType: DataType,
-): dataType is DateTimeDataType | DateDataType | TimeDataType {
-  return [DataTypeType.DateTime, DataTypeType.Date, DataTypeType.Time].includes(dataType.type)
+export type StringType = StringDataType
+
+export function isStringType(dataType: DataType): dataType is StringType {
+  return [DataTypeType.String].includes(dataType.type)
 }
 
-type NumberType =
+export type DateTimeTypes = DateTimeDataType | DateDataType | TimeDataType
+const dateTypeTypes: DataTypeType[] = [DataTypeType.DateTime, DataTypeType.Date, DataTypeType.Time]
+
+export function isDateTimeType(dataType: DataType): dataType is DateTimeTypes {
+  return dateTypeTypes.includes(dataType.type)
+}
+
+export type NumberType =
   | IntegerDataType
   | BigIntDataType
   | SmallIntDataType
@@ -178,29 +198,39 @@ type NumberType =
   | FloatDataType
   | DecimalDataType
 
+const numberTypes: DataTypeType[] = [
+  DataTypeType.Integer,
+  DataTypeType.BigInt,
+  DataTypeType.SmallInt,
+  DataTypeType.Float,
+  DataTypeType.Real,
+  DataTypeType.Double,
+  DataTypeType.Float,
+  DataTypeType.Decimal,
+]
+
 export function isNumberType(dataType: DataType): dataType is NumberType {
-  return [
-    DataTypeType.Integer,
-    DataTypeType.BigInt,
-    DataTypeType.SmallInt,
-    DataTypeType.Float,
-    DataTypeType.Real,
-    DataTypeType.Double,
-    DataTypeType.Float,
-    DataTypeType.Decimal,
-  ].includes(dataType.type)
+  return numberTypes.includes(dataType.type)
 }
 
-type IntegerType = IntegerDataType | BigIntDataType | SmallIntDataType
+export type IntegerType = IntegerDataType | BigIntDataType | SmallIntDataType
+
+const integerTypes: DataTypeType[] = [
+  DataTypeType.Integer,
+  DataTypeType.BigInt,
+  DataTypeType.SmallInt,
+]
 
 export function isIntegerType(dataType: DataType): dataType is IntegerType {
-  return [DataTypeType.Integer, DataTypeType.BigInt, DataTypeType.SmallInt].includes(dataType.type)
+  return integerTypes.includes(dataType.type)
 }
 
-type NumericType = DecimalDataType
+export type NumericType = DecimalDataType
+
+const numericTypes: DataTypeType[] = [DataTypeType.Decimal]
 
 export function isNumericType(dataType: DataType): dataType is NumericType {
-  return [DataTypeType.Decimal].includes(dataType.type)
+  return numericTypes.includes(dataType.type)
 }
 export function stringDataType(): StringDataType {
   return { type: DataTypeType.String }
@@ -208,6 +238,10 @@ export function stringDataType(): StringDataType {
 
 export function textDataType(): TextDataType {
   return { type: DataTypeType.Text }
+}
+
+export function ciTextDataType(): CiTextDataType {
+  return { type: DataTypeType.CiText }
 }
 
 export function integerDataType(): IntegerDataType {
@@ -266,6 +300,10 @@ export function jsonDataType(): JsonDataType {
   return { type: DataTypeType.Json }
 }
 
+export function jsonBDataType(): JsonBDataType {
+  return { type: DataTypeType.JsonB }
+}
+
 export function blobDataType(): BlobDataType {
   return { type: DataTypeType.Blob }
 }
@@ -280,6 +318,8 @@ export function dataTypeFromDataTypeType(type: DataTypeType): DataType {
       return stringDataType()
     case DataTypeType.Text:
       return textDataType()
+    case DataTypeType.CiText:
+      return ciTextDataType()
     case DataTypeType.Uuid:
       return uuidDataType()
     case DataTypeType.DateTime:
@@ -310,6 +350,8 @@ export function dataTypeFromDataTypeType(type: DataTypeType): DataType {
       return arrayDataType()
     case DataTypeType.Json:
       return jsonDataType()
+    case DataTypeType.JsonB:
+      return jsonBDataType()
     case DataTypeType.Blob:
       return blobDataType()
   }

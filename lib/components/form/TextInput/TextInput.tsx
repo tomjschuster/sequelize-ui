@@ -2,11 +2,11 @@ import React from 'react'
 import { classnames } from 'tailwindcss-classnames'
 import { CommonFieldProps, CommonInputProps } from '../shared/types'
 
-type TextInputProps = CommonInputProps<string> & CommonFieldProps
+type TextInputProps = CommonFieldProps & CommonInputProps<string>
 
 function TextInput({ id, label, value, error, onChange }: TextInputProps): React.ReactElement {
   const handleChange = React.useCallback(
-    (evt: React.ChangeEvent<HTMLInputElement>) => onChange(evt.target.value),
+    (evt: React.ChangeEvent<HTMLInputElement>) => onChange(evt.target.value || undefined),
     [onChange],
   )
 

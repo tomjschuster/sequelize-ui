@@ -1,10 +1,9 @@
 import React from 'react'
 import { classnames } from 'tailwindcss-classnames'
 import { lookupOptionKey, lookupOptionValue, optionsToList } from '../shared/options'
-import { CommonFieldProps, CommonInputProps, CommonOptionsProps } from '../shared/types'
+import { CommonFieldProps, CommonOptionsProps } from '../shared/types'
 
-type SelectProps<T> = CommonInputProps<T> & CommonOptionsProps<T> & CommonFieldProps
-
+type SelectProps<T> = CommonFieldProps & CommonOptionsProps<T>
 function Select<T>({
   id,
   label,

@@ -19,6 +19,8 @@ function IntegerInput({
 }: IntegerInputProps): React.ReactElement {
   const handleChange = React.useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {
+      if (!evt.target.value) onChange(undefined)
+
       const updatedValue = parseInt(evt.target.value)
       if (isNaN(updatedValue)) return
       if (max !== undefined && updatedValue > max) return

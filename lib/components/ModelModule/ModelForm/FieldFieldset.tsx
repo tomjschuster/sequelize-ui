@@ -12,6 +12,7 @@ import {
   isIntegerType,
   isNumberType,
   isNumericType,
+  isStringType,
   UuidType,
 } from '@lib/core'
 import React, { useCallback } from 'react'
@@ -29,7 +30,9 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
     onChange,
   ])
 
-  const handleChangeName = useCallback((name: string) => handleChange({ name }), [handleChange])
+  const handleChangeName = useCallback((name?: string) => handleChange({ name: name || '' }), [
+    handleChange,
+  ])
 
   const handleChangeDataType = useCallback(
     (type: DataTypeType) => handleChange({ type: dataTypeFromDataTypeType(type) }),
@@ -51,17 +54,19 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
 
   const handleChangeUnsigned = useCallback(
     (unsigned: boolean) =>
-      handleChange({
-        type: isNumberType(field.type) ? { ...field.type, unsigned } : field.type,
-      }),
+      isNumberType(field.type) && handleChange({ type: { ...field.type, unsigned } }),
     [field.type, handleChange],
   )
 
   const handleChangeAutoincrement = useCallback(
     (autoincrement: boolean) =>
-      handleChange({
-        type: isIntegerType(field.type) ? { ...field.type, autoincrement } : field.type,
-      }),
+      isIntegerType(field.type) && handleChange({ type: { ...field.type, autoincrement } }),
+    [field.type, handleChange],
+  )
+
+  const handleChangeStringLength = useCallback(
+    (length?: number) =>
+      isStringType(field.type) && handleChange({ type: { ...field.type, length } }),
     [field.type, handleChange],
   )
 
@@ -87,18 +92,14 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
 
   const handleChangeUuidDefault = useCallback(
     (defaultVersion: UuidType | undefined) =>
-      handleChange({
-        type:
-          field.type.type === DataTypeType.Uuid ? { ...field.type, defaultVersion } : field.type,
-      }),
+      field.type.type === DataTypeType.Uuid &&
+      handleChange({ type: { ...field.type, defaultVersion } }),
     [field.type, handleChange],
   )
 
   const handleChangeDefaultNow = useCallback(
     (defaultNow: boolean) =>
-      handleChange({
-        type: isDateTimeType(field.type) ? { ...field.type, defaultNow } : field.type,
-      }),
+      isDateTimeType(field.type) && handleChange({ type: { ...field.type, defaultNow } }),
     [field.type, handleChange],
   )
 
@@ -121,6 +122,16 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         value={field.type.type}
         onChange={handleChangeDataType}
       />
+      {isStringType(field.type) && (
+        <IntegerInput
+          id={`field-string-length-${field.id}`}
+          label="Length"
+          value={field.type.length}
+          min={1}
+          max={65535}
+          onChange={handleChangeStringLength}
+        />
+      )}
       {isNumberType(field.type) && (
         <Checkbox
           id={`field-unsigned-${field.id}`}

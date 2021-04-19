@@ -105,12 +105,12 @@ function AssociationFieldset({
   )
 
   const handleChangeAlias = useCallback(
-    (alias: string) => handleChange({ alias: alias || undefined }),
+    (alias?: string) => handleChange({ alias: alias || undefined }),
     [handleChange],
   )
 
   const handleChangeForeignKey = useCallback(
-    (foreignKey: string) => handleChange({ foreignKey: foreignKey || undefined }),
+    (foreignKey?: string) => handleChange({ foreignKey: foreignKey || undefined }),
     [handleChange],
   )
 
@@ -147,16 +147,16 @@ function AssociationFieldset({
   )
 
   const handleChangeThroughTable = useCallback(
-    (table: string) =>
+    (table?: string) =>
       handleChangeManyToMany((type) => ({
         ...type,
-        through: { type: ThroughType.ThroughTable, table },
+        through: { type: ThroughType.ThroughTable, table: table || '' },
       })),
     [handleChangeManyToMany],
   )
 
   const handleChangeTargetForeignKey = useCallback(
-    (targetFk: string) =>
+    (targetFk?: string) =>
       handleChangeManyToMany((type) => ({ ...type, targetFk: targetFk || undefined })),
     [handleChangeManyToMany],
   )

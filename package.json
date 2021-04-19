@@ -10,7 +10,7 @@
     "format": "prettier --write .",
     "generate:css-types": "tailwindcss-classnames -i tailwind.config.js -o typings/__generated__/tailwindcss-classnames.d.ts",
     "test:unit": "npm run test:ts -- 'lib/**/*.spec.ts' --watch ",
-    "test:sql": "npm run test:ts -- 'tests/integration/sql.spec.ts' --exit",
+    "test:sql": "SQL_DIALECT=${SQL_DIALECT:=postgres} npm run test:ts -- 'tests/integration/sql.spec.ts' --exit",
     "test:ts": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha",
     "type:check": "tsc -b tsconfig.check.json"
   },

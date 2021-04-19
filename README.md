@@ -8,6 +8,7 @@ UI
 - [ ] Radio group
 - [ ] Checkbox group
 - [ ] Model form
+- [ ] db compatibility warnings
 - [ ] Schema form
 - [ ] Form a11y review
 - [ ] Code preview

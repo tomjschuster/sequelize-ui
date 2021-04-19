@@ -59,7 +59,8 @@ function SchemaForm({ schema, schemas, onSubmit, onCancel }: SchemaFormProps): R
     if (noSchemaFormErrors(newErrors)) onSubmit(formSchema)
   }
 
-  const handleChangeSchemaName = (name: string): void => setFormSchema((s) => ({ ...s, name }))
+  const handleChangeSchemaName = (name?: string): void =>
+    setFormSchema((s) => ({ ...s, name: name || '' }))
 
   return (
     <form onSubmit={handleSubmit}>

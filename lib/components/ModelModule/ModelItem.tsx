@@ -5,6 +5,7 @@ import {
   isIntegerType,
   isNumberType,
   isNumericType,
+  isStringType,
   Model,
   Precision,
   Schema,
@@ -96,17 +97,22 @@ function fieldAttributes(field: Field): string | undefined {
       field.primaryKey ? 'primary key' : undefined,
       field.required ? 'required' : undefined,
       field.unique ? 'unique' : undefined,
+      isStringType(field.type) ? displayLength(field.type.length) : undefined,
       isNumberType(field.type) && field.type.unsigned ? 'unsigned' : undefined,
       isIntegerType(field.type) && field.type.autoincrement ? 'autoincrement' : undefined,
-      isNumericType(field.type) && field.type.precision
-        ? displayPrecision(field.type.precision)
-        : undefined,
+      isNumericType(field.type) ? displayPrecision(field.type.precision) : undefined,
     ]
       .filter((x) => x)
       .join('; ') || undefined
   )
 }
 
-function displayPrecision(precision: Precision): string {
-  return `precision: ${precision.precision}${precision.scale ? `,${precision.scale}` : ''}`
+function displayLength(length?: number): string | undefined {
+  return length ? `length: ${length}}` : undefined
+}
+
+function displayPrecision(precision?: Precision): string | undefined {
+  return precision
+    ? `precision: ${precision.precision}${precision.scale ? `,${precision.scale}` : ''}`
+    : undefined
 }

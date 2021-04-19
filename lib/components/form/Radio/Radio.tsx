@@ -1,8 +1,8 @@
 import React from 'react'
 import { lookupOptionValue, optionsToList } from '../shared/options'
-import { CommonInputProps, CommonOptionsProps } from '../shared/types'
+import { CommonOptionsProps } from '../shared/types'
 
-type RadioProps<T> = CommonInputProps<T> & CommonOptionsProps<T>
+type RadioProps<T> = CommonOptionsProps<T>
 
 function Radio<T>({ value, options, display, onChange }: RadioProps<T>): React.ReactElement {
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {

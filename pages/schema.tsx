@@ -1,5 +1,6 @@
 import { deleteSchema, emptyModel, listSchemas, updateSchema } from '@lib/api/schema'
 import CodeViewer from '@lib/components/CodeViewer'
+import DbOptionsForm from '@lib/components/DbOptionsForm'
 import Layout from '@lib/components/Layout'
 import ModelModule from '@lib/components/ModelModule'
 import SchemaModule from '@lib/components/SchemaModule'
@@ -180,13 +181,15 @@ function SchemaPageContent({
   if (error) return <p>{error}</p>
   if (schema === undefined) return <p>Loading Schemas</p>
 
+  const [dbOptions, setDbOptions] = useState<DatabaseOptions>(defaultDbOptions)
   const [viewCode, setViewCode] = useState<boolean>(false)
   const handleClickViewCode = () => setViewCode((x) => !x)
   const handleClickAddModel = () =>
     onUpdate({ ...schema, models: [emptyModel(), ...schema.models] })
 
-  const root = useMemo(() => SequelizeFramework.generate({ schema, dbOptions: defaultDbOptions }), [
+  const root = useMemo(() => SequelizeFramework.generate({ schema, dbOptions }), [
     schema,
+    dbOptions,
   ])
 
   const handleChange = (model: Model): void => {
@@ -231,7 +234,12 @@ function SchemaPageContent({
       <form onSubmit={handleDeleteSchema}>
         <button>Delete</button>
       </form>
-      {viewCode && <CodeViewer cacheKey={schema.id} root={root} />}
+      {viewCode && (
+        <>
+          <DbOptionsForm dbOptions={dbOptions} onChange={setDbOptions} />
+          <CodeViewer cacheKey={schema.id} root={root} />
+        </>
+      )}
       <h3>Models</h3>
       <button type="button" onClick={handleClickAddModel}>
         Add model

@@ -10,7 +10,9 @@ type ModelFieldsetProps = {
 }
 
 function ModelFieldset({ name, errors, onChange }: ModelFieldsetProps): React.ReactElement {
-  const handleChangeName = React.useCallback((name: string) => onChange({ name }), [onChange])
+  const handleChangeName = React.useCallback((name?: string) => onChange({ name: name || '' }), [
+    onChange,
+  ])
 
   return (
     <fieldset>

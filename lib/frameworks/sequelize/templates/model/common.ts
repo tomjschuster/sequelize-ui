@@ -1,9 +1,5 @@
 import { Association, DataType, displaySqlDialect, Model, SqlDialect } from '@lib/core'
-import {
-  dataTypeNotSupported,
-  dataTypeToSequelize,
-  displaySequelizeDataType,
-} from '../../dataTypes'
+import { dataTypeNotSupported, displaySequelizeDataType } from '../../dataTypes'
 
 export type ModelAssociation = {
   model: Model
@@ -16,6 +12,6 @@ export const notSupportedComment = (type: DataType, dialect: SqlDialect): string
 export const noSupportedDetails = (type: DataType, dialect: SqlDialect): string | null => {
   if (!dataTypeNotSupported(type, dialect)) return null
 
-  const typeDisplay = displaySequelizeDataType(dataTypeToSequelize(type))
+  const typeDisplay = displaySequelizeDataType(type)
   return `//// ${typeDisplay} not supported for ${displaySqlDialect(dialect)}`
 }

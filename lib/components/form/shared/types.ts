@@ -2,7 +2,7 @@ import { Options } from './options'
 
 export type CommonInputProps<T> = {
   value?: T
-  onChange: (value: T) => void
+  onChange: (value?: T) => void
 }
 
 export type CommonFieldProps = {
@@ -11,7 +11,8 @@ export type CommonFieldProps = {
   error?: string
 }
 
-export type CommonOptionsProps<T> = {
+export type CommonOptionsProps<T> = Omit<CommonInputProps<T>, 'onChange'> & {
   options: Options<T>
   display: (value: T) => string
+  onChange: (value: T) => void
 }

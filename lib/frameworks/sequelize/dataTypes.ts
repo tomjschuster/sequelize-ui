@@ -1,171 +1,23 @@
-import { DataType, DataTypeType, SqlDialect, UuidType } from '@lib/core'
-
-export enum SequelizeDataTypeType {
-  String = 'STRING',
-  Text = 'TEXT',
-  Integer = 'INTEGER',
-  BigInt = 'BIGINT',
-  SmallInt = 'SMALLINT',
-  Float = 'FLOAT',
-  Real = 'REAL',
-  Double = 'DOUBLE',
-  Decimal = 'DECIMAL',
-  Date = 'DATE',
-  Dateonly = 'DATEONLY',
-  Time = 'TIME',
-  Boolean = 'BOOLEAN',
-  Enum = 'ENUM',
-  Array = 'ARRAY',
-  Json = 'JSON',
-  Blob = 'BLOB',
-  Uuid = 'UUID',
-}
-
-type SequelizeNumberOptions = { unsigned?: boolean }
-type SequelizeNumericOptions = SequelizeNumberOptions & { precision?: number; scale?: number }
-
-type SequelizeStringType = { type: SequelizeDataTypeType.String }
-type SequelizeTextType = { type: SequelizeDataTypeType.Text }
-type SequelizeIntegerType = { type: SequelizeDataTypeType.Integer } & SequelizeNumberOptions
-type SequelizeBigIntType = { type: SequelizeDataTypeType.BigInt } & SequelizeNumberOptions
-type SequelizeSmallIntType = { type: SequelizeDataTypeType.SmallInt } & SequelizeNumberOptions
-type SequelizeFloatType = { type: SequelizeDataTypeType.Float } & SequelizeNumberOptions
-type SequelizeRealType = { type: SequelizeDataTypeType.Real } & SequelizeNumberOptions
-type SequelizeDoubleType = { type: SequelizeDataTypeType.Double } & SequelizeNumberOptions
-type SequelizeDecimalType = { type: SequelizeDataTypeType.Decimal } & SequelizeNumericOptions
-type SequelizeDateType = { type: SequelizeDataTypeType.Date }
-type SequelizeDateonlyType = { type: SequelizeDataTypeType.Dateonly }
-type SequelizeTimeType = { type: SequelizeDataTypeType.Time }
-type SequelizeBooleanType = { type: SequelizeDataTypeType.Boolean }
-type SequelizeEnumType = {
-  type: SequelizeDataTypeType.Enum
-  values: string[]
-}
-type SequelizeArrayType = {
-  type: SequelizeDataTypeType.Array
-  arrayType: SequelizeDataType
-}
-type SequelizeJsonType = { type: SequelizeDataTypeType.Json }
-type SequelizeBlobType = { type: SequelizeDataTypeType.Blob }
-type SequelizeUuidType = { type: SequelizeDataTypeType.Uuid }
-
-export type SequelizeDataType =
-  | SequelizeStringType
-  | SequelizeTextType
-  | SequelizeIntegerType
-  | SequelizeBigIntType
-  | SequelizeSmallIntType
-  | SequelizeFloatType
-  | SequelizeRealType
-  | SequelizeDoubleType
-  | SequelizeDecimalType
-  | SequelizeDateType
-  | SequelizeDateonlyType
-  | SequelizeTimeType
-  | SequelizeBooleanType
-  | SequelizeEnumType
-  | SequelizeArrayType
-  | SequelizeJsonType
-  | SequelizeBlobType
-  | SequelizeUuidType
-
-function displayNumber(options: SequelizeNumberOptions): string {
-  return options.unsigned ? '.UNSIGNED' : ''
-}
-
-function displayNumeric(options: SequelizeNumericOptions): string {
-  return options.precision
-    ? `.PRECISION(${options.precision}${options.scale ? `, ${options.scale})` : ''})`
-    : ''
-}
-
-export function displaySequelizeDataType(dataType: SequelizeDataType): string {
-  switch (dataType.type) {
-    case SequelizeDataTypeType.Integer:
-    case SequelizeDataTypeType.BigInt:
-    case SequelizeDataTypeType.SmallInt:
-    case SequelizeDataTypeType.Float:
-    case SequelizeDataTypeType.Real:
-    case SequelizeDataTypeType.Double:
-      return `DataTypes.${dataType.type}${displayNumber(dataType)}`
-    case SequelizeDataTypeType.Decimal:
-      return `DataTypes.${dataType.type}${displayNumber(dataType)}${displayNumeric(dataType)}`
-
-    case SequelizeDataTypeType.Enum:
-      return `DataTypes.${SequelizeDataTypeType.Enum}(${dataType.values
-        .map((x) => `'${x}'`)
-        .join(', ')})`
-    case SequelizeDataTypeType.Array:
-      return `DataTypes.${SequelizeDataTypeType.Array}(${displaySequelizeDataType(
-        dataType.arrayType,
-      )})`
-    default:
-      return `DataTypes.${dataType.type}`
-  }
-}
-
-export function dataTypeToSequelize(dataType: DataType): SequelizeDataType {
-  switch (dataType.type) {
-    case DataTypeType.String:
-      return { type: SequelizeDataTypeType.String }
-    case DataTypeType.Text:
-      return { type: SequelizeDataTypeType.Text }
-    case DataTypeType.Integer:
-      return {
-        type: SequelizeDataTypeType.Integer,
-        unsigned: dataType.unsigned,
-      }
-    case DataTypeType.BigInt:
-      return {
-        type: SequelizeDataTypeType.BigInt,
-        unsigned: dataType.unsigned,
-      }
-    case DataTypeType.SmallInt:
-      return {
-        type: SequelizeDataTypeType.SmallInt,
-        unsigned: dataType.unsigned,
-      }
-    case DataTypeType.Float:
-      return { type: SequelizeDataTypeType.Float, unsigned: dataType.unsigned }
-    case DataTypeType.Real:
-      return { type: SequelizeDataTypeType.Real, unsigned: dataType.unsigned }
-    case DataTypeType.Double:
-      return { type: SequelizeDataTypeType.Double, unsigned: dataType.unsigned }
-    case DataTypeType.Decimal:
-      return {
-        type: SequelizeDataTypeType.Decimal,
-        unsigned: dataType.unsigned,
-        precision: dataType.precision?.precision,
-        scale: dataType.precision?.scale,
-      }
-    case DataTypeType.DateTime:
-      return { type: SequelizeDataTypeType.Date }
-    case DataTypeType.Date:
-      return { type: SequelizeDataTypeType.Dateonly }
-    case DataTypeType.Time:
-      return { type: SequelizeDataTypeType.Time }
-    case DataTypeType.Boolean:
-      return { type: SequelizeDataTypeType.Boolean }
-    case DataTypeType.Enum:
-      return { type: SequelizeDataTypeType.Enum, values: dataType.values }
-    case DataTypeType.Array:
-      return {
-        type: SequelizeDataTypeType.Array,
-        arrayType: dataTypeToSequelize(dataType.arrayType),
-      }
-    case DataTypeType.Json:
-      return { type: SequelizeDataTypeType.Json }
-    case DataTypeType.Blob:
-      return { type: SequelizeDataTypeType.Blob }
-    case DataTypeType.Uuid:
-      return { type: SequelizeDataTypeType.Uuid }
-  }
-}
+import {
+  ArrayDataType,
+  DataType,
+  DataTypeType,
+  EnumDataType,
+  isNumberType,
+  isNumericType,
+  isStringType,
+  NumberType,
+  NumericType,
+  SqlDialect,
+  StringType,
+  UuidType,
+} from '@lib/core'
 
 export function dataTypeToTypeScript(dataType: DataType): string {
   switch (dataType.type) {
     case DataTypeType.String:
     case DataTypeType.Text:
+    case DataTypeType.CiText:
     case DataTypeType.Uuid:
     case DataTypeType.DateTime:
     case DataTypeType.Time:
@@ -189,10 +41,30 @@ export function dataTypeToTypeScript(dataType: DataType): string {
       }
       return `${dataTypeToTypeScript(dataType.arrayType)}[]`
     case DataTypeType.Json:
+    case DataTypeType.JsonB:
       return 'Json'
     case DataTypeType.Blob:
       return 'Buffer'
   }
+}
+
+const postgresTypes: DataTypeType[] = [DataTypeType.Array, DataTypeType.JsonB, DataTypeType.CiText]
+const nonMssqlTypes: DataTypeType[] = [DataTypeType.Json]
+
+export function dataTypeNotSupported(dataType: DataType, dialect: SqlDialect): boolean {
+  if (dialect === SqlDialect.MsSql && nonMssqlTypes.includes(dataType.type)) {
+    return true
+  }
+
+  if (dialect !== SqlDialect.Postgres && postgresTypes.includes(dataType.type)) {
+    return true
+  }
+
+  return false
+}
+
+export function displaySequelizeDataType(dataType: DataType): string {
+  return `${displayBaseDataType(dataType)}${displayDataTypeOptions(dataType)}`
 }
 
 export function sequelizeUuidVersion(uuidType: UuidType): string {
@@ -204,14 +76,109 @@ export function sequelizeUuidVersion(uuidType: UuidType): string {
   }
 }
 
-export function dataTypeNotSupported(dataType: DataType, dialect: SqlDialect): boolean {
-  if (dataType.type === DataTypeType.Json) {
-    return dialect === SqlDialect.MsSql
-  }
+function displayBaseDataType(dataType: DataType): string {
+  return `DataTypes.${dataTypeToSequelize(dataType)}`
+}
 
-  if (dataType.type === DataTypeType.Array) {
-    return dialect !== SqlDialect.Postgres
-  }
+enum SequelizeDataType {
+  String = 'STRING',
+  Text = 'TEXT',
+  CiText = 'CITEXT',
+  Integer = 'INTEGER',
+  BigInt = 'BIGINT',
+  SmallInt = 'SMALLINT',
+  Float = 'FLOAT',
+  Real = 'REAL',
+  Double = 'DOUBLE',
+  Decimal = 'DECIMAL',
+  Date = 'DATE',
+  Dateonly = 'DATEONLY',
+  Time = 'TIME',
+  Boolean = 'BOOLEAN',
+  Enum = 'ENUM',
+  Array = 'ARRAY',
+  Json = 'JSON',
+  JsonB = 'JSONB',
+  Blob = 'BLOB',
+  Uuid = 'UUID',
+}
 
-  return false
+function dataTypeToSequelize(dataType: DataType): SequelizeDataType {
+  switch (dataType.type) {
+    case DataTypeType.String:
+      return SequelizeDataType.String
+    case DataTypeType.Text:
+      return SequelizeDataType.Text
+    case DataTypeType.CiText:
+      return SequelizeDataType.CiText
+    case DataTypeType.Integer:
+      return SequelizeDataType.Integer
+    case DataTypeType.BigInt:
+      return SequelizeDataType.BigInt
+    case DataTypeType.SmallInt:
+      return SequelizeDataType.SmallInt
+    case DataTypeType.Float:
+      return SequelizeDataType.Float
+    case DataTypeType.Real:
+      return SequelizeDataType.Real
+    case DataTypeType.Double:
+      return SequelizeDataType.Double
+    case DataTypeType.Decimal:
+      return SequelizeDataType.Decimal
+    case DataTypeType.DateTime:
+      return SequelizeDataType.Date
+    case DataTypeType.Date:
+      return SequelizeDataType.Dateonly
+    case DataTypeType.Time:
+      return SequelizeDataType.Time
+    case DataTypeType.Boolean:
+      return SequelizeDataType.Boolean
+    case DataTypeType.Enum:
+      return SequelizeDataType.Enum
+    case DataTypeType.Array:
+      return SequelizeDataType.Array
+    case DataTypeType.Json:
+      return SequelizeDataType.Json
+    case DataTypeType.JsonB:
+      return SequelizeDataType.JsonB
+    case DataTypeType.Blob:
+      return SequelizeDataType.Blob
+    case DataTypeType.Uuid:
+      return SequelizeDataType.Uuid
+  }
+}
+
+function displayDataTypeOptions(dataType: DataType): string {
+  if (isStringType(dataType)) return displayString(dataType)
+  if (isNumericType(dataType)) return displayNumeric(dataType)
+  if (isNumberType(dataType)) return displayNumber(dataType)
+  if (dataType.type === DataTypeType.Enum) return displayEnum(dataType)
+  if (dataType.type === DataTypeType.Array) return displayArray(dataType)
+  return ''
+}
+
+function displayString(dataType: StringType): string {
+  return dataType.length ? `(${dataType.length})` : ''
+}
+
+function displayNumber(dataType: NumberType): string {
+  return dataType.unsigned ? '.UNSIGNED' : ''
+}
+
+function displayNumeric(dataType: NumericType): string {
+  const { precision } = dataType
+
+  const numeric = precision
+    ? `.PRECISION(${precision.precision}${precision.scale ? `, ${precision.scale}` : ''})`
+    : ''
+
+  return `${displayNumber(dataType)}${numeric}`
+}
+
+function displayEnum(dataType: EnumDataType): string {
+  return `(${dataType.values.map((x) => `'${x}'`).join(', ')})`
+}
+
+function displayArray(dataType: ArrayDataType): string {
+  return `(${displaySequelizeDataType(dataType.arrayType)})`
 }

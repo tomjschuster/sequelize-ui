@@ -16,7 +16,6 @@ import {
 } from '@lib/core'
 import { camelCase, pascalCase, singular, snakeCase } from '@lib/utils'
 import {
-  dataTypeToSequelize,
   dataTypeToTypeScript,
   displaySequelizeDataType,
   sequelizeUuidVersion,
@@ -187,8 +186,7 @@ const fieldTemplate = (
   ])
 }
 
-const typeField = (dataType: DataType): string =>
-  `type: ${displaySequelizeDataType(dataTypeToSequelize(dataType))}`
+const typeField = (dataType: DataType): string => `type: ${displaySequelizeDataType(dataType)}`
 
 const allowNullField = (required?: boolean): string | null =>
   required === undefined ? null : `allowNull: ${!required}`
