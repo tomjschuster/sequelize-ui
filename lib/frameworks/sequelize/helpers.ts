@@ -1,4 +1,4 @@
-import { DataTypeType, Field, Model } from '@lib/core'
+import { DataTypeType, Field, Model, SqlDialect } from '@lib/core'
 import { pascalCase, plural as plural_, singular } from '@lib/utils'
 import shortid from 'shortid'
 
@@ -26,3 +26,18 @@ export const hasJsonType = (model: Model): boolean =>
   model.fields.some((f) => f.type.type === DataTypeType.Json)
 
 export const literalFunction = (fn: string): string => `Sequelize.literal('${fn}')`
+
+export const sqlDialiectConfigValue = (dialect: SqlDialect): string => {
+  switch (dialect) {
+    case SqlDialect.MariaDb:
+      return 'mariadb'
+    case SqlDialect.MsSql:
+      return 'mssql'
+    case SqlDialect.MySql:
+      return 'mysql'
+    case SqlDialect.Postgres:
+      return 'postgres'
+    case SqlDialect.Sqlite:
+      return 'sqlite'
+  }
+}

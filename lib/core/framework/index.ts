@@ -1,6 +1,6 @@
 import { DatabaseOptions, DirectoryItem, Schema } from '@lib/core'
 
-type GenerateArgs = {
+export type GenerateArgs = {
   schema: Schema
   dbOptions: DatabaseOptions
 }

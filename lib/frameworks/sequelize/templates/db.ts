@@ -9,12 +9,12 @@ import {
   defaultSqlDialectPort,
   defaultSqlDialectStorage,
   defaultSqlDialectUsername,
-  displaySqlDialect,
   lines,
   Schema,
   SqlDialect,
-  varSqlDialect,
+  sqlDialectEnvVar,
 } from '@lib/core'
+import { sqlDialiectConfigValue } from '../helpers'
 
 export type DbTemplateArgs = {
   schema: Schema
@@ -54,47 +54,48 @@ const instanceDeclaration = ({ schema, dbOptions }: DbTemplateArgs) =>
 
 const exportInstance = (): string => 'export default db'
 
-const dialectField = (dialect: SqlDialect): string => `dialect: '${displaySqlDialect(dialect)}'`
+const dialectField = (dialect: SqlDialect): string =>
+  `dialect: '${sqlDialiectConfigValue(dialect)}'`
 
 const storageField = (dialect: SqlDialect): string | null => {
   const defaultStorage = defaultSqlDialectStorage(dialect)
   return defaultStorage
-    ? `storage: process.env.${varSqlDialect(dialect)} || '${defaultStorage}'`
+    ? `storage: process.env.${sqlDialectEnvVar(dialect)} || '${defaultStorage}'`
     : null
 }
 
 const databaseField = (schemaName: string, dialect: SqlDialect): string | null => {
   const defaultDatabase = defaultSqlDialectDatabase(schemaName, dialect)
   return defaultDatabase
-    ? `database: process.env.${varSqlDialect(dialect)}_DB_NAME || '${defaultDatabase}'`
+    ? `database: process.env.${sqlDialectEnvVar(dialect)}_DB_NAME || '${defaultDatabase}'`
     : null
 }
 
 const usernameField = (dialect: SqlDialect): string | null => {
   const defaultUsername = defaultSqlDialectUsername(dialect)
   return defaultUsername
-    ? `username: process.env.${varSqlDialect(dialect)}_DB_USERNAME || '${defaultUsername}'`
+    ? `username: process.env.${sqlDialectEnvVar(dialect)}_DB_USERNAME || '${defaultUsername}'`
     : null
 }
 
 const passwordField = (dialect: SqlDialect): string | null => {
   const defaultPassword = defaultSqlDialectPassword(dialect)
   return defaultPassword
-    ? `password: process.env.${varSqlDialect(dialect)}_DB_PASSWORD || '${defaultPassword}'`
+    ? `password: process.env.${sqlDialectEnvVar(dialect)}_DB_PASSWORD || '${defaultPassword}'`
     : null
 }
 
 const hostField = (dialect: SqlDialect): string | null => {
   const defaultHost = defaultSqlDialectHost(dialect)
   return defaultHost
-    ? `host: process.env.${varSqlDialect(dialect)}_DB_HOST || '${defaultHost}'`
+    ? `host: process.env.${sqlDialectEnvVar(dialect)}_DB_HOST || '${defaultHost}'`
     : null
 }
 
 const portField = (dialect: SqlDialect): string | null => {
   const defaultPort = defaultSqlDialectPort(dialect)
   return defaultPort
-    ? `port: parseInt(process.env.${varSqlDialect(dialect)}_DB_PORT || '${defaultPort}')`
+    ? `port: parseInt(process.env.${sqlDialectEnvVar(dialect)}_DB_PORT || '${defaultPort}')`
     : null
 }
 

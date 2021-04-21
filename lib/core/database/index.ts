@@ -28,19 +28,19 @@ export enum SqlDialect {
 export const displaySqlDialect = (dialect: SqlDialect): string => {
   switch (dialect) {
     case SqlDialect.MariaDb:
-      return 'mariadb'
+      return 'MariaDB'
     case SqlDialect.MsSql:
-      return 'mssql'
+      return 'SQL Server'
     case SqlDialect.MySql:
-      return 'mysql'
+      return 'MySQL'
     case SqlDialect.Postgres:
-      return 'postgres'
+      return 'PostgreSQL'
     case SqlDialect.Sqlite:
-      return 'sqlite'
+      return 'SQLite'
   }
 }
 
-export const varSqlDialect = (dialect: SqlDialect): string => {
+export const sqlDialectEnvVar = (dialect: SqlDialect): string => {
   switch (dialect) {
     case SqlDialect.MariaDb:
       return 'MARIADB'

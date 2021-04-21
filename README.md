@@ -38,9 +38,9 @@ Testing
 - [ ] Use data schemas in integration tests
   - [ ] Create schema with all data types
 - [ ] Review missing unit tests
-  - [ ] database
-  - [ ] framework
   - [ ] schema
+  - [ ] string case
+  - [ ] file.io
 - [ ] Switch to jest
   - [ ] hook tests
   - [ ] api tests (mock local storage)
