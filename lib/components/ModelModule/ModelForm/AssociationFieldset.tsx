@@ -4,7 +4,7 @@ import TextInput from '@lib/components/form/TextInput'
 import {
   Association,
   AssociationTypeType,
-  displayAssociationType,
+  displayAssociationTypeType,
   displayThroughType,
   ManyToManyAssociation,
   Model,
@@ -169,7 +169,7 @@ function AssociationFieldset({
         id="association-type"
         label="Type"
         options={AssociationTypeType}
-        display={displayAssociationType}
+        display={displayAssociationTypeType}
         value={association.type.type}
         onChange={handleChangeType}
       />

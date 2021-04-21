@@ -46,10 +46,10 @@ export enum ThroughType {
 }
 
 export function displayAssociation(association: Association): string {
-  return displayAssociationType(association.type.type)
+  return displayAssociationTypeType(association.type.type)
 }
 
-export function displayAssociationType(type: AssociationTypeType): string {
+export function displayAssociationTypeType(type: AssociationTypeType): string {
   switch (type) {
     case AssociationTypeType.BelongsTo:
       return 'belongs to'
