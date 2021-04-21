@@ -12,7 +12,7 @@ import {
   itemName,
   Language,
   listPaths,
-} from '..'
+} from '../fileSystem'
 import fileTree from '../__fixtures__/fileTree'
 
 describe('files', () => {
@@ -56,6 +56,7 @@ describe('files', () => {
       [file('foo.json', 'contents'), Language.Json],
       [file('.gitignore', 'contents'), Language.Git],
       [file('foo.txt', 'contents'), undefined],
+      [file('foo.', 'contents'), undefined],
       [file('foo', 'contents'), undefined],
     ]
     forEach(cases).describe(`(%s)`, (f, expected) => {

@@ -29,6 +29,7 @@ DB Options
 Codegen
 
 - [ ] Review sequelize cli format for init models and config
+- [ ] Review DataTypes.NOW
 - [ ] Migrations
 - [ ] JavaScript
 
@@ -37,6 +38,13 @@ Testing
 - [ ] Use data schemas in integration tests
   - [ ] Create schema with all data types
 - [ ] Review missing unit tests
+  - [ ] codegen
+  - [ ] database
+  - [ ] framework
+  - [ ] schema
+- [ ] Switch to jest
+  - [ ] hook tests
+  - [ ] api tests (mock local storage)
 - [ ] Browser tests
 
 Bugs

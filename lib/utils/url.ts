@@ -6,7 +6,6 @@ export function qsValueToEnum<T>(
   qs: ParsedQs[keyof ParsedQs],
 ): T | undefined {
   if (typeof qs !== 'string') return undefined
-  if (qs === undefined) return undefined
   return toEnum<T>(enumConst, qs)
 }
 
@@ -15,7 +14,6 @@ export function qsValueToIntEnum<T extends number>(
   qs: ParsedQs[keyof ParsedQs],
 ): T | undefined {
   if (typeof qs !== 'string') return undefined
-  if (qs === undefined) return undefined
   const int = parseInt(qs)
   if (isNaN(int)) return undefined
   return toEnum<T>(enumConst, int)
