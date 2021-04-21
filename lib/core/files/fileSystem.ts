@@ -42,7 +42,6 @@ export function isFile(item: FileSystemItem): item is FileItem {
 
 export function fileLanguage(f: FileItem): Language | undefined {
   const extension = fileExtension(f)
-  console.log({ extension }, '!!!!!')
   return extension ? languageFromExtension(extension) : undefined
 }
 
