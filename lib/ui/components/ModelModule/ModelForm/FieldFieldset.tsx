@@ -1,8 +1,3 @@
-import Checkbox from '@lib/components/form/Checkbox'
-import IntegerInput from '@lib/components/form/IntegerInput'
-import Radio from '@lib/components/form/Radio'
-import Select from '@lib/components/form/Select'
-import TextInput from '@lib/components/form/TextInput'
 import {
   dataTypeFromDataTypeType,
   DataTypeType,
@@ -15,6 +10,11 @@ import {
   isStringType,
   UuidType,
 } from '@lib/core'
+import Checkbox from '@lib/ui/components/form/Checkbox'
+import IntegerInput from '@lib/ui/components/form/IntegerInput'
+import Radio from '@lib/ui/components/form/Radio'
+import Select from '@lib/ui/components/form/Select'
+import TextInput from '@lib/ui/components/form/TextInput'
 import React, { useCallback } from 'react'
 import { FieldFormErrors } from './validation'
 

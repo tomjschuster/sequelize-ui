@@ -1,4 +1,3 @@
-import Radio from '@lib/components/form/Radio'
 import {
   DatabaseCaseStyle,
   DatabaseNounForm,
@@ -8,6 +7,7 @@ import {
   displaySqlDialect,
   SqlDialect,
 } from '@lib/core'
+import Radio from '@lib/ui/components/form/Radio'
 import React from 'react'
 
 type DbOptionsFormProps = {

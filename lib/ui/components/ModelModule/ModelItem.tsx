@@ -1,4 +1,3 @@
-import AssociationList from '@lib/components/AssociationList'
 import {
   displayDataType,
   Field,
@@ -11,6 +10,7 @@ import {
   Schema,
 } from '@lib/core'
 import { noCase, titleCase } from '@lib/core/utils'
+import AssociationList from '@lib/ui/components/AssociationList'
 import React, { useCallback, useState } from 'react'
 import * as styles from './styles'
 

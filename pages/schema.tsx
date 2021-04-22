@@ -1,9 +1,4 @@
 import { deleteSchema, emptyModel, listSchemas, updateSchema } from '@lib/api/schema'
-import CodeViewer from '@lib/components/CodeViewer'
-import DbOptionsForm from '@lib/components/DbOptionsForm'
-import Layout from '@lib/components/Layout'
-import ModelModule from '@lib/components/ModelModule'
-import SchemaModule from '@lib/components/SchemaModule'
 import {
   DatabaseCaseStyle,
   DatabaseNounForm,
@@ -13,7 +8,12 @@ import {
   SqlDialect,
 } from '@lib/core'
 import { SequelizeFramework } from '@lib/frameworks'
-import usePrevious from '@lib/hooks/usePrevious'
+import CodeViewer from '@lib/ui/components/CodeViewer'
+import DbOptionsForm from '@lib/ui/components/DbOptionsForm'
+import Layout from '@lib/ui/components/Layout'
+import ModelModule from '@lib/ui/components/ModelModule'
+import SchemaModule from '@lib/ui/components/SchemaModule'
+import usePrevious from '@lib/ui/hooks/usePrevious'
 import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 

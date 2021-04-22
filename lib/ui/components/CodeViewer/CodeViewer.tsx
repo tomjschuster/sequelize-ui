@@ -1,6 +1,6 @@
-import Code from '@lib/components/Code'
-import FileTree, { useFileTree } from '@lib/components/FileTree'
 import { copyFile, download, fileLanguage, FileSystemItem } from '@lib/core'
+import Code from '@lib/ui/components/Code'
+import FileTree, { useFileTree } from '@lib/ui/components/FileTree'
 import React from 'react'
 
 type CodeViewerProps = {

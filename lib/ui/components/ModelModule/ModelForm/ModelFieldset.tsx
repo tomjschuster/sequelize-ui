@@ -1,5 +1,5 @@
-import TextInput from '@lib/components/form/TextInput'
 import { Model } from '@lib/core'
+import TextInput from '@lib/ui/components/form/TextInput'
 import React from 'react'
 import { ModelFormErrors } from './validation'
 

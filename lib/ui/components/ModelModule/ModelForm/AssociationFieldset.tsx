@@ -1,6 +1,3 @@
-import Radio from '@lib/components/form/Radio'
-import Select from '@lib/components/form/Select'
-import TextInput from '@lib/components/form/TextInput'
 import {
   Association,
   AssociationTypeType,
@@ -12,6 +9,9 @@ import {
   ThroughType,
 } from '@lib/core'
 import { snakeCase } from '@lib/core/utils'
+import Radio from '@lib/ui/components/form/Radio'
+import Select from '@lib/ui/components/form/Select'
+import TextInput from '@lib/ui/components/form/TextInput'
 import React, { useCallback, useMemo } from 'react'
 import { AssociationFormErrors } from './validation'
 
