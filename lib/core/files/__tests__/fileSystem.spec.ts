@@ -18,33 +18,33 @@ import fileTree from '../__fixtures__/fileTree'
 describe('files', () => {
   describe('itemName', () => {
     const cases = [
-      ['file', file('foo', 'contents'), 'foo'],
-      ['dir', directory('bar', []), 'bar'],
+      [file('foo', 'contents'), 'foo'],
+      [directory('bar', []), 'bar'],
     ]
-    forEach(cases).describe(`(%s)`, (_label, item, expected) => {
-      it(`=== ${expected}`, () => {
+    forEach(cases).describe('', (item, expected) => {
+      it(`(${JSON.stringify(item)}) === ${expected}`, () => {
         expect(itemName(item)).to.equal(expected)
       })
     })
   })
   describe('isDirectory', () => {
     const cases = [
-      ['file', file('foo', 'contents'), false],
-      ['dir', directory('bar', []), true],
+      [file('foo', 'contents'), false],
+      [directory('bar', []), true],
     ]
-    forEach(cases).describe(`(%s)`, (_label, item, expected) => {
-      it(`=== ${expected}`, () => {
+    forEach(cases).describe('', (item, expected) => {
+      it(`(${JSON.stringify(item)}) === ${expected}`, () => {
         expect(isDirectory(item)).to.equal(expected)
       })
     })
   })
   describe('isFile', () => {
     const cases = [
-      ['file', file('foo', 'contents'), true],
-      ['dir', directory('bar', []), false],
+      [file('foo', 'contents'), true],
+      [directory('bar', []), false],
     ]
-    forEach(cases).describe(`(%s)`, (_label, item, expected) => {
-      it(`=== ${expected}`, () => {
+    forEach(cases).describe('', (item, expected) => {
+      it(`(${JSON.stringify(item)}) === ${expected}`, () => {
         expect(isFile(item)).to.equal(expected)
       })
     })
@@ -59,8 +59,8 @@ describe('files', () => {
       [file('foo.', 'contents'), undefined],
       [file('foo', 'contents'), undefined],
     ]
-    forEach(cases).describe(`(%s)`, (f, expected) => {
-      it(`=== ${expected}`, () => {
+    forEach(cases).describe('', (f, expected) => {
+      it(`(${JSON.stringify(f)}) === ${expected}`, () => {
         expect(fileLanguage(f)).to.equal(expected)
       })
     })
@@ -76,8 +76,8 @@ describe('files', () => {
       ['foo', undefined],
       ['documents/foo', undefined],
     ]
-    forEach(cases).describe(`(dir, '%s')`, (path, expected) => {
-      it(`=== ${expected}`, () => {
+    forEach(cases).describe('', (path, expected) => {
+      it(`(dir, ${path}) === ${expected}`, () => {
         expect(findItem(fileTree, path)?.name).to.equal(expected)
       })
     })
@@ -93,8 +93,8 @@ describe('files', () => {
       ['foo', undefined],
       ['documents/foo', undefined],
     ]
-    forEach(cases).describe(`(dir, '%s')`, (path, expected) => {
-      it(`=== ${expected}`, () => {
+    forEach(cases).describe('', (path, expected) => {
+      it(`(dir, ${path}) === ${expected}`, () => {
         expect(findFile(fileTree, path)?.name).to.equal(expected)
       })
     })
@@ -111,8 +111,8 @@ describe('files', () => {
       ['foo', undefined],
       ['documents/foo', undefined],
     ]
-    forEach(cases).describe(`(dir, '%s')`, (path, expected) => {
-      it(`=== ${expected}`, () => {
+    forEach(cases).describe('', (path, expected) => {
+      it(`(dir, ${path}) === ${expected}`, () => {
         expect(findDirectory(fileTree, path)?.name).to.equal(expected)
       })
     })

@@ -30,8 +30,8 @@ describe('database', () => {
       [SqlDialect.Postgres, 'PostgreSQL'],
       [SqlDialect.Sqlite, 'SQLite'],
     ]
-    forEach(cases).describe('(%s)', (dialect, expected) => {
-      it(`=== ${JSON.stringify(expected)}`, () => {
+    forEach(cases).describe('', (dialect, expected) => {
+      it(`(${dialect}) === ${JSON.stringify(expected)}`, () => {
         expect(displaySqlDialect(dialect)).to.equal(expected)
       })
     })
@@ -45,8 +45,8 @@ describe('database', () => {
       [SqlDialect.Postgres, 'POSTGRES'],
       [SqlDialect.Sqlite, 'SQLITE'],
     ]
-    forEach(cases).describe('(%s)', (dialect, expected) => {
-      it(`=== ${JSON.stringify(expected)}`, () => {
+    forEach(cases).describe('', (dialect, expected) => {
+      it(`(${dialect}) === ${JSON.stringify(expected)}`, () => {
         expect(sqlDialectEnvVar(dialect)).to.equal(expected)
       })
     })
@@ -64,8 +64,8 @@ describe('database', () => {
       ['maria db', null],
       ['', null],
     ]
-    forEach(cases).describe('(%s)', (dialect, expected) => {
-      it(`=== ${JSON.stringify(expected)}`, () => {
+    forEach(cases).describe('', (dialect, expected) => {
+      it(`(${dialect}) === ${JSON.stringify(expected)}`, () => {
         expect(parseSqlDialect(dialect)).to.equal(expected)
       })
     })
@@ -79,8 +79,8 @@ describe('database', () => {
       [SqlDialect.Postgres, '5432'],
       [SqlDialect.Sqlite, null],
     ]
-    forEach(cases).describe('(%s)', (dialect, expected) => {
-      it(`=== ${JSON.stringify(expected)}`, () => {
+    forEach(cases).describe('', (dialect, expected) => {
+      it(`(${dialect}) === ${JSON.stringify(expected)}`, () => {
         expect(defaultSqlDialectPort(dialect)).to.equal(expected)
       })
     })
@@ -95,7 +95,7 @@ describe('database', () => {
       [SqlDialect.Sqlite, null],
     ]
     forEach(cases).describe('(%s)', (dialect, expected) => {
-      it(`=== ${JSON.stringify(expected)}`, () => {
+      it(` ${JSON.stringify(expected)}`, () => {
         expect(defaultSqlDialectUsername(dialect)).to.equal(expected)
       })
     })
@@ -110,7 +110,7 @@ describe('database', () => {
       [SqlDialect.Sqlite, null],
     ]
     forEach(cases).describe('(%s)', (dialect, expected) => {
-      it(`=== ${JSON.stringify(expected)}`, () => {
+      it(` ${JSON.stringify(expected)}`, () => {
         expect(defaultSqlDialectPassword(dialect)).to.equal(expected)
       })
     })
@@ -125,7 +125,7 @@ describe('database', () => {
       ['foo', SqlDialect.Sqlite, null],
     ]
     forEach(cases).describe('(%s)', (name, dialect, expected) => {
-      it(`=== ${JSON.stringify(expected)}`, () => {
+      it(` ${JSON.stringify(expected)}`, () => {
         expect(defaultSqlDialectDatabase(name, dialect)).to.equal(expected)
       })
     })
@@ -140,7 +140,7 @@ describe('database', () => {
       [SqlDialect.Sqlite, null],
     ]
     forEach(cases).describe('(%s)', (dialect, expected) => {
-      it(`=== ${JSON.stringify(expected)}`, () => {
+      it(` ${JSON.stringify(expected)}`, () => {
         expect(defaultSqlDialectHost(dialect)).to.equal(expected)
       })
     })
@@ -155,7 +155,7 @@ describe('database', () => {
       [SqlDialect.Sqlite, '.tmp/data.db'],
     ]
     forEach(cases).describe('(%s)', (dialect, expected) => {
-      it(`=== ${JSON.stringify(expected)}`, () => {
+      it(` ${JSON.stringify(expected)}`, () => {
         expect(defaultSqlDialectStorage(dialect)).to.equal(expected)
       })
     })
@@ -167,7 +167,7 @@ describe('database', () => {
       [DatabaseNounForm.Plural, 'plural'],
     ]
     forEach(cases).describe('(%s)', (nounForm, expected) => {
-      it(`=== ${JSON.stringify(expected)}`, () => {
+      it(` ${JSON.stringify(expected)}`, () => {
         expect(displayDatabaseNounForm(nounForm)).to.equal(expected)
       })
     })
@@ -179,7 +179,7 @@ describe('database', () => {
       [DatabaseCaseStyle.Camel, 'camel'],
     ]
     forEach(cases).describe('(%s)', (caseStyle, expected) => {
-      it(`=== ${JSON.stringify(expected)}`, () => {
+      it(` ${JSON.stringify(expected)}`, () => {
         expect(displayDatabaseCaseStyle(caseStyle)).to.equal(expected)
       })
     })

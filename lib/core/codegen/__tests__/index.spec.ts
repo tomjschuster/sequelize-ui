@@ -21,8 +21,8 @@ describe('codegen', () => {
       [['foo', 'bar', 'baz'], { prefix: '^' }, '^foo\n^bar\n^baz'],
       [['foo', 'bar', 'baz'], undefined, 'foo\nbar\nbaz'],
     ]
-    forEach(cases).describe('(%s, %s)', (value, opts, expected) => {
-      it(`=== ${expected}`, () => {
+    forEach(cases).describe('', (value, opts, expected) => {
+      it(`(${value}, ${JSON.stringify(opts)})=== ${expected}`, () => {
         expect(lines(value, opts)).to.equal(expected)
       })
     })
@@ -38,8 +38,8 @@ describe('codegen', () => {
       [undefined, 2, 'foo\n  bar', '  foo\n    bar'],
       [',', 2, 'foo\n  bar', ',  foo\n,    bar'],
     ]
-    forEach(cases).describe(`(%s, %s)`, (prefix, level, value, expected) => {
-      it(`=== ${expected}`, () => {
+    forEach(cases).describe('', (prefix, level, value, expected) => {
+      it(`(${level}, ${value}, ${prefix}) === ${expected}`, () => {
         expect(indent(level, value, prefix)).to.equal(expected)
       })
     })

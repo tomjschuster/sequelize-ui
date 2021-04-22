@@ -33,9 +33,9 @@ describe('schema dataTypes', () => {
       [manyToManyModel, 'many to many'],
     ]
 
-    forEach(cases).describe('', (type, expected) => {
-      it(`(${type}) === ${expected}`, () => {
-        expect(displayAssociation(type)).to.equal(expected)
+    forEach(cases).describe('', (a, expected) => {
+      it(`(${a.type.type}) === ${expected}`, () => {
+        expect(displayAssociation(a)).to.equal(expected)
       })
     })
   })
@@ -130,8 +130,8 @@ describe('schema dataTypes', () => {
       [manyToManyTableType, true],
       [manyToManyModelType, true],
     ]
-    forEach(cases).describe(`(%s)`, (type, expected) => {
-      it(`=== ${'TODO'}`, () => {
+    forEach(cases).describe('', (type, expected) => {
+      it(`(${type.type})=== ${'TODO'}`, () => {
         expect(associationTypeIsPlural(type)).to.equal(expected)
       })
     })
