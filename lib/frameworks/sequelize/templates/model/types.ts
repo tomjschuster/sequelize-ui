@@ -1,5 +1,5 @@
 import { blank, DatabaseOptions, Field, isDateTimeType, lines, Model } from '@lib/core'
-import { camelCase } from '@lib/utils'
+import { camelCase } from '@lib/core/utils'
 import { dataTypeToTypeScript } from '../../dataTypes'
 import { modelName } from '../../helpers'
 import { noSupportedDetails, notSupportedComment } from './common'

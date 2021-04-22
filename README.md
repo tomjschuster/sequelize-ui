@@ -38,7 +38,21 @@ Testing
 - [ ] Use data schemas in integration tests
   - [ ] Create schema with all data types
 - [ ] Review missing unit tests
+
   - [ ] file.io
+  - [ ] Sequelize (create additional data/schema which demonstrates all cases, test all data schemas)
+    - [ ] Use/test missing data types
+    - [ ] Use/test framework display name
+    - [ ] Use/test hasOne
+    - [ ] Use/test aliasValue
+    - [ ] Use/test (non?) JSON type project
+    - [ ] Use/test imports of self associated project
+    - [ ] Use/test imports of hasOne
+    - [ ] Use/test modelClass of hasOne
+    - [ ] Use/test modelClass of default current date
+    - [ ] Use/test modelClass of default current time
+    - [ ] Use/test modelClass of default uuid versions
+
 - [ ] Switch to jest
   - [ ] hook tests
   - [ ] api tests (mock local storage)

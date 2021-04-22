@@ -14,7 +14,7 @@ import {
   sqlCurrentTime,
   sqlCurrentTimestamp,
 } from '@lib/core'
-import { camelCase, pascalCase, plural, singular, snakeCase } from '@lib/utils'
+import { camelCase, pascalCase, plural, singular, snakeCase } from '@lib/core/utils'
 import {
   dataTypeToTypeScript,
   displaySequelizeDataType,

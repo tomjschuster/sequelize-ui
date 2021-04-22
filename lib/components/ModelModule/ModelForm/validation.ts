@@ -15,7 +15,7 @@ import {
   namesEq,
   namesEqSingular,
   nameStartsWithNumber,
-} from '@lib/utils'
+} from '@lib/core/utils'
 
 export type ModelFormErrors = {
   name?: string

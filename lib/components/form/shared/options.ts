@@ -1,4 +1,4 @@
-import { keyFromEnum } from '@lib/utils'
+import { keyFromEnum } from '@lib/core/utils'
 
 export type Options<T> = { [key: string]: T } | Option<T>[]
 

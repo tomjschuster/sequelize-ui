@@ -11,7 +11,7 @@ import {
   Schema,
   ThroughType,
 } from '@lib/core'
-import { snakeCase } from '@lib/utils'
+import { snakeCase } from '@lib/core/utils'
 import React, { useCallback, useMemo } from 'react'
 import { AssociationFormErrors } from './validation'
 

@@ -1,5 +1,5 @@
 import { Association, AssociationTypeType, DataTypeType, Field, Model, Schema } from '@lib/core'
-import { versionedName } from '@lib/utils'
+import { versionedName } from '@lib/core/utils'
 import shortid from 'shortid'
 
 export async function listSchemas(): Promise<Schema[]> {

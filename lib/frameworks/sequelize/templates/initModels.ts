@@ -10,7 +10,7 @@ import {
   Schema,
   ThroughType,
 } from '@lib/core'
-import { camelCase, pascalCase, plural, singular, snakeCase } from '@lib/utils'
+import { camelCase, pascalCase, plural, singular, snakeCase } from '@lib/core/utils'
 import { modelName } from '../helpers'
 
 export type InitModelsTemplateArgs = {

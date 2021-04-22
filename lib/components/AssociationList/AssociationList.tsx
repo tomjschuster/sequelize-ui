@@ -6,7 +6,7 @@ import {
   Schema,
   ThroughType,
 } from '@lib/core'
-import { arrayToLookup, titleCase } from '@lib/utils'
+import { arrayToLookup, titleCase } from '@lib/core/utils'
 import React, { useMemo } from 'react'
 
 type AssociationListProps = {

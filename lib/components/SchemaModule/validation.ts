@@ -5,7 +5,7 @@ import {
   nameLongerThan,
   namesEqSingular,
   nameStartsWithNumber,
-} from '@lib/utils'
+} from '@lib/core/utils'
 
 export type SchemaFormErrors = {
   name?: string
