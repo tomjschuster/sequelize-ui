@@ -1,5 +1,5 @@
 import { noCase, sentenceCase, snakeCase } from 'change-case'
-import { plural, singular } from 'pluralize'
+import { plural as plural_, singular } from 'pluralize'
 
 export {
   camelCase,
@@ -9,7 +9,17 @@ export {
   sentenceCase,
   snakeCase,
 } from 'change-case'
-export { plural, singular } from 'pluralize'
+export { singular } from 'pluralize'
+
+export function plural(value: string): string {
+  const pluralized = plural_(value)
+  const singularized = singular(value)
+  // If a word's plural form is the same as the singular form, add an 's' to ensure uniqueness
+  // for association codegen purposes
+  // for example: "has many deer" would have addDeer for both adding one or multiple deer
+  // so we must append an 's' for nouns whose plural is the same as their singular
+  return pluralized === singularized ? `${singularized}s` : pluralized
+}
 
 export function titleCase(value: string): string {
   return noCase(value)

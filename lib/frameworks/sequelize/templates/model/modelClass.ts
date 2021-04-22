@@ -14,13 +14,13 @@ import {
   sqlCurrentTime,
   sqlCurrentTimestamp,
 } from '@lib/core'
-import { camelCase, pascalCase, singular, snakeCase } from '@lib/utils'
+import { camelCase, pascalCase, plural, singular, snakeCase } from '@lib/utils'
 import {
   dataTypeToTypeScript,
   displaySequelizeDataType,
   sequelizeUuidVersion,
 } from '../../dataTypes'
-import { addIdField, literalFunction, modelName, plural } from '../../helpers'
+import { addIdField, literalFunction, modelName } from '../../helpers'
 import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
 
 export type ModelClassTempalteArgs = {
