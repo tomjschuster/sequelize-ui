@@ -126,7 +126,7 @@ export function displayDataType(dataType: DataType): string {
     case DataTypeType.JsonB:
       return 'JSONB'
     case DataTypeType.Blob:
-      return 'Buffer'
+      return 'Blob'
   }
 }
 
@@ -171,7 +171,7 @@ export function displayDataTypeType(type: DataTypeType): string {
     case DataTypeType.JsonB:
       return 'JSONB'
     case DataTypeType.Blob:
-      return 'Buffer'
+      return 'Blob'
   }
 }
 
