@@ -2,7 +2,6 @@ import {
   DatabaseCaseStyle,
   DatabaseNounForm,
   DatabaseOptions,
-  displaySqlDialect,
   SqlDialect,
 } from '@src/core/database'
 import { Framework } from '@src/core/framework'
@@ -17,12 +16,10 @@ import {
   preinstall,
   validateDialect,
 } from '@src/test-utils'
-import { expect } from 'chai'
-import forEach from 'mocha-each'
-import { dvdSchema } from './fixtures'
+import { dvdSchema } from './__fixtures__'
 
-const sqlDialect: SqlDialect = validateDialect(process.env.SQL_DIALECT)
-const keepAssets: boolean = process.env.KEEP_ASSETS === 'true'
+const SQL_DIALECT = process.env.SQL_DIALECT
+const KEEP_ASSETS: boolean = process.env.KEEP_ASSETS === 'true'
 
 type DbTestConfig = {
   dbOptions: DatabaseOptions
@@ -31,7 +28,7 @@ type DbTestConfig = {
   expectedColumns: string[]
 }
 
-const snakePlural: DbTestConfig = {
+const snakePlural = (sqlDialect: SqlDialect): DbTestConfig => ({
   dbOptions: {
     sqlDialect,
     timestamps: true,
@@ -61,9 +58,9 @@ const snakePlural: DbTestConfig = {
     'updated_at',
     'store_id',
   ],
-}
+})
 
-const snakeSingular: DbTestConfig = {
+const snakeSingular = (sqlDialect: SqlDialect): DbTestConfig => ({
   dbOptions: {
     sqlDialect,
     timestamps: true,
@@ -93,8 +90,9 @@ const snakeSingular: DbTestConfig = {
     'updated_at',
     'store_id',
   ],
-}
-const camelPlural: DbTestConfig = {
+})
+
+const camelPlural = (sqlDialect: SqlDialect): DbTestConfig => ({
   dbOptions: {
     sqlDialect,
     timestamps: true,
@@ -124,9 +122,9 @@ const camelPlural: DbTestConfig = {
     'updatedAt',
     'storeId',
   ],
-}
+})
 
-const camelSingular: DbTestConfig = {
+const camelSingular = (sqlDialect: SqlDialect): DbTestConfig => ({
   dbOptions: {
     sqlDialect,
     timestamps: true,
@@ -156,9 +154,9 @@ const camelSingular: DbTestConfig = {
     'updatedAt',
     'storeId',
   ],
-}
+})
 
-const noTimestamps: DbTestConfig = {
+const noTimestamps = (sqlDialect: SqlDialect): DbTestConfig => ({
   dbOptions: {
     sqlDialect,
     timestamps: false,
@@ -180,57 +178,61 @@ const noTimestamps: DbTestConfig = {
     'stores',
   ],
   expectedColumns: ['customer_id', 'first_name', 'last_name', 'email', 'store_id'],
-}
+})
 
 const frameworks: [label: string, framework: Framework][] = [['Sequelize', SequelizeFramework]]
 
-describe(`SQL tests (${displaySqlDialect(sqlDialect)})`, () => {
+const sqlDialects: SqlDialect[] =
+  SQL_DIALECT === 'all'
+    ? Object.values(SqlDialect)
+    : [validateDialect(SQL_DIALECT || SqlDialect.Sqlite)]
+
+fdescribe.each(sqlDialects)('SQL tests %s', (sqlDialect) => {
   const projectName = alpha(12)
 
-  forEach(frameworks).describe('%s', (_label, framework: Framework) => {
+  fdescribe.each(frameworks)('%s', (_label, framework: Framework) => {
     const projectType = framework.projectType()
 
-    after(async () => {
-      !keepAssets && (await destroyProject(projectType, projectName))
-      !keepAssets && (await dropDatabase(projectName, sqlDialect))
-    })
+    afterAll(async () => {
+      !KEEP_ASSETS && (await destroyProject(projectType, projectName))
+      !KEEP_ASSETS && (await dropDatabase(projectName, sqlDialect))
+    }, 10000)
 
     const cases: [label: string, config: DbTestConfig][] = [
-      ['snake plural', snakePlural],
-      ['snake singular', snakeSingular],
-      ['camel plural', camelPlural],
-      ['camel singular', camelSingular],
-      ['no timestamps', noTimestamps],
+      ['snake plural', snakePlural(sqlDialect)],
+      ['snake singular', snakeSingular(sqlDialect)],
+      ['camel plural', camelPlural(sqlDialect)],
+      ['camel singular', camelSingular(sqlDialect)],
+      ['no timestamps', noTimestamps(sqlDialect)],
     ]
 
-    forEach(cases).describe(
+    fdescribe.each(cases)(
       '%s',
-      function (_label, { dbOptions, tableName, expectedTables, expectedColumns }) {
-        this.timeout(60000)
+      (_label, { dbOptions, tableName, expectedTables, expectedColumns }) => {
         let client: DbConnection
 
-        before(async () => {
+        beforeAll(async () => {
           const schema = dvdSchema(projectName)
           const directory = framework.generate({ schema, dbOptions })
-
           client = await createDatabase(projectName, sqlDialect)
           await buildProject(projectType, directory, preinstall(sqlDialect, projectType))
-        })
+        }, 30000)
 
-        after(async () => {
+        afterAll(async () => {
           await client.close()
         })
 
-        it('should create the correct tables with the correct names', async () => {
+        fit('should create the correct tables with the correct names', async () => {
           const tables = await client.getTables()
-          expect(tables).to.have.members(expectedTables)
+          expect(tables.sort()).toEqual(expectedTables.sort())
         })
 
-        it('should create the correct columns with the correct names', async () => {
-          const tables = await client.getColumns(tableName)
-          expect(tables).to.have.members(expectedColumns)
+        fit('should create the correct columns with the correct names', async () => {
+          const columns = await client.getColumns(tableName)
+          expect(columns.sort()).toEqual(expectedColumns.sort())
         })
       },
+      60000,
     )
   })
 })

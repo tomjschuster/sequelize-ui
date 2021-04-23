@@ -15,39 +15,28 @@ Language.hasMany(Film, {
 })
 ```
 
-#### Refactor
-
-- Switch to Jest
-
 #### Testing
 
-- Use data schemas in integration tests
+- frameworks
 
-  - Create schema with all data types
-  - Adjust sql tests to exclude columns not supported by db type
+  - missing data types
+  - framework display name
+  - hasOne
+  - aliasValue
+  - (non?) JSON type project
+  - imports of self associated project
+  - imports of hasOne
+  - modelClass of hasOne
+  - modelClass of default current date
+  - modelClass of default current time
+  - modelClass of default uuid versions
 
-- Unit tests
+- io
+- api
+- ui
 
-  - frameworks/sequelize
-    - Use/test missing data types
-    - Use/test framework display name
-    - Use/test hasOne
-    - Use/test aliasValue
-    - Use/test (non?) JSON type project
-    - Use/test imports of self associated project
-    - Use/test imports of hasOne
-    - Use/test modelClass of hasOne
-    - Use/test modelClass of default current date
-    - Use/test modelClass of default current time
-    - Use/test modelClass of default uuid versions
-
-- AFTER JEST:
-
-  - io
-  - api
-  - ui
-    - hooks
-    - components?
+  - hooks
+  - components?
 
 - Browser tests (pick framework, post UI)
 

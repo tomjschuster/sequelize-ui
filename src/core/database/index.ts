@@ -8,21 +8,21 @@ export type DatabaseOptions = {
 }
 
 export enum DatabaseCaseStyle {
-  Snake = 'SNAKE',
-  Camel = 'CAMEL',
+  Snake = 'snake',
+  Camel = 'camel',
 }
 
 export enum DatabaseNounForm {
-  Singular = 'SINGULAR',
-  Plural = 'PLURAL',
+  Singular = 'singular',
+  Plural = 'plural',
 }
 
 export enum SqlDialect {
-  MariaDb = 'MARIADB',
-  MsSql = 'MSSQL',
-  MySql = 'MYSQL',
-  Postgres = 'POSTGRES',
-  Sqlite = 'SQLITE',
+  MariaDb = 'mariadb',
+  MsSql = 'mssql',
+  MySql = 'mysql',
+  Postgres = 'postgres',
+  Sqlite = 'sqlite',
 }
 
 export const displaySqlDialect = (dialect: SqlDialect): string => {
