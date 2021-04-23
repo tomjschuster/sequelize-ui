@@ -8,19 +8,19 @@
     "build": "next build",
     "start": "next start",
     "format": "prettier --write .",
-    "generate:css-types": "tailwindcss-classnames -i tailwind.config.js -o typings/__generated__/tailwindcss-classnames.d.ts",
-    "test": "npm run test:unit && npm run test:sql:all",
-    "test:coverage": "nyc --reporter=text npm run test",
+    "generate:css-types": "tailwindcss-classnames -i tailwind.config.js -o src/typings/__generated__/tailwindcss-classnames.d.ts",
+    "test:all": "npm run test:unit && npm run test:frameworks:all",
+    "test:coverage": "nyc --reporter=text npm run test:all",
     "test:unit": "npm run test:ts -- 'src/**/*.spec.ts'",
-    "test:sql": "SQL_DIALECT=${SQL_DIALECT:=sqlite} npm run test:ts -- 'tests/integration/sql.spec.ts' --exit",
-    "test:sql:all": "SQL_DIALECT=sqlite npm run test:sql && SQL_DIALECT=postgres npm run test:sql && SQL_DIALECT=mysql npm run test:sql && SQL_DIALECT=mariadb npm run test:sql && SQL_DIALECT=mssql npm run test:sql",
+    "test:frameworks": "SQL_DIALECT=${SQL_DIALECT:=sqlite} npm run test:ts -- 'integration/frameworks/**/*.spec.ts' --exit",
+    "test:frameworks:all": "SQL_DIALECT=sqlite npm run test:frameworks && SQL_DIALECT=postgres npm run test:frameworks && SQL_DIALECT=mysql npm run test:frameworks && SQL_DIALECT=mariadb npm run test:frameworks && SQL_DIALECT=mssql npm run test:frameworks",
     "test:watch": "npm run test:ts -- 'src/**/*.spec.ts' --watch ",
     "test:ts": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha",
-    "type:check": "tsc -b tsconfig.check.json"
+    "types:check": "tsc -b tsconfig.check.json"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && npm run type:check"
+      "pre-commit": "lint-staged && npm run types:check"
     }
   },
   "lint-staged": {
