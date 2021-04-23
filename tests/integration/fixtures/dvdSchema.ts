@@ -1,4 +1,4 @@
-import { AssociationTypeType, DataTypeType, Model, Schema, ThroughType } from '@lib/core/schema'
+import { AssociationTypeType, DataTypeType, Model, Schema, ThroughType } from '@src/core/schema'
 
 const actor: Model = {
   id: '1',

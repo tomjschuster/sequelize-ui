@@ -11,10 +11,10 @@
     "generate:css-types": "tailwindcss-classnames -i tailwind.config.js -o typings/__generated__/tailwindcss-classnames.d.ts",
     "test": "npm run test:unit && npm run test:sql:all",
     "test:coverage": "nyc --reporter=text npm run test",
-    "test:unit": "npm run test:ts -- 'lib/**/*.spec.ts'",
+    "test:unit": "npm run test:ts -- 'src/**/*.spec.ts'",
     "test:sql": "SQL_DIALECT=${SQL_DIALECT:=sqlite} npm run test:ts -- 'tests/integration/sql.spec.ts' --exit",
     "test:sql:all": "SQL_DIALECT=sqlite npm run test:sql && SQL_DIALECT=postgres npm run test:sql && SQL_DIALECT=mysql npm run test:sql && SQL_DIALECT=mariadb npm run test:sql && SQL_DIALECT=mssql npm run test:sql",
-    "test:watch": "npm run test:ts -- 'lib/**/*.spec.ts' --watch ",
+    "test:watch": "npm run test:ts -- 'src/**/*.spec.ts' --watch ",
     "test:ts": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha",
     "type:check": "tsc -b tsconfig.check.json"
   },

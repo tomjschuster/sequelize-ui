@@ -2,6 +2,6 @@
   "extends": "@istanbuljs/nyc-config-typescript",
   "all": true,
   "check-coverage": true,
-  "include": ["lib/core/**/*.ts", "lib/frameworks/**/*.ts"],
+  "include": ["src/core/**/*.ts", "src/frameworks/**/*.ts"],
   "exclude": ["**/*.spec.ts", "**/__fixtures__/**"]
 }

@@ -21,8 +21,7 @@
     "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
-      "@lib/*": ["lib/*"],
-      "@styles/*": ["styles/*"]
+      "@src/*": ["src/*"]
     }
   },
   "exclude": ["node_modules"],

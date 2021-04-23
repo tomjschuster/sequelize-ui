@@ -7,8 +7,7 @@
     "tsBuildInfoFile": "./buildcache/tsbuildinfo",
     "outDir": "./buildcache/tsc-dist",
     "paths": {
-      "@lib/*": ["lib/*"],
-      "@styles/*": ["styles/*"]
+      "@src/*": ["src/*"]
     }
   },
   "exclude": ["node_modules"],
