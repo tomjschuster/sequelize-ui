@@ -17,7 +17,6 @@ Language.hasMany(Film, {
 
 #### Refactor
 
-- Stop importing from top level index files
 - Switch to Jest
 
 #### Testing
@@ -40,10 +39,11 @@ Language.hasMany(Film, {
     - Use/test modelClass of default current time
     - Use/test modelClass of default uuid versions
 
-- NEEDS JEST:
+- AFTER JEST:
 
   - hook tests
   - api tests (mock local storage)
+  - Component tests?
 
 - Browser tests (pick framework, post UI)
 
