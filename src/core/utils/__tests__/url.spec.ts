@@ -1,5 +1,3 @@
-import { expect } from 'chai'
-import forEach from 'mocha-each'
 import { qsValueToEnum, qsValueToIntEnum } from '../url'
 
 enum IntEnum {
@@ -14,9 +12,13 @@ enum StringEnum {
   Baz = 'BAZ',
 }
 
-describe('url utils', () => {
-  describe('qsValueToEnum', () => {
-    const cases = [
+fdescribe('url utils', () => {
+  fdescribe('qsValueToEnum', () => {
+    const cases: [
+      key: string | string[] | undefined,
+      obj: typeof StringEnum,
+      expected: StringEnum | undefined,
+    ][] = [
       ['FOO', StringEnum, StringEnum.Foo],
       ['BAR', StringEnum, StringEnum.Bar],
       ['BAZ', StringEnum, StringEnum.Baz],
@@ -24,14 +26,18 @@ describe('url utils', () => {
       [undefined, StringEnum, undefined],
       [['0'], StringEnum, undefined],
     ]
-    forEach(cases).describe('', (key, object, expected) => {
+    fdescribe.each(cases)('', (key, object, expected) => {
       it(`(StringEnum, ${key}) === ${expected}`, () => {
-        expect(qsValueToEnum(object, key)).to.equal(expected)
+        expect(qsValueToEnum(object, key)).toEqual(expected)
       })
     })
 
-    describe('qsValueToIntEnum', () => {
-      const intCases = [
+    fdescribe('qsValueToIntEnum', () => {
+      const cases: [
+        key: string | string[] | undefined,
+        obj: typeof IntEnum,
+        expected: IntEnum | undefined,
+      ][] = [
         ['0', IntEnum, IntEnum.Foo],
         ['1', IntEnum, IntEnum.Bar],
         ['2', IntEnum, IntEnum.Baz],
@@ -40,9 +46,10 @@ describe('url utils', () => {
         [undefined, IntEnum, undefined],
         [['0'], IntEnum, undefined],
       ]
-      forEach(intCases).describe('', (key, object, expected) => {
+      fdescribe.each(cases)('', (key, object, expected) => {
         it(`(IntEnum, ${key}) === ${expected}`, () => {
-          expect(qsValueToIntEnum(object, key)).to.equal(expected)
+          //@ts-expect-error Index signatures are incompatible. Type 'string' is not assignable to type 'number'
+          expect(qsValueToIntEnum(object, key)).toEqual(expected)
         })
       })
     })

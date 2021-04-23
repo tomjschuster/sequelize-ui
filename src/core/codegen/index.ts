@@ -9,13 +9,13 @@ export function blank(): string {
   return ''
 }
 
-type LinesOptions = {
+export type LinesOptions = {
   separator?: string
   depth?: number
   prefix?: string
 }
 
-type ArrayOrString = Array<ArrayOrString> | string | null
+export type ArrayOrString = Array<ArrayOrString> | string | null
 
 const defaultLinesOptions: LinesOptions = {
   separator: '',

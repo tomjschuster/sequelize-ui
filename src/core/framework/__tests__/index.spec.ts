@@ -6,7 +6,6 @@ import {
 } from '@src/core/database'
 import { directory, isDirectory } from '@src/core/files'
 import { Schema } from '@src/core/schema'
-import { expect } from 'chai'
 import shortid from 'shortid'
 import { Framework, GenerateArgs, ProjectType } from '..'
 
@@ -35,15 +34,15 @@ const mockDbOptions: DatabaseOptions = {
   timestamps: true,
 }
 
-describe('framework', () => {
-  it('should display a name', () => {
-    expect(typeof MockFramework.displayName()).to.equal('string')
+fdescribe('framework', () => {
+  fit('should display a name', () => {
+    expect(typeof MockFramework.displayName()).toEqual('string')
   })
-  it('should generate a directory', () => {
+  fit('should generate a directory', () => {
     const generateArgs: GenerateArgs = { schema: mockSchema, dbOptions: mockDbOptions }
-    expect(isDirectory(MockFramework.generate(generateArgs))).to.be.true
+    expect(isDirectory(MockFramework.generate(generateArgs))).toBe(true)
   })
-  it('should have a project type', () => {
-    expect(MockFramework.projectType()).to.equal(ProjectType.Npm)
+  fit('should have a project type', () => {
+    expect(MockFramework.projectType()).toEqual(ProjectType.Npm)
   })
 })

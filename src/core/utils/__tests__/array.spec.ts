@@ -1,17 +1,16 @@
-import { expect } from 'chai'
-import forEach from 'mocha-each'
 import { arrayToLookup } from '../array'
 
-describe('array utils', () => {
-  describe('arrayToLookup', () => {
-    const cases = [
+fdescribe('array utils', () => {
+  fdescribe('arrayToLookup', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const cases: [array: unknown[], fn: (x: any) => string, expected: Record<string, unknown>][] = [
       [['foo', 'bar'], (x: string) => x, { foo: 'foo', bar: 'bar' }],
       [['foo', 'bar'], (x: string) => x.toUpperCase(), { FOO: 'foo', BAR: 'bar' }],
-      [[1, 2], (x: number) => x + 1 + '', { 2: 1, 3: 2 }],
+      [[1, 2], (x: number) => x + 1 + '', { '2': 1, '3': 2 }],
     ]
-    forEach(cases).describe('', (array, fn, expected) => {
-      it(`(${JSON.stringify}, ${fn.toString()}) === ${JSON.stringify(expected)}`, () => {
-        expect(arrayToLookup(array, fn)).to.eql(expected)
+    fdescribe.each(cases)('', (array, fn, expected) => {
+      fit(`(${JSON.stringify}, ${fn.toString()}) === ${JSON.stringify(expected)}`, () => {
+        expect(arrayToLookup(array, fn)).toEqual(expected)
       })
     })
   })

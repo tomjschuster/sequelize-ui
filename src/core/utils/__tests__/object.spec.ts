@@ -1,10 +1,8 @@
-import { expect } from 'chai'
-import forEach from 'mocha-each'
 import { deepEmpty } from '../object'
 
-describe('object utils', () => {
-  describe('deepEmpty', () => {
-    const cases = [
+fdescribe('object utils', () => {
+  fdescribe('deepEmpty', () => {
+    const cases: [obj: { [key: string]: unknown } | unknown[], expected: boolean][] = [
       [[], true],
       [{}, true],
       [[null, undefined, '', [], {}], true],
@@ -23,9 +21,9 @@ describe('object utils', () => {
       [[[0]], false],
       [['foo'], false],
     ]
-    forEach(cases).describe('', (object, expected) => {
-      it(`(${JSON.stringify(object)})=== ${expected}`, () => {
-        expect(deepEmpty(object)).to.eql(expected)
+    fdescribe.each(cases)('', (object, expected) => {
+      fit(`(${JSON.stringify(object)})=== ${expected}`, () => {
+        expect(deepEmpty(object)).toEqual(expected)
       })
     })
   })

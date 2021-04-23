@@ -1,5 +1,3 @@
-import { expect } from 'chai'
-import forEach from 'mocha-each'
 import {
   DatabaseCaseStyle,
   DatabaseNounForm,
@@ -21,39 +19,39 @@ import {
   sqlDialectEnvVar,
 } from '..'
 
-describe('database', () => {
-  describe('displaySqlDialect', () => {
-    const cases = [
+fdescribe('database', () => {
+  fdescribe('displaySqlDialect', () => {
+    const cases: [dialect: SqlDialect, expected: string][] = [
       [SqlDialect.MariaDb, 'MariaDB'],
       [SqlDialect.MsSql, 'SQL Server'],
       [SqlDialect.MySql, 'MySQL'],
       [SqlDialect.Postgres, 'PostgreSQL'],
       [SqlDialect.Sqlite, 'SQLite'],
     ]
-    forEach(cases).describe('', (dialect, expected) => {
-      it(`(${dialect}) === ${JSON.stringify(expected)}`, () => {
-        expect(displaySqlDialect(dialect)).to.equal(expected)
+    fdescribe.each(cases)('', (dialect, expected) => {
+      fit(`(${dialect}) === ${JSON.stringify(expected)}`, () => {
+        expect(displaySqlDialect(dialect)).toEqual(expected)
       })
     })
   })
 
-  describe('sqlDialectEnvVar', () => {
-    const cases = [
+  fdescribe('sqlDialectEnvVar', () => {
+    const cases: [dialect: SqlDialect, expected: string][] = [
       [SqlDialect.MariaDb, 'MARIADB'],
       [SqlDialect.MsSql, 'MSSQL'],
       [SqlDialect.MySql, 'MYSQL'],
       [SqlDialect.Postgres, 'POSTGRES'],
       [SqlDialect.Sqlite, 'SQLITE'],
     ]
-    forEach(cases).describe('', (dialect, expected) => {
-      it(`(${dialect}) === ${JSON.stringify(expected)}`, () => {
-        expect(sqlDialectEnvVar(dialect)).to.equal(expected)
+    fdescribe.each(cases)('', (dialect, expected) => {
+      fit(`(${dialect}) === ${JSON.stringify(expected)}`, () => {
+        expect(sqlDialectEnvVar(dialect)).toEqual(expected)
       })
     })
   })
 
-  describe('parseSqlDialect', () => {
-    const cases = [
+  fdescribe('parseSqlDialect', () => {
+    const cases: [dialect: string, expected: SqlDialect | null][] = [
       ['mariadb', SqlDialect.MariaDb],
       ['mssql', SqlDialect.MsSql],
       ['mysql', SqlDialect.MySql],
@@ -64,148 +62,148 @@ describe('database', () => {
       ['maria db', null],
       ['', null],
     ]
-    forEach(cases).describe('', (dialect, expected) => {
-      it(`(${dialect}) === ${JSON.stringify(expected)}`, () => {
-        expect(parseSqlDialect(dialect)).to.equal(expected)
+    fdescribe.each(cases)('', (dialect, expected) => {
+      fit(`(${dialect}) === ${JSON.stringify(expected)}`, () => {
+        expect(parseSqlDialect(dialect)).toEqual(expected)
       })
     })
   })
 
-  describe('defaultSqlDialectPort', () => {
-    const cases = [
+  fdescribe('defaultSqlDialectPort', () => {
+    const cases: [dialect: SqlDialect, expected: string | null][] = [
       [SqlDialect.MariaDb, '3306'],
       [SqlDialect.MsSql, '1433'],
       [SqlDialect.MySql, '3306'],
       [SqlDialect.Postgres, '5432'],
       [SqlDialect.Sqlite, null],
     ]
-    forEach(cases).describe('', (dialect, expected) => {
-      it(`(${dialect}) === ${JSON.stringify(expected)}`, () => {
-        expect(defaultSqlDialectPort(dialect)).to.equal(expected)
+    fdescribe.each(cases)('', (dialect, expected) => {
+      fit(`(${dialect}) === ${JSON.stringify(expected)}`, () => {
+        expect(defaultSqlDialectPort(dialect)).toEqual(expected)
       })
     })
   })
 
-  describe('defaultSqlDialectUsername', () => {
-    const cases = [
+  fdescribe('defaultSqlDialectUsername', () => {
+    const cases: [dialect: SqlDialect, expected: string | null][] = [
       [SqlDialect.MariaDb, 'root'],
       [SqlDialect.MsSql, 'sa'],
       [SqlDialect.MySql, 'root'],
       [SqlDialect.Postgres, 'postgres'],
       [SqlDialect.Sqlite, null],
     ]
-    forEach(cases).describe('(%s)', (dialect, expected) => {
-      it(` ${JSON.stringify(expected)}`, () => {
-        expect(defaultSqlDialectUsername(dialect)).to.equal(expected)
+    fdescribe.each(cases)('(%s)', (dialect, expected) => {
+      fit(` ${JSON.stringify(expected)}`, () => {
+        expect(defaultSqlDialectUsername(dialect)).toEqual(expected)
       })
     })
   })
 
-  describe('defaultSqlDialectPassword', () => {
-    const cases = [
+  fdescribe('defaultSqlDialectPassword', () => {
+    const cases: [dialect: SqlDialect, expected: string | null][] = [
       [SqlDialect.MariaDb, 'root'],
       [SqlDialect.MsSql, 'Password1'],
       [SqlDialect.MySql, 'root'],
       [SqlDialect.Postgres, 'postgres'],
       [SqlDialect.Sqlite, null],
     ]
-    forEach(cases).describe('(%s)', (dialect, expected) => {
-      it(` ${JSON.stringify(expected)}`, () => {
-        expect(defaultSqlDialectPassword(dialect)).to.equal(expected)
+    fdescribe.each(cases)('(%s)', (dialect, expected) => {
+      fit(` ${JSON.stringify(expected)}`, () => {
+        expect(defaultSqlDialectPassword(dialect)).toEqual(expected)
       })
     })
   })
 
-  describe('defaultSqlDialectDatabase', () => {
-    const cases = [
+  fdescribe('defaultSqlDialectDatabase', () => {
+    const cases: [name: string, dialect: SqlDialect, expected: string | null][] = [
       ['foo', SqlDialect.MariaDb, 'foo'],
       ['foo', SqlDialect.MsSql, 'Foo'],
       ['foo', SqlDialect.MySql, 'foo'],
       ['foo', SqlDialect.Postgres, 'foo'],
       ['foo', SqlDialect.Sqlite, null],
     ]
-    forEach(cases).describe('(%s)', (name, dialect, expected) => {
-      it(` ${JSON.stringify(expected)}`, () => {
-        expect(defaultSqlDialectDatabase(name, dialect)).to.equal(expected)
+    fdescribe.each(cases)('(%s)', (name, dialect, expected) => {
+      fit(` ${JSON.stringify(expected)}`, () => {
+        expect(defaultSqlDialectDatabase(name, dialect)).toEqual(expected)
       })
     })
   })
 
-  describe('defaultSqlDialectHost', () => {
-    const cases = [
+  fdescribe('defaultSqlDialectHost', () => {
+    const cases: [dialect: SqlDialect, expected: string | null][] = [
       [SqlDialect.MariaDb, 'localhost'],
       [SqlDialect.MsSql, 'localhost'],
       [SqlDialect.MySql, 'localhost'],
       [SqlDialect.Postgres, 'localhost'],
       [SqlDialect.Sqlite, null],
     ]
-    forEach(cases).describe('(%s)', (dialect, expected) => {
-      it(` ${JSON.stringify(expected)}`, () => {
-        expect(defaultSqlDialectHost(dialect)).to.equal(expected)
+    fdescribe.each(cases)('(%s)', (dialect, expected) => {
+      fit(` ${JSON.stringify(expected)}`, () => {
+        expect(defaultSqlDialectHost(dialect)).toEqual(expected)
       })
     })
   })
 
-  describe('defaultSqlDialectStorage', () => {
-    const cases = [
+  fdescribe('defaultSqlDialectStorage', () => {
+    const cases: [dialect: SqlDialect, expected: string | null][] = [
       [SqlDialect.MariaDb, null],
       [SqlDialect.MsSql, null],
       [SqlDialect.MySql, null],
       [SqlDialect.Postgres, null],
       [SqlDialect.Sqlite, '.tmp/data.db'],
     ]
-    forEach(cases).describe('(%s)', (dialect, expected) => {
-      it(` ${JSON.stringify(expected)}`, () => {
-        expect(defaultSqlDialectStorage(dialect)).to.equal(expected)
+    fdescribe.each(cases)('(%s)', (dialect, expected) => {
+      fit(` ${JSON.stringify(expected)}`, () => {
+        expect(defaultSqlDialectStorage(dialect)).toEqual(expected)
       })
     })
   })
 
-  describe('displayDatabaseNounForm', () => {
-    const cases = [
+  fdescribe('displayDatabaseNounForm', () => {
+    const cases: [dialect: DatabaseNounForm, expected: string][] = [
       [DatabaseNounForm.Singular, 'singular'],
       [DatabaseNounForm.Plural, 'plural'],
     ]
-    forEach(cases).describe('(%s)', (nounForm, expected) => {
-      it(` ${JSON.stringify(expected)}`, () => {
-        expect(displayDatabaseNounForm(nounForm)).to.equal(expected)
+    fdescribe.each(cases)('(%s)', (nounForm, expected) => {
+      fit(` ${JSON.stringify(expected)}`, () => {
+        expect(displayDatabaseNounForm(nounForm)).toEqual(expected)
       })
     })
   })
 
-  describe('displayDatabaseCaseStyle', () => {
-    const cases = [
+  fdescribe('displayDatabaseCaseStyle', () => {
+    const cases: [dialect: DatabaseCaseStyle, expected: string][] = [
       [DatabaseCaseStyle.Snake, 'snake'],
       [DatabaseCaseStyle.Camel, 'camel'],
     ]
-    forEach(cases).describe('(%s)', (caseStyle, expected) => {
-      it(` ${JSON.stringify(expected)}`, () => {
-        expect(displayDatabaseCaseStyle(caseStyle)).to.equal(expected)
+    fdescribe.each(cases)('(%s)', (caseStyle, expected) => {
+      fit(` ${JSON.stringify(expected)}`, () => {
+        expect(displayDatabaseCaseStyle(caseStyle)).toEqual(expected)
       })
     })
   })
 
-  describe('sqlCurrentTimestamp', () => {
-    it('should return the proper value', () => {
-      expect(sqlCurrentTimestamp()).to.equal('CURRENT_TIMESTAMP')
+  fdescribe('sqlCurrentTimestamp', () => {
+    fit('should return the proper value', () => {
+      expect(sqlCurrentTimestamp()).toEqual('CURRENT_TIMESTAMP')
     })
   })
 
-  describe('sqlCurrentDate', () => {
-    it('should return the proper value', () => {
-      expect(sqlCurrentDate()).to.equal('CURRENT_DATE')
+  fdescribe('sqlCurrentDate', () => {
+    fit('should return the proper value', () => {
+      expect(sqlCurrentDate()).toEqual('CURRENT_DATE')
     })
   })
 
-  describe('sqlCurrentTime', () => {
-    it('should return the proper value', () => {
-      expect(sqlCurrentTime()).to.equal('CURRENT_TIME')
+  fdescribe('sqlCurrentTime', () => {
+    fit('should return the proper value', () => {
+      expect(sqlCurrentTime()).toEqual('CURRENT_TIME')
     })
   })
 
-  describe('MAX_IDENTIFIER_LENGTH', () => {
-    it('should be the proper value', () => {
-      expect(MAX_IDENTIFIER_LENGTH).to.equal(63)
+  fdescribe('MAX_IDENTIFIER_LENGTH', () => {
+    fit('should be the proper value', () => {
+      expect(MAX_IDENTIFIER_LENGTH).toEqual(63)
     })
   })
 })

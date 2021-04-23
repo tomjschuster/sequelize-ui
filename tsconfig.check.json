@@ -4,8 +4,8 @@
     "noEmit": false,
     "isolatedModules": true,
     "incremental": true,
-    "tsBuildInfoFile": "./buildcache/tsbuildinfo",
-    "outDir": "./buildcache/tsc-dist",
+    "tsBuildInfoFile": "./.buildcache/tsbuildinfo",
+    "outDir": "./.buildcache/tsc-dist",
     "paths": {
       "@src/*": ["src/*"]
     }

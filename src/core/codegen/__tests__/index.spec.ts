@@ -1,15 +1,13 @@
-import { expect } from 'chai'
-import forEach from 'mocha-each'
-import { blank, indent, lines } from '..'
+import { ArrayOrString, blank, indent, lines, LinesOptions } from '..'
 
-describe('codegen', () => {
-  describe('blank', () => {
+fdescribe('codegen', () => {
+  fdescribe('blank', () => {
     it('returns an empty string', () => {
-      expect(blank()).to.equal('')
+      expect(blank()).toEqual('')
     })
   })
-  describe('lines', () => {
-    const cases = [
+  fdescribe('lines', () => {
+    const cases: [value: ArrayOrString[], options: LinesOptions | undefined, expected: string][] = [
       [[], {}, ''],
       [[[]], {}, ''],
       [['foo'], {}, 'foo'],
@@ -21,26 +19,26 @@ describe('codegen', () => {
       [['foo', 'bar', 'baz'], { prefix: '^' }, '^foo\n^bar\n^baz'],
       [['foo', 'bar', 'baz'], undefined, 'foo\nbar\nbaz'],
     ]
-    forEach(cases).describe('', (value, opts, expected) => {
+    fdescribe.each(cases)('', (value, opts, expected) => {
       it(`(${value}, ${JSON.stringify(opts)})=== ${expected}`, () => {
-        expect(lines(value, opts)).to.equal(expected)
+        expect(lines(value, opts)).toEqual(expected)
       })
     })
   })
-  describe('indent', () => {
-    const cases = [
-      [undefined, 0, 'foo', 'foo'],
-      [undefined, 0, 'foo\nbar', 'foo\nbar'],
-      [undefined, 1, 'foo', ' foo'],
-      [undefined, 1, 'foo\nbar', ' foo\n bar'],
-      [undefined, 2, 'foo', '  foo'],
-      [undefined, 2, 'foo\nbar', '  foo\n  bar'],
-      [undefined, 2, 'foo\n  bar', '  foo\n    bar'],
-      [',', 2, 'foo\n  bar', ',  foo\n,    bar'],
+  fdescribe('indent', () => {
+    const cases: [level: number, value: string, prefix: string | undefined, expected: string][] = [
+      [0, 'foo', undefined, 'foo'],
+      [0, 'foo\nbar', undefined, 'foo\nbar'],
+      [1, 'foo', undefined, ' foo'],
+      [1, 'foo\nbar', undefined, ' foo\n bar'],
+      [2, 'foo', undefined, '  foo'],
+      [2, 'foo\nbar', undefined, '  foo\n  bar'],
+      [2, 'foo\n  bar', undefined, '  foo\n    bar'],
+      [2, 'foo\n  bar', ',', ',  foo\n,    bar'],
     ]
-    forEach(cases).describe('', (prefix, level, value, expected) => {
+    fdescribe.each(cases)('', (level, value, prefix, expected) => {
       it(`(${level}, ${value}, ${prefix}) === ${expected}`, () => {
-        expect(indent(level, value, prefix)).to.equal(expected)
+        expect(indent(level, value, prefix)).toEqual(expected)
       })
     })
   })

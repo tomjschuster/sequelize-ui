@@ -1,11 +1,10 @@
-import { expect } from 'chai'
-import forEach from 'mocha-each'
 import {
   arrayDataType,
   bigIntDataType,
   blobDataType,
   booleanDataType,
   ciTextDataType,
+  DataType,
   dataTypeFromDataTypeType,
   DataTypeType,
   dateDataType,
@@ -54,9 +53,9 @@ import {
   uuid,
 } from '../__fixtures__/dataType'
 
-describe('schema dataTypes', () => {
-  describe('displayDataType', () => {
-    const cases = [
+fdescribe('schema dataTypes', () => {
+  fdescribe('displayDataType', () => {
+    const cases: [type: DataType, expected: string][] = [
       [string, 'String'],
       [text, 'Text'],
       [ciText, 'CI Text'],
@@ -79,15 +78,15 @@ describe('schema dataTypes', () => {
       [blob, 'Blob'],
       [uuid, 'UUID'],
     ]
-    forEach(cases).describe('', (type, expected) => {
-      it(`${type} === ${expected}`, () => {
-        expect(displayDataType(type)).to.equal(expected)
+    fdescribe.each(cases)('', (type, expected) => {
+      fit(`${type} === ${expected}`, () => {
+        expect(displayDataType(type)).toEqual(expected)
       })
     })
   })
 
-  describe('displayDataTypeType', () => {
-    const cases = [
+  fdescribe('displayDataTypeType', () => {
+    const cases: [type: DataTypeType, expected: string][] = [
       [DataTypeType.String, 'String'],
       [DataTypeType.Text, 'Text'],
       [DataTypeType.CiText, 'CI Text'],
@@ -109,15 +108,15 @@ describe('schema dataTypes', () => {
       [DataTypeType.Blob, 'Blob'],
       [DataTypeType.Uuid, 'UUID'],
     ]
-    forEach(cases).describe('', (type, expected) => {
-      it(`${type} === ${expected}`, () => {
-        expect(displayDataTypeType(type)).to.equal(expected)
+    fdescribe.each(cases)('', (type, expected) => {
+      fit(`${type} === ${expected}`, () => {
+        expect(displayDataTypeType(type)).toEqual(expected)
       })
     })
   })
 
-  describe('dataTypeFromDataTypeType', () => {
-    const cases = [
+  fdescribe('dataTypeFromDataTypeType', () => {
+    const cases: [type: DataTypeType, expected: DataType][] = [
       [DataTypeType.String, string],
       [DataTypeType.Text, text],
       [DataTypeType.CiText, ciText],
@@ -139,135 +138,135 @@ describe('schema dataTypes', () => {
       [DataTypeType.Blob, blob],
       [DataTypeType.Uuid, uuid],
     ]
-    forEach(cases).describe('', (type, expected) => {
-      it(`${type} === ${expected}`, () => {
-        expect(dataTypeFromDataTypeType(type)).to.eql(expected)
+    fdescribe.each(cases)('', (type, expected) => {
+      fit(`${type} === ${expected}`, () => {
+        expect(dataTypeFromDataTypeType(type)).toEqual(expected)
       })
     })
   })
 
-  describe('stringDataType', () => {
+  fdescribe('stringDataType', () => {
     it('should create a stringDataType datatype', () => {
-      expect(stringDataType()).to.eql(string)
+      expect(stringDataType()).toEqual(string)
     })
   })
 
-  describe('textDataType', () => {
+  fdescribe('textDataType', () => {
     it('should create a textDataType datatype', () => {
-      expect(textDataType()).to.eql(text)
+      expect(textDataType()).toEqual(text)
     })
   })
 
-  describe('ciTextDataType', () => {
+  fdescribe('ciTextDataType', () => {
     it('should create a ciTextDataType datatype', () => {
-      expect(ciTextDataType()).to.eql(ciText)
+      expect(ciTextDataType()).toEqual(ciText)
     })
   })
 
-  describe('integerDataType', () => {
+  fdescribe('integerDataType', () => {
     it('should create a integerDataType datatype', () => {
-      expect(integerDataType()).to.eql(integer)
+      expect(integerDataType()).toEqual(integer)
     })
   })
 
-  describe('bigIntDataType', () => {
+  fdescribe('bigIntDataType', () => {
     it('should create a bigIntDataType datatype', () => {
-      expect(bigIntDataType()).to.eql(bigInt)
+      expect(bigIntDataType()).toEqual(bigInt)
     })
   })
 
-  describe('smallIntDataType', () => {
+  fdescribe('smallIntDataType', () => {
     it('should create a smallIntDataType datatype', () => {
-      expect(smallIntDataType()).to.eql(smallInt)
+      expect(smallIntDataType()).toEqual(smallInt)
     })
   })
 
-  describe('floatDataType', () => {
+  fdescribe('floatDataType', () => {
     it('should create a floatDataType datatype', () => {
-      expect(floatDataType()).to.eql(float)
+      expect(floatDataType()).toEqual(float)
     })
   })
 
-  describe('realDataType', () => {
+  fdescribe('realDataType', () => {
     it('should create a realDataType datatype', () => {
-      expect(realDataType()).to.eql(real)
+      expect(realDataType()).toEqual(real)
     })
   })
 
-  describe('doubleDataType', () => {
+  fdescribe('doubleDataType', () => {
     it('should create a doubleDataType datatype', () => {
-      expect(doubleDataType()).to.eql(double)
+      expect(doubleDataType()).toEqual(double)
     })
   })
 
-  describe('decimalDataType', () => {
+  fdescribe('decimalDataType', () => {
     it('should create a decimalDataType datatype', () => {
-      expect(decimalDataType()).to.eql(decimal)
+      expect(decimalDataType()).toEqual(decimal)
     })
   })
 
-  describe('dateTimeDataType', () => {
+  fdescribe('dateTimeDataType', () => {
     it('should create a dateTimeDataType datatype', () => {
-      expect(dateTimeDataType()).to.eql(dateTime)
+      expect(dateTimeDataType()).toEqual(dateTime)
     })
   })
 
-  describe('dateDataType', () => {
+  fdescribe('dateDataType', () => {
     it('should create a dateDataType datatype', () => {
-      expect(dateDataType()).to.eql(date)
+      expect(dateDataType()).toEqual(date)
     })
   })
 
-  describe('timeDataType', () => {
+  fdescribe('timeDataType', () => {
     it('should create a timeDataType datatype', () => {
-      expect(timeDataType()).to.eql(time)
+      expect(timeDataType()).toEqual(time)
     })
   })
 
-  describe('booleanDataType', () => {
+  fdescribe('booleanDataType', () => {
     it('should create a booleanDataType datatype', () => {
-      expect(booleanDataType()).to.eql(boolean)
+      expect(booleanDataType()).toEqual(boolean)
     })
   })
 
-  describe('enumDataType', () => {
+  fdescribe('enumDataType', () => {
     it('should create a enumDataType datatype', () => {
-      expect(enumDataType()).to.eql(enum_)
+      expect(enumDataType()).toEqual(enum_)
     })
   })
 
-  describe('arrayDataType', () => {
+  fdescribe('arrayDataType', () => {
     it('should create a arrayDataType datatype', () => {
-      expect(arrayDataType()).to.eql(array)
+      expect(arrayDataType()).toEqual(array)
     })
   })
 
-  describe('jsonDataType', () => {
+  fdescribe('jsonDataType', () => {
     it('should create a jsonDataType datatype', () => {
-      expect(jsonDataType()).to.eql(json)
+      expect(jsonDataType()).toEqual(json)
     })
   })
 
-  describe('jsonBDataType', () => {
+  fdescribe('jsonBDataType', () => {
     it('should create a jsonBDataType datatype', () => {
-      expect(jsonBDataType()).to.eql(jsonB)
+      expect(jsonBDataType()).toEqual(jsonB)
     })
   })
 
-  describe('blobDataType', () => {
+  fdescribe('blobDataType', () => {
     it('should create a blobDataType datatype', () => {
-      expect(blobDataType()).to.eql(blob)
+      expect(blobDataType()).toEqual(blob)
     })
   })
 
-  describe('uuidDataType', () => {
+  fdescribe('uuidDataType', () => {
     it('should create a uuidDataType datatype', () => {
-      expect(uuidDataType()).to.eql(uuid)
+      expect(uuidDataType()).toEqual(uuid)
     })
   })
 
-  describe('isStringType', () => {
-    const cases = [
+  fdescribe('isStringType', () => {
+    const cases: [type: DataType, expected: boolean][] = [
       [string, true],
       [text, false],
       [ciText, false],
@@ -289,15 +288,15 @@ describe('schema dataTypes', () => {
       [blob, false],
       [uuid, false],
     ]
-    forEach(cases).describe('', (type, expected) => {
-      it(`${type} === ${expected}`, () => {
-        expect(isStringType(type)).to.equal(expected)
+    fdescribe.each(cases)('', (type, expected) => {
+      fit(`${type} === ${expected}`, () => {
+        expect(isStringType(type)).toEqual(expected)
       })
     })
   })
 
-  describe('isDateTimeType', () => {
-    const cases = [
+  fdescribe('isDateTimeType', () => {
+    const cases: [type: DataType, expected: boolean][] = [
       [string, false],
       [text, false],
       [ciText, false],
@@ -319,15 +318,15 @@ describe('schema dataTypes', () => {
       [blob, false],
       [uuid, false],
     ]
-    forEach(cases).describe('', (type, expected) => {
-      it(`${type} === ${expected}`, () => {
-        expect(isDateTimeType(type)).to.equal(expected)
+    fdescribe.each(cases)('', (type, expected) => {
+      fit(`${type} === ${expected}`, () => {
+        expect(isDateTimeType(type)).toEqual(expected)
       })
     })
   })
 
-  describe('isDateTimeType', () => {
-    const cases = [
+  fdescribe('isDateTimeType', () => {
+    const cases: [type: DataType, expected: boolean][] = [
       [string, false],
       [text, false],
       [ciText, false],
@@ -349,15 +348,15 @@ describe('schema dataTypes', () => {
       [blob, false],
       [uuid, false],
     ]
-    forEach(cases).describe('', (type, expected) => {
-      it(`${type} === ${expected}`, () => {
-        expect(isDateTimeType(type)).to.equal(expected)
+    fdescribe.each(cases)('', (type, expected) => {
+      fit(`${type} === ${expected}`, () => {
+        expect(isDateTimeType(type)).toEqual(expected)
       })
     })
   })
 
-  describe('isDateTimeType', () => {
-    const cases = [
+  fdescribe('isDateTimeType', () => {
+    const cases: [type: DataType, expected: boolean][] = [
       [string, false],
       [text, false],
       [ciText, false],
@@ -379,15 +378,15 @@ describe('schema dataTypes', () => {
       [blob, false],
       [uuid, false],
     ]
-    forEach(cases).describe('', (type, expected) => {
-      it(`${type} === ${expected}`, () => {
-        expect(isDateTimeType(type)).to.equal(expected)
+    fdescribe.each(cases)('', (type, expected) => {
+      fit(`${type} === ${expected}`, () => {
+        expect(isDateTimeType(type)).toEqual(expected)
       })
     })
   })
 
-  describe('isDateTimeType', () => {
-    const cases = [
+  fdescribe('isDateTimeType', () => {
+    const cases: [type: DataType, expected: boolean][] = [
       [string, false],
       [text, false],
       [ciText, false],
@@ -409,14 +408,14 @@ describe('schema dataTypes', () => {
       [blob, false],
       [uuid, false],
     ]
-    forEach(cases).describe('', (type, expected) => {
-      it(`${type} === ${expected}`, () => {
-        expect(isNumericType(type)).to.equal(expected)
+    fdescribe.each(cases)('', (type, expected) => {
+      fit(`${type} === ${expected}`, () => {
+        expect(isNumericType(type)).toEqual(expected)
       })
     })
 
-    describe('isNumberType', () => {
-      const cases = [
+    fdescribe('isNumberType', () => {
+      const cases: [type: DataType, expected: boolean][] = [
         [string, false],
         [text, false],
         [ciText, false],
@@ -438,15 +437,15 @@ describe('schema dataTypes', () => {
         [blob, false],
         [uuid, false],
       ]
-      forEach(cases).describe('', (type, expected) => {
-        it(`${type} === ${expected}`, () => {
-          expect(isNumberType(type)).to.equal(expected)
+      fdescribe.each(cases)('', (type, expected) => {
+        fit(`${type} === ${expected}`, () => {
+          expect(isNumberType(type)).toEqual(expected)
         })
       })
     })
 
-    describe('isNumberType', () => {
-      const cases = [
+    fdescribe('isNumberType', () => {
+      const cases: [type: DataType, expected: boolean][] = [
         [string, false],
         [text, false],
         [ciText, false],
@@ -468,9 +467,9 @@ describe('schema dataTypes', () => {
         [blob, false],
         [uuid, false],
       ]
-      forEach(cases).describe('', (type, expected) => {
-        it(`${type} === ${expected}`, () => {
-          expect(isIntegerType(type)).to.equal(expected)
+      fdescribe.each(cases)('', (type, expected) => {
+        fit(`${type} === ${expected}`, () => {
+          expect(isIntegerType(type)).toEqual(expected)
         })
       })
     })
