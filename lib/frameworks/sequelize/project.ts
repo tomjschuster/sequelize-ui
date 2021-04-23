@@ -1,7 +1,7 @@
 import { DatabaseOptions } from '@lib/core/database'
 import { directory, DirectoryItem, file } from '@lib/core/files'
 import { Schema } from '@lib/core/schema'
-import { kebabCase } from '@lib/core/utils'
+import { kebabCase } from '@lib/core/utils/string'
 import { hasJsonType, modelName } from './helpers'
 import { dbTemplate } from './templates/db'
 import { gitignoreTemplate } from './templates/gitignore'

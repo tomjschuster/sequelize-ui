@@ -1,6 +1,6 @@
 import { SqlDialect } from '@lib/core/database'
 import { DataTypeType, Field, Model } from '@lib/core/schema'
-import { pascalCase, singular } from '@lib/core/utils'
+import { pascalCase, singular } from '@lib/core/utils/string'
 import shortid from 'shortid'
 
 export const modelName = ({ name }: Model): string => singular(pascalCase(name))

@@ -1,12 +1,12 @@
 import { MAX_IDENTIFIER_LENGTH } from '@lib/core/database'
 import { Schema } from '@lib/core/schema'
+import { deepEmpty } from '@lib/core/utils/object'
 import {
-  deepEmpty,
   nameEmpty,
   nameLongerThan,
   namesEqSingular,
   nameStartsWithNumber,
-} from '@lib/core/utils'
+} from '@lib/core/utils/string'
 
 export type SchemaFormErrors = {
   name?: string

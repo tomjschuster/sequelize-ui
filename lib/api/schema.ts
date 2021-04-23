@@ -6,7 +6,7 @@ import {
   Model,
   Schema,
 } from '@lib/core/schema'
-import { versionedName } from '@lib/core/utils'
+import { versionedName } from '@lib/core/utils/string'
 import shortid from 'shortid'
 
 export async function listSchemas(): Promise<Schema[]> {

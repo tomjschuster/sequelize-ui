@@ -1,7 +1,7 @@
 import { lines } from '@lib/core/codegen'
 import { DatabaseOptions, SqlDialect } from '@lib/core/database'
 import { Schema } from '@lib/core/schema'
-import { kebabCase } from '@lib/core/utils'
+import { kebabCase } from '@lib/core/utils/string'
 
 export type PackageJsonTemplateArgs = {
   schema: Schema

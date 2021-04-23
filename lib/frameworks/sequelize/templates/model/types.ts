@@ -1,7 +1,7 @@
 import { blank, lines } from '@lib/core/codegen'
 import { DatabaseOptions } from '@lib/core/database'
 import { Field, isDateTimeType, Model } from '@lib/core/schema'
-import { camelCase } from '@lib/core/utils'
+import { camelCase } from '@lib/core/utils/string'
 import { dataTypeToTypeScript } from '../../dataTypes'
 import { modelName } from '../../helpers'
 import { noSupportedDetails, notSupportedComment } from './common'

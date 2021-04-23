@@ -8,7 +8,7 @@ import {
   Schema,
   ThroughType,
 } from '@lib/core/schema'
-import { snakeCase } from '@lib/core/utils'
+import { snakeCase } from '@lib/core/utils/string'
 import Radio from '@lib/ui/components/form/Radio'
 import Select from '@lib/ui/components/form/Select'
 import TextInput from '@lib/ui/components/form/TextInput'

@@ -9,7 +9,7 @@ import {
   Precision,
   Schema,
 } from '@lib/core/schema'
-import { noCase, titleCase } from '@lib/core/utils'
+import { noCase, titleCase } from '@lib/core/utils/string'
 import AssociationList from '@lib/ui/components/AssociationList'
 import React, { useCallback, useState } from 'react'
 import * as styles from './styles'
