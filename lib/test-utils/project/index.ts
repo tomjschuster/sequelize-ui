@@ -1,4 +1,5 @@
-import { DirectoryItem, ProjectType } from '@lib/core'
+import { DirectoryItem } from '@lib/core/files'
+import { ProjectType } from '@lib/core/framework'
 import { NpmProject } from './npm'
 
 export const buildProject = (

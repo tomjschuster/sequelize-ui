@@ -1,4 +1,4 @@
-import { Language } from '@lib/core'
+import { Language } from '@lib/core/files'
 import Highlight, { defaultProps, Language as PrismLanguage } from 'prism-react-renderer'
 import React from 'react'
 

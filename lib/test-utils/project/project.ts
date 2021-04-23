@@ -1,4 +1,4 @@
-import { DirectoryItem } from '@lib/core'
+import { DirectoryItem } from '@lib/core/files'
 
 export interface Project {
   build(directory: DirectoryItem, preinstall?: string): Promise<void>

@@ -3,9 +3,9 @@ import {
   DatabaseNounForm,
   DatabaseOptions,
   displaySqlDialect,
-  Framework,
   SqlDialect,
-} from '@lib/core'
+} from '@lib/core/database'
+import { Framework } from '@lib/core/framework'
 import { SequelizeFramework } from '@lib/frameworks'
 import {
   alpha,

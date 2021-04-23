@@ -1,4 +1,4 @@
-import { FileSystemItem, isDirectory, isFile, itemName } from '@lib/core'
+import { FileSystemItem, isDirectory, isFile, itemName } from '@lib/core/files'
 import React from 'react'
 import { classnames } from 'tailwindcss-classnames'
 import { FolderState } from './types'

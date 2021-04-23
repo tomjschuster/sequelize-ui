@@ -6,7 +6,7 @@ import {
   isDirectory,
   isFile,
   listPaths,
-} from '@lib/core'
+} from '@lib/core/files'
 import usePrevious from '@lib/ui/hooks/usePrevious'
 import React from 'react'
 import { FolderState } from './types'

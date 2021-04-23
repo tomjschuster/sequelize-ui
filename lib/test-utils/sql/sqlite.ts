@@ -1,4 +1,4 @@
-import { ProjectType } from '@lib/core'
+import { ProjectType } from '@lib/core/framework'
 import { deleteFileOrDirectory, exists, mkdirp, tmpDirPath } from '@lib/test-utils/files'
 import { isLinux } from 'check-os'
 import { Database } from 'sqlite3'

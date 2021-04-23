@@ -6,7 +6,7 @@ import {
   displayDatabaseNounForm,
   displaySqlDialect,
   SqlDialect,
-} from '@lib/core'
+} from '@lib/core/database'
 import Radio from '@lib/ui/components/form/Radio'
 import React from 'react'
 

@@ -1,4 +1,5 @@
-import { parseSqlDialect, ProjectType, SqlDialect } from '@lib/core'
+import { parseSqlDialect, SqlDialect } from '@lib/core/database'
+import { ProjectType } from '@lib/core/framework'
 import { DbConnection, DbConnectionConstructor } from './connection'
 import { MsSqlConnection } from './mssql'
 import { MySqlConnection } from './mysql'

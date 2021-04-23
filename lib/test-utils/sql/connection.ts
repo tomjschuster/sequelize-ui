@@ -1,4 +1,4 @@
-import { ProjectType } from '@lib/core'
+import { ProjectType } from '@lib/core/framework'
 
 export interface DbConnection {
   connected(): Promise<boolean>

@@ -1,4 +1,4 @@
-import { DirectoryItem, itemName } from '@lib/core'
+import { DirectoryItem, itemName } from '@lib/core/files'
 import {
   clearDirectory,
   deleteFileOrDirectory,

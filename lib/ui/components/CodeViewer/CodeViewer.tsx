@@ -1,4 +1,4 @@
-import { copyFile, download, fileLanguage, FileSystemItem } from '@lib/core'
+import { copyFile, download, fileLanguage, FileSystemItem } from '@lib/core/files'
 import Code from '@lib/ui/components/Code'
 import FileTree, { useFileTree } from '@lib/ui/components/FileTree'
 import React from 'react'
