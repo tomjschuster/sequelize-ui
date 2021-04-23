@@ -22,11 +22,13 @@ Language.hasMany(Film, {
 #### Testing
 
 - Use data schemas in integration tests
-  - Create schema with all data types
-- Review missing unit tests
 
-  - `file.io`
-  - Sequelize (create additional data/schema which demonstrates all cases, test all data schemas)
+  - Create schema with all data types
+  - Adjust sql tests to exclude columns not supported by db type
+
+- Unit tests
+
+  - frameworks/sequelize
     - Use/test missing data types
     - Use/test framework display name
     - Use/test hasOne
@@ -41,9 +43,11 @@ Language.hasMany(Film, {
 
 - AFTER JEST:
 
-  - hook tests
-  - api tests (mock local storage)
-  - Component tests?
+  - io
+  - api
+  - ui
+    - hooks
+    - components?
 
 - Browser tests (pick framework, post UI)
 
