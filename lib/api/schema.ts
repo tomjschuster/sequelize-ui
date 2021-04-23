@@ -1,4 +1,11 @@
-import { Association, AssociationTypeType, DataTypeType, Field, Model, Schema } from '@lib/core'
+import {
+  Association,
+  AssociationTypeType,
+  DataTypeType,
+  Field,
+  Model,
+  Schema,
+} from '@lib/core/schema'
 import { versionedName } from '@lib/core/utils'
 import shortid from 'shortid'
 

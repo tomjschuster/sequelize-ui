@@ -1,5 +1,5 @@
 import { emptyAssociation, emptyField } from '@lib/api/schema'
-import { Association, Field, Model, Schema } from '@lib/core'
+import { Association, Field, Model, Schema } from '@lib/core/schema'
 import React from 'react'
 import { classnames } from 'tailwindcss-classnames'
 import AssociationFieldset from './AssociationFieldset'

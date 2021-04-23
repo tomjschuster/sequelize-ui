@@ -1,4 +1,4 @@
-import { Model, Schema } from '@lib/core'
+import { Model, Schema } from '@lib/core/schema'
 import React from 'react'
 import ModelForm from './ModelForm'
 import ModelItem from './ModelItem'

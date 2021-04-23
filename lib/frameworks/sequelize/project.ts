@@ -1,4 +1,6 @@
-import { DatabaseOptions, directory, DirectoryItem, file, Schema } from '@lib/core'
+import { DatabaseOptions } from '@lib/core/database'
+import { directory, DirectoryItem, file } from '@lib/core/files'
+import { Schema } from '@lib/core/schema'
 import { kebabCase } from '@lib/core/utils'
 import { hasJsonType, modelName } from './helpers'
 import { dbTemplate } from './templates/db'

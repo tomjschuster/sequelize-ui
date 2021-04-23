@@ -1,4 +1,6 @@
-import { Association, blank, DatabaseOptions, lines, Model, Schema } from '@lib/core'
+import { blank, lines } from '@lib/core/codegen'
+import { DatabaseOptions } from '@lib/core/database'
+import { Association, Model, Schema } from '@lib/core/schema'
 import { ModelAssociation } from './common'
 import { modelImportsTemplate } from './imports'
 import { modelClassTemplate } from './modelClass'

@@ -1,12 +1,6 @@
 import { deleteSchema, emptyModel, listSchemas, updateSchema } from '@lib/api/schema'
-import {
-  DatabaseCaseStyle,
-  DatabaseNounForm,
-  DatabaseOptions,
-  Model,
-  Schema,
-  SqlDialect,
-} from '@lib/core'
+import { DatabaseCaseStyle, DatabaseNounForm, DatabaseOptions, SqlDialect } from '@lib/core'
+import { Model, Schema } from '@lib/core/schema'
 import { SequelizeFramework } from '@lib/frameworks'
 import CodeViewer from '@lib/ui/components/CodeViewer'
 import DbOptionsForm from '@lib/ui/components/DbOptionsForm'

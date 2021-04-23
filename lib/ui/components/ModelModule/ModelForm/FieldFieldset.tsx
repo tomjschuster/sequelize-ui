@@ -9,7 +9,7 @@ import {
   isNumericType,
   isStringType,
   UuidType,
-} from '@lib/core'
+} from '@lib/core/schema'
 import Checkbox from '@lib/ui/components/form/Checkbox'
 import IntegerInput from '@lib/ui/components/form/IntegerInput'
 import Radio from '@lib/ui/components/form/Radio'

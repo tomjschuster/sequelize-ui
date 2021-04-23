@@ -1,4 +1,5 @@
-import { DataTypeType, Field, Model, SqlDialect } from '@lib/core'
+import { SqlDialect } from '@lib/core/database'
+import { DataTypeType, Field, Model } from '@lib/core/schema'
 import { pascalCase, singular } from '@lib/core/utils'
 import shortid from 'shortid'
 

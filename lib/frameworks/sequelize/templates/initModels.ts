@@ -1,15 +1,13 @@
+import { blank, lines } from '@lib/core/codegen'
+import { DatabaseCaseStyle, DatabaseOptions } from '@lib/core/database'
 import {
   Association,
   AssociationTypeType,
-  blank,
-  DatabaseCaseStyle,
-  DatabaseOptions,
-  lines,
   ManyToManyAssociation,
   Model,
   Schema,
   ThroughType,
-} from '@lib/core'
+} from '@lib/core/schema'
 import { camelCase, pascalCase, plural, singular, snakeCase } from '@lib/core/utils'
 import { modelName } from '../helpers'
 

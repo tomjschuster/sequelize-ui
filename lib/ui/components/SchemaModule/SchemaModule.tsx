@@ -1,4 +1,4 @@
-import { Schema } from '@lib/core'
+import { Schema } from '@lib/core/schema'
 import React from 'react'
 import TextInput from '../form/TextInput'
 import { emptyErrors, noSchemaFormErrors, SchemaFormErrors, validateSchema } from './validation'

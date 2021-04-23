@@ -1,4 +1,4 @@
-import { Model } from '@lib/core'
+import { Model } from '@lib/core/schema'
 import TextInput from '@lib/ui/components/form/TextInput'
 import React from 'react'
 import { ModelFormErrors } from './validation'

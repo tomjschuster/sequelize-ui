@@ -1,4 +1,4 @@
-import { AssociationTypeType, DataTypeType, Model, Schema, ThroughType } from '@lib/core'
+import { AssociationTypeType, DataTypeType, Model, Schema, ThroughType } from '@lib/core/schema'
 
 enum Id {
   Actor = '1',

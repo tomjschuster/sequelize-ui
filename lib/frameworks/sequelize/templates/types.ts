@@ -1,4 +1,4 @@
-import { blank, lines } from '@lib/core'
+import { blank, lines } from '@lib/core/codegen'
 
 export const typesTemplate = (): string => lines([jsonType()])
 

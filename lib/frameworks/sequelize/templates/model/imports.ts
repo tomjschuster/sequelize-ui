@@ -1,11 +1,6 @@
-import {
-  AssociationTypeType,
-  DatabaseOptions,
-  DataType,
-  DataTypeType,
-  lines,
-  Model,
-} from '@lib/core'
+import { lines } from '@lib/core/codegen'
+import { DatabaseOptions } from '@lib/core/database'
+import { AssociationTypeType, DataType, DataTypeType, Model } from '@lib/core/schema'
 import { hasJsonType, modelName } from '../../helpers'
 import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
 

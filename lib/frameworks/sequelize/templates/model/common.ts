@@ -1,4 +1,5 @@
-import { Association, DataType, displaySqlDialect, Model, SqlDialect } from '@lib/core'
+import { displaySqlDialect, SqlDialect } from '@lib/core/database'
+import { Association, DataType, Model } from '@lib/core/schema'
 import { dataTypeNotSupported, displaySequelizeDataType } from '../../dataTypes'
 
 export type ModelAssociation = {

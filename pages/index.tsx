@@ -1,5 +1,11 @@
 import { createSchema, listSchemas } from '@lib/api/schema'
-import { DatabaseCaseStyle, DatabaseNounForm, DatabaseOptions, Schema, SqlDialect } from '@lib/core'
+import {
+  DatabaseCaseStyle,
+  DatabaseNounForm,
+  DatabaseOptions,
+  SqlDialect,
+} from '@lib/core/database'
+import { Schema } from '@lib/core/schema'
 import { DemoSchemaType, displayDemoSchemaType, getDemoSchema } from '@lib/data/schemas'
 import { SequelizeFramework } from '@lib/frameworks'
 import CodeViewer from '@lib/ui/components/CodeViewer'

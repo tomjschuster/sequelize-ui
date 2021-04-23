@@ -1,13 +1,13 @@
+import { MAX_IDENTIFIER_LENGTH } from '@lib/core/database'
 import {
   Association,
   associationsHaveSameForm,
   AssociationTypeType,
   Field,
-  MAX_IDENTIFIER_LENGTH,
   Model,
   Schema,
   ThroughType,
-} from '@lib/core'
+} from '@lib/core/schema'
 import {
   deepEmpty,
   nameEmpty,

@@ -1,5 +1,5 @@
+import { blank, lines } from '@lib/core/codegen'
 import {
-  blank,
   DatabaseCaseStyle,
   DatabaseNounForm,
   DatabaseOptions,
@@ -9,11 +9,10 @@ import {
   defaultSqlDialectPort,
   defaultSqlDialectStorage,
   defaultSqlDialectUsername,
-  lines,
-  Schema,
   SqlDialect,
   sqlDialectEnvVar,
-} from '@lib/core'
+} from '@lib/core/database'
+import { Schema } from '@lib/core/schema'
 import { sqlDialiectConfigValue } from '../helpers'
 
 export type DbTemplateArgs = {

@@ -1,19 +1,20 @@
+import { blank, lines } from '@lib/core/codegen'
 import {
-  Association,
-  AssociationTypeType,
-  blank,
   DatabaseCaseStyle,
   DatabaseNounForm,
   DatabaseOptions,
-  DataType,
-  DataTypeType,
-  Field,
-  lines,
-  Model,
   sqlCurrentDate,
   sqlCurrentTime,
   sqlCurrentTimestamp,
-} from '@lib/core'
+} from '@lib/core/database'
+import {
+  Association,
+  AssociationTypeType,
+  DataType,
+  DataTypeType,
+  Field,
+  Model,
+} from '@lib/core/schema'
 import { camelCase, pascalCase, plural, singular, snakeCase } from '@lib/core/utils'
 import {
   dataTypeToTypeScript,

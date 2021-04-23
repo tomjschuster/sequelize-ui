@@ -7,7 +7,7 @@ import {
   Model,
   Schema,
   ThroughType,
-} from '@lib/core'
+} from '@lib/core/schema'
 import { snakeCase } from '@lib/core/utils'
 import Radio from '@lib/ui/components/form/Radio'
 import Select from '@lib/ui/components/form/Select'

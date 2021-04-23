@@ -1,3 +1,4 @@
+import { SqlDialect } from '@lib/core/database'
 import {
   ArrayDataType,
   DataType,
@@ -8,10 +9,9 @@ import {
   isStringType,
   NumberType,
   NumericType,
-  SqlDialect,
   StringType,
   UuidType,
-} from '@lib/core'
+} from '@lib/core/schema'
 
 export function dataTypeToTypeScript(dataType: DataType): string {
   switch (dataType.type) {

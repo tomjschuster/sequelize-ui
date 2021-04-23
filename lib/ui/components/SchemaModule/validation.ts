@@ -1,4 +1,5 @@
-import { MAX_IDENTIFIER_LENGTH, Schema } from '@lib/core'
+import { MAX_IDENTIFIER_LENGTH } from '@lib/core/database'
+import { Schema } from '@lib/core/schema'
 import {
   deepEmpty,
   nameEmpty,

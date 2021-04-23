@@ -5,7 +5,7 @@ import {
   Model,
   Schema,
   ThroughType,
-} from '@lib/core'
+} from '@lib/core/schema'
 import { arrayToLookup, titleCase } from '@lib/core/utils'
 import React, { useMemo } from 'react'
 

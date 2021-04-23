@@ -8,7 +8,7 @@ import {
   Model,
   Precision,
   Schema,
-} from '@lib/core'
+} from '@lib/core/schema'
 import { noCase, titleCase } from '@lib/core/utils'
 import AssociationList from '@lib/ui/components/AssociationList'
 import React, { useCallback, useState } from 'react'

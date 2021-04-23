@@ -1,5 +1,8 @@
-import { DatabaseOptions, lines, Schema, SqlDialect } from '@lib/core'
+import { lines } from '@lib/core/codegen'
+import { DatabaseOptions, SqlDialect } from '@lib/core/database'
+import { Schema } from '@lib/core/schema'
 import { kebabCase } from '@lib/core/utils'
+
 export type PackageJsonTemplateArgs = {
   schema: Schema
   dbOptions: DatabaseOptions

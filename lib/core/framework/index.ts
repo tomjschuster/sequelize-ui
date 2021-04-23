@@ -1,4 +1,6 @@
-import { DatabaseOptions, DirectoryItem, Schema } from '@lib/core'
+import { DatabaseOptions } from '@lib/core/database'
+import { DirectoryItem } from '@lib/core/files'
+import { Schema } from '@lib/core/schema'
 
 export type GenerateArgs = {
   schema: Schema

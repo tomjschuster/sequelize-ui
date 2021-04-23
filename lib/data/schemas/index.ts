@@ -1,4 +1,4 @@
-import { Schema } from '@lib/core'
+import { Schema } from '@lib/core/schema'
 import { default as employee } from './employeeTemporalDataSet'
 import { default as sakila } from './sakila'
 
