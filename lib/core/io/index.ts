@@ -1,7 +1,7 @@
+import { DirectoryItem, FileItem, FileSystemItem, isDirectory, isFile } from '@lib/core/files'
 import copy from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
 import Zip from 'jszip'
-import { DirectoryItem, FileItem, FileSystemItem, isDirectory, isFile } from './fileSystem'
 
 export const copyFile = (file: FileItem): void => {
   copy(file.content)

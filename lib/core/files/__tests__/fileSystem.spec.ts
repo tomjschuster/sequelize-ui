@@ -12,7 +12,7 @@ import {
   itemName,
   Language,
   listPaths,
-} from '../fileSystem'
+} from '..'
 import fileTree from '../__fixtures__/fileTree'
 
 describe('files', () => {
