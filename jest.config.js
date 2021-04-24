@@ -1,5 +1,5 @@
 module.exports = {
-  roots: ['<rootDir>/src/core', '<rootDir>/integration/frameworks'],
+  roots: ['<rootDir>/src/core', '<rootDir>/src/io', '<rootDir>/integration/frameworks'],
   moduleNameMapper: {
     '@src/(.*)': '<rootDir>/src/$1',
   },

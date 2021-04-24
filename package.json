@@ -9,9 +9,10 @@
     "start": "next start",
     "format": "prettier --write .",
     "generate:css-types": "tailwindcss-classnames -i tailwind.config.js -o src/typings/__generated__/tailwindcss-classnames.d.ts",
-    "test": "SQL_DIALECT=all jest src integration --coverage",
-    "test:unit": "jest src",
-    "test:integration": "jest integration",
+    "test": "jest",
+    "test:all": "SQL_DIALECT=all npm test -- src integration --coverage",
+    "test:unit": "npm test -- src",
+    "test:integration": "npm test -- integration",
     "test:integration:all": "SQL_DIALECT=all npm run test:integration",
     "test:watch": "npm run test:unit -- --coverage",
     "types:check": "tsc -b tsconfig.check.json"
