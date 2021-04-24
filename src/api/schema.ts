@@ -40,9 +40,16 @@ export async function updateSchema(schema: Schema): Promise<Schema> {
     return Promise.reject(new Error(SCHEMA_NOT_FOUND_ERROR))
   }
 
-  const updatedSchemas = schemas.map((s) => (s.id === schema.id ? schema : s))
+  const name = versionedName(
+    schema.name,
+    schemas.map((s) => s.name),
+  )
+
+  const updateSchema = { ...schema, name }
+
+  const updatedSchemas = schemas.map((s) => (s.id === schema.id ? updateSchema : s))
   await set(schemasKey(), updatedSchemas)
-  return schema
+  return updateSchema
 }
 
 export async function deleteSchema(id: string): Promise<void> {
@@ -57,14 +64,17 @@ export async function clearSchemas(): Promise<void> {
   return await remove(schemasKey())
 }
 
+// TODO move to core/schema
 export function emptyModel(): Model {
   return { id: shortid(), name: '', fields: [], associations: [] }
 }
 
+// TODO move to core/schema
 export function emptyField(): Field {
   return { id: shortid(), name: '', type: { type: DataTypeType.String } }
 }
 
+// TODO move to core/schema
 export function emptyAssociation(
   sourceModelId: Model['id'],
   targetModelId: Model['id'],

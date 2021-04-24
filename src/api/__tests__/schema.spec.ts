@@ -1,3 +1,4 @@
+import employeeTemporalDataSet from '@src/data/schemas/employeeTemporalDataSet'
 import sakila from '@src/data/schemas/sakila'
 import {
   clearSchemas,
@@ -12,11 +13,11 @@ import {
   updateSchema,
 } from '../schema'
 
+// TODO mock local storage failing to test error cases
+
 describe('schema api', () => {
   beforeEach(() => {
-    // to fully reset the state between tests, clear the storage
     localStorage.clear()
-    // and reset all mocks
     jest.clearAllMocks()
   })
 
@@ -26,6 +27,13 @@ describe('schema api', () => {
       expect(schemas).toEqual([])
       expect(localStorage.length).toBe(0)
     })
+
+    it('should return all created schemas', async () => {
+      const schemaA = await createSchema(sakila)
+      const schemaB = await createSchema(employeeTemporalDataSet)
+      const schemas = await listSchemas()
+      expect(schemas).toEqual([schemaA, schemaB])
+    })
   })
 
   describe('getSchema', () => {
@@ -34,16 +42,32 @@ describe('schema api', () => {
         expect(e).toEqual(new Error(SCHEMA_NOT_FOUND_ERROR))
       })
     })
+
+    it('return a rejected promise when schema does not exist', async () => {
+      await createSchema(sakila)
+      getSchema('foo').catch((e) => {
+        expect(e).toEqual(new Error(SCHEMA_NOT_FOUND_ERROR))
+      })
+    })
+
+    it('returns schema when it exists', async () => {
+      const expectedSchema = await createSchema(sakila)
+      const schema = await getSchema(expectedSchema.id)
+      expect(schema).toEqual(expectedSchema)
+    })
   })
 
   describe('createSchema', () => {
-    it('adds a schema to storage', async () => {
-      /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-      const { id: _sakilaId, ...payload } = sakila
-      /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-      const { id: _schemaId, ...schema } = await createSchema(payload)
-      expect(schema).toEqual(payload)
+    it('creates new storage with new schema when no storage', async () => {
+      const schema = await createSchema(sakila)
+      expect(schema).toEqual({ ...sakila, id: schema.id })
       expect(localStorage.length).toEqual(1)
+    })
+
+    it('increments the schema name when other schema has name', async () => {
+      await createSchema(sakila)
+      const schema = await createSchema(sakila)
+      expect(schema.name).toEqual(`${sakila.name} (1)`)
     })
   })
 
@@ -53,12 +77,52 @@ describe('schema api', () => {
         expect(e).toEqual(new Error(SCHEMA_NOT_FOUND_ERROR))
       })
     })
+
+    it('returns an error when there is storage, but schema does not exist', async () => {
+      await createSchema(sakila)
+      updateSchema(employeeTemporalDataSet).catch((e) => {
+        expect(e).toEqual(new Error(SCHEMA_NOT_FOUND_ERROR))
+      })
+    })
+
+    it('updates the schema when it exists', async () => {
+      const existingSchema = await createSchema(sakila)
+
+      const schema = await updateSchema({ ...existingSchema, name: 'foo' })
+      expect(schema.name).toBe('foo')
+
+      const persistedSchema = await getSchema(schema.id)
+      expect(persistedSchema.name).toBe('foo')
+    })
+
+    it('increments the name when other schema has the name', async () => {
+      await createSchema(employeeTemporalDataSet)
+      const existingSchema = await createSchema(sakila)
+
+      const schema = await updateSchema({ ...existingSchema, name: employeeTemporalDataSet.name })
+      expect(schema.name).toBe(`${employeeTemporalDataSet.name} (1)`)
+    })
   })
 
   describe('deleteSchema', () => {
     it('should have no effect when there is no storage', async () => {
       await deleteSchema('foo')
       expect(localStorage.length).toBe(0)
+    })
+
+    it('should return a rejected promise when schema does not exist', async () => {
+      await createSchema(sakila)
+      deleteSchema('foo').catch((e) => {
+        expect(e).toEqual(new Error(SCHEMA_NOT_FOUND_ERROR))
+      })
+    })
+
+    it('should remove a schema from storage', async () => {
+      const expectedSchema = await createSchema(sakila)
+      await deleteSchema(expectedSchema.id)
+      getSchema(expectedSchema.id).catch((e) => {
+        expect(e).toEqual(new Error(SCHEMA_NOT_FOUND_ERROR))
+      })
     })
   })
 
