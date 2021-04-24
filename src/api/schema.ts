@@ -9,13 +9,16 @@ import {
 import { versionedName } from '@src/core/utils/string'
 import shortid from 'shortid'
 
+export const SCHEMA_NOT_FOUND_ERROR = '[Schema Api Error] Schema not found'
+
 export async function listSchemas(): Promise<Schema[]> {
   return (await get<Schema[]>(schemasKey())) || []
 }
 
-export async function getSchema(id: string): Promise<Schema | undefined> {
+export async function getSchema(id: string): Promise<Schema> {
   const schemas = await listSchemas()
-  return schemas.find((s) => s.id === id)
+  const schema = schemas.find((s) => s.id === id)
+  return schema || Promise.reject(new Error(SCHEMA_NOT_FOUND_ERROR))
 }
 
 export async function createSchema(schemaPayload: Omit<Schema, 'id'>): Promise<Schema> {
@@ -32,6 +35,11 @@ export async function createSchema(schemaPayload: Omit<Schema, 'id'>): Promise<S
 
 export async function updateSchema(schema: Schema): Promise<Schema> {
   const schemas = await listSchemas()
+
+  if (!schemas.some((s) => s.id === schema.id)) {
+    return Promise.reject(new Error(SCHEMA_NOT_FOUND_ERROR))
+  }
+
   const updatedSchemas = schemas.map((s) => (s.id === schema.id ? schema : s))
   await set(schemasKey(), updatedSchemas)
   return schema
@@ -39,8 +47,10 @@ export async function updateSchema(schema: Schema): Promise<Schema> {
 
 export async function deleteSchema(id: string): Promise<void> {
   const schemas = await listSchemas()
-  const updatedSchemas = schemas.filter((s) => s.id !== id)
-  await set(schemasKey(), updatedSchemas)
+  if (schemas.length) {
+    const updatedSchemas = schemas.filter((s) => s.id !== id)
+    await set(schemasKey(), updatedSchemas)
+  }
 }
 
 export async function clearSchemas(): Promise<void> {

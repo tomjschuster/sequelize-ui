@@ -31,8 +31,8 @@ Language.hasMany(Film, {
   - modelClass of default current time
   - modelClass of default uuid versions
 
-- io
 - api
+  - Non-empty storage cases
 - ui
 
   - hooks
