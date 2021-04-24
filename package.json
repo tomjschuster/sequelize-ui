@@ -14,7 +14,7 @@
     "test:unit": "npm test -- src",
     "test:integration": "npm test -- integration",
     "test:integration:all": "SQL_DIALECT=all npm run test:integration",
-    "test:watch": "npm run test:unit -- --coverage",
+    "test:watch": "npm run test:unit -- --watch",
     "types:check": "tsc -b tsconfig.check.json"
   },
   "husky": {
