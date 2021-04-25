@@ -1,13 +1,8 @@
 import { DirectoryItem, FileItem, FileSystemItem, isDirectory, isFile } from '@src/core/files'
-import copy from 'copy-to-clipboard'
 import { saveAs } from 'file-saver'
 import Zip from 'jszip'
 
 export const FAILED_TO_CREATE_FOLDER_ERROR = '[Zip Error] Failed to create folder'
-
-export const copyFile = (file: FileItem): void => {
-  copy(file.content)
-}
 
 export const download = (item: FileSystemItem): Promise<void> =>
   isFile(item) ? downloadFile(item) : downloadDirectory(item)
