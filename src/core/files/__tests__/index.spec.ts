@@ -15,41 +15,41 @@ import {
 } from '..'
 import fileTree from './__fixtures__/fileTree'
 
-fdescribe('files', () => {
-  fdescribe('itemName', () => {
+describe('files', () => {
+  describe('itemName', () => {
     const cases: [item: FileSystemItem, expected: string][] = [
       [file('foo', 'contents'), 'foo'],
       [directory('bar', []), 'bar'],
     ]
-    fdescribe.each(cases)('', (item, expected) => {
+    describe.each(cases)('', (item, expected) => {
       fit(`(${JSON.stringify(item)}) === ${expected}`, () => {
         expect(itemName(item)).toEqual(expected)
       })
     })
   })
-  fdescribe('isDirectory', () => {
+  describe('isDirectory', () => {
     const cases: [item: FileSystemItem, expected: boolean][] = [
       [file('foo', 'contents'), false],
       [directory('bar', []), true],
     ]
-    fdescribe.each(cases)('', (item, expected) => {
+    describe.each(cases)('', (item, expected) => {
       fit(`(${JSON.stringify(item)}) === ${expected}`, () => {
         expect(isDirectory(item)).toEqual(expected)
       })
     })
   })
-  fdescribe('isFile', () => {
+  describe('isFile', () => {
     const cases: [item: FileSystemItem, expected: boolean][] = [
       [file('foo', 'contents'), true],
       [directory('bar', []), false],
     ]
-    fdescribe.each(cases)('', (item, expected) => {
+    describe.each(cases)('', (item, expected) => {
       fit(`(${JSON.stringify(item)}) === ${expected}`, () => {
         expect(isFile(item)).toEqual(expected)
       })
     })
   })
-  fdescribe('fileLanguage', () => {
+  describe('fileLanguage', () => {
     const cases: [item: FileItem, expected: Language | undefined][] = [
       [file('foo.ts', 'contents'), Language.TypeScript],
       [file('foo.js', 'contents'), Language.JavaScript],
@@ -59,13 +59,13 @@ fdescribe('files', () => {
       [file('foo.', 'contents'), undefined],
       [file('foo', 'contents'), undefined],
     ]
-    fdescribe.each(cases)('', (f, expected) => {
+    describe.each(cases)('', (f, expected) => {
       fit(`(${JSON.stringify(f)}) === ${expected}`, () => {
         expect(fileLanguage(f)).toEqual(expected)
       })
     })
   })
-  fdescribe('findItem', () => {
+  describe('findItem', () => {
     const cases: [path: string, expected: string | undefined][] = [
       ['documents', 'documents'],
       ['documents/essay.docx', 'essay.docx'],
@@ -76,13 +76,13 @@ fdescribe('files', () => {
       ['foo', undefined],
       ['documents/foo', undefined],
     ]
-    fdescribe.each(cases)('', (path, expected) => {
+    describe.each(cases)('', (path, expected) => {
       fit(`(dir, ${path}) === ${expected}`, () => {
         expect(findItem(fileTree, path)?.name).toEqual(expected)
       })
     })
   })
-  fdescribe('findFile', () => {
+  describe('findFile', () => {
     const cases: [path: string, expected: string | undefined][] = [
       ['documents', undefined],
       ['documents/essay.docx', 'essay.docx'],
@@ -93,14 +93,14 @@ fdescribe('files', () => {
       ['foo', undefined],
       ['documents/foo', undefined],
     ]
-    fdescribe.each(cases)('', (path, expected) => {
+    describe.each(cases)('', (path, expected) => {
       fit(`(dir, ${path}) === ${expected}`, () => {
         expect(findFile(fileTree, path)?.name).toEqual(expected)
       })
     })
   })
 
-  fdescribe('findDirectory', () => {
+  describe('findDirectory', () => {
     const cases: [path: string, expected: string | undefined][] = [
       ['documents', 'documents'],
       ['documents/essay.docx', undefined],
@@ -111,14 +111,14 @@ fdescribe('files', () => {
       ['foo', undefined],
       ['documents/foo', undefined],
     ]
-    fdescribe.each(cases)('', (path, expected) => {
+    describe.each(cases)('', (path, expected) => {
       fit(`(dir, ${path}) === ${expected}`, () => {
         expect(findDirectory(fileTree, path)?.name).toEqual(expected)
       })
     })
   })
 
-  fdescribe('listPaths', () => {
+  describe('listPaths', () => {
     const expected = [
       'documents',
       'documents/essay.docx',

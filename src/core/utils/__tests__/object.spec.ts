@@ -1,7 +1,7 @@
 import { deepEmpty } from '../object'
 
-fdescribe('object utils', () => {
-  fdescribe('deepEmpty', () => {
+describe('object utils', () => {
+  describe('deepEmpty', () => {
     const cases: [obj: { [key: string]: unknown } | unknown[], expected: boolean][] = [
       [[], true],
       [{}, true],
@@ -21,7 +21,7 @@ fdescribe('object utils', () => {
       [[[0]], false],
       [['foo'], false],
     ]
-    fdescribe.each(cases)('', (object, expected) => {
+    describe.each(cases)('', (object, expected) => {
       fit(`(${JSON.stringify(object)})=== ${expected}`, () => {
         expect(deepEmpty(object)).toEqual(expected)
       })

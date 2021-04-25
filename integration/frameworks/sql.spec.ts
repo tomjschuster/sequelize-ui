@@ -187,10 +187,10 @@ const sqlDialects: SqlDialect[] =
     ? Object.values(SqlDialect)
     : [validateDialect(SQL_DIALECT || SqlDialect.Sqlite)]
 
-fdescribe.each(sqlDialects)('SQL tests %s', (sqlDialect) => {
+describe.each(sqlDialects)('SQL tests %s', (sqlDialect) => {
   const projectName = alpha(12)
 
-  fdescribe.each(frameworks)('%s', (_label, framework: Framework) => {
+  describe.each(frameworks)('%s', (_label, framework: Framework) => {
     const projectType = framework.projectType()
 
     afterAll(async () => {
@@ -206,7 +206,7 @@ fdescribe.each(sqlDialects)('SQL tests %s', (sqlDialect) => {
       ['no timestamps', noTimestamps(sqlDialect)],
     ]
 
-    fdescribe.each(cases)(
+    describe.each(cases)(
       '%s',
       (_label, { dbOptions, tableName, expectedTables, expectedColumns }) => {
         let client: DbConnection

@@ -34,7 +34,7 @@ const mockDbOptions: DatabaseOptions = {
   timestamps: true,
 }
 
-fdescribe('framework', () => {
+describe('framework', () => {
   fit('should display a name', () => {
     expect(typeof MockFramework.displayName()).toEqual('string')
   })

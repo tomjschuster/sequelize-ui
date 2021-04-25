@@ -15,8 +15,8 @@ import {
   versionedName,
 } from '../string'
 
-fdescribe('string utils', () => {
-  fdescribe('noCase', () => {
+describe('string utils', () => {
+  describe('noCase', () => {
     const cases: [a: string, expected: string][] = [
       ['foo bar', 'foo bar'],
       ['foo_bar', 'foo bar'],
@@ -27,14 +27,14 @@ fdescribe('string utils', () => {
       [' !@#$%^&*()-_=+foo!@#$%^&*()-_=+bar!@#$%^&*()-_=+ ', 'foo bar'],
     ]
 
-    fdescribe.each(cases)('', (a, expected) => {
+    describe.each(cases)('', (a, expected) => {
       fit(`(${a}) === ${expected}`, () => {
         expect(noCase(a)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('sentenceCase', () => {
+  describe('sentenceCase', () => {
     const cases: [a: string, expected: string][] = [
       ['foo bar', 'Foo bar'],
       ['Foo bar', 'Foo bar'],
@@ -46,14 +46,14 @@ fdescribe('string utils', () => {
       [' !@#$%^&*()-_=+foo!@#$%^&*()-_=+bar!@#$%^&*()-_=+ ', 'Foo bar'],
     ]
 
-    fdescribe.each(cases)('', (a, expected) => {
+    describe.each(cases)('', (a, expected) => {
       fit(`(${a}) === ${expected}`, () => {
         expect(sentenceCase(a)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('titleCase', () => {
+  describe('titleCase', () => {
     const cases: [a: string, expected: string][] = [
       ['foo bar', 'Foo Bar'],
       ['Foo bar', 'Foo Bar'],
@@ -64,14 +64,14 @@ fdescribe('string utils', () => {
       ['foo-bar', 'Foo Bar'],
       ['!@#$%^&*()-_=+foo!@#$%^&*()-_=+bar!@#$%^&*()-_=+', 'Foo Bar'],
     ]
-    fdescribe.each(cases)('', (a, expected) => {
+    describe.each(cases)('', (a, expected) => {
       fit(`(${a}) === ${expected}`, () => {
         expect(titleCase(a)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('snakeCase', () => {
+  describe('snakeCase', () => {
     const cases: [a: string, expected: string][] = [
       ['foo bar', 'foo_bar'],
       ['Foo bar', 'foo_bar'],
@@ -83,14 +83,14 @@ fdescribe('string utils', () => {
       [' !@#$%^&*()-_=+foo!@#$%^&*()-_=+bar!@#$%^&*()-_=+ ', 'foo_bar'],
     ]
 
-    fdescribe.each(cases)('', (a, expected) => {
+    describe.each(cases)('', (a, expected) => {
       fit(`(${a}) === ${expected}`, () => {
         expect(snakeCase(a)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('camelCase', () => {
+  describe('camelCase', () => {
     const cases: [a: string, expected: string][] = [
       ['foo bar', 'fooBar'],
       ['Foo bar', 'fooBar'],
@@ -102,14 +102,14 @@ fdescribe('string utils', () => {
       [' !@#$%^&*()-_=+foo!@#$%^&*()-_=+bar!@#$%^&*()-_=+ ', 'fooBar'],
     ]
 
-    fdescribe.each(cases)('', (a, expected) => {
+    describe.each(cases)('', (a, expected) => {
       fit(`(${a}) === ${expected}`, () => {
         expect(camelCase(a)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('pascalCase', () => {
+  describe('pascalCase', () => {
     const cases: [a: string, expected: string][] = [
       ['foo bar', 'FooBar'],
       ['Foo bar', 'FooBar'],
@@ -121,14 +121,14 @@ fdescribe('string utils', () => {
       [' !@#$%^&*()-_=+foo!@#$%^&*()-_=+bar!@#$%^&*()-_=+ ', 'FooBar'],
     ]
 
-    fdescribe.each(cases)('', (a, expected) => {
+    describe.each(cases)('', (a, expected) => {
       fit(`(${a}) === ${expected}`, () => {
         expect(pascalCase(a)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('plural', () => {
+  describe('plural', () => {
     const cases: [a: string, expected: string][] = [
       ['whale', 'whales'],
       ['whales', 'whales'],
@@ -145,14 +145,14 @@ fdescribe('string utils', () => {
       ['asdfs', 'asdfs'],
     ]
 
-    fdescribe.each(cases)('', (a, expected) => {
+    describe.each(cases)('', (a, expected) => {
       fit(`(${a}) === ${expected}`, () => {
         expect(plural(a)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('singular', () => {
+  describe('singular', () => {
     const cases: [a: string, expected: string][] = [
       ['whale', 'whale'],
       ['whales', 'whale'],
@@ -168,14 +168,14 @@ fdescribe('string utils', () => {
       ['asdfs', 'asdf'],
     ]
 
-    fdescribe.each(cases)('', (a, expected) => {
+    describe.each(cases)('', (a, expected) => {
       fit(`(${a}) === ${expected}`, () => {
         expect(singular(a)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('versionedName', () => {
+  describe('versionedName', () => {
     const cases: [name: string, names: string[], expected: string][] = [
       ['foo', ['bar'], 'foo'],
       ['foo', ['foo (0)', 'bar'], 'foo'],
@@ -186,13 +186,13 @@ fdescribe('string utils', () => {
       ['foo', ['foo', 'foo (1)', 'foo (2)', 'bar'], 'foo (3)'],
       ['foo', ['foo (1)', 'bar'], 'foo'],
     ]
-    fdescribe.each(cases)('', (name, names, expected) => {
+    describe.each(cases)('', (name, names, expected) => {
       fit(`(${name}, ${JSON.stringify(names)}) === ${expected}`, () => {
         expect(versionedName(name, names)).toEqual(expected)
       })
     })
   })
-  fdescribe('namesEq', () => {
+  describe('namesEq', () => {
     const cases: [a: string | undefined, b: string | undefined, expected: boolean][] = [
       ['foo', 'foo', true],
       ['foo', 'Foo', true],
@@ -204,14 +204,14 @@ fdescribe('string utils', () => {
       ['foo', undefined, false],
       ['foo', '', false],
     ]
-    fdescribe.each(cases)('', (a, b, expected) => {
+    describe.each(cases)('', (a, b, expected) => {
       fit(`(${a}, ${b}) === ${expected}`, () => {
         expect(namesEq(a, b)).toEqual(expected)
         expect(namesEq(b, a)).toEqual(expected)
       })
     })
   })
-  fdescribe('namesEqSingular', () => {
+  describe('namesEqSingular', () => {
     const cases: [a: string | undefined, b: string | undefined, expected: boolean][] = [
       ['foo', 'foo', true],
       ['foo', 'foos', true],
@@ -227,14 +227,14 @@ fdescribe('string utils', () => {
       ['foo', undefined, false],
       ['foo', '', false],
     ]
-    fdescribe.each(cases)('', (a, b, expected) => {
+    describe.each(cases)('', (a, b, expected) => {
       fit(`(${a}, ${b}) === ${expected}`, () => {
         expect(namesEqSingular(a, b)).toEqual(expected)
         expect(namesEqSingular(b, a)).toEqual(expected)
       })
     })
   })
-  fdescribe('nameEmpty', () => {
+  describe('nameEmpty', () => {
     const cases: [a: string | undefined, expected: boolean][] = [
       ['', true],
       [undefined, true],
@@ -242,13 +242,13 @@ fdescribe('string utils', () => {
       ['!@#$%^&*()-_=+', true],
       ['foo', false],
     ]
-    fdescribe.each(cases)('', (a, expected) => {
+    describe.each(cases)('', (a, expected) => {
       fit(`(${a}) === ${expected}`, () => {
         expect(nameEmpty(a)).toEqual(expected)
       })
     })
   })
-  fdescribe('nameLongerThan', () => {
+  describe('nameLongerThan', () => {
     const cases: [name: string | undefined, length: number, expected: boolean][] = [
       ['', 0, false],
       ['', 1, false],
@@ -260,13 +260,13 @@ fdescribe('string utils', () => {
       ['foo!@#$%^&*()-_=+', 2, true],
       ['foo!@#$%^&*()-_=+', 3, false],
     ]
-    fdescribe.each(cases)('', (name, length, expected) => {
+    describe.each(cases)('', (name, length, expected) => {
       fit(`(${name}, ${length}) === ${expected}`, () => {
         expect(nameLongerThan(name, length)).toEqual(expected)
       })
     })
   })
-  fdescribe('nameStartsWithANumber', () => {
+  describe('nameStartsWithANumber', () => {
     const cases: [a: string | undefined, expected: boolean][] = [
       ['', false],
       [undefined, false],
@@ -275,7 +275,7 @@ fdescribe('string utils', () => {
       ['!@#$%^&*()-_=+1foo', true],
       ['!@#$%^&*()-_=+foo', false],
     ]
-    fdescribe.each(cases)('', (a, expected) => {
+    describe.each(cases)('', (a, expected) => {
       fit(`(${a}) === ${expected}`, () => {
         expect(nameStartsWithNumber(a)).toEqual(expected)
       })

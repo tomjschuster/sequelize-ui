@@ -53,8 +53,8 @@ import {
   uuid,
 } from './__fixtures__/dataType'
 
-fdescribe('schema dataTypes', () => {
-  fdescribe('displayDataType', () => {
+describe('schema dataTypes', () => {
+  describe('displayDataType', () => {
     const cases: [type: DataType, expected: string][] = [
       [string, 'String'],
       [text, 'Text'],
@@ -78,14 +78,14 @@ fdescribe('schema dataTypes', () => {
       [blob, 'Blob'],
       [uuid, 'UUID'],
     ]
-    fdescribe.each(cases)('', (type, expected) => {
-      fit(`${type} === ${expected}`, () => {
+    describe.each(cases)('', (type, expected) => {
+      it(`${type} === ${expected}`, () => {
         expect(displayDataType(type)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('displayDataTypeType', () => {
+  describe('displayDataTypeType', () => {
     const cases: [type: DataTypeType, expected: string][] = [
       [DataTypeType.String, 'String'],
       [DataTypeType.Text, 'Text'],
@@ -108,14 +108,14 @@ fdescribe('schema dataTypes', () => {
       [DataTypeType.Blob, 'Blob'],
       [DataTypeType.Uuid, 'UUID'],
     ]
-    fdescribe.each(cases)('', (type, expected) => {
-      fit(`${type} === ${expected}`, () => {
+    describe.each(cases)('', (type, expected) => {
+      it(`${type} === ${expected}`, () => {
         expect(displayDataTypeType(type)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('dataTypeFromDataTypeType', () => {
+  describe('dataTypeFromDataTypeType', () => {
     const cases: [type: DataTypeType, expected: DataType][] = [
       [DataTypeType.String, string],
       [DataTypeType.Text, text],
@@ -138,134 +138,134 @@ fdescribe('schema dataTypes', () => {
       [DataTypeType.Blob, blob],
       [DataTypeType.Uuid, uuid],
     ]
-    fdescribe.each(cases)('', (type, expected) => {
-      fit(`${type} === ${expected}`, () => {
+    describe.each(cases)('', (type, expected) => {
+      it(`${type} === ${expected}`, () => {
         expect(dataTypeFromDataTypeType(type)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('stringDataType', () => {
+  describe('stringDataType', () => {
     it('creates a stringDataType datatype', () => {
       expect(stringDataType()).toEqual(string)
     })
   })
 
-  fdescribe('textDataType', () => {
+  describe('textDataType', () => {
     it('creates a textDataType datatype', () => {
       expect(textDataType()).toEqual(text)
     })
   })
 
-  fdescribe('ciTextDataType', () => {
+  describe('ciTextDataType', () => {
     it('creates a ciTextDataType datatype', () => {
       expect(ciTextDataType()).toEqual(ciText)
     })
   })
 
-  fdescribe('integerDataType', () => {
+  describe('integerDataType', () => {
     it('creates a integerDataType datatype', () => {
       expect(integerDataType()).toEqual(integer)
     })
   })
 
-  fdescribe('bigIntDataType', () => {
+  describe('bigIntDataType', () => {
     it('creates a bigIntDataType datatype', () => {
       expect(bigIntDataType()).toEqual(bigInt)
     })
   })
 
-  fdescribe('smallIntDataType', () => {
+  describe('smallIntDataType', () => {
     it('creates a smallIntDataType datatype', () => {
       expect(smallIntDataType()).toEqual(smallInt)
     })
   })
 
-  fdescribe('floatDataType', () => {
+  describe('floatDataType', () => {
     it('creates a floatDataType datatype', () => {
       expect(floatDataType()).toEqual(float)
     })
   })
 
-  fdescribe('realDataType', () => {
+  describe('realDataType', () => {
     it('creates a realDataType datatype', () => {
       expect(realDataType()).toEqual(real)
     })
   })
 
-  fdescribe('doubleDataType', () => {
+  describe('doubleDataType', () => {
     it('creates a doubleDataType datatype', () => {
       expect(doubleDataType()).toEqual(double)
     })
   })
 
-  fdescribe('decimalDataType', () => {
+  describe('decimalDataType', () => {
     it('creates a decimalDataType datatype', () => {
       expect(decimalDataType()).toEqual(decimal)
     })
   })
 
-  fdescribe('dateTimeDataType', () => {
+  describe('dateTimeDataType', () => {
     it('creates a dateTimeDataType datatype', () => {
       expect(dateTimeDataType()).toEqual(dateTime)
     })
   })
 
-  fdescribe('dateDataType', () => {
+  describe('dateDataType', () => {
     it('creates a dateDataType datatype', () => {
       expect(dateDataType()).toEqual(date)
     })
   })
 
-  fdescribe('timeDataType', () => {
+  describe('timeDataType', () => {
     it('creates a timeDataType datatype', () => {
       expect(timeDataType()).toEqual(time)
     })
   })
 
-  fdescribe('booleanDataType', () => {
+  describe('booleanDataType', () => {
     it('creates a booleanDataType datatype', () => {
       expect(booleanDataType()).toEqual(boolean)
     })
   })
 
-  fdescribe('enumDataType', () => {
+  describe('enumDataType', () => {
     it('creates a enumDataType datatype', () => {
       expect(enumDataType()).toEqual(enum_)
     })
   })
 
-  fdescribe('arrayDataType', () => {
+  describe('arrayDataType', () => {
     it('creates a arrayDataType datatype', () => {
       expect(arrayDataType()).toEqual(array)
     })
   })
 
-  fdescribe('jsonDataType', () => {
+  describe('jsonDataType', () => {
     it('creates a jsonDataType datatype', () => {
       expect(jsonDataType()).toEqual(json)
     })
   })
 
-  fdescribe('jsonBDataType', () => {
+  describe('jsonBDataType', () => {
     it('creates a jsonBDataType datatype', () => {
       expect(jsonBDataType()).toEqual(jsonB)
     })
   })
 
-  fdescribe('blobDataType', () => {
+  describe('blobDataType', () => {
     it('creates a blobDataType datatype', () => {
       expect(blobDataType()).toEqual(blob)
     })
   })
 
-  fdescribe('uuidDataType', () => {
+  describe('uuidDataType', () => {
     it('creates a uuidDataType datatype', () => {
       expect(uuidDataType()).toEqual(uuid)
     })
   })
 
-  fdescribe('isStringType', () => {
+  describe('isStringType', () => {
     const cases: [type: DataType, expected: boolean][] = [
       [string, true],
       [text, false],
@@ -288,14 +288,14 @@ fdescribe('schema dataTypes', () => {
       [blob, false],
       [uuid, false],
     ]
-    fdescribe.each(cases)('', (type, expected) => {
-      fit(`${type} === ${expected}`, () => {
+    describe.each(cases)('', (type, expected) => {
+      it(`${type} === ${expected}`, () => {
         expect(isStringType(type)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('isDateTimeType', () => {
+  describe('isDateTimeType', () => {
     const cases: [type: DataType, expected: boolean][] = [
       [string, false],
       [text, false],
@@ -318,14 +318,14 @@ fdescribe('schema dataTypes', () => {
       [blob, false],
       [uuid, false],
     ]
-    fdescribe.each(cases)('', (type, expected) => {
-      fit(`${type} === ${expected}`, () => {
+    describe.each(cases)('', (type, expected) => {
+      it(`${type} === ${expected}`, () => {
         expect(isDateTimeType(type)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('isDateTimeType', () => {
+  describe('isDateTimeType', () => {
     const cases: [type: DataType, expected: boolean][] = [
       [string, false],
       [text, false],
@@ -348,14 +348,14 @@ fdescribe('schema dataTypes', () => {
       [blob, false],
       [uuid, false],
     ]
-    fdescribe.each(cases)('', (type, expected) => {
-      fit(`${type} === ${expected}`, () => {
+    describe.each(cases)('', (type, expected) => {
+      it(`${type} === ${expected}`, () => {
         expect(isDateTimeType(type)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('isDateTimeType', () => {
+  describe('isDateTimeType', () => {
     const cases: [type: DataType, expected: boolean][] = [
       [string, false],
       [text, false],
@@ -378,14 +378,14 @@ fdescribe('schema dataTypes', () => {
       [blob, false],
       [uuid, false],
     ]
-    fdescribe.each(cases)('', (type, expected) => {
-      fit(`${type} === ${expected}`, () => {
+    describe.each(cases)('', (type, expected) => {
+      it(`${type} === ${expected}`, () => {
         expect(isDateTimeType(type)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('isDateTimeType', () => {
+  describe('isDateTimeType', () => {
     const cases: [type: DataType, expected: boolean][] = [
       [string, false],
       [text, false],
@@ -408,13 +408,13 @@ fdescribe('schema dataTypes', () => {
       [blob, false],
       [uuid, false],
     ]
-    fdescribe.each(cases)('', (type, expected) => {
-      fit(`${type} === ${expected}`, () => {
+    describe.each(cases)('', (type, expected) => {
+      it(`${type} === ${expected}`, () => {
         expect(isNumericType(type)).toEqual(expected)
       })
     })
 
-    fdescribe('isNumberType', () => {
+    describe('isNumberType', () => {
       const cases: [type: DataType, expected: boolean][] = [
         [string, false],
         [text, false],
@@ -437,14 +437,14 @@ fdescribe('schema dataTypes', () => {
         [blob, false],
         [uuid, false],
       ]
-      fdescribe.each(cases)('', (type, expected) => {
-        fit(`${type} === ${expected}`, () => {
+      describe.each(cases)('', (type, expected) => {
+        it(`${type} === ${expected}`, () => {
           expect(isNumberType(type)).toEqual(expected)
         })
       })
     })
 
-    fdescribe('isNumberType', () => {
+    describe('isNumberType', () => {
       const cases: [type: DataType, expected: boolean][] = [
         [string, false],
         [text, false],
@@ -467,8 +467,8 @@ fdescribe('schema dataTypes', () => {
         [blob, false],
         [uuid, false],
       ]
-      fdescribe.each(cases)('', (type, expected) => {
-        fit(`${type} === ${expected}`, () => {
+      describe.each(cases)('', (type, expected) => {
+        it(`${type} === ${expected}`, () => {
           expect(isIntegerType(type)).toEqual(expected)
         })
       })

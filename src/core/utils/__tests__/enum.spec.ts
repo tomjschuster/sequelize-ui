@@ -12,8 +12,8 @@ enum StringEnum {
   Baz = 'BAZ',
 }
 
-fdescribe('enum utils', () => {
-  fdescribe('toEnum', () => {
+describe('enum utils', () => {
+  describe('toEnum', () => {
     const intCases: [key: unknown, obj: typeof IntEnum, expected: IntEnum | undefined][] = [
       [0, IntEnum, IntEnum.Foo],
       [1, IntEnum, IntEnum.Bar],
@@ -25,7 +25,7 @@ fdescribe('enum utils', () => {
       ['2', IntEnum, undefined],
       ['3', IntEnum, undefined],
     ]
-    fdescribe.each(intCases)('', (key, object, expected) => {
+    describe.each(intCases)('', (key, object, expected) => {
       fit(`(IntEnum, ${key}) === ${expected}`, () => {
         expect(toEnum(object, key)).toEqual(expected)
       })
@@ -45,13 +45,13 @@ fdescribe('enum utils', () => {
       [2, StringEnum, undefined],
       [3, StringEnum, undefined],
     ]
-    fdescribe.each(stringCases)('', (key, object, expected) => {
+    describe.each(stringCases)('', (key, object, expected) => {
       fit(`(StringEnum, ${key}) === ${expected}`, () => {
         expect(toEnum(object, key)).toEqual(expected)
       })
     })
   })
-  fdescribe('keyFromEnum', () => {
+  describe('keyFromEnum', () => {
     const intCases: [
       obj: typeof IntEnum,
       value: number | undefined,
@@ -63,13 +63,13 @@ fdescribe('enum utils', () => {
       [IntEnum, undefined, undefined],
       [IntEnum, 4, undefined],
     ]
-    fdescribe.each(intCases)('', (object, value, expected) => {
+    describe.each(intCases)('', (object, value, expected) => {
       fit(`(IntEnum, ${value}) === ${expected}`, () => {
         expect(keyFromEnum(object, value)).toEqual(expected)
       })
     })
 
-    fdescribe('keyFromEnum', () => {
+    describe('keyFromEnum', () => {
       const stringCases: [
         obj: typeof StringEnum,
         value: string | undefined,
@@ -81,7 +81,7 @@ fdescribe('enum utils', () => {
         [StringEnum, undefined, undefined],
         [StringEnum, 'QUX', undefined],
       ]
-      fdescribe.each(stringCases)('', (object, value, expected) => {
+      describe.each(stringCases)('', (object, value, expected) => {
         fit(`(StringEnum, ${value}) === ${expected}`, () => {
           expect(keyFromEnum(object, value)).toEqual(expected)
         })

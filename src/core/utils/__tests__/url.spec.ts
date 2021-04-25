@@ -12,8 +12,8 @@ enum StringEnum {
   Baz = 'BAZ',
 }
 
-fdescribe('url utils', () => {
-  fdescribe('qsValueToEnum', () => {
+describe('url utils', () => {
+  describe('qsValueToEnum', () => {
     const cases: [
       key: string | string[] | undefined,
       obj: typeof StringEnum,
@@ -26,13 +26,13 @@ fdescribe('url utils', () => {
       [undefined, StringEnum, undefined],
       [['0'], StringEnum, undefined],
     ]
-    fdescribe.each(cases)('', (key, object, expected) => {
+    describe.each(cases)('', (key, object, expected) => {
       it(`(StringEnum, ${key}) === ${expected}`, () => {
         expect(qsValueToEnum(object, key)).toEqual(expected)
       })
     })
 
-    fdescribe('qsValueToIntEnum', () => {
+    describe('qsValueToIntEnum', () => {
       const cases: [
         key: string | string[] | undefined,
         obj: typeof IntEnum,
@@ -46,7 +46,7 @@ fdescribe('url utils', () => {
         [undefined, IntEnum, undefined],
         [['0'], IntEnum, undefined],
       ]
-      fdescribe.each(cases)('', (key, object, expected) => {
+      describe.each(cases)('', (key, object, expected) => {
         it(`(IntEnum, ${key}) === ${expected}`, () => {
           //@ts-expect-error Index signatures are incompatible. Type 'string' is not assignable to type 'number'
           expect(qsValueToIntEnum(object, key)).toEqual(expected)

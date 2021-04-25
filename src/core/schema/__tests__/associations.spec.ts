@@ -28,8 +28,8 @@ import {
   manyToManyTableType_,
 } from './__fixtures__/association'
 
-fdescribe('schema dataTypes', () => {
-  fdescribe('displayAssociationType', () => {
+describe('schema dataTypes', () => {
+  describe('displayAssociationType', () => {
     const cases: [a: Association, expected: string][] = [
       [belongsTo, 'belongs to'],
       [hasMany, 'has many'],
@@ -38,14 +38,14 @@ fdescribe('schema dataTypes', () => {
       [manyToManyModel, 'many to many'],
     ]
 
-    fdescribe.each(cases)('', (a, expected) => {
-      fit(`(${a.type.type}) === ${expected}`, () => {
+    describe.each(cases)('', (a, expected) => {
+      it(`(${a.type.type}) === ${expected}`, () => {
         expect(displayAssociation(a)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('displayAssociationTypeType', () => {
+  describe('displayAssociationTypeType', () => {
     const cases: [type: AssociationTypeType, expected: string][] = [
       [AssociationTypeType.BelongsTo, 'belongs to'],
       [AssociationTypeType.HasMany, 'has many'],
@@ -53,27 +53,27 @@ fdescribe('schema dataTypes', () => {
       [AssociationTypeType.ManyToMany, 'many to many'],
     ]
 
-    fdescribe.each(cases)('', (type, expected) => {
-      fit(`(${type}) === ${expected}`, () => {
+    describe.each(cases)('', (type, expected) => {
+      it(`(${type}) === ${expected}`, () => {
         expect(displayAssociationTypeType(type)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('displayThroughType', () => {
+  describe('displayThroughType', () => {
     const cases: [type: ThroughType, expected: string][] = [
       [ThroughType.ThroughTable, 'Through table'],
       [ThroughType.ThroughModel, 'Through model'],
     ]
 
-    fdescribe.each(cases)('', (type, expected) => {
-      fit(`(${type}) === ${expected}`, () => {
+    describe.each(cases)('', (type, expected) => {
+      it(`(${type}) === ${expected}`, () => {
         expect(displayThroughType(type)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('associationsHaveSameForm', () => {
+  describe('associationsHaveSameForm', () => {
     const cases: [a: Association, b: Association, expected: boolean][] = [
       [belongsTo, belongsTo, true],
       [belongsTo, hasMany, false],
@@ -105,14 +105,14 @@ fdescribe('schema dataTypes', () => {
       [manyToManyModel, manyToManyTable, true],
       [manyToManyModel, manyToManyModel, true],
     ]
-    fdescribe.each(cases)('', (a, b, expected) => {
-      fit(`(${a.type.type}, ${b.type.type}) === ${expected}`, () => {
+    describe.each(cases)('', (a, b, expected) => {
+      it(`(${a.type.type}, ${b.type.type}) === ${expected}`, () => {
         expect(associationsHaveSameForm(a, b)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('associationTypeIsSingular', () => {
+  describe('associationTypeIsSingular', () => {
     const cases: [type: AssociationType, expected: boolean][] = [
       [belongsToType_, true],
       [hasManyType_, false],
@@ -120,14 +120,14 @@ fdescribe('schema dataTypes', () => {
       [manyToManyTableType_, false],
       [manyToManyModelType_, false],
     ]
-    fdescribe.each(cases)('', (type, expected) => {
-      fit(`(${type.type}) === ${expected}`, () => {
+    describe.each(cases)('', (type, expected) => {
+      it(`(${type.type}) === ${expected}`, () => {
         expect(associationTypeIsSingular(type)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('associationTypeIsPlural', () => {
+  describe('associationTypeIsPlural', () => {
     const cases: [type: AssociationType, expected: boolean][] = [
       [belongsToType_, false],
       [hasManyType_, true],
@@ -135,38 +135,38 @@ fdescribe('schema dataTypes', () => {
       [manyToManyTableType_, true],
       [manyToManyModelType_, true],
     ]
-    fdescribe.each(cases)('', (type, expected) => {
-      fit(`(${type.type})=== ${'TODO'}`, () => {
+    describe.each(cases)('', (type, expected) => {
+      it(`(${type.type})=== ${'TODO'}`, () => {
         expect(associationTypeIsPlural(type)).toEqual(expected)
       })
     })
   })
 
-  fdescribe('belongsToType', () => {
+  describe('belongsToType', () => {
     it('returns the correct value', () => {
       expect(belongsToType()).toEqual(belongsToType_)
     })
   })
 
-  fdescribe('hasManyType', () => {
+  describe('hasManyType', () => {
     it('returns the correct value', () => {
       expect(hasManyType()).toEqual(hasManyType_)
     })
   })
 
-  fdescribe('hasOneType', () => {
+  describe('hasOneType', () => {
     it('returns the correct value', () => {
       expect(hasOneType()).toEqual(hasOneType_)
     })
   })
 
-  fdescribe('manyToManyTableType', () => {
+  describe('manyToManyTableType', () => {
     it('returns the correct value', () => {
       expect(manyToManyTableType(manyToManyTableType_.through.table)).toEqual(manyToManyTableType_)
     })
   })
 
-  fdescribe('manyToManyModelType', () => {
+  describe('manyToManyModelType', () => {
     it('returns the correct value', () => {
       expect(manyToManyModelType(manyToManyModelType_.through.modelId)).toEqual(
         manyToManyModelType_,
