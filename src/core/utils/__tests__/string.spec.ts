@@ -28,7 +28,7 @@ describe('string utils', () => {
     ]
 
     describe.each(cases)('', (a, expected) => {
-      fit(`(${a}) === ${expected}`, () => {
+      it(`(${a}) === ${expected}`, () => {
         expect(noCase(a)).toEqual(expected)
       })
     })
@@ -47,7 +47,7 @@ describe('string utils', () => {
     ]
 
     describe.each(cases)('', (a, expected) => {
-      fit(`(${a}) === ${expected}`, () => {
+      it(`(${a}) === ${expected}`, () => {
         expect(sentenceCase(a)).toEqual(expected)
       })
     })
@@ -65,7 +65,7 @@ describe('string utils', () => {
       ['!@#$%^&*()-_=+foo!@#$%^&*()-_=+bar!@#$%^&*()-_=+', 'Foo Bar'],
     ]
     describe.each(cases)('', (a, expected) => {
-      fit(`(${a}) === ${expected}`, () => {
+      it(`(${a}) === ${expected}`, () => {
         expect(titleCase(a)).toEqual(expected)
       })
     })
@@ -84,7 +84,7 @@ describe('string utils', () => {
     ]
 
     describe.each(cases)('', (a, expected) => {
-      fit(`(${a}) === ${expected}`, () => {
+      it(`(${a}) === ${expected}`, () => {
         expect(snakeCase(a)).toEqual(expected)
       })
     })
@@ -103,7 +103,7 @@ describe('string utils', () => {
     ]
 
     describe.each(cases)('', (a, expected) => {
-      fit(`(${a}) === ${expected}`, () => {
+      it(`(${a}) === ${expected}`, () => {
         expect(camelCase(a)).toEqual(expected)
       })
     })
@@ -122,7 +122,7 @@ describe('string utils', () => {
     ]
 
     describe.each(cases)('', (a, expected) => {
-      fit(`(${a}) === ${expected}`, () => {
+      it(`(${a}) === ${expected}`, () => {
         expect(pascalCase(a)).toEqual(expected)
       })
     })
@@ -146,7 +146,7 @@ describe('string utils', () => {
     ]
 
     describe.each(cases)('', (a, expected) => {
-      fit(`(${a}) === ${expected}`, () => {
+      it(`(${a}) === ${expected}`, () => {
         expect(plural(a)).toEqual(expected)
       })
     })
@@ -169,7 +169,7 @@ describe('string utils', () => {
     ]
 
     describe.each(cases)('', (a, expected) => {
-      fit(`(${a}) === ${expected}`, () => {
+      it(`(${a}) === ${expected}`, () => {
         expect(singular(a)).toEqual(expected)
       })
     })
@@ -187,7 +187,7 @@ describe('string utils', () => {
       ['foo', ['foo (1)', 'bar'], 'foo'],
     ]
     describe.each(cases)('', (name, names, expected) => {
-      fit(`(${name}, ${JSON.stringify(names)}) === ${expected}`, () => {
+      it(`(${name}, ${JSON.stringify(names)}) === ${expected}`, () => {
         expect(versionedName(name, names)).toEqual(expected)
       })
     })
@@ -205,7 +205,7 @@ describe('string utils', () => {
       ['foo', '', false],
     ]
     describe.each(cases)('', (a, b, expected) => {
-      fit(`(${a}, ${b}) === ${expected}`, () => {
+      it(`(${a}, ${b}) === ${expected}`, () => {
         expect(namesEq(a, b)).toEqual(expected)
         expect(namesEq(b, a)).toEqual(expected)
       })
@@ -228,7 +228,7 @@ describe('string utils', () => {
       ['foo', '', false],
     ]
     describe.each(cases)('', (a, b, expected) => {
-      fit(`(${a}, ${b}) === ${expected}`, () => {
+      it(`(${a}, ${b}) === ${expected}`, () => {
         expect(namesEqSingular(a, b)).toEqual(expected)
         expect(namesEqSingular(b, a)).toEqual(expected)
       })
@@ -243,7 +243,7 @@ describe('string utils', () => {
       ['foo', false],
     ]
     describe.each(cases)('', (a, expected) => {
-      fit(`(${a}) === ${expected}`, () => {
+      it(`(${a}) === ${expected}`, () => {
         expect(nameEmpty(a)).toEqual(expected)
       })
     })
@@ -261,7 +261,7 @@ describe('string utils', () => {
       ['foo!@#$%^&*()-_=+', 3, false],
     ]
     describe.each(cases)('', (name, length, expected) => {
-      fit(`(${name}, ${length}) === ${expected}`, () => {
+      it(`(${name}, ${length}) === ${expected}`, () => {
         expect(nameLongerThan(name, length)).toEqual(expected)
       })
     })
@@ -276,7 +276,7 @@ describe('string utils', () => {
       ['!@#$%^&*()-_=+foo', false],
     ]
     describe.each(cases)('', (a, expected) => {
-      fit(`(${a}) === ${expected}`, () => {
+      it(`(${a}) === ${expected}`, () => {
         expect(nameStartsWithNumber(a)).toEqual(expected)
       })
     })
