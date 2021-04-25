@@ -6,9 +6,9 @@ import {
   SqlDialect,
 } from '@src/core/database'
 import { DirectoryItem } from '@src/core/files'
+import { Framework } from '@src/core/framework'
 import { Schema } from '@src/core/schema'
 import { DemoSchemaType, displayDemoSchemaType, getDemoSchema } from '@src/data/schemas'
-import { SequelizeFramework } from '@src/frameworks'
 import CodeViewer from '@src/ui/components/CodeViewer'
 import DbOptionsForm from '@src/ui/components/DbOptionsForm'
 import Radio from '@src/ui/components/form/Radio'
@@ -76,9 +76,16 @@ function IndexPageDemoContent(): React.ReactElement {
   const router = useRouter()
   const [demoSchema, setDemoSchema] = useState<DemoSchemaState | undefined>()
   const [dbOptions, setDbOptions] = useState<DatabaseOptions>(defaultDbOptions)
+  const [framework, setFramework] = useState<Framework | undefined>()
 
   const root: DirectoryItem | undefined =
-    demoSchema && SequelizeFramework.generate({ schema: demoSchema.schema, dbOptions })
+    demoSchema && framework?.generate({ schema: demoSchema.schema, dbOptions })
+
+  useEffect(() => {
+    import('@src/frameworks/sequelize').then(({ SequelizeFramework }) => {
+      setFramework(SequelizeFramework)
+    })
+  }, [])
 
   const handleChangeSchemaType = async (type: DemoSchemaType) => {
     const schema = await getDemoSchema(type)

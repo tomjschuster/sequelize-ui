@@ -5,7 +5,7 @@ import {
   SqlDialect,
 } from '@src/core/database'
 import { Framework } from '@src/core/framework'
-import { SequelizeFramework } from '@src/frameworks'
+import { SequelizeFramework } from '@src/frameworks/sequelize'
 import {
   alpha,
   buildProject,

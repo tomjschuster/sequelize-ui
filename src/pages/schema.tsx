@@ -5,8 +5,9 @@ import {
   DatabaseOptions,
   SqlDialect,
 } from '@src/core/database'
+import { DirectoryItem } from '@src/core/files'
+import { Framework } from '@src/core/framework'
 import { emptyModel, Model, Schema } from '@src/core/schema'
-import { SequelizeFramework } from '@src/frameworks'
 import CodeViewer from '@src/ui/components/CodeViewer'
 import DbOptionsForm from '@src/ui/components/DbOptionsForm'
 import Layout from '@src/ui/components/Layout'
@@ -14,7 +15,7 @@ import ModelModule from '@src/ui/components/ModelModule'
 import SchemaModule from '@src/ui/components/SchemaModule'
 import usePrevious from '@src/ui/hooks/usePrevious'
 import { useRouter } from 'next/router'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 type SchemaPageEditState =
   | { type: SchemaPageEditStateType.NotEditing }
@@ -182,14 +183,21 @@ function SchemaPageContent({
 
   const [dbOptions, setDbOptions] = useState<DatabaseOptions>(defaultDbOptions)
   const [viewCode, setViewCode] = useState<boolean>(false)
+  const [framework, setFramework] = useState<Framework | undefined>()
+
+  const root: DirectoryItem | undefined = framework?.generate({ schema, dbOptions })
+
+  useEffect(() => {
+    if (viewCode && !framework) {
+      import('@src/frameworks/sequelize').then(({ SequelizeFramework }) => {
+        setFramework(SequelizeFramework)
+      })
+    }
+  }, [viewCode])
+
   const handleClickViewCode = () => setViewCode((x) => !x)
   const handleClickAddModel = () =>
     onUpdate({ ...schema, models: [emptyModel(), ...schema.models] })
-
-  const root = useMemo(() => SequelizeFramework.generate({ schema, dbOptions }), [
-    schema,
-    dbOptions,
-  ])
 
   const handleChange = (model: Model): void => {
     const updatedSchema = {
@@ -233,7 +241,7 @@ function SchemaPageContent({
       <form onSubmit={handleDeleteSchema}>
         <button>Delete</button>
       </form>
-      {viewCode && (
+      {viewCode && root && (
         <>
           <DbOptionsForm dbOptions={dbOptions} onChange={setDbOptions} />
           <CodeViewer cacheKey={schema.id} root={root} />
