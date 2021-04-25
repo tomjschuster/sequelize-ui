@@ -9,13 +9,15 @@ import { DirectoryItem } from '@src/core/files'
 import { Framework } from '@src/core/framework'
 import { Schema } from '@src/core/schema'
 import { DemoSchemaType, displayDemoSchemaType, getDemoSchema } from '@src/data/schemas'
-import CodeViewer from '@src/ui/components/CodeViewer'
 import DbOptionsForm from '@src/ui/components/DbOptionsForm'
 import Radio from '@src/ui/components/form/Radio'
 import Layout from '@src/ui/components/Layout'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+
+const CodeViewer = dynamic(() => import('@src/ui/components/CodeViewer'))
 
 function IndexPage(): React.ReactElement {
   const [schemas, setSchemas] = useState<Schema[] | undefined>()

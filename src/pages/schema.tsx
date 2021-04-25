@@ -8,14 +8,16 @@ import {
 import { DirectoryItem } from '@src/core/files'
 import { Framework } from '@src/core/framework'
 import { emptyModel, Model, Schema } from '@src/core/schema'
-import CodeViewer from '@src/ui/components/CodeViewer'
 import DbOptionsForm from '@src/ui/components/DbOptionsForm'
 import Layout from '@src/ui/components/Layout'
 import ModelModule from '@src/ui/components/ModelModule'
 import SchemaModule from '@src/ui/components/SchemaModule'
 import usePrevious from '@src/ui/hooks/usePrevious'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useState } from 'react'
+
+const CodeViewer = dynamic(() => import('@src/ui/components/CodeViewer'))
 
 type SchemaPageEditState =
   | { type: SchemaPageEditStateType.NotEditing }

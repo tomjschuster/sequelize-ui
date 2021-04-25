@@ -1,5 +1,4 @@
 import { fileLanguage, FileSystemItem } from '@src/core/files'
-import { copyFile, download } from '@src/io'
 import Code from '@src/ui/components/Code'
 import FileTree, { useFileTree } from '@src/ui/components/FileTree'
 import React from 'react'
@@ -11,8 +10,18 @@ type CodeViewerProps = {
 
 export default function CodeViewer({ root, cacheKey }: CodeViewerProps): React.ReactElement {
   const { activeFile, folderState, selectItem } = useFileTree({ root, cacheKey })
-  const handleClickDownload = () => download(root)
-  const handleClickCopy = () => activeFile && copyFile(activeFile.file)
+
+  const handleClickDownload = async () => {
+    const { download } = await import('@src/io')
+    download(root)
+  }
+
+  const handleClickCopy = async () => {
+    if (!activeFile) return
+    const { copyFile } = await import('@src/io')
+    copyFile(activeFile.file)
+  }
+
   return (
     <>
       <button onClick={handleClickDownload}>Download</button>
