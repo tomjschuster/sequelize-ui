@@ -331,8 +331,10 @@ const user: Model = {
 }
 
 // https://github.com/tutorials24x7/blog-database-mysql
-export const blogSchema: Schema = {
+const blogSchema: Schema = {
   id: shortid(),
   name: 'blog',
   models: [category, post, postCategory, postComment, postMeta, postTag, tag, user],
 }
+
+export default blogSchema

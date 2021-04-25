@@ -1,4 +1,4 @@
-import employeeTemporalDataSet from '@src/data/schemas/employeeTemporalDataSet'
+import employeeTemporalDataSet from '@src/data/schemas/employeeTemporalDataset'
 import sakila from '@src/data/schemas/sakila'
 import {
   clearSchemas,

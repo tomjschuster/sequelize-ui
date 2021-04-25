@@ -17,8 +17,10 @@ const fields: Model = {
   associations: [],
 }
 
-export const fieldsSchema: Schema = {
+const fieldsSchema: Schema = {
   id: shortid(),
   name: 'fields',
   models: [fields],
 }
+
+export default fieldsSchema

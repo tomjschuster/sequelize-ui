@@ -1,28 +1,32 @@
 import { Schema } from '@src/core/schema'
-import { default as employee } from './employeeTemporalDataSet'
-import { default as sakila } from './sakila'
 
 export enum DemoSchemaType {
+  Blog = 'blog',
+  EmployeeTemporalDataset = 'employeeTemporalDataset',
   Sakila = 'sakila',
-  Employee = 'employee',
-}
-
-export function getDemoSchema(type?: DemoSchemaType): Schema {
-  switch (type) {
-    case DemoSchemaType.Employee:
-      return employee
-    case DemoSchemaType.Sakila:
-      return sakila
-    default:
-      return sakila
-  }
 }
 
 export function displayDemoSchemaType(type: DemoSchemaType): string {
   switch (type) {
-    case DemoSchemaType.Employee:
-      return 'Temporal Employee Data Set'
+    case DemoSchemaType.Blog:
+      return 'Blog'
+    case DemoSchemaType.EmployeeTemporalDataset:
+      return 'Employee Temporal Data Set'
     case DemoSchemaType.Sakila:
       return 'Sakila'
+  }
+}
+
+export async function getDemoSchema(type: DemoSchemaType): Promise<Schema> {
+  switch (type) {
+    case DemoSchemaType.Blog: {
+      return (await import('./blog')).default
+    }
+    case DemoSchemaType.EmployeeTemporalDataset: {
+      return (await import('./employeeTemporalDataset')).default
+    }
+    case DemoSchemaType.Sakila: {
+      return (await import('./sakila')).default
+    }
   }
 }

@@ -5,7 +5,7 @@ import {
   defaultDbOptions,
   SqlDialect,
 } from '@src/core/database'
-import { dataTypesSchema as schema } from '@src/data/schemas/dataTypes'
+import schema from '@src/data/schemas/dataTypes'
 import { SequelizeFramework } from '..'
 
 describe('Sequelize Framework', () => {

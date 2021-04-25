@@ -1,8 +1,8 @@
 import { DatabaseCaseStyle, DatabaseOptions, defaultDbOptions } from '@src/core/database'
 import { Schema } from '@src/core/schema'
-import { associationsSchema } from '@src/data/schemas/associations'
-import { dataTypesSchema } from '@src/data/schemas/dataTypes'
-import { fieldsSchema } from '@src/data/schemas/fields'
+import associationsSchema from '@src/data/schemas/associations'
+import dataTypesSchema from '@src/data/schemas/dataTypes'
+import fieldsSchema from '@src/data/schemas/fields'
 import { SequelizeFramework } from '..'
 
 describe('Sequelize Framework', () => {

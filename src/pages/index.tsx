@@ -5,6 +5,7 @@ import {
   DatabaseOptions,
   SqlDialect,
 } from '@src/core/database'
+import { DirectoryItem } from '@src/core/files'
 import { Schema } from '@src/core/schema'
 import { DemoSchemaType, displayDemoSchemaType, getDemoSchema } from '@src/data/schemas'
 import { SequelizeFramework } from '@src/frameworks'
@@ -66,36 +67,42 @@ const defaultDbOptions: DatabaseOptions = {
   timestamps: true,
 }
 
+type DemoSchemaState = {
+  type: DemoSchemaType
+  schema: Schema
+}
+
 function IndexPageDemoContent(): React.ReactElement {
   const router = useRouter()
-
-  const [schemaType, setSchemaType] = useState<DemoSchemaType>(DemoSchemaType.Sakila)
-
+  const [demoSchema, setDemoSchema] = useState<DemoSchemaState | undefined>()
   const [dbOptions, setDbOptions] = useState<DatabaseOptions>(defaultDbOptions)
 
-  const demoSchema = React.useMemo(() => getDemoSchema(schemaType), [schemaType])
+  const root: DirectoryItem | undefined =
+    demoSchema && SequelizeFramework.generate({ schema: demoSchema.schema, dbOptions })
 
-  const root = React.useMemo(() => SequelizeFramework.generate({ schema: demoSchema, dbOptions }), [
-    schemaType,
-    dbOptions,
-  ])
+  const handleChangeSchemaType = async (type: DemoSchemaType) => {
+    const schema = await getDemoSchema(type)
+    setDemoSchema({ type, schema })
+  }
 
   const handleClickFork = async () => {
-    const schema = await createSchema(demoSchema)
-    router.push(`/schema?id=${schema.id}`)
+    if (demoSchema) {
+      const schema = await createSchema(demoSchema.schema)
+      router.push(`/schema?id=${schema.id}`)
+    }
   }
 
   return (
     <>
       <Radio
-        value={schemaType}
+        value={demoSchema?.type}
         options={DemoSchemaType}
         display={displayDemoSchemaType}
-        onChange={setSchemaType}
+        onChange={handleChangeSchemaType}
       />
-      <button onClick={handleClickFork}>Fork</button>
-      <DbOptionsForm dbOptions={dbOptions} onChange={setDbOptions} />
-      <CodeViewer cacheKey={schemaType} root={root} />
+      {demoSchema && <button onClick={handleClickFork}>Fork</button>}
+      {root && <DbOptionsForm dbOptions={dbOptions} onChange={setDbOptions} />}
+      {root && demoSchema && <CodeViewer cacheKey={demoSchema.type} root={root} />}
     </>
   )
 }

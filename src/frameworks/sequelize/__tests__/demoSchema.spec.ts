@@ -1,8 +1,8 @@
 import { defaultDbOptions } from '@src/core/database'
 import { Schema } from '@src/core/schema'
-import { blogSchema } from '@src/data/schemas/blog'
-import { employeeTemporalDatasetSchema } from '@src/data/schemas/employeeTemporalDataSet'
-import { sakilaSchema } from '@src/data/schemas/sakila'
+import blogSchema from '@src/data/schemas/blog'
+import employeeTemporalDatasetSchema from '@src/data/schemas/employeeTemporalDataset'
+import sakilaSchema from '@src/data/schemas/sakila'
 import { SequelizeFramework } from '..'
 
 describe('Sequelize Framework', () => {

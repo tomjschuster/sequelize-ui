@@ -79,8 +79,10 @@ const dataTypes: Model = {
   associations: [],
 }
 
-export const dataTypesSchema: Schema = {
+const dataTypesSchema: Schema = {
   id: shortid(),
   name: 'data types',
   models: [dataTypes],
 }
+
+export default dataTypesSchema

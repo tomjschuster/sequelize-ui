@@ -167,8 +167,10 @@ const tag: Model = {
   ],
 }
 
-export const associationsSchema: Schema = {
+const associationsSchema: Schema = {
   id: shortid(),
   name: 'associations',
   models: [category, post, postCategory, postTag, tag],
 }
+
+export default associationsSchema
