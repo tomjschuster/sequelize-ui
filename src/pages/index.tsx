@@ -5,13 +5,13 @@ import {
   DatabaseOptions,
   SqlDialect,
 } from '@src/core/database'
-import { DirectoryItem } from '@src/core/files'
-import { Framework } from '@src/core/framework'
 import { Schema } from '@src/core/schema'
-import { DemoSchemaType, displayDemoSchemaType, getDemoSchema } from '@src/data/schemas'
+import { DemoSchemaType, displayDemoSchemaType } from '@src/data/schemas'
 import DbOptionsForm from '@src/ui/components/DbOptionsForm'
 import Radio from '@src/ui/components/form/Radio'
 import Layout from '@src/ui/components/Layout'
+import useDemoSchema from '@src/ui/hooks/useDemoSchema'
+import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -69,34 +69,16 @@ const defaultDbOptions: DatabaseOptions = {
   timestamps: true,
 }
 
-type DemoSchemaState = {
-  type: DemoSchemaType
-  schema: Schema
-}
-
 function IndexPageDemoContent(): React.ReactElement {
   const router = useRouter()
-  const [demoSchema, setDemoSchema] = useState<DemoSchemaState | undefined>()
   const [dbOptions, setDbOptions] = useState<DatabaseOptions>(defaultDbOptions)
-  const [framework, setFramework] = useState<Framework | undefined>()
-
-  const root: DirectoryItem | undefined =
-    demoSchema && framework?.generate({ schema: demoSchema.schema, dbOptions })
-
-  useEffect(() => {
-    import('@src/frameworks/sequelize').then(({ SequelizeFramework }) => {
-      setFramework(SequelizeFramework)
-    })
-  }, [])
-
-  const handleChangeSchemaType = async (type: DemoSchemaType) => {
-    const schema = await getDemoSchema(type)
-    setDemoSchema({ type, schema })
-  }
+  const [demoSchemaType, setDemoSchemaType] = useState<DemoSchemaType | undefined>()
+  const { schema: demoSchema } = useDemoSchema({ type: demoSchemaType })
+  const { root } = useGeneratedCode({ schema: demoSchema, dbOptions })
 
   const handleClickFork = async () => {
     if (demoSchema) {
-      const schema = await createSchema(demoSchema.schema)
+      const schema = await createSchema(demoSchema)
       router.push(`/schema?id=${schema.id}`)
     }
   }
@@ -104,14 +86,14 @@ function IndexPageDemoContent(): React.ReactElement {
   return (
     <>
       <Radio
-        value={demoSchema?.type}
+        value={demoSchemaType}
         options={DemoSchemaType}
         display={displayDemoSchemaType}
-        onChange={handleChangeSchemaType}
+        onChange={setDemoSchemaType}
       />
       {demoSchema && <button onClick={handleClickFork}>Fork</button>}
       {root && <DbOptionsForm dbOptions={dbOptions} onChange={setDbOptions} />}
-      {root && demoSchema && <CodeViewer cacheKey={demoSchema.type} root={root} />}
+      {root && demoSchema && <CodeViewer cacheKey={demoSchema.id} root={root} />}
     </>
   )
 }

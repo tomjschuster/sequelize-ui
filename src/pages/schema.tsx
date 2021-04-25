@@ -5,13 +5,12 @@ import {
   DatabaseOptions,
   SqlDialect,
 } from '@src/core/database'
-import { DirectoryItem } from '@src/core/files'
-import { Framework } from '@src/core/framework'
 import { emptyModel, Model, Schema } from '@src/core/schema'
 import DbOptionsForm from '@src/ui/components/DbOptionsForm'
 import Layout from '@src/ui/components/Layout'
 import ModelModule from '@src/ui/components/ModelModule'
 import SchemaModule from '@src/ui/components/SchemaModule'
+import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import usePrevious from '@src/ui/hooks/usePrevious'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
@@ -185,17 +184,7 @@ function SchemaPageContent({
 
   const [dbOptions, setDbOptions] = useState<DatabaseOptions>(defaultDbOptions)
   const [viewCode, setViewCode] = useState<boolean>(false)
-  const [framework, setFramework] = useState<Framework | undefined>()
-
-  const root: DirectoryItem | undefined = framework?.generate({ schema, dbOptions })
-
-  useEffect(() => {
-    if (viewCode && !framework) {
-      import('@src/frameworks/sequelize').then(({ SequelizeFramework }) => {
-        setFramework(SequelizeFramework)
-      })
-    }
-  }, [viewCode])
+  const { root } = useGeneratedCode({ schema, dbOptions })
 
   const handleClickViewCode = () => setViewCode((x) => !x)
   const handleClickAddModel = () =>
