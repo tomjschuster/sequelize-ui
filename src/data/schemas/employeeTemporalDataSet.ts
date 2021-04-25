@@ -329,10 +329,10 @@ const salary: Model = {
 }
 
 // https://github.com/datacharmer/test_db
-const schema: Schema = {
+export const employeeTemporalDatasetSchema: Schema = {
   id: 'demo-employee',
   name: 'employee_temporal_dataset',
   models: [employee, department, departmentEmployee, departmentManager, title, salary],
 }
 
-export default schema
+export default employeeTemporalDatasetSchema

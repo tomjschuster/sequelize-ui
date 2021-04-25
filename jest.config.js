@@ -3,6 +3,7 @@ module.exports = {
     '<rootDir>/src/api',
     '<rootDir>/src/core',
     '<rootDir>/src/data',
+    '<rootDir>/src/frameworks',
     '<rootDir>/src/io',
     '<rootDir>/integration/frameworks',
   ],

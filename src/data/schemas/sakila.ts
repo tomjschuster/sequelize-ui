@@ -741,7 +741,7 @@ const film_category: Model = {
 }
 
 // https://dev.mysql.com/doc/sakila/en/
-const schema: Schema = {
+export const sakilaSchema: Schema = {
   id: 'demo-sakila',
   name: 'sakila',
   models: [
@@ -763,4 +763,4 @@ const schema: Schema = {
   ],
 }
 
-export default schema
+export default sakilaSchema

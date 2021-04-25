@@ -184,4 +184,11 @@ export const displayDatabaseCaseStyle = (caseStyle: DatabaseCaseStyle): string =
   }
 }
 
+export const defaultDbOptions: DatabaseOptions = {
+  sqlDialect: SqlDialect.Postgres,
+  timestamps: true,
+  caseStyle: DatabaseCaseStyle.Snake,
+  nounForm: DatabaseNounForm.Plural,
+}
+
 export const MAX_IDENTIFIER_LENGTH = 63

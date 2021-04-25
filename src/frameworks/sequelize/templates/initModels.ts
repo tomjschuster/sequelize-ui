@@ -205,7 +205,6 @@ const getForeignKey = ({
     : association.type.type === AssociationTypeType.BelongsTo
     ? modelById[association.targetModelId].name
     : model.name
-
   return dbOptions.caseStyle === DatabaseCaseStyle.Snake
     ? `${snakeCase(name)}_id`
     : `${camelCase(name)}Id`

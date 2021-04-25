@@ -24,7 +24,7 @@ export type Precision = { precision: number; scale?: number }
 
 type DataTypeBase<T extends DataTypeType> = { type: T }
 type StringOptions = { length?: number }
-type DateTypeOptions = { defaultNow?: boolean }
+type DateTimeOptions = { defaultNow?: boolean }
 type NumberOptions = { unsigned?: boolean }
 type IntegerOptions = NumberOptions & { autoincrement?: boolean }
 type NumericOptions = NumberOptions & { precision?: Precision }
@@ -42,9 +42,9 @@ export type FloatDataType = DataTypeBase<DataTypeType.Float> & NumberOptions
 export type RealDataType = DataTypeBase<DataTypeType.Real> & NumberOptions
 export type DoubleDataType = DataTypeBase<DataTypeType.Double> & NumberOptions
 export type DecimalDataType = DataTypeBase<DataTypeType.Decimal> & NumericOptions
-export type DateTimeDataType = DataTypeBase<DataTypeType.DateTime> & DateTypeOptions
-export type DateDataType = DataTypeBase<DataTypeType.Date> & DateTypeOptions
-export type TimeDataType = DataTypeBase<DataTypeType.Time> & DateTypeOptions
+export type DateTimeDataType = DataTypeBase<DataTypeType.DateTime> & DateTimeOptions
+export type DateDataType = DataTypeBase<DataTypeType.Date> & DateTimeOptions
+export type TimeDataType = DataTypeBase<DataTypeType.Time> & DateTimeOptions
 export type BooleanDataType = DataTypeBase<DataTypeType.Boolean>
 export type EnumDataType = DataTypeBase<DataTypeType.Enum> & EnumOptions
 export type ArrayDataType = DataTypeBase<DataTypeType.Array> & ArrayOptions
@@ -232,8 +232,8 @@ const numericTypes: DataTypeType[] = [DataTypeType.Decimal]
 export function isNumericType(dataType: DataType): dataType is NumericType {
   return numericTypes.includes(dataType.type)
 }
-export function stringDataType(): StringDataType {
-  return { type: DataTypeType.String }
+export function stringDataType(opts: StringOptions = {}): StringDataType {
+  return { type: DataTypeType.String, ...opts }
 }
 
 export function textDataType(): TextDataType {
@@ -244,56 +244,56 @@ export function ciTextDataType(): CiTextDataType {
   return { type: DataTypeType.CiText }
 }
 
-export function integerDataType(): IntegerDataType {
-  return { type: DataTypeType.Integer }
+export function integerDataType(opts: IntegerOptions = {}): IntegerDataType {
+  return { type: DataTypeType.Integer, ...opts }
 }
 
-export function bigIntDataType(): BigIntDataType {
-  return { type: DataTypeType.BigInt }
+export function bigIntDataType(opts: IntegerOptions = {}): BigIntDataType {
+  return { type: DataTypeType.BigInt, ...opts }
 }
 
-export function smallIntDataType(): SmallIntDataType {
-  return { type: DataTypeType.SmallInt }
+export function smallIntDataType(opts: IntegerOptions = {}): SmallIntDataType {
+  return { type: DataTypeType.SmallInt, ...opts }
 }
 
-export function floatDataType(): FloatDataType {
-  return { type: DataTypeType.Float }
+export function floatDataType(opts: NumberOptions = {}): FloatDataType {
+  return { type: DataTypeType.Float, ...opts }
 }
 
-export function realDataType(): RealDataType {
-  return { type: DataTypeType.Real }
+export function realDataType(opts: NumberOptions = {}): RealDataType {
+  return { type: DataTypeType.Real, ...opts }
 }
 
-export function doubleDataType(): DoubleDataType {
-  return { type: DataTypeType.Double }
+export function doubleDataType(opts: NumberOptions = {}): DoubleDataType {
+  return { type: DataTypeType.Double, ...opts }
 }
 
-export function decimalDataType(): DecimalDataType {
-  return { type: DataTypeType.Decimal }
+export function decimalDataType(opts: NumericOptions = {}): DecimalDataType {
+  return { type: DataTypeType.Decimal, ...opts }
 }
 
-export function dateTimeDataType(): DateTimeDataType {
-  return { type: DataTypeType.DateTime }
+export function dateTimeDataType(opts: DateTimeOptions = {}): DateTimeDataType {
+  return { type: DataTypeType.DateTime, ...opts }
 }
 
-export function dateDataType(): DateDataType {
-  return { type: DataTypeType.Date }
+export function dateDataType(opts: DateTimeOptions = {}): DateDataType {
+  return { type: DataTypeType.Date, ...opts }
 }
 
-export function timeDataType(): TimeDataType {
-  return { type: DataTypeType.Time }
+export function timeDataType(opts: DateTimeOptions = {}): TimeDataType {
+  return { type: DataTypeType.Time, ...opts }
 }
 
 export function booleanDataType(): BooleanDataType {
   return { type: DataTypeType.Boolean }
 }
 
-export function enumDataType(values: string[] = []): EnumDataType {
-  return { type: DataTypeType.Enum, values }
+export function enumDataType(opts: EnumOptions = { values: [] }): EnumDataType {
+  return { type: DataTypeType.Enum, ...opts }
 }
 
-export function arrayDataType(arrayType = stringDataType()): ArrayDataType {
-  return { type: DataTypeType.Array, arrayType }
+export function arrayDataType(opts: ArrayOptions = { arrayType: stringDataType() }): ArrayDataType {
+  return { type: DataTypeType.Array, ...opts }
 }
 
 export function jsonDataType(): JsonDataType {
@@ -308,8 +308,8 @@ export function blobDataType(): BlobDataType {
   return { type: DataTypeType.Blob }
 }
 
-export function uuidDataType(): UuidDataType {
-  return { type: DataTypeType.Uuid }
+export function uuidDataType(opts: UuidOptions = {}): UuidDataType {
+  return { type: DataTypeType.Uuid, ...opts }
 }
 
 export function dataTypeFromDataTypeType(type: DataTypeType): DataType {
