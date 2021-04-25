@@ -51,7 +51,7 @@ import {
   text,
   time,
   uuid,
-} from '../__fixtures__/dataType'
+} from './__fixtures__/dataType'
 
 fdescribe('schema dataTypes', () => {
   fdescribe('displayDataType', () => {
@@ -146,121 +146,121 @@ fdescribe('schema dataTypes', () => {
   })
 
   fdescribe('stringDataType', () => {
-    it('should create a stringDataType datatype', () => {
+    it('creates a stringDataType datatype', () => {
       expect(stringDataType()).toEqual(string)
     })
   })
 
   fdescribe('textDataType', () => {
-    it('should create a textDataType datatype', () => {
+    it('creates a textDataType datatype', () => {
       expect(textDataType()).toEqual(text)
     })
   })
 
   fdescribe('ciTextDataType', () => {
-    it('should create a ciTextDataType datatype', () => {
+    it('creates a ciTextDataType datatype', () => {
       expect(ciTextDataType()).toEqual(ciText)
     })
   })
 
   fdescribe('integerDataType', () => {
-    it('should create a integerDataType datatype', () => {
+    it('creates a integerDataType datatype', () => {
       expect(integerDataType()).toEqual(integer)
     })
   })
 
   fdescribe('bigIntDataType', () => {
-    it('should create a bigIntDataType datatype', () => {
+    it('creates a bigIntDataType datatype', () => {
       expect(bigIntDataType()).toEqual(bigInt)
     })
   })
 
   fdescribe('smallIntDataType', () => {
-    it('should create a smallIntDataType datatype', () => {
+    it('creates a smallIntDataType datatype', () => {
       expect(smallIntDataType()).toEqual(smallInt)
     })
   })
 
   fdescribe('floatDataType', () => {
-    it('should create a floatDataType datatype', () => {
+    it('creates a floatDataType datatype', () => {
       expect(floatDataType()).toEqual(float)
     })
   })
 
   fdescribe('realDataType', () => {
-    it('should create a realDataType datatype', () => {
+    it('creates a realDataType datatype', () => {
       expect(realDataType()).toEqual(real)
     })
   })
 
   fdescribe('doubleDataType', () => {
-    it('should create a doubleDataType datatype', () => {
+    it('creates a doubleDataType datatype', () => {
       expect(doubleDataType()).toEqual(double)
     })
   })
 
   fdescribe('decimalDataType', () => {
-    it('should create a decimalDataType datatype', () => {
+    it('creates a decimalDataType datatype', () => {
       expect(decimalDataType()).toEqual(decimal)
     })
   })
 
   fdescribe('dateTimeDataType', () => {
-    it('should create a dateTimeDataType datatype', () => {
+    it('creates a dateTimeDataType datatype', () => {
       expect(dateTimeDataType()).toEqual(dateTime)
     })
   })
 
   fdescribe('dateDataType', () => {
-    it('should create a dateDataType datatype', () => {
+    it('creates a dateDataType datatype', () => {
       expect(dateDataType()).toEqual(date)
     })
   })
 
   fdescribe('timeDataType', () => {
-    it('should create a timeDataType datatype', () => {
+    it('creates a timeDataType datatype', () => {
       expect(timeDataType()).toEqual(time)
     })
   })
 
   fdescribe('booleanDataType', () => {
-    it('should create a booleanDataType datatype', () => {
+    it('creates a booleanDataType datatype', () => {
       expect(booleanDataType()).toEqual(boolean)
     })
   })
 
   fdescribe('enumDataType', () => {
-    it('should create a enumDataType datatype', () => {
+    it('creates a enumDataType datatype', () => {
       expect(enumDataType()).toEqual(enum_)
     })
   })
 
   fdescribe('arrayDataType', () => {
-    it('should create a arrayDataType datatype', () => {
+    it('creates a arrayDataType datatype', () => {
       expect(arrayDataType()).toEqual(array)
     })
   })
 
   fdescribe('jsonDataType', () => {
-    it('should create a jsonDataType datatype', () => {
+    it('creates a jsonDataType datatype', () => {
       expect(jsonDataType()).toEqual(json)
     })
   })
 
   fdescribe('jsonBDataType', () => {
-    it('should create a jsonBDataType datatype', () => {
+    it('creates a jsonBDataType datatype', () => {
       expect(jsonBDataType()).toEqual(jsonB)
     })
   })
 
   fdescribe('blobDataType', () => {
-    it('should create a blobDataType datatype', () => {
+    it('creates a blobDataType datatype', () => {
       expect(blobDataType()).toEqual(blob)
     })
   })
 
   fdescribe('uuidDataType', () => {
-    it('should create a uuidDataType datatype', () => {
+    it('creates a uuidDataType datatype', () => {
       expect(uuidDataType()).toEqual(uuid)
     })
   })

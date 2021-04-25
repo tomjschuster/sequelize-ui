@@ -6,6 +6,7 @@
 
 #### Bugs
 
+- association fieldset ts-expect-error
 - id_id?
 
 ```ts
@@ -17,22 +18,6 @@ Language.hasMany(Film, {
 
 #### Testing
 
-- frameworks
-
-  - missing data types
-  - framework display name
-  - hasOne
-  - aliasValue
-  - (non?) JSON type project
-  - imports of self associated project
-  - imports of hasOne
-  - modelClass of hasOne
-  - modelClass of default current date
-  - modelClass of default current time
-  - modelClass of default uuid versions
-
-- api
-  - Non-empty storage cases
 - ui
 
   - hooks

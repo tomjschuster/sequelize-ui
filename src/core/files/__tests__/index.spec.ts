@@ -13,7 +13,7 @@ import {
   Language,
   listPaths,
 } from '..'
-import fileTree from '../__fixtures__/fileTree'
+import fileTree from './__fixtures__/fileTree'
 
 fdescribe('files', () => {
   fdescribe('itemName', () => {

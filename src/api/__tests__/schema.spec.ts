@@ -4,9 +4,6 @@ import {
   clearSchemas,
   createSchema,
   deleteSchema,
-  emptyAssociation,
-  emptyField,
-  emptyModel,
   getSchema,
   listSchemas,
   SCHEMA_NOT_FOUND_ERROR,
@@ -33,6 +30,15 @@ describe('schema api', () => {
       const schemaB = await createSchema(employeeTemporalDataSet)
       const schemas = await listSchemas()
       expect(schemas).toEqual([schemaA, schemaB])
+    })
+
+    it('should return a rejected promise when localStorage.getItem throws', () => {
+      ;(localStorage.getItem as jest.Mock).mockImplementationOnce(() => {
+        throw new Error('foo')
+      })
+      listSchemas().catch((e) => {
+        expect(e).toEqual(new Error('foo'))
+      })
     })
   })
 
@@ -68,6 +74,15 @@ describe('schema api', () => {
       await createSchema(sakila)
       const schema = await createSchema(sakila)
       expect(schema.name).toEqual(`${sakila.name} (1)`)
+    })
+
+    it('should return a rejected promise when localStorage.setItem throws', () => {
+      ;(localStorage.setItem as jest.Mock).mockImplementationOnce(() => {
+        throw new Error('foo')
+      })
+      createSchema(sakila).catch((e) => {
+        expect(e).toEqual(new Error('foo'))
+      })
     })
   })
 
@@ -131,30 +146,14 @@ describe('schema api', () => {
       await clearSchemas()
       expect(localStorage.length).toBe(0)
     })
-  })
 
-  describe('emptyModel', () => {
-    it('return an empy model', async () => {
-      const model = emptyModel()
-      expect(typeof model.id).toBe('string')
-      expect(typeof model.name).toBe('string')
-      expect(model.fields).toEqual([])
-      expect(model.associations).toEqual([])
-    })
-  })
-
-  describe('emptyField', () => {
-    it('return an empy field', async () => {
-      const field = emptyField()
-      expect(typeof field.id).toBe('string')
-      expect(typeof field.name).toBe('string')
-    })
-  })
-
-  describe('emptyAssociation', () => {
-    it('return an empy association', async () => {
-      const association = emptyAssociation('foo', 'bar')
-      expect(typeof association.id).toBe('string')
+    it('should return a rejected promise when localStorage.removeItem throws', async () => {
+      ;(localStorage.removeItem as jest.Mock).mockImplementationOnce(() => {
+        throw new Error('foo')
+      })
+      clearSchemas().catch((e) => {
+        expect(e).toEqual(new Error('foo'))
+      })
     })
   })
 })

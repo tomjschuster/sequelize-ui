@@ -69,6 +69,7 @@ function AssociationFieldset({
         const table = snakeCase(`${model.name} ${targetModel.name}`)
 
         handleChange({
+          // @ts-expect-error association type error
           type: cb({
             type: AssociationTypeType.ManyToMany,
             through: { type: ThroughType.ThroughTable, table },
@@ -76,6 +77,7 @@ function AssociationFieldset({
         })
         return
       }
+      // @ts-expect-error association type error
       handleChange({ type: cb(association.type) })
     },
     [model, targetModel, association.type, handleChange],

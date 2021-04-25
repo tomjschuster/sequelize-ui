@@ -8,7 +8,12 @@ module.exports = {
     '<rootDir>/integration/frameworks',
   ],
   moduleNameMapper: { '@src/(.*)': '<rootDir>/src/$1' },
-  testPathIgnorePatterns: ['<rootDir>/.buildcache', '<rootDir>/.next/', '<rootDir>/node_modules/'],
+  testPathIgnorePatterns: [
+    '<rootDir>/.buildcache',
+    '<rootDir>/.next/',
+    '<rootDir>/node_modules/',
+    '__fixtures__',
+  ],
   setupFiles: ['jest-localstorage-mock'],
   resetMocks: false,
 }

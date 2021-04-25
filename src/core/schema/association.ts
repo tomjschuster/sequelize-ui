@@ -1,6 +1,6 @@
-export type Association = {
+export type Association<T extends AssociationType = AssociationType> = {
   id: string
-  type: AssociationType
+  type: T
   sourceModelId: string
   targetModelId: string
   foreignKey?: string
@@ -18,24 +18,26 @@ export type AssociationType =
   | BelongsToAssociation
   | HasOneAssociation
   | HasManyAssociation
-  | ManyToManyAssociation
+  | ManyToManyAssociation<ManyToManyThroughModel>
+  | ManyToManyAssociation<ManyToManyThroughTable>
 
 export type BelongsToAssociation = { type: AssociationTypeType.BelongsTo }
 export type HasOneAssociation = { type: AssociationTypeType.HasOne }
 export type HasManyAssociation = { type: AssociationTypeType.HasMany }
-export type ManyToManyAssociation = {
+export type ManyToManyAssociation<T extends ManyToManyThrough = ManyToManyThrough> = {
   type: AssociationTypeType.ManyToMany
-  through: ManyToManyThrough
+  through: T
   targetFk?: string
 }
+
 export type ManyToManyThrough = ManyToManyThroughModel | ManyToManyThroughTable
 
-type ManyToManyThroughModel = {
+export type ManyToManyThroughModel = {
   type: ThroughType.ThroughModel
   modelId: string
 }
 
-type ManyToManyThroughTable = {
+export type ManyToManyThroughTable = {
   type: ThroughType.ThroughTable
   table: string
 }
@@ -84,4 +86,41 @@ export function associationTypeIsSingular(type: AssociationType): boolean {
 
 export function associationTypeIsPlural(type: AssociationType): boolean {
   return [AssociationTypeType.HasMany, AssociationTypeType.ManyToMany].includes(type.type)
+}
+
+export function belongsToType(): BelongsToAssociation {
+  return { type: AssociationTypeType.BelongsTo }
+}
+
+export function hasManyType(): HasManyAssociation {
+  return { type: AssociationTypeType.HasMany }
+}
+
+export function hasOneType(): HasOneAssociation {
+  return { type: AssociationTypeType.HasOne }
+}
+
+export function throughTable(table: string): ManyToManyThrough {
+  return { type: ThroughType.ThroughTable, table }
+}
+
+export function throughModel(modelId: string): ManyToManyThrough {
+  return {
+    type: ThroughType.ThroughModel,
+    modelId,
+  }
+}
+
+export function manyToManyTableType(table: string): ManyToManyAssociation {
+  return {
+    type: AssociationTypeType.ManyToMany,
+    through: throughTable(table),
+  }
+}
+
+export function manyToManyModelType(modelId: string): ManyToManyAssociation {
+  return {
+    type: AssociationTypeType.ManyToMany,
+    through: throughModel(modelId),
+  }
 }

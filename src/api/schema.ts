@@ -1,11 +1,4 @@
-import {
-  Association,
-  AssociationTypeType,
-  DataTypeType,
-  Field,
-  Model,
-  Schema,
-} from '@src/core/schema'
+import { Schema } from '@src/core/schema'
 import { versionedName } from '@src/core/utils/string'
 import shortid from 'shortid'
 
@@ -62,29 +55,6 @@ export async function deleteSchema(id: string): Promise<void> {
 
 export async function clearSchemas(): Promise<void> {
   return await remove(schemasKey())
-}
-
-// TODO move to core/schema
-export function emptyModel(): Model {
-  return { id: shortid(), name: '', fields: [], associations: [] }
-}
-
-// TODO move to core/schema
-export function emptyField(): Field {
-  return { id: shortid(), name: '', type: { type: DataTypeType.String } }
-}
-
-// TODO move to core/schema
-export function emptyAssociation(
-  sourceModelId: Model['id'],
-  targetModelId: Model['id'],
-): Association {
-  return {
-    id: shortid(),
-    sourceModelId,
-    type: { type: AssociationTypeType.BelongsTo },
-    targetModelId,
-  }
 }
 
 function get<T>(key: string): Promise<T | null> {

@@ -20,7 +20,7 @@ import {
   TextDataType,
   TimeDataType,
   UuidDataType,
-} from '../dataType'
+} from '../../dataType'
 
 export const string: StringDataType = { type: DataTypeType.String }
 export const text: TextDataType = { type: DataTypeType.Text }

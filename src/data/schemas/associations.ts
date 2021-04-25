@@ -1,5 +1,12 @@
-import { AssociationTypeType, bigIntDataType, Model, Schema, ThroughType } from '@src/core/schema'
-import { belongsToType, hasManyType } from '@src/core/schema/__fixtures__/association'
+import {
+  AssociationTypeType,
+  belongsToType,
+  bigIntDataType,
+  hasManyType,
+  Model,
+  Schema,
+  ThroughType,
+} from '@src/core/schema'
 import shortid from 'shortid'
 
 const Id = {
@@ -20,20 +27,20 @@ const category: Model = {
       alias: 'parent',
       sourceModelId: Id.Category,
       targetModelId: Id.Category,
-      type: belongsToType,
+      type: belongsToType(),
     },
     {
       id: shortid(),
       alias: 'children',
       sourceModelId: Id.Category,
       targetModelId: Id.Category,
-      type: hasManyType,
+      type: hasManyType(),
     },
     {
       id: shortid(),
       sourceModelId: Id.Category,
       targetModelId: Id.PostCategory,
-      type: hasManyType,
+      type: hasManyType(),
     },
     {
       id: shortid(),
@@ -58,20 +65,20 @@ const post: Model = {
       foreignKey: 'parent id',
       sourceModelId: Id.Post,
       targetModelId: Id.Post,
-      type: belongsToType,
+      type: belongsToType(),
     },
     {
       id: shortid(),
       alias: 'children',
       sourceModelId: Id.Post,
       targetModelId: Id.Post,
-      type: hasManyType,
+      type: hasManyType(),
     },
     {
       id: shortid(),
       sourceModelId: Id.Post,
       targetModelId: Id.PostCategory,
-      type: hasManyType,
+      type: hasManyType(),
     },
     {
       id: shortid(),
@@ -86,7 +93,7 @@ const post: Model = {
       id: shortid(),
       sourceModelId: Id.Post,
       targetModelId: Id.PostTag,
-      type: hasManyType,
+      type: hasManyType(),
     },
     {
       id: shortid(),
@@ -113,13 +120,13 @@ const postCategory: Model = {
       id: shortid(),
       sourceModelId: Id.PostCategory,
       targetModelId: Id.Post,
-      type: belongsToType,
+      type: belongsToType(),
     },
     {
       id: shortid(),
       sourceModelId: Id.PostCategory,
       targetModelId: Id.Category,
-      type: belongsToType,
+      type: belongsToType(),
     },
   ],
 }
@@ -133,13 +140,13 @@ const postTag: Model = {
       id: shortid(),
       sourceModelId: Id.PostTag,
       targetModelId: Id.Post,
-      type: belongsToType,
+      type: belongsToType(),
     },
     {
       id: shortid(),
       sourceModelId: Id.PostTag,
       targetModelId: Id.Tag,
-      type: belongsToType,
+      type: belongsToType(),
     },
   ],
 }
@@ -153,7 +160,7 @@ const tag: Model = {
       id: shortid(),
       sourceModelId: Id.Tag,
       targetModelId: Id.PostTag,
-      type: hasManyType,
+      type: hasManyType(),
     },
     {
       id: shortid(),

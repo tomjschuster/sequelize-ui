@@ -1,15 +1,16 @@
 import {
   AssociationTypeType,
+  belongsToType,
   bigIntDataType,
   booleanDataType,
   dateTimeDataType,
+  hasManyType,
   Model,
   Schema,
   stringDataType,
   textDataType,
   ThroughType,
 } from '@src/core/schema'
-import { belongsToType, hasManyType } from '@src/core/schema/__fixtures__/association'
 import shortid from 'shortid'
 
 const Id = {
@@ -45,20 +46,20 @@ const category: Model = {
       alias: 'parent',
       sourceModelId: Id.Category,
       targetModelId: Id.Category,
-      type: belongsToType,
+      type: belongsToType(),
     },
     {
       id: shortid(),
       alias: 'children',
       sourceModelId: Id.Category,
       targetModelId: Id.Category,
-      type: hasManyType,
+      type: hasManyType(),
     },
     {
       id: shortid(),
       sourceModelId: Id.Category,
       targetModelId: Id.PostCategory,
-      type: hasManyType,
+      type: hasManyType(),
     },
     {
       id: shortid(),
@@ -97,27 +98,27 @@ const post: Model = {
       alias: 'author',
       sourceModelId: Id.Post,
       targetModelId: Id.User,
-      type: belongsToType,
+      type: belongsToType(),
     },
     {
       id: shortid(),
       alias: 'parent',
       sourceModelId: Id.Post,
       targetModelId: Id.Post,
-      type: belongsToType,
+      type: belongsToType(),
     },
     {
       id: shortid(),
       alias: 'children',
       sourceModelId: Id.Post,
       targetModelId: Id.Post,
-      type: hasManyType,
+      type: hasManyType(),
     },
     {
       id: shortid(),
       sourceModelId: Id.Post,
       targetModelId: Id.PostCategory,
-      type: hasManyType,
+      type: hasManyType(),
     },
     {
       id: shortid(),
@@ -133,20 +134,20 @@ const post: Model = {
       alias: 'comments',
       sourceModelId: Id.Post,
       targetModelId: Id.PostComment,
-      type: hasManyType,
+      type: hasManyType(),
     },
     {
       id: shortid(),
       alias: 'meta',
       sourceModelId: Id.Post,
       targetModelId: Id.PostMeta,
-      type: hasManyType,
+      type: hasManyType(),
     },
     {
       id: shortid(),
       sourceModelId: Id.Post,
       targetModelId: Id.PostTag,
-      type: hasManyType,
+      type: hasManyType(),
     },
     {
       id: shortid(),
@@ -172,13 +173,13 @@ const postCategory: Model = {
       id: shortid(),
       sourceModelId: Id.PostCategory,
       targetModelId: Id.Post,
-      type: belongsToType,
+      type: belongsToType(),
     },
     {
       id: shortid(),
       sourceModelId: Id.PostCategory,
       targetModelId: Id.Category,
-      type: belongsToType,
+      type: belongsToType(),
     },
   ],
 }
@@ -198,21 +199,21 @@ const postComment: Model = {
       id: shortid(),
       sourceModelId: Id.PostComment,
       targetModelId: Id.Post,
-      type: belongsToType,
+      type: belongsToType(),
     },
     {
       id: shortid(),
       alias: 'parent',
       sourceModelId: Id.PostComment,
       targetModelId: Id.PostComment,
-      type: belongsToType,
+      type: belongsToType(),
     },
     {
       id: shortid(),
       alias: 'children',
       sourceModelId: Id.PostComment,
       targetModelId: Id.PostComment,
-      type: hasManyType,
+      type: hasManyType(),
     },
   ],
 }
@@ -236,7 +237,7 @@ const postMeta: Model = {
       id: shortid(),
       sourceModelId: Id.PostMeta,
       targetModelId: Id.Post,
-      type: belongsToType,
+      type: belongsToType(),
     },
   ],
 }
@@ -253,13 +254,13 @@ const postTag: Model = {
       id: shortid(),
       sourceModelId: Id.PostTag,
       targetModelId: Id.Post,
-      type: belongsToType,
+      type: belongsToType(),
     },
     {
       id: shortid(),
       sourceModelId: Id.PostTag,
       targetModelId: Id.Tag,
-      type: belongsToType,
+      type: belongsToType(),
     },
   ],
 }
@@ -285,7 +286,7 @@ const tag: Model = {
       id: shortid(),
       sourceModelId: Id.Tag,
       targetModelId: Id.PostTag,
-      type: hasManyType,
+      type: hasManyType(),
     },
     {
       id: shortid(),
@@ -325,7 +326,7 @@ const user: Model = {
       id: shortid(),
       sourceModelId: Id.User,
       targetModelId: Id.Post,
-      type: hasManyType,
+      type: hasManyType(),
     },
   ],
 }

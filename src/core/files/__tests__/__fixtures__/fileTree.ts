@@ -1,4 +1,4 @@
-import { directory, file } from '..'
+import { directory, file } from '../..'
 
 export default directory('documents', [
   directory('media', [
