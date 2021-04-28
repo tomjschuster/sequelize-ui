@@ -6,6 +6,7 @@
 
 #### Bugs
 
+- CSS not being loaded on build
 - association fieldset ts-expect-error
 - id_id?
 
