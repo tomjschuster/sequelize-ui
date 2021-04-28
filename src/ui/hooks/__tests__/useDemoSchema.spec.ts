@@ -1,5 +1,5 @@
 import * as SchemaData from '@src/data/schemas'
-import blogSchema from '@src/data/schemas/blog'
+import employeeTemporalDatasetSchema from '@src/data/schemas/employeeTemporalDataset'
 import sakilaSchema from '@src/data/schemas/sakila'
 import { renderHook } from '@testing-library/react-hooks'
 import useDemoSchema, { UseDemoSchemaArgs, UseDemoSchemaResult } from '../useDemoSchema'
@@ -32,7 +32,7 @@ describe('useDemoSchema', () => {
     const { result, waitForValueToChange } = renderHook<UseDemoSchemaArgs, UseDemoSchemaResult>(
       ({ type }) => useDemoSchema({ type }),
       {
-        initialProps: { type: SchemaData.DemoSchemaType.Blog },
+        initialProps: { type: SchemaData.DemoSchemaType.EmployeeTemporalDataset },
       },
     )
 
@@ -40,7 +40,7 @@ describe('useDemoSchema', () => {
 
     expect(result.current.loading).toBe(false)
     expect(result.current.error).toBeUndefined()
-    expect(result.current.schema).toEqual(blogSchema)
+    expect(result.current.schema).toEqual(employeeTemporalDatasetSchema)
   })
 
   it('unsets the schema when type is removed', async () => {

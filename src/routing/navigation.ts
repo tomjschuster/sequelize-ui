@@ -1,7 +1,7 @@
 import Router from 'next/router'
 import { Route, routeToUrl } from './routes'
 
-type GoToOptions = {
+export type GoToOptions = {
   replace?: boolean
 }
 
