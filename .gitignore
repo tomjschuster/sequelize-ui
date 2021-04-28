@@ -16,6 +16,7 @@ npm-debug.log*
 
 # Next.js
 /.next
+/out
 
 # Istanbul/NYC
 .nyc_output

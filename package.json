@@ -5,7 +5,7 @@
   "license": "ISC",
   "scripts": {
     "dev": "next",
-    "build": "next build",
+    "build": "next build && next export",
     "start": "next start",
     "format": "prettier --write .",
     "generate:css-types": "tailwindcss-classnames -i tailwind.config.js -o src/typings/__generated__/tailwindcss-classnames.d.ts",
