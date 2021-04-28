@@ -6,7 +6,6 @@
 
 #### Bugs
 
-- CSS not being loaded on build
 - association fieldset ts-expect-error
 - id_id?
 
@@ -26,7 +25,6 @@ Language.hasMany(Film, {
 - ui
 
   - hooks
-    - useRoute
     - useGeneratedCode
     - useEditSchema
   - components
