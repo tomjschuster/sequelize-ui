@@ -5,6 +5,7 @@ module.exports = {
     '<rootDir>/src/data',
     '<rootDir>/src/frameworks',
     '<rootDir>/src/io',
+    '<rootDir>/src/routing',
     '<rootDir>/integration/frameworks',
   ],
   moduleNameMapper: { '@src/(.*)': '<rootDir>/src/$1' },
