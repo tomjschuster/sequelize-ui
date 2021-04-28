@@ -6,6 +6,7 @@ module.exports = {
     '<rootDir>/src/frameworks',
     '<rootDir>/src/io',
     '<rootDir>/src/routing',
+    '<rootDir>/src/ui/hooks',
     '<rootDir>/integration/frameworks',
   ],
   moduleNameMapper: { '@src/(.*)': '<rootDir>/src/$1' },
