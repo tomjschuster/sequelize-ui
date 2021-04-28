@@ -1,19 +1,26 @@
 module.exports = {
-  roots: [
-    '<rootDir>/src/api',
-    '<rootDir>/src/core',
-    '<rootDir>/src/data',
-    '<rootDir>/src/frameworks',
-    '<rootDir>/src/io',
-    '<rootDir>/src/routing',
-    '<rootDir>/src/ui/hooks',
-    '<rootDir>/integration/frameworks',
+  roots: ['<rootDir>/src', '<rootDir>/e2e/frameworks'],
+  collectCoverageFrom: ['src/**/*.{ts,tsx}'],
+  coveragePathIgnorePatterns: [
+    // write tests after completing ui
+    'src/pages',
+    'src/test-utils',
+    'src/theme',
+    'src/typings',
+    // write tests after completing ui
+    'src/ui/components',
+    '__fixtures__',
+    '__tests__',
   ],
   moduleNameMapper: { '@src/(.*)': '<rootDir>/src/$1' },
   testPathIgnorePatterns: [
-    '<rootDir>/.buildcache',
-    '<rootDir>/.next/',
-    '<rootDir>/node_modules/',
+    // write tests after completing ui
+    'src/pages',
+    'src/test-utils',
+    'src/theme',
+    'src/typings',
+    // write tests after completing ui
+    'src/ui/components',
     '__fixtures__',
   ],
   setupFiles: ['jest-localstorage-mock'],

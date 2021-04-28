@@ -1,0 +1,182 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sequelize Framework schema - fields generates correct code 1`] = `
+Object {
+  "files": Array [
+    Object {
+      "files": Array [
+        Object {
+          "content": "import type { Sequelize, Model } from 'sequelize'
+import { Category } from './Category'
+import type { CategoryAttributes, CategoryCreationAttributes } from './Category'
+
+export {
+  Category
+}
+
+export type {
+  CategoryAttributes,
+  CategoryCreationAttributes
+}
+
+export function initModels(sequelize: Sequelize) {
+  Category.initModel(sequelize)
+
+  
+
+  return {
+    Category
+  }
+}
+",
+          "name": "index.ts",
+          "type": "FILE",
+        },
+        Object {
+          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+
+export interface CategoryAttributes {
+  field?: string
+  pkField?: string
+  requiredField: string
+  optionalField?: string
+}
+
+export type CategoryPk = 'pkField'
+export type CategoryId = CategoryAttributes[CategoryPk]
+export type CategoryCreationAttributes = Optional<CategoryAttributes, CategoryPk>
+
+export class Category extends Model<CategoryAttributes, CategoryCreationAttributes> implements CategoryAttributes {
+  public field?: string
+  public readonly pkField?: string
+  public requiredField!: string
+  public optionalField?: string
+  
+  static initModel(sequelize: Sequelize.Sequelize): typeof Category {
+    Category.init({
+      field: {
+        type: DataTypes.STRING
+      },
+      pkField: {
+        type: DataTypes.STRING,
+        primaryKey: true
+      },
+      requiredField: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      optionalField: {
+        type: DataTypes.STRING,
+        unique: true
+      }
+    }, {
+      sequelize
+    })
+    
+    return Category
+  }
+}
+",
+          "name": "Category.ts",
+          "type": "FILE",
+        },
+      ],
+      "name": "models",
+      "type": "DIRECTORY",
+    },
+    Object {
+      "content": "node_modules/
+dist
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.tmp
+",
+      "name": ".gitignore",
+      "type": "FILE",
+    },
+    Object {
+      "content": "import { Sequelize } from 'sequelize'
+
+const db: Sequelize = new Sequelize({
+  dialect: 'postgres',
+  database: process.env.POSTGRES_DB_NAME || 'fields',
+  username: process.env.POSTGRES_DB_USERNAME || 'postgres',
+  password: process.env.POSTGRES_DB_PASSWORD || 'postgres',
+  host: process.env.POSTGRES_DB_HOST || 'localhost',
+  port: parseInt(process.env.POSTGRES_DB_PORT || '5432'),
+  define: {
+    underscored: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
+})
+
+export default db
+",
+      "name": "db.ts",
+      "type": "FILE",
+    },
+    Object {
+      "content": "{
+  \\"name\\": \\"fields\\",
+  \\"version\\": \\"0.0.1\\",
+  \\"description\\": \\"\\",
+  \\"main\\": \\"server.ts\\",
+  \\"scripts\\": {
+    \\"test\\": \\"echo \\\\\\"Error: no test specified\\\\\\" && exit 1\\",
+    \\"build\\": \\"tsc\\",
+    \\"start\\": \\"node ./dist/server.js\\"
+  },
+  \\"author\\": \\"\\",
+  \\"license\\": \\"ISC\\",
+  \\"dependencies\\": {
+    \\"pg\\": \\"^8.5.1\\",
+    \\"pg-hstore\\": \\"^2.3.3\\",
+    \\"sequelize\\": \\"^6.3.5\\"
+  },
+  \\"devDependencies\\": {
+    \\"@types/node\\": \\"^14.14.20\\",
+    \\"@types/validator\\": \\"^13.1.3\\",
+    \\"typescript\\": \\"^4.1.3\\"
+  }
+}
+
+",
+      "name": "package.json",
+      "type": "FILE",
+    },
+    Object {
+      "content": "import db from './db'
+import { initModels } from './models'
+
+initModels(db)
+
+db.sync({ force: true })
+",
+      "name": "server.ts",
+      "type": "FILE",
+    },
+    Object {
+      "content": "{
+    \\"compilerOptions\\": {
+      \\"target\\": \\"ES2020\\",
+      \\"module\\": \\"commonjs\\",
+      \\"lib\\": [\\"ES2020\\"],
+      \\"outDir\\": \\"dist\\",
+      \\"strict\\": true,
+      \\"moduleResolution\\": \\"node\\",
+      \\"esModuleInterop\\": true,
+      \\"forceConsistentCasingInFileNames\\": true
+    }
+  }
+",
+      "name": "tsconfig.json",
+      "type": "FILE",
+    },
+  ],
+  "name": "fields",
+  "type": "DIRECTORY",
+}
+`;

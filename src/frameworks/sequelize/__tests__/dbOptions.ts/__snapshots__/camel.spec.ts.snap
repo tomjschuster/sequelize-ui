@@ -1,0 +1,321 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sequelize Framework camel case database options generates correct code 1`] = `
+Object {
+  "files": Array [
+    Object {
+      "files": Array [
+        Object {
+          "content": "import type { Sequelize, Model } from 'sequelize'
+import { Category } from './Category'
+import type { CategoryAttributes, CategoryCreationAttributes } from './Category'
+
+export {
+  Category
+}
+
+export type {
+  CategoryAttributes,
+  CategoryCreationAttributes
+}
+
+export function initModels(sequelize: Sequelize) {
+  Category.initModel(sequelize)
+
+  
+
+  return {
+    Category
+  }
+}
+",
+          "name": "index.ts",
+          "type": "FILE",
+        },
+        Object {
+          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+import { Json } from '../types'
+
+export interface CategoryAttributes {
+  string?: string
+  stringWithLength?: string
+  text?: string
+  ciText?: string
+  integer?: number
+  integerUnsigned?: number
+  integerAutoincrement?: number
+  bigInt?: number
+  smallInt?: number
+  float?: number
+  real?: number
+  double?: number
+  decimal?: number
+  decimalPrecision?: number
+  decimalPrecisionAndScale?: number
+  dateTime?: string
+  dateTimeDefaultNow?: string
+  date?: string
+  dateDefaultNow?: string
+  time?: string
+  timeDefaultNow?: string
+  boolean?: boolean
+  enum?: 
+  array?: string[]
+  json?: Json
+  jsonB?: Json
+  blob?: Buffer
+  uuid?: string
+  uuidDefaultV4?: string
+  uuidDefaultV1?: string
+}
+
+export type CategoryId = number
+export type CategoryCreationAttributes = CategoryAttributes & { id?: number }
+
+export class Category extends Model<CategoryAttributes, CategoryCreationAttributes> implements CategoryAttributes {
+  public readonly id?: number
+  public string?: string
+  public stringWithLength?: string
+  public text?: string
+  public ciText?: string
+  public integer?: number
+  public integerUnsigned?: number
+  public integerAutoincrement?: number
+  public bigInt?: number
+  public smallInt?: number
+  public float?: number
+  public real?: number
+  public double?: number
+  public decimal?: number
+  public decimalPrecision?: number
+  public decimalPrecisionAndScale?: number
+  public dateTime?: string
+  public dateTimeDefaultNow?: string
+  public date?: string
+  public dateDefaultNow?: string
+  public time?: string
+  public timeDefaultNow?: string
+  public boolean?: boolean
+  public enum?: 
+  public array?: string[]
+  public json?: Json
+  public jsonB?: Json
+  public blob?: Buffer
+  public uuid?: string
+  public uuidDefaultV4?: string
+  public uuidDefaultV1?: string
+  
+  static initModel(sequelize: Sequelize.Sequelize): typeof Category {
+    Category.init({
+      string: {
+        type: DataTypes.STRING
+      },
+      stringWithLength: {
+        type: DataTypes.STRING(100)
+      },
+      text: {
+        type: DataTypes.TEXT
+      },
+      ciText: {
+        type: DataTypes.CITEXT
+      },
+      integer: {
+        type: DataTypes.INTEGER
+      },
+      integerUnsigned: {
+        type: DataTypes.INTEGER.UNSIGNED
+      },
+      integerAutoincrement: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true
+      },
+      bigInt: {
+        type: DataTypes.BIGINT
+      },
+      smallInt: {
+        type: DataTypes.SMALLINT
+      },
+      float: {
+        type: DataTypes.FLOAT
+      },
+      real: {
+        type: DataTypes.REAL
+      },
+      double: {
+        type: DataTypes.DOUBLE
+      },
+      decimal: {
+        type: DataTypes.DECIMAL
+      },
+      decimalPrecision: {
+        type: DataTypes.DECIMAL.PRECISION(14)
+      },
+      decimalPrecisionAndScale: {
+        type: DataTypes.DECIMAL.PRECISION(14, 2)
+      },
+      dateTime: {
+        type: DataTypes.DATE
+      },
+      dateTimeDefaultNow: {
+        type: DataTypes.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
+      date: {
+        type: DataTypes.DATEONLY
+      },
+      dateDefaultNow: {
+        type: DataTypes.DATEONLY,
+        defaultValue: Sequelize.literal('CURRENT_DATE')
+      },
+      time: {
+        type: DataTypes.TIME
+      },
+      timeDefaultNow: {
+        type: DataTypes.TIME,
+        defaultValue: Sequelize.literal('CURRENT_TIME')
+      },
+      boolean: {
+        type: DataTypes.BOOLEAN
+      },
+      enum: {
+        type: DataTypes.ENUM()
+      },
+      array: {
+        type: DataTypes.ARRAY(DataTypes.STRING)
+      },
+      json: {
+        type: DataTypes.JSON
+      },
+      jsonB: {
+        type: DataTypes.JSONB
+      },
+      blob: {
+        type: DataTypes.BLOB
+      },
+      uuid: {
+        type: DataTypes.UUID
+      },
+      uuidDefaultV4: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4
+      },
+      uuidDefaultV1: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV1
+      }
+    }, {
+      sequelize
+    })
+    
+    return Category
+  }
+}
+",
+          "name": "Category.ts",
+          "type": "FILE",
+        },
+      ],
+      "name": "models",
+      "type": "DIRECTORY",
+    },
+    Object {
+      "content": "node_modules/
+dist
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.tmp
+",
+      "name": ".gitignore",
+      "type": "FILE",
+    },
+    Object {
+      "content": "import { Sequelize } from 'sequelize'
+
+const db: Sequelize = new Sequelize({
+  dialect: 'postgres',
+  database: process.env.POSTGRES_DB_NAME || 'data_types',
+  username: process.env.POSTGRES_DB_USERNAME || 'postgres',
+  password: process.env.POSTGRES_DB_PASSWORD || 'postgres',
+  host: process.env.POSTGRES_DB_HOST || 'localhost',
+  port: parseInt(process.env.POSTGRES_DB_PORT || '5432')
+})
+
+export default db
+",
+      "name": "db.ts",
+      "type": "FILE",
+    },
+    Object {
+      "content": "{
+  \\"name\\": \\"data-types\\",
+  \\"version\\": \\"0.0.1\\",
+  \\"description\\": \\"\\",
+  \\"main\\": \\"server.ts\\",
+  \\"scripts\\": {
+    \\"test\\": \\"echo \\\\\\"Error: no test specified\\\\\\" && exit 1\\",
+    \\"build\\": \\"tsc\\",
+    \\"start\\": \\"node ./dist/server.js\\"
+  },
+  \\"author\\": \\"\\",
+  \\"license\\": \\"ISC\\",
+  \\"dependencies\\": {
+    \\"pg\\": \\"^8.5.1\\",
+    \\"pg-hstore\\": \\"^2.3.3\\",
+    \\"sequelize\\": \\"^6.3.5\\"
+  },
+  \\"devDependencies\\": {
+    \\"@types/node\\": \\"^14.14.20\\",
+    \\"@types/validator\\": \\"^13.1.3\\",
+    \\"typescript\\": \\"^4.1.3\\"
+  }
+}
+
+",
+      "name": "package.json",
+      "type": "FILE",
+    },
+    Object {
+      "content": "import db from './db'
+import { initModels } from './models'
+
+initModels(db)
+
+db.sync({ force: true })
+",
+      "name": "server.ts",
+      "type": "FILE",
+    },
+    Object {
+      "content": "export interface JsonMap {[member: string]: string | number | boolean | null | JsonArray | JsonMap }
+
+export interface JsonArray extends Array<string | number | boolean | null | JsonArray | JsonMap> {}
+
+export type Json = JsonMap | JsonArray | string | number | boolean | null
+",
+      "name": "types.ts",
+      "type": "FILE",
+    },
+    Object {
+      "content": "{
+    \\"compilerOptions\\": {
+      \\"target\\": \\"ES2020\\",
+      \\"module\\": \\"commonjs\\",
+      \\"lib\\": [\\"ES2020\\"],
+      \\"outDir\\": \\"dist\\",
+      \\"strict\\": true,
+      \\"moduleResolution\\": \\"node\\",
+      \\"esModuleInterop\\": true,
+      \\"forceConsistentCasingInFileNames\\": true
+    }
+  }
+",
+      "name": "tsconfig.json",
+      "type": "FILE",
+    },
+  ],
+  "name": "data-types",
+  "type": "DIRECTORY",
+}
+`;

@@ -21,9 +21,14 @@ Language.hasMany(Film, {
 - ui
 
   - hooks
-  - components?
+    - useRoute
+    - useGeneratedCode
+    - useEditSchema
+  - components
+    - after UI complete
 
-- Browser tests (pick framework, post UI)
+- Browser tests
+  - after UI complete
 
 #### Documentation
 
