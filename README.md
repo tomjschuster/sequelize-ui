@@ -17,6 +17,10 @@ Language.hasMany(Film, {
 })
 ```
 
+#### Upgrade
+
+- Webpack 5
+
 #### Testing
 
 - ui
