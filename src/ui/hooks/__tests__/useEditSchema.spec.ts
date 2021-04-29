@@ -48,17 +48,17 @@ describe('useEditSchema', () => {
 
   it('navigates to the first schema when no schema id', async () => {
     ;(useRoute as jest.Mock).mockReturnValue({ route: noSchemaRoute(), loading: false })
-
     const { waitFor } = renderHook<never, UseEditSchemaResult>(useEditSchema)
     await waitFor(() => true, { timeout: 0 })
+
     expect(goTo).toHaveBeenCalledWith(viewSchemaRoute(schema.id))
   })
 
   it('navigates to index when not a schema route', async () => {
     ;(useRoute as jest.Mock).mockReturnValue({ route: notFoundRoute(), loading: false })
-
     const { waitFor } = renderHook<never, UseEditSchemaResult>(useEditSchema)
     await waitFor(() => true, { timeout: 0 })
+
     expect(goTo).toHaveBeenCalledWith(indexRoute())
   })
 
@@ -66,6 +66,7 @@ describe('useEditSchema', () => {
     ;(useRoute as jest.Mock).mockReturnValue({ route: viewSchemaRoute('foo'), loading: false })
     const { waitFor } = renderHook<never, UseEditSchemaResult>(useEditSchema)
     await waitFor(() => true, { timeout: 0 })
+
     expect(goTo).toHaveBeenCalledWith(indexRoute())
   })
 
@@ -75,7 +76,8 @@ describe('useEditSchema', () => {
       loading: false,
     })
     const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-    await waitForValueToChange(() => result.current.schema, { timeout: 0 })
+    await waitForValueToChange(() => result.current.schema)
+
     expect(result.current.schema).toEqual(schema)
   })
 
@@ -85,7 +87,8 @@ describe('useEditSchema', () => {
       loading: false,
     })
     const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-    await waitForValueToChange(() => result.current.schemas, { timeout: 0 })
+    await waitForValueToChange(() => result.current.schemas)
+
     expect(result.current.schemas).toEqual(schemas)
   })
 
@@ -96,13 +99,15 @@ describe('useEditSchema', () => {
     })
     jest.spyOn(SchemaApi, 'listSchemas').mockRejectedValueOnce(new Error('foo'))
     const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-    await waitForValueToChange(() => result.current.error, { timeout: 0 })
+    await waitForValueToChange(() => result.current.error)
+
     expect(result.current.error).toEqual('Sorry, something went wrong.')
   })
 
   it('when route is index, returns edit state no schema', () => {
     ;(useRoute as jest.Mock).mockReturnValue({ route: indexRoute(), loading: false })
     const { result } = renderHook<never, UseEditSchemaResult>(useEditSchema)
+
     expect(result.current.editState).toEqual({ type: SchemaEditStateType.NoSchema })
   })
 
@@ -111,7 +116,6 @@ describe('useEditSchema', () => {
       route: viewSchemaRoute(schema.id),
       loading: false,
     })
-
     const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
     await waitForValueToChange(() => result.current.schema)
 
@@ -124,7 +128,6 @@ describe('useEditSchema', () => {
       loading: false,
     })
     const { result, waitForNextUpdate } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-
     await waitForNextUpdate()
 
     expect(result.current.editState).toEqual({ type: SchemaEditStateType.EditingSchema })
@@ -137,7 +140,6 @@ describe('useEditSchema', () => {
       loading: false,
     })
     const { result, waitForNextUpdate } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-
     await waitForNextUpdate()
 
     expect(result.current.editState).toEqual({
@@ -152,11 +154,7 @@ describe('useEditSchema', () => {
       loading: false,
     })
     const { result, waitForNextUpdate } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-
-    act(() => {
-      result.current.edit()
-    })
-
+    act(() => result.current.edit())
     await waitForNextUpdate()
 
     expect(goTo).toHaveBeenCalledWith(editSchemaRoute(schema.id))
@@ -168,19 +166,12 @@ describe('useEditSchema', () => {
       route: viewSchemaRoute(schema.id),
       loading: false,
     })
-
     const { result, waitForValueToChange, waitFor } = renderHook<never, UseEditSchemaResult>(
       useEditSchema,
     )
-
     await waitForValueToChange(() => result.current.schema)
-
-    act(() => {
-      result.current.editModel(modelId)
-    })
-
+    act(() => result.current.editModel(modelId))
     await waitFor(() => true, { timeout: 0 })
-
     expect(goTo).toHaveBeenCalledWith(editModelRoute(schema.id, modelId))
   })
 
@@ -191,12 +182,9 @@ describe('useEditSchema', () => {
       loading: true,
     })
     const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
+    act(() => result.current.editModel(modelId))
 
-    await act(async () => {
-      await result.current.editModel(modelId)
-    })
-
-    await waitForValueToChange(() => result.current.schema, { timeout: 1000 }).catch((e) => {
+    await waitForValueToChange(() => result.current.schema, { timeout: 1 }).catch((e) => {
       expect(e.message.startsWith('Timed out')).toBe(true)
     })
 
@@ -210,11 +198,7 @@ describe('useEditSchema', () => {
       loading: false,
     })
     const { result, waitForNextUpdate } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-
-    act(() => {
-      result.current.cancel()
-    })
-
+    act(() => result.current.cancel())
     await waitForNextUpdate()
 
     expect(goTo).toHaveBeenCalledWith(viewSchemaRoute(schema.id))
@@ -227,10 +211,7 @@ describe('useEditSchema', () => {
     })
     const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
     await waitForValueToChange(() => result.current.schema)
-
-    await act(async () => {
-      await result.current.destroy()
-    })
+    await act(() => result.current.destroy())
 
     expect(goTo).toHaveBeenCalledWith(indexRoute())
     const schemas = await SchemaApi.listSchemas()
@@ -243,12 +224,9 @@ describe('useEditSchema', () => {
       loading: true,
     })
     const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
+    await act(() => result.current.destroy())
 
-    await act(async () => {
-      await result.current.destroy()
-    })
-
-    await waitForValueToChange(() => result.current.schema, { timeout: 1000 }).catch((e) => {
+    await waitForValueToChange(() => result.current.schema, { timeout: 1 }).catch((e) => {
       expect(e.message.startsWith('Timed out')).toBe(true)
     })
 
@@ -261,10 +239,7 @@ describe('useEditSchema', () => {
       loading: false,
     })
     const { result } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-
-    await act(async () => {
-      await result.current.update({ ...schema, name: 'foo' })
-    })
+    await act(() => result.current.update({ ...schema, name: 'foo' }).then(() => void 0))
 
     expect(goTo).toHaveBeenCalledWith(viewSchemaRoute(schema.id))
     const updatedSchema = await SchemaApi.getSchema(schema.id)
@@ -277,12 +252,8 @@ describe('useEditSchema', () => {
       loading: false,
     })
     const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-
     await waitForValueToChange(() => result.current.schema)
-
-    await act(async () => {
-      await result.current.addModel()
-    })
+    await act(() => result.current.addModel())
 
     const updatedSchema = await SchemaApi.getSchema(schema.id)
     const modelId = updatedSchema.models[0].id
@@ -297,12 +268,9 @@ describe('useEditSchema', () => {
       loading: true,
     })
     const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
+    await act(() => result.current.addModel())
 
-    await act(async () => {
-      await result.current.addModel()
-    })
-
-    await waitForValueToChange(() => result.current.schema, { timeout: 1000 }).catch((e) => {
+    await waitForValueToChange(() => result.current.schema, { timeout: 1 }).catch((e) => {
       expect(e.message.startsWith('Timed out')).toBe(true)
     })
 
@@ -316,13 +284,8 @@ describe('useEditSchema', () => {
       loading: false,
     })
     const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-
     await waitForValueToChange(() => result.current.schema)
-
-    await act(async () => {
-      await result.current.updateModel({ ...model, name: 'foo' })
-    })
-
+    await act(() => result.current.updateModel({ ...model, name: 'foo' }))
     const updatedModel = (await SchemaApi.getSchema(schema.id)).models[0]
 
     expect(updatedModel.name).toBe('foo')
@@ -335,12 +298,9 @@ describe('useEditSchema', () => {
       loading: true,
     })
     const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
+    await act(() => result.current.updateModel(schema.models[0]))
 
-    await act(async () => {
-      await result.current.updateModel(schema.models[0])
-    })
-
-    await waitForValueToChange(() => result.current.schema, { timeout: 1000 }).catch((e) => {
+    await waitForValueToChange(() => result.current.schema, { timeout: 1 }).catch((e) => {
       expect(e.message.startsWith('Timed out')).toBe(true)
     })
 
@@ -354,13 +314,8 @@ describe('useEditSchema', () => {
       loading: false,
     })
     const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-
     await waitForValueToChange(() => result.current.schema)
-
-    await act(async () => {
-      await result.current.deleteModel(modelId)
-    })
-
+    await act(() => result.current.deleteModel(modelId))
     const updatedSchema = await SchemaApi.getSchema(schema.id)
 
     expect(updatedSchema.models.some((m) => m.id === modelId)).toBe(false)
@@ -379,12 +334,9 @@ describe('useEditSchema', () => {
       loading: true,
     })
     const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
+    await act(() => result.current.deleteModel(schema.models[0].id))
 
-    await act(async () => {
-      await result.current.deleteModel(schema.models[0].id)
-    })
-
-    await waitForValueToChange(() => result.current.schema, { timeout: 1000 }).catch((e) => {
+    await waitForValueToChange(() => result.current.schema, { timeout: 1 }).catch((e) => {
       expect(e.message.startsWith('Timed out')).toBe(true)
     })
 

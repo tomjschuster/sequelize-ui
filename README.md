@@ -16,6 +16,10 @@ Language.hasMany(Film, {
 })
 ```
 
+#### Refactor
+
+- Remove associations when deleting model in API
+
 #### Upgrade
 
 - Webpack 5
