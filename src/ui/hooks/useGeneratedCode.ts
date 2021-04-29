@@ -4,12 +4,12 @@ import { Framework } from '@src/core/framework'
 import { Schema } from '@src/core/schema'
 import { useEffect, useMemo, useState } from 'react'
 
-type UseGeneratedCodeArgs = {
+export type UseGeneratedCodeArgs = {
   schema?: Schema
   dbOptions: DatabaseOptions
 }
 
-type UseGeneratedCodeResult = {
+export type UseGeneratedCodeResult = {
   root?: DirectoryItem
   framework?: Framework
 }

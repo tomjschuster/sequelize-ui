@@ -13,19 +13,19 @@ import {
 import useRoute from '@src/ui/hooks/useRoute'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-type UseEditSchemaResult = {
+export type UseEditSchemaResult = {
   schema: Schema | undefined
   schemas: Schema[] | undefined
   error: string | undefined
   editState: SchemaEditState
   edit: () => void
-  addModel: () => void
+  addModel: () => Promise<void>
   editModel: (id: Model['id']) => void
-  updateModel: (model: Model) => void
-  deleteModel: (id: Model['id']) => void
+  updateModel: (model: Model) => Promise<void>
+  deleteModel: (id: Model['id']) => Promise<void>
   cancel: () => void
-  update: (schema: Schema) => void
-  destroy: () => void
+  update: (schema: Schema) => Promise<Schema>
+  destroy: () => Promise<void>
 }
 
 export type SchemaEditState =
@@ -55,7 +55,7 @@ export default function useEditSchema(): UseEditSchemaResult {
   ])
 
   useLoadSchema({
-    skip: loading || (!!schema && schema.id === schemaId),
+    skip: loading || !!error || (!!schema && schema.id === schemaId),
     route,
     schemaId,
     onLoadSchema: setSchema,
@@ -76,39 +76,42 @@ export default function useEditSchema(): UseEditSchemaResult {
   )
 
   const destroy = useCallback(async () => {
-    if (schemaId) {
-      await deleteSchema(schemaId)
-      goTo(indexRoute())
-    }
-  }, [schemaId, deleteSchema])
+    if (!schema) return
+    await deleteSchema(schema.id)
+    goTo(indexRoute())
+  }, [schema, deleteSchema])
 
   const addModel = useCallback(async () => {
-    if (schema) {
-      const {
-        models: [model],
-      } = await update({ ...schema, models: [emptyModel(), ...schema.models] })
+    if (!schema) return
+    const {
+      models: [model],
+    } = await update({ ...schema, models: [emptyModel(), ...schema.models] })
 
-      goTo(editModelRoute(schema.id, model.id))
-    }
+    goTo(editModelRoute(schema.id, model.id))
   }, [schema])
 
   const updateModel = useCallback(
-    (model: Model): void => {
-      if (schema) update(updateModelInSchema(schema, model))
+    async (model: Model) => {
+      if (!schema) return
+      await update(updateModelInSchema(schema, model))
     },
     [schema],
   )
 
   const deleteModel = useCallback(
-    (id: Model['id']) => {
-      if (schema) update(removeModelFromSchema(schema, id))
+    async (id: Model['id']) => {
+      if (!schema) return
+      await update(removeModelFromSchema(schema, id))
     },
     [schema],
   )
 
   const editModel = useCallback(
-    (id: Model['id']) => schemaId && goTo(editModelRoute(schemaId, id)),
-    [schemaId],
+    (id: Model['id']) => {
+      if (!schema) return
+      goTo(editModelRoute(schema.id, id))
+    },
+    [schema],
   )
 
   const cancel = useCallback(() => schemaId && goTo(viewSchemaRoute(schemaId)), [schemaId])
@@ -160,15 +163,21 @@ function useLoadSchema({
 
     listSchemas()
       .then((schemas) => {
-        const schema = schemas.find((s) => s.id === schemaId) || schemas[0]
-        if (!schema) return goTo(indexRoute())
-        if (schema.id !== schemaId) return goTo(viewSchemaRoute(schema.id))
-
+        const schema = schemas.find((s) => s.id === schemaId)
+        if (!schemaId && schemas[0]) {
+          return goTo(viewSchemaRoute(schemas[0].id))
+        }
+        if (!schema) {
+          return goTo(indexRoute())
+        }
         onLoadSchemas(schemas)
         onLoadSchema(schema)
+        setLoading(false)
       })
-      .catch(() => onError('Sorry, something went wrong.'))
-      .finally(() => setLoading(false))
+      .catch(() => {
+        onError('Sorry, something went wrong.')
+        setLoading(false)
+      })
   }, [skip, loading, route, schemaId])
 }
 
@@ -178,7 +187,7 @@ function routeToEditState(route?: Route): SchemaEditState {
       return { type: SchemaEditStateType.EditingSchema }
     case RouteType.EditModel:
       return { type: SchemaEditStateType.EditingModel, id: route.modelId }
-    case RouteType.Index:
+    case RouteType.ViewSchema:
       return { type: SchemaEditStateType.NotEditing }
     case RouteType.NoSchema:
     default:

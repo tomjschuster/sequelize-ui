@@ -106,7 +106,7 @@ describe('useDemoSchema', () => {
 
     rerender({ type: SchemaData.DemoSchemaType.Sakila })
 
-    await waitForValueToChange(() => result.current.error, { interval: 1 }).catch((e) => {
+    await waitForValueToChange(() => result.current.error, { timeout: 1 }).catch((e) => {
       expect(e.message.startsWith('Timed out')).toBe(true)
     })
 
