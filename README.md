@@ -24,9 +24,6 @@ Language.hasMany(Film, {
 
 - ui
 
-  - hooks
-    - useGeneratedCode
-    - useEditSchema
   - components
     - after UI complete
 
@@ -44,7 +41,7 @@ Language.hasMany(Film, {
 
 - prefix id name option
 - default value
-  - Fix default date/time to use DataTypes.NOW
+  - Update default date/time to use DataTypes.NOW
 
 #### Codegen
 
