@@ -307,7 +307,7 @@ describe('useEditSchema', () => {
     expect(goTo).not.toHaveBeenCalled()
   })
 
-  it('calling delete model removes the model and all of its associations and navigates to the view schema route', async () => {
+  it('calling delete model removes the model and navigates to the view schema route', async () => {
     const modelId = schema.models[0].id
     ;(useRoute as jest.Mock).mockReturnValue({
       route: viewSchemaRoute(schema.id),
@@ -320,11 +320,6 @@ describe('useEditSchema', () => {
 
     expect(updatedSchema.models.some((m) => m.id === modelId)).toBe(false)
     expect(updatedSchema.models.length).toBe(schema.models.length - 1)
-    expect(
-      updatedSchema.models.some((m) =>
-        m.associations.some((a) => a.targetModelId === modelId || a.sourceModelId === modelId),
-      ),
-    ).toBe(false)
     expect(goTo).toHaveBeenCalledWith(viewSchemaRoute(schema.id))
   })
 

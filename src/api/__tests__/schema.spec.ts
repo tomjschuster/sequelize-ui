@@ -1,3 +1,4 @@
+import blogSchema from '@src/data/schemas/blog'
 import employeeTemporalDataSet from '@src/data/schemas/employeeTemporalDataset'
 import sakila from '@src/data/schemas/sakila'
 import {
@@ -116,6 +117,31 @@ describe('schema api', () => {
 
       const schema = await updateSchema({ ...existingSchema, name: employeeTemporalDataSet.name })
       expect(schema.name).toBe(`${employeeTemporalDataSet.name} (1)`)
+    })
+
+    it('removes targeting associations when removing a model', async () => {
+      const existingSchema = await createSchema(blogSchema)
+
+      // Assert the following to make sure test is valid
+      // If schemas change, update test cases
+      const post = existingSchema.models.find((m) => m.name === 'post')
+      const user = existingSchema.models.find((m) => m.name === 'user')
+      const postHasUserAssoc = post?.associations.some((a) => a.targetModelId === user?.id)
+      expect(postHasUserAssoc).toBe(true)
+
+      const schema = {
+        ...existingSchema,
+        models: existingSchema.models.filter((m) => m.id !== user?.id),
+      }
+      const updatedSchema = await updateSchema(schema)
+      const updatedPost = updatedSchema.models.find((m) => m.id === post?.id)
+      const updatedUser = updatedSchema.models.find((m) => m.id === user?.id)
+      const updatedPostHasUserAssoc = updatedPost?.associations.some(
+        (a) => a.targetModelId === user?.id,
+      )
+
+      expect(updatedUser).toBeUndefined()
+      expect(updatedPostHasUserAssoc).toBe(false)
     })
   })
 

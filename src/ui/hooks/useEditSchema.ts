@@ -205,15 +205,6 @@ function updateModelInSchema(schema: Schema, model: Model): Schema {
 function removeModelFromSchema(schema: Schema, modelId: Model['id']): Schema {
   return {
     ...schema,
-    models: schema.models
-      // Remove model
-      .filter((m) => m.id !== modelId)
-      // Remove associations related to model
-      .map((m) => ({
-        ...m,
-        associations: m.associations.filter(
-          (a) => a.sourceModelId !== modelId && a.targetModelId !== modelId,
-        ),
-      })),
+    models: schema.models.filter((m) => m.id !== modelId),
   }
 }

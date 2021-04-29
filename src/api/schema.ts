@@ -28,8 +28,9 @@ export async function createSchema(schemaPayload: Omit<Schema, 'id'>): Promise<S
 
 export async function updateSchema(schema: Schema): Promise<Schema> {
   const schemas = await listSchemas()
+  const existingSchema = schemas.find((s) => s.id === schema.id)
 
-  if (!schemas.some((s) => s.id === schema.id)) {
+  if (!existingSchema) {
     return Promise.reject(new Error(SCHEMA_NOT_FOUND_ERROR))
   }
 
@@ -38,11 +39,24 @@ export async function updateSchema(schema: Schema): Promise<Schema> {
     schemas.map((s) => s.name),
   )
 
-  const updateSchema = { ...schema, name }
+  const updatedSchema: Schema = removeTargetingAssociations(existingSchema, { ...schema, name })
+  const updatedSchemas = schemas.map((s) => (s.id === schema.id ? updatedSchema : s))
 
-  const updatedSchemas = schemas.map((s) => (s.id === schema.id ? updateSchema : s))
   await set(schemasKey(), updatedSchemas)
-  return updateSchema
+  return updatedSchema
+}
+
+function removeTargetingAssociations(schema: Schema, updatedSchema: Schema): Schema {
+  const removedModelIds = schema.models
+    .filter((m) => !updatedSchema.models.some((um) => um.id === m.id))
+    .map((m) => m.id)
+
+  const models = updatedSchema.models.map((m) => ({
+    ...m,
+    associations: m.associations.filter((a) => !removedModelIds.includes(a.targetModelId)),
+  }))
+
+  return { ...updatedSchema, models }
 }
 
 export async function deleteSchema(id: string): Promise<void> {
