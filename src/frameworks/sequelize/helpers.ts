@@ -18,8 +18,6 @@ const idField = (): Field => ({
 export const hasJsonType = (model: Model): boolean =>
   model.fields.some((f) => f.type.type === DataTypeType.Json)
 
-export const literalFunction = (fn: string): string => `Sequelize.literal('${fn}')`
-
 export const sqlDialiectConfigValue = (dialect: SqlDialect): string => {
   switch (dialect) {
     case SqlDialect.MariaDb:

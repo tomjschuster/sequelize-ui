@@ -162,10 +162,6 @@ export const defaultSqlDialectStorage = (dialect: SqlDialect): string | null => 
   }
 }
 
-export const sqlCurrentTimestamp = (): string => 'CURRENT_TIMESTAMP'
-export const sqlCurrentDate = (): string => 'CURRENT_DATE'
-export const sqlCurrentTime = (): string => 'CURRENT_TIME'
-
 export const displayDatabaseNounForm = (nounForm: DatabaseNounForm): string => {
   switch (nounForm) {
     case DatabaseNounForm.Singular:

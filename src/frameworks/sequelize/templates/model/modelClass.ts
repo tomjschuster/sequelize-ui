@@ -1,12 +1,5 @@
 import { blank, lines } from '@src/core/codegen'
-import {
-  DatabaseCaseStyle,
-  DatabaseNounForm,
-  DatabaseOptions,
-  sqlCurrentDate,
-  sqlCurrentTime,
-  sqlCurrentTimestamp,
-} from '@src/core/database'
+import { DatabaseCaseStyle, DatabaseNounForm, DatabaseOptions } from '@src/core/database'
 import {
   Association,
   AssociationTypeType,
@@ -21,7 +14,7 @@ import {
   displaySequelizeDataType,
   sequelizeUuidVersion,
 } from '../../dataTypes'
-import { addIdField, literalFunction, modelName } from '../../helpers'
+import { addIdField, modelName } from '../../helpers'
 import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
 
 export type ModelClassTempalteArgs = {
@@ -216,15 +209,15 @@ const tableName = ({ dbOptions: { caseStyle, nounForm }, model }: TableNameArgs)
 
 const defaultField = (dataType: DataType) => {
   if (dataType.type === DataTypeType.DateTime && dataType.defaultNow) {
-    return `defaultValue: ${literalFunction(sqlCurrentTimestamp())}`
+    return `defaultValue: DataTypes.NOW`
   }
 
   if (dataType.type === DataTypeType.Date && dataType.defaultNow) {
-    return `defaultValue: ${literalFunction(sqlCurrentDate())}`
+    return `defaultValue: DataTypes.NOW`
   }
 
   if (dataType.type === DataTypeType.Time && dataType.defaultNow) {
-    return `defaultValue: ${literalFunction(sqlCurrentTime())}`
+    return `defaultValue: DataTypes.NOW`
   }
 
   if (dataType.type === DataTypeType.Uuid && dataType.defaultVersion) {

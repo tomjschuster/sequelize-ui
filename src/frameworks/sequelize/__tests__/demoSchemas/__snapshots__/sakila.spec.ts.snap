@@ -487,6 +487,7 @@ import type { Film, FilmId } from './Film'
 
 export interface LanguageAttributes {
   languageId: number
+  name: string
 }
 
 export type LanguagePk = 'languageId'
@@ -495,6 +496,7 @@ export type LanguageCreationAttributes = Optional<LanguageAttributes, LanguagePk
 
 export class Language extends Model<LanguageAttributes, LanguageCreationAttributes> implements LanguageAttributes {
   public readonly languageId!: number
+  public name!: string
 
   // Language hasMany Film
   public readonly films?: Film[]
@@ -528,6 +530,10 @@ export class Language extends Model<LanguageAttributes, LanguageCreationAttribut
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        allowNull: false
+      },
+      name: {
+        type: DataTypes.STRING,
         allowNull: false
       }
     }, {

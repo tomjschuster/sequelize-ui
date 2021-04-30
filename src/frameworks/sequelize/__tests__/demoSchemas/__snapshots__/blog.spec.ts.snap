@@ -842,7 +842,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
       registeredAt: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: DataTypes.NOW
       },
       lastLogin: {
         type: DataTypes.DATE

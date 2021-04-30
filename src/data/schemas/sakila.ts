@@ -190,6 +190,12 @@ const language: Model = {
       primaryKey: true,
       required: true,
     },
+    {
+      id: '16',
+      name: 'name',
+      type: { type: DataTypeType.String },
+      required: true,
+    },
   ],
   associations: [
     {
@@ -214,7 +220,7 @@ const category: Model = {
   name: 'category',
   fields: [
     {
-      id: '16',
+      id: '17',
       name: 'category_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
@@ -241,7 +247,7 @@ const inventory: Model = {
   name: 'inventory',
   fields: [
     {
-      id: '17',
+      id: '18',
       name: 'inventory_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
@@ -269,7 +275,7 @@ const store: Model = {
   name: 'store',
   fields: [
     {
-      id: '18',
+      id: '19',
       name: 'store_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
@@ -317,48 +323,48 @@ const staff: Model = {
   name: 'staff',
   fields: [
     {
-      id: '19',
+      id: '20',
       name: 'staff_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '20',
+      id: '21',
       name: 'first_name',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '21',
+      id: '22',
       name: 'last_name',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '22',
+      id: '23',
       name: 'picture',
       type: { type: DataTypeType.Blob },
     },
     {
-      id: '23',
+      id: '24',
       name: 'email',
       type: { type: DataTypeType.String },
     },
     {
-      id: '24',
+      id: '25',
       name: 'active',
       type: { type: DataTypeType.Boolean },
       required: true,
     },
     {
-      id: '25',
+      id: '26',
       name: 'username',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '26',
+      id: '27',
       name: 'password',
       type: { type: DataTypeType.String },
     },
@@ -404,31 +410,31 @@ const customer: Model = {
   name: 'customer',
   fields: [
     {
-      id: '27',
+      id: '28',
       name: 'customer_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '28',
+      id: '29',
       name: 'first_name',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '29',
+      id: '30',
       name: 'last_name',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '30',
+      id: '31',
       name: 'email',
       type: { type: DataTypeType.String },
     },
     {
-      id: '31',
+      id: '32',
       name: 'active',
       type: { type: DataTypeType.Boolean },
       required: true,
@@ -467,31 +473,31 @@ const address: Model = {
   name: 'address',
   fields: [
     {
-      id: '32',
+      id: '33',
       name: 'address_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '33',
+      id: '34',
       name: 'address',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '34',
+      id: '35',
       name: 'address2',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '35',
+      id: '36',
       name: 'postal_code',
       type: { type: DataTypeType.String },
     },
     {
-      id: '36',
+      id: '37',
       name: 'phone',
       type: { type: DataTypeType.String },
       required: true,
@@ -530,20 +536,20 @@ const rental: Model = {
   name: 'rental',
   fields: [
     {
-      id: '37',
+      id: '38',
       name: 'rental_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '38',
+      id: '39',
       name: 'rental_date',
       type: { type: DataTypeType.Date },
       required: true,
     },
     {
-      id: '39',
+      id: '40',
       name: 'return_date',
       type: { type: DataTypeType.String },
     },
@@ -581,20 +587,20 @@ const payment: Model = {
   name: 'payment',
   fields: [
     {
-      id: '40',
+      id: '41',
       name: 'payment_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '41',
+      id: '42',
       name: 'amount',
       type: { type: DataTypeType.Decimal },
       required: true,
     },
     {
-      id: '42',
+      id: '43',
       name: 'payment_date',
       type: { type: DataTypeType.DateTime },
       required: true,
@@ -627,14 +633,14 @@ const city: Model = {
   name: 'city',
   fields: [
     {
-      id: '43',
+      id: '44',
       name: 'city_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '44',
+      id: '45',
       name: 'city',
       type: { type: DataTypeType.String },
       required: true,
@@ -661,14 +667,14 @@ const country: Model = {
   name: 'country',
   fields: [
     {
-      id: '45',
+      id: '46',
       name: 'country_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '46',
+      id: '47',
       name: 'country',
       type: { type: DataTypeType.String },
       required: true,
@@ -689,7 +695,7 @@ const film_actor: Model = {
   name: 'film_actor',
   fields: [
     {
-      id: '47',
+      id: '48',
       name: 'film_actor_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
@@ -717,7 +723,7 @@ const film_category: Model = {
   name: 'film_category',
   fields: [
     {
-      id: '48',
+      id: '49',
       name: 'film_category_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,

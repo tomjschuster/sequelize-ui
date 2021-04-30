@@ -158,21 +158,21 @@ export class Category extends Model<CategoryAttributes, CategoryCreationAttribut
       },
       dateTimeDefaultNow: {
         type: DataTypes.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: DataTypes.NOW
       },
       date: {
         type: DataTypes.DATEONLY
       },
       dateDefaultNow: {
         type: DataTypes.DATEONLY,
-        defaultValue: Sequelize.literal('CURRENT_DATE')
+        defaultValue: DataTypes.NOW
       },
       time: {
         type: DataTypes.TIME
       },
       timeDefaultNow: {
         type: DataTypes.TIME,
-        defaultValue: Sequelize.literal('CURRENT_TIME')
+        defaultValue: DataTypes.NOW
       },
       boolean: {
         type: DataTypes.BOOLEAN

@@ -325,7 +325,7 @@ const rental: Model = {
     {
       id: '19',
       name: 'rentedAt',
-      type: { type: DataTypeType.DateTime, defaultNow: true },
+      type: { type: DataTypeType.Time, defaultNow: true },
       required: true,
     },
   ],

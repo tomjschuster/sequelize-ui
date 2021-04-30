@@ -22,13 +22,10 @@
 #### DB Options
 
 - prefix id name option
-- default value
-  - Update default date/time to use DataTypes.NOW
 
 #### Codegen
 
 - Review sequelize cli format for init models and config
-- Review DataTypes.NOW
 - Migrations
 - JavaScript
 

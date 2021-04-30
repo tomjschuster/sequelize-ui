@@ -12,9 +12,6 @@ import {
   displaySqlDialect,
   MAX_IDENTIFIER_LENGTH,
   parseSqlDialect,
-  sqlCurrentDate,
-  sqlCurrentTime,
-  sqlCurrentTimestamp,
   SqlDialect,
   sqlDialectEnvVar,
 } from '..'
@@ -180,24 +177,6 @@ describe('database', () => {
       fit(` ${JSON.stringify(expected)}`, () => {
         expect(displayDatabaseCaseStyle(caseStyle)).toEqual(expected)
       })
-    })
-  })
-
-  describe('sqlCurrentTimestamp', () => {
-    fit('should return the proper value', () => {
-      expect(sqlCurrentTimestamp()).toEqual('CURRENT_TIMESTAMP')
-    })
-  })
-
-  describe('sqlCurrentDate', () => {
-    fit('should return the proper value', () => {
-      expect(sqlCurrentDate()).toEqual('CURRENT_DATE')
-    })
-  })
-
-  describe('sqlCurrentTime', () => {
-    fit('should return the proper value', () => {
-      expect(sqlCurrentTime()).toEqual('CURRENT_TIME')
     })
   })
 
