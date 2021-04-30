@@ -126,6 +126,7 @@ export default function ModelForm({
           key={`association-form-${association.id}`}
           association={association}
           schema={schema}
+          model={formModel}
           onChange={handleChangeAssociation}
           onDelete={handleDeleteAssociation}
           errors={errors.associations[association.id]}

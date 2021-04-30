@@ -24,11 +24,11 @@ export const throughModel_: ManyToManyThroughModel = {
   modelId: shortid(),
 }
 
-export const manyToManyTableType_: ManyToManyAssociation<ManyToManyThroughTable> = {
+export const manyToManyTableType_: ManyToManyAssociation = {
   type: AssociationTypeType.ManyToMany,
   through: throughTable_,
 }
-export const manyToManyModelType_: ManyToManyAssociation<ManyToManyThroughModel> = {
+export const manyToManyModelType_: ManyToManyAssociation = {
   type: AssociationTypeType.ManyToMany,
   through: throughModel_,
 }
@@ -45,11 +45,11 @@ export const belongsTo: Association<BelongsToAssociation> = {
 }
 export const hasMany: Association<HasManyAssociation> = { ...baseAssociation, type: hasManyType_ }
 export const hasOne: Association<HasOneAssociation> = { ...baseAssociation, type: hasOneType_ }
-export const manyToManyTable: Association<ManyToManyAssociation<ManyToManyThroughTable>> = {
+export const manyToManyTable: Association<ManyToManyAssociation> = {
   ...baseAssociation,
   type: manyToManyTableType_,
 }
-export const manyToManyModel: Association<ManyToManyAssociation<ManyToManyThroughModel>> = {
+export const manyToManyModel: Association<ManyToManyAssociation> = {
   ...baseAssociation,
   type: manyToManyModelType_,
 }

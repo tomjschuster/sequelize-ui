@@ -18,6 +18,7 @@ import { AssociationFormErrors } from './validation'
 type AssociationFieldsetProps = {
   association: Association
   schema: Schema
+  model: Model
   errors?: AssociationFormErrors
   onChange: (id: Association['id'], changes: Partial<Association>) => void
   onDelete: (id: Association['id']) => void
@@ -26,6 +27,7 @@ type AssociationFieldsetProps = {
 function AssociationFieldset({
   association,
   schema,
+  model,
   errors,
   onChange,
   onDelete,
@@ -33,11 +35,6 @@ function AssociationFieldset({
   const modelOptions = React.useMemo(
     () => schema.models.map<[string, Model]>((m) => [m.id, m]),
     [schema.models],
-  )
-
-  const model: Model = useMemo(
-    () => schema.models.find((m) => m.id === association.sourceModelId) as Model,
-    [schema.models, association.sourceModelId],
   )
 
   const targetModel: Model = useMemo(
@@ -64,41 +61,31 @@ function AssociationFieldset({
   )
 
   const handleChangeManyToMany = useCallback(
-    (cb: (type: ManyToManyAssociation) => ManyToManyAssociation): void => {
-      if (association.type.type !== AssociationTypeType.ManyToMany) {
-        const table = snakeCase(`${model.name} ${targetModel.name}`)
-
-        handleChange({
-          // @ts-expect-error association type error
-          type: cb({
-            type: AssociationTypeType.ManyToMany,
-            through: { type: ThroughType.ThroughTable, table },
-          }),
-        })
-        return
-      }
-      // @ts-expect-error association type error
-      handleChange({ type: cb(association.type) })
+    (changes: Partial<ManyToManyAssociation>) => {
+      if (association.type.type !== AssociationTypeType.ManyToMany) return
+      handleChange({ type: { ...association.type, ...changes } })
     },
-    [model, targetModel, association.type, handleChange],
+    [association.type, handleChange],
   )
 
   const handleChangeType = useCallback(
-    (type: AssociationTypeType) => {
-      handleChange({
-        type:
-          type === AssociationTypeType.ManyToMany
-            ? {
-                type,
-                through: {
-                  type: ThroughType.ThroughTable,
-                  table: snakeCase(`${model.name} ${targetModel.name}`),
-                },
-              }
-            : { type },
-      })
+    (typeType: AssociationTypeType) => {
+      if (typeType === AssociationTypeType.ManyToMany) {
+        handleChange({
+          type: {
+            type: typeType,
+            through: {
+              type: ThroughType.ThroughTable,
+              table: snakeCase(`${model.name} ${targetModel.name}`),
+            },
+          },
+        })
+        return
+      }
+
+      handleChange({ type: { type: typeType } })
     },
-    [model, targetModel, handleChange],
+    [model.name, targetModel.name, handleChange],
   )
 
   const handleChangeTarget = useCallback(
@@ -118,48 +105,47 @@ function AssociationFieldset({
 
   const handleChangeThroughType = useCallback(
     (type: ThroughType) => {
+      const associationType = association.type
+      if (associationType.type !== AssociationTypeType.ManyToMany) {
+        return
+      }
+
       const table = snakeCase(`${model.name} ${targetModel.name}`)
+
+      if (type === ThroughType.ThroughTable) {
+        handleChangeManyToMany({ through: { type, table } })
+        return
+      }
 
       const throughModel =
         schema.models.find((m) => snakeCase(m.name) === table) || schema.models[0]
 
-      if (type === ThroughType.ThroughModel && throughModel) {
-        handleChangeManyToMany((currType) => ({
-          ...currType,
-          through: { type, modelId: throughModel.id },
-        }))
-        return
-      }
-
-      if (type === ThroughType.ThroughTable) {
-        handleChangeManyToMany((currType) => ({ ...currType, through: { type, table } }))
+      if (throughModel) {
+        handleChangeManyToMany({ through: { type, modelId: throughModel.id } })
       }
     },
-    [model, targetModel, schema.models, handleChangeManyToMany],
+    [association.type, model.name, targetModel, schema.models, handleChangeManyToMany],
   )
 
   const handleChangeThroughModel = useCallback(
     (model: Model) => {
-      handleChangeManyToMany((type) => ({
-        ...type,
+      handleChangeManyToMany({
         through: { type: ThroughType.ThroughModel, modelId: model.id },
-      }))
+      })
     },
     [handleChangeManyToMany],
   )
 
   const handleChangeThroughTable = useCallback(
     (table?: string) =>
-      handleChangeManyToMany((type) => ({
-        ...type,
+      handleChangeManyToMany({
         through: { type: ThroughType.ThroughTable, table: table || '' },
-      })),
+      }),
     [handleChangeManyToMany],
   )
 
   const handleChangeTargetForeignKey = useCallback(
-    (targetFk?: string) =>
-      handleChangeManyToMany((type) => ({ ...type, targetFk: targetFk || undefined })),
+    (targetFk?: string) => handleChangeManyToMany({ targetFk: targetFk || undefined }),
     [handleChangeManyToMany],
   )
 

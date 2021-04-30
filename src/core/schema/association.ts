@@ -18,15 +18,15 @@ export type AssociationType =
   | BelongsToAssociation
   | HasOneAssociation
   | HasManyAssociation
-  | ManyToManyAssociation<ManyToManyThroughModel>
-  | ManyToManyAssociation<ManyToManyThroughTable>
+  | ManyToManyAssociation
+  | ManyToManyAssociation
 
 export type BelongsToAssociation = { type: AssociationTypeType.BelongsTo }
 export type HasOneAssociation = { type: AssociationTypeType.HasOne }
 export type HasManyAssociation = { type: AssociationTypeType.HasMany }
-export type ManyToManyAssociation<T extends ManyToManyThrough = ManyToManyThrough> = {
+export type ManyToManyAssociation = {
   type: AssociationTypeType.ManyToMany
-  through: T
+  through: ManyToManyThrough
   targetFk?: string
 }
 

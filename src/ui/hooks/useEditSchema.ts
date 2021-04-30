@@ -51,7 +51,6 @@ export default function useEditSchema(): UseEditSchemaResult {
 
   const schemaId = useMemo(() => (route && 'schemaId' in route ? route.schemaId : undefined), [
     route,
-    schema,
   ])
 
   useLoadSchema({
@@ -63,23 +62,20 @@ export default function useEditSchema(): UseEditSchemaResult {
     onError: setError,
   })
 
-  const edit = useCallback(() => schemaId && goTo(editSchemaRoute(schemaId)), [schemaId, route])
+  const edit = useCallback(() => schemaId && goTo(editSchemaRoute(schemaId)), [schemaId])
 
-  const update = useCallback(
-    async (schema: Schema): Promise<Schema> => {
-      const updatedSchema = await updateSchema(schema)
-      setSchema(updatedSchema)
-      goTo(viewSchemaRoute(schema.id))
-      return updatedSchema
-    },
-    [route],
-  )
+  const update = useCallback(async (schema: Schema): Promise<Schema> => {
+    const updatedSchema = await updateSchema(schema)
+    setSchema(updatedSchema)
+    goTo(viewSchemaRoute(schema.id))
+    return updatedSchema
+  }, [])
 
   const destroy = useCallback(async () => {
     if (!schema) return
     await deleteSchema(schema.id)
     goTo(indexRoute())
-  }, [schema, deleteSchema])
+  }, [schema])
 
   const addModel = useCallback(async () => {
     if (!schema) return
@@ -88,14 +84,14 @@ export default function useEditSchema(): UseEditSchemaResult {
     } = await update({ ...schema, models: [emptyModel(), ...schema.models] })
 
     goTo(editModelRoute(schema.id, model.id))
-  }, [schema])
+  }, [schema, update])
 
   const updateModel = useCallback(
     async (model: Model) => {
       if (!schema) return
       await update(updateModelInSchema(schema, model))
     },
-    [schema],
+    [schema, update],
   )
 
   const deleteModel = useCallback(
@@ -103,7 +99,7 @@ export default function useEditSchema(): UseEditSchemaResult {
       if (!schema) return
       await update(removeModelFromSchema(schema, id))
     },
-    [schema],
+    [schema, update],
   )
 
   const editModel = useCallback(
@@ -165,11 +161,15 @@ function useLoadSchema({
       .then((schemas) => {
         const schema = schemas.find((s) => s.id === schemaId)
         if (!schemaId && schemas[0]) {
-          return goTo(viewSchemaRoute(schemas[0].id))
+          goTo(viewSchemaRoute(schemas[0].id))
+          return
         }
+
         if (!schema) {
-          return goTo(indexRoute())
+          goTo(indexRoute())
+          return
         }
+
         onLoadSchemas(schemas)
         onLoadSchema(schema)
         setLoading(false)
@@ -178,7 +178,7 @@ function useLoadSchema({
         onError('Sorry, something went wrong.')
         setLoading(false)
       })
-  }, [skip, loading, route, schemaId])
+  }, [skip, loading, route, schemaId, onError, onLoadSchema, onLoadSchemas])
 }
 
 function routeToEditState(route?: Route): SchemaEditState {

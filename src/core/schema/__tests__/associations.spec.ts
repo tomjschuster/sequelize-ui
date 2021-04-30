@@ -26,6 +26,8 @@ import {
   manyToManyModelType_,
   manyToManyTable,
   manyToManyTableType_,
+  throughModel_,
+  throughTable_,
 } from './__fixtures__/association'
 
 describe('schema dataTypes', () => {
@@ -162,15 +164,13 @@ describe('schema dataTypes', () => {
 
   describe('manyToManyTableType', () => {
     it('returns the correct value', () => {
-      expect(manyToManyTableType(manyToManyTableType_.through.table)).toEqual(manyToManyTableType_)
+      expect(manyToManyTableType(throughTable_.table)).toEqual(manyToManyTableType_)
     })
   })
 
   describe('manyToManyModelType', () => {
     it('returns the correct value', () => {
-      expect(manyToManyModelType(manyToManyModelType_.through.modelId)).toEqual(
-        manyToManyModelType_,
-      )
+      expect(manyToManyModelType(throughModel_.modelId)).toEqual(manyToManyModelType_)
     })
   })
 })

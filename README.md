@@ -6,7 +6,6 @@
 
 #### Bugs
 
-- association fieldset ts-expect-error
 - id_id?
 
 ```ts
