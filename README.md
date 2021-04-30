@@ -2,12 +2,6 @@
 
 ## Todo:
 
-### Tech Debt
-
-#### Upgrade
-
-- Webpack 5
-
 #### Testing
 
 - ui

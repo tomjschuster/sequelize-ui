@@ -111,14 +111,6 @@ describe('schema api', () => {
       expect(persistedSchema.name).toBe('foo')
     })
 
-    it('increments the name when other schema has the name', async () => {
-      await createSchema(employeeTemporalDataSet)
-      const existingSchema = await createSchema(sakila)
-
-      const schema = await updateSchema({ ...existingSchema, name: employeeTemporalDataSet.name })
-      expect(schema.name).toBe(`${employeeTemporalDataSet.name} (1)`)
-    })
-
     it('removes targeting associations when removing a model', async () => {
       const existingSchema = await createSchema(blogSchema)
 

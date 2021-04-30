@@ -34,12 +34,7 @@ export async function updateSchema(schema: Schema): Promise<Schema> {
     return Promise.reject(new Error(SCHEMA_NOT_FOUND_ERROR))
   }
 
-  const name = versionedName(
-    schema.name,
-    schemas.map((s) => s.name),
-  )
-
-  const updatedSchema: Schema = removeTargetingAssociations(existingSchema, { ...schema, name })
+  const updatedSchema: Schema = removeTargetingAssociations(existingSchema, schema)
   const updatedSchemas = schemas.map((s) => (s.id === schema.id ? updatedSchema : s))
 
   await set(schemasKey(), updatedSchemas)
