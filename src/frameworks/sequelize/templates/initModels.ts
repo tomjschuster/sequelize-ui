@@ -2,6 +2,7 @@ import { blank, lines } from '@src/core/codegen'
 import { DatabaseCaseStyle, DatabaseOptions } from '@src/core/database'
 import {
   Association,
+  associationIsCircular,
   AssociationTypeType,
   ManyToManyAssociation,
   Model,
@@ -153,6 +154,7 @@ const associationOptions = ({
         throughField(association, modelById),
         foreignKeyField({ model, association, modelById, dbOptions }),
         otherKeyField({ model, association, modelById, dbOptions }),
+        noConstraintsField({ model, association }),
         onDeleteField(association),
       ],
       { depth: 2, separator: ',' },
@@ -198,13 +200,14 @@ const getForeignKey = ({
   modelById,
   dbOptions,
 }: AssociationOptionsArgs): string => {
-  const name = association.foreignKey
-    ? association.foreignKey
-    : association.alias && association.type.type === AssociationTypeType.BelongsTo
-    ? association.alias
-    : association.type.type === AssociationTypeType.BelongsTo
-    ? modelById[association.targetModelId].name
-    : model.name
+  if (association.foreignKey) return association.foreignKey
+  const name =
+    association.alias && association.type.type === AssociationTypeType.BelongsTo
+      ? association.alias
+      : association.type.type === AssociationTypeType.BelongsTo
+      ? modelById[association.targetModelId].name
+      : model.name
+
   return dbOptions.caseStyle === DatabaseCaseStyle.Snake
     ? `${snakeCase(name)}_id`
     : `${camelCase(name)}Id`
@@ -226,16 +229,22 @@ const getOtherKey = ({
   dbOptions,
 }: AssociationOptionsArgs): string | null => {
   if (association.type.type !== AssociationTypeType.ManyToMany) return null
+  if (association.type.targetFk) return association.type.targetFk
 
-  const name = association.type.targetFk
-    ? association.type.targetFk
-    : association.alias
-    ? association.alias
-    : modelById[association.targetModelId].name
+  const name = association.alias ? association.alias : modelById[association.targetModelId].name
 
   return dbOptions.caseStyle === DatabaseCaseStyle.Snake
     ? `${snakeCase(name)}_id`
     : `${camelCase(name)}Id`
+}
+
+type NoConstraintsFieldArgs = {
+  model: Model
+  association: Association
+}
+const noConstraintsField = ({ model, association }: NoConstraintsFieldArgs) => {
+  // https://sequelize.org/master/class/lib/associations/base.js~Association.html
+  return associationIsCircular(association, model.associations) ? 'constraints: false' : null
 }
 
 type AliasValueArgs = {

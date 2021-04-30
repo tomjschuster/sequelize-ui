@@ -1,16 +1,21 @@
 import {
   Association,
+  associationIsCircular,
   associationsHaveSameForm,
   AssociationType,
   associationTypeIsPlural,
   associationTypeIsSingular,
   AssociationTypeType,
+  BelongsToAssociation,
   belongsToType,
   displayAssociation,
   displayAssociationTypeType,
   displayThroughType,
+  HasManyAssociation,
   hasManyType,
+  HasOneAssociation,
   hasOneType,
+  ManyToManyAssociation,
   manyToManyModelType,
   manyToManyTableType,
   ThroughType,
@@ -172,5 +177,107 @@ describe('schema dataTypes', () => {
     it('returns the correct value', () => {
       expect(manyToManyModelType(throughModel_.modelId)).toEqual(manyToManyModelType_)
     })
+  })
+
+  describe('associationIsCircular', () => {
+    const aBelongsToB: Association<BelongsToAssociation> = {
+      id: 'aBelongsToB',
+      sourceModelId: 'a',
+      targetModelId: 'b',
+      type: { type: AssociationTypeType.BelongsTo },
+    }
+
+    const aHasManyB: Association<HasManyAssociation> = {
+      id: 'aHasManyB',
+      sourceModelId: 'a',
+      targetModelId: 'b',
+      type: { type: AssociationTypeType.HasMany },
+    }
+
+    const aHasOneB: Association<HasOneAssociation> = {
+      id: 'aHasOneB',
+      sourceModelId: 'a',
+      targetModelId: 'b',
+      type: { type: AssociationTypeType.HasOne },
+    }
+
+    const bBelongsToA: Association<BelongsToAssociation> = {
+      id: 'bBelongsToA',
+      sourceModelId: 'b',
+      targetModelId: 'a',
+      type: { type: AssociationTypeType.BelongsTo },
+    }
+
+    const bHasManyA: Association<HasManyAssociation> = {
+      id: 'bHasManyA',
+      sourceModelId: 'b',
+      targetModelId: 'a',
+      type: { type: AssociationTypeType.HasMany },
+    }
+
+    const bHasOneA: Association<HasManyAssociation> = {
+      id: 'bHasOneA',
+      sourceModelId: 'b',
+      targetModelId: 'a',
+      type: { type: AssociationTypeType.HasMany },
+    }
+
+    const aBelongsToC: Association<BelongsToAssociation> = {
+      id: 'aBelongsToC',
+      sourceModelId: 'a',
+      targetModelId: 'c',
+      type: { type: AssociationTypeType.BelongsTo },
+    }
+
+    const aManyToManyB: Association<ManyToManyAssociation> = {
+      id: 'aManyToManyB',
+      sourceModelId: 'a',
+      targetModelId: 'b',
+      type: {
+        type: AssociationTypeType.ManyToMany,
+        through: { type: ThroughType.ThroughTable, table: 'foo' },
+      },
+    }
+
+    const bManyToManyA: Association<ManyToManyAssociation> = {
+      id: 'bManyToManyA',
+      sourceModelId: 'b',
+      targetModelId: 'a',
+      type: {
+        type: AssociationTypeType.ManyToMany,
+        through: { type: ThroughType.ThroughTable, table: 'bar' },
+      },
+    }
+
+    const commonAssociations = [aBelongsToC, aManyToManyB, bManyToManyA]
+
+    const cases: [association: Association, associations: Association[], expected: boolean][] = [
+      [aBelongsToB, [aHasManyB, aBelongsToB, ...commonAssociations], true],
+      [aBelongsToB, [aHasOneB, aBelongsToB, ...commonAssociations], true],
+      [aBelongsToB, [bBelongsToA, aBelongsToB, ...commonAssociations], true],
+      [aHasManyB, [bHasManyA, aHasManyB, ...commonAssociations], true],
+      [aHasManyB, [bHasOneA, aHasManyB, ...commonAssociations], true],
+      [aHasOneB, [bHasOneA, aHasOneB, ...commonAssociations], true],
+      [aHasOneB, [bHasManyA, aHasOneB, ...commonAssociations], true],
+      [bBelongsToA, [aBelongsToB, bBelongsToA, ...commonAssociations], true],
+      [bHasManyA, [aHasManyB, bHasManyA, ...commonAssociations], true],
+      [bHasManyA, [aHasOneB, bHasManyA, ...commonAssociations], true],
+      [bHasOneA, [aHasManyB, bHasOneA, ...commonAssociations], true],
+      [bHasOneA, [aHasOneB, bHasOneA, ...commonAssociations], true],
+      [aHasManyB, [aBelongsToB, aHasManyB, ...commonAssociations], true],
+      [aHasOneB, [aBelongsToB, aHasOneB, ...commonAssociations], true],
+      [aBelongsToB, [bHasManyA, aBelongsToB, ...commonAssociations], false],
+      [aBelongsToB, [bHasOneA, aBelongsToB, ...commonAssociations], false],
+      [bHasManyA, [aBelongsToB, bHasManyA, ...commonAssociations], false],
+      [bHasOneA, [aBelongsToB, bHasOneA, ...commonAssociations], false],
+      [aBelongsToB, [aBelongsToB, ...commonAssociations], false],
+    ]
+
+    it.each(cases)(
+      'associationIsCircular(%s, %o) === %s',
+      (association, associations, expected) => {
+        expect(associationIsCircular(association, associations)).toBe(expected)
+      },
+    )
   })
 })

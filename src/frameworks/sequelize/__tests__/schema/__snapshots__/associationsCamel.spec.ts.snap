@@ -65,7 +65,7 @@ export function initModels(sequelize: Sequelize) {
   })
   Post.belongsTo(Post, {
     as: 'parent',
-    foreignKey: 'parentIdId'
+    foreignKey: 'parent id'
   })
   Post.hasMany(Post, {
     as: 'children',
@@ -86,7 +86,7 @@ export function initModels(sequelize: Sequelize) {
   Post.belongsToMany(Tag, {
     through: 'post_tag',
     foreignKey: 'postId',
-    otherKey: 'tagIdId',
+    otherKey: 'tag_id',
     onDelete: 'CASCADE'
   })
   PostCategory.belongsTo(Post, {

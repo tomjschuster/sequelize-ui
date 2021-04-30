@@ -124,3 +124,41 @@ export function manyToManyModelType(modelId: string): ManyToManyAssociation {
     through: throughModel(modelId),
   }
 }
+
+// https://sequelize.org/master/class/lib/associations/base.js~Association.html
+export function associationIsCircular(
+  association: Association,
+  associations: Association[],
+): boolean {
+  return (
+    association.sourceModelId !== association.targetModelId &&
+    associations.some(
+      (a) =>
+        (association.id !== a.id &&
+          // Model has "belongs" and "has" relationship to same model
+          (association.type.type === AssociationTypeType.HasMany ||
+            association.type.type === AssociationTypeType.HasOne) &&
+          a.type.type === AssociationTypeType.BelongsTo &&
+          association.sourceModelId === a.sourceModelId &&
+          association.targetModelId === a.targetModelId) ||
+        // Model has "belongs" and "has" relationship to same model
+        (association.type.type === AssociationTypeType.BelongsTo &&
+          (a.type.type === AssociationTypeType.HasMany ||
+            a.type.type === AssociationTypeType.HasOne) &&
+          association.sourceModelId === a.sourceModelId &&
+          association.targetModelId === a.targetModelId) ||
+        // Two models have "belongs" to each other
+        (association.type.type === AssociationTypeType.BelongsTo &&
+          a.type.type === AssociationTypeType.BelongsTo &&
+          association.sourceModelId === a.targetModelId &&
+          association.targetModelId === a.sourceModelId) ||
+        // Two models have "has" relationship to each other
+        ((association.type.type === AssociationTypeType.HasMany ||
+          association.type.type === AssociationTypeType.HasOne) &&
+          (a.type.type === AssociationTypeType.HasMany ||
+            a.type.type === AssociationTypeType.HasOne) &&
+          association.sourceModelId === a.targetModelId &&
+          association.targetModelId === a.sourceModelId),
+    )
+  )
+}

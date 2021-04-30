@@ -53,23 +53,23 @@ export function initModels(sequelize: Sequelize) {
   Salary.initModel(sequelize)
 
   Employee.hasMany(Salary, {
-    foreignKey: 'emp_no_id'
+    foreignKey: 'emp_no'
   })
   Employee.hasMany(Title, {
-    foreignKey: 'emp_no_id'
+    foreignKey: 'emp_no'
   })
   Employee.belongsToMany(Department, {
     as: 'employingDepartments',
     through: DeptEmp,
-    foreignKey: 'emp_no_id',
-    otherKey: 'dept_no_id',
+    foreignKey: 'emp_no',
+    otherKey: 'dept_no',
     onDelete: 'CASCADE'
   })
   Employee.belongsToMany(Department, {
     as: 'managedDepartments',
     through: DeptManager,
-    foreignKey: 'emp_no_id',
-    otherKey: 'dept_no_id',
+    foreignKey: 'emp_no',
+    otherKey: 'dept_no',
     onDelete: 'CASCADE'
   })
   Department.belongsToMany(Employee, {
@@ -87,28 +87,28 @@ export function initModels(sequelize: Sequelize) {
     onDelete: 'CASCADE'
   })
   Department.hasMany(DeptEmp, {
-    foreignKey: 'dept_no_id'
+    foreignKey: 'dept_no'
   })
   Department.hasMany(DeptManager, {
-    foreignKey: 'dept_no_id'
+    foreignKey: 'dept_no'
   })
   DeptEmp.belongsTo(Employee, {
-    foreignKey: 'emp_no_id'
+    foreignKey: 'emp_no'
   })
   DeptEmp.belongsTo(Department, {
-    foreignKey: 'dept_no_id'
+    foreignKey: 'dept_no'
   })
   DeptManager.belongsTo(Employee, {
-    foreignKey: 'emp_no_id'
+    foreignKey: 'emp_no'
   })
   DeptManager.belongsTo(Department, {
-    foreignKey: 'dept_no_id'
+    foreignKey: 'dept_no'
   })
   Title.belongsTo(Employee, {
-    foreignKey: 'emp_no_id'
+    foreignKey: 'emp_no'
   })
   Salary.belongsTo(Employee, {
-    foreignKey: 'emp_no_id'
+    foreignKey: 'emp_no'
   })
 
   return {

@@ -4,17 +4,6 @@
 
 ### Tech Debt
 
-#### Bugs
-
-- id_id?
-
-```ts
-Language.hasMany(Film, {
-  as: 'originalLanguageFilms',
-  foreignKey: 'original_language_id_id',
-})
-```
-
 #### Upgrade
 
 - Webpack 5

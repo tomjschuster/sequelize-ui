@@ -108,8 +108,8 @@ export function initModels(sequelize: Sequelize) {
 
   Actor.belongsToMany(Film, {
     through: FilmActor,
-    foreignKey: 'actor_id_id',
-    otherKey: 'film_id_id',
+    foreignKey: 'actor_id',
+    otherKey: 'film_id',
     onDelete: 'CASCADE'
   })
   Film.belongsTo(Language, {
@@ -117,21 +117,21 @@ export function initModels(sequelize: Sequelize) {
   })
   Film.belongsTo(Language, {
     as: 'originalLanguage',
-    foreignKey: 'original_language_id_id'
+    foreignKey: 'original_language_id'
   })
   Film.hasMany(Inventory, {
-    foreignKey: 'film_id_id'
+    foreignKey: 'film_id'
   })
   Film.belongsToMany(Actor, {
     through: FilmActor,
-    foreignKey: 'film_id_id',
-    otherKey: 'actor_id_id',
+    foreignKey: 'film_id',
+    otherKey: 'actor_id',
     onDelete: 'CASCADE'
   })
   Film.belongsToMany(Category, {
     through: FilmCategory,
-    foreignKey: 'film_id_id',
-    otherKey: 'category_id_id',
+    foreignKey: 'film_id',
+    otherKey: 'category_id',
     onDelete: 'CASCADE'
   })
   Language.hasMany(Film, {
@@ -139,12 +139,12 @@ export function initModels(sequelize: Sequelize) {
   })
   Language.hasMany(Film, {
     as: 'originalLanguageFilms',
-    foreignKey: 'original_language_id_id'
+    foreignKey: 'original_language_id'
   })
   Category.belongsToMany(Film, {
     through: FilmCategory,
-    foreignKey: 'category_id_id',
-    otherKey: 'film_id_id',
+    foreignKey: 'category_id',
+    otherKey: 'film_id',
     onDelete: 'CASCADE'
   })
   Inventory.belongsTo(Film, {
@@ -157,24 +157,28 @@ export function initModels(sequelize: Sequelize) {
     foreignKey: 'store_id'
   })
   Store.hasMany(Staff, {
-    foreignKey: 'store_id'
+    foreignKey: 'store_id',
+    constraints: false
   })
   Store.hasMany(Customer, {
     foreignKey: 'store_id'
   })
   Store.belongsTo(Staff, {
     as: 'manager',
-    foreignKey: 'manager_staff_id_id'
+    foreignKey: 'manager_staff_id',
+    constraints: false
   })
   Store.belongsTo(Address, {
     foreignKey: 'address_id'
   })
   Staff.belongsTo(Store, {
-    foreignKey: 'store_id'
+    foreignKey: 'store_id',
+    constraints: false
   })
   Staff.hasMany(Store, {
     as: 'managedStores',
-    foreignKey: 'manager_staff_id_id'
+    foreignKey: 'manager_staff_id',
+    constraints: false
   })
   Staff.belongsTo(Address, {
     foreignKey: 'address_id'
