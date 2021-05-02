@@ -1,5 +1,5 @@
 import { blank, lines } from '@src/core/codegen'
-import { DatabaseOptions } from '@src/core/database'
+import { DbOptions } from '@src/core/database'
 import { Association, Model, Schema } from '@src/core/schema'
 import { ModelAssociation } from './common'
 import { modelImportsTemplate } from './imports'
@@ -9,10 +9,10 @@ import { modelTypesTemplate } from './types'
 export type ModelTemplateArgs = {
   model: Model
   schema: Schema
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
 }
 
-export const modelTemplate = ({ model, schema, dbOptions }: ModelTemplateArgs): string => {
+export function modelTemplate({ model, schema, dbOptions }: ModelTemplateArgs): string {
   const associations = joinModelAssociations({
     associations: model.associations,
     models: schema.models,
@@ -26,10 +26,10 @@ type JoinModelAssociationsArgs = {
   models: Model[]
 }
 type ModelById = { [id: string]: Model }
-const joinModelAssociations = ({
+function joinModelAssociations({
   associations,
   models,
-}: JoinModelAssociationsArgs): ModelAssociation[] => {
+}: JoinModelAssociationsArgs): ModelAssociation[] {
   const modelById: ModelById = models.reduce<ModelById>((acc, model) => {
     acc[model.id] = model
     return acc
@@ -43,10 +43,10 @@ const joinModelAssociations = ({
 type ModelTemplateArgs_ = {
   model: Model
   associations: ModelAssociation[]
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
 }
-const modelTemplate_ = ({ model, associations, dbOptions }: ModelTemplateArgs_): string =>
-  lines([
+function modelTemplate_({ model, associations, dbOptions }: ModelTemplateArgs_): string {
+  return lines([
     modelImportsTemplate({ model, associations, dbOptions }),
     blank(),
     modelTypesTemplate({ model, dbOptions }),
@@ -54,3 +54,4 @@ const modelTemplate_ = ({ model, associations, dbOptions }: ModelTemplateArgs_):
     modelClassTemplate({ model, associations, dbOptions }),
     blank(),
   ])
+}

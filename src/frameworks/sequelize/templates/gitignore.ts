@@ -1,7 +1,7 @@
 import { blank, lines } from '@src/core/codegen'
 
-export const gitignoreTemplate = (): string =>
-  lines([
+export function gitignoreTemplate(): string {
+  return lines([
     'node_modules/',
     'dist',
     'npm-debug.log*',
@@ -11,3 +11,4 @@ export const gitignoreTemplate = (): string =>
     '.tmp',
     blank(),
   ])
+}

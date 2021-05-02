@@ -1,5 +1,5 @@
 import { blank, lines } from '@src/core/codegen'
-import { DatabaseCaseStyle, DatabaseOptions } from '@src/core/database'
+import { DbCaseStyle, DbOptions } from '@src/core/database'
 import {
   Association,
   associationIsCircular,
@@ -9,16 +9,16 @@ import {
   Schema,
   ThroughType,
 } from '@src/core/schema'
-import { camelCase, pascalCase, plural, singular, snakeCase } from '@src/core/utils/string'
+import { camelCase, pascalCase, plural, singular, snakeCase } from '@src/utils/string'
 import { modelName } from '../helpers'
 
 export type InitModelsTemplateArgs = {
   schema: Schema
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
 }
 
-export const initModelsTemplate = ({ schema, dbOptions }: InitModelsTemplateArgs): string =>
-  lines([
+export function initModelsTemplate({ schema, dbOptions }: InitModelsTemplateArgs): string {
+  return lines([
     importSequelize(),
     importModels(schema),
     blank(),
@@ -29,12 +29,17 @@ export const initModelsTemplate = ({ schema, dbOptions }: InitModelsTemplateArgs
     initModels({ schema, dbOptions }),
     blank(),
   ])
+}
 
-const importSequelize = (): string => `import type { Sequelize, Model } from 'sequelize'`
+function importSequelize(): string {
+  return `import type { Sequelize, Model } from 'sequelize'`
+}
 
-const importModels = ({ models }: Schema): string => lines(models.map(importModel))
+function importModels({ models }: Schema): string {
+  return lines(models.map(importModel))
+}
 
-const importModel = (model: Model): string => {
+function importModel(model: Model): string {
   const name = modelName(model)
 
   return lines([
@@ -43,13 +48,19 @@ const importModel = (model: Model): string => {
   ])
 }
 
-const exportModels = ({ models }: Schema): string =>
-  lines(['export {', lines(models.map(modelName), { separator: ',', depth: 2 }), '}'])
+function exportModels({ models }: Schema): string {
+  return lines(['export {', lines(models.map(modelName), { separator: ',', depth: 2 }), '}'])
+}
 
-const exportTypes = ({ models }: Schema): string =>
-  lines(['export type {', lines(models.map(modelTypeExport), { depth: 2, separator: ',' }), '}'])
+function exportTypes({ models }: Schema): string {
+  return lines([
+    'export type {',
+    lines(models.map(modelTypeExport), { depth: 2, separator: ',' }),
+    '}',
+  ])
+}
 
-const modelTypeExport = (model: Model) => {
+function modelTypeExport(model: Model) {
   const name = modelName(model)
 
   return lines([`${name}Attributes`, `${name}CreationAttributes`], {
@@ -61,9 +72,9 @@ type ModelById = { [key: string]: Model }
 
 type InitModelsArgs = {
   schema: Schema
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
 }
-const initModels = ({ schema: { models }, dbOptions }: InitModelsArgs): string => {
+function initModels({ schema: { models }, dbOptions }: InitModelsArgs): string {
   const modelById: ModelById = models.reduce<ModelById>((acc, model) => {
     acc[model.id] = model
     return acc
@@ -87,28 +98,33 @@ const initModels = ({ schema: { models }, dbOptions }: InitModelsArgs): string =
     '}',
   ])
 }
-const initModel = ({ name }: Model) => `${singular(pascalCase(name))}.initModel(sequelize)`
+function initModel({ name }: Model) {
+  return `${singular(pascalCase(name))}.initModel(sequelize)`
+}
 
 type ModelAssociationsArgs = {
   model: Model
   modelById: ModelById
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
 }
-const modelAssociations = (args: ModelAssociationsArgs): string =>
-  lines(args.model.associations.map((association) => modelAssociation({ association, ...args })))
+function modelAssociations(args: ModelAssociationsArgs): string {
+  return lines(
+    args.model.associations.map((association) => modelAssociation({ association, ...args })),
+  )
+}
 
 type ModelAssociationArgs = {
   association: Association
   model: Model
   modelById: ModelById
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
 }
-const modelAssociation = ({
+function modelAssociation({
   association,
   model,
   modelById,
   dbOptions,
-}: ModelAssociationArgs): string => {
+}: ModelAssociationArgs): string {
   const name = modelName(model)
   const targetName = modelName(modelById[association.targetModelId])
   const label = associationLabel(association)
@@ -121,7 +137,7 @@ const modelAssociation = ({
   return `${name}.${label}(${targetName}${assocOptions})`
 }
 
-const associationLabel = ({ type }: Association): string => {
+function associationLabel({ type }: Association): string {
   switch (type.type) {
     case AssociationTypeType.BelongsTo:
       return 'belongsTo'
@@ -138,15 +154,15 @@ type AssociationOptionsArgs = {
   model: Model
   association: Association
   modelById: ModelById
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
 }
-const associationOptions = ({
+function associationOptions({
   model,
   association,
   modelById,
   dbOptions,
-}: AssociationOptionsArgs): string =>
-  lines([
+}: AssociationOptionsArgs): string {
+  return lines([
     ', {',
     lines(
       [
@@ -161,30 +177,34 @@ const associationOptions = ({
     ),
     '}',
   ])
+}
 
-const asField = (alias: string | undefined, type: AssociationTypeType): string | null =>
-  alias ? `as: '${aliasValue({ alias: alias, type: type })}'` : null
+function asField(alias: string | undefined, type: AssociationTypeType): string | null {
+  return alias ? `as: '${aliasValue({ alias: alias, type: type })}'` : null
+}
 
-const throughField = (association: Association, modelById: ModelById): string | null =>
-  association.type.type === AssociationTypeType.ManyToMany
+function throughField(association: Association, modelById: ModelById): string | null {
+  return association.type.type === AssociationTypeType.ManyToMany
     ? `through: ${throughValue({ type: association.type, modelById })}`
     : null
+}
 
 type ThroughValueArgs = {
   type: ManyToManyAssociation
   modelById: ModelById
 }
-const throughValue = ({ type, modelById }: ThroughValueArgs): string =>
-  type.through.type === ThroughType.ThroughTable
+function throughValue({ type, modelById }: ThroughValueArgs): string {
+  return type.through.type === ThroughType.ThroughTable
     ? `'${type.through.table}'`
     : modelName(modelById[type.through.modelId])
+}
 
-const foreignKeyField = ({
+function foreignKeyField({
   model,
   association,
   modelById,
   dbOptions,
-}: AssociationOptionsArgs): string => {
+}: AssociationOptionsArgs): string {
   const foreignKey = getForeignKey({
     model,
     association,
@@ -194,12 +214,12 @@ const foreignKeyField = ({
   return `foreignKey: '${foreignKey}'`
 }
 
-const getForeignKey = ({
+function getForeignKey({
   model,
   association,
   modelById,
   dbOptions,
-}: AssociationOptionsArgs): string => {
+}: AssociationOptionsArgs): string {
   if (association.foreignKey) return association.foreignKey
   const name =
     association.alias && association.type.type === AssociationTypeType.BelongsTo
@@ -208,32 +228,28 @@ const getForeignKey = ({
       ? modelById[association.targetModelId].name
       : model.name
 
-  return dbOptions.caseStyle === DatabaseCaseStyle.Snake
+  return dbOptions.caseStyle === DbCaseStyle.Snake
     ? `${snakeCase(name)}_id`
     : `${camelCase(name)}Id`
 }
 
-const otherKeyField = ({
+function otherKeyField({
   model,
   association,
   modelById,
   dbOptions,
-}: AssociationOptionsArgs): string | null => {
+}: AssociationOptionsArgs): string | null {
   const otherKey = getOtherKey({ model, association, modelById, dbOptions })
   return otherKey ? `otherKey: '${otherKey}'` : null
 }
 
-const getOtherKey = ({
-  association,
-  modelById,
-  dbOptions,
-}: AssociationOptionsArgs): string | null => {
+function getOtherKey({ association, modelById, dbOptions }: AssociationOptionsArgs): string | null {
   if (association.type.type !== AssociationTypeType.ManyToMany) return null
   if (association.type.targetFk) return association.type.targetFk
 
   const name = association.alias ? association.alias : modelById[association.targetModelId].name
 
-  return dbOptions.caseStyle === DatabaseCaseStyle.Snake
+  return dbOptions.caseStyle === DbCaseStyle.Snake
     ? `${snakeCase(name)}_id`
     : `${camelCase(name)}Id`
 }
@@ -242,7 +258,7 @@ type NoConstraintsFieldArgs = {
   model: Model
   association: Association
 }
-const noConstraintsField = ({ model, association }: NoConstraintsFieldArgs) => {
+function noConstraintsField({ model, association }: NoConstraintsFieldArgs) {
   // https://sequelize.org/master/class/lib/associations/base.js~Association.html
   return associationIsCircular(association, model.associations) ? 'constraints: false' : null
 }
@@ -251,7 +267,7 @@ type AliasValueArgs = {
   alias: string
   type: AssociationTypeType
 }
-const aliasValue = ({ type, alias }: AliasValueArgs) => {
+function aliasValue({ type, alias }: AliasValueArgs) {
   const camelAlias = camelCase(alias)
   switch (type) {
     case AssociationTypeType.HasMany:
@@ -263,5 +279,6 @@ const aliasValue = ({ type, alias }: AliasValueArgs) => {
   }
 }
 
-const onDeleteField = ({ type }: Association): string | null =>
-  type.type === AssociationTypeType.ManyToMany ? `onDelete: 'CASCADE'` : null
+function onDeleteField({ type }: Association): string | null {
+  return type.type === AssociationTypeType.ManyToMany ? `onDelete: 'CASCADE'` : null
+}

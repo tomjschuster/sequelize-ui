@@ -1,4 +1,4 @@
-import { DatabaseNounForm, defaultDbOptions } from '@src/core/database'
+import { DbNounForm, defaultDbOptions } from '@src/core/database'
 import schema from '@src/data/schemas/dataTypes'
 import { SequelizeFramework } from '../..'
 
@@ -9,7 +9,7 @@ describe('Sequelize Framework', () => {
         schema,
         dbOptions: {
           ...defaultDbOptions,
-          nounForm: DatabaseNounForm.Plural,
+          nounForm: DbNounForm.Plural,
         },
       })
       expect(code).toMatchSnapshot()

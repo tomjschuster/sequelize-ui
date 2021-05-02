@@ -1,8 +1,8 @@
 import { blank, lines } from '@src/core/codegen'
 import {
-  DatabaseCaseStyle,
-  DatabaseNounForm,
-  DatabaseOptions,
+  DbCaseStyle,
+  DbNounForm,
+  DbOptions,
   defaultSqlDialectDatabase,
   defaultSqlDialectHost,
   defaultSqlDialectPassword,
@@ -17,11 +17,11 @@ import { sqlDialiectConfigValue } from '../helpers'
 
 export type DbTemplateArgs = {
   schema: Schema
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
 }
 
-export const dbTemplate = ({ schema, dbOptions }: DbTemplateArgs): string =>
-  lines([
+export function dbTemplate({ schema, dbOptions }: DbTemplateArgs): string {
+  return lines([
     imports(),
     blank(),
     instanceDeclaration({ schema, dbOptions }),
@@ -29,6 +29,7 @@ export const dbTemplate = ({ schema, dbOptions }: DbTemplateArgs): string =>
     exportInstance(),
     blank(),
   ])
+}
 
 const imports = (): string => `import { Sequelize } from 'sequelize'`
 
@@ -98,12 +99,12 @@ const portField = (dialect: SqlDialect): string | null => {
     : null
 }
 
-const hasOptions = (dbOptions: DatabaseOptions): boolean =>
+const hasOptions = (dbOptions: DbOptions): boolean =>
   !dbOptions.timestamps ||
-  dbOptions.caseStyle === DatabaseCaseStyle.Snake ||
-  dbOptions.nounForm === DatabaseNounForm.Singular
+  dbOptions.caseStyle === DbCaseStyle.Snake ||
+  dbOptions.nounForm === DbNounForm.Singular
 
-const defineField = (dbOptions: DatabaseOptions): string | null =>
+const defineField = (dbOptions: DbOptions): string | null =>
   !hasOptions(dbOptions)
     ? null
     : lines([
@@ -111,7 +112,7 @@ const defineField = (dbOptions: DatabaseOptions): string | null =>
         lines(
           [
             freezeTableNameField(dbOptions),
-            underscoredField(dbOptions.caseStyle === DatabaseCaseStyle.Snake),
+            underscoredField(dbOptions.caseStyle === DbCaseStyle.Snake),
             timestampsField(dbOptions.timestamps),
             createdAtField(dbOptions),
             updatedAtField(dbOptions),
@@ -127,13 +128,13 @@ const underscoredField = (underscored: boolean): string | null =>
 const timestampsField = (timestamps: boolean): string | null =>
   timestamps ? null : 'timestamps: false'
 
-const createdAtField = ({ caseStyle, timestamps }: DatabaseOptions): string | null =>
-  caseStyle === DatabaseCaseStyle.Snake && timestamps ? `createdAt: 'created_at'` : null
+const createdAtField = ({ caseStyle, timestamps }: DbOptions): string | null =>
+  caseStyle === DbCaseStyle.Snake && timestamps ? `createdAt: 'created_at'` : null
 
-const updatedAtField = ({ caseStyle, timestamps }: DatabaseOptions): string | null =>
-  caseStyle === DatabaseCaseStyle.Snake && timestamps ? `updatedAt: 'updated_at'` : null
+const updatedAtField = ({ caseStyle, timestamps }: DbOptions): string | null =>
+  caseStyle === DbCaseStyle.Snake && timestamps ? `updatedAt: 'updated_at'` : null
 
-const freezeTableNameField = ({ caseStyle, nounForm }: DatabaseOptions): string | null =>
-  caseStyle === DatabaseCaseStyle.Camel && nounForm === DatabaseNounForm.Singular
+const freezeTableNameField = ({ caseStyle, nounForm }: DbOptions): string | null =>
+  caseStyle === DbCaseStyle.Camel && nounForm === DbNounForm.Singular
     ? `freezeTableName: true`
     : null

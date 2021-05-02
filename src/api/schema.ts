@@ -1,5 +1,5 @@
 import { Schema } from '@src/core/schema'
-import { versionedName } from '@src/core/utils/string'
+import { versionedName } from '@src/utils/string'
 import shortid from 'shortid'
 
 export const SCHEMA_NOT_FOUND_ERROR = '[Schema Api Error] Schema not found'

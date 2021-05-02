@@ -22,6 +22,7 @@ export type Field = {
   primaryKey?: boolean
   required?: boolean
   unique?: boolean
+  generated?: boolean
 }
 
 export function emptyModel(): Model {

@@ -8,14 +8,14 @@ import {
   Schema,
   ThroughType,
 } from '@src/core/schema'
-import { deepEmpty } from '@src/core/utils/object'
+import { deepEmpty } from '@src/utils/object'
 import {
   nameEmpty,
   nameLongerThan,
   namesEq,
   namesEqSingular,
   nameStartsWithNumber,
-} from '@src/core/utils/string'
+} from '@src/utils/string'
 
 export type ModelFormErrors = {
   name?: string

@@ -7,10 +7,11 @@ export type ModelAssociation = {
   association: Association
 }
 
-export const notSupportedComment = (type: DataType, dialect: SqlDialect): string =>
-  dataTypeNotSupported(type, dialect) ? '// ' : ''
+export function notSupportedComment(type: DataType, dialect: SqlDialect): string {
+  return dataTypeNotSupported(type, dialect) ? '// ' : ''
+}
 
-export const noSupportedDetails = (type: DataType, dialect: SqlDialect): string | null => {
+export function noSupportedDetails(type: DataType, dialect: SqlDialect): string | null {
   if (!dataTypeNotSupported(type, dialect)) return null
 
   const typeDisplay = displaySequelizeDataType(type)

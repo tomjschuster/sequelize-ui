@@ -1,9 +1,4 @@
-import {
-  DatabaseCaseStyle,
-  DatabaseNounForm,
-  DatabaseOptions,
-  SqlDialect,
-} from '@src/core/database'
+import { DbCaseStyle, DbNounForm, DbOptions, SqlDialect } from '@src/core/database'
 import { Framework } from '@src/core/framework'
 import { SequelizeFramework } from '@src/frameworks/sequelize'
 import {
@@ -22,7 +17,7 @@ const SQL_DIALECT = process.env.SQL_DIALECT
 const KEEP_ASSETS: boolean = process.env.KEEP_ASSETS === 'true'
 
 type DbTestConfig = {
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
   tableName: string
   expectedTables: string[]
   expectedColumns: string[]
@@ -31,9 +26,10 @@ type DbTestConfig = {
 const snakePlural = (sqlDialect: SqlDialect): DbTestConfig => ({
   dbOptions: {
     sqlDialect,
+    prefixPks: null,
     timestamps: true,
-    caseStyle: DatabaseCaseStyle.Snake,
-    nounForm: DatabaseNounForm.Plural,
+    caseStyle: DbCaseStyle.Snake,
+    nounForm: DbNounForm.Plural,
   },
   tableName: 'customers',
   expectedTables: [
@@ -63,9 +59,10 @@ const snakePlural = (sqlDialect: SqlDialect): DbTestConfig => ({
 const snakeSingular = (sqlDialect: SqlDialect): DbTestConfig => ({
   dbOptions: {
     sqlDialect,
+    prefixPks: null,
     timestamps: true,
-    caseStyle: DatabaseCaseStyle.Snake,
-    nounForm: DatabaseNounForm.Singular,
+    caseStyle: DbCaseStyle.Snake,
+    nounForm: DbNounForm.Singular,
   },
   tableName: 'customer',
   expectedTables: [
@@ -95,9 +92,10 @@ const snakeSingular = (sqlDialect: SqlDialect): DbTestConfig => ({
 const camelPlural = (sqlDialect: SqlDialect): DbTestConfig => ({
   dbOptions: {
     sqlDialect,
+    prefixPks: null,
     timestamps: true,
-    caseStyle: DatabaseCaseStyle.Camel,
-    nounForm: DatabaseNounForm.Plural,
+    caseStyle: DbCaseStyle.Camel,
+    nounForm: DbNounForm.Plural,
   },
   tableName: 'Customers',
   expectedTables: [
@@ -127,9 +125,10 @@ const camelPlural = (sqlDialect: SqlDialect): DbTestConfig => ({
 const camelSingular = (sqlDialect: SqlDialect): DbTestConfig => ({
   dbOptions: {
     sqlDialect,
+    prefixPks: null,
     timestamps: true,
-    caseStyle: DatabaseCaseStyle.Camel,
-    nounForm: DatabaseNounForm.Singular,
+    caseStyle: DbCaseStyle.Camel,
+    nounForm: DbNounForm.Singular,
   },
   tableName: 'Customer',
   expectedTables: [
@@ -159,9 +158,10 @@ const camelSingular = (sqlDialect: SqlDialect): DbTestConfig => ({
 const noTimestamps = (sqlDialect: SqlDialect): DbTestConfig => ({
   dbOptions: {
     sqlDialect,
+    prefixPks: null,
     timestamps: false,
-    caseStyle: DatabaseCaseStyle.Snake,
-    nounForm: DatabaseNounForm.Plural,
+    caseStyle: DbCaseStyle.Snake,
+    nounForm: DbNounForm.Plural,
   },
   tableName: 'customers',
   expectedTables: [
@@ -178,6 +178,39 @@ const noTimestamps = (sqlDialect: SqlDialect): DbTestConfig => ({
     'stores',
   ],
   expectedColumns: ['customer_id', 'first_name', 'last_name', 'email', 'store_id'],
+})
+
+const noPrefixPks = (sqlDialect: SqlDialect): DbTestConfig => ({
+  dbOptions: {
+    sqlDialect,
+    prefixPks: false,
+    timestamps: true,
+    caseStyle: DbCaseStyle.Snake,
+    nounForm: DbNounForm.Plural,
+  },
+  tableName: 'customers',
+  expectedTables: [
+    'actors',
+    'categories',
+    'customers',
+    'films',
+    'film_actors',
+    'film_categories',
+    'languages',
+    'inventories',
+    'rentals',
+    'staffs',
+    'stores',
+  ],
+  expectedColumns: [
+    'id',
+    'first_name',
+    'last_name',
+    'email',
+    'store_id',
+    'created_at',
+    'updated_at',
+  ],
 })
 
 const frameworks: [label: string, framework: Framework][] = [['Sequelize', SequelizeFramework]]
@@ -204,6 +237,7 @@ describe.each(sqlDialects)('SQL tests %s', (sqlDialect) => {
       ['camel plural', camelPlural(sqlDialect)],
       ['camel singular', camelSingular(sqlDialect)],
       ['no timestamps', noTimestamps(sqlDialect)],
+      ['no prefix pks', noPrefixPks(sqlDialect)],
     ]
 
     describe.each(cases)(

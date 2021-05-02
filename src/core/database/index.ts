@@ -1,18 +1,19 @@
 import { pascalCase, snakeCase } from 'change-case'
 
-export type DatabaseOptions = {
+export type DbOptions = {
   sqlDialect: SqlDialect
+  prefixPks: boolean | null
   timestamps: boolean
-  caseStyle: DatabaseCaseStyle
-  nounForm: DatabaseNounForm
+  caseStyle: DbCaseStyle
+  nounForm: DbNounForm
 }
 
-export enum DatabaseCaseStyle {
+export enum DbCaseStyle {
   Snake = 'snake',
   Camel = 'camel',
 }
 
-export enum DatabaseNounForm {
+export enum DbNounForm {
   Singular = 'singular',
   Plural = 'plural',
 }
@@ -25,7 +26,7 @@ export enum SqlDialect {
   Sqlite = 'sqlite',
 }
 
-export const displaySqlDialect = (dialect: SqlDialect): string => {
+export function displaySqlDialect(dialect: SqlDialect): string {
   switch (dialect) {
     case SqlDialect.MariaDb:
       return 'MariaDB'
@@ -40,7 +41,7 @@ export const displaySqlDialect = (dialect: SqlDialect): string => {
   }
 }
 
-export const sqlDialectEnvVar = (dialect: SqlDialect): string => {
+export function sqlDialectEnvVar(dialect: SqlDialect): string {
   switch (dialect) {
     case SqlDialect.MariaDb:
       return 'MARIADB'
@@ -55,7 +56,7 @@ export const sqlDialectEnvVar = (dialect: SqlDialect): string => {
   }
 }
 
-export const parseSqlDialect = (dialect: string): SqlDialect | null => {
+export function parseSqlDialect(dialect: string): SqlDialect | null {
   switch (dialect) {
     case 'mariadb':
       return SqlDialect.MariaDb
@@ -72,7 +73,7 @@ export const parseSqlDialect = (dialect: string): SqlDialect | null => {
   }
 }
 
-export const defaultSqlDialectPort = (dialect: SqlDialect): string | null => {
+export function defaultSqlDialectPort(dialect: SqlDialect): string | null {
   switch (dialect) {
     case SqlDialect.MariaDb:
       return '3306'
@@ -87,7 +88,7 @@ export const defaultSqlDialectPort = (dialect: SqlDialect): string | null => {
   }
 }
 
-export const defaultSqlDialectUsername = (dialect: SqlDialect): string | null => {
+export function defaultSqlDialectUsername(dialect: SqlDialect): string | null {
   switch (dialect) {
     case SqlDialect.MariaDb:
       return 'root'
@@ -102,7 +103,7 @@ export const defaultSqlDialectUsername = (dialect: SqlDialect): string | null =>
   }
 }
 
-export const defaultSqlDialectPassword = (dialect: SqlDialect): string | null => {
+export function defaultSqlDialectPassword(dialect: SqlDialect): string | null {
   switch (dialect) {
     case SqlDialect.MariaDb:
       return 'root'
@@ -117,7 +118,7 @@ export const defaultSqlDialectPassword = (dialect: SqlDialect): string | null =>
   }
 }
 
-export const defaultSqlDialectDatabase = (name: string, dialect: SqlDialect): string | null => {
+export function defaultSqlDialectDatabase(name: string, dialect: SqlDialect): string | null {
   switch (dialect) {
     case SqlDialect.MariaDb:
       return snakeCase(name)
@@ -132,7 +133,7 @@ export const defaultSqlDialectDatabase = (name: string, dialect: SqlDialect): st
   }
 }
 
-export const defaultSqlDialectHost = (dialect: SqlDialect): string | null => {
+export function defaultSqlDialectHost(dialect: SqlDialect): string | null {
   switch (dialect) {
     case SqlDialect.MariaDb:
       return 'localhost'
@@ -147,7 +148,7 @@ export const defaultSqlDialectHost = (dialect: SqlDialect): string | null => {
   }
 }
 
-export const defaultSqlDialectStorage = (dialect: SqlDialect): string | null => {
+export function defaultSqlDialectStorage(dialect: SqlDialect): string | null {
   switch (dialect) {
     case SqlDialect.MariaDb:
       return null
@@ -162,29 +163,30 @@ export const defaultSqlDialectStorage = (dialect: SqlDialect): string | null => 
   }
 }
 
-export const displayDatabaseNounForm = (nounForm: DatabaseNounForm): string => {
+export function displayDatabaseNounForm(nounForm: DbNounForm): string {
   switch (nounForm) {
-    case DatabaseNounForm.Singular:
+    case DbNounForm.Singular:
       return 'singular'
-    case DatabaseNounForm.Plural:
+    case DbNounForm.Plural:
       return 'plural'
   }
 }
 
-export const displayDatabaseCaseStyle = (caseStyle: DatabaseCaseStyle): string => {
+export function displayDatabaseCaseStyle(caseStyle: DbCaseStyle): string {
   switch (caseStyle) {
-    case DatabaseCaseStyle.Snake:
+    case DbCaseStyle.Snake:
       return 'snake'
-    case DatabaseCaseStyle.Camel:
+    case DbCaseStyle.Camel:
       return 'camel'
   }
 }
 
-export const defaultDbOptions: DatabaseOptions = {
+export const defaultDbOptions: DbOptions = {
   sqlDialect: SqlDialect.Postgres,
+  prefixPks: null,
   timestamps: true,
-  caseStyle: DatabaseCaseStyle.Snake,
-  nounForm: DatabaseNounForm.Plural,
+  caseStyle: DbCaseStyle.Snake,
+  nounForm: DbNounForm.Plural,
 }
 
 export const MAX_IDENTIFIER_LENGTH = 63

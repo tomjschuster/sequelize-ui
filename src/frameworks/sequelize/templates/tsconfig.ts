@@ -1,5 +1,5 @@
-export const tsconfigTemplate = (): string =>
-  `{
+export function tsconfigTemplate(): string {
+  return `{
     "compilerOptions": {
       "target": "ES2020",
       "module": "commonjs",
@@ -12,3 +12,4 @@ export const tsconfigTemplate = (): string =>
     }
   }
 `
+}

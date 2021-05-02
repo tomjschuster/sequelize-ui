@@ -1,16 +1,15 @@
-import { DbCaseStyle, DbNounForm, defaultDbOptions } from '@src/core/database'
-import schema from '@src/data/schemas/dataTypes'
+import { defaultDbOptions } from '@src/core/database'
+import schema from '@src/data/schemas/pks'
 import { SequelizeFramework } from '../..'
 
 describe('Sequelize Framework', () => {
-  describe('camel case singular database options', () => {
+  describe('prefix pks options', () => {
     it('generates correct code', () => {
       const code = SequelizeFramework.generate({
         schema,
         dbOptions: {
           ...defaultDbOptions,
-          caseStyle: DbCaseStyle.Camel,
-          nounForm: DbNounForm.Singular,
+          prefixPks: true,
         },
       })
       expect(code).toMatchSnapshot()

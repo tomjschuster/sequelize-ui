@@ -1,5 +1,5 @@
 import { blank, lines } from '@src/core/codegen'
-import { DatabaseCaseStyle, DatabaseNounForm, DatabaseOptions } from '@src/core/database'
+import { DbCaseStyle, DbNounForm, DbOptions } from '@src/core/database'
 import {
   Association,
   AssociationTypeType,
@@ -8,32 +8,31 @@ import {
   Field,
   Model,
 } from '@src/core/schema'
-import { camelCase, pascalCase, plural, singular, snakeCase } from '@src/core/utils/string'
+import { camelCase, pascalCase, plural, singular, snakeCase } from '@src/utils/string'
 import {
   dataTypeToTypeScript,
   displaySequelizeDataType,
   sequelizeUuidVersion,
 } from '../../dataTypes'
-import { addIdField, modelName } from '../../helpers'
+import { modelName, pkIsDefault } from '../../helpers'
 import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
 
 export type ModelClassTempalteArgs = {
   model: Model
   associations: ModelAssociation[]
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
 }
-export const modelClassTemplate = ({
+export function modelClassTemplate({
   model,
   associations,
   dbOptions,
-}: ModelClassTempalteArgs): string => {
+}: ModelClassTempalteArgs): string {
   const name = modelName(model)
-  const fieldsWithId = addIdField(model.fields)
 
   return lines([
     `export class ${name} extends Model<${name}Attributes, ${name}CreationAttributes> implements ${name}Attributes {`,
     lines(
-      fieldsWithId.map((field) => classFieldType(field, dbOptions)),
+      model.fields.map((field) => classFieldType(field, dbOptions)),
       { depth: 2 },
     ),
     associations.length ? blank() : null,
@@ -48,7 +47,9 @@ export const modelClassTemplate = ({
           [
             `${name}.init({`,
             lines(
-              model.fields.map((field) => fieldTemplate(field, dbOptions)),
+              model.fields
+                .filter((field) => !pkIsDefault(field))
+                .map((field) => fieldTemplate(field, dbOptions)),
               { depth: 2, separator: ',' },
             ),
             '}, {',
@@ -72,7 +73,7 @@ export const modelClassTemplate = ({
 
 const classFieldType = (
   { name, type, required, primaryKey }: Field,
-  dbOptions: DatabaseOptions,
+  dbOptions: DbOptions,
 ): Array<string | null> => {
   const comment = notSupportedComment(type, dbOptions.sqlDialect)
   const readonly = primaryKey ? 'readonly ' : ''
@@ -88,10 +89,10 @@ type AssociationTypeArgs = {
   sourceModel: Model
   association: ModelAssociation
 }
-const associationType = ({
+function associationType({
   sourceModel,
   association: { model: targetModel, association },
-}: AssociationTypeArgs): string => {
+}: AssociationTypeArgs): string {
   const sourceName = modelName(sourceModel)
   const targetName = modelName(targetModel)
   const associationName = association.alias || targetName
@@ -154,12 +155,14 @@ const associationType = ({
   }
 }
 
-const aliasLabel = ({ alias }: Association): string => (alias ? ` (as ${pascalCase(alias)})` : '')
+function aliasLabel({ alias }: Association): string {
+  return alias ? ` (as ${pascalCase(alias)})` : ''
+}
 
-const fieldTemplate = (
+function fieldTemplate(
   { name, type, required, primaryKey, unique }: Field,
-  { sqlDialect }: DatabaseOptions,
-): string => {
+  { sqlDialect }: DbOptions,
+): string {
   const comment = notSupportedComment(type, sqlDialect)
 
   return lines([
@@ -180,34 +183,40 @@ const fieldTemplate = (
   ])
 }
 
-const typeField = (dataType: DataType): string => `type: ${displaySequelizeDataType(dataType)}`
+function typeField(dataType: DataType): string {
+  return `type: ${displaySequelizeDataType(dataType)}`
+}
 
-const allowNullField = (required?: boolean): string | null =>
-  required === undefined ? null : `allowNull: ${!required}`
+function allowNullField(required?: boolean): string | null {
+  return required === undefined ? null : `allowNull: ${!required}`
+}
 
-const primaryKeyField = (primaryKey?: boolean): string | null =>
-  primaryKey ? `primaryKey: ${primaryKey}` : null
+function primaryKeyField(primaryKey?: boolean): string | null {
+  return primaryKey ? `primaryKey: ${primaryKey}` : null
+}
 
-const uniqueField = (unique?: boolean): string | null =>
-  unique === undefined ? null : `unique: ${unique}`
+function uniqueField(unique?: boolean): string | null {
+  return unique === undefined ? null : `unique: ${unique}`
+}
 
-const autoincrementField = (dataType: DataType) =>
-  dataType.type === DataTypeType.Integer && dataType.autoincrement !== undefined
+function autoincrementField(dataType: DataType): string | null {
+  return dataType.type === DataTypeType.Integer && dataType.autoincrement !== undefined
     ? `autoIncrement: ${dataType.autoincrement}`
     : null
+}
 
 type TableNameArgs = {
   model: Model
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
 }
-const tableName = ({ dbOptions: { caseStyle, nounForm }, model }: TableNameArgs): string | null => {
-  if (nounForm === DatabaseNounForm.Singular && caseStyle === DatabaseCaseStyle.Snake) {
+function tableName({ dbOptions: { caseStyle, nounForm }, model }: TableNameArgs): string | null {
+  if (nounForm === DbNounForm.Singular && caseStyle === DbCaseStyle.Snake) {
     return `tableName: '${singular(snakeCase(model.name))}'`
   }
   return null
 }
 
-const defaultField = (dataType: DataType) => {
+function defaultField(dataType: DataType) {
   if (dataType.type === DataTypeType.DateTime && dataType.defaultNow) {
     return `defaultValue: DataTypes.NOW`
   }

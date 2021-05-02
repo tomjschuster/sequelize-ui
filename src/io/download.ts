@@ -4,16 +4,18 @@ import Zip from 'jszip'
 
 export const FAILED_TO_CREATE_FOLDER_ERROR = '[Zip Error] Failed to create folder'
 
-export const download = (item: FileSystemItem): Promise<void> =>
-  isFile(item) ? downloadFile(item) : downloadDirectory(item)
+export function download(item: FileSystemItem): Promise<void> {
+  return isFile(item) ? downloadFile(item) : downloadDirectory(item)
+}
 
-const downloadDirectory = (dir: DirectoryItem): Promise<void> =>
-  zip(dir).then((z) =>
+function downloadDirectory(dir: DirectoryItem): Promise<void> {
+  return zip(dir).then((z) =>
     z.generateAsync({ type: 'blob' }).then((blob: Blob) => saveAs(blob, dir.name)),
   )
+}
 
-const downloadFile = (f: FileItem): Promise<void> =>
-  new Promise((resolve, reject) => {
+function downloadFile(f: FileItem): Promise<void> {
+  return new Promise((resolve, reject) => {
     try {
       saveAs(f.content, f.name)
       resolve()
@@ -21,15 +23,21 @@ const downloadFile = (f: FileItem): Promise<void> =>
       reject(e)
     }
   })
+}
 
-const zip = (item: FileSystemItem): Promise<Zip> => zipItem(new Zip(), item)
+function zip(item: FileSystemItem): Promise<Zip> {
+  return zipItem(new Zip(), item)
+}
 
-const zipItem = (z: Zip, item: FileSystemItem): Promise<Zip> =>
-  isDirectory(item) ? zipDirectory(z, item) : Promise.resolve(zipFile(z, item))
+function zipItem(z: Zip, item: FileSystemItem): Promise<Zip> {
+  return isDirectory(item) ? zipDirectory(z, item) : Promise.resolve(zipFile(z, item))
+}
 
-const zipFile = (z: Zip, f: FileItem): Zip => z.file(f.name, f.content)
+function zipFile(z: Zip, f: FileItem): Zip {
+  return z.file(f.name, f.content)
+}
 
-const zipDirectory = (z: Zip, dir: DirectoryItem): Promise<Zip> => {
+function zipDirectory(z: Zip, dir: DirectoryItem): Promise<Zip> {
   const folder = z.folder(dir.name)
   if (!folder) return Promise.reject(Error(FAILED_TO_CREATE_FOLDER_ERROR))
 

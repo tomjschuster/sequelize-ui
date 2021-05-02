@@ -436,20 +436,22 @@ const customer: Model = {
   ],
 }
 
-export const dvdSchema = (name: string): Schema => ({
-  id: '1',
-  name,
-  models: [
-    film,
-    filmActor,
-    actor,
-    filmCategory,
-    category,
-    language,
-    inventory,
-    store,
-    rental,
-    staff,
-    customer,
-  ],
-})
+export function dvdSchema(name: string): Schema {
+  return {
+    id: '1',
+    name,
+    models: [
+      film,
+      filmActor,
+      actor,
+      filmCategory,
+      category,
+      language,
+      inventory,
+      store,
+      rental,
+      staff,
+      customer,
+    ],
+  }
+}

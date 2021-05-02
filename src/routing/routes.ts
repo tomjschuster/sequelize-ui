@@ -1,5 +1,5 @@
 import { Model, Schema } from '@src/core/schema'
-import { getQsBoolean, getQsString } from '@src/core/utils/url'
+import { getQsBoolean, getQsString } from '@src/utils/url'
 import { ParsedUrlQuery } from 'node:querystring'
 
 export enum RouteType {

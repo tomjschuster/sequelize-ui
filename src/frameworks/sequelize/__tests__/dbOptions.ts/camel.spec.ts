@@ -1,4 +1,4 @@
-import { DatabaseCaseStyle, defaultDbOptions } from '@src/core/database'
+import { DbCaseStyle, defaultDbOptions } from '@src/core/database'
 import schema from '@src/data/schemas/dataTypes'
 import { SequelizeFramework } from '../..'
 
@@ -9,7 +9,7 @@ describe('Sequelize Framework', () => {
         schema,
         dbOptions: {
           ...defaultDbOptions,
-          caseStyle: DatabaseCaseStyle.Camel,
+          caseStyle: DbCaseStyle.Camel,
         },
       })
       expect(code).toMatchSnapshot()

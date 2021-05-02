@@ -1,10 +1,10 @@
-import { DatabaseOptions } from '@src/core/database'
+import { DbOptions } from '@src/core/database'
 import { DirectoryItem } from '@src/core/files'
 import { Schema } from '@src/core/schema'
 
 export type GenerateArgs = {
   schema: Schema
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
 }
 
 export enum ProjectType {

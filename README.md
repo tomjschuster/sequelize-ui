@@ -6,11 +6,11 @@
 
 - ui
 
-  - components
-    - after UI complete
+  - components (after UI complete)
+  - Browser tests (after UI complete)
 
-- Browser tests
-  - after UI complete
+- sql
+  - verify all tables/columns for each db type with demo schema
 
 #### Documentation
 
@@ -19,15 +19,11 @@
 
 ### Features
 
-#### DB Options
-
-- prefix id name option
-
 #### Codegen
 
 - Review sequelize cli format for init models and config
 - Migrations
-- JavaScript
+- JavaScript (post launch, link to legacy instead)
 
 #### UI
 

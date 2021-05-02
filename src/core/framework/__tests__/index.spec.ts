@@ -1,12 +1,6 @@
-import {
-  DatabaseCaseStyle,
-  DatabaseNounForm,
-  DatabaseOptions,
-  SqlDialect,
-} from '@src/core/database'
+import { defaultDbOptions } from '@src/core/database'
 import { directory, isDirectory } from '@src/core/files'
-import { Schema } from '@src/core/schema'
-import shortid from 'shortid'
+import blogSchema from '@src/data/schemas/blog'
 import { Framework, GenerateArgs, ProjectType } from '..'
 
 const MockFramework: Framework = {
@@ -21,25 +15,12 @@ const MockFramework: Framework = {
   },
 }
 
-const mockSchema: Schema = {
-  id: shortid(),
-  name: 'Mock Schema',
-  models: [],
-}
-
-const mockDbOptions: DatabaseOptions = {
-  sqlDialect: SqlDialect.MariaDb,
-  nounForm: DatabaseNounForm.Singular,
-  caseStyle: DatabaseCaseStyle.Snake,
-  timestamps: true,
-}
-
 describe('framework', () => {
   fit('should display a name', () => {
     expect(typeof MockFramework.displayName()).toEqual('string')
   })
   fit('should generate a directory', () => {
-    const generateArgs: GenerateArgs = { schema: mockSchema, dbOptions: mockDbOptions }
+    const generateArgs: GenerateArgs = { schema: blogSchema, dbOptions: defaultDbOptions }
     expect(isDirectory(MockFramework.generate(generateArgs))).toBe(true)
   })
   fit('should have a project type', () => {

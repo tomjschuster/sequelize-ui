@@ -1,10 +1,5 @@
 import { createSchema, listSchemas } from '@src/api/schema'
-import {
-  DatabaseCaseStyle,
-  DatabaseNounForm,
-  DatabaseOptions,
-  SqlDialect,
-} from '@src/core/database'
+import { DbOptions, defaultDbOptions } from '@src/core/database'
 import { Schema } from '@src/core/schema'
 import { DemoSchemaType, displayDemoSchemaType } from '@src/data/schemas'
 import DbOptionsForm from '@src/ui/components/DbOptionsForm'
@@ -62,16 +57,9 @@ function IndexPageSchemaContent({
 
 export default IndexPage
 
-const defaultDbOptions: DatabaseOptions = {
-  sqlDialect: SqlDialect.Postgres,
-  caseStyle: DatabaseCaseStyle.Snake,
-  nounForm: DatabaseNounForm.Singular,
-  timestamps: true,
-}
-
 function IndexPageDemoContent(): React.ReactElement {
   const router = useRouter()
-  const [dbOptions, setDbOptions] = useState<DatabaseOptions>(defaultDbOptions)
+  const [dbOptions, setDbOptions] = useState<DbOptions>(defaultDbOptions)
   const [demoSchemaType, setDemoSchemaType] = useState<DemoSchemaType | undefined>()
   const { schema: demoSchema } = useDemoSchema({ type: demoSchemaType })
   const { root } = useGeneratedCode({ schema: demoSchema, dbOptions })

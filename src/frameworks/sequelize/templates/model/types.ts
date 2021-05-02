@@ -1,37 +1,39 @@
 import { blank, lines } from '@src/core/codegen'
-import { DatabaseOptions } from '@src/core/database'
+import { DbOptions } from '@src/core/database'
 import { Field, isDateTimeType, Model } from '@src/core/schema'
-import { camelCase } from '@src/core/utils/string'
+import { camelCase } from '@src/utils/string'
 import { dataTypeToTypeScript } from '../../dataTypes'
-import { modelName } from '../../helpers'
+import { modelName, pkIsDefault } from '../../helpers'
 import { noSupportedDetails, notSupportedComment } from './common'
 
 type ModelTypesTemplateArgs = {
   model: Model
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
 }
-export const modelTypesTemplate = ({ model, dbOptions }: ModelTypesTemplateArgs): string =>
-  lines([
+export function modelTypesTemplate({ model, dbOptions }: ModelTypesTemplateArgs): string {
+  return lines([
     modelAttributesType({ model, dbOptions }),
     blank(),
     idTypes(model),
     creationAttributeType(model),
   ])
+}
 
-const modelAttributesType = ({ model, dbOptions }: ModelTypesTemplateArgs): string =>
-  lines([
+function modelAttributesType({ model, dbOptions }: ModelTypesTemplateArgs): string {
+  return lines([
     `export interface ${modelName(model)}Attributes {`,
     lines(
-      model.fields.map((field) => attributeType(field, dbOptions)),
+      model.fields.filter((f) => !pkIsDefault(f)).map((field) => attributeType(field, dbOptions)),
       { depth: 2 },
     ),
     '}',
   ])
+}
 
-const attributeType = (
+function attributeType(
   { name, type, required }: Field,
-  dbOptions: DatabaseOptions,
-): Array<string | null> => {
+  dbOptions: DbOptions,
+): Array<string | null> {
   const optional = (isDateTimeType(type) && type.defaultNow) || !required
   const comment = notSupportedComment(type, dbOptions.sqlDialect)
   const typeDisplay = dataTypeToTypeScript(type)
@@ -42,9 +44,9 @@ const attributeType = (
   ]
 }
 
-const idTypes = (model: Model): string => {
+function idTypes(model: Model): string {
   const name = modelName(model)
-  const pks = model.fields.filter((f) => f.primaryKey)
+  const pks = model.fields.filter((f) => f.primaryKey && !pkIsDefault(f))
 
   if (pks.length === 0) {
     return `export type ${name}Id = number`
@@ -56,9 +58,9 @@ const idTypes = (model: Model): string => {
   ])
 }
 
-const creationAttributeType = (model: Model): string => {
+function creationAttributeType(model: Model): string {
   const name = modelName(model)
-  const pks = model.fields.filter((f) => f.primaryKey)
+  const pks = model.fields.filter((f) => f.primaryKey && !pkIsDefault(f))
 
   if (pks.length === 0) {
     return `export type ${name}CreationAttributes = ${name}Attributes & { id?: number }`

@@ -1,9 +1,4 @@
-import {
-  DatabaseCaseStyle,
-  DatabaseNounForm,
-  DatabaseOptions,
-  SqlDialect,
-} from '@src/core/database'
+import { DbOptions, defaultDbOptions } from '@src/core/database'
 import DbOptionsForm from '@src/ui/components/DbOptionsForm'
 import Layout from '@src/ui/components/Layout'
 import ModelModule from '@src/ui/components/ModelModule'
@@ -23,13 +18,6 @@ function SchemaPage(): React.ReactElement {
   )
 }
 
-const defaultDbOptions: DatabaseOptions = {
-  sqlDialect: SqlDialect.Postgres,
-  caseStyle: DatabaseCaseStyle.Snake,
-  nounForm: DatabaseNounForm.Singular,
-  timestamps: true,
-}
-
 function SchemaPageContent(): React.ReactElement {
   const {
     schema,
@@ -46,7 +34,7 @@ function SchemaPageContent(): React.ReactElement {
     cancel,
   } = useSchemaState()
 
-  const [dbOptions, setDbOptions] = useState<DatabaseOptions>(defaultDbOptions)
+  const [dbOptions, setDbOptions] = useState<DbOptions>(defaultDbOptions)
   const { root } = useGeneratedCode({ schema, dbOptions })
   const [viewCode, setViewCode] = useState<boolean>(false)
   const handleClickViewCode = useCallback(() => setViewCode((x) => !x), [])

@@ -1,6 +1,6 @@
 import {
-  DatabaseCaseStyle,
-  DatabaseNounForm,
+  DbCaseStyle,
+  DbNounForm,
   defaultSqlDialectDatabase,
   defaultSqlDialectHost,
   defaultSqlDialectPassword,
@@ -157,9 +157,9 @@ describe('database', () => {
   })
 
   describe('displayDatabaseNounForm', () => {
-    const cases: [dialect: DatabaseNounForm, expected: string][] = [
-      [DatabaseNounForm.Singular, 'singular'],
-      [DatabaseNounForm.Plural, 'plural'],
+    const cases: [dialect: DbNounForm, expected: string][] = [
+      [DbNounForm.Singular, 'singular'],
+      [DbNounForm.Plural, 'plural'],
     ]
     describe.each(cases)('(%s)', (nounForm, expected) => {
       fit(` ${JSON.stringify(expected)}`, () => {
@@ -169,9 +169,9 @@ describe('database', () => {
   })
 
   describe('displayDatabaseCaseStyle', () => {
-    const cases: [dialect: DatabaseCaseStyle, expected: string][] = [
-      [DatabaseCaseStyle.Snake, 'snake'],
-      [DatabaseCaseStyle.Camel, 'camel'],
+    const cases: [dialect: DbCaseStyle, expected: string][] = [
+      [DbCaseStyle.Snake, 'snake'],
+      [DbCaseStyle.Camel, 'camel'],
     ]
     describe.each(cases)('(%s)', (caseStyle, expected) => {
       fit(` ${JSON.stringify(expected)}`, () => {

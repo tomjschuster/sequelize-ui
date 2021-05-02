@@ -1,0 +1,275 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sequelize Framework no prefix pks options generates correct code 1`] = `
+Object {
+  "files": Array [
+    Object {
+      "files": Array [
+        Object {
+          "content": "import type { Sequelize, Model } from 'sequelize'
+import { Default } from './Default'
+import type { DefaultAttributes, DefaultCreationAttributes } from './Default'
+import { Id } from './Id'
+import type { IdAttributes, IdCreationAttributes } from './Id'
+import { Prefixed } from './Prefixed'
+import type { PrefixedAttributes, PrefixedCreationAttributes } from './Prefixed'
+import { Nonstandard } from './Nonstandard'
+import type { NonstandardAttributes, NonstandardCreationAttributes } from './Nonstandard'
+
+export {
+  Default,
+  Id,
+  Prefixed,
+  Nonstandard
+}
+
+export type {
+  DefaultAttributes,
+  DefaultCreationAttributes,
+  IdAttributes,
+  IdCreationAttributes,
+  PrefixedAttributes,
+  PrefixedCreationAttributes,
+  NonstandardAttributes,
+  NonstandardCreationAttributes
+}
+
+export function initModels(sequelize: Sequelize) {
+  Default.initModel(sequelize)
+  Id.initModel(sequelize)
+  Prefixed.initModel(sequelize)
+  Nonstandard.initModel(sequelize)
+
+  
+
+  return {
+    Default,
+    Id,
+    Prefixed,
+    Nonstandard
+  }
+}
+",
+          "name": "index.ts",
+          "type": "FILE",
+        },
+        Object {
+          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+
+export interface DefaultAttributes {
+  
+}
+
+export type DefaultId = number
+export type DefaultCreationAttributes = DefaultAttributes & { id?: number }
+
+export class Default extends Model<DefaultAttributes, DefaultCreationAttributes> implements DefaultAttributes {
+  public readonly id?: number
+  
+  static initModel(sequelize: Sequelize.Sequelize): typeof Default {
+    Default.init({
+      
+    }, {
+      sequelize
+    })
+    
+    return Default
+  }
+}
+",
+          "name": "Default.ts",
+          "type": "FILE",
+        },
+        Object {
+          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+
+export interface IdAttributes {
+  id?: number
+}
+
+export type IdPk = 'id'
+export type IdId = IdAttributes[IdPk]
+export type IdCreationAttributes = Optional<IdAttributes, IdPk>
+
+export class Id extends Model<IdAttributes, IdCreationAttributes> implements IdAttributes {
+  public readonly id?: number
+  
+  static initModel(sequelize: Sequelize.Sequelize): typeof Id {
+    Id.init({
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true
+      }
+    }, {
+      sequelize
+    })
+    
+    return Id
+  }
+}
+",
+          "name": "Id.ts",
+          "type": "FILE",
+        },
+        Object {
+          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+
+export interface PrefixedAttributes {
+  id?: number
+}
+
+export type PrefixedPk = 'id'
+export type PrefixedId = PrefixedAttributes[PrefixedPk]
+export type PrefixedCreationAttributes = Optional<PrefixedAttributes, PrefixedPk>
+
+export class Prefixed extends Model<PrefixedAttributes, PrefixedCreationAttributes> implements PrefixedAttributes {
+  public readonly id?: number
+  
+  static initModel(sequelize: Sequelize.Sequelize): typeof Prefixed {
+    Prefixed.init({
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true
+      }
+    }, {
+      sequelize
+    })
+    
+    return Prefixed
+  }
+}
+",
+          "name": "Prefixed.ts",
+          "type": "FILE",
+        },
+        Object {
+          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+
+export interface NonstandardAttributes {
+  otherId?: number
+}
+
+export type NonstandardPk = 'otherId'
+export type NonstandardId = NonstandardAttributes[NonstandardPk]
+export type NonstandardCreationAttributes = Optional<NonstandardAttributes, NonstandardPk>
+
+export class Nonstandard extends Model<NonstandardAttributes, NonstandardCreationAttributes> implements NonstandardAttributes {
+  public readonly otherId?: number
+  
+  static initModel(sequelize: Sequelize.Sequelize): typeof Nonstandard {
+    Nonstandard.init({
+      otherId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true
+      }
+    }, {
+      sequelize
+    })
+    
+    return Nonstandard
+  }
+}
+",
+          "name": "Nonstandard.ts",
+          "type": "FILE",
+        },
+      ],
+      "name": "models",
+      "type": "DIRECTORY",
+    },
+    Object {
+      "content": "node_modules/
+dist
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.tmp
+",
+      "name": ".gitignore",
+      "type": "FILE",
+    },
+    Object {
+      "content": "import { Sequelize } from 'sequelize'
+
+const db: Sequelize = new Sequelize({
+  dialect: 'postgres',
+  database: process.env.POSTGRES_DB_NAME || 'fields',
+  username: process.env.POSTGRES_DB_USERNAME || 'postgres',
+  password: process.env.POSTGRES_DB_PASSWORD || 'postgres',
+  host: process.env.POSTGRES_DB_HOST || 'localhost',
+  port: parseInt(process.env.POSTGRES_DB_PORT || '5432'),
+  define: {
+    underscored: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
+})
+
+export default db
+",
+      "name": "db.ts",
+      "type": "FILE",
+    },
+    Object {
+      "content": "{
+  \\"name\\": \\"fields\\",
+  \\"version\\": \\"0.0.1\\",
+  \\"description\\": \\"\\",
+  \\"main\\": \\"server.ts\\",
+  \\"scripts\\": {
+    \\"test\\": \\"echo \\\\\\"Error: no test specified\\\\\\" && exit 1\\",
+    \\"build\\": \\"tsc\\",
+    \\"start\\": \\"node ./dist/server.js\\"
+  },
+  \\"author\\": \\"\\",
+  \\"license\\": \\"ISC\\",
+  \\"dependencies\\": {
+    \\"pg\\": \\"^8.5.1\\",
+    \\"pg-hstore\\": \\"^2.3.3\\",
+    \\"sequelize\\": \\"^6.3.5\\"
+  },
+  \\"devDependencies\\": {
+    \\"@types/node\\": \\"^14.14.20\\",
+    \\"@types/validator\\": \\"^13.1.3\\",
+    \\"typescript\\": \\"^4.1.3\\"
+  }
+}
+
+",
+      "name": "package.json",
+      "type": "FILE",
+    },
+    Object {
+      "content": "import db from './db'
+import { initModels } from './models'
+
+initModels(db)
+
+db.sync({ force: true })
+",
+      "name": "server.ts",
+      "type": "FILE",
+    },
+    Object {
+      "content": "{
+    \\"compilerOptions\\": {
+      \\"target\\": \\"ES2020\\",
+      \\"module\\": \\"commonjs\\",
+      \\"lib\\": [\\"ES2020\\"],
+      \\"outDir\\": \\"dist\\",
+      \\"strict\\": true,
+      \\"moduleResolution\\": \\"node\\",
+      \\"esModuleInterop\\": true,
+      \\"forceConsistentCasingInFileNames\\": true
+    }
+  }
+",
+      "name": "tsconfig.json",
+      "type": "FILE",
+    },
+  ],
+  "name": "fields",
+  "type": "DIRECTORY",
+}
+`;

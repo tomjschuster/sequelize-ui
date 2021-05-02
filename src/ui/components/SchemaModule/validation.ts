@@ -1,12 +1,7 @@
 import { MAX_IDENTIFIER_LENGTH } from '@src/core/database'
 import { Schema } from '@src/core/schema'
-import { deepEmpty } from '@src/core/utils/object'
-import {
-  nameEmpty,
-  nameLongerThan,
-  namesEqSingular,
-  nameStartsWithNumber,
-} from '@src/core/utils/string'
+import { deepEmpty } from '@src/utils/object'
+import { nameEmpty, nameLongerThan, namesEqSingular, nameStartsWithNumber } from '@src/utils/string'
 
 export type SchemaFormErrors = {
   name?: string

@@ -8,10 +8,10 @@ import {
   Schema,
   ThroughType,
 } from '@src/core/schema'
-import { snakeCase } from '@src/core/utils/string'
 import Radio from '@src/ui/components/form/Radio'
 import Select from '@src/ui/components/form/Select'
 import TextInput from '@src/ui/components/form/TextInput'
+import { snakeCase } from '@src/utils/string'
 import React, { useCallback, useMemo } from 'react'
 import { AssociationFormErrors } from './validation'
 

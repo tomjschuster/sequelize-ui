@@ -1,4 +1,4 @@
-import { DatabaseOptions } from '@src/core/database'
+import { DbOptions } from '@src/core/database'
 import { DirectoryItem } from '@src/core/files'
 import { Framework } from '@src/core/framework'
 import { Schema } from '@src/core/schema'
@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 export type UseGeneratedCodeArgs = {
   schema?: Schema
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
 }
 
 export type UseGeneratedCodeResult = {

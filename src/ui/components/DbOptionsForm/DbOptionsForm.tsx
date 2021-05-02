@@ -1,7 +1,7 @@
 import {
-  DatabaseCaseStyle,
-  DatabaseNounForm,
-  DatabaseOptions,
+  DbCaseStyle,
+  DbNounForm,
+  DbOptions,
   displayDatabaseCaseStyle,
   displayDatabaseNounForm,
   displaySqlDialect,
@@ -11,8 +11,8 @@ import Radio from '@src/ui/components/form/Radio'
 import React from 'react'
 
 type DbOptionsFormProps = {
-  dbOptions: DatabaseOptions
-  onChange: (dbOptions: DatabaseOptions) => void
+  dbOptions: DbOptions
+  onChange: (dbOptions: DbOptions) => void
 }
 export default function DbOptionsForm({
   dbOptions,
@@ -26,17 +26,29 @@ export default function DbOptionsForm({
         display={displaySqlDialect}
         onChange={(sqlDialect) => onChange({ ...dbOptions, sqlDialect })}
       />
-      <Radio<DatabaseCaseStyle>
+      <Radio<DbCaseStyle>
         value={dbOptions.caseStyle}
-        options={DatabaseCaseStyle}
+        options={DbCaseStyle}
         display={displayDatabaseCaseStyle}
         onChange={(caseStyle) => onChange({ ...dbOptions, caseStyle })}
       />
-      <Radio<DatabaseNounForm>
+      <Radio<DbNounForm>
         value={dbOptions.nounForm}
-        options={DatabaseNounForm}
+        options={DbNounForm}
         display={displayDatabaseNounForm}
         onChange={(nounForm) => onChange({ ...dbOptions, nounForm })}
+      />
+      <Radio<boolean | null>
+        value={dbOptions.prefixPks}
+        options={{ true: true, false: false, notFound: null }}
+        display={(x) =>
+          x === null
+            ? `don't change pks`
+            : x
+            ? 'prefix pk field with table name'
+            : 'use "id" as default pk field'
+        }
+        onChange={(prefixPks) => onChange({ ...dbOptions, prefixPks })}
       />
       <Radio<boolean>
         value={dbOptions.timestamps}

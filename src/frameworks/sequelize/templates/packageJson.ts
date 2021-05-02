@@ -1,15 +1,15 @@
 import { lines } from '@src/core/codegen'
-import { DatabaseOptions, SqlDialect } from '@src/core/database'
+import { DbOptions, SqlDialect } from '@src/core/database'
 import { Schema } from '@src/core/schema'
-import { kebabCase } from '@src/core/utils/string'
+import { kebabCase } from '@src/utils/string'
 
 export type PackageJsonTemplateArgs = {
   schema: Schema
-  dbOptions: DatabaseOptions
+  dbOptions: DbOptions
 }
 
-export const packageJsonTemplate = ({ schema, dbOptions }: PackageJsonTemplateArgs): string =>
-  `{
+export function packageJsonTemplate({ schema, dbOptions }: PackageJsonTemplateArgs): string {
+  return `{
   "name": "${kebabCase(schema.name)}",
   "version": "0.0.1",
   "description": "",
@@ -30,12 +30,13 @@ ${formatDeps(...commonDevDeps(), ...dialectDevDeps(dbOptions))}
 }
 
 `
+}
 
 type Dependency = [name: string, version: string]
 
 const commonDeps = (): Dependency[] => [['sequelize', '^6.3.5']]
 
-const dialectDeps = ({ sqlDialect }: DatabaseOptions): Dependency[] => {
+function dialectDeps({ sqlDialect }: DbOptions): Dependency[] {
   switch (sqlDialect) {
     case SqlDialect.MariaDb:
       return [['mariadb', '^2.5.2']]
@@ -53,13 +54,15 @@ const dialectDeps = ({ sqlDialect }: DatabaseOptions): Dependency[] => {
   }
 }
 
-const commonDevDeps = (): Dependency[] => [
-  ['@types/node', '^14.14.20'],
-  ['@types/validator', '^13.1.3'],
-  ['typescript', '^4.1.3'],
-]
+function commonDevDeps(): Dependency[] {
+  return [
+    ['@types/node', '^14.14.20'],
+    ['@types/validator', '^13.1.3'],
+    ['typescript', '^4.1.3'],
+  ]
+}
 
-const dialectDevDeps = ({ sqlDialect }: DatabaseOptions): Dependency[] => {
+function dialectDevDeps({ sqlDialect }: DbOptions): Dependency[] {
   switch (sqlDialect) {
     case SqlDialect.MariaDb:
       return []
@@ -74,13 +77,16 @@ const dialectDevDeps = ({ sqlDialect }: DatabaseOptions): Dependency[] => {
   }
 }
 
-const formatDeps = (...ds: Dependency[]): string =>
-  lines(
+function formatDeps(...ds: Dependency[]): string {
+  return lines(
     ds
       .slice()
       .sort(([a], [b]) => a.localeCompare(b))
       .map(depKv),
     { separator: ',', depth: 4 },
   )
+}
 
-const depKv = ([name, version]: Dependency): string => `"${name}": "${version}"`
+function depKv([name, version]: Dependency): string {
+  return `"${name}": "${version}"`
+}
