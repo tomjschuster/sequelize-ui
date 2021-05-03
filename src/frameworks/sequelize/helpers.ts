@@ -1,6 +1,12 @@
-import { DbCaseStyle, DbOptions, SqlDialect } from '@src/core/database'
-import { DataTypeType, Field, Model } from '@src/core/schema'
-import { camelCase, pascalCase, singular, snakeCase } from '@src/utils/string'
+import { caseByDbCaseStyle, DbOptions, SqlDialect } from '@src/core/database'
+import {
+  Association,
+  associationTypeIsSingular,
+  DataTypeType,
+  Field,
+  Model,
+} from '@src/core/schema'
+import { camelCase, pascalCase, plural, singular, snakeCase } from '@src/utils/string'
 import shortid from 'shortid'
 
 export function modelName({ name }: Model): string {
@@ -54,9 +60,7 @@ type GetPkNameArgs = {
 }
 const getPkName = ({ model, dbOptions }: GetPkNameArgs): string => {
   if (!dbOptions.prefixPks) return 'id'
-  const prefix =
-    dbOptions.caseStyle === DbCaseStyle.Snake ? snakeCase(model.name) : camelCase(model.name)
-  return dbOptions.caseStyle === DbCaseStyle.Snake ? `${prefix}_id` : `${prefix}Id`
+  return caseByDbCaseStyle(`${model.name} id`, dbOptions.caseStyle)
 }
 
 export function pkIsDefault(field: Field): boolean {
@@ -80,4 +84,13 @@ export function sqlDialiectConfigValue(dialect: SqlDialect): string {
     case SqlDialect.Sqlite:
       return 'sqlite'
   }
+}
+
+type AssociationNameArgs = {
+  association: Association
+  targetModel: Model
+}
+export function associationName({ association, targetModel }: AssociationNameArgs): string {
+  const name = association.alias ? camelCase(association.alias) : modelName(targetModel)
+  return associationTypeIsSingular(association.type) ? singular(name) : plural(name)
 }

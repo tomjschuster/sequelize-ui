@@ -327,6 +327,7 @@ const user: Model = {
       sourceModelId: Id.User,
       targetModelId: Id.Post,
       type: hasManyType(),
+      foreignKey: 'author id',
     },
   ],
 }

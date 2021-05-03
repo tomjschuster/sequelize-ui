@@ -14,7 +14,7 @@ import {
   displaySequelizeDataType,
   sequelizeUuidVersion,
 } from '../../dataTypes'
-import { modelName, pkIsDefault } from '../../helpers'
+import { associationName, modelName, pkIsDefault } from '../../helpers'
 import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
 
 export type ModelClassTempalteArgs = {
@@ -40,6 +40,24 @@ export function modelClassTemplate({
       associations.map((a) => associationType({ sourceModel: model, association: a })),
       { depth: 2 },
     ),
+    associations.length
+      ? lines(
+          [
+            'public static associations: {',
+            lines(
+              associations.map((association) =>
+                staticAssociation({ sourceModel: model, association }),
+              ),
+              { depth: 2, separator: ',' },
+            ),
+            '}',
+          ],
+          {
+            depth: 2,
+          },
+        )
+      : null,
+    associations.length ? blank() : null,
     lines(
       [
         `static initModel(sequelize: Sequelize.Sequelize): typeof ${name} {`,
@@ -67,6 +85,7 @@ export function modelClassTemplate({
       ],
       { depth: 2 },
     ),
+
     '}',
   ])
 }
@@ -85,6 +104,19 @@ const classFieldType = (
   ]
 }
 
+type StaticAssociation = {
+  sourceModel: Model
+  association: ModelAssociation
+}
+function staticAssociation({
+  sourceModel,
+  association: { model: targetModel, association },
+}: StaticAssociation): string {
+  const key = associationName({ association, targetModel })
+  const value = `Association<${modelName(sourceModel)}, ${modelName(targetModel)}>`
+  return `${key}: ${value}`
+}
+
 type AssociationTypeArgs = {
   sourceModel: Model
   association: ModelAssociation
@@ -95,61 +127,59 @@ function associationType({
 }: AssociationTypeArgs): string {
   const sourceName = modelName(sourceModel)
   const targetName = modelName(targetModel)
-  const associationName = association.alias || targetName
-  const singularAssociationField = singular(camelCase(associationName))
-  const pluralAssociationField = plural(camelCase(associationName))
-  const singularAssociationMethod = singular(pascalCase(associationName))
-  const pluralAssociationMethod = plural(pascalCase(associationName))
+  const name = associationName({ association, targetModel })
+  const singularMethodPostfix = singular(pascalCase(name))
+  const pluralMethodPostfix = plural(pascalCase(name))
 
   switch (association.type.type) {
     case AssociationTypeType.BelongsTo:
       return [
         `// ${sourceName} belongsTo ${targetName}${aliasLabel(association)}`,
-        `public readonly ${singularAssociationField}?: ${targetName}`,
-        `public get${singularAssociationMethod}!: Sequelize.BelongsToGetAssociationMixin<${targetName}>`,
-        `public set${singularAssociationMethod}!: Sequelize.BelongsToSetAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public create${singularAssociationMethod}!: Sequelize.BelongsToCreateAssociationMixin<${targetName}>`,
+        `public readonly ${name}?: ${targetName}`,
+        `public get${singularMethodPostfix}!: Sequelize.BelongsToGetAssociationMixin<${targetName}>`,
+        `public set${singularMethodPostfix}!: Sequelize.BelongsToSetAssociationMixin<${targetName}, ${targetName}Id>`,
+        `public create${singularMethodPostfix}!: Sequelize.BelongsToCreateAssociationMixin<${targetName}>`,
         blank(),
       ].join('\n')
     case AssociationTypeType.HasMany:
       return [
         `// ${sourceName} hasMany ${targetName}${aliasLabel(association)}`,
-        `public readonly ${pluralAssociationField}?: ${targetName}[]`,
-        `public get${pluralAssociationMethod}!: Sequelize.HasManyGetAssociationsMixin<${targetName}>`,
-        `public set${pluralAssociationMethod}!: Sequelize.HasManySetAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public add${singularAssociationMethod}!: Sequelize.HasManyAddAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public add${pluralAssociationMethod}!: Sequelize.HasManyAddAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public create${singularAssociationMethod}!: Sequelize.HasManyCreateAssociationMixin<${targetName}>`,
-        `public remove${singularAssociationMethod}!: Sequelize.HasManyRemoveAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public remove${pluralAssociationMethod}!: Sequelize.HasManyRemoveAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public has${singularAssociationMethod}!: Sequelize.HasManyHasAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public has${pluralAssociationMethod}!: Sequelize.HasManyHasAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public count${pluralAssociationMethod}!: Sequelize.HasManyCountAssociationsMixin`,
+        `public readonly ${name}?: ${targetName}[]`,
+        `public get${pluralMethodPostfix}!: Sequelize.HasManyGetAssociationsMixin<${targetName}>`,
+        `public set${pluralMethodPostfix}!: Sequelize.HasManySetAssociationsMixin<${targetName}, ${targetName}Id>`,
+        `public add${singularMethodPostfix}!: Sequelize.HasManyAddAssociationMixin<${targetName}, ${targetName}Id>`,
+        `public add${pluralMethodPostfix}!: Sequelize.HasManyAddAssociationsMixin<${targetName}, ${targetName}Id>`,
+        `public create${singularMethodPostfix}!: Sequelize.HasManyCreateAssociationMixin<${targetName}>`,
+        `public remove${singularMethodPostfix}!: Sequelize.HasManyRemoveAssociationMixin<${targetName}, ${targetName}Id>`,
+        `public remove${pluralMethodPostfix}!: Sequelize.HasManyRemoveAssociationsMixin<${targetName}, ${targetName}Id>`,
+        `public has${singularMethodPostfix}!: Sequelize.HasManyHasAssociationMixin<${targetName}, ${targetName}Id>`,
+        `public has${pluralMethodPostfix}!: Sequelize.HasManyHasAssociationsMixin<${targetName}, ${targetName}Id>`,
+        `public count${pluralMethodPostfix}!: Sequelize.HasManyCountAssociationsMixin`,
         blank(),
       ].join('\n')
     case AssociationTypeType.HasOne:
       return [
         `// ${sourceName} hasOne ${targetName}${aliasLabel(association)}`,
-        `public readonly ${singularAssociationField}?: ${targetName}`,
-        `public get${singularAssociationMethod}!: Sequelize.HasOneGetAssociationMixin<${targetName}>`,
-        `public set${singularAssociationMethod}!: Sequelize.HasOneSetAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public create${singularAssociationMethod}!: Sequelize.HasOneCreateAssociationMixin<${targetName}CreationAttributes>`,
+        `public readonly ${name}?: ${targetName}`,
+        `public get${singularMethodPostfix}!: Sequelize.HasOneGetAssociationMixin<${targetName}>`,
+        `public set${singularMethodPostfix}!: Sequelize.HasOneSetAssociationMixin<${targetName}, ${targetName}Id>`,
+        `public create${singularMethodPostfix}!: Sequelize.HasOneCreateAssociationMixin<${targetName}CreationAttributes>`,
         blank(),
       ].join('\n')
     case AssociationTypeType.ManyToMany:
       return [
         `// ${sourceName} belongsToMany ${targetName}${aliasLabel(association)}`,
-        `public readonly ${pluralAssociationField}?: ${targetName}[]`,
-        `public get${pluralAssociationMethod}!: Sequelize.BelongsToManyGetAssociationsMixin<${targetName}>`,
-        `public set${pluralAssociationMethod}!: Sequelize.BelongsToManySetAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public add${singularAssociationMethod}!: Sequelize.BelongsToManyAddAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public add${pluralAssociationMethod}!: Sequelize.BelongsToManyAddAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public create${singularAssociationMethod}!: Sequelize.BelongsToManyCreateAssociationMixin<${targetName}>`,
-        `public remove${singularAssociationMethod}!: Sequelize.BelongsToManyRemoveAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public remove${pluralAssociationMethod}!: Sequelize.BelongsToManyRemoveAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public has${singularAssociationMethod}!: Sequelize.BelongsToManyHasAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public has${pluralAssociationMethod}!: Sequelize.BelongsToManyHasAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public count${pluralAssociationMethod}!: Sequelize.BelongsToManyCountAssociationsMixin`,
+        `public readonly ${name}?: ${targetName}[]`,
+        `public get${pluralMethodPostfix}!: Sequelize.BelongsToManyGetAssociationsMixin<${targetName}>`,
+        `public set${pluralMethodPostfix}!: Sequelize.BelongsToManySetAssociationsMixin<${targetName}, ${targetName}Id>`,
+        `public add${singularMethodPostfix}!: Sequelize.BelongsToManyAddAssociationMixin<${targetName}, ${targetName}Id>`,
+        `public add${pluralMethodPostfix}!: Sequelize.BelongsToManyAddAssociationsMixin<${targetName}, ${targetName}Id>`,
+        `public create${singularMethodPostfix}!: Sequelize.BelongsToManyCreateAssociationMixin<${targetName}>`,
+        `public remove${singularMethodPostfix}!: Sequelize.BelongsToManyRemoveAssociationMixin<${targetName}, ${targetName}Id>`,
+        `public remove${pluralMethodPostfix}!: Sequelize.BelongsToManyRemoveAssociationsMixin<${targetName}, ${targetName}Id>`,
+        `public has${singularMethodPostfix}!: Sequelize.BelongsToManyHasAssociationMixin<${targetName}, ${targetName}Id>`,
+        `public has${pluralMethodPostfix}!: Sequelize.BelongsToManyHasAssociationsMixin<${targetName}, ${targetName}Id>`,
+        `public count${pluralMethodPostfix}!: Sequelize.BelongsToManyCountAssociationsMixin`,
         blank(),
       ].join('\n')
   }

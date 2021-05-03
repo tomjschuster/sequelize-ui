@@ -279,7 +279,7 @@ export function initModels(sequelize: Sequelize) {
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Film, FilmId } from './Film'
 
 export interface ActorAttributes {
@@ -298,7 +298,7 @@ export class Actor extends Model<ActorAttributes, ActorCreationAttributes> imple
   public lastName!: string
 
   // Actor belongsToMany Film
-  public readonly films?: Film[]
+  public readonly Films?: Film[]
   public getFilms!: Sequelize.BelongsToManyGetAssociationsMixin<Film>
   public setFilms!: Sequelize.BelongsToManySetAssociationsMixin<Film, FilmId>
   public addFilm!: Sequelize.BelongsToManyAddAssociationMixin<Film, FilmId>
@@ -310,6 +310,10 @@ export class Actor extends Model<ActorAttributes, ActorCreationAttributes> imple
   public hasFilms!: Sequelize.BelongsToManyHasAssociationsMixin<Film, FilmId>
   public countFilms!: Sequelize.BelongsToManyCountAssociationsMixin
   
+  public static associations: {
+    Films: Association<Actor, Film>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Actor {
     Actor.init({
       actorId: {
@@ -338,7 +342,7 @@ export class Actor extends Model<ActorAttributes, ActorCreationAttributes> imple
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Actor, ActorId } from './Actor'
 import type { Category, CategoryId } from './Category'
 import type { Inventory, InventoryId } from './Inventory'
@@ -376,7 +380,7 @@ export class Film extends Model<FilmAttributes, FilmCreationAttributes> implemen
   public specialFeature!: Array<'Trailers' | 'Commentaries' | 'Deleted Scenes' | 'Behind the Scenes'>
 
   // Film belongsTo Language
-  public readonly language?: Language
+  public readonly Language?: Language
   public getLanguage!: Sequelize.BelongsToGetAssociationMixin<Language>
   public setLanguage!: Sequelize.BelongsToSetAssociationMixin<Language, LanguageId>
   public createLanguage!: Sequelize.BelongsToCreateAssociationMixin<Language>
@@ -388,7 +392,7 @@ export class Film extends Model<FilmAttributes, FilmCreationAttributes> implemen
   public createOriginalLanguage!: Sequelize.BelongsToCreateAssociationMixin<Language>
   
   // Film hasMany Inventory
-  public readonly inventories?: Inventory[]
+  public readonly Inventories?: Inventory[]
   public getInventories!: Sequelize.HasManyGetAssociationsMixin<Inventory>
   public setInventories!: Sequelize.HasManySetAssociationsMixin<Inventory, InventoryId>
   public addInventory!: Sequelize.HasManyAddAssociationMixin<Inventory, InventoryId>
@@ -401,7 +405,7 @@ export class Film extends Model<FilmAttributes, FilmCreationAttributes> implemen
   public countInventories!: Sequelize.HasManyCountAssociationsMixin
   
   // Film belongsToMany Actor
-  public readonly actors?: Actor[]
+  public readonly Actors?: Actor[]
   public getActors!: Sequelize.BelongsToManyGetAssociationsMixin<Actor>
   public setActors!: Sequelize.BelongsToManySetAssociationsMixin<Actor, ActorId>
   public addActor!: Sequelize.BelongsToManyAddAssociationMixin<Actor, ActorId>
@@ -414,7 +418,7 @@ export class Film extends Model<FilmAttributes, FilmCreationAttributes> implemen
   public countActors!: Sequelize.BelongsToManyCountAssociationsMixin
   
   // Film belongsToMany Category
-  public readonly categories?: Category[]
+  public readonly Categories?: Category[]
   public getCategories!: Sequelize.BelongsToManyGetAssociationsMixin<Category>
   public setCategories!: Sequelize.BelongsToManySetAssociationsMixin<Category, CategoryId>
   public addCategory!: Sequelize.BelongsToManyAddAssociationMixin<Category, CategoryId>
@@ -426,6 +430,14 @@ export class Film extends Model<FilmAttributes, FilmCreationAttributes> implemen
   public hasCategories!: Sequelize.BelongsToManyHasAssociationsMixin<Category, CategoryId>
   public countCategories!: Sequelize.BelongsToManyCountAssociationsMixin
   
+  public static associations: {
+    Language: Association<Film, Language>,
+    originalLanguage: Association<Film, Language>,
+    Inventories: Association<Film, Inventory>,
+    Actors: Association<Film, Actor>,
+    Categories: Association<Film, Category>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Film {
     Film.init({
       filmId: {
@@ -482,7 +494,7 @@ export class Film extends Model<FilmAttributes, FilmCreationAttributes> implemen
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Film, FilmId } from './Film'
 
 export interface LanguageAttributes {
@@ -499,7 +511,7 @@ export class Language extends Model<LanguageAttributes, LanguageCreationAttribut
   public name!: string
 
   // Language hasMany Film
-  public readonly films?: Film[]
+  public readonly Films?: Film[]
   public getFilms!: Sequelize.HasManyGetAssociationsMixin<Film>
   public setFilms!: Sequelize.HasManySetAssociationsMixin<Film, FilmId>
   public addFilm!: Sequelize.HasManyAddAssociationMixin<Film, FilmId>
@@ -524,6 +536,11 @@ export class Language extends Model<LanguageAttributes, LanguageCreationAttribut
   public hasOriginalLanguageFilms!: Sequelize.HasManyHasAssociationsMixin<Film, FilmId>
   public countOriginalLanguageFilms!: Sequelize.HasManyCountAssociationsMixin
   
+  public static associations: {
+    Films: Association<Language, Film>,
+    originalLanguageFilms: Association<Language, Film>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Language {
     Language.init({
       languageId: {
@@ -548,7 +565,7 @@ export class Language extends Model<LanguageAttributes, LanguageCreationAttribut
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Film, FilmId } from './Film'
 
 export interface CategoryAttributes {
@@ -563,7 +580,7 @@ export class Category extends Model<CategoryAttributes, CategoryCreationAttribut
   public readonly categoryId!: number
 
   // Category belongsToMany Film
-  public readonly films?: Film[]
+  public readonly Films?: Film[]
   public getFilms!: Sequelize.BelongsToManyGetAssociationsMixin<Film>
   public setFilms!: Sequelize.BelongsToManySetAssociationsMixin<Film, FilmId>
   public addFilm!: Sequelize.BelongsToManyAddAssociationMixin<Film, FilmId>
@@ -575,6 +592,10 @@ export class Category extends Model<CategoryAttributes, CategoryCreationAttribut
   public hasFilms!: Sequelize.BelongsToManyHasAssociationsMixin<Film, FilmId>
   public countFilms!: Sequelize.BelongsToManyCountAssociationsMixin
   
+  public static associations: {
+    Films: Association<Category, Film>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Category {
     Category.init({
       categoryId: {
@@ -595,7 +616,7 @@ export class Category extends Model<CategoryAttributes, CategoryCreationAttribut
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Film, FilmId } from './Film'
 import type { Store, StoreId } from './Store'
 
@@ -611,17 +632,22 @@ export class Inventory extends Model<InventoryAttributes, InventoryCreationAttri
   public readonly inventoryId!: number
 
   // Inventory belongsTo Film
-  public readonly film?: Film
+  public readonly Film?: Film
   public getFilm!: Sequelize.BelongsToGetAssociationMixin<Film>
   public setFilm!: Sequelize.BelongsToSetAssociationMixin<Film, FilmId>
   public createFilm!: Sequelize.BelongsToCreateAssociationMixin<Film>
   
   // Inventory belongsTo Store
-  public readonly store?: Store
+  public readonly Store?: Store
   public getStore!: Sequelize.BelongsToGetAssociationMixin<Store>
   public setStore!: Sequelize.BelongsToSetAssociationMixin<Store, StoreId>
   public createStore!: Sequelize.BelongsToCreateAssociationMixin<Store>
   
+  public static associations: {
+    Film: Association<Inventory, Film>,
+    Store: Association<Inventory, Store>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Inventory {
     Inventory.init({
       inventoryId: {
@@ -642,7 +668,7 @@ export class Inventory extends Model<InventoryAttributes, InventoryCreationAttri
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Address, AddressId } from './Address'
 import type { Customer, CustomerId } from './Customer'
 import type { Inventory, InventoryId } from './Inventory'
@@ -660,7 +686,7 @@ export class Store extends Model<StoreAttributes, StoreCreationAttributes> imple
   public readonly storeId!: number
 
   // Store hasMany Inventory
-  public readonly inventories?: Inventory[]
+  public readonly Inventories?: Inventory[]
   public getInventories!: Sequelize.HasManyGetAssociationsMixin<Inventory>
   public setInventories!: Sequelize.HasManySetAssociationsMixin<Inventory, InventoryId>
   public addInventory!: Sequelize.HasManyAddAssociationMixin<Inventory, InventoryId>
@@ -673,7 +699,7 @@ export class Store extends Model<StoreAttributes, StoreCreationAttributes> imple
   public countInventories!: Sequelize.HasManyCountAssociationsMixin
   
   // Store hasMany Staff
-  public readonly staffs?: Staff[]
+  public readonly Staffs?: Staff[]
   public getStaffs!: Sequelize.HasManyGetAssociationsMixin<Staff>
   public setStaffs!: Sequelize.HasManySetAssociationsMixin<Staff, StaffId>
   public addStaff!: Sequelize.HasManyAddAssociationMixin<Staff, StaffId>
@@ -686,7 +712,7 @@ export class Store extends Model<StoreAttributes, StoreCreationAttributes> imple
   public countStaffs!: Sequelize.HasManyCountAssociationsMixin
   
   // Store hasMany Customer
-  public readonly customers?: Customer[]
+  public readonly Customers?: Customer[]
   public getCustomers!: Sequelize.HasManyGetAssociationsMixin<Customer>
   public setCustomers!: Sequelize.HasManySetAssociationsMixin<Customer, CustomerId>
   public addCustomer!: Sequelize.HasManyAddAssociationMixin<Customer, CustomerId>
@@ -705,11 +731,19 @@ export class Store extends Model<StoreAttributes, StoreCreationAttributes> imple
   public createManager!: Sequelize.BelongsToCreateAssociationMixin<Staff>
   
   // Store belongsTo Address
-  public readonly address?: Address
+  public readonly Address?: Address
   public getAddress!: Sequelize.BelongsToGetAssociationMixin<Address>
   public setAddress!: Sequelize.BelongsToSetAssociationMixin<Address, AddressId>
   public createAddress!: Sequelize.BelongsToCreateAssociationMixin<Address>
   
+  public static associations: {
+    Inventories: Association<Store, Inventory>,
+    Staffs: Association<Store, Staff>,
+    Customers: Association<Store, Customer>,
+    manager: Association<Store, Staff>,
+    Address: Association<Store, Address>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Store {
     Store.init({
       storeId: {
@@ -730,7 +764,7 @@ export class Store extends Model<StoreAttributes, StoreCreationAttributes> imple
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Address, AddressId } from './Address'
 import type { Payment, PaymentId } from './Payment'
 import type { Rental, RentalId } from './Rental'
@@ -762,7 +796,7 @@ export class Staff extends Model<StaffAttributes, StaffCreationAttributes> imple
   public password?: string
 
   // Staff belongsTo Store
-  public readonly store?: Store
+  public readonly Store?: Store
   public getStore!: Sequelize.BelongsToGetAssociationMixin<Store>
   public setStore!: Sequelize.BelongsToSetAssociationMixin<Store, StoreId>
   public createStore!: Sequelize.BelongsToCreateAssociationMixin<Store>
@@ -781,13 +815,13 @@ export class Staff extends Model<StaffAttributes, StaffCreationAttributes> imple
   public countManagedStores!: Sequelize.HasManyCountAssociationsMixin
   
   // Staff belongsTo Address
-  public readonly address?: Address
+  public readonly Address?: Address
   public getAddress!: Sequelize.BelongsToGetAssociationMixin<Address>
   public setAddress!: Sequelize.BelongsToSetAssociationMixin<Address, AddressId>
   public createAddress!: Sequelize.BelongsToCreateAssociationMixin<Address>
   
   // Staff hasMany Rental
-  public readonly rentals?: Rental[]
+  public readonly Rentals?: Rental[]
   public getRentals!: Sequelize.HasManyGetAssociationsMixin<Rental>
   public setRentals!: Sequelize.HasManySetAssociationsMixin<Rental, RentalId>
   public addRental!: Sequelize.HasManyAddAssociationMixin<Rental, RentalId>
@@ -800,7 +834,7 @@ export class Staff extends Model<StaffAttributes, StaffCreationAttributes> imple
   public countRentals!: Sequelize.HasManyCountAssociationsMixin
   
   // Staff hasMany Payment
-  public readonly payments?: Payment[]
+  public readonly Payments?: Payment[]
   public getPayments!: Sequelize.HasManyGetAssociationsMixin<Payment>
   public setPayments!: Sequelize.HasManySetAssociationsMixin<Payment, PaymentId>
   public addPayment!: Sequelize.HasManyAddAssociationMixin<Payment, PaymentId>
@@ -812,6 +846,14 @@ export class Staff extends Model<StaffAttributes, StaffCreationAttributes> imple
   public hasPayments!: Sequelize.HasManyHasAssociationsMixin<Payment, PaymentId>
   public countPayments!: Sequelize.HasManyCountAssociationsMixin
   
+  public static associations: {
+    Store: Association<Staff, Store>,
+    managedStores: Association<Staff, Store>,
+    Address: Association<Staff, Address>,
+    Rentals: Association<Staff, Rental>,
+    Payments: Association<Staff, Payment>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Staff {
     Staff.init({
       staffId: {
@@ -857,7 +899,7 @@ export class Staff extends Model<StaffAttributes, StaffCreationAttributes> imple
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Address, AddressId } from './Address'
 import type { Payment, PaymentId } from './Payment'
 import type { Rental, RentalId } from './Rental'
@@ -883,19 +925,19 @@ export class Customer extends Model<CustomerAttributes, CustomerCreationAttribut
   public active!: boolean
 
   // Customer belongsTo Store
-  public readonly store?: Store
+  public readonly Store?: Store
   public getStore!: Sequelize.BelongsToGetAssociationMixin<Store>
   public setStore!: Sequelize.BelongsToSetAssociationMixin<Store, StoreId>
   public createStore!: Sequelize.BelongsToCreateAssociationMixin<Store>
   
   // Customer belongsTo Address
-  public readonly address?: Address
+  public readonly Address?: Address
   public getAddress!: Sequelize.BelongsToGetAssociationMixin<Address>
   public setAddress!: Sequelize.BelongsToSetAssociationMixin<Address, AddressId>
   public createAddress!: Sequelize.BelongsToCreateAssociationMixin<Address>
   
   // Customer hasMany Rental
-  public readonly rentals?: Rental[]
+  public readonly Rentals?: Rental[]
   public getRentals!: Sequelize.HasManyGetAssociationsMixin<Rental>
   public setRentals!: Sequelize.HasManySetAssociationsMixin<Rental, RentalId>
   public addRental!: Sequelize.HasManyAddAssociationMixin<Rental, RentalId>
@@ -908,7 +950,7 @@ export class Customer extends Model<CustomerAttributes, CustomerCreationAttribut
   public countRentals!: Sequelize.HasManyCountAssociationsMixin
   
   // Customer hasMany Payment
-  public readonly payments?: Payment[]
+  public readonly Payments?: Payment[]
   public getPayments!: Sequelize.HasManyGetAssociationsMixin<Payment>
   public setPayments!: Sequelize.HasManySetAssociationsMixin<Payment, PaymentId>
   public addPayment!: Sequelize.HasManyAddAssociationMixin<Payment, PaymentId>
@@ -920,6 +962,13 @@ export class Customer extends Model<CustomerAttributes, CustomerCreationAttribut
   public hasPayments!: Sequelize.HasManyHasAssociationsMixin<Payment, PaymentId>
   public countPayments!: Sequelize.HasManyCountAssociationsMixin
   
+  public static associations: {
+    Store: Association<Customer, Store>,
+    Address: Association<Customer, Address>,
+    Rentals: Association<Customer, Rental>,
+    Payments: Association<Customer, Payment>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Customer {
     Customer.init({
       customerId: {
@@ -955,7 +1004,7 @@ export class Customer extends Model<CustomerAttributes, CustomerCreationAttribut
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { City, CityId } from './City'
 import type { Customer, CustomerCreationAttributes, CustomerId } from './Customer'
 import type { Staff, StaffCreationAttributes, StaffId } from './Staff'
@@ -981,29 +1030,36 @@ export class Address extends Model<AddressAttributes, AddressCreationAttributes>
   public phone!: string
 
   // Address belongsTo City
-  public readonly city?: City
+  public readonly City?: City
   public getCity!: Sequelize.BelongsToGetAssociationMixin<City>
   public setCity!: Sequelize.BelongsToSetAssociationMixin<City, CityId>
   public createCity!: Sequelize.BelongsToCreateAssociationMixin<City>
   
   // Address hasOne Customer
-  public readonly customer?: Customer
+  public readonly Customer?: Customer
   public getCustomer!: Sequelize.HasOneGetAssociationMixin<Customer>
   public setCustomer!: Sequelize.HasOneSetAssociationMixin<Customer, CustomerId>
   public createCustomer!: Sequelize.HasOneCreateAssociationMixin<CustomerCreationAttributes>
   
   // Address hasOne Staff
-  public readonly staff?: Staff
+  public readonly Staff?: Staff
   public getStaff!: Sequelize.HasOneGetAssociationMixin<Staff>
   public setStaff!: Sequelize.HasOneSetAssociationMixin<Staff, StaffId>
   public createStaff!: Sequelize.HasOneCreateAssociationMixin<StaffCreationAttributes>
   
   // Address hasOne Store
-  public readonly store?: Store
+  public readonly Store?: Store
   public getStore!: Sequelize.HasOneGetAssociationMixin<Store>
   public setStore!: Sequelize.HasOneSetAssociationMixin<Store, StoreId>
   public createStore!: Sequelize.HasOneCreateAssociationMixin<StoreCreationAttributes>
   
+  public static associations: {
+    City: Association<Address, City>,
+    Customer: Association<Address, Customer>,
+    Staff: Association<Address, Staff>,
+    Store: Association<Address, Store>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Address {
     Address.init({
       addressId: {
@@ -1039,7 +1095,7 @@ export class Address extends Model<AddressAttributes, AddressCreationAttributes>
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Customer, CustomerId } from './Customer'
 import type { Inventory, InventoryId } from './Inventory'
 import type { Payment, PaymentId } from './Payment'
@@ -1061,25 +1117,25 @@ export class Rental extends Model<RentalAttributes, RentalCreationAttributes> im
   public returnDate?: string
 
   // Rental belongsTo Inventory
-  public readonly inventory?: Inventory
+  public readonly Inventory?: Inventory
   public getInventory!: Sequelize.BelongsToGetAssociationMixin<Inventory>
   public setInventory!: Sequelize.BelongsToSetAssociationMixin<Inventory, InventoryId>
   public createInventory!: Sequelize.BelongsToCreateAssociationMixin<Inventory>
   
   // Rental belongsTo Customer
-  public readonly customer?: Customer
+  public readonly Customer?: Customer
   public getCustomer!: Sequelize.BelongsToGetAssociationMixin<Customer>
   public setCustomer!: Sequelize.BelongsToSetAssociationMixin<Customer, CustomerId>
   public createCustomer!: Sequelize.BelongsToCreateAssociationMixin<Customer>
   
   // Rental belongsTo Staff
-  public readonly staff?: Staff
+  public readonly Staff?: Staff
   public getStaff!: Sequelize.BelongsToGetAssociationMixin<Staff>
   public setStaff!: Sequelize.BelongsToSetAssociationMixin<Staff, StaffId>
   public createStaff!: Sequelize.BelongsToCreateAssociationMixin<Staff>
   
   // Rental hasMany Payment
-  public readonly payments?: Payment[]
+  public readonly Payments?: Payment[]
   public getPayments!: Sequelize.HasManyGetAssociationsMixin<Payment>
   public setPayments!: Sequelize.HasManySetAssociationsMixin<Payment, PaymentId>
   public addPayment!: Sequelize.HasManyAddAssociationMixin<Payment, PaymentId>
@@ -1091,6 +1147,13 @@ export class Rental extends Model<RentalAttributes, RentalCreationAttributes> im
   public hasPayments!: Sequelize.HasManyHasAssociationsMixin<Payment, PaymentId>
   public countPayments!: Sequelize.HasManyCountAssociationsMixin
   
+  public static associations: {
+    Inventory: Association<Rental, Inventory>,
+    Customer: Association<Rental, Customer>,
+    Staff: Association<Rental, Staff>,
+    Payments: Association<Rental, Payment>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Rental {
     Rental.init({
       rentalId: {
@@ -1118,7 +1181,7 @@ export class Rental extends Model<RentalAttributes, RentalCreationAttributes> im
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Customer, CustomerId } from './Customer'
 import type { Rental, RentalId } from './Rental'
 import type { Staff, StaffId } from './Staff'
@@ -1139,23 +1202,29 @@ export class Payment extends Model<PaymentAttributes, PaymentCreationAttributes>
   public paymentDate!: string
 
   // Payment belongsTo Customer
-  public readonly customer?: Customer
+  public readonly Customer?: Customer
   public getCustomer!: Sequelize.BelongsToGetAssociationMixin<Customer>
   public setCustomer!: Sequelize.BelongsToSetAssociationMixin<Customer, CustomerId>
   public createCustomer!: Sequelize.BelongsToCreateAssociationMixin<Customer>
   
   // Payment belongsTo Staff
-  public readonly staff?: Staff
+  public readonly Staff?: Staff
   public getStaff!: Sequelize.BelongsToGetAssociationMixin<Staff>
   public setStaff!: Sequelize.BelongsToSetAssociationMixin<Staff, StaffId>
   public createStaff!: Sequelize.BelongsToCreateAssociationMixin<Staff>
   
   // Payment belongsTo Rental
-  public readonly rental?: Rental
+  public readonly Rental?: Rental
   public getRental!: Sequelize.BelongsToGetAssociationMixin<Rental>
   public setRental!: Sequelize.BelongsToSetAssociationMixin<Rental, RentalId>
   public createRental!: Sequelize.BelongsToCreateAssociationMixin<Rental>
   
+  public static associations: {
+    Customer: Association<Payment, Customer>,
+    Staff: Association<Payment, Staff>,
+    Rental: Association<Payment, Rental>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Payment {
     Payment.init({
       paymentId: {
@@ -1184,7 +1253,7 @@ export class Payment extends Model<PaymentAttributes, PaymentCreationAttributes>
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Address, AddressId } from './Address'
 import type { Country, CountryId } from './Country'
 
@@ -1202,13 +1271,13 @@ export class City extends Model<CityAttributes, CityCreationAttributes> implemen
   public city!: string
 
   // City belongsTo Country
-  public readonly country?: Country
+  public readonly Country?: Country
   public getCountry!: Sequelize.BelongsToGetAssociationMixin<Country>
   public setCountry!: Sequelize.BelongsToSetAssociationMixin<Country, CountryId>
   public createCountry!: Sequelize.BelongsToCreateAssociationMixin<Country>
   
   // City hasMany Address
-  public readonly addresses?: Address[]
+  public readonly Addresses?: Address[]
   public getAddresses!: Sequelize.HasManyGetAssociationsMixin<Address>
   public setAddresses!: Sequelize.HasManySetAssociationsMixin<Address, AddressId>
   public addAddress!: Sequelize.HasManyAddAssociationMixin<Address, AddressId>
@@ -1220,6 +1289,11 @@ export class City extends Model<CityAttributes, CityCreationAttributes> implemen
   public hasAddresses!: Sequelize.HasManyHasAssociationsMixin<Address, AddressId>
   public countAddresses!: Sequelize.HasManyCountAssociationsMixin
   
+  public static associations: {
+    Country: Association<City, Country>,
+    Addresses: Association<City, Address>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof City {
     City.init({
       cityId: {
@@ -1244,7 +1318,7 @@ export class City extends Model<CityAttributes, CityCreationAttributes> implemen
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { City, CityId } from './City'
 
 export interface CountryAttributes {
@@ -1261,7 +1335,7 @@ export class Country extends Model<CountryAttributes, CountryCreationAttributes>
   public country!: string
 
   // Country hasMany City
-  public readonly cities?: City[]
+  public readonly Cities?: City[]
   public getCities!: Sequelize.HasManyGetAssociationsMixin<City>
   public setCities!: Sequelize.HasManySetAssociationsMixin<City, CityId>
   public addCity!: Sequelize.HasManyAddAssociationMixin<City, CityId>
@@ -1273,6 +1347,10 @@ export class Country extends Model<CountryAttributes, CountryCreationAttributes>
   public hasCities!: Sequelize.HasManyHasAssociationsMixin<City, CityId>
   public countCities!: Sequelize.HasManyCountAssociationsMixin
   
+  public static associations: {
+    Cities: Association<Country, City>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Country {
     Country.init({
       countryId: {
@@ -1297,7 +1375,7 @@ export class Country extends Model<CountryAttributes, CountryCreationAttributes>
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Actor, ActorId } from './Actor'
 import type { Film, FilmId } from './Film'
 
@@ -1313,17 +1391,22 @@ export class FilmActor extends Model<FilmActorAttributes, FilmActorCreationAttri
   public readonly filmActorId!: number
 
   // FilmActor belongsTo Film
-  public readonly film?: Film
+  public readonly Film?: Film
   public getFilm!: Sequelize.BelongsToGetAssociationMixin<Film>
   public setFilm!: Sequelize.BelongsToSetAssociationMixin<Film, FilmId>
   public createFilm!: Sequelize.BelongsToCreateAssociationMixin<Film>
   
   // FilmActor belongsTo Actor
-  public readonly actor?: Actor
+  public readonly Actor?: Actor
   public getActor!: Sequelize.BelongsToGetAssociationMixin<Actor>
   public setActor!: Sequelize.BelongsToSetAssociationMixin<Actor, ActorId>
   public createActor!: Sequelize.BelongsToCreateAssociationMixin<Actor>
   
+  public static associations: {
+    Film: Association<FilmActor, Film>,
+    Actor: Association<FilmActor, Actor>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof FilmActor {
     FilmActor.init({
       filmActorId: {
@@ -1344,7 +1427,7 @@ export class FilmActor extends Model<FilmActorAttributes, FilmActorCreationAttri
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Category, CategoryId } from './Category'
 import type { Film, FilmId } from './Film'
 
@@ -1360,17 +1443,22 @@ export class FilmCategory extends Model<FilmCategoryAttributes, FilmCategoryCrea
   public readonly filmCategoryId!: number
 
   // FilmCategory belongsTo Film
-  public readonly film?: Film
+  public readonly Film?: Film
   public getFilm!: Sequelize.BelongsToGetAssociationMixin<Film>
   public setFilm!: Sequelize.BelongsToSetAssociationMixin<Film, FilmId>
   public createFilm!: Sequelize.BelongsToCreateAssociationMixin<Film>
   
   // FilmCategory belongsTo Category
-  public readonly category?: Category
+  public readonly Category?: Category
   public getCategory!: Sequelize.BelongsToGetAssociationMixin<Category>
   public setCategory!: Sequelize.BelongsToSetAssociationMixin<Category, CategoryId>
   public createCategory!: Sequelize.BelongsToCreateAssociationMixin<Category>
   
+  public static associations: {
+    Film: Association<FilmCategory, Film>,
+    Category: Association<FilmCategory, Category>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof FilmCategory {
     FilmCategory.init({
       filmCategoryId: {

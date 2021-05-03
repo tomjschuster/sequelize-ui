@@ -8,6 +8,8 @@ import {
   Schema,
   ThroughType,
 } from '@src/core/schema'
+import { associationName } from '@src/frameworks/sequelize/helpers'
+import { arrayToLookup } from '@src/utils/array'
 import { deepEmpty } from '@src/utils/object'
 import {
   nameEmpty,
@@ -44,7 +46,7 @@ export function validateModel(model: Model, schema: Schema): ModelFormErrors {
   return {
     name: validateModelName(model, schema),
     fields: validateModelFields(model),
-    associations: validateModelAssociations(model),
+    associations: validateModelAssociations(model, schema),
   }
 }
 
@@ -101,23 +103,34 @@ function validateFieldName(field: Field, model: Model): string | undefined {
   }
 }
 
-function validateModelAssociations(model: Model): { [id: string]: AssociationFormErrors } {
+function validateModelAssociations(
+  model: Model,
+  schema: Schema,
+): { [id: string]: AssociationFormErrors } {
   return model.associations.reduce<{ [id: string]: AssociationFormErrors }>((acc, association) => {
-    acc[association.id] = validateAssociation(association, model)
+    acc[association.id] = validateAssociation(association, model, schema)
     return acc
   }, {})
 }
 
-function validateAssociation(association: Association, model: Model): AssociationFormErrors {
+function validateAssociation(
+  association: Association,
+  model: Model,
+  schema: Schema,
+): AssociationFormErrors {
   return {
-    alias: validateAssociationAlias(association, model),
+    alias: validateAssociationAlias(association, model, schema),
     foreignKey: validateAssociationForeignKey(association),
     targetForeignKey: validateAssociationTargetForeignKey(association),
     throughTable: validateAssociationThroughTable(association),
   }
 }
 
-function validateAssociationAlias(association: Association, model: Model): string | undefined {
+function validateAssociationAlias(
+  association: Association,
+  model: Model,
+  schema: Schema,
+): string | undefined {
   if (nameLongerThan(association.alias, MAX_IDENTIFIER_LENGTH)) {
     return 'Name cannot be longer than 63 characters'
   }
@@ -130,8 +143,8 @@ function validateAssociationAlias(association: Association, model: Model): strin
     return `Alias must be unique across the model's associations`
   }
 
-  if (findDuplicateTarget(association, model)) {
-    return 'Cannot have two associations of the same type to the same model without an alias'
+  if (findDuplicateAssociationName(association, model, schema)) {
+    return 'Cannot have two associations to the same model/alias name'
   }
 }
 
@@ -194,13 +207,23 @@ function findDuplicateAlias(association: Association, model: Model): Association
   )
 }
 
-function findDuplicateTarget(association: Association, model: Model): Association | undefined {
-  return model.associations.find(
-    (a) =>
-      !association.alias &&
-      !a.alias &&
-      association.id !== a.id &&
-      association.targetModelId === a.targetModelId &&
-      associationsHaveSameForm(association, a),
-  )
+function findDuplicateAssociationName(
+  association: Association,
+  model: Model,
+  schema: Schema,
+): Association | undefined {
+  const modelById = arrayToLookup(schema.models, (m) => m.id)
+  const targetModel: Model | undefined = modelById[association.targetModelId]
+  if (!targetModel) return undefined
+
+  const name = associationName({ association, targetModel })
+  console.log({ name })
+
+  return model.associations.find((a) => {
+    if (a.id === association.id) return false
+    const aTargetModel: Model | undefined = modelById[a.targetModelId]
+    if (!aTargetModel) return false
+    const aName = associationName({ association: a, targetModel: aTargetModel })
+    return namesEqSingular(name, aName)
+  })
 }

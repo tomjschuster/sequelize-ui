@@ -155,7 +155,7 @@ export function initModels(sequelize: Sequelize) {
     onDelete: 'CASCADE'
   })
   User.hasMany(Post, {
-    foreignKey: 'user_id'
+    foreignKey: 'author_id'
   })
 
   return {
@@ -174,7 +174,7 @@ export function initModels(sequelize: Sequelize) {
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Post, PostId } from './Post'
 import type { PostCategory, PostCategoryId } from './PostCategory'
 
@@ -217,7 +217,7 @@ export class Category extends Model<CategoryAttributes, CategoryCreationAttribut
   public countChildren!: Sequelize.HasManyCountAssociationsMixin
   
   // Category hasMany PostCategory
-  public readonly postCategories?: PostCategory[]
+  public readonly PostCategories?: PostCategory[]
   public getPostCategories!: Sequelize.HasManyGetAssociationsMixin<PostCategory>
   public setPostCategories!: Sequelize.HasManySetAssociationsMixin<PostCategory, PostCategoryId>
   public addPostCategory!: Sequelize.HasManyAddAssociationMixin<PostCategory, PostCategoryId>
@@ -230,7 +230,7 @@ export class Category extends Model<CategoryAttributes, CategoryCreationAttribut
   public countPostCategories!: Sequelize.HasManyCountAssociationsMixin
   
   // Category belongsToMany Post
-  public readonly posts?: Post[]
+  public readonly Posts?: Post[]
   public getPosts!: Sequelize.BelongsToManyGetAssociationsMixin<Post>
   public setPosts!: Sequelize.BelongsToManySetAssociationsMixin<Post, PostId>
   public addPost!: Sequelize.BelongsToManyAddAssociationMixin<Post, PostId>
@@ -242,6 +242,13 @@ export class Category extends Model<CategoryAttributes, CategoryCreationAttribut
   public hasPosts!: Sequelize.BelongsToManyHasAssociationsMixin<Post, PostId>
   public countPosts!: Sequelize.BelongsToManyCountAssociationsMixin
   
+  public static associations: {
+    parent: Association<Category, Category>,
+    children: Association<Category, Category>,
+    PostCategories: Association<Category, PostCategory>,
+    Posts: Association<Category, Post>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Category {
     Category.init({
       id: {
@@ -275,7 +282,7 @@ export class Category extends Model<CategoryAttributes, CategoryCreationAttribut
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Category, CategoryId } from './Category'
 import type { PostCategory, PostCategoryId } from './PostCategory'
 import type { PostComment, PostCommentId } from './PostComment'
@@ -335,7 +342,7 @@ export class Post extends Model<PostAttributes, PostCreationAttributes> implemen
   public countChildren!: Sequelize.HasManyCountAssociationsMixin
   
   // Post hasMany PostCategory
-  public readonly postCategories?: PostCategory[]
+  public readonly PostCategories?: PostCategory[]
   public getPostCategories!: Sequelize.HasManyGetAssociationsMixin<PostCategory>
   public setPostCategories!: Sequelize.HasManySetAssociationsMixin<PostCategory, PostCategoryId>
   public addPostCategory!: Sequelize.HasManyAddAssociationMixin<PostCategory, PostCategoryId>
@@ -348,7 +355,7 @@ export class Post extends Model<PostAttributes, PostCreationAttributes> implemen
   public countPostCategories!: Sequelize.HasManyCountAssociationsMixin
   
   // Post belongsToMany Category
-  public readonly categories?: Category[]
+  public readonly Categories?: Category[]
   public getCategories!: Sequelize.BelongsToManyGetAssociationsMixin<Category>
   public setCategories!: Sequelize.BelongsToManySetAssociationsMixin<Category, CategoryId>
   public addCategory!: Sequelize.BelongsToManyAddAssociationMixin<Category, CategoryId>
@@ -387,7 +394,7 @@ export class Post extends Model<PostAttributes, PostCreationAttributes> implemen
   public countMetas!: Sequelize.HasManyCountAssociationsMixin
   
   // Post hasMany PostTag
-  public readonly postTags?: PostTag[]
+  public readonly PostTags?: PostTag[]
   public getPostTags!: Sequelize.HasManyGetAssociationsMixin<PostTag>
   public setPostTags!: Sequelize.HasManySetAssociationsMixin<PostTag, PostTagId>
   public addPostTag!: Sequelize.HasManyAddAssociationMixin<PostTag, PostTagId>
@@ -400,7 +407,7 @@ export class Post extends Model<PostAttributes, PostCreationAttributes> implemen
   public countPostTags!: Sequelize.HasManyCountAssociationsMixin
   
   // Post belongsToMany Tag
-  public readonly tags?: Tag[]
+  public readonly Tags?: Tag[]
   public getTags!: Sequelize.BelongsToManyGetAssociationsMixin<Tag>
   public setTags!: Sequelize.BelongsToManySetAssociationsMixin<Tag, TagId>
   public addTag!: Sequelize.BelongsToManyAddAssociationMixin<Tag, TagId>
@@ -412,6 +419,18 @@ export class Post extends Model<PostAttributes, PostCreationAttributes> implemen
   public hasTags!: Sequelize.BelongsToManyHasAssociationsMixin<Tag, TagId>
   public countTags!: Sequelize.BelongsToManyCountAssociationsMixin
   
+  public static associations: {
+    author: Association<Post, User>,
+    parent: Association<Post, Post>,
+    children: Association<Post, Post>,
+    PostCategories: Association<Post, PostCategory>,
+    Categories: Association<Post, Category>,
+    comments: Association<Post, PostComment>,
+    metas: Association<Post, PostMeta>,
+    PostTags: Association<Post, PostTag>,
+    Tags: Association<Post, Tag>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Post {
     Post.init({
       id: {
@@ -455,7 +474,7 @@ export class Post extends Model<PostAttributes, PostCreationAttributes> implemen
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Category, CategoryId } from './Category'
 import type { Post, PostId } from './Post'
 
@@ -473,17 +492,22 @@ export class PostCategory extends Model<PostCategoryAttributes, PostCategoryCrea
   public readonly categoryId?: number
 
   // PostCategory belongsTo Post
-  public readonly post?: Post
+  public readonly Post?: Post
   public getPost!: Sequelize.BelongsToGetAssociationMixin<Post>
   public setPost!: Sequelize.BelongsToSetAssociationMixin<Post, PostId>
   public createPost!: Sequelize.BelongsToCreateAssociationMixin<Post>
   
   // PostCategory belongsTo Category
-  public readonly category?: Category
+  public readonly Category?: Category
   public getCategory!: Sequelize.BelongsToGetAssociationMixin<Category>
   public setCategory!: Sequelize.BelongsToSetAssociationMixin<Category, CategoryId>
   public createCategory!: Sequelize.BelongsToCreateAssociationMixin<Category>
   
+  public static associations: {
+    Post: Association<PostCategory, Post>,
+    Category: Association<PostCategory, Category>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof PostCategory {
     PostCategory.init({
       postId: {
@@ -506,7 +530,7 @@ export class PostCategory extends Model<PostCategoryAttributes, PostCategoryCrea
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Post, PostId } from './Post'
 
 export interface PostCommentAttributes {
@@ -529,7 +553,7 @@ export class PostComment extends Model<PostCommentAttributes, PostCommentCreatio
   public content?: string
 
   // PostComment belongsTo Post
-  public readonly post?: Post
+  public readonly Post?: Post
   public getPost!: Sequelize.BelongsToGetAssociationMixin<Post>
   public setPost!: Sequelize.BelongsToSetAssociationMixin<Post, PostId>
   public createPost!: Sequelize.BelongsToCreateAssociationMixin<Post>
@@ -553,6 +577,12 @@ export class PostComment extends Model<PostCommentAttributes, PostCommentCreatio
   public hasChildren!: Sequelize.HasManyHasAssociationsMixin<PostComment, PostCommentId>
   public countChildren!: Sequelize.HasManyCountAssociationsMixin
   
+  public static associations: {
+    Post: Association<PostComment, Post>,
+    parent: Association<PostComment, PostComment>,
+    children: Association<PostComment, PostComment>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof PostComment {
     PostComment.init({
       id: {
@@ -585,7 +615,7 @@ export class PostComment extends Model<PostCommentAttributes, PostCommentCreatio
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Post, PostId } from './Post'
 
 export interface PostMetaAttributes {
@@ -604,11 +634,15 @@ export class PostMeta extends Model<PostMetaAttributes, PostMetaCreationAttribut
   public content?: string
 
   // PostMeta belongsTo Post
-  public readonly post?: Post
+  public readonly Post?: Post
   public getPost!: Sequelize.BelongsToGetAssociationMixin<Post>
   public setPost!: Sequelize.BelongsToSetAssociationMixin<Post, PostId>
   public createPost!: Sequelize.BelongsToCreateAssociationMixin<Post>
   
+  public static associations: {
+    Post: Association<PostMeta, Post>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof PostMeta {
     PostMeta.init({
       id: {
@@ -635,7 +669,7 @@ export class PostMeta extends Model<PostMetaAttributes, PostMetaCreationAttribut
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Post, PostId } from './Post'
 import type { Tag, TagId } from './Tag'
 
@@ -653,17 +687,22 @@ export class PostTag extends Model<PostTagAttributes, PostTagCreationAttributes>
   public readonly tagId?: number
 
   // PostTag belongsTo Post
-  public readonly post?: Post
+  public readonly Post?: Post
   public getPost!: Sequelize.BelongsToGetAssociationMixin<Post>
   public setPost!: Sequelize.BelongsToSetAssociationMixin<Post, PostId>
   public createPost!: Sequelize.BelongsToCreateAssociationMixin<Post>
   
   // PostTag belongsTo Tag
-  public readonly tag?: Tag
+  public readonly Tag?: Tag
   public getTag!: Sequelize.BelongsToGetAssociationMixin<Tag>
   public setTag!: Sequelize.BelongsToSetAssociationMixin<Tag, TagId>
   public createTag!: Sequelize.BelongsToCreateAssociationMixin<Tag>
   
+  public static associations: {
+    Post: Association<PostTag, Post>,
+    Tag: Association<PostTag, Tag>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof PostTag {
     PostTag.init({
       postId: {
@@ -686,7 +725,7 @@ export class PostTag extends Model<PostTagAttributes, PostTagCreationAttributes>
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Post, PostId } from './Post'
 import type { PostTag, PostTagId } from './PostTag'
 
@@ -710,7 +749,7 @@ export class Tag extends Model<TagAttributes, TagCreationAttributes> implements 
   public content?: string
 
   // Tag hasMany PostTag
-  public readonly postTags?: PostTag[]
+  public readonly PostTags?: PostTag[]
   public getPostTags!: Sequelize.HasManyGetAssociationsMixin<PostTag>
   public setPostTags!: Sequelize.HasManySetAssociationsMixin<PostTag, PostTagId>
   public addPostTag!: Sequelize.HasManyAddAssociationMixin<PostTag, PostTagId>
@@ -723,7 +762,7 @@ export class Tag extends Model<TagAttributes, TagCreationAttributes> implements 
   public countPostTags!: Sequelize.HasManyCountAssociationsMixin
   
   // Tag belongsToMany Post
-  public readonly posts?: Post[]
+  public readonly Posts?: Post[]
   public getPosts!: Sequelize.BelongsToManyGetAssociationsMixin<Post>
   public setPosts!: Sequelize.BelongsToManySetAssociationsMixin<Post, PostId>
   public addPost!: Sequelize.BelongsToManyAddAssociationMixin<Post, PostId>
@@ -735,6 +774,11 @@ export class Tag extends Model<TagAttributes, TagCreationAttributes> implements 
   public hasPosts!: Sequelize.BelongsToManyHasAssociationsMixin<Post, PostId>
   public countPosts!: Sequelize.BelongsToManyCountAssociationsMixin
   
+  public static associations: {
+    PostTags: Association<Tag, PostTag>,
+    Posts: Association<Tag, Post>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof Tag {
     Tag.init({
       id: {
@@ -768,7 +812,7 @@ export class Tag extends Model<TagAttributes, TagCreationAttributes> implements 
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { Post, PostId } from './Post'
 
 export interface UserAttributes {
@@ -803,7 +847,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public profile?: string
 
   // User hasMany Post
-  public readonly posts?: Post[]
+  public readonly Posts?: Post[]
   public getPosts!: Sequelize.HasManyGetAssociationsMixin<Post>
   public setPosts!: Sequelize.HasManySetAssociationsMixin<Post, PostId>
   public addPost!: Sequelize.HasManyAddAssociationMixin<Post, PostId>
@@ -815,6 +859,10 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public hasPosts!: Sequelize.HasManyHasAssociationsMixin<Post, PostId>
   public countPosts!: Sequelize.HasManyCountAssociationsMixin
   
+  public static associations: {
+    Posts: Association<User, Post>
+  }
+
   static initModel(sequelize: Sequelize.Sequelize): typeof User {
     User.init({
       id: {

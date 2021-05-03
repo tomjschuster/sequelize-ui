@@ -1,4 +1,4 @@
-import { pascalCase, snakeCase } from 'change-case'
+import { camelCase, pascalCase, snakeCase } from 'change-case'
 
 export type DbOptions = {
   sqlDialect: SqlDialect
@@ -187,6 +187,10 @@ export const defaultDbOptions: DbOptions = {
   timestamps: true,
   caseStyle: DbCaseStyle.Snake,
   nounForm: DbNounForm.Plural,
+}
+
+export function caseByDbCaseStyle(value: string, caseStyle: DbCaseStyle): string {
+  return caseStyle === DbCaseStyle.Snake ? snakeCase(value) : camelCase(value)
 }
 
 export const MAX_IDENTIFIER_LENGTH = 63

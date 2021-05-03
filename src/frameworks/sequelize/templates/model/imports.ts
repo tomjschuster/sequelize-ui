@@ -15,14 +15,18 @@ export function modelImportsTemplate({
   dbOptions,
 }: ModelImportsTemplateArgs): string {
   return lines([
-    sequelizeImports(),
+    sequelizeImports({ associations }),
     hasJsonType(model) ? importJsonType(dbOptions) : null,
     ...getAssociationTypes({ currentModel: model, associations }).map(typeImports),
   ])
 }
 
-function sequelizeImports(): string {
-  return `import Sequelize, { DataTypes, Model, Optional } from 'sequelize'`
+type SequelizeImportsArgs = {
+  associations: ModelAssociation[]
+}
+function sequelizeImports({ associations }: SequelizeImportsArgs): string {
+  const associationImport = associations.length ? 'Association, ' : ''
+  return `import Sequelize, { ${associationImport}DataTypes, Model, Optional } from 'sequelize'`
 }
 
 type TypeImportArgs = [filename: string, types: string[]]

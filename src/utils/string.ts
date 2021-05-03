@@ -1,4 +1,4 @@
-import { noCase, sentenceCase, snakeCase } from 'change-case'
+import { noCase, sentenceCase } from 'change-case'
 import { plural as plural_, singular } from 'pluralize'
 
 export {
@@ -70,29 +70,33 @@ function getNameVersion(name: string, matchName: string): number | undefined {
 export function namesEq(a?: string, b?: string): boolean {
   if (!a && !b) return true
   if (!a || !b) return false
-  return snakeCase(a) === snakeCase(b)
+  return normalize(a) === normalize(b)
 }
 
 /** Check if normalized names are equal */
 export function namesEqSingular(a?: string, b?: string): boolean {
   if (!a && !b) return true
   if (!a || !b) return false
-  return singular(snakeCase(a)) === singular(snakeCase(b))
+  return singular(normalize(a)) === singular(normalize(b))
 }
 
 /** Check if normalized name is empty */
 export function nameEmpty(a?: string): boolean {
   if (!a) return true
-  return !snakeCase(a)
+  return !normalize(a)
 }
 
 export function nameLongerThan(a: string | undefined, length: number): boolean {
   if (!a) return false
-  return singular(snakeCase(a)).length > length && plural(snakeCase(a)).length > length
+  return singular(normalize(a)).length > length && plural(normalize(a)).length > length
 }
 
 /** Check if normalized name starts with a number */
 export function nameStartsWithNumber(x?: string): boolean {
   if (!x) return false
-  return /^\d/.test(snakeCase(x))
+  return /^\d/.test(normalize(x))
+}
+
+function normalize(name: string): string {
+  return noCase(name)
 }

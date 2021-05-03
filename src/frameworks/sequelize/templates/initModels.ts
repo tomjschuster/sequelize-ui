@@ -1,5 +1,5 @@
 import { blank, lines } from '@src/core/codegen'
-import { DbCaseStyle, DbOptions } from '@src/core/database'
+import { caseByDbCaseStyle, DbOptions } from '@src/core/database'
 import {
   Association,
   associationIsCircular,
@@ -9,7 +9,7 @@ import {
   Schema,
   ThroughType,
 } from '@src/core/schema'
-import { camelCase, pascalCase, plural, singular, snakeCase } from '@src/utils/string'
+import { camelCase, pascalCase, plural, singular } from '@src/utils/string'
 import { modelName } from '../helpers'
 
 export type InitModelsTemplateArgs = {
@@ -220,7 +220,8 @@ function getForeignKey({
   modelById,
   dbOptions,
 }: AssociationOptionsArgs): string {
-  if (association.foreignKey) return association.foreignKey
+  if (association.foreignKey) return caseByDbCaseStyle(association.foreignKey, dbOptions.caseStyle)
+
   const name =
     association.alias && association.type.type === AssociationTypeType.BelongsTo
       ? association.alias
@@ -228,9 +229,7 @@ function getForeignKey({
       ? modelById[association.targetModelId].name
       : model.name
 
-  return dbOptions.caseStyle === DbCaseStyle.Snake
-    ? `${snakeCase(name)}_id`
-    : `${camelCase(name)}Id`
+  return caseByDbCaseStyle(`${name} id`, dbOptions.caseStyle)
 }
 
 function otherKeyField({
@@ -249,9 +248,7 @@ function getOtherKey({ association, modelById, dbOptions }: AssociationOptionsAr
 
   const name = association.alias ? association.alias : modelById[association.targetModelId].name
 
-  return dbOptions.caseStyle === DbCaseStyle.Snake
-    ? `${snakeCase(name)}_id`
-    : `${camelCase(name)}Id`
+  return caseByDbCaseStyle(`${name} id`, dbOptions.caseStyle)
 }
 
 type NoConstraintsFieldArgs = {
