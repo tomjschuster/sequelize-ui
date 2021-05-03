@@ -256,7 +256,7 @@ type NoConstraintsFieldArgs = {
   association: Association
 }
 function noConstraintsField({ model, association }: NoConstraintsFieldArgs) {
-  // https://sequelize.org/master/class/lib/associations/base.js~Association.html
+  // https://sequelize.org/master/manual/constraints-and-circularities.html
   return associationIsCircular(association, model.associations) ? 'constraints: false' : null
 }
 
