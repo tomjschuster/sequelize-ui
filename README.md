@@ -2,6 +2,12 @@
 
 ## Todo:
 
+### Tech Debt
+
+#### Refactor
+
+- Extract validation to schema with tests
+
 #### Testing
 
 - ui
@@ -21,7 +27,6 @@
 
 #### Codegen
 
-- Review sequelize cli format for init models and config
 - Migrations
 - JavaScript (post launch, link to legacy instead)
 
