@@ -29,6 +29,7 @@ type UseFileTreeResult = {
 
 function useFileTree({ root, cacheKey }: UseFileTreeArgs): UseFileTreeResult {
   const previousCacheKey = usePrevious(cacheKey)
+  const previousRoot = usePrevious(root)
   const [activePath, setActivePath] = React.useState<string | undefined>()
 
   const [folderState, setFolderState] = React.useState<FolderState>(() => createFolderState(root))
@@ -38,6 +39,15 @@ function useFileTree({ root, cacheKey }: UseFileTreeArgs): UseFileTreeResult {
     setActivePath(undefined)
     setFolderState(createFolderState(root))
   }, [root, cacheKey, previousCacheKey])
+
+  React.useEffect(() => {
+    if (root && isDirectory(root) && previousRoot) {
+      const previousPaths = listPaths(previousRoot)
+      const paths = listPaths(root)
+      const newPaths = paths.filter((path) => !previousPaths.includes(path))
+      if (newPaths.length > 0) setFolderState(refreshFolderState(folderState, root))
+    }
+  }, [root, previousRoot, folderState])
 
   const toggleFolder = React.useCallback(
     (path: string) =>
@@ -73,6 +83,13 @@ function useFileTree({ root, cacheKey }: UseFileTreeArgs): UseFileTreeResult {
 function createFolderState(root: FileSystemItem): FolderState {
   return listPaths(root).reduce<{ [key: string]: boolean }>((acc, x) => {
     acc[x] = true
+    return acc
+  }, {})
+}
+
+function refreshFolderState(state: FolderState, root: FileSystemItem): FolderState {
+  return listPaths(root).reduce<{ [key: string]: boolean }>((acc, x) => {
+    acc[x] = x in state ? state[x] : true
     return acc
   }, {})
 }

@@ -28,7 +28,14 @@
 #### Codegen
 
 - Migrations
+  - Figure out order/extra constraint migrations
+  - Join tables
+  - Many-to-many columns
 - JavaScript (post launch, link to legacy instead)
+
+#### API
+
+- Persist db options for user
 
 #### UI
 

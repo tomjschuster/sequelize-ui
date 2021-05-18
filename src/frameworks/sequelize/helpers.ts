@@ -1,12 +1,23 @@
-import { caseByDbCaseStyle, DbOptions, SqlDialect } from '@src/core/database'
+import {
+  caseByDbCaseStyle,
+  DbOptions,
+  nounFormByDbNounForm,
+  SqlDialect,
+  tableCaseByDbCaseStyle,
+} from '@src/core/database'
 import {
   Association,
   associationTypeIsSingular,
+  AssociationTypeType,
   DataTypeType,
+  dateTimeDataType,
   Field,
   Model,
+  Schema,
+  typeWithoutOptions,
 } from '@src/core/schema'
-import { camelCase, pascalCase, plural, singular, snakeCase } from '@src/utils/string'
+import { arrayToLookup } from '@src/utils/array'
+import { camelCase, namesEq, pascalCase, plural, singular, snakeCase } from '@src/utils/string'
 import shortid from 'shortid'
 
 export function modelName({ name }: Model): string {
@@ -93,4 +104,176 @@ type AssociationNameArgs = {
 export function associationName({ association, targetModel }: AssociationNameArgs): string {
   const name = association.alias ? camelCase(association.alias) : modelName(targetModel)
   return associationTypeIsSingular(association.type) ? singular(name) : plural(name)
+}
+
+// TODO: Save schema create date and use as start date
+const migrationStartDateNumber = parseInt(
+  new Date()
+    .toISOString()
+    .split('.')[0]
+    .replace(/[^0-9]/g, ''),
+)
+
+type MigrationCreateFileNameArgs = {
+  model: Model
+  dbOptions: DbOptions
+  index: number
+}
+export function migrationCreateFilename({
+  model,
+  dbOptions,
+  index,
+}: MigrationCreateFileNameArgs): string {
+  return `${migrationStartDateNumber + index}-create-${dbTableName({ model, dbOptions })}.js`
+}
+
+type DbTableNameArgs = {
+  model: Model
+  dbOptions: DbOptions
+}
+
+export function dbTableName({ model, dbOptions }: DbTableNameArgs): string {
+  const casedName = tableCaseByDbCaseStyle(model.name, dbOptions.caseStyle)
+  return nounFormByDbNounForm(casedName, dbOptions.nounForm)
+}
+
+type GetTimestampFieldsTemplateArgs = {
+  dbOptions: DbOptions
+}
+export function getTimestampFields({ dbOptions }: GetTimestampFieldsTemplateArgs): Field[] {
+  if (!dbOptions.timestamps) return []
+  const createdAt: Field = {
+    id: shortid(),
+    name: caseByDbCaseStyle('created at', dbOptions.caseStyle),
+    type: dateTimeDataType(),
+  }
+
+  const updatedAt: Field = {
+    id: shortid(),
+    name: caseByDbCaseStyle('updated at', dbOptions.caseStyle),
+    type: dateTimeDataType(),
+  }
+
+  return [createdAt, updatedAt]
+}
+
+export type Reference = {
+  table: string
+  column: string
+}
+
+type GetDbColumnFieldsArgs = {
+  model: Model
+  schema: Schema
+  dbOptions: DbOptions
+}
+export function getDbColumnFields({
+  model,
+  schema,
+  dbOptions,
+}: GetDbColumnFieldsArgs): [Field, Reference | null][] {
+  const fieldsWithPk = getFieldsWithPk({ model, dbOptions })
+  const timestampFields = getTimestampFields({ dbOptions }).filter(
+    (field) => !fieldsWithPk.some((f) => namesEq(field.name, f.name)),
+  )
+  const fields = fieldsWithPk.concat(timestampFields)
+  const modelWithFields: Model = { ...model, fields }
+  const fkFields = getFkFields({ model: modelWithFields, schema, dbOptions })
+
+  return fields
+    .map<[Field, Reference | null]>((field) => {
+      const fr = fkFields.find(([f]) => namesEq(field.name, f.name))
+      if (!fr) return [field, null]
+      return [field, fr[1]]
+    })
+    .concat(fkFields.filter(([field]) => !fields.some((f) => namesEq(field.name, f.name))))
+}
+
+type GetFkFieldsArgs = {
+  model: Model
+  schema: Schema
+  dbOptions: DbOptions
+}
+
+function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): [Field, Reference][] {
+  const modelById = arrayToLookup<Model>(schema.models, (m) => m.id)
+  const sourceFields = model.associations
+    .filter((a) => a.type.type === AssociationTypeType.BelongsTo)
+    .map<[Field, Reference] | null>((association) => {
+      const fk = getForeignKey({ model, association, modelById, dbOptions })
+
+      const target = modelById[association.targetModelId]
+      if (!target) {
+        console.error(
+          `Target model ${association.targetModelId} not found from model ${model.name}`,
+        )
+        return null
+      }
+
+      const targetPk =
+        target.fields.find((field) => field.primaryKey) || idField({ model: target, dbOptions })
+      const table = tableCaseByDbCaseStyle(target.name, dbOptions.caseStyle)
+      const column = prefixPk({ field: targetPk, model: target, dbOptions }).name
+      const field = { id: shortid(), name: fk, type: typeWithoutOptions(targetPk.type) }
+
+      return [field, { table, column }]
+    })
+    .filter((fr): fr is [Field, Reference] => !!fr)
+
+  const targetFields = schema.models
+    .flatMap((m) => m.associations)
+    .filter(
+      (a) =>
+        (a.type.type === AssociationTypeType.HasOne ||
+          a.type.type === AssociationTypeType.HasMany) &&
+        a.targetModelId === model.id,
+    )
+    .map<[Field, Reference] | null>((association) => {
+      const fk = getForeignKey({ model, association, modelById, dbOptions })
+
+      const source = modelById[association.sourceModelId]
+      if (!source) {
+        console.error(
+          `Target modelf ${association.sourceModelId} not found from model ${model.name}`,
+        )
+        return null
+      }
+
+      const sourcePk =
+        source.fields.find((field) => field.primaryKey) || idField({ model: source, dbOptions })
+      const table = tableCaseByDbCaseStyle(source.name, dbOptions.caseStyle)
+      const column = prefixPk({ field: sourcePk, model: source, dbOptions }).name
+      const field = { id: shortid(), name: fk, type: typeWithoutOptions(sourcePk.type) }
+
+      return [field, { table, column }]
+    })
+    .filter((fr): fr is [Field, Reference] => !!fr)
+  return sourceFields.concat(targetFields)
+}
+
+type ModelById = Record<string, Model>
+
+type GetForeignKeyArgs = {
+  model: Model
+  association: Association
+  modelById: ModelById
+  dbOptions: DbOptions
+}
+
+export function getForeignKey({
+  model,
+  association,
+  modelById,
+  dbOptions,
+}: GetForeignKeyArgs): string {
+  if (association.foreignKey) return caseByDbCaseStyle(association.foreignKey, dbOptions.caseStyle)
+
+  const name =
+    association.alias && association.type.type === AssociationTypeType.BelongsTo
+      ? association.alias
+      : association.type.type === AssociationTypeType.BelongsTo
+      ? modelById[association.targetModelId].name
+      : model.name
+
+  return caseByDbCaseStyle(`${name} id`, dbOptions.caseStyle)
 }

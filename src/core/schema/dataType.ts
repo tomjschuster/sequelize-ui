@@ -175,6 +175,42 @@ export function displayDataTypeType(type: DataTypeType): string {
   }
 }
 
+export function typeWithoutOptions(dataType: DataType): DataType {
+  switch (dataType.type) {
+    case DataTypeType.String:
+    case DataTypeType.Text:
+    case DataTypeType.CiText:
+    case DataTypeType.Float:
+    case DataTypeType.Real:
+    case DataTypeType.Double:
+    case DataTypeType.Decimal:
+    case DataTypeType.Boolean:
+    case DataTypeType.Enum:
+    case DataTypeType.Array:
+    case DataTypeType.Json:
+    case DataTypeType.JsonB:
+    case DataTypeType.Blob: {
+      return dataType
+    }
+    case DataTypeType.Uuid: {
+      const { defaultVersion: _, ...type } = dataType
+      return type
+    }
+    case DataTypeType.DateTime:
+    case DataTypeType.Time:
+    case DataTypeType.Date: {
+      const { defaultNow: _, ...type } = dataType
+      return type
+    }
+    case DataTypeType.Integer:
+    case DataTypeType.BigInt:
+    case DataTypeType.SmallInt: {
+      const { autoincrement: _, ...type } = dataType
+      return type
+    }
+  }
+}
+
 export type StringType = StringDataType
 
 export function isStringType(dataType: DataType): dataType is StringType {

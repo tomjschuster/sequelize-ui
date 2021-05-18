@@ -1,5 +1,5 @@
 import { blank, lines } from '@src/core/codegen'
-import { DbCaseStyle, DbNounForm, DbOptions } from '@src/core/database'
+import { caseByDbCaseStyle, DbCaseStyle, DbNounForm, DbOptions } from '@src/core/database'
 import {
   Association,
   AssociationTypeType,
@@ -14,7 +14,7 @@ import {
   displaySequelizeDataType,
   sequelizeUuidVersion,
 } from '../../dataTypes'
-import { associationName, modelName, pkIsDefault } from '../../helpers'
+import { associationName, modelName, pkIsDefault, Reference } from '../../helpers'
 import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
 
 export type ModelClassTempalteArgs = {
@@ -67,7 +67,7 @@ export function modelClassTemplate({
             lines(
               model.fields
                 .filter((field) => !pkIsDefault(field))
-                .map((field) => fieldTemplate(field, dbOptions)),
+                .map((field) => fieldTemplate({ field, dbOptions })),
               { depth: 2, separator: ',' },
             ),
             '}, {',
@@ -189,10 +189,19 @@ function aliasLabel({ alias }: Association): string {
   return alias ? ` (as ${pascalCase(alias)})` : ''
 }
 
-function fieldTemplate(
-  { name, type, required, primaryKey, unique }: Field,
-  { sqlDialect }: DbOptions,
-): string {
+type FieldTemplateArgs = {
+  field: Field
+  dbOptions: DbOptions
+  defineField?: boolean
+  reference?: Reference | null
+}
+// TODO refactor to common
+export function fieldTemplate({
+  field: { name, type, required, primaryKey, unique },
+  dbOptions: { sqlDialect, caseStyle },
+  defineField,
+  reference,
+}: FieldTemplateArgs): string {
   const comment = notSupportedComment(type, sqlDialect)
 
   return lines([
@@ -201,11 +210,15 @@ function fieldTemplate(
     lines(
       [
         typeField(type),
+        // TODO refactor to helper function
+        defineField ? `field: '${caseByDbCaseStyle(name, caseStyle)}'` : null,
         primaryKeyField(primaryKey),
         autoincrementField(type),
         allowNullField(required),
         uniqueField(unique),
         defaultField(type),
+        // TODO refactor to helper function
+        reference ? `references: {model: '${reference.table}', key: '${reference.column}'}` : null,
       ],
       { depth: 2, separator: ',', prefix: comment },
     ),

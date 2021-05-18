@@ -217,7 +217,6 @@ function findDuplicateAssociationName(
   if (!targetModel) return undefined
 
   const name = associationName({ association, targetModel })
-  console.log({ name })
 
   return model.associations.find((a) => {
     if (a.id === association.id) return false

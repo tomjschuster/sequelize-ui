@@ -12,9 +12,11 @@ import {
   displayDatabaseNounForm,
   displaySqlDialect,
   MAX_IDENTIFIER_LENGTH,
+  nounFormByDbNounForm,
   parseSqlDialect,
   SqlDialect,
   sqlDialectEnvVar,
+  tableCaseByDbCaseStyle,
 } from '..'
 
 describe('database', () => {
@@ -166,6 +168,26 @@ describe('database', () => {
     ]
     it.each(cases)('caseByStyle(%s, %o) === %s', (value, caseStyle, expected) => {
       expect(caseByDbCaseStyle(value, caseStyle)).toEqual(expected)
+    })
+
+    describe('tableCaseByDbCaseStyle', () => {
+      const cases: [value: string, dialect: DbCaseStyle, expected: string][] = [
+        ['blog post', DbCaseStyle.Snake, 'blog_post'],
+        ['blog post', DbCaseStyle.Camel, 'BlogPost'],
+      ]
+      it.each(cases)('caseByStyle(%s, %o) === %s', (value, caseStyle, expected) => {
+        expect(tableCaseByDbCaseStyle(value, caseStyle)).toEqual(expected)
+      })
+    })
+
+    describe('nounFormByDbNounForm', () => {
+      const cases: [value: string, dialect: DbNounForm, expected: string][] = [
+        ['blog post', DbNounForm.Singular, 'blog post'],
+        ['blog post', DbNounForm.Plural, 'blog posts'],
+      ]
+      it.each(cases)('caseByStyle(%s, %o) === %s', (value, nounForm, expected) => {
+        expect(nounFormByDbNounForm(value, nounForm)).toEqual(expected)
+      })
     })
   })
 

@@ -30,6 +30,7 @@ const snakePlural = (sqlDialect: SqlDialect): DbTestConfig => ({
     timestamps: true,
     caseStyle: DbCaseStyle.Snake,
     nounForm: DbNounForm.Plural,
+    migrations: false,
   },
   tableName: 'customers',
   expectedTables: [
@@ -63,6 +64,7 @@ const snakeSingular = (sqlDialect: SqlDialect): DbTestConfig => ({
     timestamps: true,
     caseStyle: DbCaseStyle.Snake,
     nounForm: DbNounForm.Singular,
+    migrations: false,
   },
   tableName: 'customer',
   expectedTables: [
@@ -96,6 +98,7 @@ const camelPlural = (sqlDialect: SqlDialect): DbTestConfig => ({
     timestamps: true,
     caseStyle: DbCaseStyle.Camel,
     nounForm: DbNounForm.Plural,
+    migrations: false,
   },
   tableName: 'Customers',
   expectedTables: [
@@ -129,6 +132,7 @@ const camelSingular = (sqlDialect: SqlDialect): DbTestConfig => ({
     timestamps: true,
     caseStyle: DbCaseStyle.Camel,
     nounForm: DbNounForm.Singular,
+    migrations: false,
   },
   tableName: 'Customer',
   expectedTables: [
@@ -162,6 +166,7 @@ const noTimestamps = (sqlDialect: SqlDialect): DbTestConfig => ({
     timestamps: false,
     caseStyle: DbCaseStyle.Snake,
     nounForm: DbNounForm.Plural,
+    migrations: false,
   },
   tableName: 'customers',
   expectedTables: [
@@ -187,6 +192,7 @@ const noPrefixPks = (sqlDialect: SqlDialect): DbTestConfig => ({
     timestamps: true,
     caseStyle: DbCaseStyle.Snake,
     nounForm: DbNounForm.Plural,
+    migrations: false,
   },
   tableName: 'customers',
   expectedTables: [

@@ -2,10 +2,12 @@ import { DbOptions } from '@src/core/database'
 import { directory, DirectoryItem, file } from '@src/core/files'
 import { Model, Schema } from '@src/core/schema'
 import { kebabCase } from '@src/utils/string'
-import { getFieldsWithPk, hasJsonType, modelName } from './helpers'
+import { getFieldsWithPk, hasJsonType, migrationCreateFilename, modelName } from './helpers'
+import { config } from './templates/config'
 import { dbTemplate } from './templates/db'
 import { gitignoreTemplate } from './templates/gitignore'
 import { initModelsTemplate } from './templates/initModels'
+import { createModelMigration } from './templates/migrations/createModel'
 import { modelTemplate } from './templates/model'
 import { packageJsonTemplate } from './templates/packageJson'
 import { serverTemplate } from './templates/server'
@@ -24,6 +26,18 @@ export function generateSequelizeProject({
   const schema = normalizeSchema({ schema: nonNormalizedSchema, dbOptions })
 
   return directory(kebabCase(schema.name), [
+    directory('config', [file('config.js', config({ schema, dbOptions }))]),
+    dbOptions?.migrations
+      ? directory(
+          'migrations',
+          schema.models.map((model, index) =>
+            file(
+              migrationCreateFilename({ model, dbOptions, index }),
+              createModelMigration({ model, schema, dbOptions }),
+            ),
+          ),
+        )
+      : null,
     directory('models', [
       file('index.ts', initModelsTemplate({ schema, dbOptions })),
       ...schema.models.map((model) =>
@@ -31,9 +45,9 @@ export function generateSequelizeProject({
       ),
     ]),
     file('.gitignore', gitignoreTemplate()),
-    file('db.ts', dbTemplate({ schema, dbOptions })),
+    file('db.ts', dbTemplate({ dbOptions })),
     file('package.json', packageJsonTemplate({ schema, dbOptions })),
-    file('server.ts', serverTemplate()),
+    file('server.ts', serverTemplate({ dbOptions })),
     schema.models.some(hasJsonType) ? file('types.ts', typesTemplate()) : null,
     file('tsconfig.json', tsconfigTemplate()),
   ])

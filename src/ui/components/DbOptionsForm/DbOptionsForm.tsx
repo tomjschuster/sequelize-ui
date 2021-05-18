@@ -56,6 +56,12 @@ export default function DbOptionsForm({
         display={(x) => (x ? 'timestamps' : 'no timestamps')}
         onChange={(timestamps) => onChange({ ...dbOptions, timestamps })}
       />
+      <Radio<boolean>
+        value={dbOptions.migrations}
+        options={{ true: true, false: false }}
+        display={(x) => (x ? 'migrations' : 'no migrations')}
+        onChange={(migrations) => onChange({ ...dbOptions, migrations })}
+      />
     </>
   )
 }

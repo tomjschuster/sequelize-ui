@@ -1,4 +1,6 @@
+import { singular } from '@src/utils/string'
 import { camelCase, pascalCase, snakeCase } from 'change-case'
+import { plural } from 'pluralize'
 
 export type DbOptions = {
   sqlDialect: SqlDialect
@@ -6,6 +8,7 @@ export type DbOptions = {
   timestamps: boolean
   caseStyle: DbCaseStyle
   nounForm: DbNounForm
+  migrations: boolean
 }
 
 export enum DbCaseStyle {
@@ -187,10 +190,19 @@ export const defaultDbOptions: DbOptions = {
   timestamps: true,
   caseStyle: DbCaseStyle.Snake,
   nounForm: DbNounForm.Plural,
+  migrations: false,
 }
 
 export function caseByDbCaseStyle(value: string, caseStyle: DbCaseStyle): string {
   return caseStyle === DbCaseStyle.Snake ? snakeCase(value) : camelCase(value)
+}
+
+export function tableCaseByDbCaseStyle(value: string, caseStyle: DbCaseStyle): string {
+  return caseStyle === DbCaseStyle.Snake ? snakeCase(value) : pascalCase(value)
+}
+
+export function nounFormByDbNounForm(value: string, nounForm: DbNounForm): string {
+  return nounForm === DbNounForm.Singular ? singular(value) : plural(value)
 }
 
 export const MAX_IDENTIFIER_LENGTH = 63

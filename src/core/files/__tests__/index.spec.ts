@@ -22,7 +22,7 @@ describe('files', () => {
       [directory('bar', []), 'bar'],
     ]
     describe.each(cases)('', (item, expected) => {
-      fit(`(${JSON.stringify(item)}) === ${expected}`, () => {
+      it(`(${JSON.stringify(item)}) === ${expected}`, () => {
         expect(itemName(item)).toEqual(expected)
       })
     })
@@ -33,7 +33,7 @@ describe('files', () => {
       [directory('bar', []), true],
     ]
     describe.each(cases)('', (item, expected) => {
-      fit(`(${JSON.stringify(item)}) === ${expected}`, () => {
+      it(`(${JSON.stringify(item)}) === ${expected}`, () => {
         expect(isDirectory(item)).toEqual(expected)
       })
     })
@@ -44,7 +44,7 @@ describe('files', () => {
       [directory('bar', []), false],
     ]
     describe.each(cases)('', (item, expected) => {
-      fit(`(${JSON.stringify(item)}) === ${expected}`, () => {
+      it(`(${JSON.stringify(item)}) === ${expected}`, () => {
         expect(isFile(item)).toEqual(expected)
       })
     })
@@ -60,7 +60,7 @@ describe('files', () => {
       [file('foo', 'contents'), undefined],
     ]
     describe.each(cases)('', (f, expected) => {
-      fit(`(${JSON.stringify(f)}) === ${expected}`, () => {
+      it(`(${JSON.stringify(f)}) === ${expected}`, () => {
         expect(fileLanguage(f)).toEqual(expected)
       })
     })
@@ -77,7 +77,7 @@ describe('files', () => {
       ['documents/foo', undefined],
     ]
     describe.each(cases)('', (path, expected) => {
-      fit(`(dir, ${path}) === ${expected}`, () => {
+      it(`(dir, ${path}) === ${expected}`, () => {
         expect(findItem(fileTree, path)?.name).toEqual(expected)
       })
     })
@@ -94,7 +94,7 @@ describe('files', () => {
       ['documents/foo', undefined],
     ]
     describe.each(cases)('', (path, expected) => {
-      fit(`(dir, ${path}) === ${expected}`, () => {
+      it(`(dir, ${path}) === ${expected}`, () => {
         expect(findFile(fileTree, path)?.name).toEqual(expected)
       })
     })
@@ -112,7 +112,7 @@ describe('files', () => {
       ['documents/foo', undefined],
     ]
     describe.each(cases)('', (path, expected) => {
-      fit(`(dir, ${path}) === ${expected}`, () => {
+      it(`(dir, ${path}) === ${expected}`, () => {
         expect(findDirectory(fileTree, path)?.name).toEqual(expected)
       })
     })
@@ -133,7 +133,7 @@ describe('files', () => {
       'documents/media/music/artists/silvio-rodriguez/ojala.mp3',
       'documents/media/videos',
     ].sort()
-    fit('should return all paths', () => {
+    it('returns all paths', () => {
       expect(listPaths(fileTree).sort()).toEqual(expected)
     })
   })

@@ -8,6 +8,7 @@ export function tsconfigTemplate(): string {
       "strict": true,
       "moduleResolution": "node",
       "esModuleInterop": true,
+      "allowJs": true,
       "forceConsistentCasingInFileNames": true
     }
   }
