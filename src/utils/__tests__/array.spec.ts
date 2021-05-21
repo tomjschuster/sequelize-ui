@@ -1,4 +1,4 @@
-import { arrayToLookup } from '../array'
+import { arrayToLookup, dedupBy } from '../array'
 
 describe('array utils', () => {
   describe('arrayToLookup', () => {
@@ -8,10 +8,19 @@ describe('array utils', () => {
       [['foo', 'bar'], (x: string) => x.toUpperCase(), { FOO: 'foo', BAR: 'bar' }],
       [[1, 2], (x: number) => x + 1 + '', { '2': 1, '3': 2 }],
     ]
-    describe.each(cases)('', (array, fn, expected) => {
-      fit(`(${JSON.stringify}, ${fn.toString()}) === ${JSON.stringify(expected)}`, () => {
-        expect(arrayToLookup(array, fn)).toEqual(expected)
-      })
+    it.each(cases)('arrayToLookup(%o, %o) === %o}', (array, fn, expected) => {
+      expect(arrayToLookup(array, fn)).toEqual(expected)
+    })
+  })
+
+  describe.only('dedupBy', () => {
+    const cases: [array: unknown[], fn: (x: any) => string, expected: unknown[]][] = [
+      [[1, 2, 3, 2, 1], (n) => n.toString(), [1, 2, 3]],
+      [[{ id: 'foo' }, { id: 'bar' }, { id: 'foo' }], (n) => n.id, [{ id: 'foo' }, { id: 'bar' }]],
+    ]
+
+    it.each(cases)('dedupBy(%o, %o) === %o', (array, fn, expected) => {
+      expect(dedupBy(array, fn)).toEqual(expected)
     })
   })
 })

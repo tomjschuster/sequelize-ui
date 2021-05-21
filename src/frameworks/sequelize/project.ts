@@ -2,11 +2,18 @@ import { DbOptions } from '@src/core/database'
 import { directory, DirectoryItem, file } from '@src/core/files'
 import { Model, Schema } from '@src/core/schema'
 import { kebabCase } from '@src/utils/string'
-import { getFieldsWithPk, hasJsonType, migrationCreateFilename, modelName } from './helpers'
+import {
+  getFieldsWithPk,
+  hasJsonType,
+  migrationCreateFilename,
+  migrationForeignKeysFilename,
+  modelName,
+} from './helpers'
 import { config } from './templates/config'
 import { dbTemplate } from './templates/db'
 import { gitignoreTemplate } from './templates/gitignore'
 import { initModelsTemplate } from './templates/initModels'
+import { addForeignKeysMigration } from './templates/migrations/addForeignKeys'
 import { createModelMigration } from './templates/migrations/createModel'
 import { modelTemplate } from './templates/model'
 import { packageJsonTemplate } from './templates/packageJson'
@@ -30,12 +37,20 @@ export function generateSequelizeProject({
     dbOptions?.migrations
       ? directory(
           'migrations',
-          schema.models.map((model, index) =>
-            file(
-              migrationCreateFilename({ model, dbOptions, index }),
-              createModelMigration({ model, schema, dbOptions }),
+          schema.models
+            .map((model, index) =>
+              file(
+                migrationCreateFilename({ model, dbOptions, index }),
+                createModelMigration({ model, schema, dbOptions }),
+              ),
+            )
+            .concat(
+              // TODO, check that has foreign keys
+              file(
+                migrationForeignKeysFilename(schema.models.length),
+                addForeignKeysMigration({ schema, dbOptions }),
+              ),
             ),
-          ),
         )
       : null,
     directory('models', [

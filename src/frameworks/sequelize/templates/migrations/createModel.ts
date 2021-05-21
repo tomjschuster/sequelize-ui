@@ -36,8 +36,8 @@ function up({ model, schema, dbOptions }: CreateModelMigrationArgs): string {
           `await queryInterface.createTable('${tableName}', {`,
           // TODO: refactor fieldTemplate to common
           lines(
-            getDbColumnFields({ model, schema, dbOptions }).map(([field, reference]) =>
-              fieldTemplate({ field, dbOptions, defineField: true, reference }),
+            getDbColumnFields({ model, schema, dbOptions }).map(([field, _reference]) =>
+              fieldTemplate({ field, dbOptions, defineField: true, reference: undefined }),
             ),
             { depth: 2, separator: ',' },
           ),

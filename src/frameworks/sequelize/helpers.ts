@@ -16,7 +16,7 @@ import {
   Schema,
   typeWithoutOptions,
 } from '@src/core/schema'
-import { arrayToLookup } from '@src/utils/array'
+import { arrayToLookup, dedupBy } from '@src/utils/array'
 import { camelCase, namesEq, pascalCase, plural, singular, snakeCase } from '@src/utils/string'
 import shortid from 'shortid'
 
@@ -127,6 +127,10 @@ export function migrationCreateFilename({
   return `${migrationStartDateNumber + index}-create-${dbTableName({ model, dbOptions })}.js`
 }
 
+export function migrationForeignKeysFilename(index: number): string {
+  return `${migrationStartDateNumber + index}-add-foreign-keys.js`
+}
+
 type DbTableNameArgs = {
   model: Model
   dbOptions: DbOptions
@@ -212,7 +216,7 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): [Field, Ref
 
       const targetPk =
         target.fields.find((field) => field.primaryKey) || idField({ model: target, dbOptions })
-      const table = tableCaseByDbCaseStyle(target.name, dbOptions.caseStyle)
+      const table = dbTableName({ model: target, dbOptions })
       const column = prefixPk({ field: targetPk, model: target, dbOptions }).name
       const field = { id: shortid(), name: fk, type: typeWithoutOptions(targetPk.type) }
 
@@ -229,26 +233,27 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): [Field, Ref
         a.targetModelId === model.id,
     )
     .map<[Field, Reference] | null>((association) => {
-      const fk = getForeignKey({ model, association, modelById, dbOptions })
-
       const source = modelById[association.sourceModelId]
       if (!source) {
         console.error(
-          `Target modelf ${association.sourceModelId} not found from model ${model.name}`,
+          `Target model ${association.sourceModelId} not found from model ${model.name}`,
         )
         return null
       }
 
+      const fk = getForeignKey({ model: source, association, modelById, dbOptions })
+
       const sourcePk =
         source.fields.find((field) => field.primaryKey) || idField({ model: source, dbOptions })
-      const table = tableCaseByDbCaseStyle(source.name, dbOptions.caseStyle)
+      const table = dbTableName({ model: source, dbOptions })
       const column = prefixPk({ field: sourcePk, model: source, dbOptions }).name
       const field = { id: shortid(), name: fk, type: typeWithoutOptions(sourcePk.type) }
 
       return [field, { table, column }]
     })
     .filter((fr): fr is [Field, Reference] => !!fr)
-  return sourceFields.concat(targetFields)
+
+  return dedupBy<[Field, Reference]>(sourceFields.concat(targetFields), ([field]) => field.name)
 }
 
 type ModelById = Record<string, Model>

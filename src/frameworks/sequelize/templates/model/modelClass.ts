@@ -197,33 +197,51 @@ type FieldTemplateArgs = {
 }
 // TODO refactor to common
 export function fieldTemplate({
-  field: { name, type, required, primaryKey, unique },
-  dbOptions: { sqlDialect, caseStyle },
+  field,
+  dbOptions,
   defineField,
   reference,
 }: FieldTemplateArgs): string {
-  const comment = notSupportedComment(type, sqlDialect)
+  const comment = notSupportedComment(field.type, dbOptions.sqlDialect)
 
   return lines([
-    noSupportedDetails(type, sqlDialect),
-    `${comment}${camelCase(name)}: {`,
-    lines(
-      [
-        typeField(type),
-        // TODO refactor to helper function
-        defineField ? `field: '${caseByDbCaseStyle(name, caseStyle)}'` : null,
-        primaryKeyField(primaryKey),
-        autoincrementField(type),
-        allowNullField(required),
-        uniqueField(unique),
-        defaultField(type),
-        // TODO refactor to helper function
-        reference ? `references: {model: '${reference.table}', key: '${reference.column}'}` : null,
-      ],
-      { depth: 2, separator: ',', prefix: comment },
-    ),
+    noSupportedDetails(field.type, dbOptions.sqlDialect),
+    `${comment}${camelCase(field.name)}: {`,
+    lines(fieldOptions({ field, dbOptions, defineField, reference }), {
+      depth: 2,
+      separator: ',',
+      prefix: comment,
+    }),
     `${comment}}`,
   ])
+}
+
+type FieldOptionsArgs = {
+  field: Field
+  dbOptions: DbOptions
+  defineField?: boolean
+  reference?: Reference | null
+}
+
+// TODO refactor to helpers
+export function fieldOptions({
+  field: { name, type, required, primaryKey, unique },
+  reference,
+  defineField,
+  dbOptions: { caseStyle },
+}: FieldOptionsArgs): (string | null)[] {
+  return [
+    typeField(type),
+    // TODO refactor to helper function
+    defineField ? `field: '${caseByDbCaseStyle(name, caseStyle)}'` : null,
+    primaryKeyField(primaryKey),
+    autoincrementField(type),
+    allowNullField(required),
+    uniqueField(unique),
+    defaultField(type),
+    // TODO refactor to helper function
+    reference ? `references: {model: '${reference.table}', key: '${reference.column}'}` : null,
+  ]
 }
 
 function typeField(dataType: DataType): string {

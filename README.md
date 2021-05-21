@@ -28,7 +28,7 @@
 #### Codegen
 
 - Migrations
-  - Figure out order/extra constraint migrations
+  - Change modify columns to add/remove constraints
   - Join tables
   - Many-to-many columns
 - JavaScript (post launch, link to legacy instead)
