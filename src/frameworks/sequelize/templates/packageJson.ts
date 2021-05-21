@@ -23,7 +23,7 @@ ${scripts(dbOptions)}
 ${formatDeps(...commonDeps(), ...dialectDeps(dbOptions))}
   },
   "devDependencies": {
-${formatDeps(...commonDevDeps(dbOptions), ...dialectDevDeps(dbOptions))}
+${formatDeps(...commonDevDeps(), ...dialectDevDeps(dbOptions))}
   }
 }
 
@@ -36,8 +36,8 @@ function scripts({ migrations }: DbOptions): string {
       '"test": "echo \\"Error: no test specified\\" && exit 1"',
       migrations ? '"db:up": "npm run db:create && npm run db:migrate"' : null,
       migrations ? '"db:reset": "npm run db:drop && npm run db:up"' : null,
-      migrations ? '"db:create": "sequelize db:create"' : null,
-      migrations ? '"db:drop": "sequelize db:drop"' : null,
+      '"db:create": "sequelize db:create"',
+      '"db:drop": "sequelize db:drop"',
       migrations ? '"db:migrate": "sequelize db:migrate"' : null,
       migrations ? '"db:rollback": "sequelize db:migrate:undo"' : null,
       migrations ? '"db:rollback:all": "sequelize db:migrate:undo:all"' : null,
@@ -71,11 +71,11 @@ function dialectDeps({ sqlDialect }: DbOptions): Dependency[] {
   }
 }
 
-function commonDevDeps({ migrations }: DbOptions): Dependency[] {
+function commonDevDeps(): Dependency[] {
   return [
     ['@types/node', '^14.14.20'],
     ['@types/validator', '^13.1.3'],
-    migrations ? ['sequelize-cli', '^6.2.0'] : null,
+    ['sequelize-cli', '^6.2.0'],
     ['tsc-watch', '^4.2.9'],
     ['typescript', '^4.1.3'],
   ].filter((dep): dep is Dependency => !!dep)

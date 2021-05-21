@@ -14,7 +14,7 @@ import {
   displaySequelizeDataType,
   sequelizeUuidVersion,
 } from '../../dataTypes'
-import { associationName, modelName, pkIsDefault, Reference } from '../../helpers'
+import { associationName, modelName, pkIsDefault } from '../../helpers'
 import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
 
 export type ModelClassTempalteArgs = {
@@ -192,22 +192,16 @@ function aliasLabel({ alias }: Association): string {
 type FieldTemplateArgs = {
   field: Field
   dbOptions: DbOptions
-  defineField?: boolean
-  reference?: Reference | null
+  define?: boolean
 }
 // TODO refactor to common
-export function fieldTemplate({
-  field,
-  dbOptions,
-  defineField,
-  reference,
-}: FieldTemplateArgs): string {
+export function fieldTemplate({ field, dbOptions, define }: FieldTemplateArgs): string {
   const comment = notSupportedComment(field.type, dbOptions.sqlDialect)
 
   return lines([
     noSupportedDetails(field.type, dbOptions.sqlDialect),
     `${comment}${camelCase(field.name)}: {`,
-    lines(fieldOptions({ field, dbOptions, defineField, reference }), {
+    lines(fieldOptions({ field, dbOptions, define }), {
       depth: 2,
       separator: ',',
       prefix: comment,
@@ -219,33 +213,32 @@ export function fieldTemplate({
 type FieldOptionsArgs = {
   field: Field
   dbOptions: DbOptions
-  defineField?: boolean
-  reference?: Reference | null
+  define?: boolean
 }
 
 // TODO refactor to helpers
 export function fieldOptions({
   field: { name, type, required, primaryKey, unique },
-  reference,
-  defineField,
+  define,
   dbOptions: { caseStyle },
 }: FieldOptionsArgs): (string | null)[] {
   return [
     typeField(type),
-    // TODO refactor to helper function
-    defineField ? `field: '${caseByDbCaseStyle(name, caseStyle)}'` : null,
+    defineField(name, caseStyle, define),
     primaryKeyField(primaryKey),
     autoincrementField(type),
     allowNullField(required),
     uniqueField(unique),
     defaultField(type),
-    // TODO refactor to helper function
-    reference ? `references: {model: '${reference.table}', key: '${reference.column}'}` : null,
   ]
 }
 
 function typeField(dataType: DataType): string {
   return `type: ${displaySequelizeDataType(dataType)}`
+}
+
+function defineField(name: string, caseStyle: DbCaseStyle, define?: boolean): string | null {
+  return define ? `field: '${caseByDbCaseStyle(name, caseStyle)}'` : null
 }
 
 function allowNullField(required?: boolean): string | null {

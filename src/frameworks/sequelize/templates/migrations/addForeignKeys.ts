@@ -1,50 +1,52 @@
 import { blank, lines } from '@src/core/codegen'
 import { caseByDbCaseStyle, DbOptions } from '@src/core/database'
-import { Field, Schema } from '@src/core/schema'
+import { Field, Model, Schema } from '@src/core/schema'
 import { dbTableName, getDbColumnFields, Reference } from '../../helpers'
-import { fieldOptions } from '../model/modelClass'
+
+type Constraint = {
+  sourceTable: string
+  sourceColumn: string
+  targetTable: string
+  targetColumn: string
+  name: string
+}
 
 type AddForeignKeysMigrationArgs = {
   schema: Schema
   dbOptions: DbOptions
 }
-
 export function addForeignKeysMigration({
   schema,
   dbOptions,
 }: AddForeignKeysMigrationArgs): string {
+  const constraints: Constraint[] = schema.models.flatMap((model) =>
+    getModelConstraints({ model, schema, dbOptions }),
+  )
+
   return lines([
     // TODO refactor type defs to use either Sequelize or DataTypes
     `const DataTypes = require('sequelize').DataTypes`,
     blank(),
     `module.exports = {`,
-    up({ schema, dbOptions }),
-    down({ schema, dbOptions }),
+    up({ constraints }),
+    down({ constraints }),
     `};`,
   ])
 }
 
-type TableFieldReference = [tableName: string, field: Field, reference: Reference]
-
-function up({ schema, dbOptions }: AddForeignKeysMigrationArgs): string {
-  const tableFieldReferences: TableFieldReference[] = schema.models.flatMap((model) => {
-    const tableName = dbTableName({ model, dbOptions })
-    return getDbColumnFields({ model, schema, dbOptions })
-      .filter((fr): fr is [Field, Reference] => !!fr[1])
-      .map<TableFieldReference>(([field, reference]) => [tableName, field, reference])
-  })
-
+type UpArgs = {
+  constraints: Constraint[]
+}
+function up({ constraints }: UpArgs): string {
   return lines(
     [
       `up: async (queryInterface, Sequelize) => {`,
       lines(
-        tableFieldReferences.map(([table, field, reference]) => {
-          const column = caseByDbCaseStyle(field.name, dbOptions.caseStyle)
+        constraints.map((constraint) => {
           return lines([
-            `await queryInterface.changeColumn('${table}', '${column}', {`,
-            lines(fieldOptions({ field, dbOptions, defineField: true, reference }), {
+            `await queryInterface.addConstraint('${constraint.sourceTable}', {`,
+            lines(constraintFields(constraint), {
               depth: 2,
-              separator: ',',
             }),
             `})`,
           ])
@@ -57,33 +59,65 @@ function up({ schema, dbOptions }: AddForeignKeysMigrationArgs): string {
   )
 }
 
-function down({ schema, dbOptions }: AddForeignKeysMigrationArgs): string {
-  const tableFieldReferences: TableFieldReference[] = schema.models.flatMap((model) => {
-    const tableName = dbTableName({ model, dbOptions })
-    return getDbColumnFields({ model, schema, dbOptions })
-      .filter((fr): fr is [Field, Reference] => !!fr[1])
-      .map<TableFieldReference>(([field, reference]) => [tableName, field, reference])
-  })
-
+type DownArgs = {
+  constraints: Constraint[]
+}
+function down({ constraints }: DownArgs): string {
   return lines(
     [
       `down: async (queryInterface, Sequelize) => {`,
       lines(
-        tableFieldReferences.map(([table, field]) => {
-          const column = caseByDbCaseStyle(field.name, dbOptions.caseStyle)
-          return lines([
-            `await queryInterface.changeColumn('${table}', '${column}', {`,
-            lines(fieldOptions({ field, dbOptions, defineField: true }), {
-              depth: 2,
-              separator: ',',
-            }),
-            `})`,
-          ])
+        constraints.map(({ sourceTable, name }) => {
+          return lines([`await queryInterface.removeConstraint('${sourceTable}', '${name}')`], {
+            depth: 2,
+            separator: '\n',
+          })
         }),
-        { depth: 2, separator: '\n' },
       ),
       '}',
     ],
     { depth: 2 },
   )
+}
+
+type GetModelConstraintsArgs = {
+  model: Model
+  schema: Schema
+  dbOptions: DbOptions
+}
+function getModelConstraints({ model, schema, dbOptions }: GetModelConstraintsArgs): Constraint[] {
+  const sourceTable = dbTableName({ model, dbOptions })
+
+  return getDbColumnFields({ model, schema, dbOptions })
+    .filter((fr): fr is [Field, Reference] => !!fr[1])
+    .map<Constraint>(([field, reference]) => {
+      const sourceColumn = caseByDbCaseStyle(field.name, dbOptions.caseStyle)
+      return {
+        sourceTable,
+        sourceColumn,
+        targetTable: reference.table,
+        targetColumn: reference.column,
+        name: `${sourceTable}_${sourceColumn}_fkey`,
+      }
+    })
+}
+
+function constraintFields({
+  sourceColumn,
+  targetTable,
+  targetColumn,
+  name,
+}: Constraint): (string | null)[] {
+  return [
+    `fields: ['${sourceColumn}'],`,
+    `type: 'foreign key',`,
+    // TODO: name by sql dialect conventions
+    `name: '${name}',`,
+    'references: {',
+    lines([`table: '${targetTable}'`, `field: '${targetColumn}'`], {
+      depth: 2,
+      separator: ',',
+    }),
+    '}',
+  ]
 }

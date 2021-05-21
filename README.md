@@ -28,9 +28,10 @@
 #### Codegen
 
 - Migrations
-  - Change modify columns to add/remove constraints
   - Join tables
-  - Many-to-many columns
+  - Implicit many-to-many columns
+  - Test dialects
+  - Refactor TODO's
 - JavaScript (post launch, link to legacy instead)
 
 #### API

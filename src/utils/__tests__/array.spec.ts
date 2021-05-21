@@ -14,6 +14,7 @@ describe('array utils', () => {
   })
 
   describe.only('dedupBy', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cases: [array: unknown[], fn: (x: any) => string, expected: unknown[]][] = [
       [[1, 2, 3, 2, 1], (n) => n.toString(), [1, 2, 3]],
       [[{ id: 'foo' }, { id: 'bar' }, { id: 'foo' }], (n) => n.id, [{ id: 'foo' }, { id: 'bar' }]],
