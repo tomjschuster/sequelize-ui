@@ -44,7 +44,7 @@ type PrefixPkArgs = {
   model: Model
   dbOptions: DbOptions
 }
-function prefixPk({ field, model, dbOptions }: PrefixPkArgs): Field {
+export function prefixPk({ field, model, dbOptions }: PrefixPkArgs): Field {
   if (dbOptions.prefixPks === null || !field.primaryKey) return field
   const name = snakeCase(field.name)
   const isStandard = name === 'id' || name === snakeCase(`${model.name}_id`)
@@ -57,7 +57,7 @@ type IdFieldArgs = {
   model: Model
   dbOptions: DbOptions
 }
-const idField = ({ model, dbOptions }: IdFieldArgs): Field => ({
+export const idField = ({ model, dbOptions }: IdFieldArgs): Field => ({
   id: shortid(),
   name: getPkName({ model, dbOptions }),
   type: { type: DataTypeType.Integer },
@@ -264,7 +264,6 @@ type GetForeignKeyArgs = {
   modelById: ModelById
   dbOptions: DbOptions
 }
-
 export function getForeignKey({
   model,
   association,
@@ -279,6 +278,20 @@ export function getForeignKey({
       : association.type.type === AssociationTypeType.BelongsTo
       ? modelById[association.targetModelId].name
       : model.name
+
+  return caseByDbCaseStyle(`${name} id`, dbOptions.caseStyle)
+}
+
+type GetOtherKeyArgs = {
+  association: Association
+  modelById: ModelById
+  dbOptions: DbOptions
+}
+export function getOtherKey({ association, modelById, dbOptions }: GetOtherKeyArgs): string | null {
+  if (association.type.type !== AssociationTypeType.ManyToMany) return null
+  if (association.type.targetFk) return association.type.targetFk
+
+  const name = association.alias ? association.alias : modelById[association.targetModelId].name
 
   return caseByDbCaseStyle(`${name} id`, dbOptions.caseStyle)
 }

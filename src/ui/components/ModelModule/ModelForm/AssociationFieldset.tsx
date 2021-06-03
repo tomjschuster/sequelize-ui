@@ -154,7 +154,7 @@ function AssociationFieldset({
   return (
     <fieldset>
       <Select
-        id="association-type"
+        id={`association-type-${association.id}`}
         label="Type"
         options={AssociationTypeType}
         display={displayAssociationTypeType}
@@ -162,7 +162,7 @@ function AssociationFieldset({
         onChange={handleChangeType}
       />
       <Select
-        id="association-target-model"
+        id={`association-target-model-${association.id}`}
         label="Target model"
         options={modelOptions}
         display={modelName}
@@ -170,14 +170,14 @@ function AssociationFieldset({
         onChange={handleChangeTarget}
       />
       <TextInput
-        id="association-alias"
+        id={`association-alias-${association.id}`}
         label="as"
         value={association.alias || ''}
         error={errors?.alias}
         onChange={handleChangeAlias}
       />
       <TextInput
-        id="association-fk"
+        id={`association-fk-${association.id}`}
         label="Foreign key"
         value={association.foreignKey || ''}
         error={errors?.foreignKey}
@@ -193,7 +193,7 @@ function AssociationFieldset({
           />
           {association.type.through.type === ThroughType.ThroughModel && (
             <Select
-              id="association-through-model"
+              id={`association-through-model-${association.id}`}
               label="Through model"
               options={modelOptions}
               display={modelName}
@@ -204,7 +204,7 @@ function AssociationFieldset({
           {association.type.through.type === ThroughType.ThroughTable && (
             <>
               <TextInput
-                id="association-through-table"
+                id={`association-through-table-${association.id}`}
                 label="Through table"
                 value={association.type.through.table}
                 error={errors?.throughTable}
@@ -213,7 +213,7 @@ function AssociationFieldset({
             </>
           )}
           <TextInput
-            id="association-target-fk"
+            id={`association-target-fk-${association.id}`}
             label="Target foreign key"
             value={association.type.targetFk || ''}
             error={errors?.targetForeignKey}

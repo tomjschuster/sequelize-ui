@@ -10,7 +10,7 @@ import {
   ThroughType,
 } from '@src/core/schema'
 import { camelCase, pascalCase, plural, singular } from '@src/utils/string'
-import { modelName } from '../helpers'
+import { getOtherKey, modelName } from '../helpers'
 
 export type InitModelsTemplateArgs = {
   schema: Schema
@@ -233,22 +233,12 @@ function getForeignKey({
 }
 
 function otherKeyField({
-  model,
   association,
   modelById,
   dbOptions,
 }: AssociationOptionsArgs): string | null {
-  const otherKey = getOtherKey({ model, association, modelById, dbOptions })
+  const otherKey = getOtherKey({ association, modelById, dbOptions })
   return otherKey ? `otherKey: '${otherKey}'` : null
-}
-
-function getOtherKey({ association, modelById, dbOptions }: AssociationOptionsArgs): string | null {
-  if (association.type.type !== AssociationTypeType.ManyToMany) return null
-  if (association.type.targetFk) return association.type.targetFk
-
-  const name = association.alias ? association.alias : modelById[association.targetModelId].name
-
-  return caseByDbCaseStyle(`${name} id`, dbOptions.caseStyle)
 }
 
 type NoConstraintsFieldArgs = {
