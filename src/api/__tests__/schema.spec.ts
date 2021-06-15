@@ -1,6 +1,8 @@
+import { AssociationTypeType, ThroughType } from '@src/core/schema'
 import blogSchema from '@src/data/schemas/blog'
 import employeeTemporalDataSet from '@src/data/schemas/employeeTemporalDataset'
 import sakila from '@src/data/schemas/sakila'
+import * as DateTimeUtils from '@src/utils/dateTime'
 import {
   clearSchemas,
   createSchema,
@@ -66,8 +68,25 @@ describe('schema api', () => {
 
   describe('createSchema', () => {
     it('creates new storage with new schema when no storage', async () => {
+      const mockDate = '2020-01-01T00:00:00Z'
+
+      jest.spyOn(DateTimeUtils, 'now').mockReturnValueOnce(mockDate)
       const schema = await createSchema(sakila)
-      expect(schema).toEqual({ ...sakila, id: schema.id })
+
+      const models = schema.models.map((m) => ({
+        ...m,
+        createdAt: mockDate,
+        updatedAt: mockDate,
+      }))
+
+      expect(schema).toEqual({
+        ...sakila,
+        id: schema.id,
+        createdAt: mockDate,
+        updatedAt: mockDate,
+        models,
+      })
+
       expect(localStorage.length).toEqual(1)
     })
 
@@ -134,6 +153,74 @@ describe('schema api', () => {
 
       expect(updatedUser).toBeUndefined()
       expect(updatedPostHasUserAssoc).toBe(false)
+    })
+
+    it('converts join models associations to join tables when removing a join model', async () => {
+      const existingSchema = await createSchema(blogSchema)
+
+      // Assert the following to make sure test is valid
+      // If schemas change, update test cases
+      const postCategory = existingSchema.models.find((m) => m.name === 'post category')
+      const post = existingSchema.models.find((m) => m.name === 'post')
+      const postModelManyToMany = post?.associations.find(
+        (a) =>
+          postCategory &&
+          a.type.type === AssociationTypeType.ManyToMany &&
+          a.type.through.type === ThroughType.ThroughModel &&
+          a.type.through.modelId === postCategory.id,
+      )
+      expect(postModelManyToMany).toBeDefined()
+
+      const schema = {
+        ...existingSchema,
+        models: existingSchema.models.filter((m) => m.id !== postCategory?.id),
+      }
+
+      const updatedSchema = await updateSchema(schema)
+      const updatedPost = updatedSchema.models.find((m) => post && m.id === post.id)
+
+      const modelTableManyToMany = updatedPost?.associations.find(
+        (a) =>
+          a.type.type === AssociationTypeType.ManyToMany &&
+          a.type.through.type === ThroughType.ThroughTable &&
+          a.type.through.table === 'category post',
+      )
+
+      expect(modelTableManyToMany).toBeDefined()
+    })
+
+    it('converts join models associations to join tables when removing a join model', async () => {
+      const existingSchema = await createSchema(blogSchema)
+
+      // Assert the following to make sure test is valid
+      // If schemas change, update test cases
+      const postCategory = existingSchema.models.find((m) => m.name === 'post category')
+      const post = existingSchema.models.find((m) => m.name === 'post')
+      const postModelManyToMany = post?.associations.find(
+        (a) =>
+          postCategory &&
+          a.type.type === AssociationTypeType.ManyToMany &&
+          a.type.through.type === ThroughType.ThroughModel &&
+          a.type.through.modelId === postCategory.id,
+      )
+      expect(postModelManyToMany).toBeDefined()
+
+      const schema = {
+        ...existingSchema,
+        models: existingSchema.models.filter((m) => m.id !== postCategory?.id),
+      }
+
+      const updatedSchema = await updateSchema(schema)
+      const updatedPost = updatedSchema.models.find((m) => post && m.id === post.id)
+
+      const modelTableManyToMany = updatedPost?.associations.find(
+        (a) =>
+          a.type.type === AssociationTypeType.ManyToMany &&
+          a.type.through.type === ThroughType.ThroughTable &&
+          a.type.through.table === 'category post',
+      )
+
+      expect(modelTableManyToMany).toBeDefined()
     })
   })
 

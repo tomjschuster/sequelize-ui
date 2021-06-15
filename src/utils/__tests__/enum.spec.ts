@@ -26,7 +26,7 @@ describe('enum utils', () => {
       ['3', IntEnum, undefined],
     ]
     describe.each(intCases)('', (key, object, expected) => {
-      fit(`(IntEnum, ${key}) === ${expected}`, () => {
+      it(`(IntEnum, ${key}) === ${expected}`, () => {
         expect(toEnum(object, key)).toEqual(expected)
       })
     })
@@ -46,7 +46,7 @@ describe('enum utils', () => {
       [3, StringEnum, undefined],
     ]
     describe.each(stringCases)('', (key, object, expected) => {
-      fit(`(StringEnum, ${key}) === ${expected}`, () => {
+      it(`(StringEnum, ${key}) === ${expected}`, () => {
         expect(toEnum(object, key)).toEqual(expected)
       })
     })
@@ -64,7 +64,7 @@ describe('enum utils', () => {
       [IntEnum, 4, undefined],
     ]
     describe.each(intCases)('', (object, value, expected) => {
-      fit(`(IntEnum, ${value}) === ${expected}`, () => {
+      it(`(IntEnum, ${value}) === ${expected}`, () => {
         expect(keyFromEnum(object, value)).toEqual(expected)
       })
     })
@@ -82,7 +82,7 @@ describe('enum utils', () => {
         [StringEnum, 'QUX', undefined],
       ]
       describe.each(stringCases)('', (object, value, expected) => {
-        fit(`(StringEnum, ${value}) === ${expected}`, () => {
+        it(`(StringEnum, ${value}) === ${expected}`, () => {
           expect(keyFromEnum(object, value)).toEqual(expected)
         })
       })

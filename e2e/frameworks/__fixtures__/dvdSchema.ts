@@ -1,8 +1,13 @@
 import { AssociationTypeType, DataTypeType, Model, Schema, ThroughType } from '@src/core/schema'
+import { now } from '@src/utils/dateTime'
+
+const time = now()
 
 const actor: Model = {
   id: '1',
   name: 'actor',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '1',
@@ -46,6 +51,8 @@ const actor: Model = {
 const filmActor: Model = {
   id: '2',
   name: 'film actor',
+  createdAt: time,
+  updatedAt: time,
   fields: [],
   associations: [
     {
@@ -66,6 +73,8 @@ const filmActor: Model = {
 const film: Model = {
   id: '3',
   name: 'film',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '4',
@@ -166,6 +175,8 @@ const film: Model = {
 const filmCategory: Model = {
   id: '4',
   name: 'film category',
+  createdAt: time,
+  updatedAt: time,
   fields: [],
   associations: [
     {
@@ -186,6 +197,8 @@ const filmCategory: Model = {
 const category: Model = {
   id: '5',
   name: 'category',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '12',
@@ -223,6 +236,8 @@ const category: Model = {
 const language: Model = {
   id: '6',
   name: 'language',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '14',
@@ -251,6 +266,8 @@ const language: Model = {
 const inventory: Model = {
   id: '7',
   name: 'inventory',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '16',
@@ -285,6 +302,8 @@ const inventory: Model = {
 const store: Model = {
   id: '8',
   name: 'store',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '17',
@@ -314,6 +333,8 @@ const store: Model = {
 const rental: Model = {
   id: '9',
   name: 'rental',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '18',
@@ -348,6 +369,8 @@ const rental: Model = {
 const staff: Model = {
   id: '10',
   name: 'staff',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '20',
@@ -394,6 +417,8 @@ const staff: Model = {
 const customer: Model = {
   id: '11',
   name: 'customer',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '24',
@@ -440,6 +465,8 @@ export function dvdSchema(name: string): Schema {
   return {
     id: '1',
     name,
+    createdAt: time,
+    updatedAt: time,
     models: [
       film,
       filmActor,

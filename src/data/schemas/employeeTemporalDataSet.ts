@@ -1,4 +1,7 @@
 import { AssociationTypeType, DataTypeType, Model, Schema, ThroughType } from '@src/core/schema'
+import { fromParts } from '@src/utils/dateTime'
+
+const time = fromParts(2020, 10, 1)
 
 enum Id {
   Employees = '1',
@@ -8,9 +11,12 @@ enum Id {
   Titles = '5',
   Salaries = '6',
 }
+
 const employee: Model = {
   id: Id.Employees,
   name: 'employees',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '1',
@@ -95,6 +101,8 @@ const employee: Model = {
 const department: Model = {
   id: Id.Departments,
   name: 'departments',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '7',
@@ -151,6 +159,8 @@ const department: Model = {
 const departmentEmployee: Model = {
   id: Id.DepartmentEmployees,
   name: 'dept_emp',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '9',
@@ -200,6 +210,8 @@ const departmentEmployee: Model = {
 const departmentManager: Model = {
   id: Id.DepartmentManagers,
   name: 'dept_manager',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '13',
@@ -249,6 +261,8 @@ const departmentManager: Model = {
 const title: Model = {
   id: Id.Titles,
   name: 'titles',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '17',
@@ -290,6 +304,8 @@ const title: Model = {
 const salary: Model = {
   id: Id.Salaries,
   name: 'salaries',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '21',
@@ -332,6 +348,8 @@ const salary: Model = {
 const employeeTemporalDatasetSchema: Schema = {
   id: 'demo-employee',
   name: 'employee_temporal_dataset',
+  createdAt: time,
+  updatedAt: time,
   models: [employee, department, departmentEmployee, departmentManager, title, salary],
 }
 

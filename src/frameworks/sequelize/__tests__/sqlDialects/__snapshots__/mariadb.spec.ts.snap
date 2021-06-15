@@ -6,6 +6,42 @@ Object {
     Object {
       "files": Array [
         Object {
+          "content": "module.exports = {
+  development: {
+    dialect: 'mariadb',
+    database: process.env.MARIADB_DB_NAME || 'data_types',
+    username: process.env.MARIADB_DB_USERNAME || 'root',
+    password: process.env.MARIADB_DB_PASSWORD || 'root',
+    host: process.env.MARIADB_DB_HOST || 'localhost',
+    port: parseInt(process.env.MARIADB_DB_PORT || '3306')
+  },
+  test: {
+    dialect: 'mariadb',
+    database: process.env.MARIADB_DB_NAME || 'data_types',
+    username: process.env.MARIADB_DB_USERNAME || 'root',
+    password: process.env.MARIADB_DB_PASSWORD || 'root',
+    host: process.env.MARIADB_DB_HOST || 'localhost',
+    port: parseInt(process.env.MARIADB_DB_PORT || '3306')
+  },
+  production: {
+    dialect: 'mariadb',
+    database: process.env.MARIADB_DB_NAME,
+    username: process.env.MARIADB_DB_USERNAME,
+    password: process.env.MARIADB_DB_PASSWORD,
+    host: process.env.MARIADB_DB_HOST,
+    port: parseInt(process.env.MARIADB_DB_PORT)
+  }
+}",
+          "name": "config.js",
+          "type": "FILE",
+        },
+      ],
+      "name": "config",
+      "type": "DIRECTORY",
+    },
+    Object {
+      "files": Array [
+        Object {
           "content": "import type { Sequelize, Model } from 'sequelize'
 import { Category } from './Category'
 import type { CategoryAttributes, CategoryCreationAttributes } from './Category'
@@ -240,15 +276,14 @@ yarn-error.log*
       "type": "FILE",
     },
     Object {
-      "content": "import { Sequelize } from 'sequelize'
+      "content": "import { Sequelize, Options } from 'sequelize'
+import configs from './config/config.js'
+
+const env = process.env.NODE_ENV || 'development'
+const config = (configs as {[key: string]: Options})[env]
 
 const db: Sequelize = new Sequelize({
-  dialect: 'mariadb',
-  database: process.env.MARIADB_DB_NAME || 'data_types',
-  username: process.env.MARIADB_DB_USERNAME || 'root',
-  password: process.env.MARIADB_DB_PASSWORD || 'root',
-  host: process.env.MARIADB_DB_HOST || 'localhost',
-  port: parseInt(process.env.MARIADB_DB_PORT || '3306'),
+  ...config,
   define: {
     underscored: true,
     createdAt: 'created_at',
@@ -270,7 +305,8 @@ export default db
   \\"scripts\\": {
     \\"test\\": \\"echo \\\\\\"Error: no test specified\\\\\\" && exit 1\\",
     \\"build\\": \\"tsc\\",
-    \\"start\\": \\"node ./dist/server.js\\"
+    \\"start\\": \\"node ./dist/server.js\\",
+    \\"dev\\": \\"tsc-watch --onSuccess \\\\\\"node ./dist/server.js\\\\\\"\\"
   },
   \\"author\\": \\"\\",
   \\"license\\": \\"ISC\\",
@@ -281,6 +317,8 @@ export default db
   \\"devDependencies\\": {
     \\"@types/node\\": \\"^14.14.20\\",
     \\"@types/validator\\": \\"^13.1.3\\",
+    \\"sequelize-cli\\": \\"^6.2.0\\",
+    \\"tsc-watch\\": \\"^4.2.9\\",
     \\"typescript\\": \\"^4.1.3\\"
   }
 }
@@ -290,13 +328,27 @@ export default db
       "type": "FILE",
     },
     Object {
-      "content": "import db from './db'
+      "content": "import http from 'http'
+import db from './db'
 import { initModels } from './models'
 
-initModels(db)
+async function run() {
+  initModels(db)
+  await db.sync()
+  const hostname = process.env.HOSTNAME || '127.0.0.1'
+  const port = parseInt(process.env.PORT || '3000')
+  const server = http.createServer((req, res) => {
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'text/plain')
+    res.end('Hello World')
+  })
+  
+  server.listen(port, hostname, () => {
+    console.log(\`Server running at http://\${hostname}:\${port}/\`)
+  })
+}
 
-db.sync({ force: true })
-",
+run()",
       "name": "server.ts",
       "type": "FILE",
     },
@@ -320,6 +372,7 @@ export type Json = JsonMap | JsonArray | string | number | boolean | null
       \\"strict\\": true,
       \\"moduleResolution\\": \\"node\\",
       \\"esModuleInterop\\": true,
+      \\"allowJs\\": true,
       \\"forceConsistentCasingInFileNames\\": true
     }
   }

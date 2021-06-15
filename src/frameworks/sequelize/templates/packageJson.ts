@@ -2,6 +2,7 @@ import { lines } from '@src/core/codegen'
 import { DbOptions, SqlDialect } from '@src/core/database'
 import { Schema } from '@src/core/schema'
 import { kebabCase } from '@src/utils/string'
+import { dbCreateSupported } from '../scripts'
 
 export type PackageJsonTemplateArgs = {
   schema: Schema
@@ -30,14 +31,17 @@ ${formatDeps(...commonDevDeps(), ...dialectDevDeps(dbOptions))}
 `
 }
 
-function scripts({ migrations }: DbOptions): string {
+function scripts({ sqlDialect, migrations }: DbOptions): string {
+  const dbCreate = dbCreateSupported(sqlDialect)
   return lines(
     [
       '"test": "echo \\"Error: no test specified\\" && exit 1"',
-      migrations ? '"db:up": "npm run db:create && npm run db:migrate"' : null,
-      migrations ? '"db:reset": "npm run db:drop && npm run db:up"' : null,
-      '"db:create": "sequelize db:create"',
-      '"db:drop": "sequelize db:drop"',
+      dbCreate && migrations
+        ? '"db:up": "echo creating && npm run db:create && echo created && npm run db:migrate && echo migrated"'
+        : null,
+      dbCreate && migrations ? '"db:reset": "npm run db:drop && npm run db:up"' : null,
+      dbCreate ? '"db:create": "sequelize db:create"' : null,
+      dbCreate ? '"db:drop": "sequelize db:drop"' : null,
       migrations ? '"db:migrate": "sequelize db:migrate"' : null,
       migrations ? '"db:rollback": "sequelize db:migrate:undo"' : null,
       migrations ? '"db:rollback:all": "sequelize db:migrate:undo:all"' : null,

@@ -28,7 +28,9 @@ import {
   stringDataType,
   textDataType,
   timeDataType,
+  typeWithoutOptions,
   uuidDataType,
+  UuidType,
 } from '../dataType'
 import {
   array,
@@ -111,6 +113,36 @@ describe('schema dataTypes', () => {
     describe.each(cases)('', (type, expected) => {
       it(`${type} === ${expected}`, () => {
         expect(displayDataTypeType(type)).toEqual(expected)
+      })
+    })
+  })
+
+  describe('typeWithoutOptions', () => {
+    const cases: [type: DataType, expected: DataType][] = [
+      [string, string],
+      [text, text],
+      [ciText, ciText],
+      [{ ...integer, autoincrement: true }, integer],
+      [{ ...bigInt, autoincrement: true }, bigInt],
+      [{ ...smallInt, autoincrement: true }, smallInt],
+      [float, float],
+      [real, real],
+      [double, double],
+      [decimal, decimal],
+      [{ ...dateTime, defaultNow: true }, dateTime],
+      [{ ...date, defaultNow: true }, date],
+      [{ ...time, defaultNow: true }, time],
+      [boolean, boolean],
+      [enum_, enum_],
+      [array, array],
+      [json, json],
+      [jsonB, jsonB],
+      [blob, blob],
+      [{ ...uuid, defaultVersion: UuidType.V1 }, uuid],
+    ]
+    describe.each(cases)('', (type, expected) => {
+      it(`${type} === ${expected}`, () => {
+        expect(typeWithoutOptions(type)).toEqual(expected)
       })
     })
   })

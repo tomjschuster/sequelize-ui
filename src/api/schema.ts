@@ -1,4 +1,6 @@
-import { Schema } from '@src/core/schema'
+import { Association, AssociationTypeType, Model, Schema, ThroughType } from '@src/core/schema'
+import { arrayToLookup } from '@src/utils/array'
+import { now } from '@src/utils/dateTime'
 import { versionedName } from '@src/utils/string'
 import shortid from 'shortid'
 
@@ -21,7 +23,9 @@ export async function createSchema(schemaPayload: Omit<Schema, 'id'>): Promise<S
     schemas.map((s) => s.name),
   )
   const id = shortid()
-  const schema: Schema = { ...schemaPayload, id, name }
+  const time = now()
+  const models = schemaPayload.models.map((m) => ({ ...m, createdAt: time, updatedAt: time }))
+  const schema: Schema = { ...schemaPayload, id, name, createdAt: time, updatedAt: time, models }
   await set(schemasKey(), [...schemas, schema])
   return schema
 }
@@ -42,13 +46,16 @@ export async function updateSchema(schema: Schema): Promise<Schema> {
 }
 
 function removeTargetingAssociations(schema: Schema, updatedSchema: Schema): Schema {
-  const removedModelIds = schema.models
-    .filter((m) => !updatedSchema.models.some((um) => um.id === m.id))
-    .map((m) => m.id)
+  const modelById = arrayToLookup(updatedSchema.models, (m) => m.id)
+  const removedModels = schema.models.filter(
+    (m) => !updatedSchema.models.some((um) => um.id === m.id),
+  )
 
   const models = updatedSchema.models.map((m) => ({
     ...m,
-    associations: m.associations.filter((a) => !removedModelIds.includes(a.targetModelId)),
+    associations: m.associations
+      .filter((a) => !removedModels.some((m) => m.id === a.targetModelId))
+      .map((association) => joinModelToTable(association, removedModels, modelById)),
   }))
 
   return { ...updatedSchema, models }
@@ -109,4 +116,34 @@ function schemasKey(): string {
 const NAMESPACE = `__SEQUELIZEUI__`
 function lsKey(key: string): string {
   return NAMESPACE + key
+}
+
+function joinModelToTable(
+  association: Association,
+  removedModels: Model[],
+  modelById: Map<string, Model>,
+): Association {
+  if (association.type.type !== AssociationTypeType.ManyToMany) return association
+
+  const throughModelId =
+    association.type.through.type === ThroughType.ThroughModel
+      ? association.type.through.modelId
+      : /* istanbul ignore next */
+        undefined
+
+  const through = removedModels.find((model) => model.id === throughModelId)
+  const source = modelById.get(association.sourceModelId)
+  const target = modelById.get(association.targetModelId)
+
+  if (!through || !source || !target) return association
+
+  const [nameA, nameB] = [source.name, target.name].sort((a, b) => a.localeCompare(b))
+
+  return {
+    ...association,
+    type: {
+      ...association.type,
+      through: { type: ThroughType.ThroughTable, table: `${nameA} ${nameB}` },
+    },
+  }
 }

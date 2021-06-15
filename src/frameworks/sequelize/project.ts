@@ -10,6 +10,7 @@ import {
   typeWithoutOptions,
 } from '@src/core/schema'
 import { arrayToLookup } from '@src/utils/array'
+import { addSeconds, now, toNumericTimestamp } from '@src/utils/dateTime'
 import { kebabCase, namesEqSingular, noCase } from '@src/utils/string'
 import shortid from 'shortid'
 import {
@@ -46,23 +47,25 @@ export function generateSequelizeProject({
   const schema = normalizeSchema({ schema: nonNormalizedSchema, dbOptions })
   const joinTables = getJoinTables(schema, dbOptions)
   const migrationModels = dedupModels([...schema.models, ...joinTables])
+  const migrationTimestamps = migrationModels.reduce(migrationTimestamp, new Map())
 
   return directory(kebabCase(schema.name), [
     directory('config', [file('config.js', config({ schema, dbOptions }))]),
     dbOptions?.migrations
       ? directory(
           'migrations',
-          migrationModels
-            .map((model, index) =>
+          Array.from(migrationTimestamps)
+            .sort((a, b) => a[0] - b[0])
+            .map(([timestamp, model]) =>
               file(
-                migrationCreateFilename({ model, dbOptions, index }),
+                migrationCreateFilename({ model, dbOptions, timestamp }),
                 createModelMigration({ model, schema, dbOptions }),
               ),
             )
             .concat(
               // TODO, check that has foreign keys
               file(
-                migrationForeignKeysFilename(migrationModels.length),
+                migrationForeignKeysFilename(nextTimestamp(migrationTimestamps)),
                 addForeignKeysMigration({ schema, dbOptions }),
               ),
             ),
@@ -145,7 +148,7 @@ function getJoinTables(schema: Schema, dbOptions: DbOptions): Model[] {
 
 function getJoinTableModel(
   association: Association,
-  modelById: Record<string, Model>,
+  modelById: Map<string, Model>,
   dbOptions: DbOptions,
 ): Model | null {
   if (association.type.type !== AssociationTypeType.ManyToMany) return null
@@ -157,8 +160,8 @@ function getJoinTableModel(
 
   if (!tableName) return null
 
-  const source = modelById[association.sourceModelId]
-  const target = modelById[association.targetModelId]
+  const source = modelById.get(association.sourceModelId)
+  const target = modelById.get(association.targetModelId)
 
   if (!source || !target) return null
 
@@ -191,7 +194,29 @@ function getJoinTableModel(
   return {
     id: shortid(),
     name: tableName,
+    createdAt: source.createdAt,
+    updatedAt: source.updatedAt,
     fields: [sourceFkField, targetFkField],
     associations: [],
   }
+}
+
+type MigrationTimestamps = Map<number, Model>
+function migrationTimestamp(timestamps: MigrationTimestamps, model: Model): MigrationTimestamps {
+  const timestamp = toNumericTimestamp(model.createdAt)
+  if (timestamps.get(timestamp)) return migrationTimestamp(timestamps, add10(model))
+  return timestamps.set(timestamp, model)
+}
+
+function add10(model: Model): Model {
+  return {
+    ...model,
+    createdAt: addSeconds(model.createdAt, 10),
+    updatedAt: addSeconds(model.updatedAt, 10),
+  }
+}
+
+function nextTimestamp(timestamps: MigrationTimestamps): number {
+  const currMax = Math.max(0, ...timestamps.keys())
+  return currMax ? currMax + 10 : toNumericTimestamp(now())
 }

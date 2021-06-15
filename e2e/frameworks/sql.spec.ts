@@ -30,10 +30,11 @@ const snakePlural = (sqlDialect: SqlDialect): DbTestConfig => ({
     timestamps: true,
     caseStyle: DbCaseStyle.Snake,
     nounForm: DbNounForm.Plural,
-    migrations: false,
+    migrations: true,
   },
   tableName: 'customers',
   expectedTables: [
+    'SequelizeMeta',
     'actors',
     'categories',
     'customers',
@@ -64,10 +65,11 @@ const snakeSingular = (sqlDialect: SqlDialect): DbTestConfig => ({
     timestamps: true,
     caseStyle: DbCaseStyle.Snake,
     nounForm: DbNounForm.Singular,
-    migrations: false,
+    migrations: true,
   },
   tableName: 'customer',
   expectedTables: [
+    'SequelizeMeta',
     'actor',
     'category',
     'customer',
@@ -98,10 +100,11 @@ const camelPlural = (sqlDialect: SqlDialect): DbTestConfig => ({
     timestamps: true,
     caseStyle: DbCaseStyle.Camel,
     nounForm: DbNounForm.Plural,
-    migrations: false,
+    migrations: true,
   },
   tableName: 'Customers',
   expectedTables: [
+    'SequelizeMeta',
     'Actors',
     'Categories',
     'Customers',
@@ -132,10 +135,11 @@ const camelSingular = (sqlDialect: SqlDialect): DbTestConfig => ({
     timestamps: true,
     caseStyle: DbCaseStyle.Camel,
     nounForm: DbNounForm.Singular,
-    migrations: false,
+    migrations: true,
   },
   tableName: 'Customer',
   expectedTables: [
+    'SequelizeMeta',
     'Actor',
     'Category',
     'Customer',
@@ -166,10 +170,11 @@ const noTimestamps = (sqlDialect: SqlDialect): DbTestConfig => ({
     timestamps: false,
     caseStyle: DbCaseStyle.Snake,
     nounForm: DbNounForm.Plural,
-    migrations: false,
+    migrations: true,
   },
   tableName: 'customers',
   expectedTables: [
+    'SequelizeMeta',
     'actors',
     'categories',
     'customers',
@@ -192,10 +197,11 @@ const noPrefixPks = (sqlDialect: SqlDialect): DbTestConfig => ({
     timestamps: true,
     caseStyle: DbCaseStyle.Snake,
     nounForm: DbNounForm.Plural,
-    migrations: false,
+    migrations: true,
   },
   tableName: 'customers',
   expectedTables: [
+    'SequelizeMeta',
     'actors',
     'categories',
     'customers',
@@ -262,12 +268,12 @@ describe.each(sqlDialects)('SQL tests %s', (sqlDialect) => {
           await client.close()
         })
 
-        fit('should create the correct tables with the correct names', async () => {
+        it('should create the correct tables with the correct names', async () => {
           const tables = await client.getTables()
           expect(tables.sort()).toEqual(expectedTables.sort())
         })
 
-        fit('should create the correct columns with the correct names', async () => {
+        it('should create the correct columns with the correct names', async () => {
           const columns = await client.getColumns(tableName)
           expect(columns.sort()).toEqual(expectedColumns.sort())
         })

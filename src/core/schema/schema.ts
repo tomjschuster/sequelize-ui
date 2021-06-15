@@ -1,3 +1,4 @@
+import { now } from '@src/utils/dateTime'
 import shortid from 'shortid'
 import { Association, AssociationTypeType } from './association'
 import { DataType, DataTypeType } from './dataType'
@@ -6,6 +7,8 @@ export type Schema = {
   id: string
   name: string
   models: Model[]
+  createdAt: string
+  updatedAt: string
 }
 
 export type Model = {
@@ -13,6 +16,8 @@ export type Model = {
   name: string
   fields: Field[]
   associations: Association[]
+  createdAt: string
+  updatedAt: string
 }
 
 export type Field = {
@@ -26,7 +31,15 @@ export type Field = {
 }
 
 export function emptyModel(): Model {
-  return { id: shortid(), name: '', fields: [], associations: [] }
+  const time = now()
+  return {
+    id: shortid(),
+    name: '',
+    fields: [],
+    associations: [],
+    createdAt: time,
+    updatedAt: time,
+  }
 }
 
 export function emptyField(): Field {

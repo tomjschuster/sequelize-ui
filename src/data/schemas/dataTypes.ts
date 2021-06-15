@@ -23,7 +23,10 @@ import {
   uuidDataType,
   UuidType,
 } from '@src/core/schema'
+import { fromParts } from '@src/utils/dateTime'
 import shortid from 'shortid'
+
+const time = fromParts(2021, 1, 1)
 
 const Id = {
   DataType: shortid(),
@@ -32,6 +35,8 @@ const Id = {
 const dataTypes: Model = {
   id: Id.DataType,
   name: 'category',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     { id: shortid(), name: 'string', type: stringDataType() },
     { id: shortid(), name: 'string with length', type: stringDataType({ length: 100 }) },
@@ -82,6 +87,8 @@ const dataTypes: Model = {
 const dataTypesSchema: Schema = {
   id: shortid(),
   name: 'data types',
+  createdAt: time,
+  updatedAt: time,
   models: [dataTypes],
 }
 

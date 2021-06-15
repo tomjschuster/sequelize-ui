@@ -11,7 +11,10 @@ import {
   textDataType,
   ThroughType,
 } from '@src/core/schema'
+import { fromParts } from '@src/utils/dateTime'
 import shortid from 'shortid'
+
+const time = fromParts(2021, 4, 1)
 
 const Id = {
   Category: shortid(),
@@ -27,6 +30,8 @@ const Id = {
 const category: Model = {
   id: Id.Category,
   name: 'category',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     { id: shortid(), name: 'id', type: bigIntDataType(), primaryKey: true },
     { id: shortid(), name: 'title', type: stringDataType({ length: 75 }), required: true },
@@ -76,6 +81,8 @@ const category: Model = {
 const post: Model = {
   id: Id.Post,
   name: 'post',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     { id: shortid(), name: 'id', type: bigIntDataType(), primaryKey: true },
     { id: shortid(), name: 'title', type: stringDataType({ length: 75 }), required: true },
@@ -164,6 +171,8 @@ const post: Model = {
 const postCategory: Model = {
   id: Id.PostCategory,
   name: 'post category',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     { id: shortid(), name: 'post id', type: bigIntDataType(), primaryKey: true },
     { id: shortid(), name: 'category id', type: bigIntDataType(), primaryKey: true },
@@ -187,6 +196,8 @@ const postCategory: Model = {
 const postComment: Model = {
   id: Id.PostComment,
   name: 'post comment',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     { id: shortid(), name: 'id', type: bigIntDataType(), primaryKey: true },
     { id: shortid(), name: 'title', type: stringDataType({ length: 75 }), required: true },
@@ -221,6 +232,8 @@ const postComment: Model = {
 const postMeta: Model = {
   id: Id.PostMeta,
   name: 'post meta',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     { id: shortid(), name: 'id', type: bigIntDataType(), primaryKey: true },
     {
@@ -245,6 +258,8 @@ const postMeta: Model = {
 const postTag: Model = {
   id: Id.PostTag,
   name: 'post tag',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     { id: shortid(), name: 'post id', type: bigIntDataType(), primaryKey: true },
     { id: shortid(), name: 'tag id', type: bigIntDataType(), primaryKey: true },
@@ -268,6 +283,8 @@ const postTag: Model = {
 const tag: Model = {
   id: Id.Tag,
   name: 'tag',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     { id: shortid(), name: 'id', type: bigIntDataType(), primaryKey: true },
     { id: shortid(), name: 'title', type: stringDataType({ length: 75 }), required: true },
@@ -303,6 +320,8 @@ const tag: Model = {
 const user: Model = {
   id: Id.User,
   name: 'user',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     { id: shortid(), name: 'id', type: bigIntDataType(), primaryKey: true },
     { id: shortid(), name: 'first name', type: stringDataType({ length: 50 }) },
@@ -336,6 +355,8 @@ const user: Model = {
 const blogSchema: Schema = {
   id: shortid(),
   name: 'blog',
+  createdAt: time,
+  updatedAt: time,
   models: [category, post, postCategory, postComment, postMeta, postTag, tag, user],
 }
 

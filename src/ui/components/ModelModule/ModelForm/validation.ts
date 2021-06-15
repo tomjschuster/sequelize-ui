@@ -213,14 +213,14 @@ function findDuplicateAssociationName(
   schema: Schema,
 ): Association | undefined {
   const modelById = arrayToLookup(schema.models, (m) => m.id)
-  const targetModel: Model | undefined = modelById[association.targetModelId]
+  const targetModel: Model | undefined = modelById.get(association.targetModelId)
   if (!targetModel) return undefined
 
   const name = associationName({ association, targetModel })
 
   return model.associations.find((a) => {
     if (a.id === association.id) return false
-    const aTargetModel: Model | undefined = modelById[a.targetModelId]
+    const aTargetModel: Model | undefined = modelById.get(a.targetModelId)
     if (!aTargetModel) return false
     const aName = associationName({ association: a, targetModel: aTargetModel })
     return namesEqSingular(name, aName)

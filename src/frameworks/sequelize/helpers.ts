@@ -12,8 +12,10 @@ import {
   DataTypeType,
   dateTimeDataType,
   Field,
+  ManyToManyAssociation,
   Model,
   Schema,
+  ThroughType,
   typeWithoutOptions,
 } from '@src/core/schema'
 import { arrayToLookup, dedupBy } from '@src/utils/array'
@@ -46,6 +48,7 @@ type PrefixPkArgs = {
 }
 export function prefixPk({ field, model, dbOptions }: PrefixPkArgs): Field {
   if (dbOptions.prefixPks === null || !field.primaryKey) return field
+
   const name = snakeCase(field.name)
   const isStandard = name === 'id' || name === snakeCase(`${model.name}_id`)
   if (!isStandard) return field
@@ -106,29 +109,21 @@ export function associationName({ association, targetModel }: AssociationNameArg
   return associationTypeIsSingular(association.type) ? singular(name) : plural(name)
 }
 
-// TODO: Save schema create date and use as start date
-const migrationStartDateNumber = parseInt(
-  new Date()
-    .toISOString()
-    .split('.')[0]
-    .replace(/[^0-9]/g, ''),
-)
-
 type MigrationCreateFileNameArgs = {
   model: Model
   dbOptions: DbOptions
-  index: number
+  timestamp: number
 }
 export function migrationCreateFilename({
   model,
   dbOptions,
-  index,
+  timestamp,
 }: MigrationCreateFileNameArgs): string {
-  return `${migrationStartDateNumber + index}-create-${dbTableName({ model, dbOptions })}.js`
+  return `${timestamp}-create-${dbTableName({ model, dbOptions })}.js`
 }
 
-export function migrationForeignKeysFilename(index: number): string {
-  return `${migrationStartDateNumber + index}-add-foreign-keys.js`
+export function migrationForeignKeysFilename(timestamp: number): string {
+  return `${timestamp}-add-foreign-keys.js`
 }
 
 type DbTableNameArgs = {
@@ -187,8 +182,7 @@ export function getDbColumnFields({
   return fields
     .map<[Field, Reference | null]>((field) => {
       const fr = fkFields.find(([f]) => namesEq(field.name, f.name))
-      if (!fr) return [field, null]
-      return [field, fr[1]]
+      return [field, fr?.[1] || null]
     })
     .concat(fkFields.filter(([field]) => !fields.some((f) => namesEq(field.name, f.name))))
 }
@@ -206,7 +200,8 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): [Field, Ref
     .map<[Field, Reference] | null>((association) => {
       const fk = getForeignKey({ model, association, modelById, dbOptions })
 
-      const target = modelById[association.targetModelId]
+      const target = modelById.get(association.targetModelId)
+
       if (!target) {
         console.error(
           `Target model ${association.targetModelId} not found from model ${model.name}`,
@@ -217,7 +212,8 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): [Field, Ref
       const targetPk =
         target.fields.find((field) => field.primaryKey) || idField({ model: target, dbOptions })
       const table = dbTableName({ model: target, dbOptions })
-      const column = prefixPk({ field: targetPk, model: target, dbOptions }).name
+      const columnField = prefixPk({ field: targetPk, model: target, dbOptions })
+      const column = caseByDbCaseStyle(columnField.name, dbOptions.caseStyle)
       const field = { id: shortid(), name: fk, type: typeWithoutOptions(targetPk.type) }
 
       return [field, { table, column }]
@@ -233,7 +229,7 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): [Field, Ref
         a.targetModelId === model.id,
     )
     .map<[Field, Reference] | null>((association) => {
-      const source = modelById[association.sourceModelId]
+      const source = modelById.get(association.sourceModelId)
       if (!source) {
         console.error(
           `Target model ${association.sourceModelId} not found from model ${model.name}`,
@@ -246,17 +242,82 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): [Field, Ref
       const sourcePk =
         source.fields.find((field) => field.primaryKey) || idField({ model: source, dbOptions })
       const table = dbTableName({ model: source, dbOptions })
-      const column = prefixPk({ field: sourcePk, model: source, dbOptions }).name
+      const columnField = prefixPk({ field: sourcePk, model: source, dbOptions })
+      const column = caseByDbCaseStyle(columnField.name, dbOptions.caseStyle)
       const field = { id: shortid(), name: fk, type: typeWithoutOptions(sourcePk.type) }
 
       return [field, { table, column }]
     })
     .filter((fr): fr is [Field, Reference] => !!fr)
 
-  return dedupBy<[Field, Reference]>(sourceFields.concat(targetFields), ([field]) => field.name)
+  const hasPk = model.fields.some((f) => f.primaryKey)
+  const joinFields = schema.models
+    .flatMap((m) => m.associations)
+    .filter(
+      (a): a is Association<ManyToManyAssociation> =>
+        a.type.type === AssociationTypeType.ManyToMany &&
+        a.type.through.type === ThroughType.ThroughModel &&
+        a.type.through.modelId === model.id,
+    )
+    .flatMap<[Field, Reference] | null>((association) => {
+      const source = modelById.get(association.sourceModelId)
+      const target = modelById.get(association.targetModelId)
+      if (!source) {
+        console.error(
+          `Target model ${association.sourceModelId} not found from model ${model.name}`,
+        )
+        return null
+      }
+
+      if (!target) {
+        console.error(
+          `Target model ${association.targetModelId} not found from model ${model.name}`,
+        )
+        return null
+      }
+      const sourceFk = getForeignKey({ model: source, association, modelById, dbOptions })
+
+      const sourcePk =
+        source.fields.find((field) => field.primaryKey) || idField({ model: source, dbOptions })
+      const sourceTable = dbTableName({ model: source, dbOptions })
+      const sourceColumnField = prefixPk({ field: sourcePk, model: target, dbOptions })
+      const sourceColumn = caseByDbCaseStyle(sourceColumnField.name, dbOptions.caseStyle)
+
+      const sourceField = {
+        id: shortid(),
+        name: sourceFk,
+        type: typeWithoutOptions(sourcePk.type),
+        primaryKey: hasPk ? undefined : true,
+      }
+
+      const targetFk = getOtherKey({ association, modelById, dbOptions })
+      const targetPk =
+        target.fields.find((field) => field.primaryKey) || idField({ model: target, dbOptions })
+
+      const targetTable = dbTableName({ model: target, dbOptions })
+      const targetColumnField = prefixPk({ field: targetPk, model: target, dbOptions })
+      const targetColumn = caseByDbCaseStyle(targetColumnField.name, dbOptions.caseStyle)
+      const targetField = {
+        id: shortid(),
+        name: targetFk,
+        type: typeWithoutOptions(targetPk.type),
+        primaryKey: hasPk ? undefined : true,
+      }
+
+      return [
+        [sourceField, { table: sourceTable, column: sourceColumn }],
+        [targetField, { table: targetTable, column: targetColumn }],
+      ] as ReadonlyArray<[Field, Reference]>
+    })
+    .filter((fr): fr is [Field, Reference] => !!fr)
+
+  return dedupBy<[Field, Reference]>(
+    sourceFields.concat(targetFields).concat(joinFields),
+    ([field]) => field.name,
+  )
 }
 
-type ModelById = Record<string, Model>
+type ModelById = Map<string, Model>
 
 type GetForeignKeyArgs = {
   model: Model
@@ -271,12 +332,12 @@ export function getForeignKey({
   dbOptions,
 }: GetForeignKeyArgs): string {
   if (association.foreignKey) return caseByDbCaseStyle(association.foreignKey, dbOptions.caseStyle)
-
+  const target = modelById.get(association.targetModelId)
   const name =
     association.alias && association.type.type === AssociationTypeType.BelongsTo
       ? association.alias
-      : association.type.type === AssociationTypeType.BelongsTo
-      ? modelById[association.targetModelId].name
+      : association.type.type === AssociationTypeType.BelongsTo && target
+      ? target.name
       : model.name
 
   return caseByDbCaseStyle(`${name} id`, dbOptions.caseStyle)
@@ -288,10 +349,11 @@ type GetOtherKeyArgs = {
   dbOptions: DbOptions
 }
 export function getOtherKey({ association, modelById, dbOptions }: GetOtherKeyArgs): string | null {
-  if (association.type.type !== AssociationTypeType.ManyToMany) return null
+  const target = modelById.get(association.targetModelId)
+  if (!target || association.type.type !== AssociationTypeType.ManyToMany) return null
   if (association.type.targetFk) return association.type.targetFk
 
-  const name = association.alias ? association.alias : modelById[association.targetModelId].name
+  const name = association.alias ? association.alias : target.name
 
   return caseByDbCaseStyle(`${name} id`, dbOptions.caseStyle)
 }

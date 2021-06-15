@@ -16,14 +16,14 @@ const MockFramework: Framework = {
 }
 
 describe('framework', () => {
-  fit('should display a name', () => {
+  it('should display a name', () => {
     expect(typeof MockFramework.displayName()).toEqual('string')
   })
-  fit('should generate a directory', () => {
+  it('should generate a directory', () => {
     const generateArgs: GenerateArgs = { schema: blogSchema, dbOptions: defaultDbOptions }
     expect(isDirectory(MockFramework.generate(generateArgs))).toBe(true)
   })
-  fit('should have a project type', () => {
+  it('should have a project type', () => {
     expect(MockFramework.projectType()).toEqual(ProjectType.Npm)
   })
 })

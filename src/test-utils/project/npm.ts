@@ -29,13 +29,13 @@ export async function buildNpmProject(
 
   await install(preinstall)
   await build()
-  await start()
+  await migrate()
 
   process.chdir(cwd)
 }
 
-export function deleteNpmProject(name: string): Promise<void> {
-  return deleteFileOrDirectory(tmpDirPath(name))
+export async function deleteNpmProject(name: string): Promise<void> {
+  await deleteFileOrDirectory(tmpDirPath(name))
 }
 
 const install = async (preinstall?: string): Promise<void> => {
@@ -45,4 +45,4 @@ const install = async (preinstall?: string): Promise<void> => {
   return exec('npm install').then()
 }
 const build = (): Promise<void> => exec('npm run build -- --incremental').then()
-const start = (): Promise<void> => exec('npm start').then()
+const migrate = (): Promise<void> => exec('npm run db:migrate').then()

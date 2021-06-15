@@ -28,8 +28,6 @@
 #### Codegen
 
 - Migrations
-  - Join tables
-  - Implicit many-to-many columns
   - Test dialects
   - Refactor TODO's
 - JavaScript (post launch, link to legacy instead)

@@ -1,6 +1,5 @@
 module.exports = {
-  roots: ['<rootDir>/src/utils/__tests__'],
-  // roots: ['<rootDir>/src', '<rootDir>/e2e/frameworks'],
+  roots: ['<rootDir>/src', '<rootDir>/e2e/frameworks'],
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
   coveragePathIgnorePatterns: [
     'src/test-utils',

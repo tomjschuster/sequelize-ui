@@ -1,4 +1,7 @@
 import { AssociationTypeType, DataTypeType, Model, Schema, ThroughType } from '@src/core/schema'
+import { fromParts } from '@src/utils/dateTime'
+
+const time = fromParts(2020, 1, 1)
 
 enum Id {
   Actor = '1',
@@ -22,6 +25,8 @@ enum Id {
 const actor: Model = {
   id: Id.Actor,
   name: 'actor',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '1',
@@ -61,6 +66,8 @@ const actor: Model = {
 const film: Model = {
   id: Id.Film,
   name: 'film',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '4',
@@ -182,6 +189,8 @@ const film: Model = {
 const language: Model = {
   id: Id.Language,
   name: 'language',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '15',
@@ -218,6 +227,8 @@ const language: Model = {
 const category: Model = {
   id: Id.Category,
   name: 'category',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '17',
@@ -245,6 +256,8 @@ const category: Model = {
 const inventory: Model = {
   id: Id.Inventory,
   name: 'inventory',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '18',
@@ -273,6 +286,8 @@ const inventory: Model = {
 const store: Model = {
   id: Id.Store,
   name: 'store',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '19',
@@ -321,6 +336,8 @@ const store: Model = {
 const staff: Model = {
   id: Id.Staff,
   name: 'staff',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '20',
@@ -408,6 +425,8 @@ const staff: Model = {
 const customer: Model = {
   id: Id.Customer,
   name: 'customer',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '28',
@@ -471,6 +490,8 @@ const customer: Model = {
 const address: Model = {
   id: Id.Address,
   name: 'address',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '33',
@@ -534,6 +555,8 @@ const address: Model = {
 const rental: Model = {
   id: Id.Rental,
   name: 'rental',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '38',
@@ -585,6 +608,8 @@ const rental: Model = {
 const payment: Model = {
   id: Id.Payment,
   name: 'payment',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '41',
@@ -631,6 +656,8 @@ const payment: Model = {
 const city: Model = {
   id: Id.City,
   name: 'city',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '44',
@@ -665,6 +692,8 @@ const city: Model = {
 const country: Model = {
   id: Id.Country,
   name: 'country',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '46',
@@ -693,6 +722,8 @@ const country: Model = {
 const film_actor: Model = {
   id: Id.FilmActor,
   name: 'film_actor',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '48',
@@ -721,6 +752,8 @@ const film_actor: Model = {
 const film_category: Model = {
   id: Id.FilmCategory,
   name: 'film_category',
+  createdAt: time,
+  updatedAt: time,
   fields: [
     {
       id: '49',
@@ -750,6 +783,8 @@ const film_category: Model = {
 const sakilaSchema: Schema = {
   id: 'demo-sakila',
   name: 'sakila',
+  createdAt: time,
+  updatedAt: time,
   models: [
     actor,
     film,

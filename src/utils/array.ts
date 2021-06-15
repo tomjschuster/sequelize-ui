@@ -1,8 +1,8 @@
-export function arrayToLookup<T>(array: T[], toKey: (value: T) => string): Record<string, T> {
-  const lookup: Record<string, T> = {}
+export function arrayToLookup<T>(array: T[], toKey: (value: T) => string): Map<string, T> {
+  const lookup: Map<string, T> = new Map()
 
   for (const value of array) {
-    lookup[toKey(value)] = value
+    lookup.set(toKey(value), value)
   }
 
   return lookup

@@ -9,6 +9,7 @@ import {
   Schema,
   ThroughType,
 } from '@src/core/schema'
+import { arrayToLookup } from '@src/utils/array'
 import { camelCase, pascalCase, plural, singular } from '@src/utils/string'
 import { getOtherKey, modelName } from '../helpers'
 
@@ -68,17 +69,14 @@ function modelTypeExport(model: Model) {
   })
 }
 
-type ModelById = { [key: string]: Model }
+type ModelById = Map<string, Model>
 
 type InitModelsArgs = {
   schema: Schema
   dbOptions: DbOptions
 }
 function initModels({ schema: { models }, dbOptions }: InitModelsArgs): string {
-  const modelById: ModelById = models.reduce<ModelById>((acc, model) => {
-    acc[model.id] = model
-    return acc
-  }, {})
+  const modelById = arrayToLookup(models, (m) => m.id)
 
   return lines([
     'export function initModels(sequelize: Sequelize) {',
@@ -124,9 +122,13 @@ function modelAssociation({
   model,
   modelById,
   dbOptions,
-}: ModelAssociationArgs): string {
+}: ModelAssociationArgs): string | null {
+  const target = modelById.get(association.targetModelId)
+  /* istanbul ignore next */
+  if (!target) return null
+
   const name = modelName(model)
-  const targetName = modelName(modelById[association.targetModelId])
+  const targetName = modelName(target)
   const label = associationLabel(association)
   const assocOptions = associationOptions({
     model,
@@ -193,10 +195,16 @@ type ThroughValueArgs = {
   type: ManyToManyAssociation
   modelById: ModelById
 }
-function throughValue({ type, modelById }: ThroughValueArgs): string {
-  return type.through.type === ThroughType.ThroughTable
-    ? `'${type.through.table}'`
-    : modelName(modelById[type.through.modelId])
+function throughValue({ type, modelById }: ThroughValueArgs): string | null {
+  if (type.through.type === ThroughType.ThroughTable) {
+    return `'${type.through.table}'`
+  }
+
+  const model = modelById.get(type.through.modelId)
+  /* istanbul ignore next */
+  if (!model) return null
+
+  return modelName(model)
 }
 
 function foreignKeyField({
@@ -219,14 +227,17 @@ function getForeignKey({
   association,
   modelById,
   dbOptions,
-}: AssociationOptionsArgs): string {
+}: AssociationOptionsArgs): string | null {
+  const target = modelById.get(association.targetModelId)
+  /* istanbul ignore next */
+  if (!target) return null
   if (association.foreignKey) return caseByDbCaseStyle(association.foreignKey, dbOptions.caseStyle)
 
   const name =
     association.alias && association.type.type === AssociationTypeType.BelongsTo
       ? association.alias
       : association.type.type === AssociationTypeType.BelongsTo
-      ? modelById[association.targetModelId].name
+      ? target.name
       : model.name
 
   return caseByDbCaseStyle(`${name} id`, dbOptions.caseStyle)

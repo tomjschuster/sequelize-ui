@@ -18,17 +18,19 @@ export default function AssociationList({
   modelId,
   schema,
 }: AssociationListProps): React.ReactElement | null {
-  const modelById = useMemo<Record<string, Model>>(
+  const modelById = useMemo<Map<string, Model>>(
     () => arrayToLookup<Model>(schema.models, (m) => m.id),
     [schema.models],
   )
-  const model = modelById[modelId]
+  const model = modelById.get(modelId)
   if (!model) return null
 
   return (
     <ul>
       {model.associations.map((association) => {
-        const targetModel = modelById[association.targetModelId]
+        const targetModel = modelById.get(association.targetModelId)
+        if (!targetModel) return null
+
         return (
           <AssociationItem
             key={`association-item-${association.id}`}
@@ -38,7 +40,7 @@ export default function AssociationList({
               association.type.type === AssociationTypeType.ManyToMany
                 ? association.type.through.type === ThroughType.ThroughTable
                   ? association.type.through.table
-                  : titleCase(modelById[association.type.through.modelId]?.name || '')
+                  : titleCase(modelById.get(association.type.through.modelId)?.name || '')
                 : undefined
             }
             targetFk={

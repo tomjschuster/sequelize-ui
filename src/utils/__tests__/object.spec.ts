@@ -22,7 +22,7 @@ describe('object utils', () => {
       [['foo'], false],
     ]
     describe.each(cases)('', (object, expected) => {
-      fit(`(${JSON.stringify(object)})=== ${expected}`, () => {
+      it(`(${JSON.stringify(object)})=== ${expected}`, () => {
         expect(deepEmpty(object)).toEqual(expected)
       })
     })

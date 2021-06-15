@@ -1,6 +1,4 @@
-import { singular } from '@src/utils/string'
-import { camelCase, pascalCase, snakeCase } from 'change-case'
-import { plural } from 'pluralize'
+import { camelCase, pascalCase, plural, singular, snakeCase } from '@src/utils/string'
 
 export type DbOptions = {
   sqlDialect: SqlDialect
