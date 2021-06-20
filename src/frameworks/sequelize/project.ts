@@ -17,8 +17,9 @@ import { serverTemplate } from './templates/server'
 import { tsconfigTemplate } from './templates/tsconfig'
 import { typesTemplate } from './templates/types'
 import { hasJsonType } from './utils/dataTypes'
-import { getJoinTables, migrationTimestamp, nextTimestamp, normalizeSchema } from './utils/helpers'
+import { getJoinTables, migrationTimestamp, nextTimestamp } from './utils/migrations'
 import { dedupModels, modelName } from './utils/model'
+import { normalizeSchema } from './utils/schema'
 
 type GenerateSequelizeProjectArgs = {
   schema: Schema

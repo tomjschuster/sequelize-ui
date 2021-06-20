@@ -1,7 +1,15 @@
 import { lines } from '@src/core/codegen'
 import { caseByDbCaseStyle, DbCaseStyle, DbOptions } from '@src/core/database'
-import { DataType, DataTypeType, Field, isDateTimeType, isIntegerType } from '@src/core/schema'
-import { camelCase } from '@src/utils/string'
+import {
+  DataType,
+  DataTypeType,
+  Field,
+  isDateTimeType,
+  isIntegerType,
+  Model,
+} from '@src/core/schema'
+import { camelCase, snakeCase } from '@src/utils/string'
+import shortid from 'shortid'
 import { displaySequelizeDataType, sequelizeUuidVersion } from './dataTypes'
 import { noSupportedDetails, notSupportedComment } from './helpers'
 
@@ -83,4 +91,42 @@ function defaultField(dataType: DataType) {
   }
 
   return null
+}
+
+type PrefixPkArgs = {
+  field: Field
+  model: Model
+  dbOptions: DbOptions
+}
+export function prefixPk({ field, model, dbOptions }: PrefixPkArgs): Field {
+  if (dbOptions.prefixPks === null || !field.primaryKey) return field
+
+  const name = snakeCase(field.name)
+  const isStandard = name === 'id' || name === snakeCase(`${model.name}_id`)
+  if (!isStandard) return field
+
+  return { ...field, name: getPkName({ model, dbOptions }) }
+}
+
+type IdFieldArgs = {
+  model: Model
+  dbOptions: DbOptions
+}
+export function idField({ model, dbOptions }: IdFieldArgs): Field {
+  return {
+    id: shortid(),
+    name: getPkName({ model, dbOptions }),
+    type: { type: DataTypeType.Integer },
+    primaryKey: true,
+    generated: true,
+  }
+}
+
+type GetPkNameArgs = {
+  model: Model
+  dbOptions: DbOptions
+}
+export function getPkName({ model, dbOptions }: GetPkNameArgs): string {
+  if (!dbOptions.prefixPks) return 'id'
+  return caseByDbCaseStyle(`${model.name} id`, dbOptions.caseStyle)
 }

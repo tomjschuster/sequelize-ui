@@ -1,5 +1,5 @@
 import { blank, lines } from '@src/core/codegen'
-import { caseByDbCaseStyle, DbOptions } from '@src/core/database'
+import { DbOptions } from '@src/core/database'
 import {
   Association,
   associationIsCircular,
@@ -11,7 +11,7 @@ import {
 } from '@src/core/schema'
 import { arrayToLookup } from '@src/utils/array'
 import { camelCase, pascalCase, plural, singular } from '@src/utils/string'
-import { getOtherKey } from '../utils/helpers'
+import { getForeignKey, getOtherKey } from '../utils/associations'
 import { modelName } from '../utils/model'
 
 export type InitModelsTemplateArgs = {
@@ -221,27 +221,6 @@ function foreignKeyField({
     dbOptions,
   })
   return `foreignKey: '${foreignKey}'`
-}
-
-function getForeignKey({
-  model,
-  association,
-  modelById,
-  dbOptions,
-}: AssociationOptionsArgs): string | null {
-  const target = modelById.get(association.targetModelId)
-  /* istanbul ignore next */
-  if (!target) return null
-  if (association.foreignKey) return caseByDbCaseStyle(association.foreignKey, dbOptions.caseStyle)
-
-  const name =
-    association.alias && association.type.type === AssociationTypeType.BelongsTo
-      ? association.alias
-      : association.type.type === AssociationTypeType.BelongsTo
-      ? target.name
-      : model.name
-
-  return caseByDbCaseStyle(`${name} id`, dbOptions.caseStyle)
 }
 
 function otherKeyField({
