@@ -54,7 +54,6 @@ export function generateSequelizeProject({
               ),
             )
             .concat(
-              // TODO, check that has foreign keys
               file(
                 migrationForeignKeysFilename(nextTimestamp(migrationTimestamps)),
                 addForeignKeysMigration({ schema: schemaWithMigrations, dbOptions }),

@@ -13,8 +13,6 @@ import {
   updateSchema,
 } from '../schema'
 
-// TODO mock local storage failing to test error cases
-
 describe('schema api', () => {
   beforeEach(() => {
     localStorage.clear()
