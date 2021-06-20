@@ -1,4 +1,4 @@
-import { SqlDialect } from '@src/core/database'
+import { displaySqlDialect, SqlDialect } from '@src/core/database'
 import {
   ArrayDataType,
   DataType,
@@ -186,4 +186,15 @@ function displayArray(dataType: ArrayDataType): string {
 
 export function hasJsonType(model: Model): boolean {
   return model.fields.some((f) => f.type.type === DataTypeType.Json)
+}
+
+export function notSupportedComment(type: DataType, dialect: SqlDialect): string {
+  return dataTypeNotSupported(type, dialect) ? '// ' : ''
+}
+
+export function noSupportedDetails(type: DataType, dialect: SqlDialect): string | null {
+  if (!dataTypeNotSupported(type, dialect)) return null
+
+  const typeDisplay = displaySequelizeDataType(type)
+  return `//// ${typeDisplay} not supported for ${displaySqlDialect(dialect)}`
 }

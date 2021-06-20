@@ -1,8 +1,7 @@
 import { blank, lines } from '@src/core/codegen'
 import { caseByDbCaseStyle, DbOptions } from '@src/core/database'
 import { Field, Model, Schema } from '@src/core/schema'
-import { dbTableName } from '../../utils/helpers'
-import { getDbColumnFields, Reference } from '../../utils/migrations'
+import { dbTableName, getDbColumnFields, Reference } from '../../utils/migrations'
 
 export function migrationForeignKeysFilename(timestamp: number): string {
   return `${timestamp}-add-foreign-keys.js`

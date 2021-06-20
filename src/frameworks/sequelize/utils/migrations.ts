@@ -1,4 +1,9 @@
-import { caseByDbCaseStyle, DbOptions } from '@src/core/database'
+import {
+  caseByDbCaseStyle,
+  DbOptions,
+  nounFormByDbNounForm,
+  tableCaseByDbCaseStyle,
+} from '@src/core/database'
 import {
   Association,
   AssociationTypeType,
@@ -17,7 +22,15 @@ import { namesEq } from '@src/utils/string'
 import shortid from 'shortid'
 import { getForeignKey, getOtherKey } from './associations'
 import { idField, prefixPk } from './field'
-import { dbTableName } from './helpers'
+
+type DbTableNameArgs = {
+  model: Model
+  dbOptions: DbOptions
+}
+export function dbTableName({ model, dbOptions }: DbTableNameArgs): string {
+  const casedName = tableCaseByDbCaseStyle(model.name, dbOptions.caseStyle)
+  return nounFormByDbNounForm(casedName, dbOptions.nounForm)
+}
 
 export type Reference = {
   table: string

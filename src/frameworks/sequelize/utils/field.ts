@@ -10,8 +10,16 @@ import {
 } from '@src/core/schema'
 import { camelCase, snakeCase } from '@src/utils/string'
 import shortid from 'shortid'
-import { displaySequelizeDataType, sequelizeUuidVersion } from './dataTypes'
-import { noSupportedDetails, notSupportedComment } from './helpers'
+import {
+  displaySequelizeDataType,
+  noSupportedDetails,
+  notSupportedComment,
+  sequelizeUuidVersion,
+} from './dataTypes'
+
+export function pkIsDefault(field: Field): boolean {
+  return !!field.primaryKey && snakeCase(field.name) === 'id' && !!field.generated
+}
 
 type FieldTemplateArgs = {
   field: Field

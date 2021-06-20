@@ -2,8 +2,7 @@ import { blank, indent, lines } from '@src/core/codegen'
 import { DbOptions } from '@src/core/database'
 import { Model, Schema } from '@src/core/schema'
 import { fieldTemplate } from '../../utils/field'
-import { dbTableName } from '../../utils/helpers'
-import { getDbColumnFields } from '../../utils/migrations'
+import { dbTableName, getDbColumnFields } from '../../utils/migrations'
 
 type MigrationCreateFileNameArgs = {
   model: Model

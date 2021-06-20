@@ -2,10 +2,13 @@ import { blank, lines } from '@src/core/codegen'
 import { DbOptions } from '@src/core/database'
 import { Field, isDateTimeType, Model } from '@src/core/schema'
 import { camelCase } from '@src/utils/string'
-import { dataTypeToTypeScript } from '../../utils/dataTypes'
-import { pkIsDefault } from '../../utils/helpers'
+import {
+  dataTypeToTypeScript,
+  noSupportedDetails,
+  notSupportedComment,
+} from '../../utils/dataTypes'
+import { pkIsDefault } from '../../utils/field'
 import { modelName } from '../../utils/model'
-import { noSupportedDetails, notSupportedComment } from './common'
 
 type ModelTypesTemplateArgs = {
   model: Model

@@ -1,7 +1,7 @@
 import { blank, lines } from '@src/core/codegen'
 import { DbOptions } from '@src/core/database'
 import { Association, Model, Schema } from '@src/core/schema'
-import { ModelAssociation } from './common'
+import { ModelAssociation } from '../../utils/model'
 import { modelImportsTemplate } from './imports'
 import { modelClassTemplate } from './modelClass'
 import { modelTypesTemplate } from './types'

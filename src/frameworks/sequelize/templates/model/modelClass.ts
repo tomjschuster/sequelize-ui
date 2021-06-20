@@ -3,11 +3,13 @@ import { DbCaseStyle, DbNounForm, DbOptions } from '@src/core/database'
 import { Association, AssociationTypeType, Field, Model } from '@src/core/schema'
 import { camelCase, pascalCase, plural, singular, snakeCase } from '@src/utils/string'
 import { associationName } from '../../utils/associations'
-import { dataTypeToTypeScript } from '../../utils/dataTypes'
-import { fieldTemplate } from '../../utils/field'
-import { pkIsDefault } from '../../utils/helpers'
-import { modelName } from '../../utils/model'
-import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
+import {
+  dataTypeToTypeScript,
+  noSupportedDetails,
+  notSupportedComment,
+} from '../../utils/dataTypes'
+import { fieldTemplate, pkIsDefault } from '../../utils/field'
+import { ModelAssociation, modelName } from '../../utils/model'
 
 export type ModelClassTempalteArgs = {
   model: Model
