@@ -3,6 +3,10 @@ import { caseByDbCaseStyle, DbOptions } from '@src/core/database'
 import { Field, Model, Schema } from '@src/core/schema'
 import { dbTableName, getDbColumnFields, Reference } from '../../utils/helpers'
 
+export function migrationForeignKeysFilename(timestamp: number): string {
+  return `${timestamp}-add-foreign-keys.js`
+}
+
 type Constraint = {
   sourceTable: string
   sourceColumn: string

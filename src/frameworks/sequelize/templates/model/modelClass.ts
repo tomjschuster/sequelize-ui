@@ -2,8 +2,11 @@ import { blank, lines } from '@src/core/codegen'
 import { DbCaseStyle, DbNounForm, DbOptions } from '@src/core/database'
 import { Association, AssociationTypeType, Field, Model } from '@src/core/schema'
 import { camelCase, pascalCase, plural, singular, snakeCase } from '@src/utils/string'
+import { associationName } from '../../utils/associations'
 import { dataTypeToTypeScript } from '../../utils/dataTypes'
-import { associationName, fieldTemplate, modelName, pkIsDefault } from '../../utils/helpers'
+import { fieldTemplate } from '../../utils/field'
+import { pkIsDefault } from '../../utils/helpers'
+import { modelName } from '../../utils/model'
 import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
 
 export type ModelClassTempalteArgs = {

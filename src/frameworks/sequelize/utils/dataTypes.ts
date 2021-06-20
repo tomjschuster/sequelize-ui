@@ -7,6 +7,7 @@ import {
   isNumberType,
   isNumericType,
   isStringType,
+  Model,
   NumberType,
   NumericType,
   StringType,
@@ -181,4 +182,8 @@ function displayEnum(dataType: EnumDataType): string {
 
 function displayArray(dataType: ArrayDataType): string {
   return `(${displaySequelizeDataType(dataType.arrayType)})`
+}
+
+export function hasJsonType(model: Model): boolean {
+  return model.fields.some((f) => f.type.type === DataTypeType.Json)
 }

@@ -1,7 +1,5 @@
-import { lines } from '@src/core/codegen'
 import {
   caseByDbCaseStyle,
-  DbCaseStyle,
   DbOptions,
   displaySqlDialect,
   nounFormByDbNounForm,
@@ -10,7 +8,6 @@ import {
 } from '@src/core/database'
 import {
   Association,
-  associationTypeIsSingular,
   AssociationTypeType,
   belongsToType,
   DataType,
@@ -25,122 +22,12 @@ import {
 } from '@src/core/schema'
 import { arrayToLookup, dedupBy } from '@src/utils/array'
 import { addSeconds, now, toNumericTimestamp } from '@src/utils/dateTime'
-import {
-  camelCase,
-  namesEq,
-  namesEqSingular,
-  noCase,
-  normalize,
-  pascalCase,
-  plural,
-  singular,
-  snakeCase,
-} from '@src/utils/string'
+import { namesEq, snakeCase } from '@src/utils/string'
 import shortid from 'shortid'
-import { dataTypeNotSupported, displaySequelizeDataType, sequelizeUuidVersion } from './dataTypes'
-
-export function modelName({ name }: Model): string {
-  return singular(pascalCase(name))
-}
-
-type GetFieldsWithIdArgs = {
-  model: Model
-  dbOptions: DbOptions
-}
-export function getFieldsWithPk({ model, dbOptions }: GetFieldsWithIdArgs): Field[] {
-  const pks = model.fields.filter((f) => f.primaryKey)
-
-  // Don't apply any prefixes if pk is composite
-  if (pks.length > 1) return model.fields
-  // Add explicit pk field for TypeScript classes
-  if (pks.length === 0) return [idField({ model, dbOptions }), ...model.fields]
-  // Prefix pk with model name if pk is standard  format and prefixPk option is true
-  return model.fields.map((field) => prefixPk({ field, model, dbOptions }))
-}
-
-type PrefixPkArgs = {
-  field: Field
-  model: Model
-  dbOptions: DbOptions
-}
-export function prefixPk({ field, model, dbOptions }: PrefixPkArgs): Field {
-  if (dbOptions.prefixPks === null || !field.primaryKey) return field
-
-  const name = snakeCase(field.name)
-  const isStandard = name === 'id' || name === snakeCase(`${model.name}_id`)
-  if (!isStandard) return field
-
-  return { ...field, name: getPkName({ model, dbOptions }) }
-}
-
-type IdFieldArgs = {
-  model: Model
-  dbOptions: DbOptions
-}
-export const idField = ({ model, dbOptions }: IdFieldArgs): Field => ({
-  id: shortid(),
-  name: getPkName({ model, dbOptions }),
-  type: { type: DataTypeType.Integer },
-  primaryKey: true,
-  generated: true,
-})
-
-type GetPkNameArgs = {
-  model: Model
-  dbOptions: DbOptions
-}
-const getPkName = ({ model, dbOptions }: GetPkNameArgs): string => {
-  if (!dbOptions.prefixPks) return 'id'
-  return caseByDbCaseStyle(`${model.name} id`, dbOptions.caseStyle)
-}
+import { dataTypeNotSupported, displaySequelizeDataType } from './dataTypes'
 
 export function pkIsDefault(field: Field): boolean {
   return !!field.primaryKey && snakeCase(field.name) === 'id' && !!field.generated
-}
-
-export function hasJsonType(model: Model): boolean {
-  return model.fields.some((f) => f.type.type === DataTypeType.Json)
-}
-
-export function sqlDialiectConfigValue(dialect: SqlDialect): string {
-  switch (dialect) {
-    case SqlDialect.MariaDb:
-      return 'mariadb'
-    case SqlDialect.MsSql:
-      return 'mssql'
-    case SqlDialect.MySql:
-      return 'mysql'
-    case SqlDialect.Postgres:
-      return 'postgres'
-    case SqlDialect.Sqlite:
-      return 'sqlite'
-  }
-}
-
-type AssociationNameArgs = {
-  association: Association
-  targetModel: Model
-}
-export function associationName({ association, targetModel }: AssociationNameArgs): string {
-  const name = association.alias ? camelCase(association.alias) : modelName(targetModel)
-  return associationTypeIsSingular(association.type) ? singular(name) : plural(name)
-}
-
-type MigrationCreateFileNameArgs = {
-  model: Model
-  dbOptions: DbOptions
-  timestamp: number
-}
-export function migrationCreateFilename({
-  model,
-  dbOptions,
-  timestamp,
-}: MigrationCreateFileNameArgs): string {
-  return `${timestamp}-create-${dbTableName({ model, dbOptions })}.js`
-}
-
-export function migrationForeignKeysFilename(timestamp: number): string {
-  return `${timestamp}-add-foreign-keys.js`
 }
 
 type DbTableNameArgs = {
@@ -151,26 +38,6 @@ type DbTableNameArgs = {
 export function dbTableName({ model, dbOptions }: DbTableNameArgs): string {
   const casedName = tableCaseByDbCaseStyle(model.name, dbOptions.caseStyle)
   return nounFormByDbNounForm(casedName, dbOptions.nounForm)
-}
-
-type GetTimestampFieldsTemplateArgs = {
-  dbOptions: DbOptions
-}
-export function getTimestampFields({ dbOptions }: GetTimestampFieldsTemplateArgs): Field[] {
-  if (!dbOptions.timestamps) return []
-  const createdAt: Field = {
-    id: shortid(),
-    name: caseByDbCaseStyle('created at', dbOptions.caseStyle),
-    type: dateTimeDataType(),
-  }
-
-  const updatedAt: Field = {
-    id: shortid(),
-    name: caseByDbCaseStyle('updated at', dbOptions.caseStyle),
-    type: dateTimeDataType(),
-  }
-
-  return [createdAt, updatedAt]
 }
 
 export type Reference = {
@@ -202,6 +69,26 @@ export function getDbColumnFields({
       return [field, fr?.[1] || null]
     })
     .concat(fkFields.filter(([field]) => !fields.some((f) => namesEq(field.name, f.name))))
+}
+
+type GetTimestampFieldsTemplateArgs = {
+  dbOptions: DbOptions
+}
+function getTimestampFields({ dbOptions }: GetTimestampFieldsTemplateArgs): Field[] {
+  if (!dbOptions.timestamps) return []
+  const createdAt: Field = {
+    id: shortid(),
+    name: caseByDbCaseStyle('created at', dbOptions.caseStyle),
+    type: dateTimeDataType(),
+  }
+
+  const updatedAt: Field = {
+    id: shortid(),
+    name: caseByDbCaseStyle('updated at', dbOptions.caseStyle),
+    type: dateTimeDataType(),
+  }
+
+  return [createdAt, updatedAt]
 }
 
 type GetFkFieldsArgs = {
@@ -391,44 +278,6 @@ const normalizeModel = ({ model, dbOptions }: NormalizeModelArgs): Model => {
   return { ...model, fields: getFieldsWithPk({ model, dbOptions }) }
 }
 
-export function dedupModels(models: Model[]): Model[] {
-  const visitedModels: Record<string, Model> = {}
-  const names: string[] = []
-  models.forEach((model) => {
-    const name = noCase(model.name)
-    const visitedModel = visitedModels[name]
-    if (visitedModel) {
-      visitedModels[name] = mergeFields(visitedModel, model)
-    } else {
-      visitedModels[name] = model
-      names.push(name)
-    }
-  })
-
-  return names.map((name) => visitedModels[name])
-}
-
-function mergeFields(x: Model, y: Model): Model {
-  const xHasPk = x.fields.some((f) => f.primaryKey)
-
-  const [, yDiffs] = y.fields.reduce(
-    (acc, y_) => {
-      const { primaryKey: _, ...yWithoutPk } = y_
-      const y = xHasPk ? yWithoutPk : y_
-      if (x.fields.some((x) => namesEqSingular(x.name, y.name))) {
-        acc[0].push(y)
-      } else {
-        acc[1].push(y)
-      }
-      return acc
-    },
-    [[], []] as [Field[], Field[]],
-  )
-
-  const fields = dedupBy([...x.fields, ...yDiffs], (f) => normalize(f.name))
-  return { ...x, fields }
-}
-
 export function getJoinTables(schema: Schema, dbOptions: DbOptions): Model[] {
   const modelById = arrayToLookup(schema.models, (m) => m.id)
   return schema.models
@@ -530,31 +379,6 @@ export function nextTimestamp(timestamps: MigrationTimestamps): number {
   return currMax ? currMax + 10 : toNumericTimestamp(now())
 }
 
-type FieldTemplateArgs = {
-  field: Field
-  dbOptions: DbOptions
-  define?: boolean
-}
-export function fieldTemplate({ field, dbOptions, define }: FieldTemplateArgs): string {
-  const comment = notSupportedComment(field.type, dbOptions.sqlDialect)
-
-  return lines([
-    noSupportedDetails(field.type, dbOptions.sqlDialect),
-    `${comment}${camelCase(field.name)}: {`,
-    lines(fieldOptions({ field, dbOptions, define }), {
-      depth: 2,
-      separator: ',',
-      prefix: comment,
-    }),
-    `${comment}}`,
-  ])
-}
-
-export type ModelAssociation = {
-  model: Model
-  association: Association
-}
-
 export function notSupportedComment(type: DataType, dialect: SqlDialect): string {
   return dataTypeNotSupported(type, dialect) ? '// ' : ''
 }
@@ -566,70 +390,53 @@ export function noSupportedDetails(type: DataType, dialect: SqlDialect): string 
   return `//// ${typeDisplay} not supported for ${displaySqlDialect(dialect)}`
 }
 
-type FieldOptionsArgs = {
-  field: Field
+type GetFieldsWithIdArgs = {
+  model: Model
   dbOptions: DbOptions
-  define?: boolean
+}
+function getFieldsWithPk({ model, dbOptions }: GetFieldsWithIdArgs): Field[] {
+  const pks = model.fields.filter((f) => f.primaryKey)
+
+  // Don't apply any prefixes if pk is composite
+  if (pks.length > 1) return model.fields
+  // Add explicit pk field for TypeScript classes
+  if (pks.length === 0) return [idField({ model, dbOptions }), ...model.fields]
+  // Prefix pk with model name if pk is standard  format and prefixPk option is true
+  return model.fields.map((field) => prefixPk({ field, model, dbOptions }))
 }
 
-export function fieldOptions({
-  field: { name, type, required, primaryKey, unique },
-  define,
-  dbOptions: { caseStyle },
-}: FieldOptionsArgs): (string | null)[] {
-  return [
-    typeField(type),
-    defineField(name, caseStyle, define),
-    primaryKeyField(primaryKey),
-    autoincrementField(type),
-    allowNullField(required),
-    uniqueField(unique),
-    defaultField(type),
-  ]
+type PrefixPkArgs = {
+  field: Field
+  model: Model
+  dbOptions: DbOptions
+}
+function prefixPk({ field, model, dbOptions }: PrefixPkArgs): Field {
+  if (dbOptions.prefixPks === null || !field.primaryKey) return field
+
+  const name = snakeCase(field.name)
+  const isStandard = name === 'id' || name === snakeCase(`${model.name}_id`)
+  if (!isStandard) return field
+
+  return { ...field, name: getPkName({ model, dbOptions }) }
 }
 
-function typeField(dataType: DataType): string {
-  return `type: ${displaySequelizeDataType(dataType)}`
+type IdFieldArgs = {
+  model: Model
+  dbOptions: DbOptions
 }
+const idField = ({ model, dbOptions }: IdFieldArgs): Field => ({
+  id: shortid(),
+  name: getPkName({ model, dbOptions }),
+  type: { type: DataTypeType.Integer },
+  primaryKey: true,
+  generated: true,
+})
 
-function defineField(name: string, caseStyle: DbCaseStyle, define?: boolean): string | null {
-  return define ? `field: '${caseByDbCaseStyle(name, caseStyle)}'` : null
+type GetPkNameArgs = {
+  model: Model
+  dbOptions: DbOptions
 }
-
-function allowNullField(required?: boolean): string | null {
-  return required === undefined ? null : `allowNull: ${!required}`
-}
-
-function primaryKeyField(primaryKey?: boolean): string | null {
-  return primaryKey ? `primaryKey: ${primaryKey}` : null
-}
-
-function uniqueField(unique?: boolean): string | null {
-  return unique === undefined ? null : `unique: ${unique}`
-}
-
-function autoincrementField(dataType: DataType): string | null {
-  return dataType.type === DataTypeType.Integer && dataType.autoincrement !== undefined
-    ? `autoIncrement: ${dataType.autoincrement}`
-    : null
-}
-
-function defaultField(dataType: DataType) {
-  if (dataType.type === DataTypeType.DateTime && dataType.defaultNow) {
-    return `defaultValue: DataTypes.NOW`
-  }
-
-  if (dataType.type === DataTypeType.Date && dataType.defaultNow) {
-    return `defaultValue: DataTypes.NOW`
-  }
-
-  if (dataType.type === DataTypeType.Time && dataType.defaultNow) {
-    return `defaultValue: DataTypes.NOW`
-  }
-
-  if (dataType.type === DataTypeType.Uuid && dataType.defaultVersion) {
-    return `defaultValue: ${sequelizeUuidVersion(dataType.defaultVersion)}`
-  }
-
-  return null
+const getPkName = ({ model, dbOptions }: GetPkNameArgs): string => {
+  if (!dbOptions.prefixPks) return 'id'
+  return caseByDbCaseStyle(`${model.name} id`, dbOptions.caseStyle)
 }

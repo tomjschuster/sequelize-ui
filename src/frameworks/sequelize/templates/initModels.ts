@@ -11,7 +11,8 @@ import {
 } from '@src/core/schema'
 import { arrayToLookup } from '@src/utils/array'
 import { camelCase, pascalCase, plural, singular } from '@src/utils/string'
-import { getOtherKey, modelName } from '../utils/helpers'
+import { getOtherKey } from '../utils/helpers'
+import { modelName } from '../utils/model'
 
 export type InitModelsTemplateArgs = {
   schema: Schema

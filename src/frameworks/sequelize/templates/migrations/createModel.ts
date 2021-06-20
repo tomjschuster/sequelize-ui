@@ -1,7 +1,22 @@
 import { blank, indent, lines } from '@src/core/codegen'
 import { DbOptions } from '@src/core/database'
 import { Model, Schema } from '@src/core/schema'
-import { dbTableName, fieldTemplate, getDbColumnFields } from '../../utils/helpers'
+import { fieldTemplate } from '../../utils/field'
+import { dbTableName, getDbColumnFields } from '../../utils/helpers'
+
+type MigrationCreateFileNameArgs = {
+  model: Model
+  dbOptions: DbOptions
+  timestamp: number
+}
+
+export function migrationCreateFilename({
+  model,
+  dbOptions,
+  timestamp,
+}: MigrationCreateFileNameArgs): string {
+  return `${timestamp}-create-${dbTableName({ model, dbOptions })}.js`
+}
 
 type CreateModelMigrationArgs = {
   model: Model

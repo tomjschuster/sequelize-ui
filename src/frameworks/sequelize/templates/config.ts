@@ -11,7 +11,7 @@ import {
   sqlDialectEnvVar,
 } from '@src/core/database'
 import { Schema } from '@src/core/schema'
-import { sqlDialiectConfigValue } from '../utils/helpers'
+import { sqlDialiectConfigValue } from '../utils/config'
 
 export type DbTemplateArgs = {
   schema: Schema

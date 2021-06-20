@@ -1,7 +1,8 @@
 import { lines } from '@src/core/codegen'
 import { DbOptions } from '@src/core/database'
 import { AssociationTypeType, DataType, DataTypeType, Model } from '@src/core/schema'
-import { hasJsonType, modelName } from '../../utils/helpers'
+import { hasJsonType } from '../../utils/dataTypes'
+import { modelName } from '../../utils/model'
 import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
 
 export type ModelImportsTemplateArgs = {

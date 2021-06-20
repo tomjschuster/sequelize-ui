@@ -6,24 +6,19 @@ import { config } from './templates/config'
 import { dbTemplate } from './templates/db'
 import { gitignoreTemplate } from './templates/gitignore'
 import { initModelsTemplate } from './templates/initModels'
-import { addForeignKeysMigration } from './templates/migrations/addForeignKeys'
-import { createModelMigration } from './templates/migrations/createModel'
+import {
+  addForeignKeysMigration,
+  migrationForeignKeysFilename,
+} from './templates/migrations/addForeignKeys'
+import { createModelMigration, migrationCreateFilename } from './templates/migrations/createModel'
 import { modelTemplate } from './templates/model'
 import { packageJsonTemplate } from './templates/packageJson'
 import { serverTemplate } from './templates/server'
 import { tsconfigTemplate } from './templates/tsconfig'
 import { typesTemplate } from './templates/types'
-import {
-  dedupModels,
-  getJoinTables,
-  hasJsonType,
-  migrationCreateFilename,
-  migrationForeignKeysFilename,
-  migrationTimestamp,
-  modelName,
-  nextTimestamp,
-  normalizeSchema,
-} from './utils/helpers'
+import { hasJsonType } from './utils/dataTypes'
+import { getJoinTables, migrationTimestamp, nextTimestamp, normalizeSchema } from './utils/helpers'
+import { dedupModels, modelName } from './utils/model'
 
 type GenerateSequelizeProjectArgs = {
   schema: Schema
