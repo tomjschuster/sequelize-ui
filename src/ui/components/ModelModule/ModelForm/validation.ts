@@ -1,6 +1,7 @@
 import { MAX_IDENTIFIER_LENGTH } from '@src/core/database'
 import {
   Association,
+  associationsAreSame,
   associationsHaveSameForm,
   AssociationTypeType,
   Field,
@@ -8,7 +9,6 @@ import {
   Schema,
   ThroughType,
 } from '@src/core/schema'
-import { associationName } from '@src/frameworks/sequelize/utils/associations'
 import { arrayToLookup } from '@src/utils/array'
 import { deepEmpty } from '@src/utils/object'
 import {
@@ -216,15 +216,16 @@ function findDuplicateAssociationName(
   const targetModel: Model | undefined = modelById.get(association.targetModelId)
   if (!targetModel) return undefined
 
-  // TODO remove dependency on sequelize framework
-  const name = associationName({ association, targetModel })
-
   return model.associations.find((a) => {
     if (a.id === association.id) return false
     const aTargetModel: Model | undefined = modelById.get(a.targetModelId)
     if (!aTargetModel) return false
-    // TODO remove dependency on sequelize framework
-    const aName = associationName({ association: a, targetModel: aTargetModel })
-    return namesEqSingular(name, aName)
+
+    return associationsAreSame({
+      associationA: association,
+      targetNameA: targetModel.name,
+      associationB: a,
+      targetNameB: aTargetModel.name,
+    })
   })
 }

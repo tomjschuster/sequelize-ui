@@ -6,7 +6,7 @@
 
 #### Refactor
 
-- Refactor sequelize framework helpers
+- Refactor sequelize migration helpers
 - Extract validation to schema with tests
 
 #### Testing

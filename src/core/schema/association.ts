@@ -1,3 +1,5 @@
+import { namesEqSingular, normalize } from '@src/utils/string'
+
 export type Association<T extends AssociationType = AssociationType> = {
   id: string
   type: T
@@ -161,4 +163,26 @@ export function associationIsCircular(
           association.targetModelId === a.sourceModelId),
     )
   )
+}
+
+type AssociationsAreSameArgs = {
+  associationA: Association
+  targetNameA: string
+  associationB: Association
+  targetNameB: string
+}
+export function associationsAreSame({
+  associationA,
+  targetNameA,
+  associationB,
+  targetNameB,
+}: AssociationsAreSameArgs): boolean {
+  return namesEqSingular(
+    normalizeAssociationName(associationA, targetNameA),
+    normalizeAssociationName(associationB, targetNameB),
+  )
+}
+
+function normalizeAssociationName(association: Association, targetModelName: string): string {
+  return association.alias ? normalize(association.alias) : normalize(targetModelName)
 }
