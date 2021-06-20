@@ -8,7 +8,7 @@ import {
   Schema,
   ThroughType,
 } from '@src/core/schema'
-import { associationName } from '@src/frameworks/sequelize/helpers'
+import { associationName } from '@src/frameworks/sequelize/utils/helpers'
 import { arrayToLookup } from '@src/utils/array'
 import { deepEmpty } from '@src/utils/object'
 import {

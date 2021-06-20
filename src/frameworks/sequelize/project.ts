@@ -14,16 +14,6 @@ import { arrayToLookup, dedupBy } from '@src/utils/array'
 import { addSeconds, now, toNumericTimestamp } from '@src/utils/dateTime'
 import { kebabCase, namesEqSingular, noCase, normalize } from '@src/utils/string'
 import shortid from 'shortid'
-import {
-  getFieldsWithPk,
-  getForeignKey,
-  getOtherKey,
-  hasJsonType,
-  idField,
-  migrationCreateFilename,
-  migrationForeignKeysFilename,
-  modelName,
-} from './helpers'
 import { config } from './templates/config'
 import { dbTemplate } from './templates/db'
 import { gitignoreTemplate } from './templates/gitignore'
@@ -35,6 +25,16 @@ import { packageJsonTemplate } from './templates/packageJson'
 import { serverTemplate } from './templates/server'
 import { tsconfigTemplate } from './templates/tsconfig'
 import { typesTemplate } from './templates/types'
+import {
+  getFieldsWithPk,
+  getForeignKey,
+  getOtherKey,
+  hasJsonType,
+  idField,
+  migrationCreateFilename,
+  migrationForeignKeysFilename,
+  modelName,
+} from './utils/helpers'
 
 type GenerateSequelizeProjectArgs = {
   schema: Schema

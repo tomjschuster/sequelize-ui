@@ -13,8 +13,8 @@ import {
   dataTypeToTypeScript,
   displaySequelizeDataType,
   sequelizeUuidVersion,
-} from '../../dataTypes'
-import { associationName, modelName, pkIsDefault } from '../../helpers'
+} from '../../utils/dataTypes'
+import { associationName, modelName, pkIsDefault } from '../../utils/helpers'
 import { ModelAssociation, noSupportedDetails, notSupportedComment } from './common'
 
 export type ModelClassTempalteArgs = {

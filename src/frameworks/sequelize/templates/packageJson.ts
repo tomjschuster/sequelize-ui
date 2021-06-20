@@ -2,7 +2,7 @@ import { lines } from '@src/core/codegen'
 import { DbOptions, SqlDialect } from '@src/core/database'
 import { Schema } from '@src/core/schema'
 import { kebabCase } from '@src/utils/string'
-import { dbCreateSupported } from '../scripts'
+import { dbCreateSupported } from '../utils/scripts'
 
 export type PackageJsonTemplateArgs = {
   schema: Schema

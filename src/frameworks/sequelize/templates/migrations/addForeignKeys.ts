@@ -1,7 +1,7 @@
 import { blank, lines } from '@src/core/codegen'
 import { caseByDbCaseStyle, DbOptions } from '@src/core/database'
 import { Field, Model, Schema } from '@src/core/schema'
-import { dbTableName, getDbColumnFields, Reference } from '../../helpers'
+import { dbTableName, getDbColumnFields, Reference } from '../../utils/helpers'
 
 type Constraint = {
   sourceTable: string

@@ -2,8 +2,8 @@ import { blank, lines } from '@src/core/codegen'
 import { DbOptions } from '@src/core/database'
 import { Field, isDateTimeType, Model } from '@src/core/schema'
 import { camelCase } from '@src/utils/string'
-import { dataTypeToTypeScript } from '../../dataTypes'
-import { modelName, pkIsDefault } from '../../helpers'
+import { dataTypeToTypeScript } from '../../utils/dataTypes'
+import { modelName, pkIsDefault } from '../../utils/helpers'
 import { noSupportedDetails, notSupportedComment } from './common'
 
 type ModelTypesTemplateArgs = {
