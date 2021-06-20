@@ -45,10 +45,8 @@ describe('schema dataTypes', () => {
       [manyToManyModel, 'many to many'],
     ]
 
-    describe.each(cases)('', (a, expected) => {
-      it(`(${a.type.type}) === ${expected}`, () => {
-        expect(displayAssociation(a)).toEqual(expected)
-      })
+    it.each(cases)('displayAssociationType(%o) === %s', (a, expected) => {
+      expect(displayAssociation(a)).toEqual(expected)
     })
   })
 
@@ -60,10 +58,8 @@ describe('schema dataTypes', () => {
       [AssociationTypeType.ManyToMany, 'many to many'],
     ]
 
-    describe.each(cases)('', (type, expected) => {
-      it(`(${type}) === ${expected}`, () => {
-        expect(displayAssociationTypeType(type)).toEqual(expected)
-      })
+    describe.each(cases)('displayAssociationTypeType(%s) === %s', (type, expected) => {
+      expect(displayAssociationTypeType(type)).toEqual(expected)
     })
   })
 
@@ -73,10 +69,8 @@ describe('schema dataTypes', () => {
       [ThroughType.ThroughModel, 'Through model'],
     ]
 
-    describe.each(cases)('', (type, expected) => {
-      it(`(${type}) === ${expected}`, () => {
-        expect(displayThroughType(type)).toEqual(expected)
-      })
+    describe.each(cases)('displayThroughType(%s) === %s', (type, expected) => {
+      expect(displayThroughType(type)).toEqual(expected)
     })
   })
 
@@ -112,10 +106,8 @@ describe('schema dataTypes', () => {
       [manyToManyModel, manyToManyTable, true],
       [manyToManyModel, manyToManyModel, true],
     ]
-    describe.each(cases)('', (a, b, expected) => {
-      it(`(${a.type.type}, ${b.type.type}) === ${expected}`, () => {
-        expect(associationsHaveSameForm(a, b)).toEqual(expected)
-      })
+    it.each(cases)('associationsHaveSameForm(%o, %o) === %s', (a, b, expected) => {
+      expect(associationsHaveSameForm(a, b)).toEqual(expected)
     })
   })
 
@@ -127,10 +119,8 @@ describe('schema dataTypes', () => {
       [manyToManyTableType_, false],
       [manyToManyModelType_, false],
     ]
-    describe.each(cases)('', (type, expected) => {
-      it(`(${type.type}) === ${expected}`, () => {
-        expect(associationTypeIsSingular(type)).toEqual(expected)
-      })
+    it.each(cases)('associationTypeIsSingular(%o) === %s', (type, expected) => {
+      expect(associationTypeIsSingular(type)).toEqual(expected)
     })
   })
 
@@ -142,10 +132,8 @@ describe('schema dataTypes', () => {
       [manyToManyTableType_, true],
       [manyToManyModelType_, true],
     ]
-    describe.each(cases)('', (type, expected) => {
-      it(`(${type.type})=== ${'TODO'}`, () => {
-        expect(associationTypeIsPlural(type)).toEqual(expected)
-      })
+    it.each(cases)('associationTypeIsPlural(%o) === %s', (type, expected) => {
+      expect(associationTypeIsPlural(type)).toEqual(expected)
     })
   })
 
