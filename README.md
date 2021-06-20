@@ -6,6 +6,7 @@
 
 #### Refactor
 
+- Refactor sequelize framework helpers
 - Extract validation to schema with tests
 
 #### Testing
@@ -17,6 +18,7 @@
 
 - sql
   - verify all tables/columns for each db type with demo schema
+  - review sequelize framework test coverage
 
 #### Documentation
 
@@ -27,9 +29,6 @@
 
 #### Codegen
 
-- Migrations
-  - Test dialects
-  - Refactor TODO's
 - JavaScript (post launch, link to legacy instead)
 
 #### API
