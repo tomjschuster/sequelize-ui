@@ -6,6 +6,7 @@ import {
   namesEqSingular,
   nameStartsWithNumber,
   noCase,
+  normalize,
   pascalCase,
   plural,
   sentenceCase,
@@ -278,6 +279,24 @@ describe('string utils', () => {
     describe.each(cases)('', (a, expected) => {
       it(`(${a}) === ${expected}`, () => {
         expect(nameStartsWithNumber(a)).toEqual(expected)
+      })
+    })
+  })
+
+  describe('normalize', () => {
+    const cases: [a: string, expected: string][] = [
+      ['foo bar', 'foo bar'],
+      ['foo_bar', 'foo bar'],
+      ['fooBar', 'foo bar'],
+      ['FooBar', 'foo bar'],
+      ['FOO_BAR', 'foo bar'],
+      ['foo-bar', 'foo bar'],
+      [' !@#$%^&*()-_=+foo!@#$%^&*()-_=+bar!@#$%^&*()-_=+ ', 'foo bar'],
+    ]
+
+    describe.each(cases)('', (a, expected) => {
+      it(`(${a}) === ${expected}`, () => {
+        expect(normalize(a)).toEqual(expected)
       })
     })
   })

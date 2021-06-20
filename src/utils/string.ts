@@ -97,6 +97,6 @@ export function nameStartsWithNumber(x?: string): boolean {
   return /^\d/.test(normalize(x))
 }
 
-function normalize(name: string): string {
+export function normalize(name: string): string {
   return noCase(name)
 }

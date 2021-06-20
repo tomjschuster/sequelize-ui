@@ -3,15 +3,16 @@ import { directory, DirectoryItem, file } from '@src/core/files'
 import {
   Association,
   AssociationTypeType,
+  belongsToType,
   Field,
   Model,
   Schema,
   ThroughType,
   typeWithoutOptions,
 } from '@src/core/schema'
-import { arrayToLookup } from '@src/utils/array'
+import { arrayToLookup, dedupBy } from '@src/utils/array'
 import { addSeconds, now, toNumericTimestamp } from '@src/utils/dateTime'
-import { kebabCase, namesEqSingular, noCase } from '@src/utils/string'
+import { kebabCase, namesEqSingular, noCase, normalize } from '@src/utils/string'
 import shortid from 'shortid'
 import {
   getFieldsWithPk,
@@ -47,6 +48,7 @@ export function generateSequelizeProject({
   const schema = normalizeSchema({ schema: nonNormalizedSchema, dbOptions })
   const joinTables = getJoinTables(schema, dbOptions)
   const migrationModels = dedupModels([...schema.models, ...joinTables])
+  const schemaWithMigrations = { ...schema, models: migrationModels }
   const migrationTimestamps = migrationModels.reduce(migrationTimestamp, new Map())
 
   return directory(kebabCase(schema.name), [
@@ -66,7 +68,7 @@ export function generateSequelizeProject({
               // TODO, check that has foreign keys
               file(
                 migrationForeignKeysFilename(nextTimestamp(migrationTimestamps)),
-                addForeignKeysMigration({ schema, dbOptions }),
+                addForeignKeysMigration({ schema: schemaWithMigrations, dbOptions }),
               ),
             ),
         )
@@ -136,7 +138,8 @@ function mergeFields(x: Model, y: Model): Model {
     [[], []] as [Field[], Field[]],
   )
 
-  return { ...x, fields: [...x.fields, ...yDiffs] }
+  const fields = dedupBy([...x.fields, ...yDiffs], (f) => normalize(f.name))
+  return { ...x, fields }
 }
 
 function getJoinTables(schema: Schema, dbOptions: DbOptions): Model[] {
@@ -152,6 +155,8 @@ function getJoinTableModel(
   dbOptions: DbOptions,
 ): Model | null {
   if (association.type.type !== AssociationTypeType.ManyToMany) return null
+
+  const id = shortid()
 
   const tableName =
     association.type.through.type === ThroughType.ThroughTable
@@ -179,6 +184,13 @@ function getJoinTableModel(
     primaryKey: true,
   }
 
+  const sourceAssoc: Association = {
+    id: shortid(),
+    sourceModelId: id,
+    targetModelId: source.id,
+    type: belongsToType(),
+  }
+
   const targetFk = getForeignKey({ model: target, association, modelById, dbOptions })
 
   const targetPk =
@@ -191,13 +203,20 @@ function getJoinTableModel(
     primaryKey: true,
   }
 
-  return {
+  const targetAssoc: Association = {
     id: shortid(),
+    sourceModelId: id,
+    targetModelId: target.id,
+    type: belongsToType(),
+  }
+
+  return {
+    id,
     name: tableName,
     createdAt: source.createdAt,
     updatedAt: source.updatedAt,
     fields: [sourceFkField, targetFkField],
-    associations: [],
+    associations: [sourceAssoc, targetAssoc],
   }
 }
 
