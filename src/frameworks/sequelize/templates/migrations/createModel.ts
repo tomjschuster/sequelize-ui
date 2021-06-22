@@ -1,8 +1,8 @@
 import { blank, indent, lines } from '@src/core/codegen'
 import { DbOptions } from '@src/core/database'
-import { Model, Schema } from '@src/core/schema'
+import { Model } from '@src/core/schema'
 import { fieldTemplate } from '../../utils/field'
-import { dbTableName, getDbColumnFields } from '../../utils/migrations'
+import { dbTableName } from '../../utils/migrations'
 
 type MigrationCreateFileNameArgs = {
   model: Model
@@ -20,27 +20,22 @@ export function migrationCreateFilename({
 
 type CreateModelMigrationArgs = {
   model: Model
-  schema: Schema
   dbOptions: DbOptions
 }
 
-export function createModelMigration({
-  model,
-  schema,
-  dbOptions,
-}: CreateModelMigrationArgs): string {
+export function createModelMigration({ model, dbOptions }: CreateModelMigrationArgs): string {
   return lines([
     // TODO refactor type defs to use either Sequelize or DataTypes
     `const DataTypes = require('sequelize').DataTypes`,
     blank(),
     `module.exports = {`,
-    up({ model, schema, dbOptions }),
-    down({ model, schema, dbOptions }),
+    up({ model, dbOptions }),
+    down({ model, dbOptions }),
     `};`,
   ])
 }
 
-function up({ model, schema, dbOptions }: CreateModelMigrationArgs): string {
+function up({ model, dbOptions }: CreateModelMigrationArgs): string {
   const tableName = dbTableName({ model, dbOptions })
   return lines(
     [
@@ -49,9 +44,7 @@ function up({ model, schema, dbOptions }: CreateModelMigrationArgs): string {
         [
           `await queryInterface.createTable('${tableName}', {`,
           lines(
-            getDbColumnFields({ model, schema, dbOptions }).map(([field]) =>
-              fieldTemplate({ field, dbOptions, define: true }),
-            ),
+            model.fields.map((field) => fieldTemplate({ field, dbOptions, define: true })),
             { depth: 2, separator: ',' },
           ),
           `})`,

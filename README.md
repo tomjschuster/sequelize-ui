@@ -6,7 +6,7 @@
 
 #### Refactor
 
-- Refactor sequelize migration helpers
+- Refactor getFkFields and getJoinTables
 - Extract validation to schema with tests
 
 #### Testing

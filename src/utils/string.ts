@@ -77,7 +77,7 @@ export function namesEq(a?: string, b?: string): boolean {
 export function namesEqSingular(a?: string, b?: string): boolean {
   if (!a && !b) return true
   if (!a || !b) return false
-  return singular(normalize(a)) === singular(normalize(b))
+  return normalizeSingular(a) === normalizeSingular(b)
 }
 
 /** Check if normalized name is empty */
@@ -99,4 +99,8 @@ export function nameStartsWithNumber(x?: string): boolean {
 
 export function normalize(name: string): string {
   return noCase(name)
+}
+
+export function normalizeSingular(name: string): string {
+  return singular(noCase(name))
 }

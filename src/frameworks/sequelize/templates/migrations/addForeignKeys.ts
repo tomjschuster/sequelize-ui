@@ -1,7 +1,6 @@
 import { blank, lines } from '@src/core/codegen'
 import { caseByDbCaseStyle, DbOptions } from '@src/core/database'
-import { Field, Model, Schema } from '@src/core/schema'
-import { dbTableName, getDbColumnFields, Reference } from '../../utils/migrations'
+import { dbTableName, ModelWithReferences } from '../../utils/migrations'
 
 export function migrationForeignKeysFilename(timestamp: number): string {
   return `${timestamp}-add-foreign-keys.js`
@@ -16,15 +15,15 @@ type Constraint = {
 }
 
 type AddForeignKeysMigrationArgs = {
-  schema: Schema
+  models: ModelWithReferences[]
   dbOptions: DbOptions
 }
 export function addForeignKeysMigration({
-  schema,
   dbOptions,
+  models,
 }: AddForeignKeysMigrationArgs): string {
-  const constraints: Constraint[] = schema.models.flatMap((model) =>
-    getModelConstraints({ model, schema, dbOptions }),
+  const constraints: Constraint[] = models.flatMap((model) =>
+    getModelConstraints({ model, dbOptions }),
   )
 
   return lines([
@@ -85,25 +84,25 @@ function down({ constraints }: DownArgs): string {
 }
 
 type GetModelConstraintsArgs = {
-  model: Model
-  schema: Schema
+  model: ModelWithReferences
   dbOptions: DbOptions
 }
-function getModelConstraints({ model, schema, dbOptions }: GetModelConstraintsArgs): Constraint[] {
+function getModelConstraints({ model, dbOptions }: GetModelConstraintsArgs): Constraint[] {
   const sourceTable = dbTableName({ model, dbOptions })
 
-  return getDbColumnFields({ model, schema, dbOptions })
-    .filter((fr): fr is [Field, Reference] => !!fr[1])
-    .map<Constraint>(([field, reference]) => {
+  return model.fields
+    .map<Constraint | null>((field) => {
+      if (!field.reference) return null
       const sourceColumn = caseByDbCaseStyle(field.name, dbOptions.caseStyle)
       return {
         sourceTable,
         sourceColumn,
-        targetTable: reference.table,
-        targetColumn: reference.column,
+        targetTable: field.reference.table,
+        targetColumn: field.reference.column,
         name: `${sourceTable}_${sourceColumn}_fkey`,
       }
     })
+    .filter((c): c is Constraint => !!c)
 }
 
 function constraintFields({

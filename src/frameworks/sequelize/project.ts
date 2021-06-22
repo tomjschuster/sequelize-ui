@@ -17,8 +17,8 @@ import { serverTemplate } from './templates/server'
 import { tsconfigTemplate } from './templates/tsconfig'
 import { typesTemplate } from './templates/types'
 import { hasJsonType } from './utils/dataTypes'
-import { getJoinTables, migrationTimestamp, nextTimestamp } from './utils/migrations'
-import { dedupModels, modelName } from './utils/model'
+import { getMigrationModels, migrationTimestamp, nextTimestamp } from './utils/migrations'
+import { modelName } from './utils/model'
 import { normalizeSchema } from './utils/schema'
 
 type GenerateSequelizeProjectArgs = {
@@ -31,9 +31,7 @@ export function generateSequelizeProject({
   dbOptions,
 }: GenerateSequelizeProjectArgs): DirectoryItem {
   const schema = normalizeSchema({ schema: nonNormalizedSchema, dbOptions })
-  const joinTables = getJoinTables(schema, dbOptions)
-  const migrationModels = dedupModels([...schema.models, ...joinTables])
-  const schemaWithMigrations = { ...schema, models: migrationModels }
+  const migrationModels = getMigrationModels({ schema, dbOptions })
   const migrationTimestamps = migrationModels.reduce(migrationTimestamp, new Map())
 
   return directory(kebabCase(schema.name), [
@@ -46,13 +44,13 @@ export function generateSequelizeProject({
             .map(([timestamp, model]) =>
               file(
                 migrationCreateFilename({ model, dbOptions, timestamp }),
-                createModelMigration({ model, schema, dbOptions }),
+                createModelMigration({ model, dbOptions }),
               ),
             )
             .concat(
               file(
                 migrationForeignKeysFilename(nextTimestamp(migrationTimestamps)),
-                addForeignKeysMigration({ schema: schemaWithMigrations, dbOptions }),
+                addForeignKeysMigration({ models: migrationModels, dbOptions }),
               ),
             ),
         )

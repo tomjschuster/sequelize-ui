@@ -18,10 +18,19 @@ import {
 } from '@src/core/schema'
 import { arrayToLookup, dedupBy } from '@src/utils/array'
 import { addSeconds, now, toNumericTimestamp } from '@src/utils/dateTime'
-import { namesEq } from '@src/utils/string'
+import { namesEq, normalize, normalizeSingular } from '@src/utils/string'
 import shortid from 'shortid'
 import { getForeignKey, getOtherKey } from './associations'
 import { idField, prefixPk } from './field'
+import { dedupModels } from './model'
+
+export type ModelWithReferences = Omit<Model, 'fields'> & { fields: FieldWithReference[] }
+export type FieldWithReference = Field & { reference?: Reference }
+
+export type Reference = {
+  table: string
+  column: string
+}
 
 type DbTableNameArgs = {
   model: Model
@@ -32,34 +41,38 @@ export function dbTableName({ model, dbOptions }: DbTableNameArgs): string {
   return nounFormByDbNounForm(casedName, dbOptions.nounForm)
 }
 
-export type Reference = {
-  table: string
-  column: string
+type GetMigrationModelsArgs = {
+  schema: Schema
+  dbOptions: DbOptions
+}
+export function getMigrationModels({
+  schema,
+  dbOptions,
+}: GetMigrationModelsArgs): ModelWithReferences[] {
+  const joinTables = getJoinTables(schema, dbOptions)
+  const modelsWithReferences = schema.models.map((model) =>
+    addDbColumnFields({ model, schema, dbOptions }),
+  )
+  return dedupModels([...modelsWithReferences, ...joinTables])
 }
 
-type GetDbColumnFieldsArgs = {
+type AddDbColumnFields = {
   model: Model
   schema: Schema
   dbOptions: DbOptions
 }
-export function getDbColumnFields({
-  model,
-  schema,
-  dbOptions,
-}: GetDbColumnFieldsArgs): [Field, Reference | null][] {
-  const timestampFields = getTimestampFields({ dbOptions }).filter(
-    (field) => !model.fields.some((f) => namesEq(field.name, f.name)),
-  )
-  const fields = model.fields.concat(timestampFields)
-  const modelWithFields: Model = { ...model, fields }
-  const fkFields = getFkFields({ model: modelWithFields, schema, dbOptions })
+function addDbColumnFields({ model, schema, dbOptions }: AddDbColumnFields): ModelWithReferences {
+  const withTimestamps = addTimestampFields({ model, dbOptions })
+  return addReferences({ model: withTimestamps, schema, dbOptions })
+}
 
-  return fields
-    .map<[Field, Reference | null]>((field) => {
-      const fr = fkFields.find(([f]) => namesEq(field.name, f.name))
-      return [field, fr?.[1] || null]
-    })
-    .concat(fkFields.filter(([field]) => !fields.some((f) => namesEq(field.name, f.name))))
+type AddTimestampFieldsArgs = {
+  model: Model
+  dbOptions: DbOptions
+}
+function addTimestampFields({ model, dbOptions }: AddTimestampFieldsArgs): Model {
+  const fields = model.fields.concat(getTimestampFields({ dbOptions }))
+  return { ...model, fields: dedupBy(fields, (f) => normalizeSingular(f.name)) }
 }
 
 type GetTimestampFieldsTemplateArgs = {
@@ -82,17 +95,37 @@ function getTimestampFields({ dbOptions }: GetTimestampFieldsTemplateArgs): Fiel
   return [createdAt, updatedAt]
 }
 
+type AddReferencesArgs = {
+  model: Model
+  schema: Schema
+  dbOptions: DbOptions
+}
+function addReferences({ model, schema, dbOptions }: AddReferencesArgs): ModelWithReferences {
+  const fkFields = getFkFields({ model, schema, dbOptions })
+
+  const fields = dedupBy(
+    model.fields
+      .map<FieldWithReference>((field) => {
+        const fr = fkFields.find((f) => namesEq(field.name, f.name))
+        return { ...field, reference: fr?.reference }
+      })
+      .concat(fkFields),
+    (f) => normalize(f.name),
+  )
+
+  return { ...model, fields }
+}
+
 type GetFkFieldsArgs = {
   model: Model
   schema: Schema
   dbOptions: DbOptions
 }
-
-function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): [Field, Reference][] {
+function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): FieldWithReference[] {
   const modelById = arrayToLookup<Model>(schema.models, (m) => m.id)
   const sourceFields = model.associations
     .filter((a) => a.type.type === AssociationTypeType.BelongsTo)
-    .map<[Field, Reference] | null>((association) => {
+    .map<FieldWithReference | null>((association) => {
       const fk = getForeignKey({ model, association, modelById, dbOptions })
 
       const target = modelById.get(association.targetModelId)
@@ -111,9 +144,9 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): [Field, Ref
       const column = caseByDbCaseStyle(columnField.name, dbOptions.caseStyle)
       const field = { id: shortid(), name: fk, type: typeWithoutOptions(targetPk.type) }
 
-      return [field, { table, column }]
+      return { ...field, reference: { table, column } }
     })
-    .filter((fr): fr is [Field, Reference] => !!fr)
+    .filter((fr): fr is FieldWithReference => !!fr)
 
   const targetFields = schema.models
     .flatMap((m) => m.associations)
@@ -123,7 +156,7 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): [Field, Ref
           a.type.type === AssociationTypeType.HasMany) &&
         a.targetModelId === model.id,
     )
-    .map<[Field, Reference] | null>((association) => {
+    .map<FieldWithReference | null>((association) => {
       const source = modelById.get(association.sourceModelId)
       if (!source) {
         console.error(
@@ -141,9 +174,9 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): [Field, Ref
       const column = caseByDbCaseStyle(columnField.name, dbOptions.caseStyle)
       const field = { id: shortid(), name: fk, type: typeWithoutOptions(sourcePk.type) }
 
-      return [field, { table, column }]
+      return { ...field, reference: { table, column } }
     })
-    .filter((fr): fr is [Field, Reference] => !!fr)
+    .filter((fr): fr is FieldWithReference => !!fr)
 
   const hasPk = model.fields.some((f) => f.primaryKey)
   const joinFields = schema.models
@@ -154,7 +187,7 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): [Field, Ref
         a.type.through.type === ThroughType.ThroughModel &&
         a.type.through.modelId === model.id,
     )
-    .flatMap<[Field, Reference] | null>((association) => {
+    .flatMap<FieldWithReference | null>((association) => {
       const source = modelById.get(association.sourceModelId)
       const target = modelById.get(association.targetModelId)
       if (!source) {
@@ -200,15 +233,15 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): [Field, Ref
       }
 
       return [
-        [sourceField, { table: sourceTable, column: sourceColumn }],
-        [targetField, { table: targetTable, column: targetColumn }],
-      ] as ReadonlyArray<[Field, Reference]>
+        { ...sourceField, reference: { table: sourceTable, column: sourceColumn } },
+        { ...targetField, reference: { table: targetTable, column: targetColumn } },
+      ] as ReadonlyArray<FieldWithReference>
     })
-    .filter((fr): fr is [Field, Reference] => !!fr)
+    .filter((fr): fr is FieldWithReference => !!fr)
 
-  return dedupBy<[Field, Reference]>(
+  return dedupBy<FieldWithReference>(
     sourceFields.concat(targetFields).concat(joinFields),
-    ([field]) => field.name,
+    (field) => field.name,
   )
 }
 
