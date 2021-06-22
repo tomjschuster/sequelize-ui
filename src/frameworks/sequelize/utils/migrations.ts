@@ -127,24 +127,8 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): FieldWithRe
     .filter((a) => a.type.type === AssociationTypeType.BelongsTo)
     .map<FieldWithReference | null>((association) => {
       const fk = getForeignKey({ model, association, modelById, dbOptions })
-
       const target = modelById.get(association.targetModelId)
-
-      if (!target) {
-        console.error(
-          `Target model ${association.targetModelId} not found from model ${model.name}`,
-        )
-        return null
-      }
-
-      const targetPk =
-        target.fields.find((field) => field.primaryKey) || idField({ model: target, dbOptions })
-      const table = dbTableName({ model: target, dbOptions })
-      const columnField = prefixPk({ field: targetPk, model: target, dbOptions })
-      const column = caseByDbCaseStyle(columnField.name, dbOptions.caseStyle)
-      const field = { id: shortid(), name: fk, type: typeWithoutOptions(targetPk.type) }
-
-      return { ...field, reference: { table, column } }
+      return target ? getFieldWithReference({ model: target, fk, dbOptions }) : null
     })
     .filter((fr): fr is FieldWithReference => !!fr)
 
@@ -158,23 +142,8 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): FieldWithRe
     )
     .map<FieldWithReference | null>((association) => {
       const source = modelById.get(association.sourceModelId)
-      if (!source) {
-        console.error(
-          `Target model ${association.sourceModelId} not found from model ${model.name}`,
-        )
-        return null
-      }
-
-      const fk = getForeignKey({ model: source, association, modelById, dbOptions })
-
-      const sourcePk =
-        source.fields.find((field) => field.primaryKey) || idField({ model: source, dbOptions })
-      const table = dbTableName({ model: source, dbOptions })
-      const columnField = prefixPk({ field: sourcePk, model: source, dbOptions })
-      const column = caseByDbCaseStyle(columnField.name, dbOptions.caseStyle)
-      const field = { id: shortid(), name: fk, type: typeWithoutOptions(sourcePk.type) }
-
-      return { ...field, reference: { table, column } }
+      const fk = source && getForeignKey({ model: source, association, modelById, dbOptions })
+      return source && fk ? getFieldWithReference({ model: source, fk, dbOptions }) : null
     })
     .filter((fr): fr is FieldWithReference => !!fr)
 
@@ -188,54 +157,35 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): FieldWithRe
         a.type.through.modelId === model.id,
     )
     .flatMap<FieldWithReference | null>((association) => {
+      const primaryKey = hasPk ? undefined : true
+
       const source = modelById.get(association.sourceModelId)
+      const sourceFk = source && getForeignKey({ model: source, association, modelById, dbOptions })
+
+      const sourceField =
+        source &&
+        sourceFk &&
+        getFieldWithReference({
+          model: source,
+          fk: sourceFk,
+          dbOptions,
+          primaryKey,
+        })
+
       const target = modelById.get(association.targetModelId)
-      if (!source) {
-        console.error(
-          `Target model ${association.sourceModelId} not found from model ${model.name}`,
-        )
-        return null
-      }
-
-      if (!target) {
-        console.error(
-          `Target model ${association.targetModelId} not found from model ${model.name}`,
-        )
-        return null
-      }
-      const sourceFk = getForeignKey({ model: source, association, modelById, dbOptions })
-
-      const sourcePk =
-        source.fields.find((field) => field.primaryKey) || idField({ model: source, dbOptions })
-      const sourceTable = dbTableName({ model: source, dbOptions })
-      const sourceColumnField = prefixPk({ field: sourcePk, model: target, dbOptions })
-      const sourceColumn = caseByDbCaseStyle(sourceColumnField.name, dbOptions.caseStyle)
-
-      const sourceField = {
-        id: shortid(),
-        name: sourceFk,
-        type: typeWithoutOptions(sourcePk.type),
-        primaryKey: hasPk ? undefined : true,
-      }
-
       const targetFk = getOtherKey({ association, modelById, dbOptions })
-      const targetPk =
-        target.fields.find((field) => field.primaryKey) || idField({ model: target, dbOptions })
 
-      const targetTable = dbTableName({ model: target, dbOptions })
-      const targetColumnField = prefixPk({ field: targetPk, model: target, dbOptions })
-      const targetColumn = caseByDbCaseStyle(targetColumnField.name, dbOptions.caseStyle)
-      const targetField = {
-        id: shortid(),
-        name: targetFk,
-        type: typeWithoutOptions(targetPk.type),
-        primaryKey: hasPk ? undefined : true,
-      }
+      const targetField =
+        target &&
+        targetFk &&
+        getFieldWithReference({
+          model: target,
+          fk: targetFk,
+          dbOptions,
+          primaryKey,
+        })
 
-      return [
-        { ...sourceField, reference: { table: sourceTable, column: sourceColumn } },
-        { ...targetField, reference: { table: targetTable, column: targetColumn } },
-      ] as ReadonlyArray<FieldWithReference>
+      return [sourceField, targetField].filter((f): f is FieldWithReference => !!f)
     })
     .filter((fr): fr is FieldWithReference => !!fr)
 
@@ -243,6 +193,27 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): FieldWithRe
     sourceFields.concat(targetFields).concat(joinFields),
     (field) => field.name,
   )
+}
+
+type GetFieldWithReferenceArgs = {
+  model: Model
+  fk: string
+  dbOptions: DbOptions
+  primaryKey?: boolean
+}
+function getFieldWithReference({
+  model,
+  fk,
+  dbOptions,
+  primaryKey,
+}: GetFieldWithReferenceArgs): FieldWithReference {
+  const pk = model.fields.find((field) => field.primaryKey) || idField({ model: model, dbOptions })
+  const table = dbTableName({ model: model, dbOptions })
+  const columnField = prefixPk({ field: pk, model: model, dbOptions })
+  const column = caseByDbCaseStyle(columnField.name, dbOptions.caseStyle)
+  const field = { id: shortid(), name: fk, type: typeWithoutOptions(pk.type), primaryKey }
+
+  return { ...field, reference: { table, column } }
 }
 
 export function getJoinTables(schema: Schema, dbOptions: DbOptions): Model[] {
@@ -277,15 +248,12 @@ function getJoinTableModel(
 
   if (!sourceFk) return null
 
-  const sourcePk =
-    source.fields.find((field) => field.primaryKey) || idField({ model: source, dbOptions })
-
-  const sourceFkField = {
-    id: shortid(),
-    name: sourceFk,
-    type: typeWithoutOptions(sourcePk.type),
+  const sourceFkField = getFieldWithReference({
+    model: source,
+    fk: sourceFk,
+    dbOptions,
     primaryKey: true,
-  }
+  })
 
   const sourceAssoc: Association = {
     id: shortid(),
@@ -296,15 +264,7 @@ function getJoinTableModel(
 
   const targetFk = getForeignKey({ model: target, association, modelById, dbOptions })
 
-  const targetPk =
-    target.fields.find((field) => field.primaryKey) || idField({ model: target, dbOptions })
-
-  const targetFkField = {
-    id: shortid(),
-    name: targetFk,
-    type: typeWithoutOptions(targetPk.type),
-    primaryKey: true,
-  }
+  const targetFkField = getFieldWithReference({ model: target, fk: targetFk, dbOptions })
 
   const targetAssoc: Association = {
     id: shortid(),
