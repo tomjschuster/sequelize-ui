@@ -6,7 +6,6 @@
 
 #### Refactor
 
-- Refactor getFkFields and getJoinTables
 - Extract validation to schema with tests
 
 #### Testing
