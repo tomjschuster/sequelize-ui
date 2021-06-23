@@ -1,10 +1,20 @@
-import { Association, emptyAssociation, emptyField, Field, Model, Schema } from '@src/core/schema'
+import {
+  Association,
+  emptyAssociation,
+  emptyField,
+  emptyModelErrors,
+  Field,
+  Model,
+  ModelErrors,
+  noModelErrors,
+  Schema,
+  validateModel,
+} from '@src/core/schema'
 import React from 'react'
 import { classnames } from 'tailwindcss-classnames'
 import AssociationFieldset from './AssociationFieldset'
 import FieldFieldset from './FieldFieldset'
 import ModelFieldset from './ModelFieldset'
-import { emptyErrors, ModelFormErrors, noModelFormErrors, validateModel } from './validation'
 
 type ModelFormProps = {
   model: Model
@@ -20,13 +30,13 @@ export default function ModelForm({
   onCancel,
 }: ModelFormProps): React.ReactElement {
   const [formModel, setFormModel] = React.useState<Model>(model)
-  const [errors, setErrors] = React.useState<ModelFormErrors>(emptyErrors)
+  const [errors, setErrors] = React.useState<ModelErrors>(emptyModelErrors)
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
     const newErrors = validateModel(formModel, schema)
     setErrors(newErrors)
-    if (noModelFormErrors(newErrors)) onSubmit(formModel)
+    if (noModelErrors(newErrors)) onSubmit(formModel)
   }
 
   const handleChangeModel = React.useCallback(

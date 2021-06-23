@@ -1,11 +1,10 @@
-import { Model } from '@src/core/schema'
+import { Model, ModelErrors } from '@src/core/schema'
 import TextInput from '@src/ui/components/form/TextInput'
 import React from 'react'
-import { ModelFormErrors } from './validation'
 
 type ModelFieldsetProps = {
   name: Model['name']
-  errors: ModelFormErrors
+  errors: ModelErrors
   onChange: (changes: Partial<Model>) => void
 }
 

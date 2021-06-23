@@ -3,6 +3,7 @@ import {
   DataTypeType,
   displayDataTypeType,
   Field,
+  FieldErrors,
   isDateTimeType,
   isIntegerType,
   isNumberType,
@@ -16,11 +17,10 @@ import Radio from '@src/ui/components/form/Radio'
 import Select from '@src/ui/components/form/Select'
 import TextInput from '@src/ui/components/form/TextInput'
 import React, { useCallback } from 'react'
-import { FieldFormErrors } from './validation'
 
 type FieldFieldsetProps = {
   field: Field
-  errors?: FieldFormErrors
+  errors?: FieldErrors
   onChange: (id: Field['id'], changes: Partial<Field>) => void
   onDelete: (id: Field['id']) => void
 }

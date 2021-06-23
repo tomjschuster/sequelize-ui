@@ -1,5 +1,6 @@
 import {
   Association,
+  AssociationErrors,
   AssociationTypeType,
   displayAssociationTypeType,
   displayThroughType,
@@ -13,13 +14,12 @@ import Select from '@src/ui/components/form/Select'
 import TextInput from '@src/ui/components/form/TextInput'
 import { snakeCase } from '@src/utils/string'
 import React, { useCallback, useMemo } from 'react'
-import { AssociationFormErrors } from './validation'
 
 type AssociationFieldsetProps = {
   association: Association
   schema: Schema
   model: Model
-  errors?: AssociationFormErrors
+  errors?: AssociationErrors
   onChange: (id: Association['id'], changes: Partial<Association>) => void
   onDelete: (id: Association['id']) => void
 }

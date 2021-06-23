@@ -1,6 +1,7 @@
 import {
   Association,
   associationIsCircular,
+  associationsAreSame,
   associationsHaveSameForm,
   AssociationType,
   associationTypeIsPlural,
@@ -265,6 +266,34 @@ describe('schema dataTypes', () => {
       'associationIsCircular(%s, %o) === %s',
       (association, associations, expected) => {
         expect(associationIsCircular(association, associations)).toBe(expected)
+      },
+    )
+  })
+
+  describe('associationsAreSame', () => {
+    const cases: [
+      a: Association,
+      nameA: string,
+      b: Association,
+      nameB: string,
+      expected: boolean,
+    ][] = [
+      [{ ...belongsTo, alias: 'foo' }, 'bar', { ...hasOne, alias: 'foo' }, 'baz', true],
+      [{ ...belongsTo, alias: 'foo' }, 'bar', hasOne, 'foo', true],
+      [{ ...belongsTo }, 'foo', hasOne, 'foo', true],
+      [{ ...belongsTo }, 'foo', { ...hasOne, alias: 'foo' }, 'bar', true],
+      [{ ...belongsTo, alias: 'foo' }, 'bar', { ...hasOne, alias: 'baz' }, 'qux', false],
+      [{ ...belongsTo, alias: 'foo' }, 'bar', hasOne, 'baz', false],
+      [{ ...belongsTo }, 'foo', hasOne, 'bar', false],
+      [{ ...belongsTo }, 'foo', { ...hasOne, alias: 'bar' }, 'baz', false],
+    ]
+
+    it.each(cases)(
+      'associationsAreSame(%s, %o) === %s',
+      (associationA, targetNameA, associationB, targetNameB, expected) => {
+        expect(associationsAreSame({ associationA, targetNameA, associationB, targetNameB })).toBe(
+          expected,
+        )
       },
     )
   })

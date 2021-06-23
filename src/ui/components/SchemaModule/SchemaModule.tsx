@@ -1,7 +1,12 @@
-import { Schema } from '@src/core/schema'
+import {
+  emptySchemaErrors,
+  noSchemaErrors,
+  Schema,
+  SchemaErrors,
+  validateSchema,
+} from '@src/core/schema'
 import React from 'react'
 import TextInput from '../form/TextInput'
-import { emptyErrors, noSchemaFormErrors, SchemaFormErrors, validateSchema } from './validation'
 
 type SchemaModuleProps = {
   schema: Schema
@@ -50,13 +55,13 @@ type SchemaFormProps = {
 function SchemaForm({ schema, schemas, onSubmit, onCancel }: SchemaFormProps): React.ReactElement {
   const [formSchema, setFormSchema] = React.useState<Schema>(schema)
 
-  const [errors, setErrors] = React.useState<SchemaFormErrors>(emptyErrors)
+  const [errors, setErrors] = React.useState<SchemaErrors>(emptySchemaErrors)
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
     const newErrors = validateSchema(formSchema, schemas)
     setErrors(newErrors)
-    if (noSchemaFormErrors(newErrors)) onSubmit(formSchema)
+    if (noSchemaErrors(newErrors)) onSubmit(formSchema)
   }
 
   const handleChangeSchemaName = (name?: string): void =>

@@ -183,6 +183,6 @@ export function associationsAreSame({
   )
 }
 
-function normalizeAssociationName(association: Association, targetModelName: string): string {
-  return association.alias ? normalize(association.alias) : normalize(targetModelName)
+function normalizeAssociationName(association: Association, targetName: string): string {
+  return association.alias ? normalize(association.alias) : normalize(targetName)
 }

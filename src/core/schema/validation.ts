@@ -19,30 +19,72 @@ import {
   nameStartsWithNumber,
 } from '@src/utils/string'
 
-export type ModelFormErrors = {
+// TODO: Unit tests
+
+export type ModelErrors = {
   name?: string
-  fields: { [id: string]: FieldFormErrors }
-  associations: { [id: string]: AssociationFormErrors }
+  fields: { [id: string]: FieldErrors }
+  associations: { [id: string]: AssociationErrors }
 }
 
-export type FieldFormErrors = {
+export type FieldErrors = {
   name?: string
 }
 
-export type AssociationFormErrors = {
+export type AssociationErrors = {
   alias?: string
   foreignKey?: string
   targetForeignKey?: string
   throughTable?: string
 }
 
-export const emptyErrors: ModelFormErrors = {
+export const emptyModelErrors: ModelErrors = {
   name: undefined,
   fields: {},
   associations: {},
 }
 
-export function validateModel(model: Model, schema: Schema): ModelFormErrors {
+export type SchemaErrors = {
+  name?: string
+}
+
+export const emptySchemaErrors: SchemaErrors = {
+  name: undefined,
+}
+
+export function validateSchema(schema: Schema, schemas: Schema[]): SchemaErrors {
+  return {
+    name: validateSchemaName(schema, schemas),
+  }
+}
+
+export function noSchemaErrors(errors: SchemaErrors): boolean {
+  return deepEmpty(errors)
+}
+
+function validateSchemaName(schema: Schema, schemas: Schema[]): string | undefined {
+  if (nameEmpty(schema.name)) {
+    return 'Schema name is required'
+  }
+
+  if (nameStartsWithNumber(schema.name)) {
+    return 'Schema name cannot start with a number'
+  }
+
+  if (nameLongerThan(schema.name, MAX_IDENTIFIER_LENGTH)) {
+    return 'Schema name cannot be longer than 63 characters'
+  }
+
+  if (findDuplicateSchema(schema, schemas)) {
+    return 'Schema name must be unique'
+  }
+}
+
+function findDuplicateSchema(schema: Schema, schemas: Schema[]): Schema | undefined {
+  return schemas.find((s) => s.id !== schema.id && namesEqSingular(s.name, schema.name))
+}
+
+export function validateModel(model: Model, schema: Schema): ModelErrors {
   return {
     name: validateModelName(model, schema),
     fields: validateModelFields(model),
@@ -50,7 +92,7 @@ export function validateModel(model: Model, schema: Schema): ModelFormErrors {
   }
 }
 
-export function noModelFormErrors(errors: ModelFormErrors): boolean {
+export function noModelErrors(errors: ModelErrors): boolean {
   return deepEmpty(errors)
 }
 
@@ -72,14 +114,14 @@ function validateModelName(model: Model, schema: Schema): string | undefined {
   }
 }
 
-function validateModelFields(model: Model): { [id: string]: FieldFormErrors } {
-  return model.fields.reduce<{ [id: string]: FieldFormErrors }>((acc, field) => {
+function validateModelFields(model: Model): { [id: string]: FieldErrors } {
+  return model.fields.reduce<{ [id: string]: FieldErrors }>((acc, field) => {
     acc[field.id] = validateField(field, model)
     return acc
   }, {})
 }
 
-function validateField(field: Field, model: Model): FieldFormErrors {
+function validateField(field: Field, model: Model): FieldErrors {
   return {
     name: validateFieldName(field, model),
   }
@@ -106,8 +148,8 @@ function validateFieldName(field: Field, model: Model): string | undefined {
 function validateModelAssociations(
   model: Model,
   schema: Schema,
-): { [id: string]: AssociationFormErrors } {
-  return model.associations.reduce<{ [id: string]: AssociationFormErrors }>((acc, association) => {
+): { [id: string]: AssociationErrors } {
+  return model.associations.reduce<{ [id: string]: AssociationErrors }>((acc, association) => {
     acc[association.id] = validateAssociation(association, model, schema)
     return acc
   }, {})
@@ -117,7 +159,7 @@ function validateAssociation(
   association: Association,
   model: Model,
   schema: Schema,
-): AssociationFormErrors {
+): AssociationErrors {
   return {
     alias: validateAssociationAlias(association, model, schema),
     foreignKey: validateAssociationForeignKey(association),
