@@ -175,22 +175,6 @@ describe('useEditSchema', () => {
     expect(goTo).toHaveBeenCalledWith(editModelRoute(schema.id, modelId))
   })
 
-  it('calling edit model when there is no schema has no effect', async () => {
-    const modelId = schema.models[0].id
-    ;(useRoute as jest.Mock).mockReturnValue({
-      route: noSchemaRoute(),
-      loading: true,
-    })
-    const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-    act(() => result.current.editModel(modelId))
-
-    await waitForValueToChange(() => result.current.schema, { timeout: 1 }).catch((e) => {
-      expect(e.message.startsWith('Timed out')).toBe(true)
-    })
-
-    expect(goTo).not.toHaveBeenCalled()
-  })
-
   it('calling cancel navigates to the view schema route', async () => {
     const modelId = schema.models[0].id
     ;(useRoute as jest.Mock).mockReturnValue({
@@ -216,21 +200,6 @@ describe('useEditSchema', () => {
     expect(goTo).toHaveBeenCalledWith(indexRoute())
     const schemas = await SchemaApi.listSchemas()
     expect(schemas.some((s) => s.id === schema.id)).toBe(false)
-  })
-
-  it('calling destroy when there is no schema has no effect', async () => {
-    ;(useRoute as jest.Mock).mockReturnValue({
-      route: noSchemaRoute(),
-      loading: true,
-    })
-    const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-    await act(() => result.current.destroy())
-
-    await waitForValueToChange(() => result.current.schema, { timeout: 1 }).catch((e) => {
-      expect(e.message.startsWith('Timed out')).toBe(true)
-    })
-
-    expect(goTo).not.toHaveBeenCalled()
   })
 
   it('calling update updates the schema and navigates to the view schema route', async () => {
@@ -262,21 +231,6 @@ describe('useEditSchema', () => {
     expect(goTo).toHaveBeenCalledWith(editModelRoute(schema.id, modelId))
   })
 
-  it('calling addModel when there is no schema has no effect', async () => {
-    ;(useRoute as jest.Mock).mockReturnValue({
-      route: noSchemaRoute(),
-      loading: true,
-    })
-    const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-    await act(() => result.current.addModel())
-
-    await waitForValueToChange(() => result.current.schema, { timeout: 1 }).catch((e) => {
-      expect(e.message.startsWith('Timed out')).toBe(true)
-    })
-
-    expect(goTo).not.toHaveBeenCalled()
-  })
-
   it('calling updateModel updates the model the schema and navigates to the view schema route', async () => {
     const model = schema.models[0]
     ;(useRoute as jest.Mock).mockReturnValue({
@@ -290,21 +244,6 @@ describe('useEditSchema', () => {
 
     expect(updatedModel.name).toBe('foo')
     expect(goTo).toHaveBeenCalledWith(viewSchemaRoute(schema.id))
-  })
-
-  it('calling updateModel when there is no schema has no effect', async () => {
-    ;(useRoute as jest.Mock).mockReturnValue({
-      route: noSchemaRoute(),
-      loading: true,
-    })
-    const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-    await act(() => result.current.updateModel(schema.models[0]))
-
-    await waitForValueToChange(() => result.current.schema, { timeout: 1 }).catch((e) => {
-      expect(e.message.startsWith('Timed out')).toBe(true)
-    })
-
-    expect(goTo).not.toHaveBeenCalled()
   })
 
   it('calling delete model removes the model and navigates to the view schema route', async () => {
@@ -321,20 +260,5 @@ describe('useEditSchema', () => {
     expect(updatedSchema.models.some((m) => m.id === modelId)).toBe(false)
     expect(updatedSchema.models.length).toBe(schema.models.length - 1)
     expect(goTo).toHaveBeenCalledWith(viewSchemaRoute(schema.id))
-  })
-
-  it('calling deleteModel when there is no schema has no effect', async () => {
-    ;(useRoute as jest.Mock).mockReturnValue({
-      route: noSchemaRoute(),
-      loading: true,
-    })
-    const { result, waitForValueToChange } = renderHook<never, UseEditSchemaResult>(useEditSchema)
-    await act(() => result.current.deleteModel(schema.models[0].id))
-
-    await waitForValueToChange(() => result.current.schema, { timeout: 1 }).catch((e) => {
-      expect(e.message.startsWith('Timed out')).toBe(true)
-    })
-
-    expect(goTo).not.toHaveBeenCalled()
   })
 })

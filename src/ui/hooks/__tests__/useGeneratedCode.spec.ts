@@ -28,20 +28,6 @@ describe('useGeneratedCode', () => {
     expect(result.current.framework).toEqual(SequelizeFramework)
   })
 
-  it('returns no root if no schema is provided', async () => {
-    const { result, waitForValueToChange } = renderHook<
-      UseGeneratedCodeArgs,
-      UseGeneratedCodeResult
-    >(useGeneratedCode, { initialProps: { dbOptions: defaultDbOptions } })
-
-    await waitForValueToChange(() => result.current.framework)
-    expect(result.current.framework).toEqual(SequelizeFramework)
-
-    await waitForValueToChange(() => result.current.root, { timeout: 1 }).catch((e) => {
-      expect(e.message.startsWith('Timed out')).toBe(true)
-    })
-  })
-
   it('returns a root generated from the current framework and schema', async () => {
     const { result, waitForValueToChange } = renderHook<
       UseGeneratedCodeArgs,

@@ -1,6 +1,6 @@
 import { Model, Schema } from '@src/core/schema'
 import { getQsBoolean, getQsString } from '@src/utils/url'
-import { ParsedUrlQuery } from 'node:querystring'
+import { ParsedUrlQuery } from 'querystring'
 
 export enum RouteType {
   NotFound = 'NOT_FOUND',

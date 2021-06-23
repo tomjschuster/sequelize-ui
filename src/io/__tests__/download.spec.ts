@@ -1,3 +1,4 @@
+/** @jest-environment jsdom */
 import { directory, file } from '@src/core/files'
 import { saveAs } from 'file-saver'
 import Zip from 'jszip'
@@ -36,7 +37,7 @@ describe('io', () => {
     })
 
     it('should return a rejected promise when folder create fails', async () => {
-      // @ts-expect-error incompatible types
+      // @ts-expect-error only using partial overlap
       ;(Zip as jest.Mock).mockReturnValueOnce({ folder: jest.fn() })
 
       download(directory('foo', [file('foo title', 'foo contents')])).catch((e) => {

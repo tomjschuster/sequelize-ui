@@ -1,5 +1,5 @@
-import { ParsedUrlQuery } from 'node:querystring'
 import { ParsedQs } from 'qs'
+import { ParsedUrlQuery } from 'querystring'
 import { toEnum } from './enum'
 
 export function qsValueToEnum<T>(

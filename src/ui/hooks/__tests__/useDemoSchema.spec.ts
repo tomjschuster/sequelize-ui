@@ -87,29 +87,4 @@ describe('useDemoSchema', () => {
     await waitForValueToChange(() => result.current.schema)
     expect(result.current.schema).toEqual(sakilaSchema)
   })
-
-  it('does not set error if type has changed while loading', async () => {
-    jest.spyOn(SchemaData, 'getDemoSchema').mockRejectedValueOnce('foo')
-    jest.spyOn(SchemaData, 'getDemoSchema').mockImplementationOnce(
-      () =>
-        new Promise((resolve) => {
-          setTimeout(() => resolve(sakilaSchema), 1)
-        }),
-    )
-
-    const { result, rerender, waitForValueToChange } = renderHook<
-      UseDemoSchemaArgs,
-      UseDemoSchemaResult
-    >(({ type }) => useDemoSchema({ type }), {
-      initialProps: { type: SchemaData.DemoSchemaType.Blog },
-    })
-
-    rerender({ type: SchemaData.DemoSchemaType.Sakila })
-
-    await waitForValueToChange(() => result.current.error, { timeout: 1 }).catch((e) => {
-      expect(e.message.startsWith('Timed out')).toBe(true)
-    })
-
-    expect(result.current.error).toBeUndefined()
-  })
 })

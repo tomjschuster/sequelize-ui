@@ -1,7 +1,7 @@
 import { MittEmitter } from 'next/dist/next-server/lib/mitt'
 import { NextRouter } from 'next/router'
 
-export const mockRouterEvents: MittEmitter = {
+export const mockRouterEvents: MittEmitter<unknown> = {
   on: jest.fn(),
   off: jest.fn(),
   emit: jest.fn(),

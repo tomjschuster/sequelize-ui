@@ -1,4 +1,4 @@
-import { ParsedUrlQuery } from 'node:querystring'
+import { ParsedUrlQuery } from 'querystring'
 import {
   editModelRoute,
   editSchemaRoute,
