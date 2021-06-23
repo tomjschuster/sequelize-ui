@@ -3,7 +3,6 @@ import {
   DataTypeType,
   displayDataTypeType,
   Field,
-  FieldErrors,
   isDateTimeType,
   isIntegerType,
   isNumberType,
@@ -11,6 +10,7 @@ import {
   isStringType,
   UuidType,
 } from '@src/core/schema'
+import { FieldErrors } from '@src/core/validation/schema'
 import Checkbox from '@src/ui/components/form/Checkbox'
 import IntegerInput from '@src/ui/components/form/IntegerInput'
 import Radio from '@src/ui/components/form/Radio'

@@ -1,15 +1,10 @@
+import { Association, emptyAssociation, emptyField, Field, Model, Schema } from '@src/core/schema'
 import {
-  Association,
-  emptyAssociation,
-  emptyField,
   emptyModelErrors,
-  Field,
-  Model,
   ModelErrors,
   noModelErrors,
-  Schema,
   validateModel,
-} from '@src/core/schema'
+} from '@src/core/validation/schema'
 import React from 'react'
 import { classnames } from 'tailwindcss-classnames'
 import AssociationFieldset from './AssociationFieldset'

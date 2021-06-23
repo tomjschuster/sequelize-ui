@@ -1,4 +1,5 @@
-import { Model, ModelErrors } from '@src/core/schema'
+import { Model } from '@src/core/schema'
+import { ModelErrors } from '@src/core/validation/schema'
 import TextInput from '@src/ui/components/form/TextInput'
 import React from 'react'
 

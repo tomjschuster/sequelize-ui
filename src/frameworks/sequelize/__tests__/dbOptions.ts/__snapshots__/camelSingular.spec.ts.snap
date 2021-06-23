@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Sequelize Framework camel case singular database options generates correct code 1`] = `
+exports[`Sequelize Framework migrations database options generates correct code 1`] = `
 Object {
   "files": Array [
     Object {

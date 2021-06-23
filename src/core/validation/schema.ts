@@ -2,7 +2,6 @@ import { MAX_IDENTIFIER_LENGTH } from '@src/core/database'
 import {
   Association,
   associationsAreSame,
-  associationsHaveSameForm,
   AssociationTypeType,
   Field,
   Model,
@@ -18,6 +17,12 @@ import {
   namesEqSingular,
   nameStartsWithNumber,
 } from '@src/utils/string'
+import {
+  NAME_REQUIRED_MESSAGE,
+  NAME_TOO_LONG_MESSAGE,
+  NAME_UNIQUE_MESSAGE,
+  NAME_WITH_NUMBER_MESSAGE,
+} from './messages'
 
 // TODO: Unit tests
 
@@ -64,19 +69,19 @@ export function noSchemaErrors(errors: SchemaErrors): boolean {
 
 function validateSchemaName(schema: Schema, schemas: Schema[]): string | undefined {
   if (nameEmpty(schema.name)) {
-    return 'Schema name is required'
+    return NAME_REQUIRED_MESSAGE
   }
 
   if (nameStartsWithNumber(schema.name)) {
-    return 'Schema name cannot start with a number'
+    return NAME_WITH_NUMBER_MESSAGE
   }
 
   if (nameLongerThan(schema.name, MAX_IDENTIFIER_LENGTH)) {
-    return 'Schema name cannot be longer than 63 characters'
+    return NAME_TOO_LONG_MESSAGE
   }
 
   if (findDuplicateSchema(schema, schemas)) {
-    return 'Schema name must be unique'
+    return NAME_UNIQUE_MESSAGE
   }
 }
 
@@ -98,19 +103,19 @@ export function noModelErrors(errors: ModelErrors): boolean {
 
 function validateModelName(model: Model, schema: Schema): string | undefined {
   if (nameEmpty(model.name)) {
-    return 'Model name is required'
+    return NAME_REQUIRED_MESSAGE
   }
 
   if (nameLongerThan(model.name, MAX_IDENTIFIER_LENGTH)) {
-    return 'Name cannot be longer than 63 characters'
+    return NAME_TOO_LONG_MESSAGE
   }
 
   if (nameStartsWithNumber(model.name)) {
-    return 'Model name cannot start with a number'
+    return NAME_WITH_NUMBER_MESSAGE
   }
 
   if (findDuplicateModel(model, schema)) {
-    return 'Model name must be unique in schema'
+    return NAME_UNIQUE_MESSAGE
   }
 }
 
@@ -129,19 +134,19 @@ function validateField(field: Field, model: Model): FieldErrors {
 
 function validateFieldName(field: Field, model: Model): string | undefined {
   if (nameEmpty(field.name)) {
-    return 'Field name is required'
+    return NAME_REQUIRED_MESSAGE
   }
 
   if (nameLongerThan(field.name, MAX_IDENTIFIER_LENGTH)) {
-    return 'Name cannot be longer than 63 characters'
+    return NAME_TOO_LONG_MESSAGE
   }
 
   if (nameStartsWithNumber(field.name)) {
-    return 'Field name cannot start with a number'
+    return NAME_WITH_NUMBER_MESSAGE
   }
 
   if (findDuplicateField(field, model)) {
-    return 'Field name must be unique in model'
+    return NAME_UNIQUE_MESSAGE
   }
 }
 
@@ -174,40 +179,36 @@ function validateAssociationAlias(
   schema: Schema,
 ): string | undefined {
   if (nameLongerThan(association.alias, MAX_IDENTIFIER_LENGTH)) {
-    return 'Name cannot be longer than 63 characters'
+    return NAME_TOO_LONG_MESSAGE
   }
 
   if (nameStartsWithNumber(association.alias)) {
-    return 'Alias cannot start with a number'
-  }
-
-  if (findDuplicateAlias(association, model)) {
-    return `Alias must be unique across the model's associations`
+    return NAME_WITH_NUMBER_MESSAGE
   }
 
   if (findDuplicateAssociationName(association, model, schema)) {
-    return 'Cannot have two associations to the same model/alias name'
+    return NAME_UNIQUE_MESSAGE
   }
 }
 
 function validateAssociationForeignKey(association: Association): string | undefined {
   if (nameLongerThan(association.foreignKey, MAX_IDENTIFIER_LENGTH)) {
-    return 'Name cannot be longer than 63 characters'
+    return NAME_TOO_LONG_MESSAGE
   }
 
   if (nameStartsWithNumber(association.foreignKey)) {
-    return 'Foreign key cannot start with a number'
+    return NAME_WITH_NUMBER_MESSAGE
   }
 }
 
 function validateAssociationTargetForeignKey(association: Association): string | undefined {
   if (association.type.type === AssociationTypeType.ManyToMany) {
     if (nameLongerThan(association.type.targetFk, MAX_IDENTIFIER_LENGTH)) {
-      return 'Name cannot be longer than 63 characters'
+      return NAME_TOO_LONG_MESSAGE
     }
 
     if (nameStartsWithNumber(association.type.targetFk)) {
-      return 'Target foreign key cannot start with a number'
+      return NAME_WITH_NUMBER_MESSAGE
     }
   }
 }
@@ -218,15 +219,15 @@ function validateAssociationThroughTable(association: Association): string | und
     association.type.through.type === ThroughType.ThroughTable
   ) {
     if (nameLongerThan(association.type.through.table, MAX_IDENTIFIER_LENGTH)) {
-      return 'Name cannot be longer than 63 characters'
+      return NAME_TOO_LONG_MESSAGE
     }
 
     if (nameEmpty(association.type.through.table)) {
-      return 'Through table is required'
+      return NAME_REQUIRED_MESSAGE
     }
 
     if (nameStartsWithNumber(association.type.through.table)) {
-      return 'Through table cannot start with a number'
+      return NAME_WITH_NUMBER_MESSAGE
     }
   }
 }
@@ -239,16 +240,6 @@ function findDuplicateField(field: Field, model: Model): Field | undefined {
   return model.fields.find((f) => f.id !== field.id && namesEq(f.name, field.name))
 }
 
-function findDuplicateAlias(association: Association, model: Model): Association | undefined {
-  return model.associations.find(
-    (a) =>
-      association.alias &&
-      association.id !== a.id &&
-      namesEq(a.alias, association.alias) &&
-      associationsHaveSameForm(association, a),
-  )
-}
-
 function findDuplicateAssociationName(
   association: Association,
   model: Model,
@@ -256,11 +247,13 @@ function findDuplicateAssociationName(
 ): Association | undefined {
   const modelById = arrayToLookup(schema.models, (m) => m.id)
   const targetModel: Model | undefined = modelById.get(association.targetModelId)
+  /* istanbul ignore next */
   if (!targetModel) return undefined
 
   return model.associations.find((a) => {
     if (a.id === association.id) return false
     const aTargetModel: Model | undefined = modelById.get(a.targetModelId)
+    /* istanbul ignore next */
     if (!aTargetModel) return false
 
     return associationsAreSame({

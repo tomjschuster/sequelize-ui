@@ -1,6 +1,6 @@
 import {
   Association,
-  AssociationErrors,
+  associationTypeIsSingular,
   AssociationTypeType,
   displayAssociationTypeType,
   displayThroughType,
@@ -9,10 +9,11 @@ import {
   Schema,
   ThroughType,
 } from '@src/core/schema'
+import { AssociationErrors } from '@src/core/validation/schema'
 import Radio from '@src/ui/components/form/Radio'
 import Select from '@src/ui/components/form/Select'
 import TextInput from '@src/ui/components/form/TextInput'
-import { snakeCase } from '@src/utils/string'
+import { plural, singular, snakeCase } from '@src/utils/string'
 import React, { useCallback, useMemo } from 'react'
 
 type AssociationFieldsetProps = {
@@ -173,6 +174,7 @@ function AssociationFieldset({
         id={`association-alias-${association.id}`}
         label="as"
         value={association.alias || ''}
+        placeholder={aliasPlaceholder(association, targetModel)}
         error={errors?.alias}
         onChange={handleChangeAlias}
       />
@@ -230,6 +232,14 @@ function AssociationFieldset({
 
 function modelName(model: Model): string {
   return model.name
+}
+
+function aliasPlaceholder(association: Association, model: Model): string | undefined {
+  return association.alias
+    ? undefined
+    : associationTypeIsSingular(association.type)
+    ? singular(model.name)
+    : plural(model.name)
 }
 
 export default React.memo(AssociationFieldset)

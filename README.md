@@ -4,10 +4,6 @@
 
 ### Tech Debt
 
-#### Refactor
-
-- Extract validation to schema with tests
-
 #### Testing
 
 - ui
@@ -36,6 +32,12 @@
 
 #### UI
 
+- Code preview
+
+  - DB options
+  - Copy/download alerts
+  - a11y (aria-controls?)
+
 - Form section
 - Form buttons
 - Text input
@@ -45,10 +47,6 @@
 - db compatibility warnings
 - Schema form
 - Form a11y review
-- Code preview
-  - DB options
-  - Copy/download alerts
-  - a11y (aria-controls?)
 - Home page
   - Intro
   - Demo section

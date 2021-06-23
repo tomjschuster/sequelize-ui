@@ -128,7 +128,10 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): FieldWithRe
     .map<FieldWithReference | null>((association) => {
       const fk = getForeignKey({ model, association, modelById, dbOptions })
       const target = modelById.get(association.targetModelId)
-      return target ? getFieldWithReference({ model: target, fk, dbOptions }) : null
+      return target
+        ? getFieldWithReference({ model: target, fk, dbOptions })
+        : /* istanbul ignore next */
+          null
     })
     .filter((fr): fr is FieldWithReference => !!fr)
 
@@ -143,7 +146,10 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): FieldWithRe
     .map<FieldWithReference | null>((association) => {
       const source = modelById.get(association.sourceModelId)
       const fk = source && getForeignKey({ model: source, association, modelById, dbOptions })
-      return source && fk ? getFieldWithReference({ model: source, fk, dbOptions }) : null
+      return source && fk
+        ? getFieldWithReference({ model: source, fk, dbOptions })
+        : /* istanbul ignore next */
+          null
     })
     .filter((fr): fr is FieldWithReference => !!fr)
 
@@ -157,7 +163,7 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): FieldWithRe
         a.type.through.modelId === model.id,
     )
     .flatMap<FieldWithReference | null>((association) => {
-      const primaryKey = hasPk ? undefined : true
+      const primaryKey = hasPk ? undefined : /* istanbul ignore next */ true
 
       const source = modelById.get(association.sourceModelId)
       const sourceFk = source && getForeignKey({ model: source, association, modelById, dbOptions })
@@ -207,7 +213,10 @@ function getFieldWithReference({
   dbOptions,
   primaryKey,
 }: GetFieldWithReferenceArgs): FieldWithReference {
-  const pk = model.fields.find((field) => field.primaryKey) || idField({ model: model, dbOptions })
+  const pk =
+    model.fields.find((field) => field.primaryKey) ||
+    /* istanbul ignore next */
+    idField({ model: model, dbOptions })
   const table = dbTableName({ model: model, dbOptions })
   const columnField = prefixPk({ field: pk, model: model, dbOptions })
   const column = caseByDbCaseStyle(columnField.name, dbOptions.caseStyle)
@@ -242,10 +251,12 @@ function getJoinTableModel(
   const source = modelById.get(association.sourceModelId)
   const target = modelById.get(association.targetModelId)
 
+  /* istanbul ignore next */
   if (!source || !target) return null
 
   const sourceFk = getOtherKey({ association, modelById, dbOptions })
 
+  /* istanbul ignore next */
   if (!sourceFk) return null
 
   const sourceFkField = getFieldWithReference({
@@ -303,5 +314,6 @@ function add10(model: Model): Model {
 
 export function nextTimestamp(timestamps: MigrationTimestamps): number {
   const currMax = Math.max(0, ...timestamps.keys())
+  /* istanbul ignore next */
   return currMax ? currMax + 10 : toNumericTimestamp(now())
 }

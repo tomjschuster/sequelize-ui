@@ -1,10 +1,10 @@
+import { Schema } from '@src/core/schema'
 import {
   emptySchemaErrors,
   noSchemaErrors,
-  Schema,
   SchemaErrors,
   validateSchema,
-} from '@src/core/schema'
+} from '@src/core/validation/schema'
 import React from 'react'
 import TextInput from '../form/TextInput'
 
