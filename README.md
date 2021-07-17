@@ -1,6 +1,7 @@
 # Sequelize UI
 
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/tomjschuster/sequelize-ui-ts/CI/main)
+![Coveralls branch](https://img.shields.io/coveralls/github/tomjschuster/sequelize-ui-ts/main)
 
 ## Todo:
 
