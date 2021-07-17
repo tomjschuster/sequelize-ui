@@ -1,5 +1,7 @@
 # Sequelize UI
 
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/tomjschuster/sequelize-ui-ts/CI/main)
+
 ## Todo:
 
 ### Tech Debt
