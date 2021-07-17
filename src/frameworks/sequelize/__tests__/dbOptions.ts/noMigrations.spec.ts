@@ -3,13 +3,13 @@ import schema from '@src/data/schemas/sakila'
 import { SequelizeFramework } from '../..'
 
 describe('Sequelize Framework', () => {
-  describe('camel case singular database options', () => {
+  describe('no migrations database options', () => {
     it('generates correct code', () => {
       const code = SequelizeFramework.generate({
         schema,
         dbOptions: {
           ...defaultDbOptions,
-          migrations: true,
+          migrations: false,
         },
       })
       expect(code).toMatchSnapshot()

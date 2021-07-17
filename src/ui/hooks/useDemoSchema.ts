@@ -2,16 +2,15 @@ import { Schema } from '@src/core/schema'
 import { DemoSchemaType, getDemoSchema } from '@src/data/schemas'
 import { useEffect, useRef, useState } from 'react'
 
-export type UseDemoSchemaArgs = {
-  type: DemoSchemaType | undefined
-}
-
 export type UseDemoSchemaResult = {
   loading: boolean
-  error?: Error
-  schema?: Schema
+  error: Error | undefined
+  schema: Schema | undefined
+  type: DemoSchemaType | undefined
+  setType: (type: DemoSchemaType | undefined) => void
 }
-export default function useDemoSchema({ type }: UseDemoSchemaArgs): UseDemoSchemaResult {
+export default function useDemoSchema(): UseDemoSchemaResult {
+  const [type, setType] = useState<DemoSchemaType | undefined>()
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<Error | undefined>()
   const [schema, setSchema] = useState<Schema | undefined>()
@@ -43,7 +42,7 @@ export default function useDemoSchema({ type }: UseDemoSchemaArgs): UseDemoSchem
           if (type === loadingType.current) setLoading(false)
         })
     }
-  }, [type])
+  }, [schema, type])
 
-  return { schema, loading, error }
+  return { schema, loading, error, type, setType }
 }

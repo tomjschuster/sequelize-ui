@@ -1,12 +1,9 @@
 import { createSchema, listSchemas } from '@src/api/schema'
-import { DbOptions, defaultDbOptions } from '@src/core/database'
 import { Schema } from '@src/core/schema'
 import { DemoSchemaType, displayDemoSchemaType } from '@src/data/schemas'
-import DbOptionsForm from '@src/ui/components/DbOptionsForm'
 import Radio from '@src/ui/components/form/Radio'
 import Layout from '@src/ui/components/Layout'
 import useDemoSchema from '@src/ui/hooks/useDemoSchema'
-import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -59,10 +56,7 @@ export default IndexPage
 
 function IndexPageDemoContent(): React.ReactElement {
   const router = useRouter()
-  const [dbOptions, setDbOptions] = useState<DbOptions>(defaultDbOptions)
-  const [demoSchemaType, setDemoSchemaType] = useState<DemoSchemaType | undefined>()
-  const { schema: demoSchema } = useDemoSchema({ type: demoSchemaType })
-  const { root } = useGeneratedCode({ schema: demoSchema, dbOptions })
+  const { schema: demoSchema, type: demoSchemaType, setType: setDemoSchemaType } = useDemoSchema()
 
   const handleClickFork = async () => {
     if (demoSchema) {
@@ -80,8 +74,7 @@ function IndexPageDemoContent(): React.ReactElement {
         onChange={setDemoSchemaType}
       />
       {demoSchema && <button onClick={handleClickFork}>Fork</button>}
-      {root && <DbOptionsForm dbOptions={dbOptions} onChange={setDbOptions} />}
-      {root && demoSchema && <CodeViewer cacheKey={demoSchema.id} root={root} />}
+      {demoSchema && <CodeViewer schema={demoSchema} />}
     </>
   )
 }

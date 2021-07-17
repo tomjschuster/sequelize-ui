@@ -24,9 +24,13 @@ export function modelClassTemplate({
   const name = modelName(model)
 
   return lines([
-    `export class ${name} extends Model<${name}Attributes, ${name}CreationAttributes> implements ${name}Attributes {`,
+    `export class ${name}`,
     lines(
-      model.fields.map((field) => classFieldType(field, dbOptions)),
+      [
+        `extends Model<${name}Attributes, ${name}CreationAttributes>`,
+        `implements ${name}Attributes {`,
+        ...model.fields.map((field) => classFieldType(field, dbOptions)),
+      ],
       { depth: 2 },
     ),
     associations.length ? blank() : null,

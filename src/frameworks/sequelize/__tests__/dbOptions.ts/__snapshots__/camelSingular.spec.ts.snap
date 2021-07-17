@@ -42,6 +42,180 @@ Object {
     Object {
       "files": Array [
         Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('Category', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      string: {
+        type: DataTypes.STRING,
+        field: 'string'
+      },
+      stringWithLength: {
+        type: DataTypes.STRING(100),
+        field: 'stringWithLength'
+      },
+      text: {
+        type: DataTypes.TEXT,
+        field: 'text'
+      },
+      ciText: {
+        type: DataTypes.CITEXT,
+        field: 'ciText'
+      },
+      integer: {
+        type: DataTypes.INTEGER,
+        field: 'integer'
+      },
+      integerUnsigned: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        field: 'integerUnsigned'
+      },
+      integerAutoincrement: {
+        type: DataTypes.INTEGER,
+        field: 'integerAutoincrement',
+        autoIncrement: true
+      },
+      bigInt: {
+        type: DataTypes.BIGINT,
+        field: 'bigInt'
+      },
+      smallInt: {
+        type: DataTypes.SMALLINT,
+        field: 'smallInt'
+      },
+      float: {
+        type: DataTypes.FLOAT,
+        field: 'float'
+      },
+      real: {
+        type: DataTypes.REAL,
+        field: 'real'
+      },
+      double: {
+        type: DataTypes.DOUBLE,
+        field: 'double'
+      },
+      decimal: {
+        type: DataTypes.DECIMAL,
+        field: 'decimal'
+      },
+      decimalPrecision: {
+        type: DataTypes.DECIMAL.PRECISION(14),
+        field: 'decimalPrecision'
+      },
+      decimalPrecisionAndScale: {
+        type: DataTypes.DECIMAL.PRECISION(14, 2),
+        field: 'decimalPrecisionAndScale'
+      },
+      dateTime: {
+        type: DataTypes.DATE,
+        field: 'dateTime'
+      },
+      dateTimeDefaultNow: {
+        type: DataTypes.DATE,
+        field: 'dateTimeDefaultNow',
+        defaultValue: DataTypes.NOW
+      },
+      date: {
+        type: DataTypes.DATEONLY,
+        field: 'date'
+      },
+      dateDefaultNow: {
+        type: DataTypes.DATEONLY,
+        field: 'dateDefaultNow',
+        defaultValue: DataTypes.NOW
+      },
+      time: {
+        type: DataTypes.TIME,
+        field: 'time'
+      },
+      timeDefaultNow: {
+        type: DataTypes.TIME,
+        field: 'timeDefaultNow',
+        defaultValue: DataTypes.NOW
+      },
+      boolean: {
+        type: DataTypes.BOOLEAN,
+        field: 'boolean'
+      },
+      enum: {
+        type: DataTypes.ENUM(),
+        field: 'enum'
+      },
+      array: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        field: 'array'
+      },
+      json: {
+        type: DataTypes.JSON,
+        field: 'json'
+      },
+      jsonB: {
+        type: DataTypes.JSONB,
+        field: 'jsonB'
+      },
+      blob: {
+        type: DataTypes.BLOB,
+        field: 'blob'
+      },
+      uuid: {
+        type: DataTypes.UUID,
+        field: 'uuid'
+      },
+      uuidDefaultV4: {
+        type: DataTypes.UUID,
+        field: 'uuidDefaultV4',
+        defaultValue: DataTypes.UUIDV4
+      },
+      uuidDefaultV1: {
+        type: DataTypes.UUID,
+        field: 'uuidDefaultV1',
+        defaultValue: DataTypes.UUIDV1
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'createdAt'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updatedAt'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('Category');
+  },
+};",
+          "name": "20210101000000-create-Category.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    
+  },
+  down: async (queryInterface, Sequelize) => {
+  
+  }
+};",
+          "name": "20210101000010-add-foreign-keys.js",
+          "type": "FILE",
+        },
+      ],
+      "name": "migrations",
+      "type": "DIRECTORY",
+    },
+    Object {
+      "files": Array [
+        Object {
           "content": "import type { Sequelize, Model } from 'sequelize'
 import { Category } from './Category'
 import type { CategoryAttributes, CategoryCreationAttributes } from './Category'
@@ -108,7 +282,9 @@ export interface CategoryAttributes {
 export type CategoryId = number
 export type CategoryCreationAttributes = CategoryAttributes & { id?: number }
 
-export class Category extends Model<CategoryAttributes, CategoryCreationAttributes> implements CategoryAttributes {
+export class Category
+  extends Model<CategoryAttributes, CategoryCreationAttributes>
+  implements CategoryAttributes {
   public readonly id?: number
   public string?: string
   public stringWithLength?: string
@@ -293,8 +469,13 @@ export default db
   \\"main\\": \\"server.ts\\",
   \\"scripts\\": {
     \\"test\\": \\"echo \\\\\\"Error: no test specified\\\\\\" && exit 1\\",
+    \\"db:up\\": \\"echo creating && npm run db:create && echo created && npm run db:migrate && echo migrated\\",
+    \\"db:reset\\": \\"npm run db:drop && npm run db:up\\",
     \\"db:create\\": \\"sequelize db:create\\",
     \\"db:drop\\": \\"sequelize db:drop\\",
+    \\"db:migrate\\": \\"sequelize db:migrate\\",
+    \\"db:rollback\\": \\"sequelize db:migrate:undo\\",
+    \\"db:rollback:all\\": \\"sequelize db:migrate:undo:all\\",
     \\"build\\": \\"tsc\\",
     \\"start\\": \\"node ./dist/server.js\\",
     \\"dev\\": \\"tsc-watch --onSuccess \\\\\\"node ./dist/server.js\\\\\\"\\"
@@ -326,7 +507,6 @@ import { initModels } from './models'
 
 async function run() {
   initModels(db)
-  await db.sync()
   const hostname = process.env.HOSTNAME || '127.0.0.1'
   const port = parseInt(process.env.PORT || '3000')
   const server = http.createServer((req, res) => {

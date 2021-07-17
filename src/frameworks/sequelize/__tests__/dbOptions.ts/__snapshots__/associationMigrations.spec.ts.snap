@@ -445,7 +445,9 @@ export interface CategoryAttributes {
 export type CategoryId = number
 export type CategoryCreationAttributes = CategoryAttributes & { id?: number }
 
-export class Category extends Model<CategoryAttributes, CategoryCreationAttributes> implements CategoryAttributes {
+export class Category
+  extends Model<CategoryAttributes, CategoryCreationAttributes>
+  implements CategoryAttributes {
   public readonly id?: number
 
   // Category belongsTo Category (as Parent)
@@ -528,7 +530,9 @@ export interface PostAttributes {
 export type PostId = number
 export type PostCreationAttributes = PostAttributes & { id?: number }
 
-export class Post extends Model<PostAttributes, PostCreationAttributes> implements PostAttributes {
+export class Post
+  extends Model<PostAttributes, PostCreationAttributes>
+  implements PostAttributes {
   public readonly id?: number
 
   // Post belongsTo Post (as Parent)
@@ -639,7 +643,9 @@ export type PostCategoryPk = 'postId' | 'categoryId'
 export type PostCategoryId = PostCategoryAttributes[PostCategoryPk]
 export type PostCategoryCreationAttributes = Optional<PostCategoryAttributes, PostCategoryPk>
 
-export class PostCategory extends Model<PostCategoryAttributes, PostCategoryCreationAttributes> implements PostCategoryAttributes {
+export class PostCategory
+  extends Model<PostCategoryAttributes, PostCategoryCreationAttributes>
+  implements PostCategoryAttributes {
   public readonly postId?: number
   public readonly categoryId?: number
 
@@ -693,7 +699,9 @@ export interface PostTagAttributes {
 export type PostTagId = number
 export type PostTagCreationAttributes = PostTagAttributes & { id?: number }
 
-export class PostTag extends Model<PostTagAttributes, PostTagCreationAttributes> implements PostTagAttributes {
+export class PostTag
+  extends Model<PostTagAttributes, PostTagCreationAttributes>
+  implements PostTagAttributes {
   public readonly id?: number
 
   // PostTag belongsTo Post
@@ -739,7 +747,9 @@ export interface TagAttributes {
 export type TagId = number
 export type TagCreationAttributes = TagAttributes & { id?: number }
 
-export class Tag extends Model<TagAttributes, TagCreationAttributes> implements TagAttributes {
+export class Tag
+  extends Model<TagAttributes, TagCreationAttributes>
+  implements TagAttributes {
   public readonly id?: number
 
   // Tag hasMany PostTag

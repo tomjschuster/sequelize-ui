@@ -42,6 +42,418 @@ Object {
     Object {
       "files": Array [
         Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('employees', {
+      empNo: {
+        type: DataTypes.INTEGER,
+        field: 'emp_no',
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      birthDate: {
+        type: DataTypes.DATEONLY,
+        field: 'birth_date',
+        allowNull: false
+      },
+      firstName: {
+        type: DataTypes.STRING,
+        field: 'first_name',
+        allowNull: false
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        field: 'last_name',
+        allowNull: false
+      },
+      gender: {
+        type: DataTypes.ENUM('M', 'F', 'O'),
+        field: 'gender',
+        allowNull: false
+      },
+      hireDate: {
+        type: DataTypes.DATEONLY,
+        field: 'hire_date',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('employees');
+  },
+};",
+          "name": "20201001000000-create-employees.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('departments', {
+      deptNo: {
+        type: DataTypes.STRING,
+        field: 'dept_no',
+        primaryKey: true,
+        allowNull: false
+      },
+      deptName: {
+        type: DataTypes.STRING,
+        field: 'dept_name',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('departments');
+  },
+};",
+          "name": "20201001000010-create-departments.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('dept_emps', {
+      empNo: {
+        type: DataTypes.INTEGER,
+        field: 'emp_no',
+        primaryKey: true,
+        allowNull: false
+      },
+      deptNo: {
+        type: DataTypes.STRING,
+        field: 'dept_no',
+        primaryKey: true,
+        allowNull: false
+      },
+      fromDate: {
+        type: DataTypes.DATEONLY,
+        field: 'from_date',
+        allowNull: false
+      },
+      toDate: {
+        type: DataTypes.DATEONLY,
+        field: 'to_date',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      departmentsId: {
+        type: DataTypes.STRING,
+        field: 'departments_id'
+      },
+      employeeId: {
+        type: DataTypes.INTEGER,
+        field: 'employee_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('dept_emps');
+  },
+};",
+          "name": "20201001000020-create-dept_emps.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('dept_managers', {
+      empNo: {
+        type: DataTypes.INTEGER,
+        field: 'emp_no',
+        primaryKey: true,
+        allowNull: false
+      },
+      deptNo: {
+        type: DataTypes.STRING,
+        field: 'dept_no',
+        primaryKey: true,
+        allowNull: false
+      },
+      fromDate: {
+        type: DataTypes.DATEONLY,
+        field: 'from_date',
+        allowNull: false
+      },
+      toDate: {
+        type: DataTypes.DATEONLY,
+        field: 'to_date',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      departmentsId: {
+        type: DataTypes.STRING,
+        field: 'departments_id'
+      },
+      managerId: {
+        type: DataTypes.INTEGER,
+        field: 'manager_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('dept_managers');
+  },
+};",
+          "name": "20201001000030-create-dept_managers.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('titles', {
+      empNo: {
+        type: DataTypes.INTEGER,
+        field: 'emp_no',
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      title: {
+        type: DataTypes.STRING,
+        field: 'title',
+        allowNull: false
+      },
+      fromDate: {
+        type: DataTypes.DATEONLY,
+        field: 'from_date',
+        primaryKey: true,
+        allowNull: false
+      },
+      toDate: {
+        type: DataTypes.DATEONLY,
+        field: 'to_date'
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('titles');
+  },
+};",
+          "name": "20201001000040-create-titles.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('salaries', {
+      empNo: {
+        type: DataTypes.INTEGER,
+        field: 'emp_no',
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      salary: {
+        type: DataTypes.INTEGER,
+        field: 'salary',
+        allowNull: false
+      },
+      fromDate: {
+        type: DataTypes.DATEONLY,
+        field: 'from_date',
+        primaryKey: true,
+        allowNull: false
+      },
+      toDate: {
+        type: DataTypes.DATEONLY,
+        field: 'to_date'
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('salaries');
+  },
+};",
+          "name": "20201001000050-create-salaries.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.addConstraint('dept_emps', {
+      fields: ['emp_no'],
+      type: 'foreign key',
+      name: 'dept_emps_emp_no_fkey',
+      references: {
+        table: 'employees',
+        field: 'emp_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('dept_emps', {
+      fields: ['dept_no'],
+      type: 'foreign key',
+      name: 'dept_emps_dept_no_fkey',
+      references: {
+        table: 'departments',
+        field: 'dept_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('dept_emps', {
+      fields: ['departments_id'],
+      type: 'foreign key',
+      name: 'dept_emps_departments_id_fkey',
+      references: {
+        table: 'departments',
+        field: 'dept_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('dept_emps', {
+      fields: ['employee_id'],
+      type: 'foreign key',
+      name: 'dept_emps_employee_id_fkey',
+      references: {
+        table: 'employees',
+        field: 'emp_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('dept_managers', {
+      fields: ['emp_no'],
+      type: 'foreign key',
+      name: 'dept_managers_emp_no_fkey',
+      references: {
+        table: 'employees',
+        field: 'emp_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('dept_managers', {
+      fields: ['dept_no'],
+      type: 'foreign key',
+      name: 'dept_managers_dept_no_fkey',
+      references: {
+        table: 'departments',
+        field: 'dept_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('dept_managers', {
+      fields: ['departments_id'],
+      type: 'foreign key',
+      name: 'dept_managers_departments_id_fkey',
+      references: {
+        table: 'departments',
+        field: 'dept_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('dept_managers', {
+      fields: ['manager_id'],
+      type: 'foreign key',
+      name: 'dept_managers_manager_id_fkey',
+      references: {
+        table: 'employees',
+        field: 'emp_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('titles', {
+      fields: ['emp_no'],
+      type: 'foreign key',
+      name: 'titles_emp_no_fkey',
+      references: {
+        table: 'employees',
+        field: 'emp_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('salaries', {
+      fields: ['emp_no'],
+      type: 'foreign key',
+      name: 'salaries_emp_no_fkey',
+      references: {
+        table: 'employees',
+        field: 'emp_no'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.removeConstraint('dept_emps', 'dept_emps_emp_no_fkey')
+    await queryInterface.removeConstraint('dept_emps', 'dept_emps_dept_no_fkey')
+    await queryInterface.removeConstraint('dept_emps', 'dept_emps_departments_id_fkey')
+    await queryInterface.removeConstraint('dept_emps', 'dept_emps_employee_id_fkey')
+    await queryInterface.removeConstraint('dept_managers', 'dept_managers_emp_no_fkey')
+    await queryInterface.removeConstraint('dept_managers', 'dept_managers_dept_no_fkey')
+    await queryInterface.removeConstraint('dept_managers', 'dept_managers_departments_id_fkey')
+    await queryInterface.removeConstraint('dept_managers', 'dept_managers_manager_id_fkey')
+    await queryInterface.removeConstraint('titles', 'titles_emp_no_fkey')
+    await queryInterface.removeConstraint('salaries', 'salaries_emp_no_fkey')
+  }
+};",
+          "name": "20201001000060-add-foreign-keys.js",
+          "type": "FILE",
+        },
+      ],
+      "name": "migrations",
+      "type": "DIRECTORY",
+    },
+    Object {
+      "files": Array [
+        Object {
           "content": "import type { Sequelize, Model } from 'sequelize'
 import { Employee } from './Employee'
 import type { EmployeeAttributes, EmployeeCreationAttributes } from './Employee'
@@ -179,7 +591,9 @@ export type EmployeePk = 'empNo'
 export type EmployeeId = EmployeeAttributes[EmployeePk]
 export type EmployeeCreationAttributes = Optional<EmployeeAttributes, EmployeePk>
 
-export class Employee extends Model<EmployeeAttributes, EmployeeCreationAttributes> implements EmployeeAttributes {
+export class Employee
+  extends Model<EmployeeAttributes, EmployeeCreationAttributes>
+  implements EmployeeAttributes {
   public readonly empNo!: number
   public birthDate!: string
   public firstName!: string
@@ -300,7 +714,9 @@ export type DepartmentPk = 'deptNo'
 export type DepartmentId = DepartmentAttributes[DepartmentPk]
 export type DepartmentCreationAttributes = Optional<DepartmentAttributes, DepartmentPk>
 
-export class Department extends Model<DepartmentAttributes, DepartmentCreationAttributes> implements DepartmentAttributes {
+export class Department
+  extends Model<DepartmentAttributes, DepartmentCreationAttributes>
+  implements DepartmentAttributes {
   public readonly deptNo!: string
   public deptName!: string
 
@@ -401,7 +817,9 @@ export type DeptEmpPk = 'empNo' | 'deptNo'
 export type DeptEmpId = DeptEmpAttributes[DeptEmpPk]
 export type DeptEmpCreationAttributes = Optional<DeptEmpAttributes, DeptEmpPk>
 
-export class DeptEmp extends Model<DeptEmpAttributes, DeptEmpCreationAttributes> implements DeptEmpAttributes {
+export class DeptEmp
+  extends Model<DeptEmpAttributes, DeptEmpCreationAttributes>
+  implements DeptEmpAttributes {
   public readonly empNo!: number
   public readonly deptNo!: string
   public fromDate!: string
@@ -471,7 +889,9 @@ export type DeptManagerPk = 'empNo' | 'deptNo'
 export type DeptManagerId = DeptManagerAttributes[DeptManagerPk]
 export type DeptManagerCreationAttributes = Optional<DeptManagerAttributes, DeptManagerPk>
 
-export class DeptManager extends Model<DeptManagerAttributes, DeptManagerCreationAttributes> implements DeptManagerAttributes {
+export class DeptManager
+  extends Model<DeptManagerAttributes, DeptManagerCreationAttributes>
+  implements DeptManagerAttributes {
   public readonly empNo!: number
   public readonly deptNo!: string
   public fromDate!: string
@@ -540,7 +960,9 @@ export type TitlePk = 'empNo' | 'fromDate'
 export type TitleId = TitleAttributes[TitlePk]
 export type TitleCreationAttributes = Optional<TitleAttributes, TitlePk>
 
-export class Title extends Model<TitleAttributes, TitleCreationAttributes> implements TitleAttributes {
+export class Title
+  extends Model<TitleAttributes, TitleCreationAttributes>
+  implements TitleAttributes {
   public readonly empNo!: number
   public title!: string
   public readonly fromDate!: string
@@ -602,7 +1024,9 @@ export type SalaryPk = 'empNo' | 'fromDate'
 export type SalaryId = SalaryAttributes[SalaryPk]
 export type SalaryCreationAttributes = Optional<SalaryAttributes, SalaryPk>
 
-export class Salary extends Model<SalaryAttributes, SalaryCreationAttributes> implements SalaryAttributes {
+export class Salary
+  extends Model<SalaryAttributes, SalaryCreationAttributes>
+  implements SalaryAttributes {
   public readonly empNo!: number
   public salary!: number
   public readonly fromDate!: string
@@ -694,8 +1118,13 @@ export default db
   \\"main\\": \\"server.ts\\",
   \\"scripts\\": {
     \\"test\\": \\"echo \\\\\\"Error: no test specified\\\\\\" && exit 1\\",
+    \\"db:up\\": \\"echo creating && npm run db:create && echo created && npm run db:migrate && echo migrated\\",
+    \\"db:reset\\": \\"npm run db:drop && npm run db:up\\",
     \\"db:create\\": \\"sequelize db:create\\",
     \\"db:drop\\": \\"sequelize db:drop\\",
+    \\"db:migrate\\": \\"sequelize db:migrate\\",
+    \\"db:rollback\\": \\"sequelize db:migrate:undo\\",
+    \\"db:rollback:all\\": \\"sequelize db:migrate:undo:all\\",
     \\"build\\": \\"tsc\\",
     \\"start\\": \\"node ./dist/server.js\\",
     \\"dev\\": \\"tsc-watch --onSuccess \\\\\\"node ./dist/server.js\\\\\\"\\"
@@ -727,7 +1156,6 @@ import { initModels } from './models'
 
 async function run() {
   initModels(db)
-  await db.sync()
   const hostname = process.env.HOSTNAME || '127.0.0.1'
   const port = parseInt(process.env.PORT || '3000')
   const server = http.createServer((req, res) => {

@@ -42,6 +42,183 @@ Object {
     Object {
       "files": Array [
         Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('categories', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      string: {
+        type: DataTypes.STRING,
+        field: 'string'
+      },
+      stringWithLength: {
+        type: DataTypes.STRING(100),
+        field: 'string_with_length'
+      },
+      text: {
+        type: DataTypes.TEXT,
+        field: 'text'
+      },
+      //// DataTypes.CITEXT not supported for MariaDB
+      // ciText: {
+      //   type: DataTypes.CITEXT,
+      //   field: 'ci_text'
+      // },
+      integer: {
+        type: DataTypes.INTEGER,
+        field: 'integer'
+      },
+      integerUnsigned: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        field: 'integer_unsigned'
+      },
+      integerAutoincrement: {
+        type: DataTypes.INTEGER,
+        field: 'integer_autoincrement',
+        autoIncrement: true
+      },
+      bigInt: {
+        type: DataTypes.BIGINT,
+        field: 'big_int'
+      },
+      smallInt: {
+        type: DataTypes.SMALLINT,
+        field: 'small_int'
+      },
+      float: {
+        type: DataTypes.FLOAT,
+        field: 'float'
+      },
+      real: {
+        type: DataTypes.REAL,
+        field: 'real'
+      },
+      double: {
+        type: DataTypes.DOUBLE,
+        field: 'double'
+      },
+      decimal: {
+        type: DataTypes.DECIMAL,
+        field: 'decimal'
+      },
+      decimalPrecision: {
+        type: DataTypes.DECIMAL.PRECISION(14),
+        field: 'decimal_precision'
+      },
+      decimalPrecisionAndScale: {
+        type: DataTypes.DECIMAL.PRECISION(14, 2),
+        field: 'decimal_precision_and_scale'
+      },
+      dateTime: {
+        type: DataTypes.DATE,
+        field: 'date_time'
+      },
+      dateTimeDefaultNow: {
+        type: DataTypes.DATE,
+        field: 'date_time_default_now',
+        defaultValue: DataTypes.NOW
+      },
+      date: {
+        type: DataTypes.DATEONLY,
+        field: 'date'
+      },
+      dateDefaultNow: {
+        type: DataTypes.DATEONLY,
+        field: 'date_default_now',
+        defaultValue: DataTypes.NOW
+      },
+      time: {
+        type: DataTypes.TIME,
+        field: 'time'
+      },
+      timeDefaultNow: {
+        type: DataTypes.TIME,
+        field: 'time_default_now',
+        defaultValue: DataTypes.NOW
+      },
+      boolean: {
+        type: DataTypes.BOOLEAN,
+        field: 'boolean'
+      },
+      enum: {
+        type: DataTypes.ENUM(),
+        field: 'enum'
+      },
+      //// DataTypes.ARRAY(DataTypes.STRING) not supported for MariaDB
+      // array: {
+      //   type: DataTypes.ARRAY(DataTypes.STRING),
+      //   field: 'array'
+      // },
+      json: {
+        type: DataTypes.JSON,
+        field: 'json'
+      },
+      //// DataTypes.JSONB not supported for MariaDB
+      // jsonB: {
+      //   type: DataTypes.JSONB,
+      //   field: 'json_b'
+      // },
+      blob: {
+        type: DataTypes.BLOB,
+        field: 'blob'
+      },
+      uuid: {
+        type: DataTypes.UUID,
+        field: 'uuid'
+      },
+      uuidDefaultV4: {
+        type: DataTypes.UUID,
+        field: 'uuid_default_v4',
+        defaultValue: DataTypes.UUIDV4
+      },
+      uuidDefaultV1: {
+        type: DataTypes.UUID,
+        field: 'uuid_default_v1',
+        defaultValue: DataTypes.UUIDV1
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('categories');
+  },
+};",
+          "name": "20210101000000-create-categories.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    
+  },
+  down: async (queryInterface, Sequelize) => {
+  
+  }
+};",
+          "name": "20210101000010-add-foreign-keys.js",
+          "type": "FILE",
+        },
+      ],
+      "name": "migrations",
+      "type": "DIRECTORY",
+    },
+    Object {
+      "files": Array [
+        Object {
           "content": "import type { Sequelize, Model } from 'sequelize'
 import { Category } from './Category'
 import type { CategoryAttributes, CategoryCreationAttributes } from './Category'
@@ -111,7 +288,9 @@ export interface CategoryAttributes {
 export type CategoryId = number
 export type CategoryCreationAttributes = CategoryAttributes & { id?: number }
 
-export class Category extends Model<CategoryAttributes, CategoryCreationAttributes> implements CategoryAttributes {
+export class Category
+  extends Model<CategoryAttributes, CategoryCreationAttributes>
+  implements CategoryAttributes {
   public readonly id?: number
   public string?: string
   public stringWithLength?: string
@@ -304,6 +483,9 @@ export default db
   \\"main\\": \\"server.ts\\",
   \\"scripts\\": {
     \\"test\\": \\"echo \\\\\\"Error: no test specified\\\\\\" && exit 1\\",
+    \\"db:migrate\\": \\"sequelize db:migrate\\",
+    \\"db:rollback\\": \\"sequelize db:migrate:undo\\",
+    \\"db:rollback:all\\": \\"sequelize db:migrate:undo:all\\",
     \\"build\\": \\"tsc\\",
     \\"start\\": \\"node ./dist/server.js\\",
     \\"dev\\": \\"tsc-watch --onSuccess \\\\\\"node ./dist/server.js\\\\\\"\\"
@@ -334,7 +516,6 @@ import { initModels } from './models'
 
 async function run() {
   initModels(db)
-  await db.sync()
   const hostname = process.env.HOSTNAME || '127.0.0.1'
   const port = parseInt(process.env.PORT || '3000')
   const server = http.createServer((req, res) => {

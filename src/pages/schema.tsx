@@ -1,10 +1,7 @@
-import { DbOptions, defaultDbOptions } from '@src/core/database'
-import DbOptionsForm from '@src/ui/components/DbOptionsForm'
 import Layout from '@src/ui/components/Layout'
 import ModelModule from '@src/ui/components/ModelModule'
 import SchemaModule from '@src/ui/components/SchemaModule'
 import useSchemaState, { SchemaEditStateType } from '@src/ui/hooks/useEditSchema'
-import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import dynamic from 'next/dynamic'
 import React, { useCallback, useState } from 'react'
 
@@ -34,9 +31,7 @@ function SchemaPageContent(): React.ReactElement {
     cancel,
   } = useSchemaState()
 
-  const [dbOptions, setDbOptions] = useState<DbOptions>(defaultDbOptions)
-  const { root } = useGeneratedCode({ schema, dbOptions })
-  const [viewCode, setViewCode] = useState<boolean>(false)
+  const [viewCode, setViewCode] = useState<boolean>(true)
   const handleClickViewCode = useCallback(() => setViewCode((x) => !x), [])
 
   if (error) return <p>{error}</p>
@@ -44,6 +39,7 @@ function SchemaPageContent(): React.ReactElement {
 
   return (
     <>
+      {viewCode && <CodeViewer schema={schema} />}
       <button onClick={handleClickViewCode}>{viewCode ? 'Hide Code' : 'View Code'}</button>
       <SchemaModule
         schema={schema}
@@ -53,14 +49,8 @@ function SchemaPageContent(): React.ReactElement {
         onUpdate={update}
         onCancel={cancel}
       />
-
       <button onClick={destroy}>Delete</button>
-      {viewCode && root && (
-        <>
-          <DbOptionsForm dbOptions={dbOptions} onChange={setDbOptions} />
-          <CodeViewer cacheKey={schema.id} root={root} />
-        </>
-      )}
+
       <h3>Models</h3>
       <button type="button" onClick={addModel}>
         Add model

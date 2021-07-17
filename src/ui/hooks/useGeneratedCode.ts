@@ -10,8 +10,8 @@ export type UseGeneratedCodeArgs = {
 }
 
 export type UseGeneratedCodeResult = {
-  root?: DirectoryItem
-  framework?: Framework
+  root: DirectoryItem | undefined
+  framework: Framework | undefined
 }
 
 export default function useGeneratedCode({

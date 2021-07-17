@@ -42,6 +42,576 @@ Object {
     Object {
       "files": Array [
         Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('categories', {
+      id: {
+        type: DataTypes.BIGINT,
+        field: 'id',
+        primaryKey: true
+      },
+      title: {
+        type: DataTypes.STRING(75),
+        field: 'title',
+        allowNull: false
+      },
+      metaTitle: {
+        type: DataTypes.STRING(100),
+        field: 'meta_title'
+      },
+      slug: {
+        type: DataTypes.STRING(100),
+        field: 'slug',
+        allowNull: false,
+        unique: true
+      },
+      content: {
+        type: DataTypes.TEXT,
+        field: 'content'
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      parentId: {
+        type: DataTypes.BIGINT,
+        field: 'parent_id'
+      },
+      categoryId: {
+        type: DataTypes.BIGINT,
+        field: 'category_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('categories');
+  },
+};",
+          "name": "20210401000000-create-categories.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('posts', {
+      id: {
+        type: DataTypes.BIGINT,
+        field: 'id',
+        primaryKey: true
+      },
+      title: {
+        type: DataTypes.STRING(75),
+        field: 'title',
+        allowNull: false
+      },
+      metaTitle: {
+        type: DataTypes.STRING(100),
+        field: 'meta_title'
+      },
+      slug: {
+        type: DataTypes.STRING(100),
+        field: 'slug',
+        allowNull: false,
+        unique: true
+      },
+      summary: {
+        type: DataTypes.TEXT,
+        field: 'summary'
+      },
+      published: {
+        type: DataTypes.BOOLEAN,
+        field: 'published',
+        allowNull: false
+      },
+      publishedAt: {
+        type: DataTypes.DATE,
+        field: 'published_at'
+      },
+      content: {
+        type: DataTypes.TEXT,
+        field: 'content'
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      authorId: {
+        type: DataTypes.BIGINT,
+        field: 'author_id'
+      },
+      parentId: {
+        type: DataTypes.BIGINT,
+        field: 'parent_id'
+      },
+      postId: {
+        type: DataTypes.BIGINT,
+        field: 'post_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('posts');
+  },
+};",
+          "name": "20210401000010-create-posts.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('post_categories', {
+      postId: {
+        type: DataTypes.BIGINT,
+        field: 'post_id',
+        primaryKey: true
+      },
+      categoryId: {
+        type: DataTypes.BIGINT,
+        field: 'category_id',
+        primaryKey: true
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('post_categories');
+  },
+};",
+          "name": "20210401000020-create-post_categories.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('post_comments', {
+      id: {
+        type: DataTypes.BIGINT,
+        field: 'id',
+        primaryKey: true
+      },
+      title: {
+        type: DataTypes.STRING(75),
+        field: 'title',
+        allowNull: false
+      },
+      published: {
+        type: DataTypes.BOOLEAN,
+        field: 'published',
+        allowNull: false
+      },
+      publishedAt: {
+        type: DataTypes.DATE,
+        field: 'published_at'
+      },
+      content: {
+        type: DataTypes.TEXT,
+        field: 'content'
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      postId: {
+        type: DataTypes.BIGINT,
+        field: 'post_id'
+      },
+      parentId: {
+        type: DataTypes.BIGINT,
+        field: 'parent_id'
+      },
+      postCommentId: {
+        type: DataTypes.BIGINT,
+        field: 'post_comment_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('post_comments');
+  },
+};",
+          "name": "20210401000030-create-post_comments.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('post_metas', {
+      id: {
+        type: DataTypes.BIGINT,
+        field: 'id',
+        primaryKey: true
+      },
+      key: {
+        type: DataTypes.STRING(50),
+        field: 'key',
+        allowNull: false,
+        unique: true
+      },
+      content: {
+        type: DataTypes.TEXT,
+        field: 'content'
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      postId: {
+        type: DataTypes.BIGINT,
+        field: 'post_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('post_metas');
+  },
+};",
+          "name": "20210401000040-create-post_metas.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('post_tags', {
+      postId: {
+        type: DataTypes.BIGINT,
+        field: 'post_id',
+        primaryKey: true
+      },
+      tagId: {
+        type: DataTypes.BIGINT,
+        field: 'tag_id',
+        primaryKey: true
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('post_tags');
+  },
+};",
+          "name": "20210401000050-create-post_tags.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('tags', {
+      id: {
+        type: DataTypes.BIGINT,
+        field: 'id',
+        primaryKey: true
+      },
+      title: {
+        type: DataTypes.STRING(75),
+        field: 'title',
+        allowNull: false
+      },
+      metaTitle: {
+        type: DataTypes.STRING(100),
+        field: 'meta_title'
+      },
+      slug: {
+        type: DataTypes.STRING(100),
+        field: 'slug',
+        allowNull: false,
+        unique: true
+      },
+      content: {
+        type: DataTypes.TEXT,
+        field: 'content'
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('tags');
+  },
+};",
+          "name": "20210401000100-create-tags.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('users', {
+      id: {
+        type: DataTypes.BIGINT,
+        field: 'id',
+        primaryKey: true
+      },
+      firstName: {
+        type: DataTypes.STRING(50),
+        field: 'first_name'
+      },
+      middleName: {
+        type: DataTypes.STRING(50),
+        field: 'middle_name'
+      },
+      lastName: {
+        type: DataTypes.STRING(50),
+        field: 'last_name'
+      },
+      mobile: {
+        type: DataTypes.STRING(15),
+        field: 'mobile'
+      },
+      email: {
+        type: DataTypes.STRING(50),
+        field: 'email'
+      },
+      passwordHash: {
+        type: DataTypes.STRING(32),
+        field: 'password_hash'
+      },
+      registeredAt: {
+        type: DataTypes.DATE,
+        field: 'registered_at',
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      lastLogin: {
+        type: DataTypes.DATE,
+        field: 'last_login'
+      },
+      intro: {
+        type: DataTypes.TEXT,
+        field: 'intro'
+      },
+      profile: {
+        type: DataTypes.TEXT,
+        field: 'profile'
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('users');
+  },
+};",
+          "name": "20210401000110-create-users.js",
+          "type": "FILE",
+        },
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.addConstraint('categories', {
+      fields: ['parent_id'],
+      type: 'foreign key',
+      name: 'categories_parent_id_fkey',
+      references: {
+        table: 'categories',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('categories', {
+      fields: ['category_id'],
+      type: 'foreign key',
+      name: 'categories_category_id_fkey',
+      references: {
+        table: 'categories',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('posts', {
+      fields: ['author_id'],
+      type: 'foreign key',
+      name: 'posts_author_id_fkey',
+      references: {
+        table: 'users',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('posts', {
+      fields: ['parent_id'],
+      type: 'foreign key',
+      name: 'posts_parent_id_fkey',
+      references: {
+        table: 'posts',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('posts', {
+      fields: ['post_id'],
+      type: 'foreign key',
+      name: 'posts_post_id_fkey',
+      references: {
+        table: 'posts',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_categories', {
+      fields: ['post_id'],
+      type: 'foreign key',
+      name: 'post_categories_post_id_fkey',
+      references: {
+        table: 'posts',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_categories', {
+      fields: ['category_id'],
+      type: 'foreign key',
+      name: 'post_categories_category_id_fkey',
+      references: {
+        table: 'categories',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_comments', {
+      fields: ['post_id'],
+      type: 'foreign key',
+      name: 'post_comments_post_id_fkey',
+      references: {
+        table: 'posts',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_comments', {
+      fields: ['parent_id'],
+      type: 'foreign key',
+      name: 'post_comments_parent_id_fkey',
+      references: {
+        table: 'post_comments',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_comments', {
+      fields: ['post_comment_id'],
+      type: 'foreign key',
+      name: 'post_comments_post_comment_id_fkey',
+      references: {
+        table: 'post_comments',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_metas', {
+      fields: ['post_id'],
+      type: 'foreign key',
+      name: 'post_metas_post_id_fkey',
+      references: {
+        table: 'posts',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_tags', {
+      fields: ['post_id'],
+      type: 'foreign key',
+      name: 'post_tags_post_id_fkey',
+      references: {
+        table: 'posts',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_tags', {
+      fields: ['tag_id'],
+      type: 'foreign key',
+      name: 'post_tags_tag_id_fkey',
+      references: {
+        table: 'tags',
+        field: 'id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.removeConstraint('categories', 'categories_parent_id_fkey')
+    await queryInterface.removeConstraint('categories', 'categories_category_id_fkey')
+    await queryInterface.removeConstraint('posts', 'posts_author_id_fkey')
+    await queryInterface.removeConstraint('posts', 'posts_parent_id_fkey')
+    await queryInterface.removeConstraint('posts', 'posts_post_id_fkey')
+    await queryInterface.removeConstraint('post_categories', 'post_categories_post_id_fkey')
+    await queryInterface.removeConstraint('post_categories', 'post_categories_category_id_fkey')
+    await queryInterface.removeConstraint('post_comments', 'post_comments_post_id_fkey')
+    await queryInterface.removeConstraint('post_comments', 'post_comments_parent_id_fkey')
+    await queryInterface.removeConstraint('post_comments', 'post_comments_post_comment_id_fkey')
+    await queryInterface.removeConstraint('post_metas', 'post_metas_post_id_fkey')
+    await queryInterface.removeConstraint('post_tags', 'post_tags_post_id_fkey')
+    await queryInterface.removeConstraint('post_tags', 'post_tags_tag_id_fkey')
+  }
+};",
+          "name": "20210401000120-add-foreign-keys.js",
+          "type": "FILE",
+        },
+      ],
+      "name": "migrations",
+      "type": "DIRECTORY",
+    },
+    Object {
+      "files": Array [
+        Object {
           "content": "import type { Sequelize, Model } from 'sequelize'
 import { Category } from './Category'
 import type { CategoryAttributes, CategoryCreationAttributes } from './Category'
@@ -226,7 +796,9 @@ export type CategoryPk = 'id'
 export type CategoryId = CategoryAttributes[CategoryPk]
 export type CategoryCreationAttributes = Optional<CategoryAttributes, CategoryPk>
 
-export class Category extends Model<CategoryAttributes, CategoryCreationAttributes> implements CategoryAttributes {
+export class Category
+  extends Model<CategoryAttributes, CategoryCreationAttributes>
+  implements CategoryAttributes {
   public readonly id?: number
   public title!: string
   public metaTitle?: string
@@ -342,7 +914,9 @@ export type PostPk = 'id'
 export type PostId = PostAttributes[PostPk]
 export type PostCreationAttributes = Optional<PostAttributes, PostPk>
 
-export class Post extends Model<PostAttributes, PostCreationAttributes> implements PostAttributes {
+export class Post
+  extends Model<PostAttributes, PostCreationAttributes>
+  implements PostAttributes {
   public readonly id?: number
   public title!: string
   public metaTitle?: string
@@ -523,7 +1097,9 @@ export type PostCategoryPk = 'postId' | 'categoryId'
 export type PostCategoryId = PostCategoryAttributes[PostCategoryPk]
 export type PostCategoryCreationAttributes = Optional<PostCategoryAttributes, PostCategoryPk>
 
-export class PostCategory extends Model<PostCategoryAttributes, PostCategoryCreationAttributes> implements PostCategoryAttributes {
+export class PostCategory
+  extends Model<PostCategoryAttributes, PostCategoryCreationAttributes>
+  implements PostCategoryAttributes {
   public readonly postId?: number
   public readonly categoryId?: number
 
@@ -581,7 +1157,9 @@ export type PostCommentPk = 'id'
 export type PostCommentId = PostCommentAttributes[PostCommentPk]
 export type PostCommentCreationAttributes = Optional<PostCommentAttributes, PostCommentPk>
 
-export class PostComment extends Model<PostCommentAttributes, PostCommentCreationAttributes> implements PostCommentAttributes {
+export class PostComment
+  extends Model<PostCommentAttributes, PostCommentCreationAttributes>
+  implements PostCommentAttributes {
   public readonly id?: number
   public title!: string
   public published!: boolean
@@ -664,7 +1242,9 @@ export type PostMetaPk = 'id'
 export type PostMetaId = PostMetaAttributes[PostMetaPk]
 export type PostMetaCreationAttributes = Optional<PostMetaAttributes, PostMetaPk>
 
-export class PostMeta extends Model<PostMetaAttributes, PostMetaCreationAttributes> implements PostMetaAttributes {
+export class PostMeta
+  extends Model<PostMetaAttributes, PostMetaCreationAttributes>
+  implements PostMetaAttributes {
   public readonly id?: number
   public key!: string
   public content?: string
@@ -718,7 +1298,9 @@ export type PostTagPk = 'postId' | 'tagId'
 export type PostTagId = PostTagAttributes[PostTagPk]
 export type PostTagCreationAttributes = Optional<PostTagAttributes, PostTagPk>
 
-export class PostTag extends Model<PostTagAttributes, PostTagCreationAttributes> implements PostTagAttributes {
+export class PostTag
+  extends Model<PostTagAttributes, PostTagCreationAttributes>
+  implements PostTagAttributes {
   public readonly postId?: number
   public readonly tagId?: number
 
@@ -777,7 +1359,9 @@ export type TagPk = 'id'
 export type TagId = TagAttributes[TagPk]
 export type TagCreationAttributes = Optional<TagAttributes, TagPk>
 
-export class Tag extends Model<TagAttributes, TagCreationAttributes> implements TagAttributes {
+export class Tag
+  extends Model<TagAttributes, TagCreationAttributes>
+  implements TagAttributes {
   public readonly id?: number
   public title!: string
   public metaTitle?: string
@@ -869,7 +1453,9 @@ export type UserPk = 'id'
 export type UserId = UserAttributes[UserPk]
 export type UserCreationAttributes = Optional<UserAttributes, UserPk>
 
-export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+export class User
+  extends Model<UserAttributes, UserCreationAttributes>
+  implements UserAttributes {
   public readonly id?: number
   public firstName?: string
   public middleName?: string
@@ -993,8 +1579,13 @@ export default db
   \\"main\\": \\"server.ts\\",
   \\"scripts\\": {
     \\"test\\": \\"echo \\\\\\"Error: no test specified\\\\\\" && exit 1\\",
+    \\"db:up\\": \\"echo creating && npm run db:create && echo created && npm run db:migrate && echo migrated\\",
+    \\"db:reset\\": \\"npm run db:drop && npm run db:up\\",
     \\"db:create\\": \\"sequelize db:create\\",
     \\"db:drop\\": \\"sequelize db:drop\\",
+    \\"db:migrate\\": \\"sequelize db:migrate\\",
+    \\"db:rollback\\": \\"sequelize db:migrate:undo\\",
+    \\"db:rollback:all\\": \\"sequelize db:migrate:undo:all\\",
     \\"build\\": \\"tsc\\",
     \\"start\\": \\"node ./dist/server.js\\",
     \\"dev\\": \\"tsc-watch --onSuccess \\\\\\"node ./dist/server.js\\\\\\"\\"
@@ -1026,7 +1617,6 @@ import { initModels } from './models'
 
 async function run() {
   initModels(db)
-  await db.sync()
   const hostname = process.env.HOSTNAME || '127.0.0.1'
   const port = parseInt(process.env.PORT || '3000')
   const server = http.createServer((req, res) => {

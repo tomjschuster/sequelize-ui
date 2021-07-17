@@ -188,7 +188,7 @@ export const defaultDbOptions: DbOptions = {
   timestamps: true,
   caseStyle: DbCaseStyle.Snake,
   nounForm: DbNounForm.Plural,
-  migrations: false,
+  migrations: true,
 }
 
 export function caseByDbCaseStyle(value: string, caseStyle: DbCaseStyle): string {

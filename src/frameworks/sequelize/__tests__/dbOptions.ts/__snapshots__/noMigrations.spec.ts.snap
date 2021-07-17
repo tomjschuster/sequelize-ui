@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Sequelize Framework camel case singular database options generates correct code 1`] = `
+exports[`Sequelize Framework no migrations database options generates correct code 1`] = `
 Object {
   "files": Array [
     Object {
@@ -37,955 +37,6 @@ Object {
         },
       ],
       "name": "config",
-      "type": "DIRECTORY",
-    },
-    Object {
-      "files": Array [
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('actors', {
-      actorId: {
-        type: DataTypes.INTEGER,
-        field: 'actor_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      firstName: {
-        type: DataTypes.STRING,
-        field: 'first_name',
-        allowNull: false
-      },
-      lastName: {
-        type: DataTypes.STRING,
-        field: 'last_name',
-        allowNull: false
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('actors');
-  },
-};",
-          "name": "20200101000000-create-actors.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('films', {
-      filmId: {
-        type: DataTypes.INTEGER,
-        field: 'film_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      title: {
-        type: DataTypes.STRING,
-        field: 'title',
-        allowNull: false
-      },
-      description: {
-        type: DataTypes.STRING,
-        field: 'description'
-      },
-      releaseYear: {
-        type: DataTypes.INTEGER,
-        field: 'release_year'
-      },
-      languageId: {
-        type: DataTypes.INTEGER,
-        field: 'language_id',
-        allowNull: false
-      },
-      originalLanguageId: {
-        type: DataTypes.INTEGER,
-        field: 'original_language_id'
-      },
-      rentalDuration: {
-        type: DataTypes.INTEGER,
-        field: 'rental_duration',
-        allowNull: false
-      },
-      rentalRate: {
-        type: DataTypes.DECIMAL,
-        field: 'rental_rate',
-        allowNull: false
-      },
-      length: {
-        type: DataTypes.INTEGER,
-        field: 'length'
-      },
-      rating: {
-        type: DataTypes.ENUM('G', 'PG', 'PG-13', 'R', 'NC-17'),
-        field: 'rating',
-        allowNull: false
-      },
-      specialFeature: {
-        type: DataTypes.ARRAY(DataTypes.ENUM('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes')),
-        field: 'special_feature',
-        allowNull: false
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('films');
-  },
-};",
-          "name": "20200101000010-create-films.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('languages', {
-      languageId: {
-        type: DataTypes.INTEGER,
-        field: 'language_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      name: {
-        type: DataTypes.STRING,
-        field: 'name',
-        allowNull: false
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('languages');
-  },
-};",
-          "name": "20200101000020-create-languages.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('categories', {
-      categoryId: {
-        type: DataTypes.INTEGER,
-        field: 'category_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('categories');
-  },
-};",
-          "name": "20200101000030-create-categories.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('inventories', {
-      inventoryId: {
-        type: DataTypes.INTEGER,
-        field: 'inventory_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      },
-      filmId: {
-        type: DataTypes.INTEGER,
-        field: 'film_id'
-      },
-      storeId: {
-        type: DataTypes.INTEGER,
-        field: 'store_id'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('inventories');
-  },
-};",
-          "name": "20200101000040-create-inventories.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('stores', {
-      storeId: {
-        type: DataTypes.INTEGER,
-        field: 'store_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      },
-      managerStaffId: {
-        type: DataTypes.INTEGER,
-        field: 'manager_staff_id'
-      },
-      addressId: {
-        type: DataTypes.INTEGER,
-        field: 'address_id'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('stores');
-  },
-};",
-          "name": "20200101000050-create-stores.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('staffs', {
-      staffId: {
-        type: DataTypes.INTEGER,
-        field: 'staff_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      firstName: {
-        type: DataTypes.STRING,
-        field: 'first_name',
-        allowNull: false
-      },
-      lastName: {
-        type: DataTypes.STRING,
-        field: 'last_name',
-        allowNull: false
-      },
-      picture: {
-        type: DataTypes.BLOB,
-        field: 'picture'
-      },
-      email: {
-        type: DataTypes.STRING,
-        field: 'email'
-      },
-      active: {
-        type: DataTypes.BOOLEAN,
-        field: 'active',
-        allowNull: false
-      },
-      username: {
-        type: DataTypes.STRING,
-        field: 'username',
-        allowNull: false
-      },
-      password: {
-        type: DataTypes.STRING,
-        field: 'password'
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      },
-      storeId: {
-        type: DataTypes.INTEGER,
-        field: 'store_id'
-      },
-      addressId: {
-        type: DataTypes.INTEGER,
-        field: 'address_id'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('staffs');
-  },
-};",
-          "name": "20200101000100-create-staffs.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('customers', {
-      customerId: {
-        type: DataTypes.INTEGER,
-        field: 'customer_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      firstName: {
-        type: DataTypes.STRING,
-        field: 'first_name',
-        allowNull: false
-      },
-      lastName: {
-        type: DataTypes.STRING,
-        field: 'last_name',
-        allowNull: false
-      },
-      email: {
-        type: DataTypes.STRING,
-        field: 'email'
-      },
-      active: {
-        type: DataTypes.BOOLEAN,
-        field: 'active',
-        allowNull: false
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      },
-      storeId: {
-        type: DataTypes.INTEGER,
-        field: 'store_id'
-      },
-      addressId: {
-        type: DataTypes.INTEGER,
-        field: 'address_id'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('customers');
-  },
-};",
-          "name": "20200101000110-create-customers.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('addresses', {
-      addressId: {
-        type: DataTypes.INTEGER,
-        field: 'address_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      address: {
-        type: DataTypes.STRING,
-        field: 'address',
-        allowNull: false
-      },
-      address2: {
-        type: DataTypes.STRING,
-        field: 'address2',
-        allowNull: false
-      },
-      postalCode: {
-        type: DataTypes.STRING,
-        field: 'postal_code'
-      },
-      phone: {
-        type: DataTypes.STRING,
-        field: 'phone',
-        allowNull: false
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      },
-      cityId: {
-        type: DataTypes.INTEGER,
-        field: 'city_id'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('addresses');
-  },
-};",
-          "name": "20200101000120-create-addresses.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('rentals', {
-      rentalId: {
-        type: DataTypes.INTEGER,
-        field: 'rental_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      rentalDate: {
-        type: DataTypes.DATEONLY,
-        field: 'rental_date',
-        allowNull: false
-      },
-      returnDate: {
-        type: DataTypes.STRING,
-        field: 'return_date'
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      },
-      inventoryId: {
-        type: DataTypes.INTEGER,
-        field: 'inventory_id'
-      },
-      customerId: {
-        type: DataTypes.INTEGER,
-        field: 'customer_id'
-      },
-      staffId: {
-        type: DataTypes.INTEGER,
-        field: 'staff_id'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('rentals');
-  },
-};",
-          "name": "20200101000130-create-rentals.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('payments', {
-      paymentId: {
-        type: DataTypes.INTEGER,
-        field: 'payment_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      amount: {
-        type: DataTypes.DECIMAL,
-        field: 'amount',
-        allowNull: false
-      },
-      paymentDate: {
-        type: DataTypes.DATE,
-        field: 'payment_date',
-        allowNull: false
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      },
-      customerId: {
-        type: DataTypes.INTEGER,
-        field: 'customer_id'
-      },
-      staffId: {
-        type: DataTypes.INTEGER,
-        field: 'staff_id'
-      },
-      rentalId: {
-        type: DataTypes.INTEGER,
-        field: 'rental_id'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('payments');
-  },
-};",
-          "name": "20200101000140-create-payments.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('cities', {
-      cityId: {
-        type: DataTypes.INTEGER,
-        field: 'city_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      city: {
-        type: DataTypes.STRING,
-        field: 'city',
-        allowNull: false
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      },
-      countryId: {
-        type: DataTypes.INTEGER,
-        field: 'country_id'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('cities');
-  },
-};",
-          "name": "20200101000150-create-cities.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('countries', {
-      countryId: {
-        type: DataTypes.INTEGER,
-        field: 'country_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      country: {
-        type: DataTypes.STRING,
-        field: 'country',
-        allowNull: false
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('countries');
-  },
-};",
-          "name": "20200101000200-create-countries.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('film_actors', {
-      filmActorId: {
-        type: DataTypes.INTEGER,
-        field: 'film_actor_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      },
-      filmId: {
-        type: DataTypes.INTEGER,
-        field: 'film_id'
-      },
-      actorId: {
-        type: DataTypes.INTEGER,
-        field: 'actor_id'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('film_actors');
-  },
-};",
-          "name": "20200101000210-create-film_actors.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('film_categories', {
-      filmCategoryId: {
-        type: DataTypes.INTEGER,
-        field: 'film_category_id',
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at'
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at'
-      },
-      filmId: {
-        type: DataTypes.INTEGER,
-        field: 'film_id'
-      },
-      categoryId: {
-        type: DataTypes.INTEGER,
-        field: 'category_id'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('film_categories');
-  },
-};",
-          "name": "20200101000220-create-film_categories.js",
-          "type": "FILE",
-        },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.addConstraint('films', {
-      fields: ['language_id'],
-      type: 'foreign key',
-      name: 'films_language_id_fkey',
-      references: {
-        table: 'languages',
-        field: 'language_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('films', {
-      fields: ['original_language_id'],
-      type: 'foreign key',
-      name: 'films_original_language_id_fkey',
-      references: {
-        table: 'languages',
-        field: 'language_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('inventories', {
-      fields: ['film_id'],
-      type: 'foreign key',
-      name: 'inventories_film_id_fkey',
-      references: {
-        table: 'films',
-        field: 'film_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('inventories', {
-      fields: ['store_id'],
-      type: 'foreign key',
-      name: 'inventories_store_id_fkey',
-      references: {
-        table: 'stores',
-        field: 'store_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('stores', {
-      fields: ['manager_staff_id'],
-      type: 'foreign key',
-      name: 'stores_manager_staff_id_fkey',
-      references: {
-        table: 'staffs',
-        field: 'staff_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('stores', {
-      fields: ['address_id'],
-      type: 'foreign key',
-      name: 'stores_address_id_fkey',
-      references: {
-        table: 'addresses',
-        field: 'address_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('staffs', {
-      fields: ['store_id'],
-      type: 'foreign key',
-      name: 'staffs_store_id_fkey',
-      references: {
-        table: 'stores',
-        field: 'store_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('staffs', {
-      fields: ['address_id'],
-      type: 'foreign key',
-      name: 'staffs_address_id_fkey',
-      references: {
-        table: 'addresses',
-        field: 'address_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('customers', {
-      fields: ['store_id'],
-      type: 'foreign key',
-      name: 'customers_store_id_fkey',
-      references: {
-        table: 'stores',
-        field: 'store_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('customers', {
-      fields: ['address_id'],
-      type: 'foreign key',
-      name: 'customers_address_id_fkey',
-      references: {
-        table: 'addresses',
-        field: 'address_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('addresses', {
-      fields: ['city_id'],
-      type: 'foreign key',
-      name: 'addresses_city_id_fkey',
-      references: {
-        table: 'cities',
-        field: 'city_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('rentals', {
-      fields: ['inventory_id'],
-      type: 'foreign key',
-      name: 'rentals_inventory_id_fkey',
-      references: {
-        table: 'inventories',
-        field: 'inventory_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('rentals', {
-      fields: ['customer_id'],
-      type: 'foreign key',
-      name: 'rentals_customer_id_fkey',
-      references: {
-        table: 'customers',
-        field: 'customer_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('rentals', {
-      fields: ['staff_id'],
-      type: 'foreign key',
-      name: 'rentals_staff_id_fkey',
-      references: {
-        table: 'staffs',
-        field: 'staff_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('payments', {
-      fields: ['customer_id'],
-      type: 'foreign key',
-      name: 'payments_customer_id_fkey',
-      references: {
-        table: 'customers',
-        field: 'customer_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('payments', {
-      fields: ['staff_id'],
-      type: 'foreign key',
-      name: 'payments_staff_id_fkey',
-      references: {
-        table: 'staffs',
-        field: 'staff_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('payments', {
-      fields: ['rental_id'],
-      type: 'foreign key',
-      name: 'payments_rental_id_fkey',
-      references: {
-        table: 'rentals',
-        field: 'rental_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('cities', {
-      fields: ['country_id'],
-      type: 'foreign key',
-      name: 'cities_country_id_fkey',
-      references: {
-        table: 'countries',
-        field: 'country_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('film_actors', {
-      fields: ['film_id'],
-      type: 'foreign key',
-      name: 'film_actors_film_id_fkey',
-      references: {
-        table: 'films',
-        field: 'film_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('film_actors', {
-      fields: ['actor_id'],
-      type: 'foreign key',
-      name: 'film_actors_actor_id_fkey',
-      references: {
-        table: 'actors',
-        field: 'actor_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('film_categories', {
-      fields: ['film_id'],
-      type: 'foreign key',
-      name: 'film_categories_film_id_fkey',
-      references: {
-        table: 'films',
-        field: 'film_id'
-      }
-    })
-    
-    await queryInterface.addConstraint('film_categories', {
-      fields: ['category_id'],
-      type: 'foreign key',
-      name: 'film_categories_category_id_fkey',
-      references: {
-        table: 'categories',
-        field: 'category_id'
-      }
-    })
-  },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeConstraint('films', 'films_language_id_fkey')
-    await queryInterface.removeConstraint('films', 'films_original_language_id_fkey')
-    await queryInterface.removeConstraint('inventories', 'inventories_film_id_fkey')
-    await queryInterface.removeConstraint('inventories', 'inventories_store_id_fkey')
-    await queryInterface.removeConstraint('stores', 'stores_manager_staff_id_fkey')
-    await queryInterface.removeConstraint('stores', 'stores_address_id_fkey')
-    await queryInterface.removeConstraint('staffs', 'staffs_store_id_fkey')
-    await queryInterface.removeConstraint('staffs', 'staffs_address_id_fkey')
-    await queryInterface.removeConstraint('customers', 'customers_store_id_fkey')
-    await queryInterface.removeConstraint('customers', 'customers_address_id_fkey')
-    await queryInterface.removeConstraint('addresses', 'addresses_city_id_fkey')
-    await queryInterface.removeConstraint('rentals', 'rentals_inventory_id_fkey')
-    await queryInterface.removeConstraint('rentals', 'rentals_customer_id_fkey')
-    await queryInterface.removeConstraint('rentals', 'rentals_staff_id_fkey')
-    await queryInterface.removeConstraint('payments', 'payments_customer_id_fkey')
-    await queryInterface.removeConstraint('payments', 'payments_staff_id_fkey')
-    await queryInterface.removeConstraint('payments', 'payments_rental_id_fkey')
-    await queryInterface.removeConstraint('cities', 'cities_country_id_fkey')
-    await queryInterface.removeConstraint('film_actors', 'film_actors_film_id_fkey')
-    await queryInterface.removeConstraint('film_actors', 'film_actors_actor_id_fkey')
-    await queryInterface.removeConstraint('film_categories', 'film_categories_film_id_fkey')
-    await queryInterface.removeConstraint('film_categories', 'film_categories_category_id_fkey')
-  }
-};",
-          "name": "20200101000230-add-foreign-keys.js",
-          "type": "FILE",
-        },
-      ],
-      "name": "migrations",
       "type": "DIRECTORY",
     },
     Object {
@@ -1277,7 +328,9 @@ export type ActorPk = 'actorId'
 export type ActorId = ActorAttributes[ActorPk]
 export type ActorCreationAttributes = Optional<ActorAttributes, ActorPk>
 
-export class Actor extends Model<ActorAttributes, ActorCreationAttributes> implements ActorAttributes {
+export class Actor
+  extends Model<ActorAttributes, ActorCreationAttributes>
+  implements ActorAttributes {
   public readonly actorId!: number
   public firstName!: string
   public lastName!: string
@@ -1351,7 +404,9 @@ export type FilmPk = 'filmId'
 export type FilmId = FilmAttributes[FilmPk]
 export type FilmCreationAttributes = Optional<FilmAttributes, FilmPk>
 
-export class Film extends Model<FilmAttributes, FilmCreationAttributes> implements FilmAttributes {
+export class Film
+  extends Model<FilmAttributes, FilmCreationAttributes>
+  implements FilmAttributes {
   public readonly filmId!: number
   public title!: string
   public description?: string
@@ -1491,7 +546,9 @@ export type LanguagePk = 'languageId'
 export type LanguageId = LanguageAttributes[LanguagePk]
 export type LanguageCreationAttributes = Optional<LanguageAttributes, LanguagePk>
 
-export class Language extends Model<LanguageAttributes, LanguageCreationAttributes> implements LanguageAttributes {
+export class Language
+  extends Model<LanguageAttributes, LanguageCreationAttributes>
+  implements LanguageAttributes {
   public readonly languageId!: number
   public name!: string
 
@@ -1561,7 +618,9 @@ export type CategoryPk = 'categoryId'
 export type CategoryId = CategoryAttributes[CategoryPk]
 export type CategoryCreationAttributes = Optional<CategoryAttributes, CategoryPk>
 
-export class Category extends Model<CategoryAttributes, CategoryCreationAttributes> implements CategoryAttributes {
+export class Category
+  extends Model<CategoryAttributes, CategoryCreationAttributes>
+  implements CategoryAttributes {
   public readonly categoryId!: number
 
   // Category belongsToMany Film
@@ -1613,7 +672,9 @@ export type InventoryPk = 'inventoryId'
 export type InventoryId = InventoryAttributes[InventoryPk]
 export type InventoryCreationAttributes = Optional<InventoryAttributes, InventoryPk>
 
-export class Inventory extends Model<InventoryAttributes, InventoryCreationAttributes> implements InventoryAttributes {
+export class Inventory
+  extends Model<InventoryAttributes, InventoryCreationAttributes>
+  implements InventoryAttributes {
   public readonly inventoryId!: number
 
   // Inventory belongsTo Film
@@ -1667,7 +728,9 @@ export type StorePk = 'storeId'
 export type StoreId = StoreAttributes[StorePk]
 export type StoreCreationAttributes = Optional<StoreAttributes, StorePk>
 
-export class Store extends Model<StoreAttributes, StoreCreationAttributes> implements StoreAttributes {
+export class Store
+  extends Model<StoreAttributes, StoreCreationAttributes>
+  implements StoreAttributes {
   public readonly storeId!: number
 
   // Store hasMany Inventory
@@ -1770,7 +833,9 @@ export type StaffPk = 'staffId'
 export type StaffId = StaffAttributes[StaffPk]
 export type StaffCreationAttributes = Optional<StaffAttributes, StaffPk>
 
-export class Staff extends Model<StaffAttributes, StaffCreationAttributes> implements StaffAttributes {
+export class Staff
+  extends Model<StaffAttributes, StaffCreationAttributes>
+  implements StaffAttributes {
   public readonly staffId!: number
   public firstName!: string
   public lastName!: string
@@ -1902,7 +967,9 @@ export type CustomerPk = 'customerId'
 export type CustomerId = CustomerAttributes[CustomerPk]
 export type CustomerCreationAttributes = Optional<CustomerAttributes, CustomerPk>
 
-export class Customer extends Model<CustomerAttributes, CustomerCreationAttributes> implements CustomerAttributes {
+export class Customer
+  extends Model<CustomerAttributes, CustomerCreationAttributes>
+  implements CustomerAttributes {
   public readonly customerId!: number
   public firstName!: string
   public lastName!: string
@@ -2007,7 +1074,9 @@ export type AddressPk = 'addressId'
 export type AddressId = AddressAttributes[AddressPk]
 export type AddressCreationAttributes = Optional<AddressAttributes, AddressPk>
 
-export class Address extends Model<AddressAttributes, AddressCreationAttributes> implements AddressAttributes {
+export class Address
+  extends Model<AddressAttributes, AddressCreationAttributes>
+  implements AddressAttributes {
   public readonly addressId!: number
   public address!: string
   public address2!: string
@@ -2096,7 +1165,9 @@ export type RentalPk = 'rentalId'
 export type RentalId = RentalAttributes[RentalPk]
 export type RentalCreationAttributes = Optional<RentalAttributes, RentalPk>
 
-export class Rental extends Model<RentalAttributes, RentalCreationAttributes> implements RentalAttributes {
+export class Rental
+  extends Model<RentalAttributes, RentalCreationAttributes>
+  implements RentalAttributes {
   public readonly rentalId!: number
   public rentalDate!: string
   public returnDate?: string
@@ -2181,7 +1252,9 @@ export type PaymentPk = 'paymentId'
 export type PaymentId = PaymentAttributes[PaymentPk]
 export type PaymentCreationAttributes = Optional<PaymentAttributes, PaymentPk>
 
-export class Payment extends Model<PaymentAttributes, PaymentCreationAttributes> implements PaymentAttributes {
+export class Payment
+  extends Model<PaymentAttributes, PaymentCreationAttributes>
+  implements PaymentAttributes {
   public readonly paymentId!: number
   public amount!: number
   public paymentDate!: string
@@ -2251,7 +1324,9 @@ export type CityPk = 'cityId'
 export type CityId = CityAttributes[CityPk]
 export type CityCreationAttributes = Optional<CityAttributes, CityPk>
 
-export class City extends Model<CityAttributes, CityCreationAttributes> implements CityAttributes {
+export class City
+  extends Model<CityAttributes, CityCreationAttributes>
+  implements CityAttributes {
   public readonly cityId!: number
   public city!: string
 
@@ -2315,7 +1390,9 @@ export type CountryPk = 'countryId'
 export type CountryId = CountryAttributes[CountryPk]
 export type CountryCreationAttributes = Optional<CountryAttributes, CountryPk>
 
-export class Country extends Model<CountryAttributes, CountryCreationAttributes> implements CountryAttributes {
+export class Country
+  extends Model<CountryAttributes, CountryCreationAttributes>
+  implements CountryAttributes {
   public readonly countryId!: number
   public country!: string
 
@@ -2372,7 +1449,9 @@ export type FilmActorPk = 'filmActorId'
 export type FilmActorId = FilmActorAttributes[FilmActorPk]
 export type FilmActorCreationAttributes = Optional<FilmActorAttributes, FilmActorPk>
 
-export class FilmActor extends Model<FilmActorAttributes, FilmActorCreationAttributes> implements FilmActorAttributes {
+export class FilmActor
+  extends Model<FilmActorAttributes, FilmActorCreationAttributes>
+  implements FilmActorAttributes {
   public readonly filmActorId!: number
 
   // FilmActor belongsTo Film
@@ -2424,7 +1503,9 @@ export type FilmCategoryPk = 'filmCategoryId'
 export type FilmCategoryId = FilmCategoryAttributes[FilmCategoryPk]
 export type FilmCategoryCreationAttributes = Optional<FilmCategoryAttributes, FilmCategoryPk>
 
-export class FilmCategory extends Model<FilmCategoryAttributes, FilmCategoryCreationAttributes> implements FilmCategoryAttributes {
+export class FilmCategory
+  extends Model<FilmCategoryAttributes, FilmCategoryCreationAttributes>
+  implements FilmCategoryAttributes {
   public readonly filmCategoryId!: number
 
   // FilmCategory belongsTo Film
@@ -2508,13 +1589,8 @@ export default db
   \\"main\\": \\"server.ts\\",
   \\"scripts\\": {
     \\"test\\": \\"echo \\\\\\"Error: no test specified\\\\\\" && exit 1\\",
-    \\"db:up\\": \\"echo creating && npm run db:create && echo created && npm run db:migrate && echo migrated\\",
-    \\"db:reset\\": \\"npm run db:drop && npm run db:up\\",
     \\"db:create\\": \\"sequelize db:create\\",
     \\"db:drop\\": \\"sequelize db:drop\\",
-    \\"db:migrate\\": \\"sequelize db:migrate\\",
-    \\"db:rollback\\": \\"sequelize db:migrate:undo\\",
-    \\"db:rollback:all\\": \\"sequelize db:migrate:undo:all\\",
     \\"build\\": \\"tsc\\",
     \\"start\\": \\"node ./dist/server.js\\",
     \\"dev\\": \\"tsc-watch --onSuccess \\\\\\"node ./dist/server.js\\\\\\"\\"
@@ -2546,6 +1622,7 @@ import { initModels } from './models'
 
 async function run() {
   initModels(db)
+  await db.sync()
   const hostname = process.env.HOSTNAME || '127.0.0.1'
   const port = parseInt(process.env.PORT || '3000')
   const server = http.createServer((req, res) => {
