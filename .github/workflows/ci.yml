@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  build:
+  test_build_deploy:
     runs-on: ubuntu-latest
 
     steps:
