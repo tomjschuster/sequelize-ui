@@ -8,8 +8,8 @@
     "build": "next build && next export",
     "start": "next start",
     "lint": "eslint --cache",
-    "format": "prettier --write **/*.{js,json,ts,tsx}",
-    "check:format": "prettier --check **/*.{js,json,ts,tsx}",
+    "format": "prettier --write {src,e2e}/**/*.{js,ts,tsx}",
+    "check:format": "prettier --check {src,e2e}/**/*.{js,ts,tsx}",
     "check:types": "tsc -b tsconfig.check.json",
     "generate:css-types": "tailwindcss-classnames -i tailwind.config.js -o src/typings/__generated__/tailwindcss-classnames.d.ts",
     "test": "jest",
@@ -26,7 +26,7 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx,js}": [
+    "src/**/*.{ts,tsx,js}": [
       "eslint --cache --fix",
       "prettier --write"
     ]
