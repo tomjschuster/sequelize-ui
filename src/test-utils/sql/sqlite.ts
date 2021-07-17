@@ -7,7 +7,8 @@ import { DbConnection, DbConnectionConstructor } from './connection'
 const sqlitePaths = ['/usr/bin/sqlite3', '/usr/local/bin/sqlite3']
 
 export const SqlLiteConnection: DbConnectionConstructor = class SqlLiteConnection
-  implements DbConnection {
+  implements DbConnection
+{
   static preinstall(projectType: ProjectType): string | undefined {
     // sqlite3 takes a long time to install on linux:
     // sudo apt-get install libsqlite3-dev

@@ -1,3 +1,7 @@
-node_modules
-.next
+.buildcache
 .eslintcache
+.github
+.next
+coverage
+node_modules
+out

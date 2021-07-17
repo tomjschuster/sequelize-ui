@@ -49,9 +49,10 @@ export default function useEditSchema(): UseEditSchemaResult {
   const [schemas, setSchemas] = useState<Schema[] | undefined>()
   const [error, setError] = useState<string | undefined>()
 
-  const schemaId = useMemo(() => (route && 'schemaId' in route ? route.schemaId : undefined), [
-    route,
-  ])
+  const schemaId = useMemo(
+    () => (route && 'schemaId' in route ? route.schemaId : undefined),
+    [route],
+  )
 
   useLoadSchema({
     skip: loading || !!error || (!!schema && schema.id === schemaId),

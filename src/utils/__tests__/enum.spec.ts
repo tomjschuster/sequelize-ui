@@ -31,20 +31,17 @@ describe('enum utils', () => {
       })
     })
 
-    const stringCases: [
-      key: unknown,
-      obj: typeof StringEnum,
-      expected: StringEnum | undefined,
-    ][] = [
-      ['FOO', StringEnum, StringEnum.Foo],
-      ['BAR', StringEnum, StringEnum.Bar],
-      ['BAZ', StringEnum, StringEnum.Baz],
-      ['', StringEnum, undefined],
-      [0, StringEnum, undefined],
-      [1, StringEnum, undefined],
-      [2, StringEnum, undefined],
-      [3, StringEnum, undefined],
-    ]
+    const stringCases: [key: unknown, obj: typeof StringEnum, expected: StringEnum | undefined][] =
+      [
+        ['FOO', StringEnum, StringEnum.Foo],
+        ['BAR', StringEnum, StringEnum.Bar],
+        ['BAZ', StringEnum, StringEnum.Baz],
+        ['', StringEnum, undefined],
+        [0, StringEnum, undefined],
+        [1, StringEnum, undefined],
+        [2, StringEnum, undefined],
+        [3, StringEnum, undefined],
+      ]
     describe.each(stringCases)('', (key, object, expected) => {
       it(`(StringEnum, ${key}) === ${expected}`, () => {
         expect(toEnum(object, key)).toEqual(expected)

@@ -2,7 +2,8 @@ import { ColumnValue, Connection, ConnectionConfig, Request } from 'tedious'
 import { DbConnection, DbConnectionConstructor } from './connection'
 
 export const MsSqlConnection: DbConnectionConstructor = class MsSqlConnection
-  implements DbConnection {
+  implements DbConnection
+{
   private static connectionConfig: ConnectionConfig = {
     server: process.env.MSSQL_DB_HOST || '127.0.0.1',
     options: {

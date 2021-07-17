@@ -7,21 +7,22 @@
     "dev": "next",
     "build": "next build && next export",
     "start": "next start",
-    "format": "prettier --write .",
-    "generate:css-types": "tailwindcss-classnames -i tailwind.config.js -o src/typings/__generated__/tailwindcss-classnames.d.ts",
     "lint": "eslint --cache",
+    "format": "prettier --write .",
+    "check:format": "prettier --check .",
+    "check:types": "tsc -b tsconfig.check.json",
+    "generate:css-types": "tailwindcss-classnames -i tailwind.config.js -o src/typings/__generated__/tailwindcss-classnames.d.ts",
     "test": "jest",
     "test:unit": "npm test -- src",
     "test:coverage": "npm run test:unit -- --coverage",
     "test:all": "SQL_DIALECT=all npm test -- src e2e --coverage",
     "test:e2e": "jest e2e",
     "test:e2e:all": "SQL_DIALECT=all npm run test:e2e",
-    "test:watch": "npm test -- --watch",
-    "types:check": "tsc -b tsconfig.check.json"
+    "test:watch": "npm test -- --watch"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && npm run types:check"
+      "pre-commit": "lint-staged && npm run check:types"
     }
   },
   "lint-staged": {

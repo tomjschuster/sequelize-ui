@@ -25,14 +25,15 @@ type FieldFieldsetProps = {
   onDelete: (id: Field['id']) => void
 }
 function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps) {
-  const handleChange = useCallback((change: Partial<Field>): void => onChange(field.id, change), [
-    field.id,
-    onChange,
-  ])
+  const handleChange = useCallback(
+    (change: Partial<Field>): void => onChange(field.id, change),
+    [field.id, onChange],
+  )
 
-  const handleChangeName = useCallback((name?: string) => handleChange({ name: name || '' }), [
-    handleChange,
-  ])
+  const handleChangeName = useCallback(
+    (name?: string) => handleChange({ name: name || '' }),
+    [handleChange],
+  )
 
   const handleChangeDataType = useCallback(
     (type: DataTypeType) => handleChange({ type: dataTypeFromDataTypeType(type) }),
@@ -44,13 +45,15 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
     [handleChange],
   )
 
-  const handleChangeRequired = useCallback((required: boolean) => handleChange({ required }), [
-    handleChange,
-  ])
+  const handleChangeRequired = useCallback(
+    (required: boolean) => handleChange({ required }),
+    [handleChange],
+  )
 
-  const handleChangeUnique = useCallback((unique: boolean) => handleChange({ unique }), [
-    handleChange,
-  ])
+  const handleChangeUnique = useCallback(
+    (unique: boolean) => handleChange({ unique }),
+    [handleChange],
+  )
 
   const handleChangeUnsigned = useCallback(
     (unsigned: boolean) =>

@@ -10,10 +10,9 @@ export type UseRouteResult = {
 export default function useRoute(): UseRouteResult {
   const router = useRouter()
   const { pathname, query, isReady } = router
-  const route = useMemo(() => (isReady ? parseRoute(pathname, query) : undefined), [
-    isReady,
-    pathname,
-    query,
-  ])
+  const route = useMemo(
+    () => (isReady ? parseRoute(pathname, query) : undefined),
+    [isReady, pathname, query],
+  )
   return { route, loading: !isReady }
 }
