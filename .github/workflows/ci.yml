@@ -1,10 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+on: [push]
 
 jobs:
   build:
@@ -50,10 +46,31 @@ jobs:
       - name: Test
         run: npm run test:coverage
 
-      - name: Coveralls
+      - name: Report coverage
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         run: npm run build
+
+      - name: Deploy branch
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        if: github.ref != 'refs/heads/main'
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_SEQUELIZE_UI_TS }}"
+          projectId: sequelize-ui-ts
+        env:
+          FIREBASE_CLI_PREVIEWS: hostingchannels
+
+      - name: Deploy main
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        if: github.ref == 'refs/heads/main'
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_SEQUELIZE_UI_TS }}"
+          channelId: live
+          projectId: sequelize-ui-ts
+        env:
+          FIREBASE_CLI_PREVIEWS: hostingchannels
