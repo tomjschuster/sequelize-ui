@@ -23,7 +23,8 @@ export async function getDemoSchema(type: DemoSchemaType): Promise<Schema> {
       return (await import('./blog')).default
     }
     case DemoSchemaType.EmployeeTemporalDataset: {
-      return (await import('./employeeTemporalDataset')).default
+      return (await import('./blog')).default
+      // return (await import('./employeeTemporalDataset')).default
     }
     case DemoSchemaType.Sakila: {
       return (await import('./sakila')).default
