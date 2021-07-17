@@ -11,6 +11,9 @@
 
 #### Testing
 
+- ci
+  - run e2e tests in ci
+
 - ui
 
   - components (after UI complete)

@@ -3,8 +3,35 @@ name: CI
 on: [push]
 
 jobs:
-  test_build_deploy:
+  install:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
+
+      - name: Check dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/package.json') }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        run: |
+          if [ ! -d node_modules ];
+          then
+            npm ci --loglevel warn --yes;
+          else
+            echo package.json and package-lock.json unchanged. Using cache.;
+          fi
+
+  test:
+    runs-on: ubuntu-latest
+    needs: install
 
     steps:
       - name: Checkout Repo
@@ -18,21 +45,8 @@ jobs:
       - name: Check dependencies cache
         uses: actions/cache@v2
         with:
-          path: |
-            ./node_modules
-            ./.next/cache
-            ./.buildcache
-            ./.eslintcache
+          path: node_modules
           key: ${{ runner.os }}-deps-${{ hashFiles('**/package.json') }}-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Maybe install dependencies
-        run: |
-          if [ ! -d node_modules ];
-          then
-            npm ci --loglevel warn --yes;
-          else
-            echo package.json and package-lock.json unchanged. Using cache.;
-          fi
 
       - name: Lint
         run: npm run lint
@@ -49,7 +63,32 @@ jobs:
       - name: Report coverage
         uses: coverallsapp/github-action@master
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}]
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
+
+      - name: Check dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/package.json') }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Check next build cache
+        uses: actions/cache@v2
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-build-${{ hashFiles('**/package.json') }}-${{ hashFiles('**/package-lock.json') }}
 
       - name: Build
         run: npm run build
