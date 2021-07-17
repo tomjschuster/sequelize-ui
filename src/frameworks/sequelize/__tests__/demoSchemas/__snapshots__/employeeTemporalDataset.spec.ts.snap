@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Sequelize Framework generates correct code for employeeTemporalDataset 1`] = `
+exports[`Sequelize Framework generates correct code for employee 1`] = `
 Object {
   "files": Array [
     Object {

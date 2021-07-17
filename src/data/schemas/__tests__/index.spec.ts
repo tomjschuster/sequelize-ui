@@ -5,7 +5,7 @@ describe('data/schemas', () => {
     const cases: [type: DemoSchemaType, expected: string][] = [
       [DemoSchemaType.Blog, 'Blog'],
       [DemoSchemaType.Sakila, 'Sakila'],
-      [DemoSchemaType.EmployeeTemporalDataset, 'Employee Temporal Dataset'],
+      [DemoSchemaType.Employee, 'Employee Temporal Dataset'],
     ]
 
     it.each(cases)('displayDemoSchemaType(%s) === %s', (type, expected) => {

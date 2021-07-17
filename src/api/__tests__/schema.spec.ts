@@ -1,6 +1,6 @@
 import { AssociationTypeType, ThroughType } from '@src/core/schema'
 import blogSchema from '@src/data/schemas/blog'
-import employeeTemporalDataSet from '@src/data/schemas/employeeTemporalDataset'
+import employee from '@src/data/schemas/employee'
 import sakila from '@src/data/schemas/sakila'
 import * as DateTimeUtils from '@src/utils/dateTime'
 import {
@@ -28,7 +28,7 @@ describe('schema api', () => {
 
     it('should return all created schemas', async () => {
       const schemaA = await createSchema(sakila)
-      const schemaB = await createSchema(employeeTemporalDataSet)
+      const schemaB = await createSchema(employee)
       const schemas = await listSchemas()
       expect(schemas).toEqual([schemaA, schemaB])
     })
@@ -113,7 +113,7 @@ describe('schema api', () => {
 
     it('returns an error when there is storage, but schema does not exist', async () => {
       await createSchema(sakila)
-      updateSchema(employeeTemporalDataSet).catch((e) => {
+      updateSchema(employee).catch((e) => {
         expect(e).toEqual(new Error(SCHEMA_NOT_FOUND_ERROR))
       })
     })
