@@ -3,6 +3,8 @@
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/tomjschuster/sequelize-ui-ts/CI/main)
 ![Coveralls branch](https://img.shields.io/coveralls/github/tomjschuster/sequelize-ui-ts/main)
 
+[WIP Deployed App](https://sequelize-ui-ts.web.app/)
+
 ## Todo:
 
 ### Tech Debt
@@ -32,6 +34,7 @@
 #### API
 
 - Persist db options for user
+- JSON schema for API
 
 #### UI
 
