@@ -3,41 +3,11 @@
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/tomjschuster/sequelize-ui-ts/CI/main)
 ![Coveralls branch](https://img.shields.io/coveralls/github/tomjschuster/sequelize-ui-ts/main)
 
-[WIP Deployed App](https://sequelize-ui-ts.web.app/)
+Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for generating TypeScript Sequelize projects: See the current [deployed app](https://sequelize-ui-ts.web.app/) for functional codegen with WIP UI.
 
 ## Todo:
 
-### Tech Debt
-
-#### Testing
-
-- ci
-  - run e2e tests in ci
-
-- ui
-
-  - components (after UI complete)
-  - Browser tests (after UI complete)
-
-- sql
-  - verify all tables/columns for each db type with demo schema
-  - review sequelize framework test coverage
-
-#### Documentation
-
-- Document modules/functions
-- Update README for project overview, contribution
-
 ### Features
-
-#### Codegen
-
-- JavaScript (post launch, link to legacy instead)
-
-#### API
-
-- Persist db options for user
-- JSON schema for API
 
 #### UI
 
@@ -60,3 +30,30 @@
   - Intro
   - Demo section
   - Current schemas
+
+#### Codegen
+
+- JavaScript (non-TS) support
+
+#### API
+
+- Persist db options for user
+- JSON schema for localStorage API
+
+### Testing
+
+- ci
+  - run e2e sql tests in ci
+
+- ui
+  - components (after UI complete)
+  - Browser tests (after UI complete)
+
+- sql
+  - verify all tables/columns for each db type with demo schema
+  - review sequelize framework test coverage
+
+### Documentation
+
+- Document modules/functions
+- Update README for project overview, contribution
