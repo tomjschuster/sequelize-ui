@@ -1,4 +1,4 @@
-import { MittEmitter } from 'next/dist/next-server/lib/mitt'
+import { MittEmitter } from 'next/dist/shared/lib/mitt'
 import { NextRouter } from 'next/router'
 
 export const mockRouterEvents: MittEmitter<unknown> = {
