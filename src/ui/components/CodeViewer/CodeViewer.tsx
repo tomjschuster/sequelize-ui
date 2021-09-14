@@ -4,17 +4,22 @@ import { Schema } from '@src/core/schema'
 import Code from '@src/ui/components/Code'
 import FileTree, { useFileTree } from '@src/ui/components/FileTree'
 import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
+import useIsOpen from '@src/ui/hooks/useIsOpen'
 import React, { useState } from 'react'
-import { classnames } from 'tailwindcss-classnames'
 import DbOptionsForm from '../DbOptionsForm'
+import * as Styles from './styles'
 
 type CodeViewerProps = {
   schema: Schema
+  onRequestClose: () => void
 }
 
-export default function CodeViewer({ schema }: CodeViewerProps): React.ReactElement | null {
+export default function CodeViewer({
+  schema,
+  onRequestClose,
+}: CodeViewerProps): React.ReactElement | null {
   const [dbOptions, setDbOptions] = useState<DbOptions>(defaultDbOptions)
-  const { root } = useGeneratedCode({ schema, dbOptions })
+  const { root, defaultPath } = useGeneratedCode({ schema, dbOptions })
 
   if (!root) return null
 
@@ -23,7 +28,9 @@ export default function CodeViewer({ schema }: CodeViewerProps): React.ReactElem
       schema={schema}
       root={root}
       dbOptions={dbOptions}
+      defaultPath={defaultPath}
       onChangeDbOptions={setDbOptions}
+      onRequestClose={onRequestClose}
     />
   )
 }
@@ -32,56 +39,70 @@ type CodeViewerContentProps = {
   schema: Schema
   root: FileSystemItem
   dbOptions: DbOptions
+  defaultPath: string | undefined
   onChangeDbOptions: (dbOptions: DbOptions) => void
+  onRequestClose: () => void
 }
 function CodeViewerContent({
   schema,
   root,
   dbOptions,
+  defaultPath,
   onChangeDbOptions,
+  onRequestClose,
 }: CodeViewerContentProps): React.ReactElement {
-  const { activeFile, folderState, selectItem } = useFileTree({ root, cacheKey: schema.id })
+  const { isOpen: isDbOptionsOpen, toggle: toggleDbOptions, close: closeDbOptions } = useIsOpen()
+  const { activeFile, folderState, selectItem } = useFileTree({
+    root,
+    cacheKey: schema.id,
+    defaultPath,
+  })
   const handleClickDownload = () => download(root)
   const handleClickCopy = async () => activeFile && copyFile(activeFile.file)
 
   return (
-    <div
-      className={classnames(
-        'h-screen',
-        'w-screen',
-        'fixed',
-        'top-0',
-        'left-0',
-        'bg-white',
-        'overflow-y-scroll',
-        'z-10',
-      )}
-    >
-      <div>
-        <button onClick={handleClickDownload}>Download</button>
-        <button onClick={handleClickCopy}>Copy File</button>
-      </div>
-      <div className={classnames('flex', 'flex-col', 'xl:flex-row', 'h-full')}>
-        <div
-          className={classnames('flex', 'flex-col', 'lg:flex-row', 'flex-grow-1', 'flex-shrink-0')}
-        >
-          <div className={classnames('width-96', 'p-5')}>
-            <FileTree
-              root={root}
-              onSelect={selectItem}
-              activePath={activeFile?.path}
-              folderState={folderState}
-            />
-          </div>
-          <div className={classnames('flex-1')}>
-            <Code
-              content={activeFile?.file.content || ''}
-              language={activeFile && fileLanguage(activeFile.file)}
-            />
-          </div>
+    <div className={Styles.container}>
+      <div className={Styles.grid}>
+        <div className={Styles.titleCell}>
+          <div className={Styles.close} />
+          <h2>{root.name}</h2>
+          <button className={Styles.close} onClick={onRequestClose}>
+            Close
+          </button>
         </div>
-        <div className={classnames('flex-shrink-0')}>
-          <DbOptionsForm dbOptions={dbOptions} onChange={onChangeDbOptions} />
+        <div className={Styles.controlsCell}>
+          <div className={Styles.actions}>
+            <button onClick={toggleDbOptions}>DB Options</button>
+            <button className={Styles.download} onClick={handleClickDownload}>
+              Download
+            </button>
+            <button className={Styles.copy} onClick={handleClickCopy} disabled={!activeFile}>
+              Copy File
+            </button>
+          </div>
+          {/* <h3 className="pt-8 pb-2">Database options</h3> */}
+          {isDbOptionsOpen && (
+            <div className={Styles.dbFormOverlay}>
+              <button className={Styles.closeDbForm} onClick={closeDbOptions}>
+                Close
+              </button>
+              <DbOptionsForm dbOptions={dbOptions} onChange={onChangeDbOptions} />
+            </div>
+          )}
+        </div>
+        <div className={Styles.fileTreeCell}>
+          <FileTree
+            root={root}
+            onSelect={selectItem}
+            activePath={activeFile?.path}
+            folderState={folderState}
+          />
+        </div>
+        <div className={Styles.codeCell}>
+          <Code
+            content={activeFile?.file.content || ''}
+            language={activeFile && fileLanguage(activeFile.file)}
+          />
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { classnames } from 'tailwindcss-classnames'
+import { classnames } from '@src/ui/classnames'
 
 export const pageWrapper = classnames('flex', 'flex-col', 'items-stretch', 'h-screen')
 export const header = classnames('shadow', 'p-2')
@@ -9,7 +9,7 @@ export const main = classnames('flex-1')
 
 export const footer = classnames(
   'shadow-inner',
-  'bg-blue-100',
+  'bg-indigo-50',
   'p-4',
   'flex',
   'justify-between',

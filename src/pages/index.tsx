@@ -65,6 +65,8 @@ function IndexPageDemoContent(): React.ReactElement {
     }
   }
 
+  const handleClose = () => setDemoSchemaType(undefined)
+
   return (
     <>
       <Radio
@@ -74,7 +76,7 @@ function IndexPageDemoContent(): React.ReactElement {
         onChange={setDemoSchemaType}
       />
       {demoSchema && <button onClick={handleClickFork}>Fork</button>}
-      {demoSchema && <CodeViewer schema={demoSchema} />}
+      {demoSchema && <CodeViewer schema={demoSchema} onRequestClose={handleClose} />}
     </>
   )
 }

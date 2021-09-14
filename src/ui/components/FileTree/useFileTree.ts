@@ -13,6 +13,7 @@ import { FolderState } from './types'
 
 type UseFileTreeArgs = {
   root: FileSystemItem
+  defaultPath?: string
   cacheKey?: string
 }
 
@@ -23,14 +24,14 @@ type ActiveFile = {
 
 type UseFileTreeResult = {
   folderState: FolderState
-  selectItem: (path: string) => void
   activeFile?: ActiveFile
+  selectItem: (path: string) => void
 }
 
-function useFileTree({ root, cacheKey }: UseFileTreeArgs): UseFileTreeResult {
+function useFileTree({ root, cacheKey, defaultPath }: UseFileTreeArgs): UseFileTreeResult {
   const previousCacheKey = usePrevious(cacheKey)
   const previousRoot = usePrevious(root)
-  const [activePath, setActivePath] = React.useState<string | undefined>()
+  const [activePath, setActivePath] = React.useState<string | undefined>(defaultPath)
 
   const [folderState, setFolderState] = React.useState<FolderState>(() => createFolderState(root))
 

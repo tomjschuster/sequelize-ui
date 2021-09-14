@@ -33,13 +33,14 @@ function SchemaPageContent(): React.ReactElement {
 
   const [viewCode, setViewCode] = useState<boolean>(true)
   const handleClickViewCode = useCallback(() => setViewCode((x) => !x), [])
+  const handleClose = useCallback(() => setViewCode(false), [])
 
   if (error) return <p>{error}</p>
   if (schema === undefined) return <p>Loading Schemas</p>
 
   return (
     <>
-      {viewCode && <CodeViewer schema={schema} />}
+      {viewCode && <CodeViewer schema={schema} onRequestClose={handleClose} />}
       <button onClick={handleClickViewCode}>{viewCode ? 'Hide Code' : 'View Code'}</button>
       <SchemaModule
         schema={schema}

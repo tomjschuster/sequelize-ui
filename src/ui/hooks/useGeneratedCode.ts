@@ -12,6 +12,7 @@ export type UseGeneratedCodeArgs = {
 export type UseGeneratedCodeResult = {
   root: DirectoryItem | undefined
   framework: Framework | undefined
+  defaultPath: string | undefined
 }
 
 export default function useGeneratedCode({
@@ -32,5 +33,7 @@ export default function useGeneratedCode({
     return framework.generate({ schema, dbOptions })
   }, [schema, dbOptions, framework])
 
-  return { framework, root }
+  const defaultPath = framework && root && framework.defaultFile && framework.defaultFile(root)
+
+  return { framework, root, defaultPath }
 }

@@ -11,25 +11,28 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- Code preview
+- [x] Layout
+- [-] Controls
+  - [ ] Icons
+- [-] File tree
+  - [ ] Icons
+  - [ ] Expand/collapse
+- [ ] Copy/download alerts
+- [ ] a11y (aria-controls?)
 
-  - DB options
-  - Copy/download alerts
-  - a11y (aria-controls?)
-
-- Form section
-- Form buttons
-- Text input
-- Radio group
-- Checkbox group
-- Model form
-- db compatibility warnings
-- Schema form
-- Form a11y review
-- Home page
-  - Intro
-  - Demo section
-  - Current schemas
+- [ ] Form section
+- [ ] Form buttons
+- [ ] Text input
+- [ ] Radio group
+- [ ] Checkbox group
+- [ ] Model form
+- [ ] db compatibility warnings
+- [ ] Schema form
+- [ ] Form a11y review
+- [ ] Home page
+  - [ ] Intro
+  - [ ] Demo section
+  - [ ] Current schemas
 
 #### Codegen
 
@@ -43,9 +46,11 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 ### Testing
 
 - ci
+
   - run e2e sql tests in ci
 
 - ui
+
   - components (after UI complete)
   - Browser tests (after UI complete)
 

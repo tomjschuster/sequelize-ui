@@ -1,5 +1,7 @@
 import { Language } from '@src/core/files'
+import { classnames } from '@src/ui/classnames'
 import Highlight, { defaultProps, Language as PrismLanguage } from 'prism-react-renderer'
+import theme from 'prism-react-renderer/themes/vsLight'
 import React from 'react'
 
 type CodeProps = {
@@ -9,14 +11,12 @@ type CodeProps = {
 
 function Code({ content = '', language = Language.TypeScript }: CodeProps): React.ReactElement {
   return (
-    <Highlight
-      {...defaultProps}
-      theme={undefined}
-      code={content}
-      language={toPrismLanguage(language)}
-    >
+    <Highlight {...defaultProps} theme={theme} code={content} language={toPrismLanguage(language)}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <pre className={className} style={style}>
+        <pre
+          className={`${className} ${classnames('h-full', 'text-xs', 'md:text-sm', 'p-2')}`}
+          style={{ ...style, marginTop: 0 }}
+        >
           {tokens.map((line, i) => (
             // eslint-disable-next-line react/jsx-key
             <div {...getLineProps({ line, key: i })}>

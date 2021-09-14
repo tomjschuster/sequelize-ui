@@ -19,6 +19,7 @@ export default function useDemoSchema(): UseDemoSchemaResult {
   useEffect(() => {
     if (!type && schema) {
       setSchema(undefined)
+      loadingType.current = undefined
       return
     }
 

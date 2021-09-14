@@ -1,5 +1,4 @@
 import React from 'react'
-import { classnames } from 'tailwindcss-classnames'
 import { CommonFieldProps, CommonInputProps } from '../shared/types'
 
 type IntegerInputProps = CommonInputProps<number> &
@@ -33,7 +32,7 @@ function IntegerInput({
 
   return (
     <>
-      <label htmlFor={id} className={classnames('flex flex-col items-start')}>
+      <label htmlFor={id} className="flex flex-col items-start">
         {label}
         <input
           id={id}

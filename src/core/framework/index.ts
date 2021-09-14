@@ -15,4 +15,5 @@ export interface Framework {
   displayName(): string
   generate(args: GenerateArgs): DirectoryItem
   projectType(): ProjectType
+  defaultFile?(root: DirectoryItem): string | undefined
 }

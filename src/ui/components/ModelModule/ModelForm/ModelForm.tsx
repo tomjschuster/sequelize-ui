@@ -5,8 +5,8 @@ import {
   noModelErrors,
   validateModel,
 } from '@src/core/validation/schema'
+import { classnames } from '@src/ui/classnames'
 import React from 'react'
-import { classnames } from 'tailwindcss-classnames'
 import AssociationFieldset from './AssociationFieldset'
 import FieldFieldset from './FieldFieldset'
 import ModelFieldset from './ModelFieldset'

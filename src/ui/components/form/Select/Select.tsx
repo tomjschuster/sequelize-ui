@@ -1,9 +1,8 @@
+import { classnames } from '@src/ui/classnames/__generated__/tailwindcss-classnames'
 import React from 'react'
-import { classnames } from 'tailwindcss-classnames'
 import { lookupOptionKey, lookupOptionValue, optionsToList } from '../shared/options'
 import { CommonFieldProps, CommonOptionsProps } from '../shared/types'
-
-type SelectProps<T> = CommonFieldProps & CommonOptionsProps<T>
+type SelectProps<T> = CommonFieldProps & CommonOptionsProps<T> & { className?: string }
 function Select<T>({
   id,
   label,
@@ -12,19 +11,21 @@ function Select<T>({
   error,
   display,
   onChange,
+  className,
 }: SelectProps<T>): React.ReactElement {
   const handleChange = (evt: React.ChangeEvent<HTMLSelectElement>) => {
     const key = evt.target.value
     const option = lookupOptionValue(options, key)
-    if (option) onChange(option)
+    if (option !== undefined) onChange(option)
   }
 
   return (
-    <>
-      <label htmlFor={id} className={classnames('flex', 'flex-col', 'items-start')}>
+    <div className={className}>
+      <label htmlFor={id} className={classnames('flex', 'flex-col', 'items-start', 'text-sm')}>
         {label}
         <select
           id={id}
+          className={classnames('pt-1', 'pb-1', 'w-full', 'text-sm', 'cursor-pointer')}
           onChange={handleChange}
           value={lookupOptionKey(options, value)}
           aria-invalid={!!error}
@@ -40,7 +41,7 @@ function Select<T>({
       <span id={`${id}-alert`} role={error ? 'alert' : undefined} aria-hidden={!error}>
         {error}
       </span>
-    </>
+    </div>
   )
 }
 

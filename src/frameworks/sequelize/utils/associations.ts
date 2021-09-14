@@ -51,7 +51,9 @@ type GetOtherKeyArgs = {
 export function getOtherKey({ association, modelById, dbOptions }: GetOtherKeyArgs): string | null {
   const target = modelById.get(association.targetModelId)
   if (!target || association.type.type !== AssociationTypeType.ManyToMany) return null
-  if (association.type.targetFk) return association.type.targetFk
+  if (association.type.targetFk) {
+    return caseByDbCaseStyle(association.type.targetFk, dbOptions.caseStyle)
+  }
 
   const name = association.alias ? association.alias : target.name
 

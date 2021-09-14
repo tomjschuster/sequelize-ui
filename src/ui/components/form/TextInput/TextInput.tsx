@@ -1,5 +1,4 @@
 import React from 'react'
-import { classnames } from 'tailwindcss-classnames'
 import { CommonFieldProps, CommonInputProps } from '../shared/types'
 
 type TextInputProps = CommonFieldProps & CommonInputProps<string> & { placeholder?: string }
@@ -19,7 +18,7 @@ function TextInput({
 
   return (
     <>
-      <label htmlFor={id} className={classnames('flex flex-col items-start')}>
+      <label htmlFor={id} className="flex flex-col items-start">
         {label}
         <input
           id={id}

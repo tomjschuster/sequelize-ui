@@ -396,7 +396,7 @@ export function initModels(sequelize: Sequelize) {
   Post.belongsToMany(Tag, {
     through: 'post_tag',
     foreignKey: 'postId',
-    otherKey: 'tag_id',
+    otherKey: 'tagId',
     onDelete: 'CASCADE'
   })
   PostCategory.belongsTo(Post, {
