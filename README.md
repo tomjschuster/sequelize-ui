@@ -11,12 +11,6 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [x] Layout
-- [-] Controls
-  - [ ] Icons
-- [-] File tree
-  - [ ] Icons
-  - [ ] Expand/collapse
 - [ ] Copy/download alerts
 - [ ] a11y (aria-controls?)
 
