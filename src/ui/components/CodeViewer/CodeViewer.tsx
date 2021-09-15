@@ -2,11 +2,16 @@ import { DbOptions, defaultDbOptions } from '@src/core/database'
 import { FileItem, fileLanguage, FileSystemItem } from '@src/core/files'
 import { Schema } from '@src/core/schema'
 import Code from '@src/ui/components/Code'
+import DbOptionsForm from '@src/ui/components/DbOptionsForm'
 import FileTree, { useFileTree } from '@src/ui/components/FileTree'
+import CloseIcon from '@src/ui/components/icons/Close'
+import CopyIcon from '@src/ui/components/icons/Copy'
+import FolderIcon from '@src/ui/components/icons/Folder'
+import SettingsIcon from '@src/ui/components/icons/Settings'
 import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import useIsOpen from '@src/ui/hooks/useIsOpen'
-import React, { useState } from 'react'
-import DbOptionsForm from '../DbOptionsForm'
+import useOnClickOutside from '@src/ui/hooks/useOnClickOutside'
+import React, { useRef, useState } from 'react'
 import * as Styles from './styles'
 
 type CodeViewerProps = {
@@ -60,29 +65,47 @@ function CodeViewerContent({
   const handleClickDownload = () => download(root)
   const handleClickCopy = async () => activeFile && copyFile(activeFile.file)
 
+  const dbOptionsRef = useRef(null)
+  useOnClickOutside(dbOptionsRef, closeDbOptions)
+
   return (
     <div className={Styles.container}>
       <div className={Styles.grid}>
         <div className={Styles.titleCell}>
-          <div className={Styles.close} />
+          <div className={Styles.titleSiteName}>
+            <img
+              className={Styles.titleLogo}
+              src="https://sequelizeui.app/static/images/sequelize-ui-tiny-white.svg"
+            />
+            Sequelize UI
+          </div>
           <h2>{root.name}</h2>
           <button className={Styles.close} onClick={onRequestClose}>
-            Close
+            <CloseIcon title="close" />
           </button>
         </div>
         <div className={Styles.controlsCell}>
-          <div className={Styles.actions}>
-            <button onClick={toggleDbOptions}>DB Options</button>
-            <button className={Styles.download} onClick={handleClickDownload}>
-              Download
+          <div
+            className={Styles.actions}
+            onMouseDown={(evt) => evt.stopPropagation()}
+            onTouchStart={(evt) => evt.stopPropagation()}
+          >
+            <button className={Styles.actionButton} onClick={toggleDbOptions}>
+              <SettingsIcon title={isDbOptionsOpen ? 'close settings' : 'open settings'} />
             </button>
-            <button className={Styles.copy} onClick={handleClickCopy} disabled={!activeFile}>
-              Copy File
+            <button className={Styles.actionButton} onClick={handleClickDownload}>
+              <FolderIcon title="download project code" />
+            </button>
+            <button
+              className={Styles.actionButton}
+              onClick={handleClickCopy}
+              disabled={!activeFile}
+            >
+              <CopyIcon title="copy current file code" />
             </button>
           </div>
-          {/* <h3 className="pt-8 pb-2">Database options</h3> */}
           {isDbOptionsOpen && (
-            <div className={Styles.dbFormOverlay}>
+            <div ref={dbOptionsRef} className={Styles.dbFormOverlay}>
               <button className={Styles.closeDbForm} onClick={closeDbOptions}>
                 Close
               </button>

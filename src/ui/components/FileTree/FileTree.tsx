@@ -1,6 +1,8 @@
-import { FileSystemItem, isDirectory, isFile, itemName } from '@src/core/files'
+import { fileLanguage, FileSystemItem, isDirectory, isFile, itemName } from '@src/core/files'
 import { classnames } from '@src/ui/classnames'
 import React, { useEffect } from 'react'
+import ChevronIcon, { ChevronDirection } from '../icons/Chevron'
+import LanguageIcon from '../icons/Language'
 import { FolderState } from './types'
 
 type FileTreeProps = {
@@ -54,21 +56,42 @@ function FileTreeItem({
     }
   }, [activePath])
 
+  const language = isFile(item) && fileLanguage(item)
+  const chevronDirection = !isDirectory(item)
+    ? undefined
+    : folderState[path]
+    ? ChevronDirection.Down
+    : ChevronDirection.Right
+
   return (
     <>
       <span
         className={classnames({
+          flex: true,
           'font-semibold': active,
+          'items-center': true,
           'text-sm': true,
-          'leading-relaxed': true,
+          'leading-loose': true,
           'w-full': true,
-          'hover:bg-gray-200': true,
+          'hover:bg-gray-200': !active,
+          'bg-indigo-100': active,
           'cursor-pointer': true,
           block: true,
         })}
-        style={{ paddingLeft: `calc(${depth} * 0.75rem)` }}
+        style={{ paddingLeft: `calc(${depth} * 1rem)` }}
         onClick={handleClick}
       >
+        {isDirectory(item)}
+        {chevronDirection && (
+          <span className="pr-1.5">
+            <ChevronIcon direction={chevronDirection} />
+          </span>
+        )}
+        {language && (
+          <span className="pr-1.5">
+            <LanguageIcon language={language} />
+          </span>
+        )}
         {itemName(item)}
       </span>
       {isDirectory(item) && item.files.length > 0 && folderState[path] && (

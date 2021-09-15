@@ -9,6 +9,8 @@ module.exports = {
     // write tests after completing ui
     'src/pages',
     'src/ui/components',
+    'src/ui/classnames',
+    'src/ui/utils',
   ],
   moduleNameMapper: { '@src/(.*)': '<rootDir>/src/$1' },
   testPathIgnorePatterns: ['src/typings', 'src/test-utils', '__fixtures__'],

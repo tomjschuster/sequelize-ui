@@ -17,16 +17,20 @@ export const titleCell = classnames(
   'items-center',
   'justify-between',
   'border-b',
+  'bg-gradient-to-r',
+  'from-blue-100',
+  'to-blue-50',
   'border-gray-900',
-  'p-1',
-  'pt-0',
+  'shadow-inner',
   'row-start-1',
   'row-end-2',
   'col-start-1',
   'col-end-13',
 )
 
-export const close = classnames('p-1', 'w-12')
+export const close = classnames('p-1', 'hover:bg-gray-200')
+export const titleSiteName = classnames('p-1', 'flex', 'items-center')
+export const titleLogo = classnames('h-6', 'pr-2')
 
 export const controlsCell = classnames(
   'relative',
@@ -34,8 +38,6 @@ export const controlsCell = classnames(
   'border-b',
   'border-gray-900',
   'h-full',
-  'py-1',
-  'px-2',
   'row-start-2',
   'row-end-3',
   'col-start-1',
@@ -47,9 +49,8 @@ export const dbFormOverlay = classnames(
   'bg-indigo-50',
   'p-4',
   'pt-8',
-  'mt-1',
-  '-ml-2',
   'border',
+  'border-gray-900',
   'shadow-md',
   'w-screen',
   'md:w-auto',
@@ -60,15 +61,13 @@ export const closeDbForm = classnames('pr-2', 'pt-2', 'w-12', 'absolute', 'right
 
 export const actions = classnames('bg-white', 'text-sm', 'flex', 'w-full')
 
-export const download = classnames('p-2')
-export const copy = classnames('p-2')
+export const actionButton = classnames('p-2', 'hover:bg-gray-100')
 
 export const fileTreeCell = classnames(
   'border-b',
   'border-gray-900',
   'bg-gray-100',
   'text-gray-600',
-  // 'p-2',
   'h-full',
   'overflow-y-scroll',
   'row-start-3',
