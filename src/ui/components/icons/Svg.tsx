@@ -7,7 +7,7 @@ export type SvgProps = {
   className?: string
 }
 
-export default function FolderIcon({
+export default function Svg({
   title,
   fill = 'none',
   stroke = 'currentColor',

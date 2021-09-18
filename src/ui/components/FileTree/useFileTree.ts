@@ -1,25 +1,12 @@
-import {
-  FileItem,
-  FileSystemItem,
-  findFile,
-  findItem,
-  isDirectory,
-  isFile,
-  listPaths,
-} from '@src/core/files'
+import { FileSystemItem, findFile, findItem, isDirectory, isFile, listPaths } from '@src/core/files'
 import usePrevious from '@src/ui/hooks/usePrevious'
 import React from 'react'
-import { FolderState } from './types'
+import { ActiveFile, FolderState } from './types'
 
 type UseFileTreeArgs = {
   root: FileSystemItem
   defaultPath?: string
   cacheKey?: string
-}
-
-type ActiveFile = {
-  file: FileItem
-  path: string
 }
 
 type UseFileTreeResult = {

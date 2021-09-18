@@ -34,6 +34,7 @@
   "dependencies": {
     "@babel/preset-typescript": "^7.14.5",
     "@tailwindcss/forms": "^0.3.3",
+    "body-scroll-lock": "^4.0.0-beta.0",
     "change-case": "^4.1.2",
     "classnames": "~2.3.1",
     "copy-to-clipboard": "^3.3.1",
@@ -55,6 +56,7 @@
     "@babel/runtime": "^7.14.6",
     "@next/bundle-analyzer": "^11.0.1",
     "@testing-library/react-hooks": "^7.0.0",
+    "@types/body-scroll-lock": "^3.1.0",
     "@types/file-saver": "^2.0.2",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.12.4",

@@ -347,7 +347,7 @@ const salary: Model = {
 // https://github.com/datacharmer/test_db
 const employeeSchema: Schema = {
   id: 'demo-employee',
-  name: 'employee_temporal_dataset',
+  name: 'employee dataset',
   createdAt: time,
   updatedAt: time,
   models: [employee, department, departmentEmployee, departmentManager, title, salary],

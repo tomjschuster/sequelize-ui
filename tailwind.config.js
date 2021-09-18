@@ -2,7 +2,32 @@ module.exports = {
   purge: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/ui/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'media', // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      gridRow: {
+        'span-7': 'span 7 / span 7',
+        'span-8': 'span 8 / span 8',
+        'span-9': 'span 9 / span 9',
+        'span-10': 'span 10 / span 10',
+        'span-11': 'span 11 / span 11',
+        'span-12': 'span 12 / span 12',
+      },
+      gridRowStart: {
+        8: '8',
+        9: '9',
+        10: '10',
+        11: '11',
+        12: '12',
+        13: '13',
+      },
+      gridRowEnd: {
+        8: '8',
+        9: '9',
+        10: '10',
+        11: '11',
+        12: '12',
+        13: '13',
+      },
+    },
   },
   variants: {
     extend: {},

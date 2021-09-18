@@ -1,27 +1,24 @@
 import { DbOptions, defaultDbOptions } from '@src/core/database'
-import { FileItem, fileLanguage, FileSystemItem } from '@src/core/files'
+import { fileLanguage, FileSystemItem } from '@src/core/files'
 import { Schema } from '@src/core/schema'
 import Code from '@src/ui/components/Code'
-import DbOptionsForm from '@src/ui/components/DbOptionsForm'
 import FileTree, { useFileTree } from '@src/ui/components/FileTree'
-import CloseIcon from '@src/ui/components/icons/Close'
-import CopyIcon from '@src/ui/components/icons/Copy'
-import FolderIcon from '@src/ui/components/icons/Folder'
-import SettingsIcon from '@src/ui/components/icons/Settings'
+import Flyout from '@src/ui/components/Flyout'
 import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
-import useIsOpen from '@src/ui/hooks/useIsOpen'
-import useOnClickOutside from '@src/ui/hooks/useOnClickOutside'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
+import CodeViewerControls from './CodeViewerControls'
 import * as Styles from './styles'
 
 type CodeViewerProps = {
   schema: Schema
-  onRequestClose: () => void
+  onClickEdit?: () => void
+  onClickClose: () => void
 }
 
 export default function CodeViewer({
   schema,
-  onRequestClose,
+  onClickClose,
+  onClickEdit,
 }: CodeViewerProps): React.ReactElement | null {
   const [dbOptions, setDbOptions] = useState<DbOptions>(defaultDbOptions)
   const { root, defaultPath } = useGeneratedCode({ schema, dbOptions })
@@ -35,7 +32,8 @@ export default function CodeViewer({
       dbOptions={dbOptions}
       defaultPath={defaultPath}
       onChangeDbOptions={setDbOptions}
-      onRequestClose={onRequestClose}
+      onClickClose={onClickClose}
+      onClickEdit={onClickEdit}
     />
   )
 }
@@ -46,7 +44,8 @@ type CodeViewerContentProps = {
   dbOptions: DbOptions
   defaultPath: string | undefined
   onChangeDbOptions: (dbOptions: DbOptions) => void
-  onRequestClose: () => void
+  onClickClose: () => void
+  onClickEdit?: () => void
 }
 function CodeViewerContent({
   schema,
@@ -54,65 +53,30 @@ function CodeViewerContent({
   dbOptions,
   defaultPath,
   onChangeDbOptions,
-  onRequestClose,
+  onClickClose,
+  onClickEdit,
 }: CodeViewerContentProps): React.ReactElement {
-  const { isOpen: isDbOptionsOpen, toggle: toggleDbOptions, close: closeDbOptions } = useIsOpen()
   const { activeFile, folderState, selectItem } = useFileTree({
     root,
     cacheKey: schema.id,
     defaultPath,
   })
-  const handleClickDownload = () => download(root)
-  const handleClickCopy = async () => activeFile && copyFile(activeFile.file)
-
-  const dbOptionsRef = useRef(null)
-  useOnClickOutside(dbOptionsRef, closeDbOptions)
 
   return (
-    <div className={Styles.container}>
+    <Flyout
+      title={root.name}
+      onClickClose={onClickClose}
+      controls={
+        <CodeViewerControls
+          root={root}
+          activeFile={activeFile}
+          dbOptions={dbOptions}
+          onClickEdit={onClickEdit}
+          onChangeDbOptions={onChangeDbOptions}
+        />
+      }
+    >
       <div className={Styles.grid}>
-        <div className={Styles.titleCell}>
-          <div className={Styles.titleSiteName}>
-            <img
-              className={Styles.titleLogo}
-              src="https://sequelizeui.app/static/images/sequelize-ui-tiny-white.svg"
-            />
-            Sequelize UI
-          </div>
-          <h2>{root.name}</h2>
-          <button className={Styles.close} onClick={onRequestClose}>
-            <CloseIcon title="close" />
-          </button>
-        </div>
-        <div className={Styles.controlsCell}>
-          <div
-            className={Styles.actions}
-            onMouseDown={(evt) => evt.stopPropagation()}
-            onTouchStart={(evt) => evt.stopPropagation()}
-          >
-            <button className={Styles.actionButton} onClick={toggleDbOptions}>
-              <SettingsIcon title={isDbOptionsOpen ? 'close settings' : 'open settings'} />
-            </button>
-            <button className={Styles.actionButton} onClick={handleClickDownload}>
-              <FolderIcon title="download project code" />
-            </button>
-            <button
-              className={Styles.actionButton}
-              onClick={handleClickCopy}
-              disabled={!activeFile}
-            >
-              <CopyIcon title="copy current file code" />
-            </button>
-          </div>
-          {isDbOptionsOpen && (
-            <div ref={dbOptionsRef} className={Styles.dbFormOverlay}>
-              <button className={Styles.closeDbForm} onClick={closeDbOptions}>
-                Close
-              </button>
-              <DbOptionsForm dbOptions={dbOptions} onChange={onChangeDbOptions} />
-            </div>
-          )}
-        </div>
         <div className={Styles.fileTreeCell}>
           <FileTree
             root={root}
@@ -128,18 +92,6 @@ function CodeViewerContent({
           />
         </div>
       </div>
-    </div>
+    </Flyout>
   )
-}
-
-/** Dynamically imported io download */
-async function download(item: FileSystemItem): Promise<void> {
-  const { download: _download } = await import('@src/io/download')
-  _download(item)
-}
-
-/** Dynamically imported io copy */
-async function copyFile(file: FileItem): Promise<void> {
-  const { copyFile: copyFile_ } = await import('@src/io/copy')
-  copyFile_(file)
 }

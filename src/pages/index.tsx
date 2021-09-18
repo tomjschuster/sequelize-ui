@@ -1,6 +1,7 @@
 import { createSchema, listSchemas } from '@src/api/schema'
 import { Schema } from '@src/core/schema'
 import { DemoSchemaType, displayDemoSchemaType } from '@src/data/schemas'
+import { editSchemaRoute, routeToUrl } from '@src/routing/routes'
 import Radio from '@src/ui/components/form/Radio'
 import Layout from '@src/ui/components/Layout'
 import useDemoSchema from '@src/ui/hooks/useDemoSchema'
@@ -42,13 +43,20 @@ function IndexPageSchemaContent({
   if (schemas.length === 0) return <p>You have no schemas</p>
 
   return (
-    <ul>
-      {schemas.map((s) => (
-        <li key={s.id}>
-          <Link href={`/schema?id=${s.id}`}>{s.name}</Link>
-        </li>
-      ))}
-    </ul>
+    <div className="w-full flex flex-col items-center ">
+      <h2 className="text-lg">Your Schemas</h2>
+      <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
+        {schemas.map((s) => (
+          <li key={s.id}>
+            <Link href={`/schema?id=${s.id}`}>
+              <a className="text-sm p-4 border border-black rounded h-24 w-48 flex items-center break-words break-all justify-center">
+                {s.name}
+              </a>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
@@ -58,25 +66,28 @@ function IndexPageDemoContent(): React.ReactElement {
   const router = useRouter()
   const { schema: demoSchema, type: demoSchemaType, setType: setDemoSchemaType } = useDemoSchema()
 
-  const handleClickFork = async () => {
+  const handleEdit = async () => {
     if (demoSchema) {
       const schema = await createSchema(demoSchema)
-      router.push(`/schema?id=${schema.id}`)
+      const route = editSchemaRoute(schema.id)
+      router.push(routeToUrl(route))
     }
   }
 
   const handleClose = () => setDemoSchemaType(undefined)
 
   return (
-    <>
+    <div className="w-full flex flex-col items-center">
+      <h2 className="text-lg">Demo Schemas</h2>
       <Radio
         value={demoSchemaType}
         options={DemoSchemaType}
         display={displayDemoSchemaType}
         onChange={setDemoSchemaType}
       />
-      {demoSchema && <button onClick={handleClickFork}>Fork</button>}
-      {demoSchema && <CodeViewer schema={demoSchema} onRequestClose={handleClose} />}
-    </>
+      {demoSchema && (
+        <CodeViewer schema={demoSchema} onClickClose={handleClose} onClickEdit={handleEdit} />
+      )}
+    </div>
   )
 }
