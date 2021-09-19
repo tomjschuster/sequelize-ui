@@ -1,4 +1,11 @@
-import { addSeconds, fromParts, now, toNumericTimestamp } from '../dateTime'
+import {
+  addSeconds,
+  fromParts,
+  now,
+  TimeGranularity,
+  timeSince,
+  toNumericTimestamp,
+} from '../dateTime'
 
 describe('dateTime utils', () => {
   describe('now', () => {
@@ -50,6 +57,51 @@ describe('dateTime utils', () => {
 
       it.each(cases)('addSeconds(%s) === %s', (dateTime, seconds, expected) => {
         expect(addSeconds(dateTime, seconds)).toEqual(expected)
+      })
+    })
+  })
+
+  describe('timeSince utils', () => {
+    describe('now', () => {
+      const POSIX_START = '1970-01-01T00:00:00.000Z'
+
+      const SAMPLE_DATE = '2021-09-19T13:19:24.000Z'
+      const SAMPLE_DATE_PLUS_59_SECS = '2021-09-19T13:20:23.000Z'
+      const SAMPLE_DATE_PLUS_60_SECS = '2021-09-19T13:20:24.000Z'
+      const SAMPLE_DATE_PLUS_61_SECS = '2021-09-19T13:20:25.000Z'
+      const SAMPLE_DATE_PLUS_59_MINS = '2021-09-19T14:18:24.000Z'
+      const SAMPLE_DATE_PLUS_60_MINS = '2021-09-19T14:19:24.000Z'
+      const SAMPLE_DATE_PLUS_61_MINS = '2021-09-19T14:20:24.000Z'
+      const SAMPLE_DATE_PLUS_23_HRS = '2021-09-20T12:19:24.000Z'
+      const SAMPLE_DATE_PLUS_24_HRS = '2021-09-20T13:19:24.000Z'
+      const SAMPLE_DATE_PLUS_25_HRS = '2021-09-20T14:19:24.000Z'
+      const SAMPLE_DATE_PLUS_364_DAYS = '2022-09-18T13:19:24.000Z'
+      const SAMPLE_DATE_PLUS_365_DAYS = '2022-09-19T13:19:24.000Z'
+      const SAMPLE_DATE_PLUS_366_DAYS = '2022-09-20T13:19:24.000Z'
+      const SAMPLE_DATE_PLUS_3_YEARS = '2024-09-19T13:19:24.000Z'
+
+      const cases = [
+        [POSIX_START, POSIX_START, TimeGranularity.MINUTES, 'less than 1 minute'],
+        [POSIX_START, POSIX_START, TimeGranularity.HOURS, 'less than 1 hour'],
+        [POSIX_START, POSIX_START, TimeGranularity.DAYS, 'less than 1 day'],
+        [POSIX_START, POSIX_START, TimeGranularity.MONTHS, 'less than 1 month'],
+        [POSIX_START, POSIX_START, TimeGranularity.YEARS, 'less than 1 year'],
+        [SAMPLE_DATE_PLUS_59_SECS, SAMPLE_DATE, TimeGranularity.SECONDS, '59 seconds'],
+        [SAMPLE_DATE_PLUS_60_SECS, SAMPLE_DATE, TimeGranularity.SECONDS, '1 minute'],
+        [SAMPLE_DATE_PLUS_61_SECS, SAMPLE_DATE, TimeGranularity.SECONDS, '1 minute'],
+        [SAMPLE_DATE_PLUS_59_MINS, SAMPLE_DATE, TimeGranularity.SECONDS, '59 minutes'],
+        [SAMPLE_DATE_PLUS_60_MINS, SAMPLE_DATE, TimeGranularity.SECONDS, '1 hour'],
+        [SAMPLE_DATE_PLUS_61_MINS, SAMPLE_DATE, TimeGranularity.SECONDS, '1 hour'],
+        [SAMPLE_DATE_PLUS_23_HRS, SAMPLE_DATE, TimeGranularity.SECONDS, '23 hours'],
+        [SAMPLE_DATE_PLUS_24_HRS, SAMPLE_DATE, TimeGranularity.SECONDS, '1 day'],
+        [SAMPLE_DATE_PLUS_25_HRS, SAMPLE_DATE, TimeGranularity.SECONDS, '1 day'],
+        [SAMPLE_DATE_PLUS_364_DAYS, SAMPLE_DATE, TimeGranularity.SECONDS, '11 months'],
+        [SAMPLE_DATE_PLUS_365_DAYS, SAMPLE_DATE, TimeGranularity.SECONDS, '1 year'],
+        [SAMPLE_DATE_PLUS_366_DAYS, SAMPLE_DATE, TimeGranularity.SECONDS, '1 year'],
+        [SAMPLE_DATE_PLUS_3_YEARS, SAMPLE_DATE, TimeGranularity.SECONDS, '3 years'],
+      ] as [string, string, TimeGranularity | undefined, string][]
+      it.each(cases)('now(%s) === %s', (current, target, granularity, expected) => {
+        expect(timeSince(current, target, granularity)).toEqual(expected)
       })
     })
   })

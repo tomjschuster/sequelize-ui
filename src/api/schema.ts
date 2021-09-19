@@ -39,7 +39,9 @@ export async function updateSchema(schema: Schema): Promise<Schema> {
   }
 
   const updatedSchema: Schema = removeTargetingAssociations(existingSchema, schema)
-  const updatedSchemas = schemas.map((s) => (s.id === schema.id ? updatedSchema : s))
+  const updatedSchemas = schemas.map((s) =>
+    s.id === schema.id ? { ...updatedSchema, updatedAt: now() } : s,
+  )
 
   await set(schemasKey(), updatedSchemas)
   return updatedSchema

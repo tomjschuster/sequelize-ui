@@ -28,7 +28,7 @@ export const title = classnames(
 
 export const close = classnames('p-1', 'hover:bg-gray-200')
 export const titleSiteName = classnames('p-1', 'flex', 'items-center')
-export const titleLogo = classnames('h-6', 'pr-2')
+export const titleLogo = classnames('h-6')
 
 export const controls = classnames(
   'relative',

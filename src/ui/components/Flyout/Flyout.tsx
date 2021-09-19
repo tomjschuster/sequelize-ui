@@ -26,7 +26,6 @@ export default function Flyout({
             className={Styles.titleLogo}
             src="https://sequelizeui.app/static/images/sequelize-ui-tiny-white.svg"
           />
-          Sequelize UI
         </div>
         <h2>{title}</h2>
         <button className={Styles.close} onClick={onClickClose}>

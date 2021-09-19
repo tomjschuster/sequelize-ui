@@ -11,7 +11,7 @@ export function displayDemoSchemaType(type: DemoSchemaType): string {
     case DemoSchemaType.Blog:
       return 'Blog'
     case DemoSchemaType.Employee:
-      return 'Employee Temporal Dataset'
+      return 'Employee Dataset'
     case DemoSchemaType.Sakila:
       return 'Sakila'
   }

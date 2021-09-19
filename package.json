@@ -18,7 +18,7 @@
     "test:all": "SQL_DIALECT=all npm test -- src e2e --coverage",
     "test:e2e": "jest e2e",
     "test:e2e:all": "SQL_DIALECT=all npm run test:e2e",
-    "test:watch": "npm test -- --watch"
+    "test:watch": "npm test -- --watch --"
   },
   "husky": {
     "hooks": {

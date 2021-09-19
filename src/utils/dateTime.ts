@@ -31,3 +31,65 @@ function fromDate(date: Date): string {
 function toDate(dateTime: string): Date {
   return new Date(dateTime)
 }
+
+export enum TimeGranularity {
+  YEARS = 'years',
+  MONTHS = 'months',
+  DAYS = 'days',
+  HOURS = 'hours',
+  MINUTES = 'minutes',
+  SECONDS = 'seconds',
+}
+
+export function timeSince(
+  current: string,
+  date: string,
+  granularity: TimeGranularity = TimeGranularity.SECONDS,
+): string {
+  const seconds = Math.floor((toDate(current).valueOf() - toDate(date).valueOf()) / 1000)
+  let intervalType
+  let lessThan = false
+
+  let interval = Math.floor(seconds / 31536000)
+  if (interval >= 1 || granularity === TimeGranularity.YEARS) {
+    lessThan = interval < 1
+    intervalType = 'year'
+  } else {
+    interval = Math.floor(seconds / 2629746)
+    if (interval >= 1 || granularity === TimeGranularity.MONTHS) {
+      lessThan = interval < 1
+      intervalType = 'month'
+    } else {
+      interval = Math.floor(seconds / 86400)
+      if (interval >= 1 || granularity === TimeGranularity.DAYS) {
+        lessThan = interval < 1
+        intervalType = 'day'
+      } else {
+        interval = Math.floor(seconds / 3600)
+        if (interval >= 1 || granularity === TimeGranularity.HOURS) {
+          lessThan = interval < 1
+          intervalType = 'hour'
+        } else {
+          interval = Math.floor(seconds / 60)
+          if (interval >= 1 || granularity === TimeGranularity.MINUTES) {
+            lessThan = interval < 1
+            intervalType = 'minute'
+          } else {
+            interval = seconds
+            intervalType = 'second'
+          }
+        }
+      }
+    }
+  }
+
+  if (lessThan) {
+    return `less than 1 ${intervalType}`
+  }
+
+  if (interval > 1 || interval === 0) {
+    intervalType += 's'
+  }
+
+  return interval + ' ' + intervalType
+}

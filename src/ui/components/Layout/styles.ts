@@ -1,16 +1,16 @@
 import { classnames } from '@src/ui/classnames'
 
 export const pageWrapper = classnames('flex', 'flex-col', 'items-stretch', 'h-screen')
-export const header = classnames('shadow', 'p-2')
+export const header = classnames('shadow', 'p-2', 'flex', 'items-center')
 export const logoLink = classnames('inline-block')
-export const logoHeading = classnames('text-2xl')
+export const logoHeading = classnames('text-2xl', 'flex', 'items-center')
 export const logo = classnames('inline', 'mr-2', 'h-8')
 export const main = classnames('flex-1')
 
 export const footer = classnames(
   'shadow-inner',
   'bg-indigo-50',
-  'p-4',
+  'p-2',
   'flex',
   'justify-between',
   'items-center',
@@ -19,5 +19,5 @@ export const footer = classnames(
   'sm:flex-row-reverse',
 )
 
-export const copyright = classnames('mt-2', 'sm:mt-0')
-export const authorLink = classnames('hover:underline', 'font-bold', 'ml-1.5')
+export const copyright = classnames('mt-2', 'sm:mt-0', 'text-sm')
+export const authorLink = classnames('hover:underline', 'font-bold', 'text-sm', 'ml-1.5')
