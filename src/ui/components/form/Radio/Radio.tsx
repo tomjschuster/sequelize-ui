@@ -1,3 +1,4 @@
+import { classnames } from '@src/ui/classnames'
 import React from 'react'
 import { lookupOptionValue, optionsToList } from '../shared/options'
 import { CommonOptionsProps } from '../shared/types'
@@ -14,8 +15,14 @@ function Radio<T>({ value, options, display, onChange }: RadioProps<T>): React.R
   return (
     <div>
       {optionsToList(options).map(([k, v]) => (
-        <label key={k}>
-          <input type="radio" value={k} checked={v === value} onChange={handleChange} />
+        <label key={k} className={classnames('border', 'rounded-md', 'p-2')}>
+          <input
+            className={classnames('hidden')}
+            type="radio"
+            value={k}
+            checked={v === value}
+            onChange={handleChange}
+          />
           {display(v)}
         </label>
       ))}

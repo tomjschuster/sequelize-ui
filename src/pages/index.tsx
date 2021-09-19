@@ -3,16 +3,18 @@ import { Schema } from '@src/core/schema'
 import { DemoSchemaType, displayDemoSchemaType } from '@src/data/schemas'
 import { editSchemaRoute, routeToUrl } from '@src/routing/routes'
 import { classnames } from '@src/ui/classnames'
-import Radio from '@src/ui/components/form/Radio'
 import ClockIcon from '@src/ui/components/icons/Clock'
 import CollectionIcon from '@src/ui/components/icons/Collection'
+import FilmIcon from '@src/ui/components/icons/Film'
+import RssIcon from '@src/ui/components/icons/Rss'
+import UserGroupIcon from '@src/ui/components/icons/Users'
 import Layout from '@src/ui/components/Layout'
 import useDemoSchema from '@src/ui/hooks/useDemoSchema'
 import { now, TimeGranularity, timeSince } from '@src/utils/dateTime'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 
 const CodeViewer = dynamic(() => import('@src/ui/components/CodeViewer'))
 
@@ -54,7 +56,7 @@ function IndexPageSchemaContent({
     'gap-6',
     'max-w-screen-lg',
     'lg:w-5/6',
-    'py-6',
+    'pt-6',
   )
   return (
     <div className="w-full flex flex-col items-center p-6">
@@ -68,7 +70,7 @@ function IndexPageSchemaContent({
             'border',
             'border-gray-400',
             'hover:border-gray-800',
-            'hover:bg-indigo-50',
+            'hover:bg-blue-100',
             'rounded',
             'min-h-24',
             'w-full',
@@ -109,7 +111,7 @@ export default IndexPage
 
 function IndexPageDemoContent(): React.ReactElement {
   const router = useRouter()
-  const { schema: demoSchema, type: demoSchemaType, setType: setDemoSchemaType } = useDemoSchema()
+  const { schema: demoSchema, setType: setDemoSchemaType } = useDemoSchema()
 
   const handleEdit = async () => {
     if (demoSchema) {
@@ -122,19 +124,62 @@ function IndexPageDemoContent(): React.ReactElement {
   const handleClose = () => setDemoSchemaType(undefined)
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full flex flex-col items-center p-6">
       <h2 className="text-2xl">Demo Schemas</h2>
-      <div className="pt-6">
-        <Radio
-          value={demoSchemaType}
-          options={DemoSchemaType}
-          display={displayDemoSchemaType}
-          onChange={setDemoSchemaType}
-        />
-      </div>
+      <ul
+        className={classnames(
+          'grid',
+          'md:grid-cols-3',
+          'sm:grid-cols-2',
+          'grid-cols-1',
+          'gap-6',
+          'max-w-screen-lg',
+          'lg:w-5/6',
+          'w-full',
+          'pt-6',
+        )}
+      >
+        {Object.values(DemoSchemaType).map((schemaType) => (
+          <li key={schemaType}>
+            <button
+              type="button"
+              className={classnames({
+                'p-2': true,
+                'w-full': true,
+                border: true,
+                'border-gray-500': true,
+                'rounded-md': true,
+                'flex-1': true,
+                flex: true,
+                'items-center': true,
+                'hover:bg-green-200': true,
+              })}
+              onClick={setDemoSchemaType.bind(null, schemaType)}
+            >
+              <span className={classnames('mr-2')}>
+                <DemoSchemaIcon schemaType={schemaType} />
+              </span>
+              {displayDemoSchemaType(schemaType)}
+            </button>
+          </li>
+        ))}
+      </ul>
       {demoSchema && (
         <CodeViewer schema={demoSchema} onClickClose={handleClose} onClickEdit={handleEdit} />
       )}
     </div>
   )
+}
+
+function DemoSchemaIcon({ schemaType }: { schemaType: DemoSchemaType }): ReactElement | null {
+  switch (schemaType) {
+    case DemoSchemaType.Blog:
+      return <RssIcon />
+    case DemoSchemaType.Employee:
+      return <UserGroupIcon />
+    case DemoSchemaType.Sakila:
+      return <FilmIcon />
+    default:
+      return null
+  }
 }
