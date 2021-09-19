@@ -1,5 +1,5 @@
 import { DbOptions, defaultDbOptions } from '@src/core/database'
-import { fileLanguage, FileSystemItem } from '@src/core/files'
+import { fileLanguage } from '@src/core/files'
 import { Schema } from '@src/core/schema'
 import Code from '@src/ui/components/Code'
 import FileTree, { useFileTree } from '@src/ui/components/FileTree'
@@ -11,56 +11,24 @@ import * as Styles from './styles'
 
 type CodeViewerProps = {
   schema: Schema
-  onClickEdit?: () => void
   onClickClose: () => void
+  onClickEdit?: () => void
 }
-
 export default function CodeViewer({
   schema,
   onClickClose,
   onClickEdit,
-}: CodeViewerProps): React.ReactElement | null {
+}: CodeViewerProps): React.ReactElement {
   const [dbOptions, setDbOptions] = useState<DbOptions>(defaultDbOptions)
   const { root, defaultPath } = useGeneratedCode({ schema, dbOptions })
 
-  if (!root) return null
-
-  return (
-    <CodeViewerContent
-      schema={schema}
-      root={root}
-      dbOptions={dbOptions}
-      defaultPath={defaultPath}
-      onChangeDbOptions={setDbOptions}
-      onClickClose={onClickClose}
-      onClickEdit={onClickEdit}
-    />
-  )
-}
-
-type CodeViewerContentProps = {
-  schema: Schema
-  root: FileSystemItem
-  dbOptions: DbOptions
-  defaultPath: string | undefined
-  onChangeDbOptions: (dbOptions: DbOptions) => void
-  onClickClose: () => void
-  onClickEdit?: () => void
-}
-function CodeViewerContent({
-  schema,
-  root,
-  dbOptions,
-  defaultPath,
-  onChangeDbOptions,
-  onClickClose,
-  onClickEdit,
-}: CodeViewerContentProps): React.ReactElement {
   const { activeFile, folderState, selectItem } = useFileTree({
     root,
     cacheKey: schema.id,
     defaultPath,
   })
+
+  if (!root) return <></>
 
   return (
     <Flyout
@@ -72,7 +40,7 @@ function CodeViewerContent({
           activeFile={activeFile}
           dbOptions={dbOptions}
           onClickEdit={onClickEdit}
-          onChangeDbOptions={onChangeDbOptions}
+          onChangeDbOptions={setDbOptions}
         />
       }
     >

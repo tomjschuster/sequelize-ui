@@ -4,7 +4,7 @@ import React from 'react'
 import { ActiveFile, FolderState } from './types'
 
 type UseFileTreeArgs = {
-  root: FileSystemItem
+  root: FileSystemItem | undefined
   defaultPath?: string
   cacheKey?: string
 }
@@ -19,15 +19,24 @@ function useFileTree({ root, cacheKey, defaultPath }: UseFileTreeArgs): UseFileT
   const previousCacheKey = usePrevious(cacheKey)
   const previousRoot = usePrevious(root)
   const [activePath, setActivePath] = React.useState<string | undefined>(defaultPath)
-
   const [folderState, setFolderState] = React.useState<FolderState>(() => createFolderState(root))
 
   React.useEffect(() => {
-    if (cacheKey && (!previousCacheKey || cacheKey === previousCacheKey)) return
-    setActivePath(undefined)
-    setFolderState(createFolderState(root))
-  }, [root, cacheKey, previousCacheKey])
+    if (defaultPath && !activePath) setActivePath(defaultPath)
+  }, [defaultPath, activePath])
 
+  // Handle first folder state and cache key changes which require new folder state
+  React.useEffect(() => {
+    // we only update folder state when the first root is available or when cache key changes
+    if (!root || (previousRoot && cacheKey && cacheKey === previousCacheKey)) return
+
+    // clear active path when cache key changes, but not for first root
+    if (previousRoot) setActivePath(undefined)
+
+    setFolderState(createFolderState(root))
+  }, [root, previousRoot, cacheKey, previousCacheKey])
+
+  // Whenever new paths are added, refresh the folder state
   React.useEffect(() => {
     if (root && isDirectory(root) && previousRoot) {
       const previousPaths = listPaths(previousRoot)
@@ -45,6 +54,7 @@ function useFileTree({ root, cacheKey, defaultPath }: UseFileTreeArgs): UseFileT
 
   const selectItem = React.useCallback(
     (path: string) => {
+      if (!root) return
       const item = findItem(root, path)
 
       if (item && isFile(item)) {
@@ -61,6 +71,7 @@ function useFileTree({ root, cacheKey, defaultPath }: UseFileTreeArgs): UseFileT
   )
 
   const activeFile = React.useMemo<ActiveFile | undefined>(() => {
+    if (!root) return undefined
     const file = activePath ? findFile(root, activePath) : undefined
     return activePath && file ? { path: activePath, file } : undefined
   }, [activePath, root])
@@ -68,7 +79,9 @@ function useFileTree({ root, cacheKey, defaultPath }: UseFileTreeArgs): UseFileT
   return { activeFile, folderState, selectItem }
 }
 
-function createFolderState(root: FileSystemItem): FolderState {
+function createFolderState(root: FileSystemItem | undefined): FolderState {
+  if (!root) return {}
+
   return listPaths(root).reduce<{ [key: string]: boolean }>((acc, x) => {
     acc[x] = true
     return acc

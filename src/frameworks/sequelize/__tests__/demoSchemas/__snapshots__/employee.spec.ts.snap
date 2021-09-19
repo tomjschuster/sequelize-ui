@@ -9,7 +9,7 @@ Object {
           "content": "module.exports = {
   development: {
     dialect: 'postgres',
-    database: process.env.POSTGRES_DB_NAME || 'employee_temporal_dataset',
+    database: process.env.POSTGRES_DB_NAME || 'employee_dataset',
     username: process.env.POSTGRES_DB_USERNAME || 'postgres',
     password: process.env.POSTGRES_DB_PASSWORD || 'postgres',
     host: process.env.POSTGRES_DB_HOST || 'localhost',
@@ -17,7 +17,7 @@ Object {
   },
   test: {
     dialect: 'postgres',
-    database: process.env.POSTGRES_DB_NAME || 'employee_temporal_dataset',
+    database: process.env.POSTGRES_DB_NAME || 'employee_dataset',
     username: process.env.POSTGRES_DB_USERNAME || 'postgres',
     password: process.env.POSTGRES_DB_PASSWORD || 'postgres',
     host: process.env.POSTGRES_DB_HOST || 'localhost',
@@ -1112,7 +1112,7 @@ export default db
     },
     Object {
       "content": "{
-  \\"name\\": \\"employee-temporal-dataset\\",
+  \\"name\\": \\"employee-dataset\\",
   \\"version\\": \\"0.0.1\\",
   \\"description\\": \\"\\",
   \\"main\\": \\"server.ts\\",
@@ -1192,7 +1192,7 @@ run()",
       "type": "FILE",
     },
   ],
-  "name": "employee-temporal-dataset",
+  "name": "employee-dataset",
   "type": "DIRECTORY",
 }
 `;

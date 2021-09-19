@@ -14,8 +14,7 @@ export const container = classnames(
 
 export const title = classnames(
   'relative',
-  'flex-1',
-  'h-32',
+  'h-10',
   'flex',
   'items-center',
   'justify-between',
@@ -34,8 +33,9 @@ export const titleLogo = classnames('h-6', 'pr-2')
 export const controls = classnames(
   'relative',
   'overflow-visible',
-  'flex-1',
-  'h-40',
+  'h-10',
+  'flex',
+  'items-center',
   'border-b',
   'border-gray-900',
 )
