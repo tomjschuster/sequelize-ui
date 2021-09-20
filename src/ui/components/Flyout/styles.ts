@@ -33,7 +33,7 @@ export const titleLogo = classnames('h-6')
 export const controls = classnames(
   'relative',
   'overflow-visible',
-  'h-10',
+  'h-12',
   'flex',
   'items-center',
   'border-b',
