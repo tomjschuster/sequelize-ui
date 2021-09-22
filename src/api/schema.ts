@@ -75,6 +75,10 @@ export async function clearSchemas(): Promise<void> {
   return await remove(schemasKey())
 }
 
+export async function clearData(): Promise<void> {
+  return await Promise.all([clearSchemas()]).then()
+}
+
 function get<T>(key: string): Promise<T | null> {
   return new Promise<T | null>((resolve, reject) => {
     try {
@@ -115,7 +119,7 @@ function schemasKey(): string {
   return '/schemas'
 }
 
-const NAMESPACE = `__SEQUELIZEUI__`
+export const NAMESPACE = `__SEQUELIZEUI__`
 function lsKey(key: string): string {
   return NAMESPACE + key
 }

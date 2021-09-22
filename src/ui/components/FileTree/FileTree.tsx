@@ -65,23 +65,21 @@ function FileTreeItem({
 
   return (
     <>
-      <span
-        className={classnames({
-          flex: true,
-          'font-semibold': active,
-          'items-center': true,
-          'text-sm': true,
-          'leading-loose': true,
-          'w-full': true,
-          'hover:bg-gray-200': !active,
-          'bg-indigo-100': active,
-          'cursor-pointer': true,
-          block: true,
-        })}
+      <button
+        type="button"
+        className={classnames(
+          'flex',
+          'items-center',
+          'text-sm',
+          'leading-loose',
+          'w-full',
+          'cursor-pointer',
+          'block',
+          { 'font-semibold': active, 'hover:bg-gray-200': !active, 'bg-indigo-100': active },
+        )}
         style={{ paddingLeft: `calc(${depth} * 1rem)` }}
         onClick={handleClick}
       >
-        {isDirectory(item)}
         {chevronDirection && (
           <span className="pr-1.5">
             <ChevronIcon direction={chevronDirection} />
@@ -93,7 +91,7 @@ function FileTreeItem({
           </span>
         )}
         {itemName(item)}
-      </span>
+      </button>
       {isDirectory(item) && item.files.length > 0 && folderState[path] && (
         <ul>
           {item.files

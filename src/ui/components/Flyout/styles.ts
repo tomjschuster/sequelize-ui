@@ -3,7 +3,7 @@ import { fullscreen } from '@src/ui/utils/classnames'
 
 export const container = classnames(
   fullscreen,
-  'bg-white',
+  'bg-gray-50',
   'overflow-y-scroll',
   'z-10',
   'border-gray-500',
@@ -26,7 +26,7 @@ export const title = classnames(
   'shadow-inner',
 )
 
-export const close = classnames('p-1', 'hover:bg-gray-200')
+export const close = classnames('p-0.5', 'hover:bg-gray-200')
 export const titleSiteName = classnames('p-1', 'flex', 'items-center')
 export const titleLogo = classnames('h-6')
 
@@ -44,4 +44,4 @@ export const content = classnames('flex-auto', 'overflow-y-scroll')
 
 export const actions = classnames('text-sm', 'flex', 'w-full')
 
-export const actionButton = classnames('p-2', 'hover:bg-gray-100')
+export const actionButton = classnames('py-1', 'px-2', 'hover:bg-gray-200')

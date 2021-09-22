@@ -1,33 +1,36 @@
 import { classnames } from '@src/ui/classnames'
+import { button, buttonGrid } from '@src/ui/utils/classnames'
 
-export const containerClassName = classnames(
-  'grid',
-  'md:grid-cols-3',
-  'sm:grid-cols-2',
-  'grid-cols-1',
-  'gap-6',
-  'max-w-screen-lg',
-  'lg:w-5/6',
-  'pt-6',
+export const container = classnames(buttonGrid)
+
+export const newSchemaIcon = classnames('mr-2')
+export const addButtonLink = classnames(
+  button,
+  'min-h-16',
+  'h-full',
+  'bg-white',
+  'hover:bg-green-50',
+  'text-lg',
+  'border-dashed',
 )
 
-export const linkClassName = classnames(
-  'text-sm',
-  'p-2',
-  'border',
-  'border-gray-400',
-  'hover:border-gray-800',
-  'hover:bg-blue-100',
-  'rounded',
-  'min-h-24',
+export const schemaButtonLink = classnames(
+  button,
+  'min-h-20',
+  'bg-white',
+  'h-full',
+  'hover:bg-indigo-50',
+)
+
+export const linkText = classnames(
+  'font-bold',
+  'overflow-ellipsis',
+  'overflow-hidden',
   'w-full',
-  'flex',
-  'flex-col',
-  'justify-between',
+  'mb-2',
 )
 
-export const linkTextClassName = classnames('font-bold', 'overflow-ellipsis', 'overflow-hidden')
-export const linkMetaClassName = classnames('flex', 'flex-col', 'items-start')
+export const linkMeta = classnames('flex', 'flex-col', 'w-full')
 
-export const linkMetaItemClassName = classnames('flex', 'items-center', 'text-xs')
-export const linkMetaIconClassName = classnames('mr-1')
+export const linkMetaItem = classnames('flex', 'items-center', 'text-xs')
+export const linkMetaIcon = classnames('mr-1')

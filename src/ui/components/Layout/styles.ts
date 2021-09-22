@@ -1,6 +1,13 @@
 import { classnames } from '@src/ui/classnames'
 
-export const pageWrapper = classnames('flex', 'flex-col', 'items-stretch', 'h-screen')
+export const pageWrapper = classnames(
+  'bg-gray-50',
+  'flex',
+  'flex-col',
+  'items-stretch',
+  'h-screen',
+  'w-screen',
+)
 export const header = classnames('shadow', 'p-2', 'flex', 'items-center')
 export const logoLink = classnames('inline-block')
 export const logoHeading = classnames('text-2xl', 'flex', 'items-center')

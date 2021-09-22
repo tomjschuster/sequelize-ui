@@ -30,6 +30,17 @@ export type Field = {
   generated?: boolean
 }
 
+export function emptySchema(): Schema {
+  const time = now()
+  return {
+    id: shortid(),
+    name: '',
+    models: [],
+    createdAt: time,
+    updatedAt: time,
+  }
+}
+
 export function emptyModel(): Model {
   const time = now()
   return {
