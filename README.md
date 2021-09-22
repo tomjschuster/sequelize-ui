@@ -24,9 +24,7 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 - [ ] Schema form
 - [ ] Form a11y review
 - [ ] Home page
-  - [ ] Intro
-  - [ ] Demo section
-  - [ ] Current schemas
+  - [ ] Copy
 
 #### Codegen
 

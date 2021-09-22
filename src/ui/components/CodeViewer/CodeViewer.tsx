@@ -18,7 +18,7 @@ export default function CodeViewer({
   schema,
   onClickClose,
   onClickEdit,
-}: CodeViewerProps): React.ReactElement {
+}: CodeViewerProps): React.ReactElement | null {
   const [dbOptions, setDbOptions] = useState<DbOptions>(defaultDbOptions)
   const { root, defaultPath } = useGeneratedCode({ schema, dbOptions })
 
@@ -28,7 +28,7 @@ export default function CodeViewer({
     defaultPath,
   })
 
-  if (!root) return <></>
+  if (!root) return null
 
   return (
     <Flyout

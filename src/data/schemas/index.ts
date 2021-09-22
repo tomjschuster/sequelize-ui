@@ -17,7 +17,7 @@ export function displayDemoSchemaType(type: DemoSchemaType): string {
   }
 }
 
-export async function getDemoSchema(type: DemoSchemaType): Promise<Schema> {
+export async function getDemoSchema(type: DemoSchemaType | undefined): Promise<Schema | undefined> {
   switch (type) {
     case DemoSchemaType.Blog: {
       return (await import('./blog')).default
@@ -29,5 +29,7 @@ export async function getDemoSchema(type: DemoSchemaType): Promise<Schema> {
     case DemoSchemaType.Sakila: {
       return (await import('./sakila')).default
     }
+    default:
+      return Promise.resolve(undefined)
   }
 }

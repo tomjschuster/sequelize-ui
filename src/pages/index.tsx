@@ -1,5 +1,5 @@
 import { clearData, createSchema, listSchemas } from '@src/api/schema'
-import { Schema } from '@src/core/schema'
+import { DemoSchemaType, getDemoSchema } from '@src/data/schemas'
 import { editSchemaRoute, routeToUrl } from '@src/routing/routes'
 import { classnames } from '@src/ui/classnames'
 import DemoSchemaButtons from '@src/ui/components/home/DemoSchemaButtons'
@@ -7,10 +7,10 @@ import MySchemaLinks from '@src/ui/components/home/MySchemaLinks'
 import SchemasError from '@src/ui/components/home/SchemasError'
 import SchemasZeroState from '@src/ui/components/home/SchemasZeroState/SchemasZeroState'
 import Layout from '@src/ui/components/Layout'
-import useDemoSchema from '@src/ui/hooks/useDemoSchema'
+import useAsync from '@src/ui/hooks/useAsync'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import React, { useCallback, useEffect, useState } from 'react'
+import React from 'react'
 
 const CodeViewer = dynamic(() => import('@src/ui/components/CodeViewer'))
 
@@ -36,30 +36,30 @@ export default function IndexPage(): React.ReactElement {
         </div>
         <div className={sectionClassName}>
           <h2 className={sectionTitleClassName}>Demo Schemas</h2>
-          <Demo />
+          <DemoSchemas />
         </div>
       </div>
     </Layout>
   )
 }
-
 function MySchemas(): React.ReactElement | null {
-  const { schemas, error, reload, loading } = useLoadSchemas()
+  const { data: schemas, error, refetch, loading } = useAsync({ getData: listSchemas })
 
   const handleClickClearData = async () => {
     await clearData()
-    reload()
+    refetch()
   }
 
   if (error) return <SchemasError onClickClearData={handleClickClearData} />
   if (loading) return null
-  if (schemas.length === 0) return <SchemasZeroState />
+  if (!schemas?.length) return <SchemasZeroState />
   return <MySchemaLinks schemas={schemas} />
 }
 
-function Demo(): React.ReactElement {
+function DemoSchemas(): React.ReactElement {
   const router = useRouter()
-  const { schema: demoSchema, setType: setDemoSchemaType } = useDemoSchema()
+  const [demoSchemaType, setDemoSchemaType] = React.useState<DemoSchemaType>()
+  const { data: demoSchema } = useAsync({ getData: getDemoSchema, variables: demoSchemaType })
 
   const handleEdit = async () => {
     if (demoSchema) {
@@ -79,32 +79,4 @@ function Demo(): React.ReactElement {
       )}
     </>
   )
-}
-
-type UseLoadSchemasResult = {
-  schemas: Schema[]
-  loading: boolean
-  error: string | undefined
-  reload: () => void
-}
-function useLoadSchemas(): UseLoadSchemasResult {
-  const [schemas, setSchemas] = useState<Schema[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string | undefined>()
-
-  const load = useCallback(() => {
-    setLoading(true)
-    setError(undefined)
-    listSchemas()
-      .then(setSchemas)
-      .catch((e) => {
-        console.error(e)
-        setError(e.message || 'Sorry, something went wrong.')
-      })
-      .then(() => setLoading(false))
-  }, [])
-
-  useEffect(load, [])
-
-  return { schemas, loading, error, reload: load }
 }
