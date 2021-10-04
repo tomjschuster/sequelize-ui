@@ -1,11 +1,11 @@
 import React from 'react'
-import * as Styles from './styles'
+import { ActionButton, ActionsContainer } from './styles'
 
 type ControlsBarProps = {
   children: React.ReactNode
 }
 export default function ControlsBar({ children }: ControlsBarProps): React.ReactElement {
-  return <div className={Styles.actions}>{children}</div>
+  return <ActionsContainer>{children}</ActionsContainer>
 }
 
 const overlayButtonProps: Pick<
@@ -23,5 +23,5 @@ export function ControlsAction({
   ...props
 }: ControlsActionProps): React.ReactElement {
   const extraProps = overlayControl ? overlayButtonProps : {}
-  return <button className={Styles.actionButton} {...props} {...extraProps} />
+  return <ActionButton {...props} {...extraProps} />
 }

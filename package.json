@@ -11,7 +11,7 @@
     "format": "prettier --write {src,e2e}/**/*.{js,ts,tsx}",
     "check:format": "prettier --check {src,e2e}/**/*.{js,ts,tsx}",
     "check:types": "tsc -b tsconfig.check.json",
-    "generate:css-types": "tailwindcss-classnames -i tailwind.config.js -o src/ui/classnames/__generated__/tailwindcss-classnames.ts",
+    "generate:css-types": "tailwindcss-classnames -i tailwind.config.js -o src/ui/styles/classnames/__generated__/tailwindcss-classnames.ts",
     "test": "jest",
     "test:unit": "npm test -- src",
     "test:coverage": "npm run test:unit -- --coverage",

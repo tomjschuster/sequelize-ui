@@ -2,7 +2,15 @@ import CloseCircleIcon from '@src/ui/components/icons/CloseCircle'
 import useLockScroll from '@src/ui/hooks/useLockScroll'
 import useTrapFocus from '@src/ui/hooks/useTrapFocus'
 import React, { useRef } from 'react'
-import * as Styles from './styles'
+import {
+  CloseButton,
+  Container,
+  ContentContainer,
+  ControlsContainer,
+  Logo,
+  LogoContainer,
+  TitleContainer,
+} from './styles'
 
 type FlyoutProps = React.PropsWithChildren<{
   title: string
@@ -21,21 +29,18 @@ export default function Flyout({
   useTrapFocus({ ref, shouldTrap: true })
 
   return (
-    <div className={Styles.container} ref={ref}>
-      <div className={Styles.title}>
-        <div className={Styles.titleSiteName}>
-          <img
-            className={Styles.titleLogo}
-            src="https://sequelizeui.app/static/images/sequelize-ui-tiny-white.svg"
-          />
-        </div>
+    <Container ref={ref}>
+      <TitleContainer>
+        <LogoContainer>
+          <Logo src="https://sequelizeui.app/static/images/sequelize-ui-tiny-white.svg" />
+        </LogoContainer>
         <h2>{title}</h2>
-        <button className={Styles.close} onClick={onClickClose}>
+        <CloseButton onClick={onClickClose}>
           <CloseCircleIcon title="close" />
-        </button>
-      </div>
-      {controls && <div className={Styles.controls}>{controls}</div>}
-      <div className={Styles.content}>{children}</div>
-    </div>
+        </CloseButton>
+      </TitleContainer>
+      {controls && <ControlsContainer>{controls}</ControlsContainer>}
+      <ContentContainer>{children}</ContentContainer>
+    </Container>
   )
 }

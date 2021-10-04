@@ -1,7 +1,7 @@
-import { classnames } from '@src/ui/classnames'
-import { fullscreen } from '@src/ui/utils/classnames'
+import styled from '@src/ui/styles/tailwind-components'
+import { fullscreen } from '@src/ui/styles/utils'
 
-export const container = classnames(
+export const Container = styled.div(
   fullscreen,
   'bg-gray-50',
   'overflow-y-scroll',
@@ -12,9 +12,9 @@ export const container = classnames(
   'flex-col',
 )
 
-export const title = classnames(
+export const TitleContainer = styled.div(
   'relative',
-  'h-10',
+  'h-8',
   'flex',
   'items-center',
   'justify-between',
@@ -26,22 +26,24 @@ export const title = classnames(
   'shadow-inner',
 )
 
-export const close = classnames('p-0.5', 'hover:bg-gray-200')
-export const titleSiteName = classnames('p-1', 'flex', 'items-center')
-export const titleLogo = classnames('h-6')
+export const LogoContainer = styled.div('p-1', 'flex', 'items-center')
 
-export const controls = classnames(
+export const Logo = styled.img('h-6')
+
+export const CloseButton = styled.button('p-0.5', 'hover:bg-gray-200')
+
+export const ControlsContainer = styled.div(
   'relative',
   'overflow-visible',
-  'h-12',
+  'h-9',
   'flex',
   'items-center',
   'border-b',
   'border-gray-900',
 )
 
-export const content = classnames('flex-auto', 'overflow-y-scroll')
+export const ContentContainer = styled.div('flex-auto', 'overflow-y-scroll')
 
-export const actions = classnames('text-sm', 'flex', 'w-full')
+export const ActionsContainer = styled.div('text-sm', 'flex', 'w-full')
 
-export const actionButton = classnames('py-1', 'px-2', 'hover:bg-gray-200')
+export const ActionButton = styled.button('py-1', 'px-2', 'hover:bg-gray-200')
