@@ -4,7 +4,7 @@ import { button, buttonGrid } from '@src/ui/utils/classnames'
 export const container = classnames(buttonGrid)
 
 export const newSchemaIcon = classnames('mr-2')
-export const addButtonLink = classnames(
+export const newButton = classnames(
   button,
   'min-h-16',
   'h-full',
@@ -14,7 +14,7 @@ export const addButtonLink = classnames(
   'border-dashed',
 )
 
-export const schemaButtonLink = classnames(
+export const schemaButton = classnames(
   button,
   'min-h-20',
   'bg-white',
@@ -22,7 +22,7 @@ export const schemaButtonLink = classnames(
   'hover:bg-indigo-50',
 )
 
-export const linkText = classnames(
+export const buttonText = classnames(
   'font-bold',
   'overflow-ellipsis',
   'overflow-hidden',
@@ -30,7 +30,7 @@ export const linkText = classnames(
   'mb-2',
 )
 
-export const linkMeta = classnames('flex', 'flex-col', 'w-full')
+export const meta = classnames('flex', 'flex-col', 'w-full')
 
-export const linkMetaItem = classnames('flex', 'items-center', 'text-xs')
-export const linkMetaIcon = classnames('mr-1')
+export const metaItem = classnames('flex', 'items-center', 'text-xs')
+export const metaIcon = classnames('mr-1')

@@ -1,76 +1,92 @@
-import { Schema } from '@src/core/schema'
-import { routeToUrl, viewSchemaRoute } from '@src/routing/routes'
+import { createSchema } from '@src/api/schema'
+import { emptySchema, Schema } from '@src/core/schema'
 import { now, TimeGranularity, timeSince } from '@src/utils/dateTime'
-import Link from 'next/link'
 import React from 'react'
 import ClockIcon from '../../icons/Clock'
 import CollectionIcon from '../../icons/Collection'
 import PlusCircleIcon from '../../icons/Plus'
 import * as Styles from './styles'
 
-type MySchemaLinksProps = {
+type MySchemaButtonsProps = {
   schemas: Schema[]
+  onSelectSchema: (schema: Schema) => void
 }
 
-export default function MySchemaLinks({ schemas }: MySchemaLinksProps): React.ReactElement {
+export default function MySchemaButtons({
+  schemas,
+  onSelectSchema,
+}: MySchemaButtonsProps): React.ReactElement {
+  const handleClickNew = React.useCallback(
+    () => createSchema(emptySchema()).then(onSelectSchema),
+    [onSelectSchema],
+  )
+
   return (
     <ul className={Styles.container}>
       <li>
-        <NewSchemaLink />
+        <NewSchemaButton onClick={handleClickNew} />
       </li>
-      {schemas.map((schema) => (
-        <li key={schema.id}>
-          <MySchemaLink schema={schema} />
-        </li>
-      ))}
+      {schemas
+        .slice()
+        .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+        .map((schema) => (
+          <li key={schema.id}>
+            <MySchemaButton schema={schema} onClick={onSelectSchema} />
+          </li>
+        ))}
     </ul>
   )
 }
 
-type MySchemaLinkProps = {
+type MySchemaButtonProps = {
   schema: Schema
+  onClick: (schema: Schema) => void
 }
-function MySchemaLink({ schema }: MySchemaLinkProps): React.ReactElement {
+function MySchemaButton({ schema, onClick }: MySchemaButtonProps): React.ReactElement {
   const modelCount = schema.models.flatMap((m) => m.associations).length
+  const handleClick = React.useCallback(() => onClick(schema), [onClick, schema])
 
   return (
-    <Link href={routeToUrl(viewSchemaRoute(schema.id))}>
-      <a className={Styles.schemaButtonLink}>
-        <span className={Styles.linkText}>{schema.name || 'Untitled'}</span>
-        <span className={Styles.linkMeta}>
-          <MySchemaLinkMetaItem icon={<CollectionIcon />}>
-            {modelCount} {modelCount === 1 ? 'model' : 'models'}
-          </MySchemaLinkMetaItem>
-          <MySchemaLinkMetaItem icon={<ClockIcon title="last updated" />}>
-            updated {timeSince(now(), schema.updatedAt, TimeGranularity.MINUTES)} ago
-          </MySchemaLinkMetaItem>
-        </span>
-      </a>
-    </Link>
+    <button type="button" className={Styles.schemaButton} onClick={handleClick}>
+      <span className={Styles.buttonText}>{schema.name || 'Untitled'}</span>
+      <span className={Styles.meta}>
+        <MySchemaButtonsMetaItem icon={<CollectionIcon />}>
+          {modelCount} {modelCount === 1 ? 'model' : 'models'}
+        </MySchemaButtonsMetaItem>
+        <MySchemaButtonsMetaItem icon={<ClockIcon title="last updated" />}>
+          {schema.createdAt === schema.updatedAt ? 'created' : 'updated'}{' '}
+          {timeSince(now(), schema.updatedAt, TimeGranularity.MINUTES)} ago
+        </MySchemaButtonsMetaItem>
+      </span>
+    </button>
   )
 }
 
-type MySchemaLinkMetaItemProps = React.PropsWithChildren<{
+type MySchemaButtonsMetaItemProps = React.PropsWithChildren<{
   icon: React.ReactNode
 }>
-function MySchemaLinkMetaItem({ icon, children }: MySchemaLinkMetaItemProps): React.ReactElement {
+function MySchemaButtonsMetaItem({
+  icon,
+  children,
+}: MySchemaButtonsMetaItemProps): React.ReactElement {
   return (
-    <span className={Styles.linkMetaItem}>
-      <span className={Styles.linkMetaIcon}>{icon}</span>
+    <span className={Styles.metaItem}>
+      <span className={Styles.metaIcon}>{icon}</span>
       {children}
     </span>
   )
 }
 
-function NewSchemaLink(): React.ReactElement {
+type NewSchemaButtonProps = {
+  onClick: () => void
+}
+function NewSchemaButton({ onClick }: NewSchemaButtonProps): React.ReactElement {
   return (
-    <Link href={routeToUrl(viewSchemaRoute('new'))}>
-      <a className={Styles.addButtonLink}>
-        <span className={Styles.newSchemaIcon}>
-          <PlusCircleIcon />
-        </span>
-        Create a new schema
-      </a>
-    </Link>
+    <button type="button" className={Styles.newButton} onClick={onClick}>
+      <span className={Styles.newSchemaIcon}>
+        <PlusCircleIcon />
+      </span>
+      Create a new schema
+    </button>
   )
 }

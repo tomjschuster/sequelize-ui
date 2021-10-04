@@ -1,5 +1,6 @@
 import { AssociationTypeType, DataTypeType, Model, Schema, ThroughType } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
+import { DEMO_SCHEMA_SAKILA_ID } from './demoSchemaIds'
 
 const time = fromParts(2020, 1, 1)
 
@@ -781,7 +782,7 @@ const film_category: Model = {
 
 // https://dev.mysql.com/doc/sakila/en/
 const sakilaSchema: Schema = {
-  id: 'demo-sakila',
+  id: DEMO_SCHEMA_SAKILA_ID,
   name: 'sakila',
   createdAt: time,
   updatedAt: time,

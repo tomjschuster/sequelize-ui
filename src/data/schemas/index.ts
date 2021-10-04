@@ -1,4 +1,22 @@
 import { Schema } from '@src/core/schema'
+import * as DemoSchemaIds from './demoSchemaIds'
+
+export function isDemoSchema(schema: Schema): boolean {
+  return !!getDemoSchemaType(schema)
+}
+
+function getDemoSchemaType({ id }: Schema): DemoSchemaType | undefined {
+  switch (id) {
+    case DemoSchemaIds.DEMO_SCHEMA_BLOG_ID:
+      return DemoSchemaType.Blog
+    case DemoSchemaIds.DEMO_SCHEMA_EMPLOYEE_ID:
+      return DemoSchemaType.Employee
+    case DemoSchemaIds.DEMO_SCHEMA_SAKILA_ID:
+      return DemoSchemaType.Sakila
+    default:
+      return undefined
+  }
+}
 
 export enum DemoSchemaType {
   Blog = 'blog',

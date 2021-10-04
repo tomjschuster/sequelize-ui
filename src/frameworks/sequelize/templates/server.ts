@@ -26,6 +26,7 @@ function defineRun({ dbOptions }: ServerTemplateArgs): string {
         dbOptions.migrations ? null : `await db.sync()`,
         `const hostname = process.env.HOSTNAME || '127.0.0.1'`,
         `const port = parseInt(process.env.PORT || '3000')`,
+        blank(),
         `const server = http.createServer((req, res) => {`,
         lines(
           [

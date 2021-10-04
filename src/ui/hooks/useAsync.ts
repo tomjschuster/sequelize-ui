@@ -4,6 +4,7 @@ type UseAsyncArgs<Data, Variables> = {
   getData: (variables?: Variables) => Promise<Data>
   variables?: Variables
   getCacheKey?: (variables: Variables) => string | undefined
+  onLoad?: (data: Data) => void
 }
 
 type UseAsyncResult<Data> = {
@@ -16,6 +17,7 @@ export default function useAsync<Data, Variables = undefined>({
   getData,
   variables,
   getCacheKey,
+  onLoad,
 }: UseAsyncArgs<Data, Variables>): UseAsyncResult<Data> {
   const [data, setData] = React.useState<Data>()
   const [loading, setLoading] = React.useState<boolean>(true)
@@ -27,6 +29,7 @@ export default function useAsync<Data, Variables = undefined>({
     const fromCache = cacheKey && cache.get(cacheKey)
 
     if (fromCache) {
+      onLoad && onLoad(fromCache)
       setData(fromCache)
       setLoading(false)
       setError(undefined)
@@ -37,6 +40,7 @@ export default function useAsync<Data, Variables = undefined>({
 
     getData(variables)
       .then((data) => {
+        onLoad && onLoad(data)
         setData(data)
         setLoading(false)
         setError(undefined)
@@ -47,7 +51,7 @@ export default function useAsync<Data, Variables = undefined>({
         setLoading(false)
         setError(error)
       })
-  }, [cache, variables, getData, getCacheKey])
+  }, [cache, variables, getData, getCacheKey, onLoad])
 
   React.useEffect(fetchData, [fetchData])
 

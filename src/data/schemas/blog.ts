@@ -13,6 +13,7 @@ import {
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
 import shortid from 'shortid'
+import { DEMO_SCHEMA_BLOG_ID } from './demoSchemaIds'
 
 const time = fromParts(2021, 4, 1)
 
@@ -353,7 +354,7 @@ const user: Model = {
 
 // https://github.com/tutorials24x7/blog-database-mysql
 const blogSchema: Schema = {
-  id: shortid(),
+  id: DEMO_SCHEMA_BLOG_ID,
   name: 'blog',
   createdAt: time,
   updatedAt: time,

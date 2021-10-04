@@ -1,5 +1,6 @@
 import { AssociationTypeType, DataTypeType, Model, Schema, ThroughType } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
+import { DEMO_SCHEMA_EMPLOYEE_ID } from './demoSchemaIds'
 
 const time = fromParts(2020, 10, 1)
 
@@ -346,7 +347,7 @@ const salary: Model = {
 
 // https://github.com/datacharmer/test_db
 const employeeSchema: Schema = {
-  id: 'demo-employee',
+  id: DEMO_SCHEMA_EMPLOYEE_ID,
   name: 'employee dataset',
   createdAt: time,
   updatedAt: time,

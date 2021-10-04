@@ -33,10 +33,11 @@ export function generateSequelizeProject({
   const schema = normalizeSchema({ schema: nonNormalizedSchema, dbOptions })
   const migrationModels = getMigrationModels({ schema, dbOptions })
   const migrationTimestamps = migrationModels.reduce(migrationTimestamp, new Map())
+  const hasAssocs = schema.models.some((m) => m.associations.length > 0)
 
   return directory(kebabCase(schema.name), [
     directory('config', [file('config.js', config({ schema, dbOptions }))]),
-    dbOptions?.migrations
+    dbOptions?.migrations && schema.models.length > 0
       ? directory(
           'migrations',
           Array.from(migrationTimestamps)
@@ -48,10 +49,12 @@ export function generateSequelizeProject({
               ),
             )
             .concat(
-              file(
-                migrationForeignKeysFilename(nextTimestamp(migrationTimestamps)),
-                addForeignKeysMigration({ models: migrationModels, dbOptions }),
-              ),
+              hasAssocs
+                ? file(
+                    migrationForeignKeysFilename(nextTimestamp(migrationTimestamps)),
+                    addForeignKeysMigration({ models: migrationModels, dbOptions }),
+                  )
+                : [],
             ),
         )
       : null,

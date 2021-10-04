@@ -1,11 +1,10 @@
+import { goTo } from '@src/routing/navigation'
+import { indexRoute } from '@src/routing/routes'
 import Layout from '@src/ui/components/Layout'
 import ModelModule from '@src/ui/components/ModelModule'
 import SchemaModule from '@src/ui/components/SchemaModule'
 import useSchemaState, { SchemaEditStateType } from '@src/ui/hooks/useEditSchema'
-import dynamic from 'next/dynamic'
-import React, { useCallback, useState } from 'react'
-
-const CodeViewer = dynamic(() => import('@src/ui/components/CodeViewer'))
+import React, { useCallback } from 'react'
 
 function SchemaPage(): React.ReactElement {
   return (
@@ -31,17 +30,14 @@ function SchemaPageContent(): React.ReactElement {
     cancel,
   } = useSchemaState()
 
-  const [viewCode, setViewCode] = useState<boolean>(false)
-  const handleClickViewCode = useCallback(() => setViewCode((x) => !x), [])
-  const handleClose = useCallback(() => setViewCode(false), [])
+  const handleClickViewCode = useCallback(() => goTo(indexRoute()), [])
 
   if (error) return <p>{error}</p>
   if (schema === undefined) return <p>Loading Schemas</p>
 
   return (
     <>
-      {viewCode && <CodeViewer schema={schema} onClickClose={handleClose} />}
-      <button onClick={handleClickViewCode}>{viewCode ? 'Hide Code' : 'View Code'}</button>
+      <button onClick={handleClickViewCode}>{'View Code'}</button>
       <SchemaModule
         schema={schema}
         schemas={schemas || []}

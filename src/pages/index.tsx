@@ -1,7 +1,10 @@
 import { clearData, createSchema, listSchemas } from '@src/api/schema'
-import { DemoSchemaType, getDemoSchema } from '@src/data/schemas'
-import { editSchemaRoute, routeToUrl } from '@src/routing/routes'
+import { Schema } from '@src/core/schema'
+import { DemoSchemaType, getDemoSchema, isDemoSchema } from '@src/data/schemas'
+import { goTo } from '@src/routing/navigation'
+import { viewSchemaRoute } from '@src/routing/routes'
 import { classnames } from '@src/ui/classnames'
+import { CodeViewerMode } from '@src/ui/components/CodeViewer/CodeViewer'
 import DemoSchemaButtons from '@src/ui/components/home/DemoSchemaButtons'
 import MySchemaLinks from '@src/ui/components/home/MySchemaLinks'
 import SchemasError from '@src/ui/components/home/SchemasError'
@@ -9,7 +12,6 @@ import SchemasZeroState from '@src/ui/components/home/SchemasZeroState/SchemasZe
 import Layout from '@src/ui/components/Layout'
 import useAsync from '@src/ui/hooks/useAsync'
 import dynamic from 'next/dynamic'
-import { useRouter } from 'next/router'
 import React from 'react'
 
 const CodeViewer = dynamic(() => import('@src/ui/components/CodeViewer'))
@@ -25,24 +27,8 @@ const mySchemaMinHeightContainerClassname = classnames(
 )
 
 export default function IndexPage(): React.ReactElement {
-  return (
-    <Layout title="Home | Sequelize UI">
-      <div className={classnames('p-6')}>
-        <div className={classnames(sectionClassName, 'mb-6')}>
-          <h2 className={sectionTitleClassName}>My Schemas</h2>
-          <div className={mySchemaMinHeightContainerClassname}>
-            <MySchemas />
-          </div>
-        </div>
-        <div className={sectionClassName}>
-          <h2 className={sectionTitleClassName}>Demo Schemas</h2>
-          <DemoSchemas />
-        </div>
-      </div>
-    </Layout>
-  )
-}
-function MySchemas(): React.ReactElement | null {
+  const [schema, setSchema] = React.useState<Schema>()
+  const [codeViewerMode, setCodeViewerMode] = React.useState<CodeViewerMode>(CodeViewerMode.VIEW)
   const { data: schemas, error, refetch, loading } = useAsync({ getData: listSchemas })
 
   const handleClickClearData = async () => {
@@ -50,33 +36,82 @@ function MySchemas(): React.ReactElement | null {
     refetch()
   }
 
-  if (error) return <SchemasError onClickClearData={handleClickClearData} />
-  if (loading) return null
-  if (!schemas?.length) return <SchemasZeroState />
-  return <MySchemaLinks schemas={schemas} />
-}
-
-function DemoSchemas(): React.ReactElement {
-  const router = useRouter()
-  const [demoSchemaType, setDemoSchemaType] = React.useState<DemoSchemaType>()
-  const { data: demoSchema } = useAsync({ getData: getDemoSchema, variables: demoSchemaType })
-
-  const handleEdit = async () => {
-    if (demoSchema) {
-      const schema = await createSchema(demoSchema)
-      const route = editSchemaRoute(schema.id)
-      router.push(routeToUrl(route))
-    }
+  const handleCancel = () => {
+    setSchema(undefined)
+    setCodeViewerMode(CodeViewerMode.VIEW)
   }
 
-  const handleClose = () => setDemoSchemaType(undefined)
+  const handleEdit = async () => {
+    if (!schema) return
+    if (isDemoSchema(schema)) {
+      await createSchema(schema)
+      refetch()
+    }
+    goTo(viewSchemaRoute(schema.id))
+  }
 
   return (
     <>
-      <DemoSchemaButtons onClick={setDemoSchemaType} />
-      {demoSchema && (
-        <CodeViewer schema={demoSchema} onClickClose={handleClose} onClickEdit={handleEdit} />
+      <Layout title="Home | Sequelize UI">
+        <div className={classnames('p-6')}>
+          <div className={classnames(sectionClassName, 'mb-6')}>
+            <h2 className={sectionTitleClassName}>My Schemas</h2>
+            <div className={mySchemaMinHeightContainerClassname}>
+              <MySchemas
+                schemas={schemas}
+                loading={loading}
+                error={error}
+                onSelectSchema={setSchema}
+                onClickClearData={handleClickClearData}
+              />
+            </div>
+          </div>
+          <div className={sectionClassName}>
+            <h2 className={sectionTitleClassName}>Demo Schemas</h2>
+            <DemoSchemas onSelectSchema={setSchema} />
+          </div>
+        </div>
+      </Layout>
+      {schema && (
+        <CodeViewer
+          schema={schema}
+          onClickClose={() => setSchema(undefined)}
+          onClickEdit={handleEdit}
+          onClickSave={handleCancel}
+          onClickCancel={handleCancel}
+          mode={codeViewerMode}
+        />
       )}
     </>
   )
+}
+
+type MySchemasProps = {
+  schemas: Schema[] | undefined
+  loading: boolean
+  error: Error | undefined
+  onSelectSchema: (schema: Schema | undefined) => void
+  onClickClearData: () => void
+}
+function MySchemas({
+  error,
+  loading,
+  schemas,
+  onSelectSchema,
+  onClickClearData,
+}: MySchemasProps): React.ReactElement | null {
+  if (error) return <SchemasError onClickClearData={onClickClearData} />
+  if (loading) return null
+  if (!schemas?.length) return <SchemasZeroState />
+  return <MySchemaLinks schemas={schemas} onSelectSchema={onSelectSchema} />
+}
+
+type DemoSchemasProps = {
+  onSelectSchema: (schema: Schema | undefined) => void
+}
+function DemoSchemas({ onSelectSchema }: DemoSchemasProps): React.ReactElement {
+  const handleSelectDemoSchema = (schemaType: DemoSchemaType) =>
+    getDemoSchema(schemaType).then(onSelectSchema)
+
+  return <DemoSchemaButtons onClick={handleSelectDemoSchema} />
 }
