@@ -1,3 +1,4 @@
+import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
 import { CommonFieldProps, CommonInputProps } from '../shared/types'
 
@@ -32,9 +33,10 @@ function IntegerInput({
 
   return (
     <>
-      <label htmlFor={id} className="flex flex-col items-start">
-        {label}
+      <label htmlFor={id} className={classnames('w-full', 'flex', 'flex-col', 'items-start')}>
+        <span className={classnames('text-sm')}>{label}</span>
         <input
+          className={classnames('py-1', 'px-2', 'p-0.5', 'w-full')}
           id={id}
           type="number"
           min={min}

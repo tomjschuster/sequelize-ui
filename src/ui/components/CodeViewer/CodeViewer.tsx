@@ -33,6 +33,7 @@ export default function CodeViewer({
   onClickSave,
   mode = CodeViewerMode.VIEW,
 }: CodeViewerProps): React.ReactElement | null {
+  console.log('?????????????????????????????')
   console.log({ mode })
   const [dbOptions, setDbOptions] = useState<DbOptions>(defaultDbOptions)
   const { root, defaultPath } = useGeneratedCode({ schema, dbOptions })

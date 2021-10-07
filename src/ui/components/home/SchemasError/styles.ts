@@ -1,5 +1,5 @@
-import { classnames } from '@src/ui/classnames'
-import { inlineButton } from '@src/ui/utils/classnames'
+import { classnames } from '@src/ui/styles/classnames'
+import { inlineButton } from '@src/ui/styles/utils'
 
 export const container = classnames(
   'p-4',

@@ -1,5 +1,5 @@
 import { fileLanguage, FileSystemItem, isDirectory, isFile, itemName } from '@src/core/files'
-import { classnames } from '@src/ui/classnames'
+import { classnames } from '@src/ui/styles/classnames'
 import React, { useEffect } from 'react'
 import ChevronIcon, { ChevronDirection } from '../icons/Chevron'
 import LanguageIcon from '../icons/Language'

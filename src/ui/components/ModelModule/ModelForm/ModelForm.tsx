@@ -5,11 +5,23 @@ import {
   noModelErrors,
   validateModel,
 } from '@src/core/validation/schema'
-import { classnames } from '@src/ui/classnames'
+import { classnames } from '@src/ui/styles/classnames'
+import { buttonGrid } from '@src/ui/styles/utils'
 import React from 'react'
+import { newButton } from '../../home/MySchemaLinks/styles'
+import PlusCircleIcon from '../../icons/Plus'
 import AssociationFieldset from './AssociationFieldset'
 import FieldFieldset from './FieldFieldset'
 import ModelFieldset from './ModelFieldset'
+
+export const section = classnames(
+  'max-w-screen-lg',
+  'w-5/6',
+  'flex',
+  'flex-col',
+  'items-center',
+  'mx-auto',
+)
 
 type ModelFormProps = {
   model: Model
@@ -104,39 +116,62 @@ export default function ModelForm({
 
       <ModelFieldset name={formModel.name} onChange={handleChangeModel} errors={errors} />
 
-      <h3>Fields</h3>
-      <button type="button" onClick={handleClickAddField}>
-        Add field
-      </button>
+      <div className={classnames(section)}>
+        <h3>Fields</h3>
 
-      {formModel.fields.map((field) => {
-        return (
-          <FieldFieldset
-            key={`field-form-${field.id}`}
-            field={field}
-            onChange={handleChangeField}
-            onDelete={handleDeleteField}
-            errors={errors.fields[field.id]}
-          />
-        )
-      })}
+        <div
+          className={classnames(
+            'grid',
+            'xl:grid-cols-3',
+            'md:grid-cols-2',
+            'grid-cols-1',
+            'gap-6',
+            'auto-rows-fr',
+            'w-full',
+          )}
+        >
+          {formModel.fields.map((field) => {
+            return (
+              <div
+                key={`field-form-${field.id}`}
+                className={classnames('border', 'border-gray-400', 'rounded')}
+              >
+                <FieldFieldset
+                  field={field}
+                  onChange={handleChangeField}
+                  onDelete={handleDeleteField}
+                  errors={errors.fields[field.id]}
+                />
+              </div>
+            )
+          })}
+          <button type="button" className={newButton} onClick={handleClickAddField}>
+            <span>
+              <PlusCircleIcon />
+            </span>
+            Add Field
+          </button>
+        </div>
+      </div>
 
       <h3>Associations</h3>
       <button type="button" onClick={handleClickAddAssociation}>
         Add association
       </button>
 
-      {formModel.associations.map((association) => (
-        <AssociationFieldset
-          key={`association-form-${association.id}`}
-          association={association}
-          schema={schema}
-          model={formModel}
-          onChange={handleChangeAssociation}
-          onDelete={handleDeleteAssociation}
-          errors={errors.associations[association.id]}
-        />
-      ))}
+      <div className={buttonGrid}>
+        {formModel.associations.map((association) => (
+          <AssociationFieldset
+            key={`association-form-${association.id}`}
+            association={association}
+            schema={schema}
+            model={formModel}
+            onChange={handleChangeAssociation}
+            onDelete={handleDeleteAssociation}
+            errors={errors.associations[association.id]}
+          />
+        ))}
+      </div>
     </form>
   )
 }

@@ -1,5 +1,5 @@
 import { Language } from '@src/core/files'
-import { classnames } from '@src/ui/classnames'
+import { classnames } from '@src/ui/styles/classnames'
 import Highlight, { defaultProps, Language as PrismLanguage } from 'prism-react-renderer'
 import theme from 'prism-react-renderer/themes/vsLight'
 import React from 'react'

@@ -1,3 +1,4 @@
+import { classnames } from '@src/ui/styles/classnames/__generated__/tailwindcss-classnames'
 import React from 'react'
 
 type CheckboxProps = {
@@ -15,8 +16,8 @@ function Checkbox({ id, label, checked, onChange }: CheckboxProps): React.ReactE
 
   return (
     <label htmlFor={id}>
-      {label}
       <input id={id} type="checkbox" checked={checked} onChange={handleChange} />
+      <span className={classnames('pl-2', 'text-sm')}>{label}</span>
     </label>
   )
 }

@@ -1,4 +1,4 @@
-import { classnames } from '@src/ui/classnames/__generated__/tailwindcss-classnames'
+import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
 import { lookupOptionKey, lookupOptionValue, optionsToList } from '../shared/options'
 import { CommonFieldProps, CommonOptionsProps } from '../shared/types'
@@ -20,12 +20,12 @@ function Select<T>({
   }
 
   return (
-    <div className={className}>
-      <label htmlFor={id} className={classnames('flex', 'flex-col', 'items-start', 'text-sm')}>
-        {label}
+    <div className={`${className} ${classnames('w-full')}`}>
+      <label htmlFor={id} className={classnames('w-full', 'flex', 'flex-col', 'items-start')}>
+        <span className={classnames('text-sm')}>{label}</span>
         <select
           id={id}
-          className={classnames('pt-1', 'pb-1', 'w-full', 'text-sm', 'cursor-pointer')}
+          className={classnames('py-1', 'px-2', 'w-full', 'cursor-pointer')}
           onChange={handleChange}
           value={lookupOptionKey(options, value)}
           aria-invalid={!!error}

@@ -7,8 +7,8 @@ import {
   displaySqlDialect,
   SqlDialect,
 } from '@src/core/database'
-import { classnames } from '@src/ui/classnames/__generated__/tailwindcss-classnames'
 import Select from '@src/ui/components/form/Select'
+import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
 
 type DbOptionsFormProps = {

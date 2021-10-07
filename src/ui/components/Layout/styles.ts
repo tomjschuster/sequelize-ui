@@ -1,4 +1,4 @@
-import { classnames } from '@src/ui/classnames'
+import { classnames } from '@src/ui/styles/classnames'
 
 export const pageWrapper = classnames(
   'bg-gray-50',

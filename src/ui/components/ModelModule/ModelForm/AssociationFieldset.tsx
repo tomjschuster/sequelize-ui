@@ -13,6 +13,7 @@ import { AssociationErrors } from '@src/core/validation/schema'
 import Radio from '@src/ui/components/form/Radio'
 import Select from '@src/ui/components/form/Select'
 import TextInput from '@src/ui/components/form/TextInput'
+import { button } from '@src/ui/styles/utils'
 import { plural, singular, snakeCase } from '@src/utils/string'
 import React, { useCallback, useMemo } from 'react'
 
@@ -153,7 +154,7 @@ function AssociationFieldset({
   const handleDelete = useCallback(() => onDelete(association.id), [onDelete, association.id])
 
   return (
-    <fieldset>
+    <fieldset className={button}>
       <Select
         id={`association-type-${association.id}`}
         label="Type"

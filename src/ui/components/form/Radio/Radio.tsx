@@ -1,4 +1,4 @@
-import { classnames } from '@src/ui/classnames'
+import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
 import { lookupOptionValue, optionsToList } from '../shared/options'
 import { CommonOptionsProps } from '../shared/types'
