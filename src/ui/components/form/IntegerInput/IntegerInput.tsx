@@ -36,7 +36,7 @@ function IntegerInput({
       <label htmlFor={id} className={classnames('w-full', 'flex', 'flex-col', 'items-start')}>
         <span className={classnames('text-sm')}>{label}</span>
         <input
-          className={classnames('py-1', 'px-2', 'p-0.5', 'w-full')}
+          className={classnames('py-1', 'px-2', 'p-0.5', 'w-full', 'text-sm')}
           id={id}
           type="number"
           min={min}

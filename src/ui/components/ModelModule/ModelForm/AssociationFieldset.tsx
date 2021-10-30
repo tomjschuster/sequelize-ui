@@ -4,6 +4,9 @@ import {
   AssociationTypeType,
   displayAssociationTypeType,
   displayThroughType,
+  isManytoMany,
+  isThroughModel,
+  isThroughTable,
   ManyToManyAssociation,
   Model,
   Schema,
@@ -13,9 +16,10 @@ import { AssociationErrors } from '@src/core/validation/schema'
 import Radio from '@src/ui/components/form/Radio'
 import Select from '@src/ui/components/form/Select'
 import TextInput from '@src/ui/components/form/TextInput'
-import { button } from '@src/ui/styles/utils'
+import { classnames } from '@src/ui/styles/classnames'
 import { plural, singular, snakeCase } from '@src/utils/string'
 import React, { useCallback, useMemo } from 'react'
+import CloseIcon from '../../icons/Close'
 
 type AssociationFieldsetProps = {
   association: Association
@@ -48,8 +52,8 @@ function AssociationFieldset({
     () =>
       schema.models.find(
         (m) =>
-          association.type.type === AssociationTypeType.ManyToMany &&
-          association.type.through.type === ThroughType.ThroughModel &&
+          isManytoMany(association) &&
+          isThroughModel(association.type.through) &&
           m.id === association.type.through.modelId,
       ),
     [schema.models, association.type],
@@ -64,7 +68,7 @@ function AssociationFieldset({
 
   const handleChangeManyToMany = useCallback(
     (changes: Partial<ManyToManyAssociation>) => {
-      if (association.type.type !== AssociationTypeType.ManyToMany) return
+      if (!isManytoMany(association)) return
       handleChange({ type: { ...association.type, ...changes } })
     },
     [association.type, handleChange],
@@ -107,10 +111,7 @@ function AssociationFieldset({
 
   const handleChangeThroughType = useCallback(
     (type: ThroughType) => {
-      const associationType = association.type
-      if (associationType.type !== AssociationTypeType.ManyToMany) {
-        return
-      }
+      if (!isManytoMany(association)) return
 
       const table = snakeCase(`${model.name} ${targetModel.name}`)
 
@@ -154,79 +155,106 @@ function AssociationFieldset({
   const handleDelete = useCallback(() => onDelete(association.id), [onDelete, association.id])
 
   return (
-    <fieldset className={button}>
-      <Select
-        id={`association-type-${association.id}`}
-        label="Type"
-        options={AssociationTypeType}
-        display={displayAssociationTypeType}
-        value={association.type.type}
-        onChange={handleChangeType}
-      />
-      <Select
-        id={`association-target-model-${association.id}`}
-        label="Target model"
-        options={modelOptions}
-        display={modelName}
-        value={targetModel}
-        onChange={handleChangeTarget}
-      />
-      <TextInput
-        id={`association-alias-${association.id}`}
-        label="as"
-        value={association.alias || ''}
-        placeholder={aliasPlaceholder(association, targetModel)}
-        error={errors?.alias}
-        onChange={handleChangeAlias}
-      />
-      <TextInput
-        id={`association-fk-${association.id}`}
-        label="Foreign key"
-        value={association.foreignKey || ''}
-        error={errors?.foreignKey}
-        onChange={handleChangeForeignKey}
-      />
-      {association.type.type === AssociationTypeType.ManyToMany && schema.models.length > 0 && (
+    <fieldset
+      className={classnames(
+        'p-4',
+        'pt-5',
+        'grid',
+        'grid-cols-12',
+        'gap-y-2',
+        'gap-x-4',
+        'relative',
+      )}
+    >
+      <div className={classnames('col-span-6')}>
+        <Select
+          id={`association-type-${association.id}`}
+          label="Type"
+          options={AssociationTypeType}
+          display={displayAssociationTypeType}
+          value={association.type.type}
+          onChange={handleChangeType}
+        />
+      </div>
+      <div className={classnames('col-span-6')}>
+        <Select
+          id={`association-target-model-${association.id}`}
+          label="Target model"
+          options={modelOptions}
+          display={modelName}
+          value={targetModel}
+          onChange={handleChangeTarget}
+        />
+      </div>
+      <div className={classnames('col-span-6')}>
+        <TextInput
+          id={`association-alias-${association.id}`}
+          label="as"
+          value={association.alias || ''}
+          placeholder={aliasPlaceholder(association, targetModel)}
+          error={errors?.alias}
+          onChange={handleChangeAlias}
+        />
+      </div>
+      <div className={classnames('col-span-6')}>
+        <TextInput
+          id={`association-fk-${association.id}`}
+          label="Foreign key"
+          value={association.foreignKey || ''}
+          error={errors?.foreignKey}
+          onChange={handleChangeForeignKey}
+        />
+      </div>
+      {!isManytoMany(association) && <div className={classnames('h-22')} />}
+      {isManytoMany(association) && schema.models.length > 0 && (
         <>
-          <Radio
-            options={ThroughType}
-            value={association.type.through.type}
-            display={displayThroughType}
-            onChange={handleChangeThroughType}
-          />
-          {association.type.through.type === ThroughType.ThroughModel && (
-            <Select
-              id={`association-through-model-${association.id}`}
-              label="Through model"
-              options={modelOptions}
-              display={modelName}
-              value={throughModel}
-              onChange={handleChangeThroughModel}
-            />
-          )}
-          {association.type.through.type === ThroughType.ThroughTable && (
-            <>
-              <TextInput
-                id={`association-through-table-${association.id}`}
-                label="Through table"
-                value={association.type.through.table}
-                error={errors?.throughTable}
-                onChange={handleChangeThroughTable}
+          <div className={classnames('col-span-6')}>
+            {isThroughModel(association.type.through) && (
+              <Select
+                id={`association-through-model-${association.id}`}
+                label="Through model"
+                options={modelOptions}
+                display={modelName}
+                value={throughModel}
+                onChange={handleChangeThroughModel}
               />
-            </>
-          )}
-          <TextInput
-            id={`association-target-fk-${association.id}`}
-            label="Target foreign key"
-            value={association.type.targetFk || ''}
-            error={errors?.targetForeignKey}
-            onChange={handleChangeTargetForeignKey}
-          />
+            )}
+            {isThroughTable(association.type.through) && (
+              <>
+                <TextInput
+                  id={`association-through-table-${association.id}`}
+                  label="Through table"
+                  value={association.type.through.table}
+                  error={errors?.throughTable}
+                  onChange={handleChangeThroughTable}
+                />
+              </>
+            )}
+          </div>
+          <div className={classnames('col-span-6')}>
+            <TextInput
+              id={`association-target-fk-${association.id}`}
+              label="Target foreign key"
+              value={association.type.targetFk || ''}
+              error={errors?.targetForeignKey}
+              onChange={handleChangeTargetForeignKey}
+            />
+          </div>
+          <div className={classnames('col-span-12')}>
+            <Radio
+              options={ThroughType}
+              value={association.type.through.type}
+              display={displayThroughType}
+              onChange={handleChangeThroughType}
+            />
+          </div>
         </>
       )}
-      <button type="button" onClick={handleDelete}>
-        Delete
-      </button>
+      <div className="absolute top-0 right-0 p-1">
+        <button type="button" onClick={handleDelete}>
+          <CloseIcon title="delete" />
+        </button>
+      </div>
     </fieldset>
   )
 }

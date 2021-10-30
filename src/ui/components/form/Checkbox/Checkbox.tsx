@@ -15,7 +15,7 @@ function Checkbox({ id, label, checked, onChange }: CheckboxProps): React.ReactE
   )
 
   return (
-    <label htmlFor={id}>
+    <label className={classnames('flex', 'items-center')} htmlFor={id}>
       <input id={id} type="checkbox" checked={checked} onChange={handleChange} />
       <span className={classnames('pl-2', 'text-sm')}>{label}</span>
     </label>

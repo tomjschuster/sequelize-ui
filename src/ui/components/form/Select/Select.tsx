@@ -2,7 +2,9 @@ import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
 import { lookupOptionKey, lookupOptionValue, optionsToList } from '../shared/options'
 import { CommonFieldProps, CommonOptionsProps } from '../shared/types'
+
 type SelectProps<T> = CommonFieldProps & CommonOptionsProps<T> & { className?: string }
+
 function Select<T>({
   id,
   label,
@@ -25,7 +27,7 @@ function Select<T>({
         <span className={classnames('text-sm')}>{label}</span>
         <select
           id={id}
-          className={classnames('py-1', 'px-2', 'w-full', 'cursor-pointer')}
+          className={classnames('p-1', 'px-2', 'w-full', 'cursor-pointer', 'text-sm')}
           onChange={handleChange}
           value={lookupOptionKey(options, value)}
           aria-invalid={!!error}

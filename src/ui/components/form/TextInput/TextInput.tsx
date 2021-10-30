@@ -22,7 +22,7 @@ function TextInput({
       <label htmlFor={id} className={classnames('w-full', 'flex', 'flex-col', 'items-start')}>
         <span className={classnames('text-sm')}>{label}</span>
         <input
-          className={classnames('py-1', 'px-2', 'w-full', 'p-0.5')}
+          className={classnames('py-1', 'px-2', 'w-full', 'p-0.5', 'text-sm')}
           id={id}
           type="text"
           value={value}

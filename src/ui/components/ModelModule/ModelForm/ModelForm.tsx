@@ -6,7 +6,6 @@ import {
   validateModel,
 } from '@src/core/validation/schema'
 import { classnames } from '@src/ui/styles/classnames'
-import { buttonGrid } from '@src/ui/styles/utils'
 import React from 'react'
 import { newButton } from '../../home/MySchemaLinks/styles'
 import PlusCircleIcon from '../../icons/Plus'
@@ -16,12 +15,27 @@ import ModelFieldset from './ModelFieldset'
 
 export const section = classnames(
   'max-w-screen-lg',
-  'w-5/6',
+  'px-6',
   'flex',
   'flex-col',
-  'items-center',
   'mx-auto',
+  'mb-6',
+  'last:mb-0',
 )
+
+export const title = classnames('text-xl', 'mb-2')
+
+const grid = classnames(
+  'grid',
+  'lg:grid-cols-3',
+  'md:grid-cols-2',
+  'sm:grid-cols-2',
+  'grid-cols-1',
+  'gap-6',
+  'auto-rows-fr',
+  'w-full',
+)
+const panel = classnames('border', 'border-gray-400', 'rounded')
 
 type ModelFormProps = {
   model: Model
@@ -114,28 +128,17 @@ export default function ModelForm({
 
       <button type="submit">Save</button>
 
-      <ModelFieldset name={formModel.name} onChange={handleChangeModel} errors={errors} />
-
       <div className={classnames(section)}>
-        <h3>Fields</h3>
+        <h3 className={classnames(title)}>Model</h3>
+        <ModelFieldset name={formModel.name} onChange={handleChangeModel} errors={errors} />
+      </div>
+      <div className={classnames(section)}>
+        <h3 className={classnames(title)}>Fields</h3>
 
-        <div
-          className={classnames(
-            'grid',
-            'xl:grid-cols-3',
-            'md:grid-cols-2',
-            'grid-cols-1',
-            'gap-6',
-            'auto-rows-fr',
-            'w-full',
-          )}
-        >
+        <div className={classnames(grid)}>
           {formModel.fields.map((field) => {
             return (
-              <div
-                key={`field-form-${field.id}`}
-                className={classnames('border', 'border-gray-400', 'rounded')}
-              >
+              <div key={`field-form-${field.id}`} className={classnames(panel)}>
                 <FieldFieldset
                   field={field}
                   onChange={handleChangeField}
@@ -154,23 +157,29 @@ export default function ModelForm({
         </div>
       </div>
 
-      <h3>Associations</h3>
-      <button type="button" onClick={handleClickAddAssociation}>
-        Add association
-      </button>
+      <div className={classnames(section)}>
+        <h3 className={classnames(title)}>Associations</h3>
 
-      <div className={buttonGrid}>
-        {formModel.associations.map((association) => (
-          <AssociationFieldset
-            key={`association-form-${association.id}`}
-            association={association}
-            schema={schema}
-            model={formModel}
-            onChange={handleChangeAssociation}
-            onDelete={handleDeleteAssociation}
-            errors={errors.associations[association.id]}
-          />
-        ))}
+        <div className={grid}>
+          {formModel.associations.map((association) => (
+            <div key={`association-form-${association.id}`} className={classnames(panel)}>
+              <AssociationFieldset
+                association={association}
+                schema={schema}
+                model={formModel}
+                onChange={handleChangeAssociation}
+                onDelete={handleDeleteAssociation}
+                errors={errors.associations[association.id]}
+              />
+            </div>
+          ))}
+          <button type="button" className={newButton} onClick={handleClickAddAssociation}>
+            <span>
+              <PlusCircleIcon />
+            </span>
+            Add association
+          </button>
+        </div>
       </div>
     </form>
   )

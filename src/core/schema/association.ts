@@ -21,11 +21,11 @@ export type AssociationType =
   | HasOneAssociation
   | HasManyAssociation
   | ManyToManyAssociation
-  | ManyToManyAssociation
 
 export type BelongsToAssociation = { type: AssociationTypeType.BelongsTo }
 export type HasOneAssociation = { type: AssociationTypeType.HasOne }
 export type HasManyAssociation = { type: AssociationTypeType.HasMany }
+
 export type ManyToManyAssociation = {
   type: AssociationTypeType.ManyToMany
   through: ManyToManyThrough
@@ -125,6 +125,20 @@ export function manyToManyModelType(modelId: string): ManyToManyAssociation {
     type: AssociationTypeType.ManyToMany,
     through: throughModel(modelId),
   }
+}
+
+export function isManytoMany(
+  association: Association,
+): association is Association<ManyToManyAssociation> {
+  return association.type.type === AssociationTypeType.ManyToMany
+}
+
+export function isThroughTable(through: ManyToManyThrough): through is ManyToManyThroughTable {
+  return through.type === ThroughType.ThroughTable
+}
+
+export function isThroughModel(through: ManyToManyThrough): through is ManyToManyThroughModel {
+  return through.type === ThroughType.ThroughModel
 }
 
 // https://sequelize.org/master/class/lib/associations/base.js~Association.html

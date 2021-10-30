@@ -13,17 +13,11 @@ function Radio<T>({ value, options, display, onChange }: RadioProps<T>): React.R
   }
 
   return (
-    <div>
+    <div className={classnames('flex', 'w-full')}>
       {optionsToList(options).map(([k, v]) => (
-        <label key={k} className={classnames('border', 'rounded-md', 'p-2')}>
-          <input
-            className={classnames('hidden')}
-            type="radio"
-            value={k}
-            checked={v === value}
-            onChange={handleChange}
-          />
-          {display(v)}
+        <label key={k} className={classnames('mr-2', 'last:mr-0')}>
+          <input type="radio" value={k} checked={v === value} onChange={handleChange} />
+          <span className={classnames('pl-2', 'text-sm')}>{display(v)}</span>
         </label>
       ))}
     </div>
