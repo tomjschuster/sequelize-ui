@@ -153,20 +153,6 @@ module.exports = {
           "name": "20200401000030-create-nonstandards.js",
           "type": "FILE",
         },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    
-  },
-  down: async (queryInterface, Sequelize) => {
-  
-  }
-};",
-          "name": "20200401000040-add-foreign-keys.js",
-          "type": "FILE",
-        },
       ],
       "name": "migrations",
       "type": "DIRECTORY",
@@ -434,6 +420,7 @@ async function run() {
   initModels(db)
   const hostname = process.env.HOSTNAME || '127.0.0.1'
   const port = parseInt(process.env.PORT || '3000')
+  
   const server = http.createServer((req, res) => {
     res.statusCode = 200
     res.setHeader('Content-Type', 'text/plain')
@@ -451,18 +438,18 @@ run()",
     },
     Object {
       "content": "{
-    \\"compilerOptions\\": {
-      \\"target\\": \\"ES2020\\",
-      \\"module\\": \\"commonjs\\",
-      \\"lib\\": [\\"ES2020\\"],
-      \\"outDir\\": \\"dist\\",
-      \\"strict\\": true,
-      \\"moduleResolution\\": \\"node\\",
-      \\"esModuleInterop\\": true,
-      \\"allowJs\\": true,
-      \\"forceConsistentCasingInFileNames\\": true
-    }
+  \\"compilerOptions\\": {
+    \\"target\\": \\"ES2020\\",
+    \\"module\\": \\"commonjs\\",
+    \\"lib\\": [\\"ES2020\\"],
+    \\"outDir\\": \\"dist\\",
+    \\"strict\\": true,
+    \\"moduleResolution\\": \\"node\\",
+    \\"esModuleInterop\\": true,
+    \\"allowJs\\": true,
+    \\"forceConsistentCasingInFileNames\\": true
   }
+}
 ",
       "name": "tsconfig.json",
       "type": "FILE",

@@ -195,20 +195,6 @@ module.exports = {
           "name": "20210101000000-create-categories.js",
           "type": "FILE",
         },
-        Object {
-          "content": "const DataTypes = require('sequelize').DataTypes
-
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    
-  },
-  down: async (queryInterface, Sequelize) => {
-  
-  }
-};",
-          "name": "20210101000010-add-foreign-keys.js",
-          "type": "FILE",
-        },
       ],
       "name": "migrations",
       "type": "DIRECTORY",
@@ -511,6 +497,7 @@ async function run() {
   initModels(db)
   const hostname = process.env.HOSTNAME || '127.0.0.1'
   const port = parseInt(process.env.PORT || '3000')
+  
   const server = http.createServer((req, res) => {
     res.statusCode = 200
     res.setHeader('Content-Type', 'text/plain')
@@ -538,18 +525,18 @@ export type Json = JsonMap | JsonArray | string | number | boolean | null
     },
     Object {
       "content": "{
-    \\"compilerOptions\\": {
-      \\"target\\": \\"ES2020\\",
-      \\"module\\": \\"commonjs\\",
-      \\"lib\\": [\\"ES2020\\"],
-      \\"outDir\\": \\"dist\\",
-      \\"strict\\": true,
-      \\"moduleResolution\\": \\"node\\",
-      \\"esModuleInterop\\": true,
-      \\"allowJs\\": true,
-      \\"forceConsistentCasingInFileNames\\": true
-    }
+  \\"compilerOptions\\": {
+    \\"target\\": \\"ES2020\\",
+    \\"module\\": \\"commonjs\\",
+    \\"lib\\": [\\"ES2020\\"],
+    \\"outDir\\": \\"dist\\",
+    \\"strict\\": true,
+    \\"moduleResolution\\": \\"node\\",
+    \\"esModuleInterop\\": true,
+    \\"allowJs\\": true,
+    \\"forceConsistentCasingInFileNames\\": true
   }
+}
 ",
       "name": "tsconfig.json",
       "type": "FILE",

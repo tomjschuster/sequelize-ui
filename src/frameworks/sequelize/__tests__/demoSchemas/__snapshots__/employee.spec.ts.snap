@@ -1158,6 +1158,7 @@ async function run() {
   initModels(db)
   const hostname = process.env.HOSTNAME || '127.0.0.1'
   const port = parseInt(process.env.PORT || '3000')
+  
   const server = http.createServer((req, res) => {
     res.statusCode = 200
     res.setHeader('Content-Type', 'text/plain')
@@ -1175,18 +1176,18 @@ run()",
     },
     Object {
       "content": "{
-    \\"compilerOptions\\": {
-      \\"target\\": \\"ES2020\\",
-      \\"module\\": \\"commonjs\\",
-      \\"lib\\": [\\"ES2020\\"],
-      \\"outDir\\": \\"dist\\",
-      \\"strict\\": true,
-      \\"moduleResolution\\": \\"node\\",
-      \\"esModuleInterop\\": true,
-      \\"allowJs\\": true,
-      \\"forceConsistentCasingInFileNames\\": true
-    }
+  \\"compilerOptions\\": {
+    \\"target\\": \\"ES2020\\",
+    \\"module\\": \\"commonjs\\",
+    \\"lib\\": [\\"ES2020\\"],
+    \\"outDir\\": \\"dist\\",
+    \\"strict\\": true,
+    \\"moduleResolution\\": \\"node\\",
+    \\"esModuleInterop\\": true,
+    \\"allowJs\\": true,
+    \\"forceConsistentCasingInFileNames\\": true
   }
+}
 ",
       "name": "tsconfig.json",
       "type": "FILE",
