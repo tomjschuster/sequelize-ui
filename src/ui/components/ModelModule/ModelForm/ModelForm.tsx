@@ -7,11 +7,13 @@ import {
 } from '@src/core/validation/schema'
 import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
+import Flyout from '../../Flyout'
 import { newButton } from '../../home/MySchemaLinks/styles'
 import PlusCircleIcon from '../../icons/Plus'
 import AssociationFieldset from './AssociationFieldset'
 import FieldFieldset from './FieldFieldset'
 import ModelFieldset from './ModelFieldset'
+import ModelFormControls from './ModelFormControls'
 
 export const section = classnames(
   'max-w-screen-lg',
@@ -53,8 +55,7 @@ export default function ModelForm({
   const [formModel, setFormModel] = React.useState<Model>(model)
   const [errors, setErrors] = React.useState<ModelErrors>(emptyModelErrors)
 
-  const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
-    evt.preventDefault()
+  const handleSubmit = () => {
     const newErrors = validateModel(formModel, schema)
     setErrors(newErrors)
     if (noModelErrors(newErrors)) onSubmit(formModel)
@@ -116,71 +117,66 @@ export default function ModelForm({
   )
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className={classnames('bg-white', 'inset-0', 'fixed', 'z-10', 'overflow-y-scroll')}
+    <Flyout
+      title={`${schema.name} > ${model.name}`}
+      onClickClose={onCancel}
+      controls={<ModelFormControls onClickCancel={onCancel} onClickSave={handleSubmit} />}
     >
-      <h2>Edit Model</h2>
+      <form onSubmit={(evt) => evt.preventDefault()} className={classnames('bg-white', 'p-4')}>
+        <div className={classnames(section)}>
+          <h3 className={classnames(title)}>Model</h3>
+          <ModelFieldset name={formModel.name} onChange={handleChangeModel} errors={errors} />
+        </div>
+        <div className={classnames(section)}>
+          <h3 className={classnames(title)}>Fields</h3>
 
-      <button type="button" onClick={onCancel}>
-        Cancel
-      </button>
+          <div className={classnames(grid)}>
+            {formModel.fields.map((field) => {
+              return (
+                <div key={`field-form-${field.id}`} className={classnames(panel)}>
+                  <FieldFieldset
+                    field={field}
+                    onChange={handleChangeField}
+                    onDelete={handleDeleteField}
+                    errors={errors.fields[field.id]}
+                  />
+                </div>
+              )
+            })}
+            <button type="button" className={newButton} onClick={handleClickAddField}>
+              <span>
+                <PlusCircleIcon />
+              </span>
+              Add Field
+            </button>
+          </div>
+        </div>
 
-      <button type="submit">Save</button>
+        <div className={classnames(section)}>
+          <h3 className={classnames(title)}>Associations</h3>
 
-      <div className={classnames(section)}>
-        <h3 className={classnames(title)}>Model</h3>
-        <ModelFieldset name={formModel.name} onChange={handleChangeModel} errors={errors} />
-      </div>
-      <div className={classnames(section)}>
-        <h3 className={classnames(title)}>Fields</h3>
-
-        <div className={classnames(grid)}>
-          {formModel.fields.map((field) => {
-            return (
-              <div key={`field-form-${field.id}`} className={classnames(panel)}>
-                <FieldFieldset
-                  field={field}
-                  onChange={handleChangeField}
-                  onDelete={handleDeleteField}
-                  errors={errors.fields[field.id]}
+          <div className={grid}>
+            {formModel.associations.map((association) => (
+              <div key={`association-form-${association.id}`} className={classnames(panel)}>
+                <AssociationFieldset
+                  association={association}
+                  schema={schema}
+                  model={formModel}
+                  onChange={handleChangeAssociation}
+                  onDelete={handleDeleteAssociation}
+                  errors={errors.associations[association.id]}
                 />
               </div>
-            )
-          })}
-          <button type="button" className={newButton} onClick={handleClickAddField}>
-            <span>
-              <PlusCircleIcon />
-            </span>
-            Add Field
-          </button>
+            ))}
+            <button type="button" className={newButton} onClick={handleClickAddAssociation}>
+              <span>
+                <PlusCircleIcon />
+              </span>
+              Add association
+            </button>
+          </div>
         </div>
-      </div>
-
-      <div className={classnames(section)}>
-        <h3 className={classnames(title)}>Associations</h3>
-
-        <div className={grid}>
-          {formModel.associations.map((association) => (
-            <div key={`association-form-${association.id}`} className={classnames(panel)}>
-              <AssociationFieldset
-                association={association}
-                schema={schema}
-                model={formModel}
-                onChange={handleChangeAssociation}
-                onDelete={handleDeleteAssociation}
-                errors={errors.associations[association.id]}
-              />
-            </div>
-          ))}
-          <button type="button" className={newButton} onClick={handleClickAddAssociation}>
-            <span>
-              <PlusCircleIcon />
-            </span>
-            Add association
-          </button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </Flyout>
   )
 }
