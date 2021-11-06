@@ -17,7 +17,7 @@ import Select from '@src/ui/components/form/Select'
 import TextInput from '@src/ui/components/form/TextInput'
 import { classnames } from '@src/ui/styles/classnames'
 import React, { useCallback } from 'react'
-import CloseIcon from '@src/ui/components/icons/Close'
+import TrashIcon from '@src/ui/components/icons/Trash'
 
 type FieldFieldsetProps = {
   field: Field
@@ -113,7 +113,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
     <fieldset
       className={classnames(
         'p-4',
-        'pt-5',
+        'pt-8',
         'grid',
         'grid-cols-12',
         'gap-y-2',
@@ -237,8 +237,12 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         />
       </div>
       <div className="absolute top-0 right-0 p-1">
-        <button type="button" onClick={handleDelete}>
-          <CloseIcon title="delete" />
+        <button
+          type="button"
+          className={classnames('p-1', 'hover:bg-gray-200')}
+          onClick={handleDelete}
+        >
+          <TrashIcon title="delete" />
         </button>
       </div>
     </fieldset>

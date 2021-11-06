@@ -19,7 +19,7 @@ import TextInput from '@src/ui/components/form/TextInput'
 import { classnames } from '@src/ui/styles/classnames'
 import { plural, singular, snakeCase } from '@src/utils/string'
 import React, { useCallback, useMemo } from 'react'
-import CloseIcon from '../../icons/Close'
+import TrashIcon from '../../icons/Trash'
 
 type AssociationFieldsetProps = {
   association: Association
@@ -158,7 +158,7 @@ function AssociationFieldset({
     <fieldset
       className={classnames(
         'p-4',
-        'pt-5',
+        'pt-8',
         'grid',
         'grid-cols-12',
         'gap-y-2',
@@ -251,8 +251,12 @@ function AssociationFieldset({
         </>
       )}
       <div className="absolute top-0 right-0 p-1">
-        <button type="button" onClick={handleDelete}>
-          <CloseIcon title="delete" />
+        <button
+          type="button"
+          className={classnames('p-1', 'hover:bg-gray-200')}
+          onClick={handleDelete}
+        >
+          <TrashIcon title="delete" />
         </button>
       </div>
     </fieldset>

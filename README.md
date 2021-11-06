@@ -11,9 +11,7 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Add model
 - [ ] View model
-- [ ] Delete field styling
 - [ ] Code/Schema toggle
 - [ ] Separate code actions from toggle
 - [ ] Fix button styling
