@@ -20,6 +20,7 @@ import CodeExplorer from '../CodeExplorer/CodeExplorer'
 import CodeIcon from '../icons/Code'
 import PencilIcon from '../icons/Pencil'
 import ModelForm from '../ModelForm'
+import ModelView from '../ModelView'
 import SchemaForm from '../SchemaForm'
 import SchemaView from '../SchemaView'
 import CodeViewerControls from './CodeViewerControls'
@@ -36,6 +37,7 @@ type Mode =
   | { type: ModeType.CODE }
   | { type: ModeType.VIEW_SCHEMA }
   | { type: ModeType.EDIT_SCHEMA; schema: Schema; errors: SchemaErrors }
+  | { type: ModeType.VIEW_MODEL; model: Model }
   | { type: ModeType.EDIT_MODEL; model: Model; errors: ModelErrors }
 
 type SchemaFlyoutProps = {
@@ -137,6 +139,19 @@ export default function SchemaFlyout({
               <PencilIcon title="edit schema" />
             </ControlsAction>
           </ControlsBar>
+        ) : mode.type === ModeType.VIEW_MODEL ? (
+          <ControlsBar>
+            <ControlsAction onClick={() => setMode({ type: ModeType.CODE })}>
+              <CodeIcon title="view code" />
+            </ControlsAction>
+            <ControlsAction
+              onClick={() =>
+                setMode({ type: ModeType.EDIT_MODEL, model: mode.model, errors: emptyModelErrors })
+              }
+            >
+              <PencilIcon title="edit schema" />
+            </ControlsAction>
+          </ControlsBar>
         ) : (
           <div className={classnames('w-full', 'px-4', 'flex', 'justify-end')}>
             <button
@@ -147,7 +162,11 @@ export default function SchemaFlyout({
                 'border-blue-600',
                 'hover:bg-blue-100',
               )}
-              onClick={() => setMode({ type: ModeType.VIEW_SCHEMA })}
+              onClick={() =>
+                mode.type === ModeType.EDIT_MODEL
+                  ? setMode({ type: ModeType.VIEW_MODEL, model: mode.model })
+                  : setMode({ type: ModeType.VIEW_SCHEMA })
+              }
             >
               Cancel
             </button>
@@ -183,9 +202,7 @@ export default function SchemaFlyout({
       {mode.type === ModeType.VIEW_SCHEMA && (
         <SchemaView
           schema={schema}
-          onClickModel={(model) =>
-            setMode({ type: ModeType.EDIT_MODEL, model, errors: emptyModelErrors })
-          }
+          onClickModel={(model) => setMode({ type: ModeType.VIEW_MODEL, model })}
         />
       )}
       {mode.type === ModeType.EDIT_MODEL && (
@@ -196,6 +213,7 @@ export default function SchemaFlyout({
           onChange={(model) => setMode({ ...mode, model })}
         />
       )}
+      {mode.type === ModeType.VIEW_MODEL && <ModelView model={mode.model} schema={schema} />}
     </Flyout>
   )
 }
