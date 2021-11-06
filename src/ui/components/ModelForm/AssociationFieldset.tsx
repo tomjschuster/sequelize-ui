@@ -19,7 +19,7 @@ import TextInput from '@src/ui/components/form/TextInput'
 import { classnames } from '@src/ui/styles/classnames'
 import { plural, singular, snakeCase } from '@src/utils/string'
 import React, { useCallback, useMemo } from 'react'
-import TrashIcon from '../../icons/Trash'
+import TrashIcon from '../icons/Trash'
 
 type AssociationFieldsetProps = {
   association: Association

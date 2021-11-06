@@ -27,6 +27,7 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 - [ ] Autofocus helpers during crud
 - [ ] db compatibility warnings
 - [ ] a11y (aria-controls?)
+- [ ] demo schema tooltips
 
 #### Codegen
 
