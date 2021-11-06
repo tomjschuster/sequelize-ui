@@ -43,19 +43,19 @@ export type AssociationErrors = {
   throughTable?: string
 }
 
-export const emptyModelErrors: ModelErrors = {
+export const emptyModelErrors: ModelErrors = Object.freeze({
   name: undefined,
   fields: {},
   associations: {},
-}
+})
 
 export type SchemaErrors = {
   name?: string
 }
 
-export const emptySchemaErrors: SchemaErrors = {
+export const emptySchemaErrors: SchemaErrors = Object.freeze({
   name: undefined,
-}
+})
 
 export function validateSchema(schema: Schema, schemas: Schema[]): SchemaErrors {
   return {

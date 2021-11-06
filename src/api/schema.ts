@@ -47,6 +47,11 @@ export async function updateSchema(schema: Schema): Promise<Schema> {
   return updatedSchema
 }
 
+export async function updateModel(model: Model, schema: Schema): Promise<Schema> {
+  const newSchema = { ...schema, models: schema.models.map((m) => (m.id === model.id ? model : m)) }
+  return await updateSchema(newSchema)
+}
+
 function removeTargetingAssociations(schema: Schema, updatedSchema: Schema): Schema {
   const modelById = arrayToLookup(updatedSchema.models, (m) => m.id)
   const removedModels = schema.models.filter(

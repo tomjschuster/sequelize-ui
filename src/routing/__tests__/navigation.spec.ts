@@ -1,6 +1,6 @@
 import { mockRouter } from '@src/test-utils/next'
 import { goTo } from '../navigation'
-import { viewSchemaRoute } from '../routes'
+import { indexRoute } from '../routes'
 
 jest.mock('next/router', () => ({
   __esModule: true,
@@ -9,12 +9,12 @@ jest.mock('next/router', () => ({
 
 describe('goTo', () => {
   it('calls Router.push with route url', () => {
-    goTo(viewSchemaRoute('foo'))
-    expect(mockRouter.push).toHaveBeenLastCalledWith('/schema?id=foo')
+    goTo(indexRoute())
+    expect(mockRouter.push).toHaveBeenLastCalledWith('/')
   })
 
   it('calls Router.replace with route url when replace is true', () => {
-    goTo(viewSchemaRoute('foo'), { replace: true })
-    expect(mockRouter.replace).toHaveBeenLastCalledWith('/schema?id=foo')
+    goTo(indexRoute(), { replace: true })
+    expect(mockRouter.replace).toHaveBeenLastCalledWith('/')
   })
 })

@@ -11,7 +11,7 @@ type UseAsyncResult<Data> = {
   data: Data | undefined
   loading: boolean
   error: Error | undefined
-  refetch: () => void
+  refetch: () => Promise<Data | undefined>
 }
 export default function useAsync<Data, Variables = undefined>({
   getData,
@@ -24,7 +24,7 @@ export default function useAsync<Data, Variables = undefined>({
   const [error, setError] = React.useState<Error>()
   const cache = React.useMemo(() => new Map<string, Data>(), [])
 
-  const fetchData = React.useCallback(() => {
+  const fetchData = React.useCallback(async () => {
     const cacheKey = variables && getCacheKey && getCacheKey(variables)
     const fromCache = cacheKey && cache.get(cacheKey)
 
@@ -38,22 +38,26 @@ export default function useAsync<Data, Variables = undefined>({
 
     setLoading(false)
 
-    getData(variables)
-      .then((data) => {
-        onLoad && onLoad(data)
-        setData(data)
+    return getData(variables)
+      .then((newData) => {
+        onLoad && onLoad(newData)
+        setData(newData)
         setLoading(false)
         setError(undefined)
         const cacheKey = getCacheKey && variables && getCacheKey(variables)
-        if (cacheKey) cache.set(cacheKey, data)
+        if (cacheKey) cache.set(cacheKey, newData)
+        return newData
       })
       .catch((error) => {
         setLoading(false)
         setError(error)
+        return undefined
       })
   }, [cache, variables, getData, getCacheKey, onLoad])
 
-  React.useEffect(fetchData, [fetchData])
+  React.useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   return { data, loading, error, refetch: fetchData }
 }

@@ -11,20 +11,24 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Copy/download alerts
-- [ ] a11y (aria-controls?)
-
-- [ ] Form section
-- [ ] Form buttons
-- [ ] Text input
-- [ ] Radio group
-- [ ] Checkbox group
-- [ ] Model form
-- [ ] db compatibility warnings
-- [ ] Schema form
-- [ ] Form a11y review
+- [ ] Add model
+- [ ] View model
+- [ ] Delete field styling
+- [ ] Code/Schema toggle
+- [ ] Separate code actions from toggle
+- [ ] Fix button styling
+- [ ] Refactor controls
+- [ ] Refactor empty id logic and empty model id logic
+- [ ] Enum form, validation
+- [ ] Form error styling
+- [ ] Form placeholders
+- [ ] Refactor styles
 - [ ] Home page
   - [ ] Copy
+- [ ] Copy/download alerts
+- [ ] Autofocus helpers during crud
+- [ ] db compatibility warnings
+- [ ] a11y (aria-controls?)
 
 #### Codegen
 

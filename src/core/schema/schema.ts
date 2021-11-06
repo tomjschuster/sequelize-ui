@@ -33,7 +33,7 @@ export type Field = {
 export function emptySchema(): Schema {
   const time = now()
   return {
-    id: shortid(),
+    id: '',
     name: '',
     models: [],
     createdAt: time,

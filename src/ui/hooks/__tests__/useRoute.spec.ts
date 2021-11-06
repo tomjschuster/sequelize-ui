@@ -1,4 +1,4 @@
-import { editSchemaRoute, indexRoute, notFoundRoute } from '@src/routing/routes'
+import { indexRoute, notFoundRoute } from '@src/routing/routes'
 import { mockRouter } from '@src/test-utils/next'
 import { renderHook } from '@testing-library/react-hooks'
 import { NextRouter, useRouter } from 'next/router'
@@ -17,10 +17,6 @@ describe('useRoute', () => {
     [
       { isReady: true, pathname: '/', query: {} },
       { loading: false, route: indexRoute() },
-    ],
-    [
-      { isReady: true, pathname: '/schema', query: { id: 'foo', editingSchema: '1' } },
-      { loading: false, route: editSchemaRoute('foo') },
     ],
     [
       { isReady: true, pathname: '/foo', query: {} },

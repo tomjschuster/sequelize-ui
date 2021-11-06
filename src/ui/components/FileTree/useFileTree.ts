@@ -1,19 +1,7 @@
 import { FileSystemItem, findFile, findItem, isDirectory, isFile, listPaths } from '@src/core/files'
 import usePrevious from '@src/ui/hooks/usePrevious'
 import React from 'react'
-import { ActiveFile, FolderState } from './types'
-
-type UseFileTreeArgs = {
-  root: FileSystemItem | undefined
-  defaultPath?: string
-  cacheKey?: string
-}
-
-type UseFileTreeResult = {
-  folderState: FolderState
-  activeFile?: ActiveFile
-  selectItem: (path: string) => void
-}
+import { ActiveFile, FolderState, UseFileTreeArgs, UseFileTreeResult } from './types'
 
 function useFileTree({ root, cacheKey, defaultPath }: UseFileTreeArgs): UseFileTreeResult {
   const previousCacheKey = usePrevious(cacheKey)

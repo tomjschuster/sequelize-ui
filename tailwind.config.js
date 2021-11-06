@@ -129,7 +129,7 @@ module.exports = {
   },
   variants: {
     extend: {
-      margin: ['first', 'last'],
+      margin: ['first', 'last', 'children-not-last'],
     },
     borderWidth: ['hover', 'focus'],
     transitionProperty: ['hover'],

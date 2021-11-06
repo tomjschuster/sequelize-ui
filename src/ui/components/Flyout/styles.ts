@@ -34,8 +34,9 @@ export const closeButton = classnames('p-0.5', 'hover:bg-gray-200')
 
 export const controlsContainer = classnames(
   'relative',
+  'bg-white',
   'overflow-visible',
-  'h-9',
+  'h-10',
   'flex',
   'items-center',
   'border-b',
@@ -46,4 +47,4 @@ export const contentContainer = classnames('flex-auto', 'overflow-y-scroll')
 
 export const actionsContainer = classnames('text-sm', 'flex', 'w-full')
 
-export const actionButton = classnames('py-1', 'px-2', 'hover:bg-gray-200')
+export const actionButton = classnames('flex', 'items-center', 'py-1', 'px-2', 'hover:bg-gray-200')

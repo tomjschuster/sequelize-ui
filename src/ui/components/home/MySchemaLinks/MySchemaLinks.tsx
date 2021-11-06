@@ -1,5 +1,4 @@
-import { createSchema } from '@src/api/schema'
-import { emptySchema, Schema } from '@src/core/schema'
+import { Schema } from '@src/core/schema'
 import { now, TimeGranularity, timeSince } from '@src/utils/dateTime'
 import React from 'react'
 import ClockIcon from '../../icons/Clock'
@@ -9,22 +8,19 @@ import * as Styles from './styles'
 
 type MySchemaButtonsProps = {
   schemas: Schema[]
+  onClickCreate: () => void
   onSelectSchema: (schema: Schema) => void
 }
 
 export default function MySchemaButtons({
   schemas,
+  onClickCreate,
   onSelectSchema,
 }: MySchemaButtonsProps): React.ReactElement {
-  const handleClickNew = React.useCallback(
-    () => createSchema(emptySchema()).then(onSelectSchema),
-    [onSelectSchema],
-  )
-
   return (
     <ul className={Styles.container}>
       <li>
-        <NewSchemaButton onClick={handleClickNew} />
+        <NewSchemaButton onClick={onClickCreate} />
       </li>
       {schemas
         .slice()
@@ -43,7 +39,7 @@ type MySchemaButtonProps = {
   onClick: (schema: Schema) => void
 }
 function MySchemaButton({ schema, onClick }: MySchemaButtonProps): React.ReactElement {
-  const modelCount = schema.models.flatMap((m) => m.associations).length
+  const modelCount = schema.models.length
   const handleClick = React.useCallback(() => onClick(schema), [onClick, schema])
 
   return (

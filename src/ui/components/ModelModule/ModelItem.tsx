@@ -1,39 +1,23 @@
-import {
-  displayDataType,
-  Field,
-  isIntegerType,
-  isNumberType,
-  isNumericType,
-  isStringType,
-  Model,
-  Precision,
-  Schema,
-} from '@src/core/schema'
-import AssociationList from '@src/ui/components/AssociationList'
-import { noCase, titleCase } from '@src/utils/string'
-import React, { useCallback, useState } from 'react'
+import { Model } from '@src/core/schema'
+import { classnames } from '@src/ui/styles/classnames/__generated__/tailwindcss-classnames'
+import { titleCase } from '@src/utils/string'
+import React, { useCallback } from 'react'
+import CloseCircleIcon from '../icons/CloseCircle'
+import PencilIcon from '../icons/Pencil'
 import * as styles from './styles'
 
+const panel = classnames('border', 'border-gray-400', 'rounded')
+
 type ModelItemProps = {
-  schema: Schema
   model: Model
-  disabled: boolean
   onEdit: (id: Model['id']) => void
   onDelete: (id: Model['id']) => void
 }
-export default function ModelItem({
-  schema,
-  model,
-  disabled,
-  onEdit,
-  onDelete,
-}: ModelItemProps): React.ReactElement {
-  const [expanded, setExpanded] = useState<boolean>(false)
-  const handleClick = useCallback(() => !disabled && setExpanded((e) => !e), [disabled])
+export default function ModelItem({ model, onEdit, onDelete }: ModelItemProps): React.ReactElement {
   const handleClickEdit = useCallback(() => onEdit(model.id), [model.id])
 
   const handleDelete = useCallback(
-    (evt: React.FormEvent<HTMLFormElement>) => {
+    (evt: React.FormEvent<HTMLButtonElement>) => {
       evt.preventDefault()
       onDelete(model.id)
     },
@@ -41,78 +25,18 @@ export default function ModelItem({
   )
 
   return (
-    <li className={styles.modelItem}>
-      <span className={styles.modelName(disabled)} onClick={handleClick}>
+    <li className={classnames(panel, 'flex', 'justify-between', 'px-2')} onClick={handleClickEdit}>
+      <span onClick={handleClickEdit} className={styles.modelName}>
         {titleCase(model.name)}
       </span>
-
-      {expanded && !disabled && (
-        <>
-          <button type="button" onClick={handleClickEdit} disabled={disabled}>
-            Edit
-          </button>
-          <form onSubmit={handleDelete}>
-            <button type="submit">Delete</button>
-          </form>
-          <p>Fields</p>
-          <FieldList fields={model.fields} />
-          <p>Associations</p>
-          <AssociationList schema={schema} modelId={model.id} />
-        </>
-      )}
+      <div className={classnames('flex', 'items-center')}>
+        <button className={classnames('hover:bg-gray-200', 'p-1.5')} onClick={handleClickEdit}>
+          <PencilIcon title="edit" />
+        </button>
+        <button className={classnames('hover:bg-gray-200', 'p-1.5')} onClick={handleDelete}>
+          <CloseCircleIcon title="delete" />
+        </button>
+      </div>
     </li>
   )
-}
-
-type FieldListProps = {
-  fields: Field[]
-}
-export function FieldList({ fields }: FieldListProps): React.ReactElement {
-  return (
-    <ul className={styles.fieldList}>
-      {fields.map((f) => (
-        <FieldItem key={`field-item-${f.id}`} field={f} />
-      ))}
-    </ul>
-  )
-}
-
-type FieldItemProps = {
-  field: Field
-}
-export function FieldItem({ field }: FieldItemProps): React.ReactElement {
-  const attributes = fieldAttributes(field)
-  return (
-    <li>
-      <span>{noCase(field.name)}: </span>
-      <span>{displayDataType(field.type)}</span>
-      {attributes ? ` (${attributes})` : undefined}
-    </li>
-  )
-}
-
-function fieldAttributes(field: Field): string | undefined {
-  return (
-    [
-      field.primaryKey ? 'primary key' : undefined,
-      field.required ? 'required' : undefined,
-      field.unique ? 'unique' : undefined,
-      isStringType(field.type) ? displayLength(field.type.length) : undefined,
-      isNumberType(field.type) && field.type.unsigned ? 'unsigned' : undefined,
-      isIntegerType(field.type) && field.type.autoincrement ? 'autoincrement' : undefined,
-      isNumericType(field.type) ? displayPrecision(field.type.precision) : undefined,
-    ]
-      .filter((x) => x)
-      .join('; ') || undefined
-  )
-}
-
-function displayLength(length?: number): string | undefined {
-  return length ? `length: ${length}}` : undefined
-}
-
-function displayPrecision(precision?: Precision): string | undefined {
-  return precision
-    ? `precision: ${precision.precision}${precision.scale ? `,${precision.scale}` : ''}`
-    : undefined
 }

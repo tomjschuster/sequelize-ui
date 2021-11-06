@@ -2,12 +2,14 @@ import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
 import { CommonFieldProps, CommonInputProps } from '../shared/types'
 
-type TextInputProps = CommonFieldProps & CommonInputProps<string> & { placeholder?: string }
+type TextInputProps = CommonFieldProps &
+  CommonInputProps<string> & { large?: boolean; placeholder?: string }
 
 function TextInput({
   id,
   label,
   value,
+  large,
   placeholder,
   error,
   onChange,
@@ -22,7 +24,15 @@ function TextInput({
       <label htmlFor={id} className={classnames('w-full', 'flex', 'flex-col', 'items-start')}>
         <span className={classnames('text-sm')}>{label}</span>
         <input
-          className={classnames('py-1', 'px-2', 'w-full', 'p-0.5', 'text-sm')}
+          className={classnames('w-full', 'text-sm', {
+            'border-none': large,
+            'h-full': large,
+            'text-lg': large,
+            'py-2': large,
+            'px-4': large,
+            'py-1': !large,
+            'px-2': !large,
+          })}
           id={id}
           type="text"
           value={value}
