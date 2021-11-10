@@ -1,11 +1,11 @@
 import {
   Association,
   displayAssociationTypeType,
-  displayThroughType,
   isManytoMany,
-  isThroughModel,
+  ManyToManyThrough,
   Model,
   Schema,
+  ThroughType,
 } from '@src/core/schema'
 import { classnames } from '@src/ui/styles/classnames'
 import { noCase, titleCase } from '@src/utils/string'
@@ -14,53 +14,78 @@ import React, { useMemo } from 'react'
 type AssociationViewProps = {
   association: Association
   schema: Schema
+  onClickModel: (model: Model) => void
 }
 
-function AssociationView({ association, schema }: AssociationViewProps): React.ReactElement {
+function AssociationView({
+  association,
+  schema,
+  onClickModel,
+}: AssociationViewProps): React.ReactElement {
   const targetModel: Model = useMemo(
     () => schema.models.find((m) => m.id === association.targetModelId) as Model,
     [schema.models, association.targetModelId],
   )
 
-  const throughName: string | undefined = useMemo(() => {
-    if (isManytoMany(association)) {
-      const through = association.type.through
-      if (isThroughModel(through)) {
-        const throughModel = schema.models.find((m) => m.id === through.modelId)
-        if (throughModel) return titleCase(throughModel.name)
-      } else {
-        return noCase(through.table)
-      }
-    }
-  }, [association, schema])
-
   return (
-    <div
-      className={classnames(
-        'p-4',
-        'pt-8',
-        'grid',
-        'grid-cols-12',
-        'gap-y-2',
-        'gap-x-4',
-        'relative',
+    <div className={classnames('p-4')}>
+      <p className={classnames('mb-2')}>
+        {displayAssociationTypeType(association.type.type)}{' '}
+        {targetModel.id === association.sourceModelId ? (
+          <span className={classnames('font-bold')}>{titleCase(targetModel.name)}</span>
+        ) : (
+          <button className={classnames('font-bold')} onClick={() => onClickModel(targetModel)}>
+            {titleCase(targetModel.name)}
+          </button>
+        )}
+      </p>
+      {(association.alias || association.foreignKey || isManytoMany(association)) && (
+        <ul className={classnames('list-disc', 'list-inside', 'text-sm')}>
+          {association.alias && <li>as {noCase(association.alias)}</li>}
+          {association.foreignKey && <li>Foreign key: {noCase(association.foreignKey)}</li>}
+          {isManytoMany(association) && (
+            <li>
+              through{' '}
+              <ThroughView
+                through={association.type.through}
+                schema={schema}
+                onClickModel={onClickModel}
+              />
+            </li>
+          )}
+          {isManytoMany(association) && association.type.targetFk && (
+            <li>Target foreign key: {noCase(association.type.targetFk)}</li>
+          )}
+        </ul>
       )}
-    >
-      <div className={classnames('col-span-6')}>
-        <p>
-          {displayAssociationTypeType(association.type.type)} {titleCase(targetModel.name)}
-          {association.alias ? ` as ${noCase(association.alias)}` : ''}
-          {association.foreignKey ? ` (foreign key: ${noCase(association.foreignKey)})` : ''}
-          {isManytoMany(association) && throughName
-            ? ` through ${throughName} ${displayThroughType(association.type.through.type)}`
-            : ''}
-          {isManytoMany(association) && association.type.targetFk
-            ? ` (target foreign key: ${noCase(association.type.targetFk)})`
-            : ''}
-        </p>
-      </div>
     </div>
   )
+}
+
+type ThroughViewProps = {
+  through: ManyToManyThrough
+  schema: Schema
+  onClickModel: (model: Model) => void
+}
+function ThroughView({
+  through,
+  schema,
+  onClickModel,
+}: ThroughViewProps): React.ReactElement | null {
+  if (through.type === ThroughType.ThroughTable) {
+    return <>through.table</>
+  }
+
+  const throughModel = schema.models.find((m) => m.id === through.modelId)
+  if (throughModel) {
+    return (
+      <button className={classnames('font-bold')} onClick={() => onClickModel(throughModel)}>
+        {titleCase(throughModel.name)}
+      </button>
+    )
+  }
+
+  return null
 }
 
 export default React.memo(AssociationView)

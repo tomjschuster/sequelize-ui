@@ -8,23 +8,14 @@ type FieldViewProps = {
 }
 function FieldView({ field }: FieldViewProps) {
   return (
-    <div
-      className={classnames(
-        'p-4',
-        'pt-8',
-        'grid',
-        'grid-cols-12',
-        'gap-y-2',
-        'gap-x-4',
-        'relative',
-      )}
-    >
-      <div className={classnames('col-span-12')}>
-        <p>Name: {noCase(field.name)}</p>
-      </div>
-      <div className={classnames('col-span-12')}>
-        <p>Data type: {displayDataType(field.type)}</p>
-      </div>
+    <div className={classnames('p-4')}>
+      <p className={classnames('mb-2', 'font-bold')}>{noCase(field.name)}</p>
+      <ul className={classnames('col-span-12', 'list-disc', 'list-inside', 'text-sm')}>
+        <li>{displayDataType(field.type)}</li>
+        {field.primaryKey && <li>Primary key</li>}
+        {field.required && <li>Required</li>}
+        {field.unique && <li>Unique</li>}
+      </ul>
     </div>
   )
 }

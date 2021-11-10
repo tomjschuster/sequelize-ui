@@ -82,52 +82,7 @@ export enum UuidType {
 }
 
 export function displayDataType(dataType: DataType): string {
-  switch (dataType.type) {
-    case DataTypeType.String:
-      return 'String'
-    case DataTypeType.Text:
-      return 'Text'
-    case DataTypeType.CiText:
-      return 'CI Text'
-    case DataTypeType.Uuid:
-      return 'UUID'
-    case DataTypeType.DateTime:
-      return 'Date Time'
-    case DataTypeType.Time:
-      return 'Time'
-    case DataTypeType.Date:
-      return 'Date'
-    case DataTypeType.Integer:
-      return 'Integer'
-    case DataTypeType.BigInt:
-      return 'Big Int'
-    case DataTypeType.SmallInt:
-      return 'Small Int'
-    case DataTypeType.Float:
-      return 'Float'
-    case DataTypeType.Real:
-      return 'Real'
-    case DataTypeType.Double:
-      return 'Double'
-    case DataTypeType.Decimal:
-      return 'Decimal'
-    case DataTypeType.Boolean:
-      return 'Boolean'
-    case DataTypeType.Enum: {
-      const types = dataType.values.length > 0 ? dataType.values.join(', ') : undefined
-      return `Enum${types ? ` (${types})` : ''}`
-    }
-    case DataTypeType.Array: {
-      const type = displayDataType(dataType.arrayType)
-      return `Array (${type})`
-    }
-    case DataTypeType.Json:
-      return 'JSON'
-    case DataTypeType.JsonB:
-      return 'JSONB'
-    case DataTypeType.Blob:
-      return 'Blob'
-  }
+  return displayDataTypeType(dataType.type) + displayDataTypeOptions(dataType)
 }
 
 export function displayDataTypeType(type: DataTypeType): string {
@@ -173,6 +128,27 @@ export function displayDataTypeType(type: DataTypeType): string {
     case DataTypeType.Blob:
       return 'Blob'
   }
+}
+
+function displayDataTypeOptions(dataType: DataType): string {
+  const options: string[] = [
+    isStringType(dataType) && dataType.length !== undefined && `length: ${dataType.length}`,
+    dataType.type === DataTypeType.Uuid &&
+      !!dataType.defaultVersion &&
+      `${dataType.defaultVersion}`,
+    isDateTimeType(dataType) && dataType.defaultNow && 'default to now',
+    isNumberType(dataType) && dataType.unsigned && 'unsigned',
+    isIntegerType(dataType) && dataType.autoincrement && 'autoincrement',
+    isNumericType(dataType) && dataType.precision && `p: ${dataType.precision.precision}`,
+    isNumericType(dataType) &&
+      dataType.precision &&
+      dataType.precision.scale &&
+      `s: ${dataType.precision.scale}`,
+    dataType.type === DataTypeType.Enum && `values: ${dataType.values.join('; ')}`,
+    dataType.type === DataTypeType.Array && displayDataType(dataType.arrayType),
+  ].filter((option): option is string => !!option)
+
+  return options.length ? ` (${options.join(', ')})` : ''
 }
 
 export function typeWithoutOptions(dataType: DataType): DataType {

@@ -10,7 +10,6 @@ import ModelFieldset from './ModelFieldset'
 
 export const section = classnames(
   'max-w-screen-lg',
-  'px-6',
   'flex',
   'flex-col',
   'mx-auto',
@@ -18,7 +17,7 @@ export const section = classnames(
   'last:mb-0',
 )
 
-export const title = classnames('text-xl', 'mb-2')
+export const title = classnames('text-2xl', 'mb-2')
 
 const grid = classnames(
   'grid',
@@ -30,7 +29,7 @@ const grid = classnames(
   'auto-rows-fr',
   'w-full',
 )
-const panel = classnames('border', 'border-gray-400', 'rounded')
+const panel = classnames('border', 'border-gray-400', 'bg-white', 'rounded')
 
 type ModelFormProps = {
   model: Model
@@ -101,9 +100,9 @@ export default function ModelForm({
   )
 
   return (
-    <form onSubmit={(evt) => evt.preventDefault()} className={classnames('bg-white', 'p-4')}>
+    <form onSubmit={(evt) => evt.preventDefault()} className={classnames('p-6', 'pt-8')}>
       <div className={classnames(section)}>
-        <h3 className={classnames(title)}>Model</h3>
+        <h2 className={classnames(title)}>Model</h2>
         <ModelFieldset name={model.name} onChange={handleChangeModel} errors={errors} />
       </div>
       <div className={classnames(section)}>

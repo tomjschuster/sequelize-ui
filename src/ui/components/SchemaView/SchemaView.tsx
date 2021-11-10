@@ -17,15 +17,7 @@ const grid = classnames(
 
 const panel = classnames('border', 'border-gray-400', 'rounded')
 
-export const section = classnames(
-  'max-w-screen-lg',
-  'p-6',
-  'flex',
-  'flex-col',
-  'mx-auto',
-  'mb-6',
-  'last:mb-0',
-)
+export const section = classnames('max-w-screen-lg', 'p-6', 'pt-8', 'flex', 'flex-col', 'mx-auto')
 
 export const title = classnames('text-2xl', 'mb-2')
 export const subtitle = classnames('text-xl', 'mb-2')

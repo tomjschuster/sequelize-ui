@@ -40,6 +40,7 @@ export default function IndexPage(): React.ReactElement {
     const updated = await (isDemoSchema(schema) ? createSchema(schema) : updateSchema(schema))
     setSchema(updated)
     refetch()
+    return updated
   }
 
   const handleCancel = () => {

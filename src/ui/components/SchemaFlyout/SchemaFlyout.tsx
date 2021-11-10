@@ -43,7 +43,7 @@ type Mode =
 type SchemaFlyoutProps = {
   schema: Schema
   schemas: Schema[]
-  onChange: (schema: Schema) => Promise<void>
+  onChange: (schema: Schema) => Promise<Schema>
   onClickClose: () => void
 }
 export default function SchemaFlyout({
@@ -82,13 +82,18 @@ export default function SchemaFlyout({
           }
 
           if (!equal(newSchema, schema)) {
-            await onChange({
+            const updated = await onChange({
               ...schema,
               models: schema.models.map((m) => (m.id === mode.model.id ? mode.model : m)),
             })
+
+            const model = updated.models.find((m) => m.id === mode.model.id) as Model
+
+            setMode({ type: ModeType.VIEW_MODEL, model })
+            return
           }
 
-          setMode({ type: ModeType.VIEW_SCHEMA })
+          setMode({ type: ModeType.VIEW_MODEL, model: mode.model })
         } else {
           setMode({ ...mode, errors })
         }
@@ -153,7 +158,7 @@ export default function SchemaFlyout({
             </ControlsAction>
           </ControlsBar>
         ) : (
-          <div className={classnames('w-full', 'px-4', 'flex', 'justify-end')}>
+          <ControlsBar>
             <button
               className={classnames(
                 'px-4',
@@ -185,7 +190,7 @@ export default function SchemaFlyout({
             >
               Save
             </button>
-          </div>
+          </ControlsBar>
         )
       }
     >
@@ -213,7 +218,14 @@ export default function SchemaFlyout({
           onChange={(model) => setMode({ ...mode, model })}
         />
       )}
-      {mode.type === ModeType.VIEW_MODEL && <ModelView model={mode.model} schema={schema} />}
+      {mode.type === ModeType.VIEW_MODEL && (
+        <ModelView
+          model={mode.model}
+          schema={schema}
+          onClickSchema={() => setMode({ type: ModeType.VIEW_SCHEMA })}
+          onClickModel={(model) => setMode({ type: ModeType.VIEW_MODEL, model })}
+        />
+      )}
     </Flyout>
   )
 }
