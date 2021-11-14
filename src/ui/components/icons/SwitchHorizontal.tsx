@@ -7,7 +7,7 @@ type SwitchHorizontalIconProps = SvgProps & {
 
 export default function SwitchHorizontalIcon({
   title,
-  strokeWidth = 2,
+  strokeWidth = 1.5,
 }: SwitchHorizontalIconProps): React.ReactElement {
   return (
     <Svg title={title} className="h-6 w-6">

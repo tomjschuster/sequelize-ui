@@ -6,7 +6,7 @@ type FloppyDiscIconProps = SvgProps
 
 export default function FloppyDiscIcon({ title }: FloppyDiscIconProps): React.ReactElement {
   return (
-    <Svg title={title} className="h-6 w-6">
+    <Svg title={title} className="h-4 w-4">
       <g
         fill="none"
         stroke="currentColor"

@@ -18,7 +18,7 @@ import { tsconfigTemplate } from './templates/tsconfig'
 import { typesTemplate } from './templates/types'
 import { hasJsonType } from './utils/dataTypes'
 import { getMigrationModels, migrationTimestamp, nextTimestamp } from './utils/migrations'
-import { modelName } from './utils/model'
+import { modelFileName } from './utils/model'
 import { normalizeSchema } from './utils/schema'
 
 type GenerateSequelizeProjectArgs = {
@@ -61,7 +61,7 @@ export function generateSequelizeProject({
     directory('models', [
       file('index.ts', initModelsTemplate({ schema, dbOptions })),
       ...schema.models.map((model) =>
-        file(`${modelName(model)}.ts`, modelTemplate({ schema, dbOptions, model })),
+        file(modelFileName(model), modelTemplate({ schema, dbOptions, model })),
       ),
     ]),
     file('.gitignore', gitignoreTemplate()),

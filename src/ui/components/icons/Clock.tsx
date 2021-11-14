@@ -5,7 +5,10 @@ type ClockIconProps = SvgProps & {
   strokeWidth?: number
 }
 
-export default function ClockIcon({ title, strokeWidth = 2 }: ClockIconProps): React.ReactElement {
+export default function ClockIcon({
+  title,
+  strokeWidth = 1.5,
+}: ClockIconProps): React.ReactElement {
   return (
     <Svg title={title} className="h-3 w-3">
       <path

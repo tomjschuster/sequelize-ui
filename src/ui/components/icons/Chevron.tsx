@@ -16,7 +16,7 @@ export enum ChevronDirection {
 export default function ChevronIcon({
   direction,
   title,
-  strokeWidth = 2,
+  strokeWidth = 1.5,
 }: ChevronIconProps): React.ReactElement {
   return (
     <Svg title={title} className="h-4 w-4">

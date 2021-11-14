@@ -5,7 +5,10 @@ type TrashIconProps = SvgProps & {
   strokeWidth?: number
 }
 
-export default function TrashIcon({ title, strokeWidth = 2 }: TrashIconProps): React.ReactElement {
+export default function TrashIcon({
+  title,
+  strokeWidth = 1.5,
+}: TrashIconProps): React.ReactElement {
   return (
     <Svg title={title} className="h-6 w-6">
       <path

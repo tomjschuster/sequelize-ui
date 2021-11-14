@@ -1,3 +1,4 @@
+import React from 'react'
 import { Options } from './options'
 
 export type CommonInputProps<T> = {
@@ -13,6 +14,6 @@ export type CommonFieldProps = {
 
 export type CommonOptionsProps<T> = Omit<CommonInputProps<T>, 'onChange'> & {
   options: Options<T>
-  display: (value: T) => string
+  display: (value: T) => React.ReactNode | string
   onChange: (value: T) => void
 }

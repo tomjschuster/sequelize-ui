@@ -11,15 +11,13 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Code/Schema toggle
-- [ ] Separate code actions from toggle
-- [ ] Fix button styling
-- [ ] Refactor controls
+- [ ] Refactor schema flyout state/view
 - [ ] Refactor empty id logic and empty model id logic
 - [ ] Enum form, validation
 - [ ] Form error styling
 - [ ] Form placeholders
 - [ ] Refactor styles
+- [ ] Refactor icon props
 - [ ] Home page
   - [ ] Copy
 - [ ] Copy/download alerts

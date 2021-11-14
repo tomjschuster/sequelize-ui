@@ -7,7 +7,7 @@ type PlusCircleIconProps = SvgProps & {
 
 export default function PlusCircleIcon({
   title,
-  strokeWidth = 2,
+  strokeWidth = 1.5,
 }: PlusCircleIconProps): React.ReactElement {
   return (
     <Svg title={title} className="h-6 w-6">

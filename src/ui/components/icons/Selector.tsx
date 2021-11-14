@@ -9,7 +9,7 @@ export default function SelectorIcon({ title }: SelectorIconProps): React.ReactE
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth={2}
+        strokeWidth={1.5}
         d="M8 9l4-4 4 4m0 6l-4 4-4-4"
       />
     </Svg>

@@ -11,6 +11,10 @@ export function modelName({ name }: Model): string {
   return singular(pascalCase(name))
 }
 
+export function modelFileName(model: Model): string {
+  return `${modelName(model)}.ts`
+}
+
 export function dedupModels(models: Model[]): Model[] {
   const visitedModels: Record<string, Model> = {}
   const names: string[] = []

@@ -7,7 +7,7 @@ type CloseCircleIconProps = SvgProps & {
 
 export default function CloseCircleIcon({
   title,
-  strokeWidth = 2,
+  strokeWidth = 1.5,
 }: CloseCircleIconProps): React.ReactElement {
   return (
     <Svg title={title} className="h-6 w-6">

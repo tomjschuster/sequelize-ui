@@ -5,7 +5,7 @@ type FilmIconProps = SvgProps & {
   strokeWidth?: number
 }
 
-export default function FilmIcon({ title, strokeWidth = 2 }: FilmIconProps): React.ReactElement {
+export default function FilmIcon({ title, strokeWidth = 1.5 }: FilmIconProps): React.ReactElement {
   return (
     <Svg title={title} className="h-6 w-6">
       <path

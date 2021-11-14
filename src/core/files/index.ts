@@ -84,6 +84,10 @@ export function listPaths(item: FileSystemItem): string[] {
   return [name].concat(item.files.flatMap(listPaths).map((path) => `${name}/${path}`))
 }
 
+export function pathFilename(path: string): string {
+  return path.split('/').reverse()[0]
+}
+
 enum FileSystemItemType {
   File = 'FILE',
   Directory = 'DIRECTORY',

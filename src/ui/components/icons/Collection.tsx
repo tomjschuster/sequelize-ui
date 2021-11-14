@@ -7,7 +7,7 @@ type CollectionIconProps = SvgProps & {
 
 export default function CollectionIcon({
   title,
-  strokeWidth = 2,
+  strokeWidth = 1.5,
 }: CollectionIconProps): React.ReactElement {
   return (
     <Svg title={title} className="h-3 w-3">

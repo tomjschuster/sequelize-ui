@@ -7,7 +7,7 @@ type UserGroupIconProps = SvgProps & {
 
 export default function UserGroupIcon({
   title,
-  strokeWidth = 2,
+  strokeWidth = 1.5,
 }: UserGroupIconProps): React.ReactElement {
   return (
     <Svg title={title} className="h-6 w-6">

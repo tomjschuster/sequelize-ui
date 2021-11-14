@@ -13,20 +13,18 @@ type FileTreeProps = {
 }
 function FileTree({ root, activePath, folderState, onSelect }: FileTreeProps): React.ReactElement {
   return (
-    <>
-      <ul className={classnames('whitespace-nowrap', 'overflow-x-scroll')}>
-        <li>
-          <FileTreeItem
-            depth={1}
-            item={root}
-            folderState={folderState}
-            onSelect={onSelect}
-            activePath={activePath}
-            path={itemName(root)}
-          />
-        </li>
-      </ul>
-    </>
+    <ul className={classnames('whitespace-nowrap', 'overflow-x-scroll')}>
+      <li>
+        <FileTreeItem
+          depth={1}
+          item={root}
+          folderState={folderState}
+          onSelect={onSelect}
+          activePath={activePath}
+          path={itemName(root)}
+        />
+      </li>
+    </ul>
   )
 }
 
@@ -52,9 +50,9 @@ function FileTreeItem({
   useEffect(() => {
     if (activePath) {
       const li = document.getElementById(pathId(activePath))
-      if (li) li.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      if (li) li.scrollIntoView({ block: 'center', behavior: 'auto' })
     }
-  }, [activePath])
+  }, [])
 
   const language = isFile(item) && fileLanguage(item)
   const chevronDirection = !isDirectory(item)

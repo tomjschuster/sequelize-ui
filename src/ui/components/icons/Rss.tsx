@@ -5,7 +5,7 @@ type RssIconProps = SvgProps & {
   strokeWidth?: number
 }
 
-export default function RssIcon({ title, strokeWidth = 2 }: RssIconProps): React.ReactElement {
+export default function RssIcon({ title, strokeWidth = 1.5 }: RssIconProps): React.ReactElement {
   return (
     <Svg title={title} className="h-6 w-6">
       <path

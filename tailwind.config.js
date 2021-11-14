@@ -141,8 +141,12 @@ module.exports = {
   variants: {
     extend: {
       margin: ['first', 'last', 'children-not-last'],
+      borderWidth: ['first', 'last', 'first', 'last', 'focus-visible'],
+      borderColor: ['focus-visible'],
+      borderRadius: ['first', 'last', 'hover', 'focus'],
+      outline: ['focus', 'focus-visible'],
+      fontWeight: ['hover', 'focus', 'focus-visible'],
     },
-    borderWidth: ['hover', 'focus'],
     transitionProperty: ['hover'],
     display: [
       'children',

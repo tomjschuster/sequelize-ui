@@ -20,7 +20,7 @@ export default function DbOptionsForm({
   onChange,
 }: DbOptionsFormProps): React.ReactElement {
   return (
-    <form className={classnames('grid', 'grid-cols-12', 'gap-x-8', 'gap-y-6')}>
+    <form className={classnames('grid', 'grid-cols-12', 'gap-x-4', 'sm:gap-x-8', 'gap-y-6')}>
       <Select<SqlDialect>
         id="sql-dialect"
         label="SQL dialect"

@@ -11,13 +11,18 @@ import {
   validateSchema,
 } from '@src/core/validation/schema'
 import { useFileTree } from '@src/ui/components/FileTree'
-import Flyout, { ControlsAction, ControlsBar } from '@src/ui/components/Flyout'
+import Flyout, { ControlsAction } from '@src/ui/components/Flyout'
 import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import { classnames } from '@src/ui/styles/classnames'
 import equal from 'fast-deep-equal/es6'
 import React, { useCallback, useState } from 'react'
 import CodeExplorer from '../CodeExplorer/CodeExplorer'
+import Button from '../form/Button'
+import Toggle from '../form/Toggle'
+import CloseIcon from '../icons/Close'
 import CodeIcon from '../icons/Code'
+import CubeIcon from '../icons/Cube'
+import FloppyDiscIcon from '../icons/FloppyDisc'
 import PencilIcon from '../icons/Pencil'
 import ModelForm from '../ModelForm'
 import ModelView from '../ModelView'
@@ -59,6 +64,39 @@ export default function SchemaFlyout({
       : { type: ModeType.CODE },
   )
 
+  const [dbOptions, setDbOptions] = useState<DbOptions>(defaultDbOptions)
+
+  const { root, framework, defaultPath } = useGeneratedCode({ schema, dbOptions })
+
+  const fileTree = useFileTree({
+    root,
+    cacheKey: schema.id,
+    defaultPath,
+  })
+
+  const handleViewSchema = useCallback(() => {
+    const path = fileTree.activeFile?.path
+    const model = path && framework?.modelFromPath && framework.modelFromPath(path, schema)
+    if (model) {
+      setMode({ type: ModeType.VIEW_MODEL, model })
+    } else {
+      setMode({ type: ModeType.VIEW_SCHEMA })
+    }
+  }, [fileTree, framework, schema])
+
+  const handleViewCode = useCallback(() => {
+    const path =
+      mode.type === ModeType.VIEW_MODEL &&
+      root &&
+      framework &&
+      framework.defaultModelFile &&
+      framework.defaultModelFile(mode.model, root)
+
+    if (path) fileTree.selectItem(path)
+
+    setMode({ type: ModeType.CODE })
+  }, [mode, root, framework, fileTree])
+
   const handleSave = useCallback(async () => {
     switch (mode.type) {
       case ModeType.EDIT_SCHEMA: {
@@ -90,6 +128,7 @@ export default function SchemaFlyout({
             const model = updated.models.find((m) => m.id === mode.model.id) as Model
 
             setMode({ type: ModeType.VIEW_MODEL, model })
+
             return
           }
 
@@ -106,16 +145,6 @@ export default function SchemaFlyout({
     }
   }, [schema, schemas, mode, onChange])
 
-  const [dbOptions, setDbOptions] = useState<DbOptions>(defaultDbOptions)
-
-  const { root, defaultPath } = useGeneratedCode({ schema, dbOptions })
-
-  const fileTree = useFileTree({
-    root,
-    cacheKey: schema.id,
-    defaultPath,
-  })
-
   if (!root) return null
 
   return (
@@ -123,75 +152,89 @@ export default function SchemaFlyout({
       title={root.name}
       onClickClose={onClickClose}
       controls={
-        mode.type === ModeType.CODE ? (
-          <CodeViewerControls
-            root={root}
-            activeFile={fileTree.activeFile}
-            dbOptions={dbOptions}
-            onClickEdit={() => setMode({ type: ModeType.VIEW_SCHEMA })}
-            onChangeDbOptions={setDbOptions}
-          />
-        ) : mode.type === ModeType.VIEW_SCHEMA ? (
-          <ControlsBar>
-            <ControlsAction onClick={() => setMode({ type: ModeType.CODE })}>
-              <CodeIcon title="view code" />
-            </ControlsAction>
-            <ControlsAction
-              onClick={() =>
-                setMode({ type: ModeType.EDIT_SCHEMA, schema, errors: emptySchemaErrors })
-              }
-            >
-              <PencilIcon title="edit schema" />
-            </ControlsAction>
-          </ControlsBar>
-        ) : mode.type === ModeType.VIEW_MODEL ? (
-          <ControlsBar>
-            <ControlsAction onClick={() => setMode({ type: ModeType.CODE })}>
-              <CodeIcon title="view code" />
-            </ControlsAction>
-            <ControlsAction
-              onClick={() =>
-                setMode({ type: ModeType.EDIT_MODEL, model: mode.model, errors: emptyModelErrors })
-              }
-            >
-              <PencilIcon title="edit schema" />
-            </ControlsAction>
-          </ControlsBar>
-        ) : (
-          <ControlsBar>
-            <button
-              className={classnames(
-                'px-4',
-                'rounded',
-                'border',
-                'border-blue-600',
-                'hover:bg-blue-100',
-              )}
-              onClick={() =>
-                mode.type === ModeType.EDIT_MODEL
-                  ? setMode({ type: ModeType.VIEW_MODEL, model: mode.model })
-                  : setMode({ type: ModeType.VIEW_SCHEMA })
-              }
-            >
-              Cancel
-            </button>
-            <button
-              className={classnames(
-                'ml-4',
-                'px-4',
-                'rounded',
-                'text-white',
-                'border',
-                'border-blue-600',
-                'bg-blue-500',
-                'hover:bg-blue-400',
-              )}
-              onClick={handleSave}
-            >
-              Save
-            </button>
-          </ControlsBar>
-        )
+        <div className={classnames('flex', 'p-2', 'items-center', 'justify-between', 'w-full')}>
+          <div className={classnames('flex')}>
+            {mode.type !== ModeType.EDIT_MODEL && mode.type !== ModeType.EDIT_SCHEMA && (
+              <Toggle
+                value={mode.type === ModeType.CODE}
+                options={{ code: true, schema: false }}
+                display={(v) =>
+                  v ? (
+                    <span className={classnames('flex', 'items-center', 'justify-center', 'w-16')}>
+                      <CodeIcon />
+                      <span className={classnames('ml-1')}>Code</span>
+                    </span>
+                  ) : (
+                    <span className={classnames('flex', 'items-center', 'justify-center', 'w-16')}>
+                      <CubeIcon />
+                      <span className={classnames('ml-1')}>Schema</span>
+                    </span>
+                  )
+                }
+                onChange={(v) => (v ? handleViewCode() : handleViewSchema())}
+              />
+            )}
+          </div>
+          <div className={classnames('flex')}>
+            {mode.type === ModeType.CODE ? (
+              <CodeViewerControls
+                root={root}
+                activeFile={fileTree.activeFile}
+                dbOptions={dbOptions}
+                onClickEdit={() => setMode({ type: ModeType.VIEW_SCHEMA })}
+                onChangeDbOptions={setDbOptions}
+              />
+            ) : mode.type === ModeType.VIEW_SCHEMA ? (
+              <ControlsAction
+                onClick={() =>
+                  setMode({ type: ModeType.EDIT_SCHEMA, schema, errors: emptySchemaErrors })
+                }
+              >
+                <PencilIcon title="edit schema" />
+              </ControlsAction>
+            ) : mode.type === ModeType.VIEW_MODEL ? (
+              <ControlsAction
+                onClick={() =>
+                  setMode({
+                    type: ModeType.EDIT_MODEL,
+                    model: mode.model,
+                    errors: emptyModelErrors,
+                  })
+                }
+              >
+                <PencilIcon title="edit schema" />
+              </ControlsAction>
+            ) : (
+              <>
+                <Button
+                  className={classnames('hover:bg-blue-100', 'w-20', 'text-sm')}
+                  onClick={() =>
+                    mode.type === ModeType.EDIT_MODEL
+                      ? setMode({ type: ModeType.VIEW_MODEL, model: mode.model })
+                      : setMode({ type: ModeType.VIEW_SCHEMA })
+                  }
+                >
+                  <CloseIcon size={4} />
+                  <span className={classnames('ml-1')}>Cancel</span>
+                </Button>
+                <Button
+                  className={classnames(
+                    'text-white',
+                    'bg-blue-600',
+                    'hover:bg-blue-400',
+                    'w-20',
+                    'text-sm',
+                    'ml-2',
+                  )}
+                  onClick={handleSave}
+                >
+                  <FloppyDiscIcon />
+                  <span className={classnames('ml-1')}>Save</span>
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
       }
     >
       {mode.type === ModeType.CODE && (
