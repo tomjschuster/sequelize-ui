@@ -73,7 +73,7 @@ describe('schema dataTypes', () => {
       [time, 'Time'],
       [boolean, 'Boolean'],
       [enum_, 'Enum'],
-      [{ ...enum_, values: ['foo', 'bar'] }, 'Enum (foo, bar)'],
+      [{ ...enum_, values: ['foo', 'bar'] }, 'Enum (values: foo; bar)'],
       [array, 'Array (String)'],
       [json, 'JSON'],
       [jsonB, 'JSONB'],

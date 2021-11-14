@@ -261,7 +261,7 @@ export interface CategoryAttributes {
   time?: string
   timeDefaultNow?: string
   boolean?: boolean
-  enum?: 
+  enum?: never
   //// DataTypes.ARRAY(DataTypes.STRING) not supported for SQL Server
   // array?: string[]
   //// DataTypes.JSON not supported for SQL Server
@@ -304,7 +304,7 @@ export class Category
   public time?: string
   public timeDefaultNow?: string
   public boolean?: boolean
-  public enum?: 
+  public enum?: never
   //// DataTypes.ARRAY(DataTypes.STRING) not supported for SQL Server
   // public array?: string[]
   //// DataTypes.JSON not supported for SQL Server

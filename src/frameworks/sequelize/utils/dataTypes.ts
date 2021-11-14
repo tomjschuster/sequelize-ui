@@ -35,7 +35,7 @@ export function dataTypeToTypeScript(dataType: DataType): string {
     case DataTypeType.Boolean:
       return 'boolean'
     case DataTypeType.Enum:
-      return dataType.values.map((x) => `'${x}'`).join(' | ')
+      return dataType.values.length > 0 ? dataType.values.map((x) => `'${x}'`).join(' | ') : 'never'
     case DataTypeType.Array:
       if (dataType.arrayType.type === DataTypeType.Enum) {
         return `Array<${dataTypeToTypeScript(dataType.arrayType)}>`

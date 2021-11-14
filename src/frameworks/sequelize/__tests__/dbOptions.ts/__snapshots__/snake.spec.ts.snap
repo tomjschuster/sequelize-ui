@@ -255,7 +255,7 @@ export interface CategoryAttributes {
   time?: string
   timeDefaultNow?: string
   boolean?: boolean
-  enum?: 
+  enum?: never
   array?: string[]
   json?: Json
   jsonB?: Json
@@ -294,7 +294,7 @@ export class Category
   public time?: string
   public timeDefaultNow?: string
   public boolean?: boolean
-  public enum?: 
+  public enum?: never
   public array?: string[]
   public json?: Json
   public jsonB?: Json

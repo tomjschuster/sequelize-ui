@@ -144,7 +144,9 @@ function displayDataTypeOptions(dataType: DataType): string {
       dataType.precision &&
       dataType.precision.scale &&
       `s: ${dataType.precision.scale}`,
-    dataType.type === DataTypeType.Enum && `values: ${dataType.values.join('; ')}`,
+    dataType.type === DataTypeType.Enum &&
+      dataType.values.length > 0 &&
+      `values: ${dataType.values.join('; ')}`,
     dataType.type === DataTypeType.Array && displayDataType(dataType.arrayType),
   ].filter((option): option is string => !!option)
 

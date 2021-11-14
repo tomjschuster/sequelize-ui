@@ -259,7 +259,7 @@ export interface CategoryAttributes {
   time?: string
   timeDefaultNow?: string
   boolean?: boolean
-  enum?: 
+  enum?: never
   //// DataTypes.ARRAY(DataTypes.STRING) not supported for MySQL
   // array?: string[]
   json?: Json
@@ -301,7 +301,7 @@ export class Category
   public time?: string
   public timeDefaultNow?: string
   public boolean?: boolean
-  public enum?: 
+  public enum?: never
   //// DataTypes.ARRAY(DataTypes.STRING) not supported for MySQL
   // public array?: string[]
   public json?: Json
