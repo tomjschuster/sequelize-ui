@@ -1,6 +1,6 @@
 import { parseRoute, Route } from '@src/routing/routes'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import React from 'react'
 
 export type UseRouteResult = {
   loading: boolean
@@ -10,7 +10,7 @@ export type UseRouteResult = {
 export default function useRoute(): UseRouteResult {
   const router = useRouter()
   const { pathname, query, isReady } = router
-  const route = useMemo(
+  const route = React.useMemo(
     () => (isReady ? parseRoute(pathname, query) : undefined),
     [isReady, pathname, query],
   )

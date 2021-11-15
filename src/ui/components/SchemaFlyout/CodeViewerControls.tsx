@@ -3,7 +3,7 @@ import { FileItem, FileSystemItem } from '@src/core/files'
 import { ActiveFile } from '@src/ui/components/FileTree'
 import useIsOpen from '@src/ui/hooks/useIsOpen'
 import useOnClickOutside from '@src/ui/hooks/useOnClickOutside'
-import React, { ReactElement, useRef } from 'react'
+import React from 'react'
 import DbOptionsForm from '../DbOptionsForm'
 import { ControlsAction } from '../Flyout'
 import CloseIcon from '../icons/Close'
@@ -25,13 +25,13 @@ export default function CodeViewerControls({
   activeFile,
   dbOptions,
   onChangeDbOptions,
-}: CodeViewerControlsProps): ReactElement {
+}: CodeViewerControlsProps): React.ReactElement {
   const { isOpen: isDbOptionsOpen, toggle: toggleDbOptions, close: closeDbOptions } = useIsOpen()
 
   const handleClickDownload = () => download(root)
   const handleClickCopy = async () => activeFile && copyFile(activeFile.file)
 
-  const dbOptionsRef = useRef(null)
+  const dbOptionsRef = React.useRef(null)
   useOnClickOutside(dbOptionsRef, closeDbOptions)
 
   return (

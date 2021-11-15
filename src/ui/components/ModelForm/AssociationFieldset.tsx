@@ -18,7 +18,7 @@ import Select from '@src/ui/components/form/Select'
 import TextInput from '@src/ui/components/form/TextInput'
 import { classnames } from '@src/ui/styles/classnames'
 import { plural, singular, snakeCase } from '@src/utils/string'
-import React, { useCallback, useMemo } from 'react'
+import React from 'react'
 import TrashIcon from '../icons/Trash'
 
 type AssociationFieldsetProps = {
@@ -43,12 +43,12 @@ function AssociationFieldset({
     [schema.models],
   )
 
-  const targetModel: Model = useMemo(
+  const targetModel: Model = React.useMemo(
     () => schema.models.find((m) => m.id === association.targetModelId) as Model,
     [schema.models, association.targetModelId],
   )
 
-  const throughModel: Model | undefined = useMemo(
+  const throughModel: Model | undefined = React.useMemo(
     () =>
       schema.models.find(
         (m) =>
@@ -56,25 +56,25 @@ function AssociationFieldset({
           isThroughModel(association.type.through) &&
           m.id === association.type.through.modelId,
       ),
-    [schema.models, association.type],
+    [schema.models, association],
   )
 
-  const handleChange = useCallback(
+  const handleChange = React.useCallback(
     (changes: Partial<Association>): void => {
       onChange(association.id, changes)
     },
     [association.id, onChange],
   )
 
-  const handleChangeManyToMany = useCallback(
+  const handleChangeManyToMany = React.useCallback(
     (changes: Partial<ManyToManyAssociation>) => {
       if (!isManytoMany(association)) return
       handleChange({ type: { ...association.type, ...changes } })
     },
-    [association.type, handleChange],
+    [association, handleChange],
   )
 
-  const handleChangeType = useCallback(
+  const handleChangeType = React.useCallback(
     (typeType: AssociationTypeType) => {
       if (typeType === AssociationTypeType.ManyToMany) {
         handleChange({
@@ -94,22 +94,22 @@ function AssociationFieldset({
     [model.name, targetModel.name, handleChange],
   )
 
-  const handleChangeTarget = useCallback(
+  const handleChangeTarget = React.useCallback(
     (model: Model) => handleChange({ targetModelId: model.id }),
     [handleChange],
   )
 
-  const handleChangeAlias = useCallback(
+  const handleChangeAlias = React.useCallback(
     (alias?: string) => handleChange({ alias: alias || undefined }),
     [handleChange],
   )
 
-  const handleChangeForeignKey = useCallback(
+  const handleChangeForeignKey = React.useCallback(
     (foreignKey?: string) => handleChange({ foreignKey: foreignKey || undefined }),
     [handleChange],
   )
 
-  const handleChangeThroughType = useCallback(
+  const handleChangeThroughType = React.useCallback(
     (type: ThroughType) => {
       if (!isManytoMany(association)) return
 
@@ -127,10 +127,10 @@ function AssociationFieldset({
         handleChangeManyToMany({ through: { type, modelId: throughModel.id } })
       }
     },
-    [association.type, model.name, targetModel, schema.models, handleChangeManyToMany],
+    [association, model.name, targetModel, schema.models, handleChangeManyToMany],
   )
 
-  const handleChangeThroughModel = useCallback(
+  const handleChangeThroughModel = React.useCallback(
     (model: Model) => {
       handleChangeManyToMany({
         through: { type: ThroughType.ThroughModel, modelId: model.id },
@@ -139,7 +139,7 @@ function AssociationFieldset({
     [handleChangeManyToMany],
   )
 
-  const handleChangeThroughTable = useCallback(
+  const handleChangeThroughTable = React.useCallback(
     (table?: string) =>
       handleChangeManyToMany({
         through: { type: ThroughType.ThroughTable, table: table || '' },
@@ -147,12 +147,12 @@ function AssociationFieldset({
     [handleChangeManyToMany],
   )
 
-  const handleChangeTargetForeignKey = useCallback(
+  const handleChangeTargetForeignKey = React.useCallback(
     (targetFk?: string) => handleChangeManyToMany({ targetFk: targetFk || undefined }),
     [handleChangeManyToMany],
   )
 
-  const handleDelete = useCallback(() => onDelete(association.id), [onDelete, association.id])
+  const handleDelete = React.useCallback(() => onDelete(association.id), [onDelete, association.id])
 
   return (
     <fieldset

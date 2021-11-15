@@ -15,9 +15,9 @@ import Checkbox from '@src/ui/components/form/Checkbox'
 import IntegerInput from '@src/ui/components/form/IntegerInput'
 import Select from '@src/ui/components/form/Select'
 import TextInput from '@src/ui/components/form/TextInput'
-import { classnames } from '@src/ui/styles/classnames'
-import React, { useCallback } from 'react'
 import TrashIcon from '@src/ui/components/icons/Trash'
+import { classnames } from '@src/ui/styles/classnames'
+import React from 'react'
 
 type FieldFieldsetProps = {
   field: Field
@@ -26,55 +26,55 @@ type FieldFieldsetProps = {
   onDelete: (id: Field['id']) => void
 }
 function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps) {
-  const handleChange = useCallback(
+  const handleChange = React.useCallback(
     (change: Partial<Field>): void => onChange(field.id, change),
     [field.id, onChange],
   )
 
-  const handleChangeName = useCallback(
+  const handleChangeName = React.useCallback(
     (name?: string) => handleChange({ name: name || '' }),
     [handleChange],
   )
 
-  const handleChangeDataType = useCallback(
+  const handleChangeDataType = React.useCallback(
     (type: DataTypeType) => handleChange({ type: dataTypeFromDataTypeType(type) }),
     [handleChange],
   )
 
-  const handleChangePrimaryKey = useCallback(
+  const handleChangePrimaryKey = React.useCallback(
     (primaryKey: boolean) => handleChange({ primaryKey }),
     [handleChange],
   )
 
-  const handleChangeRequired = useCallback(
+  const handleChangeRequired = React.useCallback(
     (required: boolean) => handleChange({ required }),
     [handleChange],
   )
 
-  const handleChangeUnique = useCallback(
+  const handleChangeUnique = React.useCallback(
     (unique: boolean) => handleChange({ unique }),
     [handleChange],
   )
 
-  const handleChangeUnsigned = useCallback(
+  const handleChangeUnsigned = React.useCallback(
     (unsigned: boolean) =>
       isNumberType(field.type) && handleChange({ type: { ...field.type, unsigned } }),
     [field.type, handleChange],
   )
 
-  const handleChangeAutoincrement = useCallback(
+  const handleChangeAutoincrement = React.useCallback(
     (autoincrement: boolean) =>
       isIntegerType(field.type) && handleChange({ type: { ...field.type, autoincrement } }),
     [field.type, handleChange],
   )
 
-  const handleChangeStringLength = useCallback(
+  const handleChangeStringLength = React.useCallback(
     (length?: number) =>
       isStringType(field.type) && handleChange({ type: { ...field.type, length } }),
     [field.type, handleChange],
   )
 
-  const handleChangePrecision = useCallback(
+  const handleChangePrecision = React.useCallback(
     (precision?: number) => {
       if (!isNumericType(field.type)) return
       if (precision === undefined) return { ...field.type, precision: undefined }
@@ -85,7 +85,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
     [field.type, handleChange],
   )
 
-  const handleChangeScale = useCallback(
+  const handleChangeScale = React.useCallback(
     (scale?: number) => {
       if (!isNumericType(field.type)) return
       if (field.type.precision === undefined) return
@@ -94,20 +94,20 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
     [field.type, handleChange],
   )
 
-  const handleChangeUuidDefault = useCallback(
+  const handleChangeUuidDefault = React.useCallback(
     (defaultVersion: UuidType | undefined) =>
       field.type.type === DataTypeType.Uuid &&
       handleChange({ type: { ...field.type, defaultVersion } }),
     [field.type, handleChange],
   )
 
-  const handleChangeDefaultNow = useCallback(
+  const handleChangeDefaultNow = React.useCallback(
     (defaultNow: boolean) =>
       isDateTimeType(field.type) && handleChange({ type: { ...field.type, defaultNow } }),
     [field.type, handleChange],
   )
 
-  const handleDelete = useCallback(() => onDelete(field.id), [onDelete, field.id])
+  const handleDelete = React.useCallback(() => onDelete(field.id), [onDelete, field.id])
 
   return (
     <fieldset

@@ -16,6 +16,6 @@ export interface Framework {
   generate(args: GenerateArgs): DirectoryItem
   projectType(): ProjectType
   defaultFile?(root: DirectoryItem): string | undefined
-  defaultModelFile?(model: Model, root: DirectoryItem): string | undefined
-  modelFromPath?(path: string, schema: Schema): Model | undefined
+  defaultModelFile(model: Model, root: DirectoryItem): string | undefined
+  modelFromPath(path: string, schema: Schema): Model | undefined
 }

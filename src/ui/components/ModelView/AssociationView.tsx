@@ -9,7 +9,7 @@ import {
 } from '@src/core/schema'
 import { classnames } from '@src/ui/styles/classnames'
 import { noCase, titleCase } from '@src/utils/string'
-import React, { useMemo } from 'react'
+import React from 'react'
 
 type AssociationViewProps = {
   association: Association
@@ -22,7 +22,7 @@ function AssociationView({
   schema,
   onClickModel,
 }: AssociationViewProps): React.ReactElement {
-  const targetModel: Model = useMemo(
+  const targetModel: Model = React.useMemo(
     () => schema.models.find((m) => m.id === association.targetModelId) as Model,
     [schema.models, association.targetModelId],
   )

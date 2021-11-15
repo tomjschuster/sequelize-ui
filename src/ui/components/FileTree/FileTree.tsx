@@ -1,6 +1,6 @@
 import { fileLanguage, FileSystemItem, isDirectory, isFile, itemName } from '@src/core/files'
 import { classnames } from '@src/ui/styles/classnames'
-import React, { useEffect } from 'react'
+import React from 'react'
 import ChevronIcon, { ChevronDirection } from '../icons/Chevron'
 import LanguageIcon from '../icons/Language'
 import { FolderState } from './types'
@@ -47,7 +47,7 @@ function FileTreeItem({
   const active = activePath === path
   const handleClick = () => onSelect(path)
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (activePath) {
       const li = document.getElementById(pathId(activePath))
       if (li) li.scrollIntoView({ block: 'center', behavior: 'auto' })

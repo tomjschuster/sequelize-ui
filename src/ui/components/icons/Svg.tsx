@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react'
+import React from 'react'
 
 export type SvgProps = {
   title?: string
@@ -13,7 +13,7 @@ export default function Svg({
   stroke = 'currentColor',
   className,
   children,
-}: PropsWithChildren<SvgProps>): React.ReactElement {
+}: React.PropsWithChildren<SvgProps>): React.ReactElement {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

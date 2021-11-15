@@ -3,9 +3,15 @@ import React from 'react'
 import { lookupOptionValue, optionsToList } from '../shared/options'
 import { CommonOptionsProps } from '../shared/types'
 
-type ToggleProps<T> = CommonOptionsProps<T>
+type ToggleProps<T> = CommonOptionsProps<T> & { disabled?: (v: T) => boolean }
 
-function Toggle<T>({ value, options, display, onChange }: ToggleProps<T>): React.ReactElement {
+function Toggle<T>({
+  value,
+  options,
+  display,
+  disabled,
+  onChange,
+}: ToggleProps<T>): React.ReactElement {
   const handleChange = (key: string) => () => {
     const option = lookupOptionValue(options, key)
     if (option !== undefined) onChange(option)
@@ -40,6 +46,7 @@ function Toggle<T>({ value, options, display, onChange }: ToggleProps<T>): React
             )}
             type="button"
             aria-pressed={selected ? 'true' : 'false'}
+            disabled={!!disabled && disabled(v)}
             value={k}
             onClick={handleChange(k)}
           >

@@ -13,6 +13,15 @@ const MockFramework: Framework = {
   projectType() {
     return ProjectType.Npm
   },
+  defaultFile() {
+    return undefined
+  },
+  defaultModelFile() {
+    return undefined
+  },
+  modelFromPath() {
+    return undefined
+  },
 }
 
 describe('framework', () => {

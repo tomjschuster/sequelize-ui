@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import React from 'react'
 
 type UseIsOpenResult = {
   isOpen: boolean
@@ -8,10 +8,10 @@ type UseIsOpenResult = {
 }
 
 export default function useIsOpen(initialState = false): UseIsOpenResult {
-  const [isOpen, setIsOpen] = useState(initialState)
-  const open = useCallback(() => setIsOpen(true), [])
-  const close = useCallback(() => setIsOpen(false), [])
-  const toggle = useCallback(() => setIsOpen((x) => !x), [])
+  const [isOpen, setIsOpen] = React.useState(initialState)
+  const open = React.useCallback(() => setIsOpen(true), [])
+  const close = React.useCallback(() => setIsOpen(false), [])
+  const toggle = React.useCallback(() => setIsOpen((x) => !x), [])
 
   return { isOpen, open, close, toggle }
 }

@@ -1,7 +1,7 @@
 import { displayDataType, Field } from '@src/core/schema'
 import { classnames } from '@src/ui/styles/classnames'
-import React from 'react'
 import { noCase } from '@src/utils/string'
+import React from 'react'
 
 type FieldViewProps = {
   field: Field

@@ -22,7 +22,7 @@ export const codeCell = classnames(
   'lg:col-span-8',
 )
 
-export const closeDbForm = classnames('py-2', 'px-3', 'absolute', 'right-0', 'top-0')
+export const closeDbForm = classnames('p-0.5', 'absolute', 'right-1', 'top-1')
 
 export const dbFormOverlay = classnames(
   'absolute',
@@ -31,7 +31,7 @@ export const dbFormOverlay = classnames(
   'right-0',
   'bg-gray-50',
   'p-4',
-  'pt-8',
+  'pt-10',
   'border',
   'border-gray-900',
   'shadow-2xl',

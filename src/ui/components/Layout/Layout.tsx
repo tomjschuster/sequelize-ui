@@ -1,12 +1,11 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import React, { ReactNode } from 'react'
+import React from 'react'
 import * as styles from './styles'
 
-type Props = {
+type Props = React.PropsWithChildren<{
   title: string
-  children?: ReactNode
-}
+}>
 
 function Layout({ children, title }: Props): React.ReactElement {
   return (
