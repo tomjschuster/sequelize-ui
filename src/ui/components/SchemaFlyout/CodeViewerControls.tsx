@@ -16,7 +16,6 @@ type CodeViewerControlsProps = {
   root: FileSystemItem
   activeFile: ActiveFile | undefined
   dbOptions: DbOptions
-  onClickEdit?: () => void
   onChangeDbOptions: (dbOptions: DbOptions) => void
 }
 

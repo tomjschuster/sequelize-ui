@@ -1,8 +1,5 @@
 import { DbOptions } from '@src/core/database'
 import { DirectoryItem } from '@src/core/files'
-import { Framework } from '@src/core/framework'
-import { Schema } from '@src/core/schema'
-import { emptyModelErrors, emptySchemaErrors } from '@src/core/validation/schema'
 import { ControlsAction } from '@src/ui/components/Flyout'
 import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
@@ -13,54 +10,54 @@ import FloppyDiscIcon from '../icons/FloppyDisc'
 import PencilIcon from '../icons/Pencil'
 import CodeViewerControls from './CodeViewerControls'
 import SchemaCodeToggle from './SchemaCodeToggle'
-import { SchemaFlyoutMode, SchemaFlyoutModeType } from './types'
+import { SchemaFlyoutState, SchemaFlyoutStateType } from './types'
 
 type SchemaFlyoutControlsProps = {
-  mode: SchemaFlyoutMode
-  schema: Schema
+  state: SchemaFlyoutState
+  isEditing: boolean
   root: DirectoryItem
   fileTree: UseFileTreeResult
-  framework: Framework
   dbOptions: DbOptions
+  onSelectCode: () => void
+  onSelectSchema: () => void
   onChangeDbOptions: (options: DbOptions) => void
-  onChangeMode: (mode: SchemaFlyoutMode) => void
+  onEdit: () => void
+  onCancel: () => void
   onSave: () => void
 }
 
 export default function SchemaFlyoutControls({
-  mode,
-  schema,
+  state,
+  isEditing,
   root,
   fileTree,
-  framework,
   dbOptions,
+  onSelectCode,
+  onSelectSchema,
   onChangeDbOptions,
-  onChangeMode,
+  onEdit,
+  onCancel,
   onSave,
 }: SchemaFlyoutControlsProps): React.ReactElement | null {
-  if (!root || !framework) return null
-
   return (
     <div className={classnames('flex', 'p-2', 'items-center', 'justify-between', 'w-full')}>
       <div className={classnames('flex')}>
         <SchemaCodeToggle
-          mode={mode}
-          schema={schema}
-          framework={framework}
-          fileTree={fileTree}
-          root={root}
-          onChangeMode={onChangeMode}
+          code={state.type === SchemaFlyoutStateType.CODE}
+          disabled={isEditing}
+          onSelectCode={onSelectCode}
+          onSelectSchema={onSelectSchema}
         />
       </div>
       <div className={classnames('flex')}>
         <SchemaFlyoutControlsActions
-          mode={mode}
-          schema={schema}
+          state={state}
           root={root}
           dbOptions={dbOptions}
           fileTree={fileTree}
           onChangeDbOptions={onChangeDbOptions}
-          onChangeMode={onChangeMode}
+          onEdit={onEdit}
+          onCancel={onCancel}
           onSave={onSave}
         />
       </div>
@@ -69,65 +66,48 @@ export default function SchemaFlyoutControls({
 }
 
 type SchemaFlyoutControlsActionsProps = {
-  mode: SchemaFlyoutMode
-  schema: Schema
+  state: SchemaFlyoutState
   root: DirectoryItem
   fileTree: UseFileTreeResult
   dbOptions: DbOptions
   onChangeDbOptions: (options: DbOptions) => void
-  onChangeMode: (mode: SchemaFlyoutMode) => void
+  onEdit: () => void
+  onCancel: () => void
   onSave: () => void
 }
 
 function SchemaFlyoutControlsActions({
-  mode,
-  schema,
+  state,
   root,
   fileTree,
   dbOptions,
   onChangeDbOptions,
-  onChangeMode,
+  onEdit,
+  onCancel,
   onSave,
 }: SchemaFlyoutControlsActionsProps): React.ReactElement | null {
-  if (mode.type === SchemaFlyoutModeType.CODE) {
+  if (state.type === SchemaFlyoutStateType.CODE) {
     return (
       <CodeViewerControls
         root={root}
         activeFile={fileTree.activeFile}
         dbOptions={dbOptions}
-        onClickEdit={() => onChangeMode({ type: SchemaFlyoutModeType.VIEW_SCHEMA })}
         onChangeDbOptions={onChangeDbOptions}
       />
     )
   }
 
-  if (mode.type === SchemaFlyoutModeType.VIEW_SCHEMA) {
+  if (state.type === SchemaFlyoutStateType.VIEW_SCHEMA) {
     return (
-      <ControlsAction
-        onClick={() =>
-          onChangeMode({
-            type: SchemaFlyoutModeType.EDIT_SCHEMA,
-            schema,
-            errors: emptySchemaErrors,
-          })
-        }
-      >
+      <ControlsAction onClick={onEdit}>
         <PencilIcon title="edit schema" />
       </ControlsAction>
     )
   }
 
-  if (mode.type === SchemaFlyoutModeType.VIEW_MODEL) {
+  if (state.type === SchemaFlyoutStateType.VIEW_MODEL) {
     return (
-      <ControlsAction
-        onClick={() =>
-          onChangeMode({
-            type: SchemaFlyoutModeType.EDIT_MODEL,
-            model: mode.model,
-            errors: emptyModelErrors,
-          })
-        }
-      >
+      <ControlsAction onClick={onEdit}>
         <PencilIcon title="edit schema" />
       </ControlsAction>
     )
@@ -135,14 +115,7 @@ function SchemaFlyoutControlsActions({
 
   return (
     <>
-      <Button
-        className={classnames('hover:bg-blue-100', 'w-20', 'text-sm')}
-        onClick={() =>
-          mode.type === SchemaFlyoutModeType.EDIT_MODEL
-            ? onChangeMode({ type: SchemaFlyoutModeType.VIEW_MODEL, model: mode.model })
-            : onChangeMode({ type: SchemaFlyoutModeType.VIEW_SCHEMA })
-        }
-      >
+      <Button className={classnames('hover:bg-blue-100', 'w-20', 'text-sm')} onClick={onCancel}>
         <CloseIcon size={4} />
         <span className={classnames('ml-1')}>Cancel</span>
       </Button>

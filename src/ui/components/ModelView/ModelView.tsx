@@ -24,22 +24,20 @@ const panel = classnames('border', 'border-gray-400', 'rounded', 'bg-white')
 type ModelViewProps = {
   schema: Schema
   model: Model
-  onClickSchema: () => void
-  onClickModel: (model: Model) => void
+  onViewSchema: (model?: Model) => void
 }
 
 export default function ModelView({
   schema,
   model,
-  onClickSchema,
-  onClickModel,
+  onViewSchema,
 }: ModelViewProps): React.ReactElement {
   return (
     <div className={classnames(section)}>
       <div className={classnames('py-1')}>
         <button
           className={classnames('font-semibold', 'text-sm', 'hover:underline', '-ml-4')}
-          onClick={onClickSchema}
+          onClick={() => onViewSchema()}
         >
           ← Back to schema
         </button>
@@ -68,7 +66,7 @@ export default function ModelView({
             <AssociationView
               association={association}
               schema={schema}
-              onClickModel={onClickModel}
+              onClickModel={onViewSchema}
             />
           </div>
         ))}
