@@ -1,9 +1,8 @@
 import { DbOptions } from '@src/core/database'
-import { DirectoryItem } from '@src/core/files'
+import { DirectoryItem, FileTreeState } from '@src/core/files'
 import { ControlsAction } from '@src/ui/components/Flyout'
 import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
-import { UseFileTreeResult } from '../FileTree'
 import Button from '../form/Button'
 import CloseIcon from '../icons/Close'
 import FloppyDiscIcon from '../icons/FloppyDisc'
@@ -16,7 +15,7 @@ type SchemaFlyoutControlsProps = {
   state: SchemaFlyoutState
   isEditing: boolean
   root: DirectoryItem
-  fileTree: UseFileTreeResult
+  fileTree: FileTreeState
   dbOptions: DbOptions
   onSelectCode: () => void
   onSelectSchema: () => void
@@ -68,7 +67,7 @@ export default function SchemaFlyoutControls({
 type SchemaFlyoutControlsActionsProps = {
   state: SchemaFlyoutState
   root: DirectoryItem
-  fileTree: UseFileTreeResult
+  fileTree: FileTreeState
   dbOptions: DbOptions
   onChangeDbOptions: (options: DbOptions) => void
   onEdit: () => void

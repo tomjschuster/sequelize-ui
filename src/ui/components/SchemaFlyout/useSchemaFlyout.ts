@@ -1,5 +1,5 @@
 import { DbOptions } from '@src/core/database'
-import { DirectoryItem } from '@src/core/files'
+import { DirectoryItem, FileTreeState } from '@src/core/files'
 import { Model, Schema } from '@src/core/schema'
 import {
   emptyModelErrors,
@@ -12,7 +12,7 @@ import {
 import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import equal from 'fast-deep-equal/es6'
 import React from 'react'
-import { useFileTree, UseFileTreeResult } from '../FileTree'
+import { useFileTree } from '../FileTree'
 import { SchemaFlyoutState, SchemaFlyoutStateType } from './types'
 
 type UseSchemaFlyoutArgs = {
@@ -27,7 +27,8 @@ type UseSchemaFlyoutResult = {
   state: SchemaFlyoutState
   isEditing: boolean
   root: DirectoryItem | undefined
-  fileTree: UseFileTreeResult
+  fileTree: FileTreeState
+  selectItem: (path: string) => void
   edit: () => void
   viewCode: () => void
   viewSchema: (model?: Model) => void
@@ -51,12 +52,7 @@ export function useSchemaFlyout({
   )
 
   const { root, framework, defaultPath } = useGeneratedCode({ schema, dbOptions })
-
-  const fileTree = useFileTree({
-    root,
-    cacheKey: schema.id,
-    defaultPath,
-  })
+  const { fileTree, selectItem } = useFileTree({ root, key: schema.id, defaultPath })
 
   const edit = React.useCallback(() => {
     const nextState: SchemaFlyoutState =
@@ -73,7 +69,7 @@ export function useSchemaFlyout({
       root &&
       framework?.defaultModelFile(state.model, root)
 
-    if (path) fileTree.selectItem(path)
+    if (path) selectItem(path)
 
     setState({ type: SchemaFlyoutStateType.CODE })
   }, [state, root, framework, fileTree])
@@ -185,6 +181,7 @@ export function useSchemaFlyout({
       state.type === SchemaFlyoutStateType.EDIT_SCHEMA,
     root,
     fileTree,
+    selectItem,
     edit,
     updateModel,
     updateSchema,

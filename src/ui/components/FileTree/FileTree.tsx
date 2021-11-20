@@ -1,9 +1,15 @@
-import { fileLanguage, FileSystemItem, isDirectory, isFile, itemName } from '@src/core/files'
+import {
+  fileLanguage,
+  FileSystemItem,
+  FolderState,
+  isDirectory,
+  isFile,
+  itemName,
+} from '@src/core/files'
 import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
 import ChevronIcon, { ChevronDirection } from '../icons/Chevron'
 import LanguageIcon from '../icons/Language'
-import { FolderState } from './types'
 
 type FileTreeProps = {
   root: FileSystemItem

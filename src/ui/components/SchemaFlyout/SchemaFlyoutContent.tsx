@@ -1,6 +1,6 @@
 import { DbOptions } from '@src/core/database'
+import { FileTreeState } from '@src/core/files'
 import { Model, Schema } from '@src/core/schema'
-import { UseFileTreeResult } from '@src/ui/components/FileTree'
 import React from 'react'
 import CodeExplorer from '../CodeExplorer/CodeExplorer'
 import ModelForm from '../ModelForm'
@@ -13,7 +13,8 @@ type SchemaFlyoutContentProps = {
   schema: Schema
   dbOptions: DbOptions
   state: SchemaFlyoutState
-  fileTree: UseFileTreeResult
+  fileTree: FileTreeState
+  onSelectFileSystemItem: (path: string) => void
   onViewSchema: (model?: Model) => void
   updateSchema: (schema: Schema) => void
   updateModel: (model: Model) => void
@@ -23,13 +24,21 @@ export default function SchemaFlyoutContent({
   dbOptions,
   state,
   fileTree,
+  onSelectFileSystemItem,
   onViewSchema,
   updateSchema,
   updateModel,
 }: SchemaFlyoutContentProps): React.ReactElement | null {
   switch (state.type) {
     case SchemaFlyoutStateType.CODE:
-      return <CodeExplorer schema={schema} dbOptions={dbOptions} fileTree={fileTree} />
+      return (
+        <CodeExplorer
+          schema={schema}
+          dbOptions={dbOptions}
+          fileTree={fileTree}
+          onSelectFileSystemItem={onSelectFileSystemItem}
+        />
+      )
     case SchemaFlyoutStateType.EDIT_SCHEMA:
       return <SchemaForm schema={state.schema} errors={state.errors} onChange={updateSchema} />
     case SchemaFlyoutStateType.VIEW_SCHEMA:

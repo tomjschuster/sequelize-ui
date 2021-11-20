@@ -1,8 +1,8 @@
 import { DbOptions } from '@src/core/database'
-import { fileLanguage } from '@src/core/files'
+import { fileLanguage, FileTreeState } from '@src/core/files'
 import { Schema } from '@src/core/schema'
 import Code from '@src/ui/components/Code'
-import FileTree, { UseFileTreeResult } from '@src/ui/components/FileTree'
+import FileTree from '@src/ui/components/FileTree'
 import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import React from 'react'
 import * as Styles from './styles'
@@ -10,15 +10,16 @@ import * as Styles from './styles'
 export type CodeExplorerProps = {
   schema: Schema
   dbOptions: DbOptions
-  fileTree: UseFileTreeResult
+  fileTree: FileTreeState
+  onSelectFileSystemItem: (path: string) => void
 }
 export default function CodeExplorer({
   schema,
   dbOptions,
   fileTree,
+  onSelectFileSystemItem,
 }: CodeExplorerProps): React.ReactElement | null {
   const { root } = useGeneratedCode({ schema, dbOptions })
-  const { activeFile, folderState, selectItem } = fileTree
 
   if (!root) return null
 
@@ -27,15 +28,15 @@ export default function CodeExplorer({
       <div className={Styles.fileTreeCell}>
         <FileTree
           root={root}
-          onSelect={selectItem}
-          activePath={activeFile?.path}
-          folderState={folderState}
+          onSelect={onSelectFileSystemItem}
+          activePath={fileTree.activeFile?.path}
+          folderState={fileTree.folderState}
         />
       </div>
       <div className={Styles.codeCell}>
         <Code
-          content={activeFile?.file.content || ''}
-          language={activeFile && fileLanguage(activeFile.file)}
+          content={fileTree.activeFile?.file.content || ''}
+          language={fileTree.activeFile && fileLanguage(fileTree.activeFile.file)}
         />
       </div>
     </div>

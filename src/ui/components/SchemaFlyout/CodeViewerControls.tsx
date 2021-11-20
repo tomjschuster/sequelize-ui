@@ -1,6 +1,5 @@
 import { DbOptions } from '@src/core/database'
-import { FileItem, FileSystemItem } from '@src/core/files'
-import { ActiveFile } from '@src/ui/components/FileTree'
+import { ActiveFile, FileItem, FileSystemItem } from '@src/core/files'
 import useIsOpen from '@src/ui/hooks/useIsOpen'
 import useOnClickOutside from '@src/ui/hooks/useOnClickOutside'
 import React from 'react'

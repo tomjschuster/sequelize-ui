@@ -11,7 +11,6 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Refactor FileTree type
 - [ ] Refactor empty id logic and empty model id logic
 - [ ] Enum form, validation
 - [ ] Form error styling

@@ -51,7 +51,6 @@ function SchemaForm({ schema, errors, onChange }: SchemaFormProps): React.ReactE
   const handleClickAddModel = React.useCallback(() => setNewModelName(''), [])
 
   const handleClickSubmitNewModel = () => {
-    console.log({ newModelName })
     if (newModelName) {
       onChange({ ...schema, models: [...schema.models, { ...emptyModel(), name: newModelName }] })
       setNewModelName(undefined)

@@ -11,7 +11,7 @@ export const fileTreeCell = classnames(
   'row-span-3',
   'col-span-12',
   'lg:row-span-12',
-  'lg:col-span-4',
+  'lg:col-span-3',
 )
 
 export const codeCell = classnames(
@@ -19,5 +19,5 @@ export const codeCell = classnames(
   'row-span-9',
   'col-span-12',
   'lg:row-span-12',
-  'lg:col-span-8',
+  'lg:col-span-9',
 )

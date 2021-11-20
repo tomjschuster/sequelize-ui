@@ -25,6 +25,7 @@ export default function SchemaFlyout({
     isEditing,
     root,
     fileTree,
+    selectItem,
     viewCode,
     viewSchema,
     edit,
@@ -61,6 +62,7 @@ export default function SchemaFlyout({
         schema={schema}
         dbOptions={dbOptions}
         fileTree={fileTree}
+        onSelectFileSystemItem={selectItem}
         updateSchema={updateSchema}
         updateModel={updateModel}
         onViewSchema={viewSchema}
