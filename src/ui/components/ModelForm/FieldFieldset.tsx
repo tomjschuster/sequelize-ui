@@ -18,6 +18,7 @@ import TextInput from '@src/ui/components/form/TextInput'
 import TrashIcon from '@src/ui/components/icons/Trash'
 import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
+import TextArea from '../form/TextArea'
 
 type FieldFieldsetProps = {
   field: Field
@@ -26,10 +27,28 @@ type FieldFieldsetProps = {
   onDelete: (id: Field['id']) => void
 }
 function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps) {
+  const [enumInputValue, setEnumInputValue] = React.useState<string | undefined>(() =>
+    field.type.type === DataTypeType.Enum ? field.type.values.join('\n') : undefined,
+  )
+
   const handleChange = React.useCallback(
     (change: Partial<Field>): void => onChange(field.id, change),
     [field.id, onChange],
   )
+
+  const handleBlurEnumInput = React.useCallback(() => {
+    if (field.type.type === DataTypeType.Enum) {
+      const values =
+        enumInputValue
+          // clear leading/tracing non-word characters and any non-(word|space|-|;|,)
+          ?.replaceAll(/^\W+|[^\w\n -,;]|\W+$/g, '')
+          // split on , ; \n
+          .split(/[ ]*,[ ]*|[ ]*;[ ]*|[ ]*\n[ ]*/) || []
+
+      handleChange({ type: { ...field.type, values } })
+      setEnumInputValue(values.join('\n'))
+    }
+  }, [field.type, enumInputValue, handleChange])
 
   const handleChangeName = React.useCallback(
     (name?: string) => handleChange({ name: name || '' }),
@@ -116,7 +135,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         'pt-8',
         'grid',
         'grid-cols-12',
-        'gap-y-2',
+        'gap-y-0',
         'gap-x-4',
         'relative',
       )}
@@ -140,7 +159,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
           onChange={handleChangeDataType}
         />
       </div>
-      <div className={classnames('col-span-6', 'flex')}>
+      <div className={classnames('col-span-6', 'flex', 'row-span-4')}>
         {isStringType(field.type) && (
           <IntegerInput
             id={`field-string-length-${field.id}`}
@@ -168,6 +187,16 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
               />
             )}
           </div>
+        )}
+        {field.type.type === DataTypeType.Enum && (
+          <TextArea
+            id={`field-evnum-values-${field.id}`}
+            label="Enum values"
+            value={enumInputValue}
+            rows={4}
+            onChange={setEnumInputValue}
+            onBlur={handleBlurEnumInput}
+          />
         )}
 
         {isDateTimeType(field.type) && (
@@ -216,7 +245,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
           </div>
         </>
       )}
-      <div className={classnames('col-span-12', 'flex', 'flex-col')}>
+      <div className={classnames('col-span-6', 'flex', 'flex-col')}>
         <Checkbox
           id={`field-pk-${field.id}`}
           label="Primary key"

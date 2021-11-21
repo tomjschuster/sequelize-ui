@@ -16,7 +16,15 @@ function Checkbox({ id, label, checked, onChange }: CheckboxProps): React.ReactE
 
   return (
     <label className={classnames('flex', 'items-center')} htmlFor={id}>
-      <input id={id} type="checkbox" checked={checked} onChange={handleChange} />
+      <input
+        id={id}
+        type="checkbox"
+        checked={checked}
+        onChange={handleChange}
+        autoComplete="off"
+        data-lpignore="true"
+        data-form-text="other"
+      />
       <span className={classnames('pl-2', 'text-sm')}>{label}</span>
     </label>
   )

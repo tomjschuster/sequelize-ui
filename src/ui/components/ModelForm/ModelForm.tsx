@@ -100,7 +100,13 @@ export default function ModelForm({
   )
 
   return (
-    <form onSubmit={(evt) => evt.preventDefault()} className={classnames('p-6', 'pt-8')}>
+    <form
+      onSubmit={(evt) => evt.preventDefault()}
+      autoComplete="off"
+      data-lpignore="true"
+      data-form-type="other"
+      className={classnames('p-6', 'pt-8')}
+    >
       <div className={classnames(section)}>
         <h2 className={classnames(title)}>Model</h2>
         <ModelFieldset name={model.name} onChange={handleChangeModel} errors={errors} />

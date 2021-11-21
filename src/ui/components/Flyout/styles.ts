@@ -47,4 +47,11 @@ export const contentContainer = classnames('flex-auto', 'overflow-y-scroll')
 
 export const actionsContainer = classnames('text-sm', 'h-10', 'flex', 'w-full')
 
-export const actionButton = classnames('flex', 'items-center', 'py-1', 'px-2', 'hover:bg-gray-200')
+export const actionButton = classnames(
+  'flex',
+  'items-center',
+  'py-1',
+  'px-1',
+  'md:px-2',
+  'hover:bg-gray-200',
+)

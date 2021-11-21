@@ -68,3 +68,7 @@ export function emptyAssociation(
     targetModelId,
   }
 }
+
+export function isDemoSchema(schema: Schema): boolean {
+  return schema.id === ''
+}

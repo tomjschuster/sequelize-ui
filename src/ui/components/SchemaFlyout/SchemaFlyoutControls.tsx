@@ -41,12 +41,14 @@ export default function SchemaFlyoutControls({
   return (
     <div className={classnames('flex', 'p-2', 'items-center', 'justify-between', 'w-full')}>
       <div className={classnames('flex')}>
-        <SchemaCodeToggle
-          code={state.type === SchemaFlyoutStateType.CODE}
-          disabled={isEditing}
-          onSelectCode={onSelectCode}
-          onSelectSchema={onSelectSchema}
-        />
+        {!isEditing && (
+          <SchemaCodeToggle
+            code={state.type === SchemaFlyoutStateType.CODE}
+            disabled={isEditing}
+            onSelectCode={onSelectCode}
+            onSelectSchema={onSelectSchema}
+          />
+        )}
       </div>
       <div className={classnames('flex')}>
         <SchemaFlyoutControlsActions
@@ -91,6 +93,7 @@ function SchemaFlyoutControlsActions({
         root={root}
         activeFile={fileTree.activeFile}
         dbOptions={dbOptions}
+        onClickEdit={onEdit}
         onChangeDbOptions={onChangeDbOptions}
       />
     )
@@ -114,23 +117,23 @@ function SchemaFlyoutControlsActions({
 
   return (
     <>
-      <Button className={classnames('hover:bg-blue-100', 'w-20', 'text-sm')} onClick={onCancel}>
+      <Button className={classnames('hover:bg-blue-100', 'w-16', 'md:w-20')} onClick={onCancel}>
         <CloseIcon size={4} />
-        <span className={classnames('ml-1')}>Cancel</span>
+        <span className={classnames('ml-1', 'text-xs')}>Cancel</span>
       </Button>
       <Button
         className={classnames(
           'text-white',
           'bg-blue-600',
           'hover:bg-blue-400',
-          'w-20',
-          'text-sm',
+          'w-16',
+          'md:w-20',
           'ml-2',
         )}
         onClick={onSave}
       >
         <FloppyDiscIcon />
-        <span className={classnames('ml-1')}>Save</span>
+        <span className={classnames('ml-1', 'text-xs')}>Save</span>
       </Button>
     </>
   )

@@ -8,6 +8,7 @@ import { ControlsAction } from '../Flyout'
 import CloseIcon from '../icons/Close'
 import CopyIcon from '../icons/Copy'
 import FolderIcon from '../icons/Folder'
+import PencilIcon from '../icons/Pencil'
 import SettingsIcon from '../icons/Settings'
 import * as Styles from './styles'
 
@@ -15,6 +16,7 @@ type CodeViewerControlsProps = {
   root: FileSystemItem
   activeFile: ActiveFile | undefined
   dbOptions: DbOptions
+  onClickEdit: () => void
   onChangeDbOptions: (dbOptions: DbOptions) => void
 }
 
@@ -22,6 +24,7 @@ export default function CodeViewerControls({
   root,
   activeFile,
   dbOptions,
+  onClickEdit,
   onChangeDbOptions,
 }: CodeViewerControlsProps): React.ReactElement {
   const { isOpen: isDbOptionsOpen, toggle: toggleDbOptions, close: closeDbOptions } = useIsOpen()
@@ -39,6 +42,9 @@ export default function CodeViewerControls({
       </ControlsAction>
       <ControlsAction onClick={handleClickDownload}>
         <FolderIcon title="download project code" />
+      </ControlsAction>
+      <ControlsAction onClick={onClickEdit} overlayControl>
+        <PencilIcon title="edit code" />
       </ControlsAction>
       <ControlsAction onClick={toggleDbOptions} overlayControl>
         <SettingsIcon title={isDbOptionsOpen ? 'close settings' : 'open settings'} />

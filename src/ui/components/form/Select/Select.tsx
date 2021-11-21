@@ -23,7 +23,10 @@ function Select<T>({
 
   return (
     <div className={`${className} ${classnames('w-full')}`}>
-      <label htmlFor={id} className={classnames('w-full', 'flex', 'flex-col', 'items-start')}>
+      <label
+        htmlFor={id}
+        className={classnames('w-full', 'flex', 'flex-col', 'items-start', { 'pb-6': !error })}
+      >
         <span className={classnames('text-sm')}>{label}</span>
         <select
           id={id}
@@ -32,6 +35,9 @@ function Select<T>({
           value={lookupOptionKey(options, value)}
           aria-invalid={!!error}
           aria-describedby={`${id}-alert`}
+          autoComplete="off"
+          data-lpignore="true"
+          data-form-text="other"
         >
           {optionsToList(options).map(([k, v]) => (
             <option key={id + k} value={k}>
@@ -40,7 +46,12 @@ function Select<T>({
           ))}
         </select>
       </label>
-      <span id={`${id}-alert`} role={error ? 'alert' : undefined} aria-hidden={!error}>
+      <span
+        id={`${id}-alert`}
+        className={classnames('text-red-700', 'text-xs')}
+        role={error ? 'alert' : undefined}
+        aria-hidden={!error}
+      >
         {error}
       </span>
     </div>

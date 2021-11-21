@@ -16,7 +16,15 @@ function Radio<T>({ value, options, display, onChange }: RadioProps<T>): React.R
     <div className={classnames('flex', 'w-full')}>
       {optionsToList(options).map(([k, v]) => (
         <label key={k} className={classnames('mr-2', 'last:mr-0')}>
-          <input type="radio" value={k} checked={v === value} onChange={handleChange} />
+          <input
+            type="radio"
+            value={k}
+            checked={v === value}
+            onChange={handleChange}
+            autoComplete="off"
+            data-lpignore="true"
+            data-form-text="other"
+          />
           <span className={classnames('pl-2', 'text-sm')}>{display(v)}</span>
         </label>
       ))}

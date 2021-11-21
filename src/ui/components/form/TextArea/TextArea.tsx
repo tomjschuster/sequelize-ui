@@ -2,33 +2,28 @@ import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
 import { CommonFieldProps, CommonInputProps } from '../shared/types'
 
-type IntegerInputProps = CommonInputProps<number> &
-  CommonFieldProps & {
-    min?: number
-    max?: number
+type TextAreaProps = CommonFieldProps &
+  CommonInputProps<string> & {
+    large?: boolean
+    placeholder?: string
+    rows?: number
+    onBlur?: () => void
   }
 
-function IntegerInput({
+function TextArea({
   id,
   label,
   value,
-  min,
-  max,
+  large,
+  placeholder,
+  rows,
   error,
   onChange,
-}: IntegerInputProps): React.ReactElement {
+  onBlur,
+}: TextAreaProps): React.ReactElement {
   const handleChange = React.useCallback(
-    (evt: React.ChangeEvent<HTMLInputElement>) => {
-      if (!evt.target.value) onChange(undefined)
-
-      const updatedValue = parseInt(evt.target.value)
-      if (isNaN(updatedValue)) return
-      if (max !== undefined && updatedValue > max) return
-      if (min !== undefined && updatedValue < min) return
-
-      onChange(updatedValue)
-    },
-    [onChange, min, max],
+    (evt: React.ChangeEvent<HTMLTextAreaElement>) => onChange(evt.target.value || undefined),
+    [onChange],
   )
 
   return (
@@ -38,14 +33,22 @@ function IntegerInput({
         className={classnames('w-full', 'flex', 'flex-col', 'items-start', { 'pb-6': !error })}
       >
         <span className={classnames('text-sm')}>{label}</span>
-        <input
-          className={classnames('py-1', 'px-2', 'p-0.5', 'w-full', 'text-sm')}
+        <textarea
+          className={classnames('w-full', 'text-sm', {
+            'border-none': large,
+            'h-full': large,
+            'text-lg': large,
+            'py-2': large,
+            'px-4': large,
+            'py-1': !large,
+            'px-2': !large,
+          })}
           id={id}
-          type="number"
-          min={min}
-          max={max}
-          value={value === undefined ? '' : value}
+          placeholder={placeholder}
+          value={value}
           onChange={handleChange}
+          onBlur={onBlur}
+          rows={rows}
           aria-invalid={!!error}
           aria-describedby={`${id}-alert`}
           autoComplete="off"
@@ -65,4 +68,4 @@ function IntegerInput({
   )
 }
 
-export default React.memo(IntegerInput)
+export default React.memo(TextArea)

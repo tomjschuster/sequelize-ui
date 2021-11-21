@@ -11,18 +11,16 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Refactor empty id logic and empty model id logic
-- [ ] Enum form, validation
-- [ ] Form error styling
-- [ ] Form placeholders
-- [ ] Refactor styles
-- [ ] Refactor icon props
-- [ ] Home page
-  - [ ] Copy
+- [ ] Refactor form components
+- [ ] Toggle disabled UI
 - [ ] Copy/download alerts
 - [ ] Autofocus helpers during crud
-- [ ] db compatibility warnings
+- [ ] Refactor styles
+- [ ] Refactor icon props
 - [ ] a11y (aria-controls?)
+- [ ] db compatibility warnings
+- [ ] Home page
+  - [ ] Copy
 - [ ] demo schema tooltips
 
 #### Codegen

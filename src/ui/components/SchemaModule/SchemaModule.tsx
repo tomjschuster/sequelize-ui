@@ -68,7 +68,7 @@ function SchemaForm({ schema, schemas, onSubmit, onCancel }: SchemaFormProps): R
     setFormSchema((s) => ({ ...s, name: name || '' }))
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form autoComplete="off" data-lpignore="true" data-form-type="other" onSubmit={handleSubmit}>
       <TextInput
         id="schema-name"
         label="Schema name"

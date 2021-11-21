@@ -161,7 +161,7 @@ function AssociationFieldset({
         'pt-8',
         'grid',
         'grid-cols-12',
-        'gap-y-2',
+        'gap-y-0',
         'gap-x-4',
         'relative',
       )}
@@ -205,9 +205,17 @@ function AssociationFieldset({
           onChange={handleChangeForeignKey}
         />
       </div>
-      {!isManytoMany(association) && <div className={classnames('h-22')} />}
+      {!isManytoMany(association) && <div className={classnames('h-30')} />}
       {isManytoMany(association) && schema.models.length > 0 && (
         <>
+          <div className={classnames('col-span-12', 'pb-5')}>
+            <Radio
+              options={ThroughType}
+              value={association.type.through.type}
+              display={displayThroughType}
+              onChange={handleChangeThroughType}
+            />
+          </div>
           <div className={classnames('col-span-6')}>
             {isThroughModel(association.type.through) && (
               <Select
@@ -234,18 +242,10 @@ function AssociationFieldset({
           <div className={classnames('col-span-6')}>
             <TextInput
               id={`association-target-fk-${association.id}`}
-              label="Target foreign key"
+              label="Target FK"
               value={association.type.targetFk || ''}
               error={errors?.targetForeignKey}
               onChange={handleChangeTargetForeignKey}
-            />
-          </div>
-          <div className={classnames('col-span-12')}>
-            <Radio
-              options={ThroughType}
-              value={association.type.through.type}
-              display={displayThroughType}
-              onChange={handleChangeThroughType}
             />
           </div>
         </>
