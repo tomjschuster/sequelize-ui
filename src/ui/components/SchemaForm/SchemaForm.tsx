@@ -3,10 +3,8 @@ import { SchemaErrors } from '@src/core/validation/schema'
 import usePrevious from '@src/ui/hooks/usePrevious'
 import { classnames } from '@src/ui/styles/classnames'
 import { focusById } from '@src/utils/dom'
-import { titleCase } from '@src/utils/string'
 import React from 'react'
 import TextInput from '../form/TextInput'
-import CloseIcon from '../icons/Close'
 import PlusCircleIcon from '../icons/Plus'
 import TrashIcon from '../icons/Trash'
 
@@ -43,50 +41,41 @@ type SchemaFormProps = {
 }
 
 function SchemaForm({ schema, errors, onChange }: SchemaFormProps): React.ReactElement {
-  const [newModelName, setNewModelName] = React.useState<string | undefined>()
-  const [newModelError, setNewModelError] = React.useState<string | undefined>()
-  const prevNewModelName = usePrevious(newModelName)
   const prevSchema = usePrevious(schema)
-
-  console.log('RENDERING')
 
   React.useEffect(() => {
     focusById(schemaNameId())
   }, [])
 
   React.useEffect(() => {
-    if (prevNewModelName === undefined && newModelName !== undefined) {
-      focusById(newModelNameId())
-    }
-  }, [newModelName, prevNewModelName])
+    const newModel =
+      prevSchema?.models &&
+      schema.models.find((m) => !prevSchema.models.some((pm) => pm.id === m.id))
 
-  React.useEffect(() => {
-    if (prevSchema && schema.models.length !== prevSchema.models.length) {
-      focusById(createNewModelId())
+    if (newModel) {
+      focusById(modelNameId(newModel))
     }
-  }, [prevSchema, schema])
+  }, [prevSchema?.models, schema.models])
 
   const handleChangeName = React.useCallback(
     (name: string | undefined) => onChange({ ...schema, name: name || '' }),
     [schema, onChange],
   )
 
-  const handleClickAddModel = React.useCallback(() => setNewModelName(''), [])
+  const handleChangeModelName = React.useCallback(
+    (modelId: string, name: string | undefined) =>
+      onChange({
+        ...schema,
+        models: schema.models.map((m) => (m.id === modelId ? { ...m, name: name || '' } : m)),
+      }),
 
-  const handleClickSubmitNewModel = React.useCallback(() => {
-    if (newModelName) {
-      onChange({ ...schema, models: [...schema.models, { ...emptyModel(), name: newModelName }] })
-      setNewModelError(undefined)
-      setNewModelName(undefined)
-    } else {
-      setNewModelError('required')
-    }
-  }, [schema, newModelName, onChange])
+    [schema, onChange],
+  )
 
-  const handleClickCancelNewModel = React.useCallback(() => {
-    setNewModelError(undefined)
-    setNewModelName(undefined)
-  }, [])
+  const handleClickAddModel = React.useCallback(
+    () => onChange({ ...schema, models: [...schema.models, emptyModel()] }),
+    [schema, onChange],
+  )
 
   const handleDeleteModel = React.useCallback(
     (id: Model['id']) =>
@@ -95,15 +84,6 @@ function SchemaForm({ schema, errors, onChange }: SchemaFormProps): React.ReactE
         models: schema.models.filter((m) => m.id !== id),
       }),
     [schema, onChange],
-  )
-
-  const handleNewModelKeyPress = React.useCallback(
-    (evt: React.KeyboardEvent<HTMLInputElement>) => {
-      if (evt.key === 'Enter') {
-        handleClickSubmitNewModel()
-      }
-    },
-    [handleClickSubmitNewModel],
   )
 
   return (
@@ -123,75 +103,47 @@ function SchemaForm({ schema, errors, onChange }: SchemaFormProps): React.ReactE
         {schema.models.map((m) => (
           <li
             key={m.id}
-            className={classnames(
-              panel,
-              'flex',
-              'justify-between',
-              'items-center',
-              'p-2',
-              'bg-white',
-            )}
+            className={classnames(panel, 'flex', 'items-stretch', 'bg-white', 'pr-1', 'pl-2')}
           >
-            <span className={classnames('p-1.5', 'text-lg')}>{titleCase(m.name)}</span>
+            <TextInput
+              id={modelNameId(m)}
+              className={classnames('pt-3', 'pb-1')}
+              label="Name"
+              error={errors.models[m.id]?.name}
+              value={m.name}
+              onChange={(value) => handleChangeModelName(m.id, value)}
+            />
             <button
-              className={classnames('p-1.5', 'hover:bg-gray-200')}
+              className={classnames('p-2', 'hover:bg-gray-200', 'self-center', 'ml-0.5')}
               onClick={() => handleDeleteModel(m.id)}
             >
               <TrashIcon title="delete model" />
             </button>
           </li>
         ))}
-        {newModelName === undefined ? (
-          <li
-            className={classnames(
-              panel,
-              'flex',
-              'items-stretch',
-              'justify-center',
-              'bg-white',
-              'hover:bg-green-50',
-              'text-lg',
-              'border-dashed',
-            )}
+        <li
+          className={classnames(
+            panel,
+            'flex',
+            'items-stretch',
+            'justify-center',
+            'bg-white',
+            'hover:bg-green-50',
+            'text-lg',
+            'border-dashed',
+          )}
+        >
+          <button
+            id={createNewModelId()}
+            className={classnames('flex', 'items-center', 'justify-center', 'p-1.5', 'flex-1')}
+            onClick={handleClickAddModel}
           >
-            <button
-              id={createNewModelId()}
-              className={classnames('flex', 'items-center', 'justify-center', 'p-1.5', 'flex-1')}
-              onClick={handleClickAddModel}
-            >
-              <span className={classnames('mr-2')}>
-                <PlusCircleIcon />
-              </span>
-              Create a new model
-            </button>
-          </li>
-        ) : (
-          <li className={classnames(panel, 'flex', 'items-stretch', 'bg-white', 'pr-1')}>
-            <TextInput
-              id={newModelNameId()}
-              className={classnames('flex-1')}
-              label="Name"
-              large
-              error={newModelError}
-              value={newModelName}
-              onChange={setNewModelName}
-              onKeyPress={handleNewModelKeyPress}
-            />
-            <button
-              id={createNewModelId()}
-              className={classnames('p-2', 'hover:bg-gray-200', 'self-center', 'ml-0.5')}
-              onClick={handleClickSubmitNewModel}
-            >
-              <PlusCircleIcon />
-            </button>
-            <button
-              className={classnames('p-2', 'hover:bg-gray-200', 'self-center', 'ml-0.5')}
-              onClick={handleClickCancelNewModel}
-            >
-              <CloseIcon />
-            </button>
-          </li>
-        )}
+            <span className={classnames('mr-2')}>
+              <PlusCircleIcon title="add model" />
+            </span>
+            Create a new model
+          </button>
+        </li>
       </ul>
     </div>
   )
@@ -201,8 +153,8 @@ function schemaNameId(): string {
   return 'schema-name'
 }
 
-function newModelNameId(): string {
-  return 'new-model-name'
+function modelNameId(model: Model): string {
+  return `model-name-${model.id}`
 }
 
 function createNewModelId(): string {

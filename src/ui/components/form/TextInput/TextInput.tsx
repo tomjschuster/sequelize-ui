@@ -1,4 +1,5 @@
 import { classnames } from '@src/ui/styles/classnames'
+import classnames_ from 'classnames'
 import React from 'react'
 import { CommonFieldProps, CommonInputProps } from '../shared/types'
 
@@ -29,10 +30,10 @@ function TextInput({
   )
 
   return (
-    <div className={`${classnames('relative')} ${className}`}>
+    <div className={classnames_(className, classnames('w-full'))}>
       <label
         htmlFor={id}
-        className={classnames('w-full', 'flex', 'flex-col', 'items-start', {
+        className={classnames('flex', 'flex-col', 'items-start', {
           'pb-6': !error && !large,
           'h-full': large,
         })}

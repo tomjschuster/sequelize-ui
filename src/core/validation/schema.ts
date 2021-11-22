@@ -51,15 +51,18 @@ export const emptyModelErrors: ModelErrors = Object.freeze({
 
 export type SchemaErrors = {
   name?: string
+  models: { [id: string]: ModelErrors }
 }
 
 export const emptySchemaErrors: SchemaErrors = Object.freeze({
   name: undefined,
+  models: {},
 })
 
 export function validateSchema(schema: Schema, schemas: Schema[]): SchemaErrors {
   return {
     name: validateSchemaName(schema, schemas),
+    models: validateModels(schema),
   }
 }
 
@@ -87,6 +90,13 @@ function validateSchemaName(schema: Schema, schemas: Schema[]): string | undefin
 
 function findDuplicateSchema(schema: Schema, schemas: Schema[]): Schema | undefined {
   return schemas.find((s) => s.id !== schema.id && namesEqSingular(s.name, schema.name))
+}
+
+function validateModels(schema: Schema): { [id: string]: ModelErrors } {
+  return schema.models.reduce<{ [id: string]: ModelErrors }>((acc, model) => {
+    acc[model.id] = validateModel(model, schema)
+    return acc
+  }, {})
 }
 
 export function validateModel(model: Model, schema: Schema): ModelErrors {

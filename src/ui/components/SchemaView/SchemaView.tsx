@@ -45,7 +45,7 @@ function SchemaView({ schema, onClickModel }: SchemaViewProps): React.ReactEleme
               'justify-between',
               'items-center',
               'px-2',
-              'py-2.5',
+              'py-3',
               'bg-white',
               'cursor-pointer',
               'hover:bg-gray-100',
