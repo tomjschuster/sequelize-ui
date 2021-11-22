@@ -4,6 +4,7 @@ import { CommonFieldProps, CommonInputProps } from '../shared/types'
 
 type TextInputProps = CommonFieldProps &
   CommonInputProps<string> & {
+    className?: string
     large?: boolean
     placeholder?: string
     onBlur?: () => void
@@ -14,6 +15,7 @@ function TextInput({
   id,
   label,
   value,
+  className,
   large,
   placeholder,
   error,
@@ -27,19 +29,32 @@ function TextInput({
   )
 
   return (
-    <>
+    <div className={`${classnames('relative')} ${className}`}>
       <label
         htmlFor={id}
-        className={classnames('w-full', 'flex', 'flex-col', 'items-start', { 'pb-6': !error })}
+        className={classnames('w-full', 'flex', 'flex-col', 'items-start', {
+          'pb-6': !error && !large,
+          'h-full': large,
+        })}
       >
-        <span className={classnames('text-sm')}>{label}</span>
+        <span
+          className={classnames({
+            'text-sm': !large,
+            'text-xs': large,
+            absolute: large,
+            'top-0.5': large,
+            'left-3.5': large,
+          })}
+        >
+          {label}
+        </span>
         <input
           className={classnames('w-full', 'text-sm', {
             'border-none': large,
             'h-full': large,
-            'text-lg': large,
-            'py-2': large,
-            'px-4': large,
+            'text-base': large,
+            'py-5': large,
+            'px-3.5': large,
             'py-1': !large,
             'px-2': !large,
           })}
@@ -59,13 +74,17 @@ function TextInput({
       </label>
       <span
         id={`${id}-alert`}
-        className={classnames('text-red-700', 'text-xs')}
+        className={classnames('text-red-700', 'text-xs', {
+          absolute: large,
+          'bottom-0.5': large,
+          'left-3.5': large,
+        })}
         role={error ? 'alert' : undefined}
         aria-hidden={!error}
       >
         {error}
       </span>
-    </>
+    </div>
   )
 }
 

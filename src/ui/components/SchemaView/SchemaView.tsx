@@ -44,14 +44,15 @@ function SchemaView({ schema, onClickModel }: SchemaViewProps): React.ReactEleme
               'flex',
               'justify-between',
               'items-center',
-              'p-2',
+              'px-2',
+              'py-2.5',
               'bg-white',
               'cursor-pointer',
               'hover:bg-gray-100',
             )}
             onClick={() => onClickModel(m)}
           >
-            <span className={classnames('p-1.5', 'text-lg')}>{titleCase(m.name)}</span>
+            <span className={classnames('px-1.5', 'text-lg')}>{titleCase(m.name)}</span>
             <div className={classnames('flex', 'items-center')}>
               <button className={classnames('p-1.5')} onClick={() => onClickModel(m)}>
                 <SelectorIcon title="select model" />

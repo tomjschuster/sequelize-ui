@@ -11,8 +11,9 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
+- [ ] Schema form multi-model editing
 - [ ] Model zero state
-- [ ] Schema form model input UI
+- [ ] Model breadcrumbs
 - [ ] Refactor form components
 - [ ] Copy/download alerts
 - [ ] Refactor styles

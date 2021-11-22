@@ -9,14 +9,7 @@ export const SequelizeFramework: Framework = {
   projectType: (): ProjectType => ProjectType.Npm,
   generate: generateSequelizeProject,
   defaultFile: (root: DirectoryItem): string => {
-    const firstModelFile = root.files
-      .filter((item) => item.name === 'models')
-      .filter(isDirectory)?.[0]
-      ?.files.filter((item) => item.name !== 'index.ts')
-      .sort((a, b) => a.name.localeCompare(b.name))?.[0]
-
-    if (!firstModelFile) return `${root.name}/models/index.ts`
-    return `${root.name}/models/${firstModelFile.name}`
+    return `${root.name}/models/index.ts`
   },
   defaultModelFile: (model: Model, root: DirectoryItem): string | undefined => {
     const modelFile = root.files

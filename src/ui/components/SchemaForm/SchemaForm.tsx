@@ -44,8 +44,11 @@ type SchemaFormProps = {
 
 function SchemaForm({ schema, errors, onChange }: SchemaFormProps): React.ReactElement {
   const [newModelName, setNewModelName] = React.useState<string | undefined>()
+  const [newModelError, setNewModelError] = React.useState<string | undefined>()
   const prevNewModelName = usePrevious(newModelName)
   const prevSchema = usePrevious(schema)
+
+  console.log('RENDERING')
 
   React.useEffect(() => {
     focusById(schemaNameId())
@@ -73,11 +76,17 @@ function SchemaForm({ schema, errors, onChange }: SchemaFormProps): React.ReactE
   const handleClickSubmitNewModel = React.useCallback(() => {
     if (newModelName) {
       onChange({ ...schema, models: [...schema.models, { ...emptyModel(), name: newModelName }] })
+      setNewModelError(undefined)
       setNewModelName(undefined)
+    } else {
+      setNewModelError('required')
     }
   }, [schema, newModelName, onChange])
 
-  const handleClickCancelNewModel = React.useCallback(() => setNewModelName(undefined), [])
+  const handleClickCancelNewModel = React.useCallback(() => {
+    setNewModelError(undefined)
+    setNewModelName(undefined)
+  }, [])
 
   const handleDeleteModel = React.useCallback(
     (id: Model['id']) =>
@@ -157,24 +166,26 @@ function SchemaForm({ schema, errors, onChange }: SchemaFormProps): React.ReactE
             </button>
           </li>
         ) : (
-          <li className={classnames(panel, 'flex', 'items-stretch', 'bg-white', 'pr-2')}>
+          <li className={classnames(panel, 'flex', 'items-stretch', 'bg-white', 'pr-1')}>
             <TextInput
               id={newModelNameId()}
-              label=""
+              className={classnames('flex-1')}
+              label="Name"
               large
+              error={newModelError}
               value={newModelName}
               onChange={setNewModelName}
               onKeyPress={handleNewModelKeyPress}
             />
             <button
               id={createNewModelId()}
-              className={classnames('p-2', 'hover:bg-gray-200')}
+              className={classnames('p-2', 'hover:bg-gray-200', 'self-center', 'ml-0.5')}
               onClick={handleClickSubmitNewModel}
             >
               <PlusCircleIcon />
             </button>
             <button
-              className={classnames('p-2', 'hover:bg-gray-200')}
+              className={classnames('p-2', 'hover:bg-gray-200', 'self-center', 'ml-0.5')}
               onClick={handleClickCancelNewModel}
             >
               <CloseIcon />
