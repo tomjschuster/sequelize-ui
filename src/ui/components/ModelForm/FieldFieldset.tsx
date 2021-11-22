@@ -142,7 +142,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
     >
       <div className={classnames('col-span-12')}>
         <TextInput
-          id={`field-name-${field.id}`}
+          id={fieldNameId(field)}
           label="Field name"
           value={field.name}
           error={errors?.name}
@@ -276,6 +276,10 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
       </div>
     </fieldset>
   )
+}
+
+export function fieldNameId(field: Field): string {
+  return `field-name-${field.id}`
 }
 
 export default React.memo(FieldFieldset)

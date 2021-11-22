@@ -168,7 +168,7 @@ function AssociationFieldset({
     >
       <div className={classnames('col-span-6')}>
         <Select
-          id={`association-type-${association.id}`}
+          id={associationTypeId(association)}
           label="Type"
           options={AssociationTypeType}
           display={displayAssociationTypeType}
@@ -273,6 +273,10 @@ function aliasPlaceholder(association: Association, model: Model): string | unde
     : associationTypeIsSingular(association.type)
     ? singular(model.name)
     : plural(model.name)
+}
+
+export function associationTypeId(association: Association): string {
+  return `association-type-${association.id}`
 }
 
 export default React.memo(AssociationFieldset)

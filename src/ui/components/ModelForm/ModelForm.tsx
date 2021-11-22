@@ -1,12 +1,14 @@
 import { Association, emptyAssociation, emptyField, Field, Model, Schema } from '@src/core/schema'
 import { ModelErrors } from '@src/core/validation/schema'
+import usePrevious from '@src/ui/hooks/usePrevious'
 import { classnames } from '@src/ui/styles/classnames'
+import { focusById } from '@src/utils/dom'
 import React from 'react'
 import { newButton } from '../home/MySchemaLinks/styles'
 import PlusCircleIcon from '../icons/Plus'
-import AssociationFieldset from './AssociationFieldset'
-import FieldFieldset from './FieldFieldset'
-import ModelFieldset from './ModelFieldset'
+import AssociationFieldset, { associationTypeId } from './AssociationFieldset'
+import FieldFieldset, { fieldNameId } from './FieldFieldset'
+import ModelFieldset, { modelNameId } from './ModelFieldset'
 
 export const section = classnames(
   'max-w-screen-lg',
@@ -44,6 +46,34 @@ export default function ModelForm({
   errors,
   onChange,
 }: ModelFormProps): React.ReactElement {
+  const prevModel = usePrevious(model)
+
+  React.useEffect(() => {
+    focusById(modelNameId())
+  }, [])
+
+  React.useEffect(() => {
+    const newField =
+      prevModel && model.fields.length > prevModel.fields.length
+        ? model.fields[model.fields.length - 1]
+        : undefined
+
+    if (newField) {
+      focusById(fieldNameId(newField))
+    }
+  }, [model, prevModel])
+
+  React.useEffect(() => {
+    const association =
+      prevModel && model.associations.length > prevModel.associations.length
+        ? model.associations[model.associations.length - 1]
+        : undefined
+
+    if (association) {
+      focusById(associationTypeId(association))
+    }
+  }, [model, prevModel])
+
   const handleChangeModel = React.useCallback(
     (changes: Partial<Model>) => onChange({ ...model, ...changes }),
     [model, onChange],

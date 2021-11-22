@@ -3,7 +3,12 @@ import React from 'react'
 import { CommonFieldProps, CommonInputProps } from '../shared/types'
 
 type TextInputProps = CommonFieldProps &
-  CommonInputProps<string> & { large?: boolean; placeholder?: string; onBlur?: () => void }
+  CommonInputProps<string> & {
+    large?: boolean
+    placeholder?: string
+    onBlur?: () => void
+    onKeyPress?: React.KeyboardEventHandler<HTMLInputElement>
+  }
 
 function TextInput({
   id,
@@ -14,6 +19,7 @@ function TextInput({
   error,
   onChange,
   onBlur,
+  onKeyPress,
 }: TextInputProps): React.ReactElement {
   const handleChange = React.useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => onChange(evt.target.value || undefined),
@@ -43,6 +49,7 @@ function TextInput({
           placeholder={placeholder}
           onChange={handleChange}
           onBlur={onBlur}
+          onKeyPress={onKeyPress}
           aria-invalid={!!error}
           aria-describedby={`${id}-alert`}
           autoComplete="off"

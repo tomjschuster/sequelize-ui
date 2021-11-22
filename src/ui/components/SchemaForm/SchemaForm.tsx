@@ -1,6 +1,8 @@
 import { emptyModel, Model, Schema } from '@src/core/schema'
 import { SchemaErrors } from '@src/core/validation/schema'
+import usePrevious from '@src/ui/hooks/usePrevious'
 import { classnames } from '@src/ui/styles/classnames'
+import { focusById } from '@src/utils/dom'
 import { titleCase } from '@src/utils/string'
 import React from 'react'
 import TextInput from '../form/TextInput'
@@ -42,6 +44,24 @@ type SchemaFormProps = {
 
 function SchemaForm({ schema, errors, onChange }: SchemaFormProps): React.ReactElement {
   const [newModelName, setNewModelName] = React.useState<string | undefined>()
+  const prevNewModelName = usePrevious(newModelName)
+  const prevSchema = usePrevious(schema)
+
+  React.useEffect(() => {
+    focusById(schemaNameId())
+  }, [])
+
+  React.useEffect(() => {
+    if (prevNewModelName === undefined && newModelName !== undefined) {
+      focusById(newModelNameId())
+    }
+  }, [newModelName, prevNewModelName])
+
+  React.useEffect(() => {
+    if (prevSchema && schema.models.length !== prevSchema.models.length) {
+      focusById(createNewModelId())
+    }
+  }, [prevSchema, schema])
 
   const handleChangeName = React.useCallback(
     (name: string | undefined) => onChange({ ...schema, name: name || '' }),
@@ -50,12 +70,12 @@ function SchemaForm({ schema, errors, onChange }: SchemaFormProps): React.ReactE
 
   const handleClickAddModel = React.useCallback(() => setNewModelName(''), [])
 
-  const handleClickSubmitNewModel = () => {
+  const handleClickSubmitNewModel = React.useCallback(() => {
     if (newModelName) {
       onChange({ ...schema, models: [...schema.models, { ...emptyModel(), name: newModelName }] })
       setNewModelName(undefined)
     }
-  }
+  }, [schema, newModelName, onChange])
 
   const handleClickCancelNewModel = React.useCallback(() => setNewModelName(undefined), [])
 
@@ -68,12 +88,21 @@ function SchemaForm({ schema, errors, onChange }: SchemaFormProps): React.ReactE
     [schema, onChange],
   )
 
+  const handleNewModelKeyPress = React.useCallback(
+    (evt: React.KeyboardEvent<HTMLInputElement>) => {
+      if (evt.key === 'Enter') {
+        handleClickSubmitNewModel()
+      }
+    },
+    [handleClickSubmitNewModel],
+  )
+
   return (
     <div className={classnames(section)}>
       <h2 className={classnames(title)}>Schema</h2>
       <div className={classnames('mb-4', 'sm:w-1/2')}>
         <TextInput
-          id="schema-name"
+          id={schemaNameId()}
           label="Name"
           value={schema.name}
           error={errors.name}
@@ -117,6 +146,7 @@ function SchemaForm({ schema, errors, onChange }: SchemaFormProps): React.ReactE
             )}
           >
             <button
+              id={createNewModelId()}
               className={classnames('flex', 'items-center', 'justify-center', 'p-1.5', 'flex-1')}
               onClick={handleClickAddModel}
             >
@@ -129,13 +159,15 @@ function SchemaForm({ schema, errors, onChange }: SchemaFormProps): React.ReactE
         ) : (
           <li className={classnames(panel, 'flex', 'items-stretch', 'bg-white', 'pr-2')}>
             <TextInput
-              id="new-model-name"
+              id={newModelNameId()}
               label=""
               large
               value={newModelName}
               onChange={setNewModelName}
+              onKeyPress={handleNewModelKeyPress}
             />
             <button
+              id={createNewModelId()}
               className={classnames('p-2', 'hover:bg-gray-200')}
               onClick={handleClickSubmitNewModel}
             >
@@ -152,6 +184,18 @@ function SchemaForm({ schema, errors, onChange }: SchemaFormProps): React.ReactE
       </ul>
     </div>
   )
+}
+
+function schemaNameId(): string {
+  return 'schema-name'
+}
+
+function newModelNameId(): string {
+  return 'new-model-name'
+}
+
+function createNewModelId(): string {
+  return 'create-new-model'
 }
 
 export default SchemaForm

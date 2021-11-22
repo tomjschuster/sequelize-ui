@@ -20,7 +20,7 @@ function ModelFieldset({ name, errors, onChange }: ModelFieldsetProps): React.Re
     <fieldset className={classnames('w-full')}>
       <div className={classnames('sm:w-1/2')}>
         <TextInput
-          id="model-name"
+          id={modelNameId()}
           label="Name"
           value={name}
           error={errors.name}
@@ -29,6 +29,10 @@ function ModelFieldset({ name, errors, onChange }: ModelFieldsetProps): React.Re
       </div>
     </fieldset>
   )
+}
+
+export function modelNameId(): string {
+  return 'model-name'
 }
 
 export default React.memo(ModelFieldset)

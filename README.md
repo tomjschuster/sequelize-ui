@@ -11,10 +11,10 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
+- [ ] Model zero state
+- [ ] Schema form model input UI
 - [ ] Refactor form components
-- [ ] Toggle disabled UI
 - [ ] Copy/download alerts
-- [ ] Autofocus helpers during crud
 - [ ] Refactor styles
 - [ ] Refactor icon props
 - [ ] a11y (aria-controls?)
