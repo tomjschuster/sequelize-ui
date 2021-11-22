@@ -190,7 +190,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         )}
         {field.type.type === DataTypeType.Enum && (
           <TextArea
-            id={`field-evnum-values-${field.id}`}
+            id={`field-enum-values-${field.id}`}
             label="Enum values"
             value={enumInputValue}
             rows={4}
