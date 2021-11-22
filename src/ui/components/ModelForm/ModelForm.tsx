@@ -36,6 +36,8 @@ const panel = classnames('border', 'border-gray-400', 'bg-white', 'rounded')
 type ModelFormProps = {
   model: Model
   schema: Schema
+  newField?: boolean
+  newAssociation?: boolean
   errors: ModelErrors
   onChange: (model: Model) => void
 }
@@ -43,23 +45,35 @@ type ModelFormProps = {
 export default function ModelForm({
   model,
   schema,
+  newField,
+  newAssociation,
   errors,
   onChange,
 }: ModelFormProps): React.ReactElement {
   const prevModel = usePrevious(model)
 
   React.useEffect(() => {
+    if (newField) {
+      handleClickAddField()
+      return
+    }
+
+    if (newAssociation) {
+      handleClickAddAssociation()
+      return
+    }
+
     focusById(modelNameId())
   }, [])
 
   React.useEffect(() => {
-    const newField =
+    const addedField =
       prevModel && model.fields.length > prevModel.fields.length
         ? model.fields[model.fields.length - 1]
         : undefined
 
-    if (newField) {
-      focusById(fieldNameId(newField))
+    if (addedField) {
+      focusById(fieldNameId(addedField))
     }
   }, [model, prevModel])
 
@@ -144,34 +158,36 @@ export default function ModelForm({
       <div className={classnames(section)}>
         <h3 className={classnames(title)}>Fields</h3>
 
-        <div className={classnames(grid)}>
+        <ul className={classnames(grid)}>
           {model.fields.map((field) => {
             return (
-              <div key={`field-form-${field.id}`} className={classnames(panel)}>
+              <li key={`field-form-${field.id}`} className={classnames(panel)}>
                 <FieldFieldset
                   field={field}
                   onChange={handleChangeField}
                   onDelete={handleDeleteField}
                   errors={errors.fields[field.id]}
                 />
-              </div>
+              </li>
             )
           })}
-          <button type="button" className={newButton} onClick={handleClickAddField}>
-            <span>
-              <PlusCircleIcon />
-            </span>
-            Add Field
-          </button>
-        </div>
+          <li>
+            <button type="button" className={newButton} onClick={handleClickAddField}>
+              <span>
+                <PlusCircleIcon />
+              </span>
+              Add Field
+            </button>
+          </li>
+        </ul>
       </div>
 
       <div className={classnames(section)}>
         <h3 className={classnames(title)}>Associations</h3>
 
-        <div className={grid}>
+        <ul className={grid}>
           {model.associations.map((association) => (
-            <div key={`association-form-${association.id}`} className={classnames(panel)}>
+            <li key={`association-form-${association.id}`} className={classnames(panel)}>
               <AssociationFieldset
                 association={association}
                 schema={schema}
@@ -180,15 +196,17 @@ export default function ModelForm({
                 onDelete={handleDeleteAssociation}
                 errors={errors.associations[association.id]}
               />
-            </div>
+            </li>
           ))}
-          <button type="button" className={newButton} onClick={handleClickAddAssociation}>
-            <span>
-              <PlusCircleIcon />
-            </span>
-            Add association
-          </button>
-        </div>
+          <li>
+            <button type="button" className={newButton} onClick={handleClickAddAssociation}>
+              <span>
+                <PlusCircleIcon />
+              </span>
+              Add association
+            </button>
+          </li>
+        </ul>
       </div>
     </form>
   )

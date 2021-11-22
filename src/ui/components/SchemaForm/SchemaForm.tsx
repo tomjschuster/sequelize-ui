@@ -36,14 +36,19 @@ export const subtitle = classnames('text-xl', 'mb-2')
 
 type SchemaFormProps = {
   schema: Schema
+  newModel?: boolean
   errors: SchemaErrors
   onChange: (schema: Schema) => void
 }
 
-function SchemaForm({ schema, errors, onChange }: SchemaFormProps): React.ReactElement {
+function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): React.ReactElement {
   const prevSchema = usePrevious(schema)
 
   React.useEffect(() => {
+    if (newModel) {
+      handleClickAddModel()
+      return
+    }
     focusById(schemaNameId())
   }, [])
 

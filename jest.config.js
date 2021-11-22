@@ -6,6 +6,7 @@ module.exports = {
     '.*\\.d\\.ts',
     '__fixtures__',
     '__tests__',
+    '__generated__',
     // write tests after completing ui
     'src/pages',
     'src/ui/components',

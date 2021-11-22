@@ -18,6 +18,9 @@ type SchemaFlyoutContentProps = {
   onViewSchema: (model?: Model) => void
   updateSchema: (schema: Schema) => void
   updateModel: (model: Model) => void
+  onClickAddModel: () => void
+  onClickAddField: () => void
+  onClickAddAssociation: () => void
 }
 export default function SchemaFlyoutContent({
   schema,
@@ -28,6 +31,9 @@ export default function SchemaFlyoutContent({
   onViewSchema,
   updateSchema,
   updateModel,
+  onClickAddModel,
+  onClickAddField,
+  onClickAddAssociation,
 }: SchemaFlyoutContentProps): React.ReactElement | null {
   switch (state.type) {
     case SchemaFlyoutStateType.CODE:
@@ -40,19 +46,38 @@ export default function SchemaFlyoutContent({
         />
       )
     case SchemaFlyoutStateType.EDIT_SCHEMA:
-      return <SchemaForm schema={state.schema} errors={state.errors} onChange={updateSchema} />
+      return (
+        <SchemaForm
+          schema={state.schema}
+          newModel={state.newModel}
+          errors={state.errors}
+          onChange={updateSchema}
+        />
+      )
     case SchemaFlyoutStateType.VIEW_SCHEMA:
-      return <SchemaView schema={schema} onClickModel={onViewSchema} />
+      return (
+        <SchemaView schema={schema} onClickModel={onViewSchema} onClickAddModel={onClickAddModel} />
+      )
     case SchemaFlyoutStateType.EDIT_MODEL:
       return (
         <ModelForm
           model={state.model}
           schema={schema}
+          newField={state.newField}
+          newAssociation={state.newAssociation}
           errors={state.errors}
           onChange={updateModel}
         />
       )
     case SchemaFlyoutStateType.VIEW_MODEL:
-      return <ModelView model={state.model} schema={schema} onViewSchema={onViewSchema} />
+      return (
+        <ModelView
+          model={state.model}
+          schema={schema}
+          onViewSchema={onViewSchema}
+          onClickAddField={onClickAddField}
+          onClickAddAssociation={onClickAddAssociation}
+        />
+      )
   }
 }

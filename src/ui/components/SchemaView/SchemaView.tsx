@@ -2,6 +2,7 @@ import { Model, Schema } from '@src/core/schema'
 import { classnames } from '@src/ui/styles/classnames'
 import { titleCase } from '@src/utils/string'
 import React from 'react'
+import PlusCircleIcon from '../icons/Plus'
 import SelectorIcon from '../icons/Selector'
 
 const grid = classnames(
@@ -25,9 +26,14 @@ export const subtitle = classnames('text-xl', 'mb-2')
 type SchemaViewProps = {
   schema: Schema
   onClickModel: (model: Model) => void
+  onClickAddModel: () => void
 }
 
-function SchemaView({ schema, onClickModel }: SchemaViewProps): React.ReactElement {
+function SchemaView({
+  schema,
+  onClickModel,
+  onClickAddModel,
+}: SchemaViewProps): React.ReactElement {
   return (
     <div className={classnames(section)}>
       <h2 className={classnames(title)}>Schema</h2>
@@ -60,6 +66,28 @@ function SchemaView({ schema, onClickModel }: SchemaViewProps): React.ReactEleme
             </div>
           </li>
         ))}
+        <li
+          className={classnames(
+            panel,
+            'flex',
+            'items-stretch',
+            'justify-center',
+            'bg-white',
+            'hover:bg-green-50',
+            'text-lg',
+            'border-dashed',
+          )}
+        >
+          <button
+            className={classnames('flex', 'items-center', 'justify-center', 'p-1.5', 'flex-1')}
+            onClick={onClickAddModel}
+          >
+            <span className={classnames('mr-2')}>
+              <PlusCircleIcon title="add model" />
+            </span>
+            Create a new model
+          </button>
+        </li>
       </ul>
     </div>
   )

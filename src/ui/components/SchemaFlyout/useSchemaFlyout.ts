@@ -34,6 +34,9 @@ type UseSchemaFlyoutResult = {
   viewSchema: (model?: Model) => void
   updateSchema: (schema: Schema) => void
   updateModel: (model: Model) => void
+  addModel: () => void
+  addField: () => void
+  addAssociation: () => void
   save: () => void
   cancel: () => void
 }
@@ -130,6 +133,39 @@ export function useSchemaFlyout({
     [state],
   )
 
+  const addModel = React.useCallback(() => {
+    if (state.type === SchemaFlyoutStateType.VIEW_SCHEMA) {
+      setState({
+        type: SchemaFlyoutStateType.EDIT_SCHEMA,
+        schema,
+        errors: emptySchemaErrors,
+        newModel: true,
+      })
+    }
+  }, [schema, state])
+
+  const addField = React.useCallback(() => {
+    if (state.type === SchemaFlyoutStateType.VIEW_MODEL) {
+      setState({
+        type: SchemaFlyoutStateType.EDIT_MODEL,
+        model: state.model,
+        errors: emptyModelErrors,
+        newField: true,
+      })
+    }
+  }, [state])
+
+  const addAssociation = React.useCallback(() => {
+    if (state.type === SchemaFlyoutStateType.VIEW_MODEL) {
+      setState({
+        type: SchemaFlyoutStateType.EDIT_MODEL,
+        model: state.model,
+        errors: emptyModelErrors,
+        newAssociation: true,
+      })
+    }
+  }, [state])
+
   const exitEdit = React.useCallback(
     (nextSchema: Schema) => {
       const model =
@@ -201,6 +237,9 @@ export function useSchemaFlyout({
     edit,
     updateModel,
     updateSchema,
+    addModel,
+    addField,
+    addAssociation,
     viewCode,
     viewSchema,
     save,

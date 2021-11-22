@@ -12,6 +12,17 @@ export const enum SchemaFlyoutStateType {
 export type SchemaFlyoutState =
   | { type: SchemaFlyoutStateType.CODE }
   | { type: SchemaFlyoutStateType.VIEW_SCHEMA }
-  | { type: SchemaFlyoutStateType.EDIT_SCHEMA; schema: Schema; errors: SchemaErrors }
+  | {
+      type: SchemaFlyoutStateType.EDIT_SCHEMA
+      schema: Schema
+      errors: SchemaErrors
+      newModel?: boolean
+    }
   | { type: SchemaFlyoutStateType.VIEW_MODEL; model: Model }
-  | { type: SchemaFlyoutStateType.EDIT_MODEL; model: Model; errors: ModelErrors }
+  | {
+      type: SchemaFlyoutStateType.EDIT_MODEL
+      model: Model
+      errors: ModelErrors
+      newField?: boolean
+      newAssociation?: boolean
+    }

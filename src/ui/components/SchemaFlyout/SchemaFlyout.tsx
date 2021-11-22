@@ -31,6 +31,9 @@ export default function SchemaFlyout({
     edit,
     updateModel,
     updateSchema,
+    addModel,
+    addField,
+    addAssociation,
     save,
     cancel,
   } = useSchemaFlyout({ schema, schemas, dbOptions, onChange })
@@ -66,6 +69,9 @@ export default function SchemaFlyout({
         updateSchema={updateSchema}
         updateModel={updateModel}
         onViewSchema={viewSchema}
+        onClickAddModel={addModel}
+        onClickAddField={addField}
+        onClickAddAssociation={addAssociation}
       />
     </Flyout>
   )
