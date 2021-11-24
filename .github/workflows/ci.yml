@@ -80,12 +80,11 @@ jobs:
 
       - name: Test
         run: npm run test:coverage
-      # coveralls API outage: https://github.com/coverallsapp/github-action/issues/93
-      # - name: Report coverage
-      #   uses: coverallsapp/github-action@master
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     flag-name: unit
+      - name: Report coverage
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: unit
 
   deploy:
     runs-on: ubuntu-latest
