@@ -1,0 +1,4 @@
+.breadcrumb::after {
+  content: '>';
+  @apply mx-1.5 inline-block;
+}

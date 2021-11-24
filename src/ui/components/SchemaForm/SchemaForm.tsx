@@ -21,15 +21,7 @@ const grid = classnames(
 
 const panel = classnames('border', 'border-gray-400', 'rounded')
 
-export const section = classnames(
-  'max-w-screen-lg',
-  'p-6',
-  'flex',
-  'flex-col',
-  'mx-auto',
-  'mb-6',
-  'last:mb-0',
-)
+export const section = classnames('max-w-screen-lg', 'flex', 'flex-col', 'mx-auto')
 
 export const title = classnames('text-2xl', 'mb-2')
 export const subtitle = classnames('text-xl', 'mb-2')
@@ -50,6 +42,7 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
       return
     }
     focusById(schemaNameId())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   React.useEffect(() => {
@@ -92,9 +85,15 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
   )
 
   return (
-    <div className={classnames(section)}>
+    <form
+      onSubmit={(evt) => evt.preventDefault()}
+      autoComplete="off"
+      data-lpignore="true"
+      data-form-type="other"
+      className={classnames('p-6', 'pt-11')}
+    >
       <h2 className={classnames(title)}>Schema</h2>
-      <div className={classnames('mb-4', 'sm:w-1/2')}>
+      <div className={classnames('sm:w-1/2')}>
         <TextInput
           id={schemaNameId()}
           label="Name"
@@ -150,7 +149,7 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
           </button>
         </li>
       </ul>
-    </div>
+    </form>
   )
 }
 

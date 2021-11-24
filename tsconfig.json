@@ -22,7 +22,8 @@
     "baseUrl": ".",
     "paths": {
       "@src/*": ["src/*"]
-    }
+    },
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
   "exclude": ["node_modules"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]

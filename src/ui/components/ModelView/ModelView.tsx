@@ -1,13 +1,15 @@
 import { Model, Schema } from '@src/core/schema'
+import breadcrumbs from '@src/ui/styles/breadcrumbs.module.css'
 import { classnames } from '@src/ui/styles/classnames'
 import { titleCase } from '@src/utils/string'
+import classnames_ from 'classnames'
 import React from 'react'
 import { newButton } from '../home/MySchemaLinks/styles'
 import PlusCircleIcon from '../icons/Plus'
 import AssociationView from './AssociationView'
 import FieldView from './FieldView'
 
-export const section = classnames('max-w-screen-lg', 'p-6', 'pt-0', 'flex', 'flex-col', 'mx-auto')
+export const section = classnames('max-w-screen-lg', 'p-6', 'pt-2', 'flex', 'flex-col', 'mx-auto')
 
 export const title = classnames('text-2xl', 'mb-2')
 
@@ -39,14 +41,18 @@ export default function ModelView({
   onClickAddAssociation,
 }: ModelViewProps): React.ReactElement {
   return (
-    <div className={classnames(section)}>
-      <div className={classnames('py-1')}>
+    <div className={classnames(section, 'mb-3')}>
+      <div className={classnames('mb-4', 'flex', 'text-sm')}>
         <button
-          className={classnames('font-semibold', 'text-sm', 'hover:underline', '-ml-4')}
+          className={classnames_(
+            classnames('font-semibold', 'hover:underline'),
+            breadcrumbs.breadcrumb,
+          )}
           onClick={() => onViewSchema()}
         >
-          ← Back to schema
+          {titleCase(schema.name)} (schema)
         </button>
+        <span>{titleCase(model.name)} (model)</span>
       </div>
       <h2 className={classnames(title)}>Model</h2>
       <div className={classnames('mb-11')}>

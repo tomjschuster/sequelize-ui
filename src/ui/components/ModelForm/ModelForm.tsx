@@ -10,14 +10,7 @@ import AssociationFieldset, { associationTypeId } from './AssociationFieldset'
 import FieldFieldset, { fieldNameId } from './FieldFieldset'
 import ModelFieldset, { modelNameId } from './ModelFieldset'
 
-export const section = classnames(
-  'max-w-screen-lg',
-  'flex',
-  'flex-col',
-  'mx-auto',
-  'mb-6',
-  'last:mb-0',
-)
+export const section = classnames('max-w-screen-lg', 'flex', 'flex-col', 'mx-auto')
 
 export const title = classnames('text-2xl', 'mb-2')
 
@@ -64,6 +57,7 @@ export default function ModelForm({
     }
 
     focusById(modelNameId())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   React.useEffect(() => {
@@ -149,13 +143,13 @@ export default function ModelForm({
       autoComplete="off"
       data-lpignore="true"
       data-form-type="other"
-      className={classnames('p-6', 'pt-8')}
+      className={classnames('p-6', 'pt-11')}
     >
       <div className={classnames(section)}>
         <h2 className={classnames(title)}>Model</h2>
         <ModelFieldset name={model.name} onChange={handleChangeModel} errors={errors} />
       </div>
-      <div className={classnames(section)}>
+      <div className={classnames(section, 'mb-6')}>
         <h3 className={classnames(title)}>Fields</h3>
 
         <ul className={classnames(grid)}>

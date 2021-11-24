@@ -18,7 +18,7 @@ const grid = classnames(
 
 const panel = classnames('border', 'border-gray-400', 'rounded')
 
-export const section = classnames('max-w-screen-lg', 'p-6', 'pt-8', 'flex', 'flex-col', 'mx-auto')
+export const section = classnames('max-w-screen-lg', 'p-6', 'pt-2', 'flex', 'flex-col', 'mx-auto')
 
 export const title = classnames('text-2xl', 'mb-2')
 export const subtitle = classnames('text-xl', 'mb-2')
@@ -36,8 +36,11 @@ function SchemaView({
 }: SchemaViewProps): React.ReactElement {
   return (
     <div className={classnames(section)}>
+      <div className={classnames('mb-4', 'flex', 'text-sm')}>
+        <span>{titleCase(schema.name)} (schema)</span>
+      </div>
       <h2 className={classnames(title)}>Schema</h2>
-      <div className={classnames('mb-8')}>
+      <div className={classnames('mb-11')}>
         <p className={classnames('text-lg')}>Name: {titleCase(schema.name)}</p>
       </div>
       <h3 className={classnames(subtitle)}>Models</h3>
