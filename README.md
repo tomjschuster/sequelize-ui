@@ -11,6 +11,8 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
+- [ ] Field/Association edit buttons
+- [ ] Trim double while lines
 - [ ] Refactor form components
 - [ ] Copy/download alerts
 - [ ] Refactor styles
