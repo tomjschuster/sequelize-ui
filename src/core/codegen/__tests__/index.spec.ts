@@ -1,4 +1,4 @@
-import { ArrayOrString, blank, indent, lines, LinesOptions } from '..'
+import { blank, indent, Line, lines, LinesOptions } from '..'
 
 describe('codegen', () => {
   describe('blank', () => {
@@ -7,7 +7,7 @@ describe('codegen', () => {
     })
   })
   describe('lines', () => {
-    const cases: [value: ArrayOrString[], options: LinesOptions | undefined, expected: string][] = [
+    const cases: [value: Line, options: LinesOptions | undefined, expected: string][] = [
       [[], {}, ''],
       [[[]], {}, ''],
       [['foo'], {}, 'foo'],

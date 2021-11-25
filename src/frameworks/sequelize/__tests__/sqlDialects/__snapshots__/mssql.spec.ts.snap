@@ -222,8 +222,6 @@ export type {
 export function initModels(sequelize: Sequelize) {
   Category.initModel(sequelize)
 
-  
-
   return {
     Category
   }

@@ -83,7 +83,6 @@ function initModels({ schema: { models }, dbOptions }: InitModelsArgs): string {
     'export function initModels(sequelize: Sequelize) {',
     lines(models.map(initModel), { depth: 2 }),
     blank(),
-
     lines(
       models
         .filter(({ associations }) => associations.length > 0)

@@ -194,8 +194,6 @@ export function initModels(sequelize: Sequelize) {
   Prefixed.initModel(sequelize)
   Nonstandard.initModel(sequelize)
 
-  
-
   return {
     Default,
     Id,

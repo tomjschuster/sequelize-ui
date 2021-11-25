@@ -11,17 +11,14 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Field/Association edit buttons
-- [ ] Trim double while lines
-- [ ] Refactor form components
 - [ ] Copy/download alerts
+- [ ] Home page copy
+- [ ] demo schema tooltips
+- [ ] Refactor form components
 - [ ] Refactor styles
 - [ ] Refactor icon props
-- [ ] a11y (aria-controls?)
+- [ ] a11y
 - [ ] db compatibility warnings
-- [ ] Home page
-  - [ ] Copy
-- [ ] demo schema tooltips
 
 #### Codegen
 

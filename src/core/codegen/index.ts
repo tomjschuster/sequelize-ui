@@ -15,22 +15,31 @@ export type LinesOptions = {
   prefix?: string
 }
 
-export type ArrayOrString = Array<ArrayOrString> | string | null
+export type Line = NestedArray<string | null>
 
 const defaultLinesOptions: LinesOptions = {
   separator: '',
   depth: 0,
 }
 export function lines(
-  xs: Array<ArrayOrString>,
+  xs: Line,
   { separator = '', depth = 0, prefix = '' }: LinesOptions = defaultLinesOptions,
 ): string {
   return indent(
     depth,
-    flatten<ArrayOrString>(xs)
-      .filter((x): x is string => x !== null)
+    flatten<string | null>(xs)
+      .filter((x, i, arr): x is string => x !== null && !consecutiveBlank(arr, i))
       .join(`${separator}\n`),
     prefix,
+  )
+}
+
+function consecutiveBlank(arr: Array<string | unknown>, i: number): boolean {
+  const prev = arr[i - 1]
+  const curr = arr[i]
+
+  return (
+    typeof curr === 'string' && typeof prev === 'string' && curr.trim() === '' && prev.trim() === ''
   )
 }
 
