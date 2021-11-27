@@ -1,6 +1,6 @@
 import CloseCircleIcon from '@src/ui/components/icons/CloseCircle'
 import useLockScroll from '@src/ui/hooks/useLockScroll'
-import useTrapFocus from '@src/ui/hooks/useTrapFocus'
+// import useTrapFocus from '@src/ui/hooks/useTrapFocus'
 import React from 'react'
 import * as Styles from './styles'
 
@@ -18,7 +18,7 @@ export default function Flyout({
 }: FlyoutProps): React.ReactElement | null {
   const ref = React.useRef() as React.MutableRefObject<HTMLDivElement>
   useLockScroll(ref)
-  useTrapFocus({ ref, shouldTrap: true })
+  // useTrapFocus({ ref, shouldTrap: true })
 
   return (
     <div className={Styles.container} ref={ref}>

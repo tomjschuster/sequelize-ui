@@ -23,6 +23,7 @@ export default function useTrapFocus({ shouldTrap, ref }: UseTrapFocusArgs): voi
   React.useEffect(() => {
     if (shouldTrap && ref.current) setTrap(ref.current)
     if (!shouldTrap) cleanup()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shouldTrap])
 
   React.useEffect(() => cleanup, [])

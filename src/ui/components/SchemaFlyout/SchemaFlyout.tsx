@@ -1,6 +1,7 @@
 import { DbOptions, defaultDbOptions } from '@src/core/database'
 import { Schema } from '@src/core/schema'
 import Flyout from '@src/ui/components/Flyout'
+import { useAlert } from '@src/ui/lib/alert'
 import React from 'react'
 import SchemaFlyoutContent from './SchemaFlyoutContent'
 import SchemaFlyoutControls from './SchemaFlyoutControls'
@@ -19,7 +20,22 @@ export default function SchemaFlyout({
   onClickClose,
 }: SchemaFlyoutProps): React.ReactElement | null {
   const [dbOptions, setDbOptions] = React.useState<DbOptions>(defaultDbOptions)
+  const { success, error } = useAlert()
 
+  const handleChange = React.useCallback(
+    (schema: Schema): Promise<Schema> =>
+      onChange(schema)
+        .then((schema) => {
+          success(`Schema ${schema.name} saved.`)
+          return schema
+        })
+        .catch((e) => {
+          console.error(e)
+          error(`Error saving schema ${schema.name}`)
+          return schema
+        }),
+    [error, success, onChange],
+  )
   const {
     state,
     isEditing,
@@ -36,7 +52,7 @@ export default function SchemaFlyout({
     addAssociation,
     save,
     cancel,
-  } = useSchemaFlyout({ schema, schemas, dbOptions, onChange })
+  } = useSchemaFlyout({ schema, schemas, dbOptions, onChange: handleChange })
 
   if (!root) return null
 

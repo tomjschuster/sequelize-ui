@@ -2,6 +2,7 @@ import { DbOptions } from '@src/core/database'
 import { ActiveFile, FileItem, FileSystemItem } from '@src/core/files'
 import useIsOpen from '@src/ui/hooks/useIsOpen'
 import useOnClickOutside from '@src/ui/hooks/useOnClickOutside'
+import { useAlert } from '@src/ui/lib/alert'
 import React from 'react'
 import DbOptionsForm from '../DbOptionsForm'
 import { ControlsAction } from '../Flyout'
@@ -27,10 +28,28 @@ export default function CodeViewerControls({
   onClickEdit,
   onChangeDbOptions,
 }: CodeViewerControlsProps): React.ReactElement {
+  const { success, error } = useAlert()
   const { isOpen: isDbOptionsOpen, toggle: toggleDbOptions, close: closeDbOptions } = useIsOpen()
 
-  const handleClickDownload = () => download(root)
-  const handleClickCopy = async () => activeFile && copyFile(activeFile.file)
+  const handleClickDownload = () => {
+    download(root)
+      .then(() => success(`Project ${root.name} downloaded as zip file.`))
+      .catch((e) => {
+        console.error(e)
+        error('Failed to copy to clipboard.')
+      })
+  }
+
+  const handleClickCopy = () => {
+    if (activeFile) {
+      copyFile(activeFile.file)
+        .then(() => success(`${activeFile.file.name} copied to clipboard.`))
+        .catch((e) => {
+          console.error(e)
+          error('Failed to download project.')
+        })
+    }
+  }
 
   const dbOptionsRef = React.useRef(null)
   useOnClickOutside(dbOptionsRef, closeDbOptions)
