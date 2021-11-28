@@ -2,7 +2,7 @@ import { Schema } from '@src/core/schema'
 import * as DemoSchemaIds from './demoSchemaIds'
 
 export function isDemoSchema(schema: Schema): boolean {
-  return !!getDemoSchemaType(schema) || schema.id === ''
+  return !!getDemoSchemaType(schema)
 }
 
 function getDemoSchemaType({ id }: Schema): DemoSchemaType | undefined {

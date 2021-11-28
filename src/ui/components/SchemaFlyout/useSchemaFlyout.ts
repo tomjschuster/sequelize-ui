@@ -1,14 +1,15 @@
 import { DbOptions } from '@src/core/database'
 import { DirectoryItem, FileTreeState } from '@src/core/files'
-import { isDemoSchema, Model, Schema } from '@src/core/schema'
+import { isNewSchema, Model, Schema } from '@src/core/schema'
 import {
   emptyModelErrors,
   emptySchemaErrors,
+  hasSchemaErrors,
   noModelErrors,
-  noSchemaErrors,
   validateModel,
   validateSchema,
 } from '@src/core/validation/schema'
+import { isDemoSchema } from '@src/data/schemas'
 import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import equal from 'fast-deep-equal/es6'
 import React from 'react'
@@ -21,6 +22,7 @@ type UseSchemaFlyoutArgs = {
   dbOptions: DbOptions
   code?: boolean
   onChange: (schema: Schema) => Promise<Schema>
+  onExit: () => void
 }
 
 type UseSchemaFlyoutResult = {
@@ -46,9 +48,10 @@ export function useSchemaFlyout({
   dbOptions,
   code = true,
   onChange,
+  onExit,
 }: UseSchemaFlyoutArgs): UseSchemaFlyoutResult {
   const [state, setState] = React.useState<SchemaFlyoutState>(() =>
-    isDemoSchema(schema) || !code
+    isNewSchema(schema) || !code
       ? { type: SchemaFlyoutStateType.EDIT_SCHEMA, schema, errors: emptySchemaErrors }
       : { type: SchemaFlyoutStateType.CODE },
   )
@@ -187,17 +190,23 @@ export function useSchemaFlyout({
     if (state.type === SchemaFlyoutStateType.EDIT_SCHEMA) {
       const errors = validateSchema(state.schema, schemas)
 
-      if (noSchemaErrors(errors)) {
-        if (!equal(state.schema, schema)) {
-          const updatedSchema = await onChange(state.schema)
-          exitEdit(updatedSchema)
-          return
-        }
-
-        exitEdit(schema)
-      } else {
+      if (hasSchemaErrors(errors)) {
         setState({ ...state, errors })
+        return
       }
+
+      if (isDemoSchema(state.schema) || !equal(state.schema, schema)) {
+        const updatedSchema = await onChange(state.schema)
+        exitEdit(updatedSchema)
+        return
+      }
+
+      if (isNewSchema(state.schema)) {
+        onExit()
+        return
+      }
+
+      exitEdit(schema)
     }
 
     if (state.type === SchemaFlyoutStateType.EDIT_MODEL) {
@@ -222,9 +231,21 @@ export function useSchemaFlyout({
         setState({ ...state, errors })
       }
     }
-  }, [schema, schemas, state, onChange, exitEdit])
+  }, [schema, schemas, state, onChange, exitEdit, onExit])
 
-  const cancel = React.useCallback(() => exitEdit(schema), [schema, exitEdit])
+  const cancel = React.useCallback(() => {
+    if (isNewSchema(schema)) {
+      onExit()
+      return
+    }
+
+    if (isDemoSchema(schema)) {
+      viewCode()
+      return
+    }
+
+    exitEdit(schema)
+  }, [schema, exitEdit, onExit, viewCode])
 
   return {
     state,

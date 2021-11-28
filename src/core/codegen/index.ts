@@ -38,9 +38,11 @@ function consecutiveBlank(arr: Array<string | unknown>, i: number): boolean {
   const prev = arr[i - 1]
   const curr = arr[i]
 
-  return (
-    typeof curr === 'string' && typeof prev === 'string' && curr.trim() === '' && prev.trim() === ''
-  )
+  if (prev === undefined || curr === undefined) {
+    return false
+  }
+
+  return isBlank(prev) && isBlank(curr)
 }
 
 type NestedArray<T> = Array<NestedArray<T> | T>
@@ -55,4 +57,8 @@ function flatten<T>(xs: NestedArray<T>): T[] {
   }
 
   return output
+}
+
+function isBlank(value: unknown): boolean {
+  return typeof value === 'string' ? value.trim() === '' : value === null
 }

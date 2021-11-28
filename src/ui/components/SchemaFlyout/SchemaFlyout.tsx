@@ -52,7 +52,7 @@ export default function SchemaFlyout({
     addAssociation,
     save,
     cancel,
-  } = useSchemaFlyout({ schema, schemas, dbOptions, onChange: handleChange })
+  } = useSchemaFlyout({ schema, schemas, dbOptions, onChange: handleChange, onExit: onClickClose })
 
   if (!root) return null
 

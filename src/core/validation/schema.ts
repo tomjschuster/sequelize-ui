@@ -70,6 +70,10 @@ export function noSchemaErrors(errors: SchemaErrors): boolean {
   return deepEmpty(errors)
 }
 
+export function hasSchemaErrors(errors: SchemaErrors): boolean {
+  return !noSchemaErrors(errors)
+}
+
 function validateSchemaName(schema: Schema, schemas: Schema[]): string | undefined {
   if (nameEmpty(schema.name)) {
     return NAME_REQUIRED_MESSAGE

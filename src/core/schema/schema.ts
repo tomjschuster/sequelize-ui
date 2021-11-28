@@ -69,6 +69,6 @@ export function emptyAssociation(
   }
 }
 
-export function isDemoSchema(schema: Schema): boolean {
+export function isNewSchema(schema: Schema): boolean {
   return schema.id === ''
 }

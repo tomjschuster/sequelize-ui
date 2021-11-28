@@ -117,7 +117,9 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
               value={m.name}
               onChange={(value) => handleChangeModelName(m.id, value)}
             />
+
             <button
+              type="button"
               className={classnames('p-2', 'hover:bg-gray-200', 'self-center', 'ml-0.5')}
               onClick={() => handleDeleteModel(m.id)}
             >

@@ -1,5 +1,6 @@
 import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
+import { useTrapFocus } from '../../focus'
 import { Alert, isAlertVisible } from './alert'
 import AlertDisplay from './AlertDisplay'
 
@@ -8,15 +9,19 @@ type AlertsContainerProps = {
   onDismiss: (id: string) => void
 }
 
+// const AlertsContainer = React.forwardRef<HTMLUListElement, AlertsContainerProps>(
 function AlertsContainer({ alerts, onDismiss }: AlertsContainerProps): React.ReactElement {
+  const ref = React.useRef() as React.MutableRefObject<HTMLUListElement>
+  useTrapFocus({ ref, global: true })
   return (
-    <ul>
+    <ul ref={ref}>
       {alerts.map((alert) => (
         <AlertItem key={alert.id} alert={alert} onDismiss={onDismiss} />
       ))}
     </ul>
   )
 }
+// )
 
 type AlertItemProps = {
   alert: Alert

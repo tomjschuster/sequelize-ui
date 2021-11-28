@@ -1,5 +1,5 @@
 import { clearData, createSchema, listSchemas, updateSchema } from '@src/api/schema'
-import { emptySchema, Schema } from '@src/core/schema'
+import { emptySchema, isNewSchema, Schema } from '@src/core/schema'
 import { DemoSchemaType, getDemoSchema, isDemoSchema } from '@src/data/schemas'
 import DemoSchemaButtons from '@src/ui/components/home/DemoSchemaButtons'
 import MySchemaLinks from '@src/ui/components/home/MySchemaLinks'
@@ -37,8 +37,10 @@ export default function IndexPage(): React.ReactElement {
   }
 
   const handleChange = async (schema: Schema) => {
-    const updated = await (isDemoSchema(schema) ? createSchema(schema) : updateSchema(schema))
+    const shouldCreate = isDemoSchema(schema) || isNewSchema(schema)
+    const updated = await (shouldCreate ? createSchema(schema) : updateSchema(schema))
     setSchema(updated)
+
     refetch()
     return updated
   }

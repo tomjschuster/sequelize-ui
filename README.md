@@ -12,17 +12,17 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 #### UI
 
 - [ ] Keyboard controls
-  - [ ] Focus trap context with appending nodes (flyout + alerts)
   - [ ] File tree navigation (WARIA example)
-- [ ] Close flyout when cancelling new project
 - [ ] demo schema tooltips
 - [ ] Refactor form components
 - [ ] Refactor styles
 - [ ] Refactor icon props
+- [ ] Error boundary
 - [ ] a11y
   - [ ] Alerts aria attrs
   - [ ] Form errors aria attrs
 - [ ] Home page copy
+- [ ] Dark mode
 - [ ] db compatibility warnings
 
 #### Codegen

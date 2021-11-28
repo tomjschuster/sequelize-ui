@@ -21,7 +21,7 @@ export type InitModelsTemplateArgs = {
 
 export function initModelsTemplate({ schema, dbOptions }: InitModelsTemplateArgs): string {
   return lines([
-    importSequelize(),
+    importSequelize(schema),
     importModels(schema),
     blank(),
     exportModels(schema),
@@ -33,7 +33,11 @@ export function initModelsTemplate({ schema, dbOptions }: InitModelsTemplateArgs
   ])
 }
 
-function importSequelize(): string {
+function importSequelize({ models }: Schema): string {
+  if (models.length === 0) {
+    return `import type { Sequelize } from 'sequelize'`
+  }
+
   return `import type { Sequelize, Model } from 'sequelize'`
 }
 
@@ -50,11 +54,19 @@ function importModel(model: Model): string {
   ])
 }
 
-function exportModels({ models }: Schema): string {
+function exportModels({ models }: Schema): string | null {
+  if (models.length === 0) {
+    return null
+  }
+
   return lines(['export {', lines(models.map(modelName), { separator: ',', depth: 2 }), '}'])
 }
 
-function exportTypes({ models }: Schema): string {
+function exportTypes({ models }: Schema): string | null {
+  if (models.length === 0) {
+    return null
+  }
+
   return lines([
     'export type {',
     lines(models.map(modelTypeExport), { depth: 2, separator: ',' }),
@@ -77,6 +89,9 @@ type InitModelsArgs = {
   dbOptions: DbOptions
 }
 function initModels({ schema: { models }, dbOptions }: InitModelsArgs): string {
+  if (models.length === 0) {
+    return 'export function initModels(_sequelize: Sequelize) {\n  return {}\n}'
+  }
   const modelById = arrayToLookup(models, (m) => m.id)
 
   return lines([

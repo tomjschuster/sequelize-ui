@@ -171,7 +171,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
           />
         )}
         {isNumberType(field.type) && (
-          <div className={classnames('flex', 'flex-col', 'justify-center', 'self-center', 'pt-2')}>
+          <div className={classnames('flex', 'flex-col', 'justify-center', 'self-start', 'pt-4')}>
             <Checkbox
               id={`field-unsigned-${field.id}`}
               label="Unsigned"
@@ -200,7 +200,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         )}
 
         {isDateTimeType(field.type) && (
-          <div className={classnames('flex', 'flex-col', 'justify-center', 'self-center', 'pt-4')}>
+          <div className={classnames('flex', 'flex-col', 'justify-center', 'self-start', 'pt-4')}>
             <Checkbox
               id={`field-default-now-${field.id}`}
               label="Default to now"
