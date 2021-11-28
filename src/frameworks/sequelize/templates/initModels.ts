@@ -41,7 +41,11 @@ function importSequelize({ models }: Schema): string {
   return `import type { Sequelize, Model } from 'sequelize'`
 }
 
-function importModels({ models }: Schema): string {
+function importModels({ models }: Schema): string | null {
+  if (models.length === 0) {
+    return null
+  }
+
   return lines(models.map(importModel))
 }
 

@@ -28,7 +28,8 @@ export function lines(
   return indent(
     depth,
     flatten<string | null>(xs)
-      .filter((x, i, arr): x is string => x !== null && !consecutiveBlank(arr, i))
+      .filter((x): x is string => x !== null)
+      .filter((_, i, arr) => !consecutiveBlank(arr, i))
       .join(`${separator}\n`),
     prefix,
   )
@@ -60,5 +61,5 @@ function flatten<T>(xs: NestedArray<T>): T[] {
 }
 
 function isBlank(value: unknown): boolean {
-  return typeof value === 'string' ? value.trim() === '' : value === null
+  return typeof value === 'string' ? value.trim() === '' : false
 }

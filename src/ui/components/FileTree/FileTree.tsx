@@ -18,9 +18,19 @@ type FileTreeProps = {
   onSelect: (path: string) => void
 }
 function FileTree({ root, activePath, folderState, onSelect }: FileTreeProps): React.ReactElement {
+  const path = itemName(root)
+  const rootActive = path === activePath
+
   return (
-    <ul className={classnames('whitespace-nowrap', 'overflow-x-scroll')}>
-      <li>
+    <ul role="tree" className={classnames('whitespace-nowrap', 'overflow-x-scroll')}>
+      <li
+        tabIndex={rootActive ? 0 : -1}
+        role="treeitem"
+        aria-level={1}
+        aria-setsize={1}
+        aria-posinset={1}
+        aria-expanded={folderState[path]}
+      >
         <FileTreeItem
           depth={1}
           item={root}
@@ -69,8 +79,7 @@ function FileTreeItem({
 
   return (
     <>
-      <button
-        type="button"
+      <span
         className={classnames(
           'flex',
           'items-center',
@@ -95,20 +104,30 @@ function FileTreeItem({
           </span>
         )}
         {itemName(item)}
-      </button>
-      {isDirectory(item) && item.files.length > 0 && folderState[path] && (
-        <ul>
+      </span>
+      {isDirectory(item) && item.files.length > 0 && (
+        <ul role="group" className={classnames({ hidden: !folderState[path] })}>
           {item.files
             .slice()
             .sort(compareItems)
-            .map((item) => {
-              const newPath = path + '/' + itemName(item)
+            .map((child, i) => {
+              const newPath = path + '/' + itemName(child)
+              const tabIndex = newPath === activePath ? 0 : -1
 
               return (
-                <li id={pathId(newPath)} key={itemName(item)}>
+                <li
+                  tabIndex={tabIndex}
+                  role="treeitem"
+                  aria-level={depth + 1}
+                  aria-setsize={item.files.length}
+                  aria-posinset={i + 1}
+                  aria-expanded={isDirectory(child) ? folderState[newPath] : undefined}
+                  id={pathId(newPath)}
+                  key={itemName(child)}
+                >
                   <FileTreeItem
                     depth={depth + 1}
-                    item={item}
+                    item={child}
                     onSelect={onSelect}
                     path={newPath}
                     activePath={activePath}
