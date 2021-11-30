@@ -54,4 +54,6 @@ export const actionButton = classnames(
   'px-1',
   'md:px-2',
   'hover:bg-gray-200',
+  'focus:outline-none',
+  'focus-visible:outline-black',
 )

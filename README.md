@@ -11,17 +11,18 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Keyboard controls
-- [ ] demo schema tooltips
+- [ ] Refactor icon props
 - [ ] Refactor form components
 - [ ] Refactor styles
-- [ ] Refactor icon props
+- [ ] Refactor file tree html
 - [ ] Error boundary
 - [ ] a11y
   - [ ] Alerts aria attrs
   - [ ] Form errors aria attrs
 - [ ] Optimize file tree state
 - [ ] Home page copy
+- [ ] demo schema tooltips
+- [ ] migrate old sequelize ui
 - [ ] Dark mode
 - [ ] db compatibility warnings
 

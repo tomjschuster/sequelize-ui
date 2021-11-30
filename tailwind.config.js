@@ -306,6 +306,10 @@ module.exports = {
       none: 'none',
       full: '0 0 100%',
     },
+    // outline: {
+    //   none: 'none',
+    //   auto: 'auto',
+    // },
   },
   variants: {
     extend: {

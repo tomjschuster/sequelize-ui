@@ -37,11 +37,11 @@ function Toggle<T>({
               'first:rounded-l',
               'last:rounded-r',
               'focus:outline-none',
-              'focus-visible:border-blue-500',
-              'focus-visible:font-bold',
+              'focus-visible:outline-black',
               {
                 'text-blue-900': selected,
                 'bg-blue-50': selected,
+                'font-semibold': selected,
               },
             )}
             type="button"
