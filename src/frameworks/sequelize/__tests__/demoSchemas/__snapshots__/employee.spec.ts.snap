@@ -454,252 +454,6 @@ module.exports = {
     Object {
       "files": Array [
         Object {
-          "content": "import type { Sequelize, Model } from 'sequelize'
-import { Employee } from './Employee'
-import type { EmployeeAttributes, EmployeeCreationAttributes } from './Employee'
-import { Department } from './Department'
-import type { DepartmentAttributes, DepartmentCreationAttributes } from './Department'
-import { DeptEmp } from './DeptEmp'
-import type { DeptEmpAttributes, DeptEmpCreationAttributes } from './DeptEmp'
-import { DeptManager } from './DeptManager'
-import type { DeptManagerAttributes, DeptManagerCreationAttributes } from './DeptManager'
-import { Title } from './Title'
-import type { TitleAttributes, TitleCreationAttributes } from './Title'
-import { Salary } from './Salary'
-import type { SalaryAttributes, SalaryCreationAttributes } from './Salary'
-
-export {
-  Employee,
-  Department,
-  DeptEmp,
-  DeptManager,
-  Title,
-  Salary
-}
-
-export type {
-  EmployeeAttributes,
-  EmployeeCreationAttributes,
-  DepartmentAttributes,
-  DepartmentCreationAttributes,
-  DeptEmpAttributes,
-  DeptEmpCreationAttributes,
-  DeptManagerAttributes,
-  DeptManagerCreationAttributes,
-  TitleAttributes,
-  TitleCreationAttributes,
-  SalaryAttributes,
-  SalaryCreationAttributes
-}
-
-export function initModels(sequelize: Sequelize) {
-  Employee.initModel(sequelize)
-  Department.initModel(sequelize)
-  DeptEmp.initModel(sequelize)
-  DeptManager.initModel(sequelize)
-  Title.initModel(sequelize)
-  Salary.initModel(sequelize)
-
-  Employee.hasMany(Salary, {
-    foreignKey: 'emp_no'
-  })
-  Employee.hasMany(Title, {
-    foreignKey: 'emp_no'
-  })
-  Employee.belongsToMany(Department, {
-    as: 'employingDepartments',
-    through: DeptEmp,
-    foreignKey: 'emp_no',
-    otherKey: 'dept_no',
-    onDelete: 'CASCADE'
-  })
-  Employee.belongsToMany(Department, {
-    as: 'managedDepartments',
-    through: DeptManager,
-    foreignKey: 'emp_no',
-    otherKey: 'dept_no',
-    onDelete: 'CASCADE'
-  })
-  Department.belongsToMany(Employee, {
-    as: 'employees',
-    through: DeptEmp,
-    foreignKey: 'departments_id',
-    otherKey: 'employee_id',
-    onDelete: 'CASCADE'
-  })
-  Department.belongsToMany(Employee, {
-    as: 'managers',
-    through: DeptManager,
-    foreignKey: 'departments_id',
-    otherKey: 'manager_id',
-    onDelete: 'CASCADE'
-  })
-  Department.hasMany(DeptEmp, {
-    foreignKey: 'dept_no'
-  })
-  Department.hasMany(DeptManager, {
-    foreignKey: 'dept_no'
-  })
-  DeptEmp.belongsTo(Employee, {
-    foreignKey: 'emp_no'
-  })
-  DeptEmp.belongsTo(Department, {
-    foreignKey: 'dept_no'
-  })
-  DeptManager.belongsTo(Employee, {
-    foreignKey: 'emp_no'
-  })
-  DeptManager.belongsTo(Department, {
-    foreignKey: 'dept_no'
-  })
-  Title.belongsTo(Employee, {
-    foreignKey: 'emp_no'
-  })
-  Salary.belongsTo(Employee, {
-    foreignKey: 'emp_no'
-  })
-
-  return {
-    Employee,
-    Department,
-    DeptEmp,
-    DeptManager,
-    Title,
-    Salary
-  }
-}
-",
-          "name": "index.ts",
-          "type": "FILE",
-        },
-        Object {
-          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Department, DepartmentId } from './Department'
-import type { Salary, SalaryId } from './Salary'
-import type { Title, TitleId } from './Title'
-
-export interface EmployeeAttributes {
-  empNo: number
-  birthDate: string
-  firstName: string
-  lastName: string
-  gender: 'M' | 'F' | 'O'
-  hireDate: string
-}
-
-export type EmployeePk = 'empNo'
-export type EmployeeId = EmployeeAttributes[EmployeePk]
-export type EmployeeCreationAttributes = Optional<EmployeeAttributes, EmployeePk>
-
-export class Employee
-  extends Model<EmployeeAttributes, EmployeeCreationAttributes>
-  implements EmployeeAttributes {
-  public readonly empNo!: number
-  public birthDate!: string
-  public firstName!: string
-  public lastName!: string
-  public gender!: 'M' | 'F' | 'O'
-  public hireDate!: string
-
-  // Employee hasMany Salary
-  public readonly Salaries?: Salary[]
-  public getSalaries!: Sequelize.HasManyGetAssociationsMixin<Salary>
-  public setSalaries!: Sequelize.HasManySetAssociationsMixin<Salary, SalaryId>
-  public addSalary!: Sequelize.HasManyAddAssociationMixin<Salary, SalaryId>
-  public addSalaries!: Sequelize.HasManyAddAssociationsMixin<Salary, SalaryId>
-  public createSalary!: Sequelize.HasManyCreateAssociationMixin<Salary>
-  public removeSalary!: Sequelize.HasManyRemoveAssociationMixin<Salary, SalaryId>
-  public removeSalaries!: Sequelize.HasManyRemoveAssociationsMixin<Salary, SalaryId>
-  public hasSalary!: Sequelize.HasManyHasAssociationMixin<Salary, SalaryId>
-  public hasSalaries!: Sequelize.HasManyHasAssociationsMixin<Salary, SalaryId>
-  public countSalaries!: Sequelize.HasManyCountAssociationsMixin
-  
-  // Employee hasMany Title
-  public readonly Titles?: Title[]
-  public getTitles!: Sequelize.HasManyGetAssociationsMixin<Title>
-  public setTitles!: Sequelize.HasManySetAssociationsMixin<Title, TitleId>
-  public addTitle!: Sequelize.HasManyAddAssociationMixin<Title, TitleId>
-  public addTitles!: Sequelize.HasManyAddAssociationsMixin<Title, TitleId>
-  public createTitle!: Sequelize.HasManyCreateAssociationMixin<Title>
-  public removeTitle!: Sequelize.HasManyRemoveAssociationMixin<Title, TitleId>
-  public removeTitles!: Sequelize.HasManyRemoveAssociationsMixin<Title, TitleId>
-  public hasTitle!: Sequelize.HasManyHasAssociationMixin<Title, TitleId>
-  public hasTitles!: Sequelize.HasManyHasAssociationsMixin<Title, TitleId>
-  public countTitles!: Sequelize.HasManyCountAssociationsMixin
-  
-  // Employee belongsToMany Department (as EmployingDepartment)
-  public readonly employingDepartments?: Department[]
-  public getEmployingDepartments!: Sequelize.BelongsToManyGetAssociationsMixin<Department>
-  public setEmployingDepartments!: Sequelize.BelongsToManySetAssociationsMixin<Department, DepartmentId>
-  public addEmployingDepartment!: Sequelize.BelongsToManyAddAssociationMixin<Department, DepartmentId>
-  public addEmployingDepartments!: Sequelize.BelongsToManyAddAssociationsMixin<Department, DepartmentId>
-  public createEmployingDepartment!: Sequelize.BelongsToManyCreateAssociationMixin<Department>
-  public removeEmployingDepartment!: Sequelize.BelongsToManyRemoveAssociationMixin<Department, DepartmentId>
-  public removeEmployingDepartments!: Sequelize.BelongsToManyRemoveAssociationsMixin<Department, DepartmentId>
-  public hasEmployingDepartment!: Sequelize.BelongsToManyHasAssociationMixin<Department, DepartmentId>
-  public hasEmployingDepartments!: Sequelize.BelongsToManyHasAssociationsMixin<Department, DepartmentId>
-  public countEmployingDepartments!: Sequelize.BelongsToManyCountAssociationsMixin
-  
-  // Employee belongsToMany Department (as ManagedDepartment)
-  public readonly managedDepartments?: Department[]
-  public getManagedDepartments!: Sequelize.BelongsToManyGetAssociationsMixin<Department>
-  public setManagedDepartments!: Sequelize.BelongsToManySetAssociationsMixin<Department, DepartmentId>
-  public addManagedDepartment!: Sequelize.BelongsToManyAddAssociationMixin<Department, DepartmentId>
-  public addManagedDepartments!: Sequelize.BelongsToManyAddAssociationsMixin<Department, DepartmentId>
-  public createManagedDepartment!: Sequelize.BelongsToManyCreateAssociationMixin<Department>
-  public removeManagedDepartment!: Sequelize.BelongsToManyRemoveAssociationMixin<Department, DepartmentId>
-  public removeManagedDepartments!: Sequelize.BelongsToManyRemoveAssociationsMixin<Department, DepartmentId>
-  public hasManagedDepartment!: Sequelize.BelongsToManyHasAssociationMixin<Department, DepartmentId>
-  public hasManagedDepartments!: Sequelize.BelongsToManyHasAssociationsMixin<Department, DepartmentId>
-  public countManagedDepartments!: Sequelize.BelongsToManyCountAssociationsMixin
-  
-  public static associations: {
-    Salaries: Association<Employee, Salary>,
-    Titles: Association<Employee, Title>,
-    employingDepartments: Association<Employee, Department>,
-    managedDepartments: Association<Employee, Department>
-  }
-
-  static initModel(sequelize: Sequelize.Sequelize): typeof Employee {
-    Employee.init({
-      empNo: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-      birthDate: {
-        type: DataTypes.DATEONLY,
-        allowNull: false
-      },
-      firstName: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      lastName: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      gender: {
-        type: DataTypes.ENUM('M', 'F', 'O'),
-        allowNull: false
-      },
-      hireDate: {
-        type: DataTypes.DATEONLY,
-        allowNull: false
-      }
-    }, {
-      sequelize
-    })
-    
-    return Employee
-  }
-}
-",
-          "name": "Employee.ts",
-          "type": "FILE",
-        },
-        Object {
           "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { DeptEmp, DeptEmpId } from './DeptEmp'
 import type { DeptManager, DeptManagerId } from './DeptManager'
@@ -947,66 +701,248 @@ export class DeptManager
         },
         Object {
           "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Employee, EmployeeId } from './Employee'
+import type { Department, DepartmentId } from './Department'
+import type { Salary, SalaryId } from './Salary'
+import type { Title, TitleId } from './Title'
 
-export interface TitleAttributes {
+export interface EmployeeAttributes {
   empNo: number
-  title: string
-  fromDate: string
-  toDate?: string
+  birthDate: string
+  firstName: string
+  lastName: string
+  gender: 'M' | 'F' | 'O'
+  hireDate: string
 }
 
-export type TitlePk = 'empNo' | 'fromDate'
-export type TitleId = TitleAttributes[TitlePk]
-export type TitleCreationAttributes = Optional<TitleAttributes, TitlePk>
+export type EmployeePk = 'empNo'
+export type EmployeeId = EmployeeAttributes[EmployeePk]
+export type EmployeeCreationAttributes = Optional<EmployeeAttributes, EmployeePk>
 
-export class Title
-  extends Model<TitleAttributes, TitleCreationAttributes>
-  implements TitleAttributes {
+export class Employee
+  extends Model<EmployeeAttributes, EmployeeCreationAttributes>
+  implements EmployeeAttributes {
   public readonly empNo!: number
-  public title!: string
-  public readonly fromDate!: string
-  public toDate?: string
+  public birthDate!: string
+  public firstName!: string
+  public lastName!: string
+  public gender!: 'M' | 'F' | 'O'
+  public hireDate!: string
 
-  // Title belongsTo Employee
-  public readonly Employee?: Employee
-  public getEmployee!: Sequelize.BelongsToGetAssociationMixin<Employee>
-  public setEmployee!: Sequelize.BelongsToSetAssociationMixin<Employee, EmployeeId>
-  public createEmployee!: Sequelize.BelongsToCreateAssociationMixin<Employee>
+  // Employee hasMany Salary
+  public readonly Salaries?: Salary[]
+  public getSalaries!: Sequelize.HasManyGetAssociationsMixin<Salary>
+  public setSalaries!: Sequelize.HasManySetAssociationsMixin<Salary, SalaryId>
+  public addSalary!: Sequelize.HasManyAddAssociationMixin<Salary, SalaryId>
+  public addSalaries!: Sequelize.HasManyAddAssociationsMixin<Salary, SalaryId>
+  public createSalary!: Sequelize.HasManyCreateAssociationMixin<Salary>
+  public removeSalary!: Sequelize.HasManyRemoveAssociationMixin<Salary, SalaryId>
+  public removeSalaries!: Sequelize.HasManyRemoveAssociationsMixin<Salary, SalaryId>
+  public hasSalary!: Sequelize.HasManyHasAssociationMixin<Salary, SalaryId>
+  public hasSalaries!: Sequelize.HasManyHasAssociationsMixin<Salary, SalaryId>
+  public countSalaries!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Employee hasMany Title
+  public readonly Titles?: Title[]
+  public getTitles!: Sequelize.HasManyGetAssociationsMixin<Title>
+  public setTitles!: Sequelize.HasManySetAssociationsMixin<Title, TitleId>
+  public addTitle!: Sequelize.HasManyAddAssociationMixin<Title, TitleId>
+  public addTitles!: Sequelize.HasManyAddAssociationsMixin<Title, TitleId>
+  public createTitle!: Sequelize.HasManyCreateAssociationMixin<Title>
+  public removeTitle!: Sequelize.HasManyRemoveAssociationMixin<Title, TitleId>
+  public removeTitles!: Sequelize.HasManyRemoveAssociationsMixin<Title, TitleId>
+  public hasTitle!: Sequelize.HasManyHasAssociationMixin<Title, TitleId>
+  public hasTitles!: Sequelize.HasManyHasAssociationsMixin<Title, TitleId>
+  public countTitles!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Employee belongsToMany Department (as EmployingDepartment)
+  public readonly employingDepartments?: Department[]
+  public getEmployingDepartments!: Sequelize.BelongsToManyGetAssociationsMixin<Department>
+  public setEmployingDepartments!: Sequelize.BelongsToManySetAssociationsMixin<Department, DepartmentId>
+  public addEmployingDepartment!: Sequelize.BelongsToManyAddAssociationMixin<Department, DepartmentId>
+  public addEmployingDepartments!: Sequelize.BelongsToManyAddAssociationsMixin<Department, DepartmentId>
+  public createEmployingDepartment!: Sequelize.BelongsToManyCreateAssociationMixin<Department>
+  public removeEmployingDepartment!: Sequelize.BelongsToManyRemoveAssociationMixin<Department, DepartmentId>
+  public removeEmployingDepartments!: Sequelize.BelongsToManyRemoveAssociationsMixin<Department, DepartmentId>
+  public hasEmployingDepartment!: Sequelize.BelongsToManyHasAssociationMixin<Department, DepartmentId>
+  public hasEmployingDepartments!: Sequelize.BelongsToManyHasAssociationsMixin<Department, DepartmentId>
+  public countEmployingDepartments!: Sequelize.BelongsToManyCountAssociationsMixin
+  
+  // Employee belongsToMany Department (as ManagedDepartment)
+  public readonly managedDepartments?: Department[]
+  public getManagedDepartments!: Sequelize.BelongsToManyGetAssociationsMixin<Department>
+  public setManagedDepartments!: Sequelize.BelongsToManySetAssociationsMixin<Department, DepartmentId>
+  public addManagedDepartment!: Sequelize.BelongsToManyAddAssociationMixin<Department, DepartmentId>
+  public addManagedDepartments!: Sequelize.BelongsToManyAddAssociationsMixin<Department, DepartmentId>
+  public createManagedDepartment!: Sequelize.BelongsToManyCreateAssociationMixin<Department>
+  public removeManagedDepartment!: Sequelize.BelongsToManyRemoveAssociationMixin<Department, DepartmentId>
+  public removeManagedDepartments!: Sequelize.BelongsToManyRemoveAssociationsMixin<Department, DepartmentId>
+  public hasManagedDepartment!: Sequelize.BelongsToManyHasAssociationMixin<Department, DepartmentId>
+  public hasManagedDepartments!: Sequelize.BelongsToManyHasAssociationsMixin<Department, DepartmentId>
+  public countManagedDepartments!: Sequelize.BelongsToManyCountAssociationsMixin
   
   public static associations: {
-    Employee: Association<Title, Employee>
+    Salaries: Association<Employee, Salary>,
+    Titles: Association<Employee, Title>,
+    employingDepartments: Association<Employee, Department>,
+    managedDepartments: Association<Employee, Department>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Title {
-    Title.init({
+  static initModel(sequelize: Sequelize.Sequelize): typeof Employee {
+    Employee.init({
       empNo: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
       },
-      title: {
+      birthDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+      },
+      firstName: {
         type: DataTypes.STRING,
         allowNull: false
       },
-      fromDate: {
-        type: DataTypes.DATEONLY,
-        primaryKey: true,
+      lastName: {
+        type: DataTypes.STRING,
         allowNull: false
       },
-      toDate: {
-        type: DataTypes.DATEONLY
+      gender: {
+        type: DataTypes.ENUM('M', 'F', 'O'),
+        allowNull: false
+      },
+      hireDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
       }
     }, {
       sequelize
     })
     
-    return Title
+    return Employee
   }
 }
 ",
-          "name": "Title.ts",
+          "name": "Employee.ts",
+          "type": "FILE",
+        },
+        Object {
+          "content": "import type { Sequelize, Model } from 'sequelize'
+import { Employee } from './Employee'
+import type { EmployeeAttributes, EmployeeCreationAttributes } from './Employee'
+import { Department } from './Department'
+import type { DepartmentAttributes, DepartmentCreationAttributes } from './Department'
+import { DeptEmp } from './DeptEmp'
+import type { DeptEmpAttributes, DeptEmpCreationAttributes } from './DeptEmp'
+import { DeptManager } from './DeptManager'
+import type { DeptManagerAttributes, DeptManagerCreationAttributes } from './DeptManager'
+import { Title } from './Title'
+import type { TitleAttributes, TitleCreationAttributes } from './Title'
+import { Salary } from './Salary'
+import type { SalaryAttributes, SalaryCreationAttributes } from './Salary'
+
+export {
+  Employee,
+  Department,
+  DeptEmp,
+  DeptManager,
+  Title,
+  Salary
+}
+
+export type {
+  EmployeeAttributes,
+  EmployeeCreationAttributes,
+  DepartmentAttributes,
+  DepartmentCreationAttributes,
+  DeptEmpAttributes,
+  DeptEmpCreationAttributes,
+  DeptManagerAttributes,
+  DeptManagerCreationAttributes,
+  TitleAttributes,
+  TitleCreationAttributes,
+  SalaryAttributes,
+  SalaryCreationAttributes
+}
+
+export function initModels(sequelize: Sequelize) {
+  Employee.initModel(sequelize)
+  Department.initModel(sequelize)
+  DeptEmp.initModel(sequelize)
+  DeptManager.initModel(sequelize)
+  Title.initModel(sequelize)
+  Salary.initModel(sequelize)
+
+  Employee.hasMany(Salary, {
+    foreignKey: 'emp_no'
+  })
+  Employee.hasMany(Title, {
+    foreignKey: 'emp_no'
+  })
+  Employee.belongsToMany(Department, {
+    as: 'employingDepartments',
+    through: DeptEmp,
+    foreignKey: 'emp_no',
+    otherKey: 'dept_no',
+    onDelete: 'CASCADE'
+  })
+  Employee.belongsToMany(Department, {
+    as: 'managedDepartments',
+    through: DeptManager,
+    foreignKey: 'emp_no',
+    otherKey: 'dept_no',
+    onDelete: 'CASCADE'
+  })
+  Department.belongsToMany(Employee, {
+    as: 'employees',
+    through: DeptEmp,
+    foreignKey: 'departments_id',
+    otherKey: 'employee_id',
+    onDelete: 'CASCADE'
+  })
+  Department.belongsToMany(Employee, {
+    as: 'managers',
+    through: DeptManager,
+    foreignKey: 'departments_id',
+    otherKey: 'manager_id',
+    onDelete: 'CASCADE'
+  })
+  Department.hasMany(DeptEmp, {
+    foreignKey: 'dept_no'
+  })
+  Department.hasMany(DeptManager, {
+    foreignKey: 'dept_no'
+  })
+  DeptEmp.belongsTo(Employee, {
+    foreignKey: 'emp_no'
+  })
+  DeptEmp.belongsTo(Department, {
+    foreignKey: 'dept_no'
+  })
+  DeptManager.belongsTo(Employee, {
+    foreignKey: 'emp_no'
+  })
+  DeptManager.belongsTo(Department, {
+    foreignKey: 'dept_no'
+  })
+  Title.belongsTo(Employee, {
+    foreignKey: 'emp_no'
+  })
+  Salary.belongsTo(Employee, {
+    foreignKey: 'emp_no'
+  })
+
+  return {
+    Employee,
+    Department,
+    DeptEmp,
+    DeptManager,
+    Title,
+    Salary
+  }
+}
+",
+          "name": "index.ts",
           "type": "FILE",
         },
         Object {
@@ -1071,6 +1007,70 @@ export class Salary
 }
 ",
           "name": "Salary.ts",
+          "type": "FILE",
+        },
+        Object {
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Employee, EmployeeId } from './Employee'
+
+export interface TitleAttributes {
+  empNo: number
+  title: string
+  fromDate: string
+  toDate?: string
+}
+
+export type TitlePk = 'empNo' | 'fromDate'
+export type TitleId = TitleAttributes[TitlePk]
+export type TitleCreationAttributes = Optional<TitleAttributes, TitlePk>
+
+export class Title
+  extends Model<TitleAttributes, TitleCreationAttributes>
+  implements TitleAttributes {
+  public readonly empNo!: number
+  public title!: string
+  public readonly fromDate!: string
+  public toDate?: string
+
+  // Title belongsTo Employee
+  public readonly Employee?: Employee
+  public getEmployee!: Sequelize.BelongsToGetAssociationMixin<Employee>
+  public setEmployee!: Sequelize.BelongsToSetAssociationMixin<Employee, EmployeeId>
+  public createEmployee!: Sequelize.BelongsToCreateAssociationMixin<Employee>
+  
+  public static associations: {
+    Employee: Association<Title, Employee>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Title {
+    Title.init({
+      empNo: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      fromDate: {
+        type: DataTypes.DATEONLY,
+        primaryKey: true,
+        allowNull: false
+      },
+      toDate: {
+        type: DataTypes.DATEONLY
+      }
+    }, {
+      sequelize
+    })
+    
+    return Title
+  }
+}
+",
+          "name": "Title.ts",
           "type": "FILE",
         },
       ],

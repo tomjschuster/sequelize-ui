@@ -42,6 +42,7 @@ export default function SchemaFlyout({
     root,
     fileTree,
     selectItem,
+    handleKeyDown,
     viewCode,
     viewSchema,
     edit,
@@ -82,6 +83,7 @@ export default function SchemaFlyout({
         dbOptions={dbOptions}
         fileTree={fileTree}
         onSelectFileSystemItem={selectItem}
+        onKeyDown={handleKeyDown}
         updateSchema={updateSchema}
         updateModel={updateModel}
         onViewSchema={viewSchema}

@@ -1,5 +1,5 @@
 import { DbOptions } from '@src/core/database'
-import { directory, DirectoryItem, file } from '@src/core/files'
+import { directory, DirectoryItem, file, itemName } from '@src/core/files'
 import { Schema } from '@src/core/schema'
 import { kebabCase } from '@src/utils/string'
 import { config } from './templates/config'
@@ -58,12 +58,15 @@ export function generateSequelizeProject({
             ),
         )
       : null,
-    directory('models', [
-      file('index.ts', initModelsTemplate({ schema, dbOptions })),
-      ...schema.models.map((model) =>
-        file(modelFileName(model), modelTemplate({ schema, dbOptions, model })),
-      ),
-    ]),
+    directory(
+      'models',
+      [
+        file('index.ts', initModelsTemplate({ schema, dbOptions })),
+        ...schema.models.map((model) =>
+          file(modelFileName(model), modelTemplate({ schema, dbOptions, model })),
+        ),
+      ].sort((a, b) => itemName(a).localeCompare(itemName(b))),
+    ),
     file('.gitignore', gitignoreTemplate()),
     file('db.ts', dbTemplate({ dbOptions })),
     file('package.json', packageJsonTemplate({ schema, dbOptions })),

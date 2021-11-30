@@ -15,6 +15,7 @@ type SchemaFlyoutContentProps = {
   state: SchemaFlyoutState
   fileTree: FileTreeState
   onSelectFileSystemItem: (path: string) => void
+  onKeyDown: (evt: React.KeyboardEvent) => void
   onViewSchema: (model?: Model) => void
   updateSchema: (schema: Schema) => void
   updateModel: (model: Model) => void
@@ -28,6 +29,7 @@ export default function SchemaFlyoutContent({
   state,
   fileTree,
   onSelectFileSystemItem,
+  onKeyDown,
   onViewSchema,
   updateSchema,
   updateModel,
@@ -43,6 +45,7 @@ export default function SchemaFlyoutContent({
           dbOptions={dbOptions}
           fileTree={fileTree}
           onSelectFileSystemItem={onSelectFileSystemItem}
+          onKeyDown={onKeyDown}
         />
       )
     case SchemaFlyoutStateType.EDIT_SCHEMA:

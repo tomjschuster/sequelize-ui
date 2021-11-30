@@ -12,12 +12,14 @@ export type CodeExplorerProps = {
   dbOptions: DbOptions
   fileTree: FileTreeState
   onSelectFileSystemItem: (path: string) => void
+  onKeyDown: (evt: React.KeyboardEvent) => void
 }
 export default function CodeExplorer({
   schema,
   dbOptions,
   fileTree,
   onSelectFileSystemItem,
+  onKeyDown,
 }: CodeExplorerProps): React.ReactElement | null {
   const { root } = useGeneratedCode({ schema, dbOptions })
 
@@ -29,7 +31,9 @@ export default function CodeExplorer({
         <FileTree
           root={root}
           onSelect={onSelectFileSystemItem}
+          onKeyDown={onKeyDown}
           activePath={fileTree.activeFile?.path}
+          focusedPath={fileTree.focusedPath}
           folderState={fileTree.folderState}
         />
       </div>

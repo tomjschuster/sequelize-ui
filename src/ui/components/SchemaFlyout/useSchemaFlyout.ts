@@ -31,6 +31,7 @@ type UseSchemaFlyoutResult = {
   root: DirectoryItem | undefined
   fileTree: FileTreeState
   selectItem: (path: string) => void
+  handleKeyDown: (evt: React.KeyboardEvent) => void
   edit: () => void
   viewCode: () => void
   viewSchema: (model?: Model) => void
@@ -57,7 +58,7 @@ export function useSchemaFlyout({
   )
 
   const { root, framework, defaultPath } = useGeneratedCode({ schema, dbOptions })
-  const { fileTree, selectItem } = useFileTree({ root, key: schema.id, defaultPath })
+  const { fileTree, selectItem, handleKeyDown } = useFileTree({ root, key: schema.id, defaultPath })
 
   const edit = React.useCallback(() => {
     if (state.type === SchemaFlyoutStateType.CODE) {
@@ -255,6 +256,7 @@ export function useSchemaFlyout({
     root,
     fileTree,
     selectItem,
+    handleKeyDown,
     edit,
     updateModel,
     updateSchema,

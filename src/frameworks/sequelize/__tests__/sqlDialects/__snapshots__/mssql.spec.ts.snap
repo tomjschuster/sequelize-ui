@@ -206,31 +206,6 @@ module.exports = {
     Object {
       "files": Array [
         Object {
-          "content": "import type { Sequelize, Model } from 'sequelize'
-import { Category } from './Category'
-import type { CategoryAttributes, CategoryCreationAttributes } from './Category'
-
-export {
-  Category
-}
-
-export type {
-  CategoryAttributes,
-  CategoryCreationAttributes
-}
-
-export function initModels(sequelize: Sequelize) {
-  Category.initModel(sequelize)
-
-  return {
-    Category
-  }
-}
-",
-          "name": "index.ts",
-          "type": "FILE",
-        },
-        Object {
           "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
 //// DataTypes.JSON not supported for SQL Server
 // import { Json } from '../types'
@@ -425,6 +400,31 @@ export class Category
 }
 ",
           "name": "Category.ts",
+          "type": "FILE",
+        },
+        Object {
+          "content": "import type { Sequelize, Model } from 'sequelize'
+import { Category } from './Category'
+import type { CategoryAttributes, CategoryCreationAttributes } from './Category'
+
+export {
+  Category
+}
+
+export type {
+  CategoryAttributes,
+  CategoryCreationAttributes
+}
+
+export function initModels(sequelize: Sequelize) {
+  Category.initModel(sequelize)
+
+  return {
+    Category
+  }
+}
+",
+          "name": "index.ts",
           "type": "FILE",
         },
       ],

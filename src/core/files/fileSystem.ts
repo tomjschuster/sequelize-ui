@@ -84,12 +84,30 @@ export function listPaths(item: FileSystemItem): string[] {
   return [name].concat(item.files.flatMap(listPaths).map((path) => `${name}/${path}`))
 }
 
+export function listDirectoryPaths(item: FileSystemItem): string[] {
+  if (isFile(item)) {
+    return []
+  }
+
+  const name = itemName(item)
+
+  if (item.files.length === 0) {
+    return [name]
+  }
+
+  return [name].concat(item.files.flatMap(listDirectoryPaths).map((path) => `${name}/${path}`))
+}
+
 export function pathFilename(path: string): string {
   return path.split('/').reverse()[0]
 }
 
-export function parentDirectoryPaths(path: string): string[] {
+export function parentDirectoryPathParts(path: string): string[] {
   return path.split('/').slice(0, -1)
+}
+
+export function parentDirectory(path: string): string {
+  return parentDirectoryPathParts(path).join('/')
 }
 
 enum FileSystemItemType {

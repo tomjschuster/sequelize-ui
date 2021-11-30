@@ -12,7 +12,6 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 #### UI
 
 - [ ] Keyboard controls
-  - [ ] File tree navigation (WARIA example)
 - [ ] demo schema tooltips
 - [ ] Refactor form components
 - [ ] Refactor styles
@@ -21,6 +20,7 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 - [ ] a11y
   - [ ] Alerts aria attrs
   - [ ] Form errors aria attrs
+- [ ] Optimize file tree state
 - [ ] Home page copy
 - [ ] Dark mode
 - [ ] db compatibility warnings

@@ -160,52 +160,6 @@ module.exports = {
     Object {
       "files": Array [
         Object {
-          "content": "import type { Sequelize, Model } from 'sequelize'
-import { Default } from './Default'
-import type { DefaultAttributes, DefaultCreationAttributes } from './Default'
-import { Id } from './Id'
-import type { IdAttributes, IdCreationAttributes } from './Id'
-import { Prefixed } from './Prefixed'
-import type { PrefixedAttributes, PrefixedCreationAttributes } from './Prefixed'
-import { Nonstandard } from './Nonstandard'
-import type { NonstandardAttributes, NonstandardCreationAttributes } from './Nonstandard'
-
-export {
-  Default,
-  Id,
-  Prefixed,
-  Nonstandard
-}
-
-export type {
-  DefaultAttributes,
-  DefaultCreationAttributes,
-  IdAttributes,
-  IdCreationAttributes,
-  PrefixedAttributes,
-  PrefixedCreationAttributes,
-  NonstandardAttributes,
-  NonstandardCreationAttributes
-}
-
-export function initModels(sequelize: Sequelize) {
-  Default.initModel(sequelize)
-  Id.initModel(sequelize)
-  Prefixed.initModel(sequelize)
-  Nonstandard.initModel(sequelize)
-
-  return {
-    Default,
-    Id,
-    Prefixed,
-    Nonstandard
-  }
-}
-",
-          "name": "index.ts",
-          "type": "FILE",
-        },
-        Object {
           "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
 
 export interface DefaultAttributes {
@@ -272,36 +226,49 @@ export class Id
           "type": "FILE",
         },
         Object {
-          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+          "content": "import type { Sequelize, Model } from 'sequelize'
+import { Default } from './Default'
+import type { DefaultAttributes, DefaultCreationAttributes } from './Default'
+import { Id } from './Id'
+import type { IdAttributes, IdCreationAttributes } from './Id'
+import { Prefixed } from './Prefixed'
+import type { PrefixedAttributes, PrefixedCreationAttributes } from './Prefixed'
+import { Nonstandard } from './Nonstandard'
+import type { NonstandardAttributes, NonstandardCreationAttributes } from './Nonstandard'
 
-export interface PrefixedAttributes {
-  prefixedId?: number
+export {
+  Default,
+  Id,
+  Prefixed,
+  Nonstandard
 }
 
-export type PrefixedPk = 'prefixedId'
-export type PrefixedId = PrefixedAttributes[PrefixedPk]
-export type PrefixedCreationAttributes = Optional<PrefixedAttributes, PrefixedPk>
+export type {
+  DefaultAttributes,
+  DefaultCreationAttributes,
+  IdAttributes,
+  IdCreationAttributes,
+  PrefixedAttributes,
+  PrefixedCreationAttributes,
+  NonstandardAttributes,
+  NonstandardCreationAttributes
+}
 
-export class Prefixed
-  extends Model<PrefixedAttributes, PrefixedCreationAttributes>
-  implements PrefixedAttributes {
-  public readonly prefixedId?: number
-  
-  static initModel(sequelize: Sequelize.Sequelize): typeof Prefixed {
-    Prefixed.init({
-      prefixedId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true
-      }
-    }, {
-      sequelize
-    })
-    
-    return Prefixed
+export function initModels(sequelize: Sequelize) {
+  Default.initModel(sequelize)
+  Id.initModel(sequelize)
+  Prefixed.initModel(sequelize)
+  Nonstandard.initModel(sequelize)
+
+  return {
+    Default,
+    Id,
+    Prefixed,
+    Nonstandard
   }
 }
 ",
-          "name": "Prefixed.ts",
+          "name": "index.ts",
           "type": "FILE",
         },
         Object {
@@ -335,6 +302,39 @@ export class Nonstandard
 }
 ",
           "name": "Nonstandard.ts",
+          "type": "FILE",
+        },
+        Object {
+          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+
+export interface PrefixedAttributes {
+  prefixedId?: number
+}
+
+export type PrefixedPk = 'prefixedId'
+export type PrefixedId = PrefixedAttributes[PrefixedPk]
+export type PrefixedCreationAttributes = Optional<PrefixedAttributes, PrefixedPk>
+
+export class Prefixed
+  extends Model<PrefixedAttributes, PrefixedCreationAttributes>
+  implements PrefixedAttributes {
+  public readonly prefixedId?: number
+  
+  static initModel(sequelize: Sequelize.Sequelize): typeof Prefixed {
+    Prefixed.init({
+      prefixedId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true
+      }
+    }, {
+      sequelize
+    })
+    
+    return Prefixed
+  }
+}
+",
+          "name": "Prefixed.ts",
           "type": "FILE",
         },
       ],

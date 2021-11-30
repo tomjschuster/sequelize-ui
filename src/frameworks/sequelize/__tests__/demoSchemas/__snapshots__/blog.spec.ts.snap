@@ -612,6 +612,116 @@ module.exports = {
     Object {
       "files": Array [
         Object {
+          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Post, PostId } from './Post'
+import type { PostCategory, PostCategoryId } from './PostCategory'
+
+export interface CategoryAttributes {
+  id?: number
+  title: string
+  metaTitle?: string
+  slug: string
+  content?: string
+}
+
+export type CategoryPk = 'id'
+export type CategoryId = CategoryAttributes[CategoryPk]
+export type CategoryCreationAttributes = Optional<CategoryAttributes, CategoryPk>
+
+export class Category
+  extends Model<CategoryAttributes, CategoryCreationAttributes>
+  implements CategoryAttributes {
+  public readonly id?: number
+  public title!: string
+  public metaTitle?: string
+  public slug!: string
+  public content?: string
+
+  // Category belongsTo Category (as Parent)
+  public readonly parent?: Category
+  public getParent!: Sequelize.BelongsToGetAssociationMixin<Category>
+  public setParent!: Sequelize.BelongsToSetAssociationMixin<Category, CategoryId>
+  public createParent!: Sequelize.BelongsToCreateAssociationMixin<Category>
+  
+  // Category hasMany Category (as Children)
+  public readonly children?: Category[]
+  public getChildren!: Sequelize.HasManyGetAssociationsMixin<Category>
+  public setChildren!: Sequelize.HasManySetAssociationsMixin<Category, CategoryId>
+  public addChild!: Sequelize.HasManyAddAssociationMixin<Category, CategoryId>
+  public addChildren!: Sequelize.HasManyAddAssociationsMixin<Category, CategoryId>
+  public createChild!: Sequelize.HasManyCreateAssociationMixin<Category>
+  public removeChild!: Sequelize.HasManyRemoveAssociationMixin<Category, CategoryId>
+  public removeChildren!: Sequelize.HasManyRemoveAssociationsMixin<Category, CategoryId>
+  public hasChild!: Sequelize.HasManyHasAssociationMixin<Category, CategoryId>
+  public hasChildren!: Sequelize.HasManyHasAssociationsMixin<Category, CategoryId>
+  public countChildren!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Category hasMany PostCategory
+  public readonly PostCategories?: PostCategory[]
+  public getPostCategories!: Sequelize.HasManyGetAssociationsMixin<PostCategory>
+  public setPostCategories!: Sequelize.HasManySetAssociationsMixin<PostCategory, PostCategoryId>
+  public addPostCategory!: Sequelize.HasManyAddAssociationMixin<PostCategory, PostCategoryId>
+  public addPostCategories!: Sequelize.HasManyAddAssociationsMixin<PostCategory, PostCategoryId>
+  public createPostCategory!: Sequelize.HasManyCreateAssociationMixin<PostCategory>
+  public removePostCategory!: Sequelize.HasManyRemoveAssociationMixin<PostCategory, PostCategoryId>
+  public removePostCategories!: Sequelize.HasManyRemoveAssociationsMixin<PostCategory, PostCategoryId>
+  public hasPostCategory!: Sequelize.HasManyHasAssociationMixin<PostCategory, PostCategoryId>
+  public hasPostCategories!: Sequelize.HasManyHasAssociationsMixin<PostCategory, PostCategoryId>
+  public countPostCategories!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Category belongsToMany Post
+  public readonly Posts?: Post[]
+  public getPosts!: Sequelize.BelongsToManyGetAssociationsMixin<Post>
+  public setPosts!: Sequelize.BelongsToManySetAssociationsMixin<Post, PostId>
+  public addPost!: Sequelize.BelongsToManyAddAssociationMixin<Post, PostId>
+  public addPosts!: Sequelize.BelongsToManyAddAssociationsMixin<Post, PostId>
+  public createPost!: Sequelize.BelongsToManyCreateAssociationMixin<Post>
+  public removePost!: Sequelize.BelongsToManyRemoveAssociationMixin<Post, PostId>
+  public removePosts!: Sequelize.BelongsToManyRemoveAssociationsMixin<Post, PostId>
+  public hasPost!: Sequelize.BelongsToManyHasAssociationMixin<Post, PostId>
+  public hasPosts!: Sequelize.BelongsToManyHasAssociationsMixin<Post, PostId>
+  public countPosts!: Sequelize.BelongsToManyCountAssociationsMixin
+  
+  public static associations: {
+    parent: Association<Category, Category>,
+    children: Association<Category, Category>,
+    PostCategories: Association<Category, PostCategory>,
+    Posts: Association<Category, Post>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Category {
+    Category.init({
+      id: {
+        type: DataTypes.BIGINT,
+        primaryKey: true
+      },
+      title: {
+        type: DataTypes.STRING(75),
+        allowNull: false
+      },
+      metaTitle: {
+        type: DataTypes.STRING(100)
+      },
+      slug: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        unique: true
+      },
+      content: {
+        type: DataTypes.TEXT
+      }
+    }, {
+      sequelize
+    })
+    
+    return Category
+  }
+}
+",
+          "name": "Category.ts",
+          "type": "FILE",
+        },
+        Object {
           "content": "import type { Sequelize, Model } from 'sequelize'
 import { Category } from './Category'
 import type { CategoryAttributes, CategoryCreationAttributes } from './Category'
@@ -777,116 +887,6 @@ export function initModels(sequelize: Sequelize) {
 }
 ",
           "name": "index.ts",
-          "type": "FILE",
-        },
-        Object {
-          "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Post, PostId } from './Post'
-import type { PostCategory, PostCategoryId } from './PostCategory'
-
-export interface CategoryAttributes {
-  id?: number
-  title: string
-  metaTitle?: string
-  slug: string
-  content?: string
-}
-
-export type CategoryPk = 'id'
-export type CategoryId = CategoryAttributes[CategoryPk]
-export type CategoryCreationAttributes = Optional<CategoryAttributes, CategoryPk>
-
-export class Category
-  extends Model<CategoryAttributes, CategoryCreationAttributes>
-  implements CategoryAttributes {
-  public readonly id?: number
-  public title!: string
-  public metaTitle?: string
-  public slug!: string
-  public content?: string
-
-  // Category belongsTo Category (as Parent)
-  public readonly parent?: Category
-  public getParent!: Sequelize.BelongsToGetAssociationMixin<Category>
-  public setParent!: Sequelize.BelongsToSetAssociationMixin<Category, CategoryId>
-  public createParent!: Sequelize.BelongsToCreateAssociationMixin<Category>
-  
-  // Category hasMany Category (as Children)
-  public readonly children?: Category[]
-  public getChildren!: Sequelize.HasManyGetAssociationsMixin<Category>
-  public setChildren!: Sequelize.HasManySetAssociationsMixin<Category, CategoryId>
-  public addChild!: Sequelize.HasManyAddAssociationMixin<Category, CategoryId>
-  public addChildren!: Sequelize.HasManyAddAssociationsMixin<Category, CategoryId>
-  public createChild!: Sequelize.HasManyCreateAssociationMixin<Category>
-  public removeChild!: Sequelize.HasManyRemoveAssociationMixin<Category, CategoryId>
-  public removeChildren!: Sequelize.HasManyRemoveAssociationsMixin<Category, CategoryId>
-  public hasChild!: Sequelize.HasManyHasAssociationMixin<Category, CategoryId>
-  public hasChildren!: Sequelize.HasManyHasAssociationsMixin<Category, CategoryId>
-  public countChildren!: Sequelize.HasManyCountAssociationsMixin
-  
-  // Category hasMany PostCategory
-  public readonly PostCategories?: PostCategory[]
-  public getPostCategories!: Sequelize.HasManyGetAssociationsMixin<PostCategory>
-  public setPostCategories!: Sequelize.HasManySetAssociationsMixin<PostCategory, PostCategoryId>
-  public addPostCategory!: Sequelize.HasManyAddAssociationMixin<PostCategory, PostCategoryId>
-  public addPostCategories!: Sequelize.HasManyAddAssociationsMixin<PostCategory, PostCategoryId>
-  public createPostCategory!: Sequelize.HasManyCreateAssociationMixin<PostCategory>
-  public removePostCategory!: Sequelize.HasManyRemoveAssociationMixin<PostCategory, PostCategoryId>
-  public removePostCategories!: Sequelize.HasManyRemoveAssociationsMixin<PostCategory, PostCategoryId>
-  public hasPostCategory!: Sequelize.HasManyHasAssociationMixin<PostCategory, PostCategoryId>
-  public hasPostCategories!: Sequelize.HasManyHasAssociationsMixin<PostCategory, PostCategoryId>
-  public countPostCategories!: Sequelize.HasManyCountAssociationsMixin
-  
-  // Category belongsToMany Post
-  public readonly Posts?: Post[]
-  public getPosts!: Sequelize.BelongsToManyGetAssociationsMixin<Post>
-  public setPosts!: Sequelize.BelongsToManySetAssociationsMixin<Post, PostId>
-  public addPost!: Sequelize.BelongsToManyAddAssociationMixin<Post, PostId>
-  public addPosts!: Sequelize.BelongsToManyAddAssociationsMixin<Post, PostId>
-  public createPost!: Sequelize.BelongsToManyCreateAssociationMixin<Post>
-  public removePost!: Sequelize.BelongsToManyRemoveAssociationMixin<Post, PostId>
-  public removePosts!: Sequelize.BelongsToManyRemoveAssociationsMixin<Post, PostId>
-  public hasPost!: Sequelize.BelongsToManyHasAssociationMixin<Post, PostId>
-  public hasPosts!: Sequelize.BelongsToManyHasAssociationsMixin<Post, PostId>
-  public countPosts!: Sequelize.BelongsToManyCountAssociationsMixin
-  
-  public static associations: {
-    parent: Association<Category, Category>,
-    children: Association<Category, Category>,
-    PostCategories: Association<Category, PostCategory>,
-    Posts: Association<Category, Post>
-  }
-
-  static initModel(sequelize: Sequelize.Sequelize): typeof Category {
-    Category.init({
-      id: {
-        type: DataTypes.BIGINT,
-        primaryKey: true
-      },
-      title: {
-        type: DataTypes.STRING(75),
-        allowNull: false
-      },
-      metaTitle: {
-        type: DataTypes.STRING(100)
-      },
-      slug: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-        unique: true
-      },
-      content: {
-        type: DataTypes.TEXT
-      }
-    }, {
-      sequelize
-    })
-    
-    return Category
-  }
-}
-",
-          "name": "Category.ts",
           "type": "FILE",
         },
         Object {

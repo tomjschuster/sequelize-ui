@@ -129,6 +129,7 @@ describe('files', () => {
       'documents/media/music/artists',
       'documents/media/music/artists/chico-buarque',
       'documents/media/music/artists/chico-buarque/pedro-pedreiro.mp3',
+      'documents/media/music/artists/chico-buarque/apesar-de-voce.mp3',
       'documents/media/music/artists/silvio-rodriguez',
       'documents/media/music/artists/silvio-rodriguez/ojala.mp3',
       'documents/media/videos',
