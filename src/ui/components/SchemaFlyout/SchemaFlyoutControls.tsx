@@ -102,7 +102,7 @@ function SchemaFlyoutControlsActions({
   if (state.type === SchemaFlyoutStateType.VIEW_SCHEMA) {
     return (
       <ControlsAction onClick={onEdit}>
-        <PencilIcon title="edit schema" />
+        <PencilIcon title="edit schema" size={6} />
       </ControlsAction>
     )
   }
@@ -110,7 +110,7 @@ function SchemaFlyoutControlsActions({
   if (state.type === SchemaFlyoutStateType.VIEW_MODEL) {
     return (
       <ControlsAction onClick={onEdit}>
-        <PencilIcon title="edit schema" />
+        <PencilIcon title="edit schema" size={6} />
       </ControlsAction>
     )
   }

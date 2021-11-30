@@ -57,21 +57,21 @@ export default function CodeViewerControls({
   return (
     <>
       <ControlsAction onClick={handleClickCopy} disabled={!activeFile}>
-        <CopyIcon title="copy current file code" />
+        <CopyIcon size={6} title="copy current file code" />
       </ControlsAction>
       <ControlsAction onClick={handleClickDownload}>
-        <FolderIcon title="download project code" />
+        <FolderIcon title="download project code" size={6} />
       </ControlsAction>
       <ControlsAction onClick={onClickEdit} overlayControl>
-        <PencilIcon title="edit code" />
+        <PencilIcon title="edit code" size={6} />
       </ControlsAction>
       <ControlsAction onClick={toggleDbOptions} overlayControl>
-        <SettingsIcon title={isDbOptionsOpen ? 'close settings' : 'open settings'} />
+        <SettingsIcon size={6} title={isDbOptionsOpen ? 'close settings' : 'open settings'} />
       </ControlsAction>
       {isDbOptionsOpen && (
         <div ref={dbOptionsRef} className={Styles.dbFormOverlay}>
           <button className={Styles.closeDbForm} onClick={closeDbOptions}>
-            <CloseIcon title="close settings" />
+            <CloseIcon title="close settings" size={6} />
           </button>
           <DbOptionsForm dbOptions={dbOptions} onChange={onChangeDbOptions} />
         </div>

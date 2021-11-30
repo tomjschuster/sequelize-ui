@@ -1,22 +1,14 @@
 import React from 'react'
-import Svg, { SvgProps } from './Svg'
+import { withSvg } from './Svg'
 
-type ClockIconProps = SvgProps & {
-  strokeWidth?: number
-}
-
-export default function ClockIcon({
-  title,
-  strokeWidth = 1.5,
-}: ClockIconProps): React.ReactElement {
+function ClockIcon(): React.ReactElement {
   return (
-    <Svg title={title} className="h-3 w-3">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={strokeWidth}
-        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </Svg>
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+    />
   )
 }
+
+export default withSvg(ClockIcon)

@@ -123,7 +123,7 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
               className={classnames('p-2', 'hover:bg-gray-200', 'self-center', 'ml-0.5')}
               onClick={() => handleDeleteModel(m.id)}
             >
-              <TrashIcon title="delete model" />
+              <TrashIcon size={6} title="delete model" />
             </button>
           </li>
         ))}
@@ -145,7 +145,7 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
             onClick={handleClickAddModel}
           >
             <span className={classnames('mr-2')}>
-              <PlusCircleIcon title="add model" />
+              <PlusCircleIcon title="add model" size={6} />
             </span>
             Create a new model
           </button>

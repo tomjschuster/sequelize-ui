@@ -2,7 +2,7 @@ import { DemoSchemaType, displayDemoSchemaType } from '@src/data/schemas'
 import React from 'react'
 import FilmIcon from '../../icons/Film'
 import RssIcon from '../../icons/Rss'
-import UserGroupIcon from '../../icons/Users'
+import UserGroupIcon from '../../icons/UserGroup'
 import * as Styles from './styles'
 
 type DemoSchemaButtonsProps = {
@@ -33,11 +33,11 @@ export default function DemoSchemaButtons({ onClick }: DemoSchemaButtonsProps): 
 function DemoSchemaIcon({ schemaType }: { schemaType: DemoSchemaType }): React.ReactElement | null {
   switch (schemaType) {
     case DemoSchemaType.Blog:
-      return <RssIcon />
+      return <RssIcon size={6} />
     case DemoSchemaType.Employee:
-      return <UserGroupIcon />
+      return <UserGroupIcon size={6} />
     case DemoSchemaType.Sakila:
-      return <FilmIcon />
+      return <FilmIcon size={6} />
     default:
       return null
   }

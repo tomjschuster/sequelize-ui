@@ -271,7 +271,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
           className={classnames('p-1', 'hover:bg-gray-200')}
           onClick={handleDelete}
         >
-          <TrashIcon title="delete" />
+          <TrashIcon size={6} title="delete" />
         </button>
       </div>
     </fieldset>

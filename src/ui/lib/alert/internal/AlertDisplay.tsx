@@ -35,7 +35,7 @@ export default function AlertDisplay({ alert, onDismiss }: AlertDisplayProps): R
     >
       {alert.message}
       <button className={classnames('p-1', 'ml-2')} onClick={handleDismiss}>
-        <CloseCircleIcon title="dismiss alert" />
+        <CloseCircleIcon title="dismiss alert" size={6} />
       </button>
     </p>
   )

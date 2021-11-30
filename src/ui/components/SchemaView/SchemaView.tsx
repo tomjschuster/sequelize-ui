@@ -64,7 +64,7 @@ function SchemaView({
             <span className={classnames('px-1.5', 'text-lg')}>{titleCase(m.name)}</span>
             <div className={classnames('flex', 'items-center')}>
               <button className={classnames('p-1.5')} onClick={() => onClickModel(m)}>
-                <SelectorIcon title="select model" />
+                <SelectorIcon title="select model" size={6} />
               </button>
             </div>
           </li>
@@ -86,7 +86,7 @@ function SchemaView({
             onClick={onClickAddModel}
           >
             <span className={classnames('mr-2')}>
-              <PlusCircleIcon title="add model" />
+              <PlusCircleIcon title="add model" size={6} />
             </span>
             Create a new model
           </button>

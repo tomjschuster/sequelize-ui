@@ -32,7 +32,7 @@ export default function Flyout({
         </div>
         <h2>{title}</h2>
         <button className={Styles.closeButton} type="button" onClick={onClickClose}>
-          <CloseCircleIcon title="close" />
+          <CloseCircleIcon title="close" size={6} />
         </button>
       </div>
       {controls && <div className={Styles.controlsContainer}>{controls}</div>}

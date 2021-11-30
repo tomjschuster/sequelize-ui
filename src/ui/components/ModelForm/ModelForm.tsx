@@ -168,7 +168,7 @@ export default function ModelForm({
           <li>
             <button type="button" className={newButton} onClick={handleClickAddField}>
               <span>
-                <PlusCircleIcon />
+                <PlusCircleIcon size={6} />
               </span>
               Add Field
             </button>
@@ -195,7 +195,7 @@ export default function ModelForm({
           <li>
             <button type="button" className={newButton} onClick={handleClickAddAssociation}>
               <span>
-                <PlusCircleIcon />
+                <PlusCircleIcon size={6} />
               </span>
               Add association
             </button>

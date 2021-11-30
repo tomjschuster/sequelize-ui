@@ -1,8 +1,7 @@
 import React from 'react'
-import Svg, { SvgProps } from './Svg'
+import { withSvg } from './Svg'
 
-type ChevronIconProps = SvgProps & {
-  strokeWidth?: number
+type ChevronIconProps = {
   direction: ChevronDirection
 }
 
@@ -13,21 +12,8 @@ export enum ChevronDirection {
   Up = 'Up',
 }
 
-export default function ChevronIcon({
-  direction,
-  title,
-  strokeWidth = 1.5,
-}: ChevronIconProps): React.ReactElement {
-  return (
-    <Svg title={title} className="h-4 w-4">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={strokeWidth}
-        d={chevronPath(direction)}
-      />
-    </Svg>
-  )
+function ChevronIcon({ direction }: ChevronIconProps): React.ReactElement {
+  return <path strokeLinecap="round" strokeLinejoin="round" d={chevronPath(direction)} />
 }
 
 function chevronPath(direction: ChevronDirection): string {
@@ -42,3 +28,5 @@ function chevronPath(direction: ChevronDirection): string {
       return 'M5 15l7-7 7 7'
   }
 }
+
+export default withSvg(ChevronIcon)

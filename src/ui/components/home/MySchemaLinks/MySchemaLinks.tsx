@@ -46,10 +46,10 @@ function MySchemaButton({ schema, onClick }: MySchemaButtonProps): React.ReactEl
     <button type="button" className={Styles.schemaButton} onClick={handleClick}>
       <span className={Styles.buttonText}>{schema.name || 'Untitled'}</span>
       <span className={Styles.meta}>
-        <MySchemaButtonsMetaItem icon={<CollectionIcon />}>
+        <MySchemaButtonsMetaItem icon={<CollectionIcon size={3} />}>
           {modelCount} {modelCount === 1 ? 'model' : 'models'}
         </MySchemaButtonsMetaItem>
-        <MySchemaButtonsMetaItem icon={<ClockIcon title="last updated" />}>
+        <MySchemaButtonsMetaItem icon={<ClockIcon title="last updated" size={3} />}>
           {schema.createdAt === schema.updatedAt ? 'created' : 'updated'}{' '}
           {timeSince(now(), schema.updatedAt, TimeGranularity.MINUTES)} ago
         </MySchemaButtonsMetaItem>
@@ -80,7 +80,7 @@ function NewSchemaButton({ onClick }: NewSchemaButtonProps): React.ReactElement 
   return (
     <button type="button" className={Styles.newButton} onClick={onClick}>
       <span className={Styles.newSchemaIcon}>
-        <PlusCircleIcon />
+        <PlusCircleIcon size={6} />
       </span>
       Create a new schema
     </button>

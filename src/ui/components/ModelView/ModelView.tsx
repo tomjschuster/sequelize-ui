@@ -71,7 +71,7 @@ export default function ModelView({
         <li>
           <button type="button" className={newButton} onClick={onClickAddField}>
             <span>
-              <PlusCircleIcon />
+              <PlusCircleIcon size={6} />
             </span>
             Add Field
           </button>
@@ -93,7 +93,7 @@ export default function ModelView({
         <li>
           <button type="button" className={newButton} onClick={onClickAddAssociation}>
             <span>
-              <PlusCircleIcon />
+              <PlusCircleIcon size={6} />
             </span>
             Add association
           </button>
