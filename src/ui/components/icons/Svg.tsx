@@ -13,6 +13,26 @@ export type SvgProps = {
 
 type SvgSize = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 
+// @ts-expect-error needed for tailwind css generation
+const _SIZE_CLASSNAMES = [
+  'h-1',
+  'h-2',
+  'h-3',
+  'h-4',
+  'h-5',
+  'h-6',
+  'h-7',
+  'h-8',
+  'w-1',
+  'w-2',
+  'w-3',
+  'w-4',
+  'w-5',
+  'w-6',
+  'w-7',
+  'w-8',
+]
+
 export default function Svg({
   title,
   fill = 'none',
