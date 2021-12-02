@@ -28,12 +28,12 @@ export default function CodeViewerControls({
   onClickEdit,
   onChangeDbOptions,
 }: CodeViewerControlsProps): React.ReactElement {
-  const { success, error } = useAlert()
+  const { info, success, error } = useAlert()
   const { isOpen: isDbOptionsOpen, toggle: toggleDbOptions, close: closeDbOptions } = useIsOpen()
 
   const handleClickDownload = () => {
     download(root)
-      .then(() => success(`Project ${root.name} downloaded as zip file.`))
+      .then(() => info(`Download started for ${root.name}.zip.`))
       .catch((e) => {
         console.error(e)
         error('Failed to copy to clipboard.')
