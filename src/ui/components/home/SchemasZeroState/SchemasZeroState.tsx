@@ -9,7 +9,7 @@ export default function SchemasZeroState({
 }: SchemasZeroStateProps): React.ReactElement | null {
   return (
     <p className={Styles.text}>
-      To get started,
+      To get started,{' '}
       <button type="button" className={Styles.createButton} onClick={onClickCreate}>
         create a new schema
       </button>{' '}

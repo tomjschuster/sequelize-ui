@@ -116,7 +116,7 @@ function FileTreeItem({
           'flex',
           'items-center',
           'text-sm',
-          'leading-loose',
+          'leading-relaxed',
           'w-full',
           'cursor-pointer',
           'block',
