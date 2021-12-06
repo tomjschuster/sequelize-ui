@@ -1,46 +1,31 @@
-import { DbOptions } from '@src/core/database'
-import { fileLanguage, FileTreeState } from '@src/core/files'
-import { Schema } from '@src/core/schema'
+import { fileLanguage } from '@src/core/files'
+import * as FileTree from '@src/core/files/fileTree'
 import Code from '@src/ui/components/Code'
-import FileTree from '@src/ui/components/FileTree'
-import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
+import FileTreeView from '@src/ui/components/FileTreeView'
 import React from 'react'
 import * as Styles from './styles'
 
 export type CodeExplorerProps = {
-  schema: Schema
-  dbOptions: DbOptions
-  fileTree: FileTreeState
+  fileTree: FileTree.FileTree
   onSelectFileSystemItem: (path: string) => void
   onKeyDown: (evt: React.KeyboardEvent) => void
 }
 export default function CodeExplorer({
-  schema,
-  dbOptions,
   fileTree,
   onSelectFileSystemItem,
   onKeyDown,
 }: CodeExplorerProps): React.ReactElement | null {
-  const { root } = useGeneratedCode({ schema, dbOptions })
-
-  if (!root) return null
+  const activeFile = FileTree.activeFileItem(fileTree)
 
   return (
     <div className={Styles.grid}>
       <div className={Styles.fileTreeCell}>
-        <FileTree
-          root={root}
-          onSelect={onSelectFileSystemItem}
-          onKeyDown={onKeyDown}
-          activePath={fileTree.activeFile?.path}
-          focusedPath={fileTree.focusedPath}
-          folderState={fileTree.folderState}
-        />
+        <FileTreeView onSelect={onSelectFileSystemItem} onKeyDown={onKeyDown} fileTree={fileTree} />
       </div>
       <div className={Styles.codeCell}>
         <Code
-          content={fileTree.activeFile?.file.content || ''}
-          language={fileTree.activeFile && fileLanguage(fileTree.activeFile.file)}
+          content={activeFile?.content || ''}
+          language={activeFile && fileLanguage(activeFile)}
         />
       </div>
     </div>

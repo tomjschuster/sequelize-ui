@@ -1,4 +1,6 @@
 import { DbOptions, defaultDbOptions } from '@src/core/database'
+import { itemName } from '@src/core/files'
+import * as FileTree from '@src/core/files/fileTree'
 import { Schema } from '@src/core/schema'
 import Flyout from '@src/ui/components/Flyout'
 import { useAlert } from '@src/ui/lib/alert'
@@ -39,7 +41,6 @@ export default function SchemaFlyout({
   const {
     state,
     isEditing,
-    root,
     fileTree,
     selectItem,
     handleKeyDown,
@@ -55,17 +56,16 @@ export default function SchemaFlyout({
     cancel,
   } = useSchemaFlyout({ schema, schemas, dbOptions, onChange: handleChange, onExit: onClickClose })
 
-  if (!root) return null
+  const title = itemName(FileTree.rootItem(fileTree))
 
   return (
     <Flyout
-      title={root.name}
+      title={title}
       onClickClose={onClickClose}
       controls={
         <SchemaFlyoutControls
           state={state}
           isEditing={isEditing}
-          root={root}
           fileTree={fileTree}
           dbOptions={dbOptions}
           onChangeDbOptions={setDbOptions}
@@ -80,7 +80,6 @@ export default function SchemaFlyout({
       <SchemaFlyoutContent
         state={state}
         schema={schema}
-        dbOptions={dbOptions}
         fileTree={fileTree}
         onSelectFileSystemItem={selectItem}
         onKeyDown={handleKeyDown}

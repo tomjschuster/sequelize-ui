@@ -36,15 +36,13 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 ### Testing
 
+- unit
+  - file tree
 - ci
-
   - run e2e sql tests in ci
-
 - ui
-
   - components (after UI complete)
   - Browser tests (after UI complete)
-
 - sql
   - verify all tables/columns for each db type with demo schema
   - review sequelize framework test coverage

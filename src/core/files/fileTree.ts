@@ -7,176 +7,341 @@ import {
   parentDirectory,
   parentDirectoryPathParts,
 } from '@src/core/files'
-import { listDirectoryPaths, pathFilename } from './fileSystem'
+import { directory, isDirectory, itemName, pathFilename, withPaths } from './fileSystem'
 
-export type FileTreeState = {
-  folderState: FolderState
-  activeFile?: ActiveFile
+export type FileTree = {
+  state: FileTreeState
+  root: FileSystemItem
+}
+
+type FileTreeState = {
+  paths: string[]
+  visiblePaths: string[]
+  items: FileSystemItemCache
+  directoryState: DirectoryState
   focusedPath: string
+  activePath?: string
 }
 
-export type FolderState = { [path: string]: boolean }
+type DirectoryState = Map<string, boolean>
+type FileSystemItemCache = Map<string, FileSystemItem>
 
-export type ActiveFile = {
-  file: FileItem
-  path: string
+/** CRUD */
+// CREATE
+export function empty(): FileTree {
+  return { root: directory('', []), state: emptyState() }
 }
 
-export function emptyFileTreeState(): FileTreeState {
+export function create(root: FileSystemItem, initialPath?: string): FileTree {
+  return { root, state: createState(root, initialPath) }
+}
+
+// UPDATE
+export function updateRoot(fileTree: FileTree, root: FileSystemItem): FileTree {
+  return mapState(fileTree, (state) => updateRootState(state, root))
+}
+
+export function selectItem(fileTree: FileTree, path: string): FileTree {
+  return mapState(fileTree, (state, root) => selectItemState(state, root, path))
+}
+
+export function selectFileTreeFocusedItem(fileTree: FileTree): FileTree {
+  return mapState(fileTree, (state, root) => selectItemState(state, root, state.focusedPath))
+}
+
+export function expandDirectory(fileTree: FileTree, path: string): FileTree {
+  return mapState(fileTree, (state, root) => expandDirectoryState(state, root, path))
+}
+
+export function collapseDirectory(fileTree: FileTree, path: string): FileTree {
+  return mapState(fileTree, (state, root) => collapseDirectoryState(state, root, path))
+}
+
+export function focusOnParent(fileTree: FileTree): FileTree {
+  return mapState(fileTree, focusOnParentState)
+}
+
+export function focusOnPrevious(fileTree: FileTree): FileTree {
+  return mapState(fileTree, focusOnPreviousState)
+}
+
+export function focusOnNext(fileTree: FileTree): FileTree {
+  return mapState(fileTree, focusOnNextState)
+}
+
+export function focusOnFirst(fileTree: FileTree): FileTree {
+  return mapState(fileTree, focusOnFirstState)
+}
+
+export function focusOnLast(fileTree: FileTree): FileTree {
+  return mapState(fileTree, focusOnLastState)
+}
+
+export function focusByChar(fileTree: FileTree, char: string): FileTree {
+  return mapState(fileTree, (state) => focusByCharState(state, char))
+}
+
+export function expandSiblings(fileTree: FileTree): FileTree {
+  return mapState(fileTree, expandSiblingsState)
+}
+
+export function expandFocusedDirectory(fileTree: FileTree): FileTree {
+  return expandDirectory(fileTree, fileTree.state.focusedPath)
+}
+
+export function collapseFocusedDirectory(fileTree: FileTree): FileTree {
+  return collapseDirectory(fileTree, fileTree.state.focusedPath)
+}
+
+// READ
+export function rootItem(fileTree: FileTree): FileSystemItem {
+  return fileTree.root
+}
+
+export function hasActiveFile(fileTree: FileTree): boolean {
+  return !!fileTree.state.activePath
+}
+
+export function isFocused(fileTree: FileTree, path: string): boolean {
+  return fileTree.state.focusedPath === path
+}
+
+export function isActive(fileTree: FileTree, path: string): boolean {
+  return fileTree.state.activePath === path
+}
+
+export function activeFileItem(fileTree: FileTree): FileItem | undefined {
+  const item = fileTree.state.activePath
+    ? fileTree.state.items.get(fileTree.state.activePath)
+    : undefined
+
+  return item && isFile(item) ? item : undefined
+}
+
+export function activeFilePath(fileTree: FileTree): string | undefined {
+  return fileTree.state.activePath
+}
+
+export function focusedFilePath(fileTree: FileTree): string {
+  return fileTree.state.focusedPath
+}
+
+export function directoryIsExpanded(fileTree: FileTree, path: string): boolean {
+  return fileTree.state.directoryState.get(path) || false
+}
+
+export function fileTreeFocusedOnDirectory(fileTree: FileTree): boolean {
+  return fileTree.state.directoryState.has(fileTree.state.focusedPath)
+}
+
+export function focusedDirectoryIsExpanded(fileTree: FileTree): boolean {
+  return !!fileTree.state.directoryState.get(fileTree.state.focusedPath)
+}
+
+export function focusedDirectoryIsCollapsed(fileTree: FileTree): boolean {
+  return !fileTree.state.directoryState.get(fileTree.state.focusedPath)
+}
+
+function mapState(
+  fileTree: FileTree,
+  fn: (state: FileTreeState, root: FileSystemItem) => FileTreeState,
+) {
+  return { ...fileTree, state: fn(fileTree.state, fileTree.root) }
+}
+
+function emptyState(): FileTreeState {
   // TODO consider focusedPath undefined
-  return { folderState: {}, focusedPath: '' }
+  return {
+    items: new Map(),
+    paths: [],
+    visiblePaths: [],
+    directoryState: new Map(),
+    focusedPath: '',
+  }
 }
 
-export function createFileTreeState(root: FileSystemItem, initialPath?: string): FileTreeState {
-  const folderState = listDirectoryPaths(root).reduce<{ [key: string]: boolean }>((acc, x) => {
-    acc[x] = false
-    return acc
-  }, {})
-
-  const fileTree = { folderState, focusedPath: root.name }
-  const item = initialPath !== undefined && findItem(root, initialPath)
-
-  return item && isFile(item) && initialPath
-    ? selectFileTreeItem(fileTree, item, initialPath)
-    : fileTree
+function createState(root: FileSystemItem, initialPath?: string): FileTreeState {
+  return updateRootState(emptyState(), root, initialPath)
 }
 
-export function refreshFileTreeState(fileTree: FileTreeState, root: FileSystemItem): FileTreeState {
-  const folderState = listDirectoryPaths(root).reduce<{ [key: string]: boolean }>((acc, x) => {
-    acc[x] = x in fileTree.folderState ? fileTree.folderState[x] : false
-    return acc
-  }, {})
+function updateRootState(
+  state: FileTreeState,
+  root: FileSystemItem,
+  initialPath?: string,
+): FileTreeState {
+  const itemsWithPaths = withPaths(root)
+  const paths = itemsWithPaths.map(([path, _]) => path)
+  const items = new Map(itemsWithPaths)
+  const rootPath = itemName(root)
 
-  return { ...fileTree, folderState }
+  const directoryState = itemsWithPaths.reduce(
+    (acc, [path, item]) =>
+      isDirectory(item) ? acc.set(path, state.directoryState.get(path) || false) : acc,
+    new Map(),
+  )
+
+  const activePath =
+    initialPath && items.has(initialPath)
+      ? initialPath
+      : state.activePath && items.has(state.activePath)
+      ? state.activePath
+      : itemsWithPaths.find(([_, item]) => isFile(item))?.[0]
+
+  const focusedPath = activePath
+    ? activePath
+    : items.has(state.focusedPath)
+    ? state.focusedPath
+    : rootPath
+
+  const initialState = {
+    ...state,
+    paths,
+    visiblePaths: [],
+    items,
+    directoryState,
+    focusedPath,
+    activePath,
+  }
+
+  return selectItemState(initialState, root, activePath || rootPath)
 }
 
-export function selectFileTreeItem(
-  fileTree: FileTreeState,
+function updateVisiblePaths(state: FileTreeState, root: FileSystemItem): FileTreeState {
+  console.log('UPDATING VISIBLE PATHS')
+  return { ...state, visiblePaths: listVisiblePaths(state, root) }
+}
+
+function selectItemState(state: FileTreeState, root: FileSystemItem, path: string): FileTreeState {
+  const item = state.items.get(path)
+
+  if (!item) {
+    return state
+  }
+
+  const updatedState = isFile(item) ? setActiveFile(state, path) : toggleFolder(state, path)
+
+  return updateVisiblePaths(updatedState, root)
+}
+
+function expandDirectoryState(
+  state: FileTreeState,
   root: FileSystemItem,
   path: string,
 ): FileTreeState {
-  const item = findItem(root, path)
-
-  if (!item) {
-    return fileTree
-  }
-
-  if (isFile(item)) {
-    return setActiveFile(fileTree, item, path)
-  }
-
-  return toggleFolder(fileTree, path)
+  return state.directoryState.has(path)
+    ? updateVisiblePaths(
+        { ...state, directoryState: new Map(state.directoryState).set(path, true) },
+        root,
+      )
+    : state
 }
 
-function setActiveFile(fileTree: FileTreeState, file: FileItem, path: string): FileTreeState {
-  const expandedTree = expandAncestors(fileTree, path)
-  return { ...expandedTree, activeFile: { file, path }, focusedPath: path }
+function collapseDirectoryState(
+  state: FileTreeState,
+  root: FileSystemItem,
+  path: string,
+): FileTreeState {
+  return state.directoryState.has(path)
+    ? updateVisiblePaths(
+        { ...state, directoryState: new Map(state.directoryState).set(path, false) },
+        root,
+      )
+    : state
 }
 
-function setFocusedPath(fileTree: FileTreeState, focusedPath: string): FileTreeState {
-  const expandedTree = expandAncestors(fileTree, focusedPath)
-  return { ...expandedTree, focusedPath }
-}
-
-function toggleFolder(fileTree: FileTreeState, path: string): FileTreeState {
-  const expandedTree = expandAncestors(fileTree, path)
-  const currValue = expandedTree.folderState[path]
-
-  return currValue !== undefined
-    ? {
-        ...expandedTree,
-        folderState: { ...expandedTree.folderState, [path]: !currValue },
-        focusedPath: path,
-      }
-    : expandedTree
-}
-
-export function expandFolder(fileTree: FileTreeState, path: string): FileTreeState {
-  return path in fileTree.folderState
-    ? { ...fileTree, folderState: { ...fileTree.folderState, [path]: true } }
-    : fileTree
-}
-
-export function collapseFolder(fileTree: FileTreeState, path: string): FileTreeState {
-  return path in fileTree.folderState
-    ? { ...fileTree, folderState: { ...fileTree.folderState, [path]: false } }
-    : fileTree
-}
-
-export function focusOnParent(fileTree: FileTreeState, root: FileSystemItem): FileTreeState {
-  const parentPath = parentDirectory(fileTree.focusedPath)
+function focusOnParentState(state: FileTreeState, root: FileSystemItem): FileTreeState {
+  const parentPath = parentDirectory(state.focusedPath)
   const parent = findItem(root, parentPath)
 
-  return parent ? setFocusedPath(fileTree, parentPath) : fileTree
+  return parent ? setFocusedPath(state, parentPath) : state
 }
 
-export function focusOnPrevious(fileTree: FileTreeState, root: FileSystemItem): FileTreeState {
-  const paths = listVisiblePaths(fileTree, root)
-  const index = paths.indexOf(fileTree.focusedPath)
+function focusOnPreviousState(state: FileTreeState): FileTreeState {
+  const paths = state.visiblePaths
+  const index = paths.indexOf(state.focusedPath)
   const previousPath = index === -1 ? undefined : paths[index - 1]
 
-  return previousPath ? setFocusedPath(fileTree, previousPath) : fileTree
+  return previousPath ? setFocusedPath(state, previousPath) : state
 }
 
-export function focusOnNext(fileTree: FileTreeState, root: FileSystemItem): FileTreeState {
-  const paths = listVisiblePaths(fileTree, root)
-  const index = paths.indexOf(fileTree.focusedPath)
+function focusOnNextState(state: FileTreeState): FileTreeState {
+  const paths = state.visiblePaths
+  const index = paths.indexOf(state.focusedPath)
   const nextPath = index === -1 ? undefined : paths[index + 1]
 
-  return nextPath ? setFocusedPath(fileTree, nextPath) : fileTree
+  return nextPath ? setFocusedPath(state, nextPath) : state
 }
 
-export function focusOnFirst(fileTree: FileTreeState, root: FileSystemItem): FileTreeState {
-  const paths = listVisiblePaths(fileTree, root)
+function focusOnFirstState(state: FileTreeState): FileTreeState {
+  const paths = state.visiblePaths
   const firstPath = paths[0]
 
-  return firstPath ? setFocusedPath(fileTree, firstPath) : fileTree
+  return firstPath ? setFocusedPath(state, firstPath) : state
 }
 
-export function focusOnLast(fileTree: FileTreeState, root: FileSystemItem): FileTreeState {
-  const paths = listVisiblePaths(fileTree, root)
+function focusOnLastState(state: FileTreeState): FileTreeState {
+  const paths = state.visiblePaths
   const lastPath = paths[paths.length - 1]
 
-  return lastPath ? setFocusedPath(fileTree, lastPath) : fileTree
+  return lastPath ? setFocusedPath(state, lastPath) : state
 }
 
-export function focusByChar(
-  fileTree: FileTreeState,
-  root: FileSystemItem,
-  char: string,
-): FileTreeState {
-  const paths = listVisiblePaths(fileTree, root)
-  const currIndex = paths.indexOf(fileTree.focusedPath)
+function focusByCharState(state: FileTreeState, char: string): FileTreeState {
+  const paths = state.visiblePaths
+  const currIndex = paths.indexOf(state.focusedPath)
 
   if (currIndex === -1) {
-    return fileTree
+    return state
   }
 
   for (let i = currIndex + 1; i < paths.length; i++) {
     if (char.toLowerCase() === pathFilename(paths[i])[0]?.toLowerCase()) {
-      return setFocusedPath(fileTree, paths[i])
+      return setFocusedPath(state, paths[i])
     }
   }
 
   for (let i = 0; i < currIndex; i++) {
     if (char.toLowerCase() === pathFilename(paths[i])[0]?.toLowerCase()) {
-      return setFocusedPath(fileTree, paths[i])
+      return setFocusedPath(state, paths[i])
     }
   }
 
-  return fileTree
+  return state
 }
 
-export function expandSiblings(fileTree: FileTreeState, root: FileSystemItem): FileTreeState {
-  const parent = parentDirectory(fileTree.focusedPath)
-  const siblings = listVisiblePaths(fileTree, root).filter(
-    (path) => parentDirectory(path) === parent,
-  )
+function expandSiblingsState(state: FileTreeState, root: FileSystemItem): FileTreeState {
+  const parent = parentDirectory(state.focusedPath)
 
-  return siblings.reduce((acc, path) => expandFolder(acc, path), fileTree)
+  const directoryState = state.visiblePaths
+    .filter((path) => parentDirectory(path) === parent)
+    .reduce((acc, path) => acc.set(path, true), new Map(state.directoryState))
+
+  return updateVisiblePaths({ ...state, directoryState }, root)
 }
 
-function listVisiblePaths(fileTree: FileTreeState, root: FileSystemItem): string[] {
+function setActiveFile(state: FileTreeState, path: string): FileTreeState {
+  const expandedTree = expandAncestors(state, path)
+  return { ...expandedTree, focusedPath: path, activePath: path }
+}
+
+function setFocusedPath(state: FileTreeState, focusedPath: string): FileTreeState {
+  return { ...state, focusedPath }
+}
+
+function toggleFolder(state: FileTreeState, path: string): FileTreeState {
+  const expandedTree = expandAncestors(state, path)
+  const currValue = expandedTree.directoryState.get(path)
+
+  return currValue !== undefined
+    ? {
+        ...expandedTree,
+        directoryState: new Map(expandedTree.directoryState).set(path, !currValue),
+        focusedPath: path,
+      }
+    : expandedTree
+}
+
+function listVisiblePaths(state: FileTreeState, root: FileSystemItem): string[] {
   const visiblePaths: string[] = []
 
   let closedAncestorPath: string | undefined
@@ -187,24 +352,24 @@ function listVisiblePaths(fileTree: FileTreeState, root: FileSystemItem): string
       continue
     }
 
-    closedAncestorPath = fileTree.folderState[path] === false ? path : undefined
+    closedAncestorPath = state.directoryState.get(path) === false ? path : undefined
     visiblePaths.push(path)
   }
 
   return visiblePaths
 }
 
-function expandAncestors(fileTree: FileTreeState, path: string): FileTreeState {
+function expandAncestors(state: FileTreeState, path: string): FileTreeState {
   const paths = parentDirectoryPathParts(path)
 
-  const [newFileTree, _] = paths.reduce<[FileTreeState, string | undefined]>(
-    ([accFileTree, accPath], curr) => {
+  const [directoryState, _] = paths.reduce<[DirectoryState, string | undefined]>(
+    ([accFolderState, accPath], curr) => {
       const nextPath = accPath ? `${accPath}/${curr}` : curr
-      const nextFileTree = expandFolder(accFileTree, nextPath)
-      return [nextFileTree, nextPath]
+      const nextState = accFolderState.set(nextPath, true)
+      return [nextState, nextPath]
     },
-    [fileTree, undefined],
+    [new Map(state.directoryState), undefined],
   )
 
-  return newFileTree
+  return { ...state, directoryState }
 }

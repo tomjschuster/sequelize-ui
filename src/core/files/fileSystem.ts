@@ -75,6 +75,17 @@ export function findDirectory(
   return directory && isDirectory(directory) ? directory : undefined
 }
 
+export function withPaths(item: FileSystemItem): [string, FileSystemItem][] {
+  const name = itemName(item)
+
+  const tuple: [string, FileSystemItem] = [name, item]
+  if (isFile(item) || item.files.length === 0) {
+    return [tuple]
+  }
+
+  return [tuple].concat(item.files.flatMap(withPaths).map(([path, i]) => [`${name}/${path}`, i]))
+}
+
 export function listPaths(item: FileSystemItem): string[] {
   const name = itemName(item)
   if (isFile(item) || item.files.length === 0) {

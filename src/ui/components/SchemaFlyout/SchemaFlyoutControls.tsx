@@ -1,5 +1,5 @@
 import { DbOptions } from '@src/core/database'
-import { DirectoryItem, FileTreeState } from '@src/core/files'
+import * as FileTree from '@src/core/files/fileTree'
 import { ControlsAction } from '@src/ui/components/Flyout'
 import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
@@ -14,8 +14,7 @@ import { SchemaFlyoutState, SchemaFlyoutStateType } from './types'
 type SchemaFlyoutControlsProps = {
   state: SchemaFlyoutState
   isEditing: boolean
-  root: DirectoryItem
-  fileTree: FileTreeState
+  fileTree: FileTree.FileTree
   dbOptions: DbOptions
   onSelectCode: () => void
   onSelectSchema: () => void
@@ -28,7 +27,6 @@ type SchemaFlyoutControlsProps = {
 export default function SchemaFlyoutControls({
   state,
   isEditing,
-  root,
   fileTree,
   dbOptions,
   onSelectCode,
@@ -53,7 +51,6 @@ export default function SchemaFlyoutControls({
       <div className={classnames('flex')}>
         <SchemaFlyoutControlsActions
           state={state}
-          root={root}
           dbOptions={dbOptions}
           fileTree={fileTree}
           onChangeDbOptions={onChangeDbOptions}
@@ -68,8 +65,7 @@ export default function SchemaFlyoutControls({
 
 type SchemaFlyoutControlsActionsProps = {
   state: SchemaFlyoutState
-  root: DirectoryItem
-  fileTree: FileTreeState
+  fileTree: FileTree.FileTree
   dbOptions: DbOptions
   onChangeDbOptions: (options: DbOptions) => void
   onEdit: () => void
@@ -79,7 +75,6 @@ type SchemaFlyoutControlsActionsProps = {
 
 function SchemaFlyoutControlsActions({
   state,
-  root,
   fileTree,
   dbOptions,
   onChangeDbOptions,
@@ -90,8 +85,8 @@ function SchemaFlyoutControlsActions({
   if (state.type === SchemaFlyoutStateType.CODE) {
     return (
       <CodeViewerControls
-        root={root}
-        activeFile={fileTree.activeFile}
+        root={FileTree.rootItem(fileTree)}
+        activeFile={FileTree.activeFileItem(fileTree)}
         dbOptions={dbOptions}
         onClickEdit={onEdit}
         onChangeDbOptions={onChangeDbOptions}

@@ -1,5 +1,4 @@
-import { DbOptions } from '@src/core/database'
-import { FileTreeState } from '@src/core/files'
+import { FileTree } from '@src/core/files'
 import { Model, Schema } from '@src/core/schema'
 import React from 'react'
 import CodeExplorer from '../CodeExplorer/CodeExplorer'
@@ -11,9 +10,8 @@ import { SchemaFlyoutState, SchemaFlyoutStateType } from './types'
 
 type SchemaFlyoutContentProps = {
   schema: Schema
-  dbOptions: DbOptions
   state: SchemaFlyoutState
-  fileTree: FileTreeState
+  fileTree: FileTree
   onSelectFileSystemItem: (path: string) => void
   onKeyDown: (evt: React.KeyboardEvent) => void
   onViewSchema: (model?: Model) => void
@@ -25,7 +23,6 @@ type SchemaFlyoutContentProps = {
 }
 export default function SchemaFlyoutContent({
   schema,
-  dbOptions,
   state,
   fileTree,
   onSelectFileSystemItem,
@@ -41,8 +38,6 @@ export default function SchemaFlyoutContent({
     case SchemaFlyoutStateType.CODE:
       return (
         <CodeExplorer
-          schema={schema}
-          dbOptions={dbOptions}
           fileTree={fileTree}
           onSelectFileSystemItem={onSelectFileSystemItem}
           onKeyDown={onKeyDown}

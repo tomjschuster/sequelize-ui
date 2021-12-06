@@ -1,5 +1,5 @@
 import { DbOptions } from '@src/core/database'
-import { ActiveFile, FileItem, FileSystemItem } from '@src/core/files'
+import { FileItem, FileSystemItem, itemName } from '@src/core/files'
 import useIsOpen from '@src/ui/hooks/useIsOpen'
 import useOnClickOutside from '@src/ui/hooks/useOnClickOutside'
 import { useAlert } from '@src/ui/lib/alert'
@@ -15,7 +15,7 @@ import * as Styles from './styles'
 
 type CodeViewerControlsProps = {
   root: FileSystemItem
-  activeFile: ActiveFile | undefined
+  activeFile?: FileItem
   dbOptions: DbOptions
   onClickEdit: () => void
   onChangeDbOptions: (dbOptions: DbOptions) => void
@@ -33,7 +33,7 @@ export default function CodeViewerControls({
 
   const handleClickDownload = () => {
     download(root)
-      .then(() => info(`Download started for ${root.name}.zip.`))
+      .then(() => info(`Download started for ${itemName(root)}.zip.`))
       .catch((e) => {
         console.error(e)
         error('Failed to copy to clipboard.')
@@ -42,8 +42,8 @@ export default function CodeViewerControls({
 
   const handleClickCopy = () => {
     if (activeFile) {
-      copyFile(activeFile.file)
-        .then(() => success(`${activeFile.file.name} copied to clipboard.`))
+      copyFile(activeFile)
+        .then(() => success(`${itemName(activeFile)} copied to clipboard.`))
         .catch((e) => {
           console.error(e)
           error('Failed to download project.')

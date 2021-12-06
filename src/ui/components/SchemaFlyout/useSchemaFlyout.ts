@@ -1,5 +1,5 @@
 import { DbOptions } from '@src/core/database'
-import { DirectoryItem, FileTreeState } from '@src/core/files'
+import { activeFilePath, FileTree } from '@src/core/files'
 import { isNewSchema, Model, Schema } from '@src/core/schema'
 import {
   emptyModelErrors,
@@ -13,7 +13,7 @@ import { isDemoSchema } from '@src/data/schemas'
 import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import equal from 'fast-deep-equal/es6'
 import React from 'react'
-import { useFileTree } from '../FileTree'
+import { useFileTree } from '../FileTreeView'
 import { SchemaFlyoutState, SchemaFlyoutStateType } from './types'
 
 type UseSchemaFlyoutArgs = {
@@ -28,8 +28,7 @@ type UseSchemaFlyoutArgs = {
 type UseSchemaFlyoutResult = {
   state: SchemaFlyoutState
   isEditing: boolean
-  root: DirectoryItem | undefined
-  fileTree: FileTreeState
+  fileTree: FileTree
   selectItem: (path: string) => void
   handleKeyDown: (evt: React.KeyboardEvent) => void
   edit: () => void
@@ -62,8 +61,9 @@ export function useSchemaFlyout({
 
   const edit = React.useCallback(() => {
     if (state.type === SchemaFlyoutStateType.CODE) {
-      const path = fileTree.activeFile?.path
+      const path = activeFilePath(fileTree)
       const model = path && framework?.modelFromPath(path, schema)
+
       if (model) {
         setState({ type: SchemaFlyoutStateType.EDIT_MODEL, model, errors: emptyModelErrors })
       } else {
@@ -98,7 +98,7 @@ export function useSchemaFlyout({
   const viewSchema = React.useCallback(
     (model?: Model) => {
       if (state.type === SchemaFlyoutStateType.CODE) {
-        const path = fileTree.activeFile?.path
+        const path = activeFilePath(fileTree)
         const currModel = path && framework?.modelFromPath(path, schema)
 
         const nextState: SchemaFlyoutState = currModel
@@ -253,7 +253,6 @@ export function useSchemaFlyout({
     isEditing:
       state.type === SchemaFlyoutStateType.EDIT_MODEL ||
       state.type === SchemaFlyoutStateType.EDIT_SCHEMA,
-    root,
     fileTree,
     selectItem,
     handleKeyDown,
