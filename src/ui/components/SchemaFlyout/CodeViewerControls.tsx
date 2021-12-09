@@ -3,9 +3,10 @@ import { FileItem, FileSystemItem, itemName } from '@src/core/files'
 import useIsOpen from '@src/ui/hooks/useIsOpen'
 import useOnClickOutside from '@src/ui/hooks/useOnClickOutside'
 import { useAlert } from '@src/ui/lib/alert'
+import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
 import DbOptionsForm from '../DbOptionsForm'
-import { ControlsAction } from '../Flyout'
+import IconButton from '../form/IconButton'
 import CloseIcon from '../icons/Close'
 import CopyIcon from '../icons/Copy'
 import FolderIcon from '../icons/Folder'
@@ -56,23 +57,44 @@ export default function CodeViewerControls({
 
   return (
     <>
-      <ControlsAction onClick={handleClickCopy} disabled={!activeFile}>
-        <CopyIcon size={6} title="copy current file code" />
-      </ControlsAction>
-      <ControlsAction onClick={handleClickDownload}>
-        <FolderIcon title="download project code" size={6} />
-      </ControlsAction>
-      <ControlsAction onClick={onClickEdit} overlayControl>
-        <PencilIcon title="edit code" size={6} />
-      </ControlsAction>
-      <ControlsAction onClick={toggleDbOptions} overlayControl>
-        <SettingsIcon size={6} title={isDbOptionsOpen ? 'close settings' : 'open settings'} />
-      </ControlsAction>
+      <IconButton
+        label="copy current file code"
+        icon={CopyIcon}
+        iconProps={{ size: 6 }}
+        onClick={handleClickCopy}
+        disabled={!activeFile}
+      />
+      <IconButton
+        label="download project code"
+        icon={FolderIcon}
+        iconProps={{
+          size: 6,
+        }}
+        onClick={handleClickDownload}
+      />
+      <IconButton
+        label="edit code"
+        icon={PencilIcon}
+        iconProps={{ size: 6 }}
+        onClick={onClickEdit}
+      />
+      <IconButton
+        label={isDbOptionsOpen ? 'close settings' : 'open settings'}
+        onClick={toggleDbOptions}
+        icon={SettingsIcon}
+        iconProps={{ size: 6 }}
+        onMouseDown={(evt) => evt.stopPropagation()}
+        onTouchStart={(evt) => evt.stopPropagation()}
+      />
       {isDbOptionsOpen && (
         <div ref={dbOptionsRef} className={Styles.dbFormOverlay}>
-          <button className={Styles.closeDbForm} onClick={closeDbOptions}>
-            <CloseIcon title="close settings" size={6} />
-          </button>
+          <IconButton
+            label="close settings"
+            className={classnames('absolute', 'right-1', 'top-1')}
+            icon={CloseIcon}
+            iconProps={{ size: 6 }}
+            onClick={closeDbOptions}
+          />
           <DbOptionsForm dbOptions={dbOptions} onChange={onChangeDbOptions} />
         </div>
       )}

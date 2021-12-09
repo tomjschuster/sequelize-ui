@@ -19,6 +19,7 @@ import TextInput from '@src/ui/components/form/TextInput'
 import { classnames } from '@src/ui/styles/classnames'
 import { plural, singular, snakeCase } from '@src/utils/string'
 import React from 'react'
+import IconButton from '../form/IconButton'
 import TrashIcon from '../icons/Trash'
 
 type AssociationFieldsetProps = {
@@ -251,13 +252,12 @@ function AssociationFieldset({
         </>
       )}
       <div className="absolute top-0 right-0 p-1">
-        <button
-          type="button"
-          className={classnames('p-1', 'hover:bg-gray-200')}
+        <IconButton
+          label="delete"
+          icon={TrashIcon}
+          iconProps={{ size: 6 }}
           onClick={handleDelete}
-        >
-          <TrashIcon size={6} title="delete" />
-        </button>
+        />
       </div>
     </fieldset>
   )

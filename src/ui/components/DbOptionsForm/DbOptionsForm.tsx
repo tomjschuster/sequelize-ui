@@ -24,7 +24,7 @@ export default function DbOptionsForm({
       autoComplete="off"
       data-lpignore="true"
       data-form-type="other"
-      className={classnames('grid', 'grid-cols-12', 'gap-x-4', 'sm:gap-x-8', 'gap-y-6')}
+      className={classnames('grid', 'grid-cols-12', 'gap-x-4', 'sm:gap-x-8', 'gap-y-1')}
     >
       <Select<SqlDialect>
         id="sql-dialect"

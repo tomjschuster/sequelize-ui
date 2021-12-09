@@ -1,15 +1,23 @@
 import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
 import { lookupOptionValue, optionsToList } from '../shared/options'
-import { CommonOptionsProps } from '../shared/types'
+import { OptionsProps } from '../shared/types'
+import { autofillDisable } from '../shared/utils'
 
-type RadioProps<T> = CommonOptionsProps<T>
+type RadioProps<T> = OptionsProps<T, React.InputHTMLAttributes<HTMLInputElement>>
 
-function Radio<T>({ value, options, display, onChange }: RadioProps<T>): React.ReactElement {
+function Radio<T>({
+  value,
+  options,
+  display,
+  onChange,
+  disabled = () => false,
+  ...rest
+}: RadioProps<T>): React.ReactElement {
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const key = evt.target.value
     const option = lookupOptionValue(options, key)
-    if (option !== undefined) onChange(option)
+    if (option !== undefined) onChange(option, evt)
   }
 
   return (
@@ -20,10 +28,10 @@ function Radio<T>({ value, options, display, onChange }: RadioProps<T>): React.R
             type="radio"
             value={k}
             checked={v === value}
+            disabled={disabled(v)}
             onChange={handleChange}
-            autoComplete="off"
-            data-lpignore="true"
-            data-form-text="other"
+            {...autofillDisable}
+            {...rest}
           />
           <span className={classnames('pl-2', 'text-sm')}>{display(v)}</span>
         </label>

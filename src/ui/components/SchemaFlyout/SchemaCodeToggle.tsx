@@ -1,6 +1,6 @@
 import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
-import Toggle from '../form/Toggle'
+import ToggleButton from '../form/ToggleButton'
 import CodeIcon from '../icons/Code'
 import CubeIcon from '../icons/Cube'
 
@@ -19,7 +19,7 @@ export default function SchemaCodeToggle({
   const handleChange = (value: boolean) => (value ? onSelectCode() : onSelectSchema())
 
   return (
-    <Toggle
+    <ToggleButton
       value={code}
       options={{ code: true, schema: false }}
       disabled={() => disabled}

@@ -1,16 +1,17 @@
 import { classnames } from '@src/ui/styles/classnames/__generated__/tailwindcss-classnames'
+import { Override } from '@src/utils/types'
 import React from 'react'
+import { FieldProps } from '../shared/types'
+import { autofillDisable } from '../shared/utils'
 
-type CheckboxProps = {
-  id: string
-  label: string
-  checked: boolean
-  onChange: (checked: boolean) => void
-}
+type CheckboxProps = Override<
+  Omit<FieldProps<boolean, React.InputHTMLAttributes<HTMLInputElement>>, 'value'>,
+  { checked: boolean }
+>
 
-function Checkbox({ id, label, checked, onChange }: CheckboxProps): React.ReactElement {
+function Checkbox({ id, label, checked, onChange, ...rest }: CheckboxProps): React.ReactElement {
   const handleChange = React.useCallback(
-    (evt: React.ChangeEvent<HTMLInputElement>) => onChange(evt.target.checked),
+    (evt: React.ChangeEvent<HTMLInputElement>) => onChange(evt.target.checked, evt),
     [onChange],
   )
 
@@ -21,9 +22,8 @@ function Checkbox({ id, label, checked, onChange }: CheckboxProps): React.ReactE
         type="checkbox"
         checked={checked}
         onChange={handleChange}
-        autoComplete="off"
-        data-lpignore="true"
-        data-form-text="other"
+        {...autofillDisable}
+        {...rest}
       />
       <span className={classnames('pl-2', 'text-sm')}>{label}</span>
     </label>

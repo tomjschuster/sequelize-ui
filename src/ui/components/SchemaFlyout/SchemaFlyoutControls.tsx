@@ -1,9 +1,9 @@
 import { DbOptions } from '@src/core/database'
 import * as FileTree from '@src/core/files/fileTree'
-import { ControlsAction } from '@src/ui/components/Flyout'
 import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
 import Button from '../form/Button'
+import IconButton from '../form/IconButton'
 import CloseIcon from '../icons/Close'
 import FloppyDiscIcon from '../icons/FloppyDisc'
 import PencilIcon from '../icons/Pencil'
@@ -96,25 +96,25 @@ function SchemaFlyoutControlsActions({
 
   if (state.type === SchemaFlyoutStateType.VIEW_SCHEMA) {
     return (
-      <ControlsAction onClick={onEdit}>
-        <PencilIcon title="edit schema" size={6} />
-      </ControlsAction>
+      <IconButton label="edit schema" icon={PencilIcon} iconProps={{ size: 6 }} onClick={onEdit} />
     )
   }
 
   if (state.type === SchemaFlyoutStateType.VIEW_MODEL) {
     return (
-      <ControlsAction onClick={onEdit}>
-        <PencilIcon title="edit schema" size={6} />
-      </ControlsAction>
+      <IconButton label="edit schema" icon={PencilIcon} iconProps={{ size: 6 }} onClick={onEdit} />
     )
   }
 
   return (
     <>
-      <Button className={classnames('hover:bg-blue-100', 'w-16', 'md:w-20')} onClick={onCancel}>
-        <CloseIcon size={4} />
-        <span className={classnames('ml-1', 'text-xs')}>Cancel</span>
+      <Button
+        className={classnames('hover:bg-blue-100', 'w-16', 'md:w-20')}
+        icon={CloseIcon}
+        iconProps={{ size: 4 }}
+        onClick={onCancel}
+      >
+        Cancel
       </Button>
       <Button
         className={classnames(
@@ -124,11 +124,12 @@ function SchemaFlyoutControlsActions({
           'w-16',
           'md:w-20',
           'ml-2',
+          'font-bold',
         )}
+        icon={FloppyDiscIcon}
         onClick={onSave}
       >
-        <FloppyDiscIcon />
-        <span className={classnames('ml-1', 'text-xs')}>Save</span>
+        Save
       </Button>
     </>
   )

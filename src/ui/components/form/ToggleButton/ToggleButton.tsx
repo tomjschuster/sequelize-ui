@@ -3,18 +3,21 @@ import React from 'react'
 import { lookupOptionValue, optionsToList } from '../shared/options'
 import { CommonOptionsProps } from '../shared/types'
 
-type ToggleProps<T> = CommonOptionsProps<T> & { disabled?: (v: T) => boolean }
+type ToggleButtonProps<T> = CommonOptionsProps<T> & {
+  value: T
+  onChange: (value: T, evt: React.MouseEvent<HTMLButtonElement>) => void
+}
 
-function Toggle<T>({
+function ToggleButton<T>({
   value,
   options,
   display,
-  disabled,
+  disabled = () => false,
   onChange,
-}: ToggleProps<T>): React.ReactElement {
-  const handleChange = (key: string) => () => {
+}: ToggleButtonProps<T>): React.ReactElement {
+  const handleChange = (key: string) => (evt: React.MouseEvent<HTMLButtonElement>) => {
     const option = lookupOptionValue(options, key)
-    if (option !== undefined) onChange(option)
+    if (option !== undefined) onChange(option, evt)
   }
 
   return (
@@ -46,8 +49,8 @@ function Toggle<T>({
             )}
             type="button"
             aria-pressed={selected ? 'true' : 'false'}
-            disabled={!!disabled && disabled(v)}
             value={k}
+            disabled={disabled(v)}
             onClick={handleChange(k)}
           >
             {display(v)}
@@ -59,4 +62,4 @@ function Toggle<T>({
 }
 
 // Cast is necessary because HOC's don't preserve generics
-export default React.memo(Toggle) as typeof Toggle
+export default React.memo(ToggleButton) as typeof ToggleButton

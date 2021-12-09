@@ -1,91 +1,43 @@
-import { classnames } from '@src/ui/styles/classnames'
-import classnames_ from 'classnames'
+import { Classname, classnames } from '@src/ui/styles/classnames'
+import { Override } from '@src/utils/types'
 import React from 'react'
-import { CommonFieldProps, CommonInputProps } from '../shared/types'
+import InputWrapper, { alertId } from '../shared/InputWrapper'
+import { FieldProps } from '../shared/types'
+import { autofillDisable } from '../shared/utils'
 
-type TextInputProps = CommonFieldProps &
-  CommonInputProps<string> & {
-    className?: string
-    large?: boolean
-    placeholder?: string
-    onBlur?: () => void
-    onKeyPress?: React.KeyboardEventHandler<HTMLInputElement>
-  }
+type TextInputProps = Override<
+  FieldProps<string | undefined, React.InputHTMLAttributes<HTMLInputElement>>,
+  { className?: Classname }
+>
 
 function TextInput({
   id,
-  label,
-  value,
   className,
-  large,
-  placeholder,
+  label,
   error,
+  value,
   onChange,
-  onBlur,
-  onKeyPress,
+  ...rest
 }: TextInputProps): React.ReactElement {
   const handleChange = React.useCallback(
-    (evt: React.ChangeEvent<HTMLInputElement>) => onChange(evt.target.value || undefined),
+    (evt: React.ChangeEvent<HTMLInputElement>) => onChange(evt.target.value || undefined, evt),
     [onChange],
   )
 
   return (
-    <div className={classnames_(className, classnames('w-full'))}>
-      <label
-        htmlFor={id}
-        className={classnames('flex', 'flex-col', 'items-start', {
-          'pb-6': !error && !large,
-          'h-full': large,
-        })}
-      >
-        <span
-          className={classnames({
-            'text-sm': !large,
-            'text-xs': large,
-            absolute: large,
-            'top-0.5': large,
-            'left-3.5': large,
-          })}
-        >
-          {label}
-        </span>
-        <input
-          className={classnames('w-full', 'text-sm', {
-            'border-none': large,
-            'h-full': large,
-            'text-base': large,
-            'py-5': large,
-            'px-3.5': large,
-            'py-1': !large,
-            'px-2': !large,
-          })}
-          id={id}
-          type="text"
-          value={value}
-          placeholder={placeholder}
-          onChange={handleChange}
-          onBlur={onBlur}
-          onKeyPress={onKeyPress}
-          aria-invalid={!!error}
-          aria-describedby={`${id}-alert`}
-          autoComplete="off"
-          data-lpignore="true"
-          data-form-type="other"
-        />
-      </label>
-      <span
-        id={`${id}-alert`}
-        className={classnames('text-red-700', 'text-xs', {
-          absolute: large,
-          'bottom-0.5': large,
-          'left-3.5': large,
-        })}
-        role={error ? 'alert' : undefined}
-        aria-hidden={!error}
-      >
-        {error}
-      </span>
-    </div>
+    <InputWrapper id={id} className={className} label={label} error={error}>
+      <input
+        id={id}
+        className={classnames('w-full', 'text-sm', 'py-1', 'px-2')}
+        type="text"
+        value={value}
+        onChange={handleChange}
+        aria-invalid={!!error}
+        aria-describedby={alertId(id)}
+        {...autofillDisable}
+        {...rest}
+      />
+    </InputWrapper>
   )
 }
 

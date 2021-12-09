@@ -1,8 +1,9 @@
 import CloseCircleIcon from '@src/ui/components/icons/CloseCircle'
 import useLockScroll from '@src/ui/hooks/useLockScroll'
 import { useTrapFocus } from '@src/ui/lib/focus'
-// import useTrapFocus from '@src/ui/hooks/useTrapFocus'
+import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
+import IconButton from '../form/IconButton'
 import * as Styles from './styles'
 
 type FlyoutProps = React.PropsWithChildren<{
@@ -31,12 +32,15 @@ export default function Flyout({
           />
         </div>
         <h2>{title}</h2>
-        <button className={Styles.closeButton} type="button" onClick={onClickClose}>
-          <CloseCircleIcon title="close" size={6} />
-        </button>
+        <IconButton
+          label="close"
+          icon={CloseCircleIcon}
+          iconProps={{ size: 6 }}
+          onClick={onClickClose}
+        />
       </div>
       {controls && <div className={Styles.controlsContainer}>{controls}</div>}
-      <div className={Styles.contentContainer}>{children}</div>
+      <div className={classnames('flex-auto', 'overflow-y-scroll')}>{children}</div>
     </div>
   )
 }

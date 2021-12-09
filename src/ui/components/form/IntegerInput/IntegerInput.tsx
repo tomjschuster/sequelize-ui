@@ -1,12 +1,14 @@
 import { classnames } from '@src/ui/styles/classnames'
+import { Override } from '@src/utils/types'
 import React from 'react'
-import { CommonFieldProps, CommonInputProps } from '../shared/types'
+import InputWrapper, { alertId } from '../shared/InputWrapper'
+import { FieldProps } from '../shared/types'
+import { autofillDisable } from '../shared/utils'
 
-type IntegerInputProps = CommonInputProps<number> &
-  CommonFieldProps & {
-    min?: number
-    max?: number
-  }
+type IntegerInputProps = FieldProps<
+  number | undefined,
+  Override<React.InputHTMLAttributes<HTMLInputElement>, { min?: number; max?: number }>
+>
 
 function IntegerInput({
   id,
@@ -16,52 +18,38 @@ function IntegerInput({
   max,
   error,
   onChange,
+  ...rest
 }: IntegerInputProps): React.ReactElement {
   const handleChange = React.useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {
-      if (!evt.target.value) onChange(undefined)
+      if (!evt.target.value) onChange(undefined, evt)
 
       const updatedValue = parseInt(evt.target.value)
       if (isNaN(updatedValue)) return
       if (max !== undefined && updatedValue > max) return
       if (min !== undefined && updatedValue < min) return
 
-      onChange(updatedValue)
+      onChange(updatedValue, evt)
     },
     [onChange, min, max],
   )
 
   return (
-    <>
-      <label
-        htmlFor={id}
-        className={classnames('w-full', 'flex', 'flex-col', 'items-start', { 'pb-6': !error })}
-      >
-        <span className={classnames('text-sm')}>{label}</span>
-        <input
-          className={classnames('py-1', 'px-2', 'p-0.5', 'w-full', 'text-sm')}
-          id={id}
-          type="number"
-          min={min}
-          max={max}
-          value={value === undefined ? '' : value}
-          onChange={handleChange}
-          aria-invalid={!!error}
-          aria-describedby={`${id}-alert`}
-          autoComplete="off"
-          data-lpignore="true"
-          data-form-text="other"
-        />
-      </label>
-      <span
-        id={`${id}-alert`}
-        className={classnames('text-red-700', 'text-xs')}
-        role={error ? 'alert' : undefined}
-        aria-hidden={!error}
-      >
-        {error}
-      </span>
-    </>
+    <InputWrapper id={id} label={label} error={error}>
+      <input
+        className={classnames('py-1', 'px-2', 'p-0.5', 'w-full', 'text-sm')}
+        id={id}
+        type="number"
+        min={min}
+        max={max}
+        value={value === undefined ? '' : value}
+        onChange={handleChange}
+        aria-invalid={!!error}
+        aria-describedby={alertId(id)}
+        {...autofillDisable}
+        {...rest}
+      />
+    </InputWrapper>
   )
 }
 

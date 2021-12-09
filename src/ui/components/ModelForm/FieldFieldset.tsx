@@ -18,6 +18,7 @@ import TextInput from '@src/ui/components/form/TextInput'
 import TrashIcon from '@src/ui/components/icons/Trash'
 import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
+import IconButton from '../form/IconButton'
 import TextArea from '../form/TextArea'
 
 type FieldFieldsetProps = {
@@ -266,13 +267,12 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         />
       </div>
       <div className="absolute top-0 right-0 p-1">
-        <button
-          type="button"
-          className={classnames('p-1', 'hover:bg-gray-200')}
+        <IconButton
+          label="delete"
+          icon={TrashIcon}
+          iconProps={{ size: 6 }}
           onClick={handleDelete}
-        >
-          <TrashIcon size={6} title="delete" />
-        </button>
+        />
       </div>
     </fieldset>
   )

@@ -30,8 +30,6 @@ export const logoContainer = classnames('p-1', 'flex', 'items-center')
 
 export const logo = classnames('h-6')
 
-export const closeButton = classnames('p-0.5', 'hover:bg-gray-200')
-
 export const controlsContainer = classnames(
   'relative',
   'bg-white',
@@ -42,8 +40,6 @@ export const controlsContainer = classnames(
   'border-b',
   'border-gray-900',
 )
-
-export const contentContainer = classnames('flex-auto', 'overflow-y-scroll')
 
 export const actionsContainer = classnames('text-sm', 'h-10', 'flex', 'w-full')
 

@@ -1,60 +1,59 @@
-import { classnames } from '@src/ui/styles/classnames'
+import { Classname, classnames } from '@src/ui/styles/classnames'
+import { Override } from '@src/utils/types'
 import React from 'react'
+import InputWrapper from '../shared/InputWrapper'
 import { lookupOptionKey, lookupOptionValue, optionsToList } from '../shared/options'
-import { CommonFieldProps, CommonOptionsProps } from '../shared/types'
+import { OptionsProps } from '../shared/types'
+import { autofillDisable } from '../shared/utils'
 
-type SelectProps<T> = CommonFieldProps & CommonOptionsProps<T> & { className?: string }
+type SelectProps<T> = Override<
+  OptionsProps<T, React.SelectHTMLAttributes<HTMLSelectElement>>,
+  { className?: Classname }
+>
 
 function Select<T>({
   id,
+  className,
   label,
   value,
   options,
   error,
   display,
   onChange,
-  className,
+  disabled = () => false,
+  ...rest
 }: SelectProps<T>): React.ReactElement {
   const handleChange = (evt: React.ChangeEvent<HTMLSelectElement>) => {
     const key = evt.target.value
     const option = lookupOptionValue(options, key)
-    if (option !== undefined) onChange(option)
+    if (option !== undefined) onChange(option, evt)
   }
 
-  return (
-    <div className={`${className} ${classnames('w-full')}`}>
-      <label
-        htmlFor={id}
-        className={classnames('w-full', 'flex', 'flex-col', 'items-start', { 'pb-6': !error })}
-      >
-        <span className={classnames('text-sm')}>{label}</span>
-        <select
-          id={id}
-          className={classnames('p-1', 'px-2', 'w-full', 'cursor-pointer', 'text-sm')}
-          onChange={handleChange}
-          value={lookupOptionKey(options, value)}
-          aria-invalid={!!error}
-          aria-describedby={`${id}-alert`}
-          autoComplete="off"
-          data-lpignore="true"
-          data-form-text="other"
-        >
-          {optionsToList(options).map(([k, v]) => (
-            <option key={id + k} value={k}>
-              {display(v)}
-            </option>
-          ))}
-        </select>
-      </label>
-      <span
-        id={`${id}-alert`}
-        className={classnames('text-red-700', 'text-xs')}
-        role={error ? 'alert' : undefined}
-        aria-hidden={!error}
-      >
-        {error}
-      </span>
-    </div>
+  const select = (
+    <select
+      id={id}
+      className={classnames('p-1', 'px-2', 'w-full', 'cursor-pointer', 'text-sm')}
+      onChange={handleChange}
+      value={lookupOptionKey(options, value)}
+      aria-invalid={!!error}
+      aria-describedby={`${id}-alert`}
+      {...autofillDisable}
+      {...rest}
+    >
+      {optionsToList(options).map(([k, v]) => (
+        <option key={id + k} value={k} disabled={disabled(v)}>
+          {display(v)}
+        </option>
+      ))}
+    </select>
+  )
+
+  return id && label ? (
+    <InputWrapper id={id} label={label} error={error} className={className}>
+      {select}
+    </InputWrapper>
+  ) : (
+    select
   )
 }
 

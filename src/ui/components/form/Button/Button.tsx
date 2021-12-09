@@ -1,17 +1,26 @@
-import { classnames } from '@src/ui/styles/classnames'
-import { TArg } from '@src/ui/styles/classnames/__generated__/tailwindcss-classnames'
+import { classnames, toClassname } from '@src/ui/styles/classnames'
 import React from 'react'
+import { SvgProps } from '../../icons/Svg'
+import IconButton from '../IconButton'
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  icon?: React.ComponentType<SvgProps>
+  iconProps?: SvgProps
+}
 
-function Button({ className, ...props }: ButtonProps): React.ReactElement {
+function Button({
+  className,
+  children,
+  icon: Icon,
+  iconProps,
+  ...props
+}: ButtonProps): React.ReactElement {
   return (
     <button
       className={classnames(
         'flex',
         'items-center',
         'justify-center',
-        'text-sm',
         'p-1',
         'border',
         'border-gray-400',
@@ -19,10 +28,21 @@ function Button({ className, ...props }: ButtonProps): React.ReactElement {
         'focus:outline-none',
         'focus-visible:border-blue-500',
         'focus-visible:font-bold',
-        className as TArg,
+        toClassname(className),
       )}
       {...props}
-    />
+    >
+      {Icon && <Icon {...iconProps} />}
+      <span
+        className={classnames({
+          'text-sm': !IconButton,
+          'text-xs': !!IconButton,
+          'ml-1': !!IconButton,
+        })}
+      >
+        {children}
+      </span>
+    </button>
   )
 }
 

@@ -11,14 +11,12 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Refactor form components
 - [ ] Refactor styles
 - [ ] Refactor file tree html
 - [ ] Error boundary
 - [ ] a11y
   - [ ] Alerts aria attrs
   - [ ] Form errors aria attrs
-- [ ] Optimize file tree state
 - [ ] Home page copy
 - [ ] demo schema tooltips
 - [ ] migrate old sequelize ui

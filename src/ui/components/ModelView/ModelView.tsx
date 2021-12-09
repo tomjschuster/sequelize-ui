@@ -1,8 +1,7 @@
 import { Model, Schema } from '@src/core/schema'
 import breadcrumbs from '@src/ui/styles/breadcrumbs.module.css'
-import { classnames } from '@src/ui/styles/classnames'
+import { classnames, toClassname } from '@src/ui/styles/classnames'
 import { titleCase } from '@src/utils/string'
-import classnames_ from 'classnames'
 import React from 'react'
 import { newButton } from '../home/MySchemaLinks/styles'
 import PlusCircleIcon from '../icons/Plus'
@@ -44,9 +43,10 @@ export default function ModelView({
     <div className={classnames(section, 'mb-3')}>
       <div className={classnames('mb-4', 'flex', 'text-sm')}>
         <button
-          className={classnames_(
-            classnames('font-semibold', 'hover:underline'),
-            breadcrumbs.breadcrumb,
+          className={classnames(
+            'font-semibold',
+            'hover:underline',
+            toClassname(breadcrumbs.breadcrumb),
           )}
           onClick={() => onViewSchema()}
         >
