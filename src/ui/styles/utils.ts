@@ -2,6 +2,10 @@ import { classnames } from './classnames'
 
 export const fullscreen = classnames('h-screen', 'w-screen', 'fixed', 'top-0', 'left-0')
 
+export const section = classnames('w-full', 'flex', 'flex-col')
+
+export const largeTitle = classnames('text-2xl', 'mb-4')
+
 export const buttonGrid = classnames(
   'grid',
   'md:grid-cols-3',
@@ -35,4 +39,14 @@ export const inlineButton = classnames(
   'p-0.5',
   'bg-white',
   'hover:bg-gray-100',
+)
+
+export const newButton = classnames(
+  button,
+  'min-h-16',
+  'h-full',
+  'bg-white',
+  'hover:bg-green-50',
+  'text-lg',
+  'border-dashed',
 )

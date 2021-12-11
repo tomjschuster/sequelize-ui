@@ -13,6 +13,7 @@ module.exports = {
   purge: [
     './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/ui/components/**/*.{js,ts,jsx,tsx}',
+    './src/ui/layouts/**/*.{js,ts,jsx,tsx}',
     './src/ui/lib/**/*.{js,ts,jsx,tsx}',
     './src/ui/styles/utils.ts',
   ],
