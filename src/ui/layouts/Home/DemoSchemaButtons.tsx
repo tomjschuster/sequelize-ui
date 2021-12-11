@@ -1,6 +1,6 @@
 import { DemoSchemaType, displayDemoSchemaType } from '@src/data/schemas'
 import { classnames } from '@src/ui/styles/classnames'
-import { button, buttonGrid } from '@src/ui/styles/utils'
+import { panelButton, panelGrid } from '@src/ui/styles/utils'
 import React from 'react'
 import FilmIcon from '../../components/icons/Film'
 import RssIcon from '../../components/icons/Rss'
@@ -12,12 +12,12 @@ type DemoSchemaButtonsProps = {
 
 export default function DemoSchemaButtons({ onClick }: DemoSchemaButtonsProps): React.ReactElement {
   return (
-    <ul className={classnames(buttonGrid)}>
+    <ul className={classnames(panelGrid)}>
       {Object.values(DemoSchemaType).map((schemaType) => (
         <li key={schemaType}>
           <button
             type="button"
-            className={classnames(button, 'bg-white', 'hover:bg-yellow-50')}
+            className={classnames(panelButton, 'hover:bg-yellow-50')}
             onClick={onClick.bind(null, schemaType)}
           >
             <span className={classnames('mr-2')}>

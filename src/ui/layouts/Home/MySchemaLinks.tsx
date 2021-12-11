@@ -1,6 +1,6 @@
 import { Schema } from '@src/core/schema'
 import { classnames } from '@src/ui/styles/classnames'
-import { button, buttonGrid } from '@src/ui/styles/utils'
+import { panelAction, panelButton, panelGrid } from '@src/ui/styles/utils'
 import { now, TimeGranularity, timeSince } from '@src/utils/dateTime'
 import React from 'react'
 import ClockIcon from '../../components/icons/Clock'
@@ -19,7 +19,7 @@ export default function MySchemaButtons({
   onSelectSchema,
 }: MySchemaButtonsProps): React.ReactElement {
   return (
-    <ul className={classnames(buttonGrid)}>
+    <ul className={panelGrid}>
       <li>
         <NewSchemaButton onClick={onClickCreate} />
       </li>
@@ -46,7 +46,7 @@ function MySchemaButton({ schema, onClick }: MySchemaButtonProps): React.ReactEl
   return (
     <button
       type="button"
-      className={classnames(button, 'min-h-20', 'bg-white', 'h-full', 'hover:bg-indigo-50')}
+      className={classnames(panelButton, 'min-h-20', 'h-full', 'hover:bg-indigo-50')}
       onClick={handleClick}
     >
       <span
@@ -95,15 +95,7 @@ function NewSchemaButton({ onClick }: NewSchemaButtonProps): React.ReactElement 
   return (
     <button
       type="button"
-      className={classnames(
-        button,
-        'min-h-16',
-        'h-full',
-        'bg-white',
-        'hover:bg-green-50',
-        'text-lg',
-        'border-dashed',
-      )}
+      className={classnames(panelAction, 'min-h-16', 'hover:bg-green-50')}
       onClick={onClick}
     >
       <span className={classnames('mr-2')}>
