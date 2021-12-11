@@ -12,7 +12,6 @@ import CopyIcon from '../icons/Copy'
 import FolderIcon from '../icons/Folder'
 import PencilIcon from '../icons/Pencil'
 import SettingsIcon from '../icons/Settings'
-import * as Styles from './styles'
 
 type CodeViewerControlsProps = {
   root: FileSystemItem
@@ -87,7 +86,24 @@ export default function CodeViewerControls({
         onTouchStart={(evt) => evt.stopPropagation()}
       />
       {isDbOptionsOpen && (
-        <div ref={dbOptionsRef} className={Styles.dbFormOverlay}>
+        <div
+          ref={dbOptionsRef}
+          className={classnames(
+            'absolute',
+            'top-full',
+            'rounded-lg',
+            'right-0',
+            'bg-gray-50',
+            'p-4',
+            'pt-10',
+            'border',
+            'border-gray-900',
+            'shadow-2xl',
+            'w-screen',
+            'md:w-auto',
+            'lg:w-auto',
+          )}
+        >
           <IconButton
             label="close settings"
             className={classnames('absolute', 'right-1', 'top-1')}

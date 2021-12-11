@@ -12,8 +12,13 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 #### UI
 
 - [ ] Refactor styles
-- [ ] Refactor file tree html
+  - [ ] Sections and titles
+  - [ ] Panels
+  - [ ] Panel buttons
+  - [ ] Standardize view/form layouts
+  - [ ] Decouple
 - [ ] Error boundary
+- [ ] Prefetch code, modal
 - [ ] a11y
   - [ ] Alerts aria attrs
   - [ ] Form errors aria attrs
@@ -25,7 +30,9 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### Codegen
 
-- JavaScript (non-TS) support
+- [ ] JavaScript (non-TS) support
+  - [ ] Link to legacy
+  - [ ] Framework options
 
 #### API
 
