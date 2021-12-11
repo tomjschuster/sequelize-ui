@@ -8,6 +8,7 @@ import {
   ThroughType,
 } from '@src/core/schema'
 import { classnames } from '@src/ui/styles/classnames'
+import { list } from '@src/ui/styles/utils'
 import { noCase, titleCase } from '@src/utils/string'
 import React from 'react'
 
@@ -40,7 +41,7 @@ function AssociationView({
         )}
       </p>
       {(association.alias || association.foreignKey || isManytoMany(association)) && (
-        <ul className={classnames('list-disc', 'list-inside', 'text-sm')}>
+        <ul className={classnames(list)}>
           {association.alias && <li>as {noCase(association.alias)}</li>}
           {association.foreignKey && <li>Foreign key: {noCase(association.foreignKey)}</li>}
           {isManytoMany(association) && (

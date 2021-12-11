@@ -8,6 +8,8 @@ export const largeTitle = classnames('text-2xl', 'mb-4')
 
 export const text = classnames('text-sm', 'mb-2')
 
+export const flexCenter = classnames('flex', 'items-center', 'justify-center', 'flex-wrap')
+
 export const panelGrid = classnames(
   'grid',
   'lg:grid-cols-3',
@@ -19,21 +21,24 @@ export const panelGrid = classnames(
   'w-full',
 )
 
-const panel = classnames(
-  'border',
-  'border-gray-400',
-  'p-2',
-  'rounded',
-  'flex',
-  'items-center',
-  'justify-center',
-  'flex-wrap',
-  'bg-white',
+export const panel = classnames('border', 'border-gray-400', 'p-2', 'rounded', 'bg-white')
+
+export const panelButton = classnames(
+  panel,
+  flexCenter,
+  'w-full',
+  'text-sm',
+  'hover:border-gray-800',
 )
 
-export const panelButton = classnames(panel, 'w-full', 'text-sm', 'hover:border-gray-800')
-
-export const panelAction = classnames(panel, 'w-full', 'h-full', 'text-lg', 'border-dashed')
+export const panelAction = classnames(
+  panel,
+  flexCenter,
+  'w-full',
+  'h-full',
+  'text-lg',
+  'border-dashed',
+)
 
 export const list = classnames('text-sm', 'list-disc', 'list-inside', 'leading-loose')
 

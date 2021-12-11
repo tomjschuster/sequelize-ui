@@ -1,28 +1,12 @@
 import { Model, Schema } from '@src/core/schema'
 import breadcrumbs from '@src/ui/styles/breadcrumbs.module.css'
 import { classnames, toClassname } from '@src/ui/styles/classnames'
-import { newButton } from '@src/ui/styles/utils'
+import { largeTitle, newButton, panel, panelGrid, section } from '@src/ui/styles/utils'
 import { titleCase } from '@src/utils/string'
 import React from 'react'
 import PlusCircleIcon from '../icons/Plus'
 import AssociationView from './AssociationView'
 import FieldView from './FieldView'
-
-export const section = classnames('max-w-screen-lg', 'p-6', 'pt-2', 'flex', 'flex-col', 'mx-auto')
-
-export const title = classnames('text-2xl', 'mb-2')
-
-const grid = classnames(
-  'grid',
-  'lg:grid-cols-3',
-  'md:grid-cols-2',
-  'sm:grid-cols-2',
-  'grid-cols-1',
-  'gap-6',
-  'auto-rows-fr',
-  'w-full',
-)
-const panel = classnames('border', 'border-gray-400', 'rounded', 'bg-white')
 
 type ModelViewProps = {
   schema: Schema
@@ -40,7 +24,7 @@ export default function ModelView({
   onClickAddAssociation,
 }: ModelViewProps): React.ReactElement {
   return (
-    <div className={classnames(section, 'mb-3')}>
+    <div className={classnames(section, 'p-6', 'pt-2', 'mb-3')}>
       <div className={classnames('mb-4', 'flex', 'text-sm')}>
         <button
           className={classnames(
@@ -54,13 +38,13 @@ export default function ModelView({
         </button>
         <span>{titleCase(model.name)} (model)</span>
       </div>
-      <h2 className={classnames(title)}>Model</h2>
+      <h2 className={classnames(largeTitle)}>Model</h2>
       <div className={classnames('mb-11')}>
         <p className={classnames('text-lg')}>Name: {titleCase(model.name)}</p>
       </div>
-      <h3 className={classnames(title)}>Fields</h3>
+      <h3 className={classnames(largeTitle)}>Fields</h3>
 
-      <ul className={classnames(grid)}>
+      <ul className={classnames(panelGrid)}>
         {model.fields.map((field) => {
           return (
             <li key={field.id} className={classnames(panel)}>
@@ -78,9 +62,9 @@ export default function ModelView({
         </li>
       </ul>
 
-      <h3 className={classnames(title, 'mt-6')}>Associations</h3>
+      <h3 className={classnames(largeTitle, 'mt-6')}>Associations</h3>
 
-      <ul className={grid}>
+      <ul className={panelGrid}>
         {model.associations.map((association) => (
           <li key={association.id} className={classnames(panel)}>
             <AssociationView

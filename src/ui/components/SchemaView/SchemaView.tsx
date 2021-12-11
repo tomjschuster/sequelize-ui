@@ -1,26 +1,11 @@
 import { Model, Schema } from '@src/core/schema'
 import { classnames } from '@src/ui/styles/classnames'
+import { largeTitle, panel, panelGrid, section } from '@src/ui/styles/utils'
 import { titleCase } from '@src/utils/string'
 import React from 'react'
 import PlusCircleIcon from '../icons/Plus'
 import SelectorIcon from '../icons/Selector'
 
-const grid = classnames(
-  'grid',
-  'lg:grid-cols-3',
-  'md:grid-cols-2',
-  'sm:grid-cols-2',
-  'grid-cols-1',
-  'gap-6',
-  'auto-rows-fr',
-  'w-full',
-)
-
-const panel = classnames('border', 'border-gray-400', 'rounded')
-
-export const section = classnames('max-w-screen-lg', 'p-6', 'pt-2', 'flex', 'flex-col', 'mx-auto')
-
-export const title = classnames('text-2xl', 'mb-2')
 export const subtitle = classnames('text-xl', 'mb-2')
 
 type SchemaViewProps = {
@@ -35,16 +20,16 @@ function SchemaView({
   onClickAddModel,
 }: SchemaViewProps): React.ReactElement {
   return (
-    <div className={classnames(section)}>
+    <div className={classnames(section, 'p-6', 'pt-2')}>
       <div className={classnames('mb-4', 'flex', 'text-sm')}>
         <span>{titleCase(schema.name)} (schema)</span>
       </div>
-      <h2 className={classnames(title)}>Schema</h2>
+      <h2 className={classnames(largeTitle)}>Schema</h2>
       <div className={classnames('mb-11')}>
         <p className={classnames('text-lg')}>Name: {titleCase(schema.name)}</p>
       </div>
       <h3 className={classnames(subtitle)}>Models</h3>
-      <ul className={classnames(grid)}>
+      <ul className={classnames(panelGrid)}>
         {schema.models.map((m) => (
           <li
             key={m.id}
@@ -55,7 +40,6 @@ function SchemaView({
               'items-center',
               'px-2',
               'py-3',
-              'bg-white',
               'cursor-pointer',
               'hover:bg-gray-100',
             )}

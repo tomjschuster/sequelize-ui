@@ -2,6 +2,7 @@ import { emptyModel, Model, Schema } from '@src/core/schema'
 import { SchemaErrors } from '@src/core/validation/schema'
 import usePrevious from '@src/ui/hooks/usePrevious'
 import { classnames } from '@src/ui/styles/classnames'
+import { flexCenter, largeTitle, panel, panelAction, panelGrid } from '@src/ui/styles/utils'
 import { focusById } from '@src/utils/dom'
 import React from 'react'
 import IconButton from '../form/IconButton'
@@ -9,22 +10,6 @@ import TextInput from '../form/TextInput'
 import PlusCircleIcon from '../icons/Plus'
 import TrashIcon from '../icons/Trash'
 
-const grid = classnames(
-  'grid',
-  'lg:grid-cols-3',
-  'md:grid-cols-2',
-  'sm:grid-cols-2',
-  'grid-cols-1',
-  'gap-6',
-  'auto-rows-fr',
-  'w-full',
-)
-
-const panel = classnames('border', 'border-gray-400', 'rounded')
-
-export const section = classnames('max-w-screen-lg', 'flex', 'flex-col', 'mx-auto')
-
-export const title = classnames('text-2xl', 'mb-2')
 export const subtitle = classnames('text-xl', 'mb-2')
 
 type SchemaFormProps = {
@@ -93,7 +78,7 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
       data-form-type="other"
       className={classnames('p-6', 'pt-11')}
     >
-      <h2 className={classnames(title)}>Schema</h2>
+      <h2 className={classnames(largeTitle)}>Schema</h2>
       <div className={classnames('sm:w-1/2')}>
         <TextInput
           id={schemaNameId()}
@@ -104,9 +89,9 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
         />
       </div>
       <h3 className={classnames(subtitle)}>Models</h3>
-      <ul className={classnames(grid)}>
+      <ul className={classnames(panelGrid)}>
         {schema.models.map((m) => (
-          <li key={m.id} className={classnames(panel, 'flex', 'bg-white', 'p-1', 'pl-4')}>
+          <li key={m.id} className={classnames(panel, 'flex', 'p-1', 'pl-4')}>
             <TextInput
               id={modelNameId(m)}
               className={classnames('pt-4')}
@@ -124,21 +109,10 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
             />
           </li>
         ))}
-        <li
-          className={classnames(
-            panel,
-            'flex',
-            'items-stretch',
-            'justify-center',
-            'bg-white',
-            'hover:bg-green-50',
-            'text-lg',
-            'border-dashed',
-          )}
-        >
+        <li className={classnames(panelAction)}>
           <button
             id={createNewModelId()}
-            className={classnames('flex', 'items-center', 'justify-center', 'p-1.5', 'flex-1')}
+            className={classnames(flexCenter, 'p-1.5', 'flex-1')}
             onClick={handleClickAddModel}
           >
             <span className={classnames('mr-2')}>

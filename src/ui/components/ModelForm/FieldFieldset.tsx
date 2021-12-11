@@ -266,7 +266,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
           onChange={handleChangeUnique}
         />
       </div>
-      <div className="absolute top-0 right-0 p-1">
+      <div className={classnames('absolute', 'top-0', 'right-0', 'p-1')}>
         <IconButton
           label="delete"
           icon={TrashIcon}

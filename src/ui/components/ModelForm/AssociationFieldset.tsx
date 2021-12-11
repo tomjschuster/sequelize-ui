@@ -160,6 +160,7 @@ function AssociationFieldset({
       className={classnames(
         'p-4',
         'pt-8',
+        'pb-0',
         'grid',
         'grid-cols-12',
         'gap-y-0',
@@ -251,7 +252,7 @@ function AssociationFieldset({
           </div>
         </>
       )}
-      <div className="absolute top-0 right-0 p-1">
+      <div className={classnames('absolute', 'top-0', 'right-0', 'p-1')}>
         <IconButton
           label="delete"
           icon={TrashIcon}

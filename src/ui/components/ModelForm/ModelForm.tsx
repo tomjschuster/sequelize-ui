@@ -2,29 +2,13 @@ import { Association, emptyAssociation, emptyField, Field, Model, Schema } from 
 import { ModelErrors } from '@src/core/validation/schema'
 import usePrevious from '@src/ui/hooks/usePrevious'
 import { classnames } from '@src/ui/styles/classnames'
-import { newButton } from '@src/ui/styles/utils'
+import { largeTitle, newButton, panel, panelGrid, section } from '@src/ui/styles/utils'
 import { focusById } from '@src/utils/dom'
 import React from 'react'
 import PlusCircleIcon from '../icons/Plus'
 import AssociationFieldset, { associationTypeId } from './AssociationFieldset'
 import FieldFieldset, { fieldNameId } from './FieldFieldset'
 import ModelFieldset, { modelNameId } from './ModelFieldset'
-
-export const section = classnames('max-w-screen-lg', 'flex', 'flex-col', 'mx-auto')
-
-export const title = classnames('text-2xl', 'mb-2')
-
-const grid = classnames(
-  'grid',
-  'lg:grid-cols-3',
-  'md:grid-cols-2',
-  'sm:grid-cols-2',
-  'grid-cols-1',
-  'gap-6',
-  'auto-rows-fr',
-  'w-full',
-)
-const panel = classnames('border', 'border-gray-400', 'bg-white', 'rounded')
 
 type ModelFormProps = {
   model: Model
@@ -146,13 +130,13 @@ export default function ModelForm({
       className={classnames('p-6', 'pt-11')}
     >
       <div className={classnames(section)}>
-        <h2 className={classnames(title)}>Model</h2>
+        <h2 className={classnames(largeTitle)}>Model</h2>
         <ModelFieldset name={model.name} onChange={handleChangeModel} errors={errors} />
       </div>
       <div className={classnames(section, 'mb-6')}>
-        <h3 className={classnames(title)}>Fields</h3>
+        <h3 className={classnames(largeTitle)}>Fields</h3>
 
-        <ul className={classnames(grid)}>
+        <ul className={classnames(panelGrid)}>
           {model.fields.map((field) => {
             return (
               <li key={`field-form-${field.id}`} className={classnames(panel)}>
@@ -177,9 +161,9 @@ export default function ModelForm({
       </div>
 
       <div className={classnames(section)}>
-        <h3 className={classnames(title)}>Associations</h3>
+        <h3 className={classnames(largeTitle)}>Associations</h3>
 
-        <ul className={grid}>
+        <ul className={panelGrid}>
           {model.associations.map((association) => (
             <li key={`association-form-${association.id}`} className={classnames(panel)}>
               <AssociationFieldset

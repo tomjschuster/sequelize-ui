@@ -14,7 +14,7 @@ export default function SchemasZeroState({
       To get started,{' '}
       <button
         type="button"
-        className={classnames(inlineButton, 'font-bold', 'hover:bg-green-100')}
+        className={classnames(inlineButton, 'text-sm', 'font-bold', 'hover:bg-green-100')}
         onClick={onClickCreate}
       >
         create a new schema
