@@ -15,6 +15,8 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
   - [ ] Standardize view/form layouts
   - [ ] Decouple
   - [ ] panel button outline
+  - [ ] breadcrumbs
+  - [ ] panel view header
 - [ ] Error boundary
 - [ ] Prefetch code, modal
 - [ ] GitHub link

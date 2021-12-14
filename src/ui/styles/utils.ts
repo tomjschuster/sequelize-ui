@@ -21,6 +21,16 @@ export const panelGrid = classnames(
   'w-full',
 )
 
+export const fieldsetGrid = classnames(
+  'p-4',
+  'pt-8',
+  'grid',
+  'grid-cols-12',
+  'gap-y-0',
+  'gap-x-4',
+  'relative',
+)
+
 export const panel = classnames('border', 'border-gray-400', 'p-2', 'rounded', 'bg-white')
 
 export const panelButton = classnames(

@@ -17,6 +17,7 @@ import Select from '@src/ui/components/form/Select'
 import TextInput from '@src/ui/components/form/TextInput'
 import TrashIcon from '@src/ui/components/icons/Trash'
 import { classnames } from '@src/ui/styles/classnames'
+import { fieldsetGrid } from '@src/ui/styles/utils'
 import React from 'react'
 import IconButton from '../form/IconButton'
 import TextArea from '../form/TextArea'
@@ -130,36 +131,31 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
   const handleDelete = React.useCallback(() => onDelete(field.id), [onDelete, field.id])
 
   return (
-    <fieldset
-      className={classnames(
-        'p-4',
-        'pt-8',
-        'grid',
-        'grid-cols-12',
-        'gap-y-0',
-        'gap-x-4',
-        'relative',
-      )}
-    >
-      <div className={classnames('col-span-12')}>
-        <TextInput
-          id={fieldNameId(field)}
-          label="Field name"
-          value={field.name}
-          error={errors?.name}
-          onChange={handleChangeName}
-        />
-      </div>
-      <div className={classnames('col-span-6')}>
-        <Select<DataTypeType>
-          id={`field-type-${field.id}`}
-          label="Data type"
-          options={DataTypeType}
-          display={displayDataTypeType}
-          value={field.type.type}
-          onChange={handleChangeDataType}
-        />
-      </div>
+    <fieldset className={classnames(fieldsetGrid)}>
+      <IconButton
+        className={classnames('absolute', 'top-0', 'right-0', 'p-1')}
+        label="delete"
+        icon={TrashIcon}
+        iconProps={{ size: 6 }}
+        onClick={handleDelete}
+      />
+      <TextInput
+        id={fieldNameId(field)}
+        className={classnames('col-span-12')}
+        label="Field name"
+        value={field.name}
+        error={errors?.name}
+        onChange={handleChangeName}
+      />
+      <Select<DataTypeType>
+        id={`field-type-${field.id}`}
+        className={classnames('col-span-6')}
+        label="Data type"
+        options={DataTypeType}
+        display={displayDataTypeType}
+        value={field.type.type}
+        onChange={handleChangeDataType}
+      />
       <div className={classnames('col-span-6', 'flex', 'row-span-4')}>
         {isStringType(field.type) && (
           <IntegerInput
@@ -224,26 +220,24 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
       </div>
       {isNumericType(field.type) && (
         <>
-          <div className={classnames('col-span-6')}>
-            <IntegerInput
-              id={`field-precision-${field.id}`}
-              label="Precision"
-              value={field.type.precision?.precision}
-              min={1}
-              max={1000}
-              onChange={handleChangePrecision}
-            />
-          </div>
-          <div className={classnames('col-span-6')}>
-            <IntegerInput
-              id={`field-scale-${field.id}`}
-              label="Precision"
-              value={field.type.precision?.scale}
-              min={0}
-              max={field.type.precision?.precision || 1000}
-              onChange={handleChangeScale}
-            />
-          </div>
+          <IntegerInput
+            id={`field-precision-${field.id}`}
+            className={classnames('col-span-6')}
+            label="Precision"
+            value={field.type.precision?.precision}
+            min={1}
+            max={1000}
+            onChange={handleChangePrecision}
+          />
+          <IntegerInput
+            id={`field-scale-${field.id}`}
+            className={classnames('col-span-6')}
+            label="Precision"
+            value={field.type.precision?.scale}
+            min={0}
+            max={field.type.precision?.precision || 1000}
+            onChange={handleChangeScale}
+          />
         </>
       )}
       <div className={classnames('col-span-6', 'flex', 'flex-col')}>
@@ -264,14 +258,6 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
           label="Unique"
           checked={!!field.unique}
           onChange={handleChangeUnique}
-        />
-      </div>
-      <div className={classnames('absolute', 'top-0', 'right-0', 'p-1')}>
-        <IconButton
-          label="delete"
-          icon={TrashIcon}
-          iconProps={{ size: 6 }}
-          onClick={handleDelete}
         />
       </div>
     </fieldset>

@@ -1,12 +1,16 @@
-import { classnames } from '@src/ui/styles/classnames'
+import { Classname, classnames } from '@src/ui/styles/classnames'
 import React from 'react'
 import { lookupOptionValue, optionsToList } from '../shared/options'
 import { OptionsProps } from '../shared/types'
 import { autofillDisable } from '../shared/utils'
 
-type RadioProps<T> = OptionsProps<T, React.InputHTMLAttributes<HTMLInputElement>>
+type RadioProps<T> = OptionsProps<
+  T,
+  React.InputHTMLAttributes<HTMLInputElement> & { className?: Classname }
+>
 
 function Radio<T>({
+  className,
   value,
   options,
   display,
@@ -21,7 +25,7 @@ function Radio<T>({
   }
 
   return (
-    <div className={classnames('flex', 'w-full')}>
+    <div className={classnames(className, 'flex', 'w-full')}>
       {optionsToList(options).map(([k, v]) => (
         <label key={k} className={classnames('mr-2', 'last:mr-0')}>
           <input
