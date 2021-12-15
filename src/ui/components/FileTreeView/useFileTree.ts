@@ -51,7 +51,7 @@ function useFileTree({ root, key, defaultPath }: UseFileTreeArgs): UseFileTreeRe
 
   // Whenever new paths are added, refresh the file tree
   React.useEffect(() => {
-    if (root && previousRoot && root !== previousRoot) {
+    if (root && previousRoot && root !== previousRoot && key === previousKey) {
       const previousPaths = listPaths(previousRoot)
       const paths = listPaths(root)
       const newPaths = paths.filter((path) => !previousPaths.includes(path))

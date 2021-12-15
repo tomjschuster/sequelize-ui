@@ -42,7 +42,7 @@ export function create(root: FileSystemItem, initialPath?: string): FileTree {
 
 // UPDATE
 export function updateRoot(fileTree: FileTree, root: FileSystemItem): FileTree {
-  return mapState(fileTree, (state) => updateRootState(state, root))
+  return { root, state: updateRootState(fileTree.state, root) }
 }
 
 export function selectItem(fileTree: FileTree, path: string): FileTree {
