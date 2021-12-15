@@ -32,6 +32,8 @@ function Layout({ children, title, metaDescription }: Props): React.ReactElement
             <a title="Go to Sequelize UI Home" className={classnames('inline-block')}>
               <h1 className={classnames('text-2xl', 'flex', 'items-center')}>
                 <img
+                  width="50px"
+                  height="50px"
                   className={classnames('inline', 'mr-2', 'h-8')}
                   alt="Sequelize UI logo"
                   src="https://sequelizeui.app/static/images/sequelize-ui-tiny-white.svg"
