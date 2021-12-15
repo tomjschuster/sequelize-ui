@@ -1,5 +1,5 @@
 import { DbOptions } from '@src/core/database'
-import { directory, DirectoryItem, file, itemName } from '@src/core/files'
+import { directory, DirectoryItem, file, itemName } from '@src/core/files/fileSystem'
 import { Schema } from '@src/core/schema'
 import { kebabCase } from '@src/utils/string'
 import { config } from './templates/config'

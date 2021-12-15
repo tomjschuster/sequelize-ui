@@ -1,4 +1,4 @@
-import { FileSystemItem, isDirectory, itemName } from '@src/core/files'
+import { FileSystemItem, isDirectory, itemName } from '@src/core/files/fileSystem'
 import fs from 'fs/promises'
 import { join } from 'path'
 

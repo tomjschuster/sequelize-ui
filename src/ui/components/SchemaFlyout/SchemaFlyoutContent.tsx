@@ -1,4 +1,4 @@
-import { FileTree } from '@src/core/files'
+import { FileTree } from '@src/core/files/fileTree'
 import { Model, Schema } from '@src/core/schema'
 import React from 'react'
 import CodeExplorer from '../CodeExplorer/CodeExplorer'

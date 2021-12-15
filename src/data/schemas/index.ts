@@ -42,7 +42,6 @@ export async function getDemoSchema(type: DemoSchemaType | undefined): Promise<S
     }
     case DemoSchemaType.Employee: {
       return (await import('./employee')).default
-      // return (await import('./employee')).default
     }
     case DemoSchemaType.Sakila: {
       return (await import('./sakila')).default

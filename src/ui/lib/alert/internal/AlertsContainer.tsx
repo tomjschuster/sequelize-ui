@@ -1,6 +1,6 @@
+import { useTrapFocus } from '@src/ui/lib/focus'
 import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
-import { useTrapFocus } from '../../focus'
 import { Alert, isAlertVisible } from './alert'
 import AlertDisplay from './AlertDisplay'
 

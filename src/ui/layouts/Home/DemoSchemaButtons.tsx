@@ -8,9 +8,13 @@ import UserGroupIcon from '../../components/icons/UserGroup'
 
 type DemoSchemaButtonsProps = {
   onClick: (schemaType: DemoSchemaType) => void
+  onMouseOver: (schemaType: DemoSchemaType) => void
 }
 
-export default function DemoSchemaButtons({ onClick }: DemoSchemaButtonsProps): React.ReactElement {
+export default function DemoSchemaButtons({
+  onClick,
+  onMouseOver,
+}: DemoSchemaButtonsProps): React.ReactElement {
   return (
     <ul className={classnames(panelGrid)}>
       {Object.values(DemoSchemaType).map((schemaType) => (
@@ -19,6 +23,8 @@ export default function DemoSchemaButtons({ onClick }: DemoSchemaButtonsProps): 
             type="button"
             className={classnames(panelAction, 'text-sm', 'hover:bg-yellow-50')}
             onClick={onClick.bind(null, schemaType)}
+            onMouseOver={onMouseOver.bind(null, schemaType)}
+            onTouchStartCapture={onMouseOver.bind(null, schemaType)}
           >
             <span className={classnames('mr-2')}>
               <DemoSchemaIcon schemaType={schemaType} />

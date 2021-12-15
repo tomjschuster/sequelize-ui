@@ -1,4 +1,10 @@
-import { DirectoryItem, FileItem, FileSystemItem, isDirectory, isFile } from '@src/core/files'
+import {
+  DirectoryItem,
+  FileItem,
+  FileSystemItem,
+  isDirectory,
+  isFile,
+} from '@src/core/files/fileSystem'
 import { saveAs } from 'file-saver'
 import Zip from 'jszip'
 

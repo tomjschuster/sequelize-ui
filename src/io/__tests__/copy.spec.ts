@@ -1,5 +1,5 @@
 /** @jest-environment jsdom */
-import { file } from '@src/core/files'
+import { file } from '@src/core/files/fileSystem'
 import copy from 'copy-to-clipboard'
 import { copyFile } from '../copy'
 

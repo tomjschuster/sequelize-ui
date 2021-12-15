@@ -1,4 +1,4 @@
-import { Language } from '@src/core/files'
+import { Language } from '@src/core/files/fileSystem'
 import React from 'react'
 import GitIcon from './Git'
 import JavaScriptIcon from './JavaScript'

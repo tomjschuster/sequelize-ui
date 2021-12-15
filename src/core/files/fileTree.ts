@@ -1,13 +1,17 @@
 import {
+  directory,
   FileItem,
   FileSystemItem,
   findItem,
+  isDirectory,
   isFile,
+  itemName,
   listPaths,
   parentDirectory,
   parentDirectoryPathParts,
-} from '@src/core/files'
-import { directory, isDirectory, itemName, pathFilename, withPaths } from './fileSystem'
+  pathFilename,
+  withPaths,
+} from './fileSystem'
 
 export type FileTree = {
   state: FileTreeState
@@ -207,7 +211,6 @@ function updateRootState(
 }
 
 function updateVisiblePaths(state: FileTreeState, root: FileSystemItem): FileTreeState {
-  console.log('UPDATING VISIBLE PATHS')
   return { ...state, visiblePaths: listVisiblePaths(state, root) }
 }
 

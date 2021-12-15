@@ -1,4 +1,4 @@
-import { DirectoryItem } from '@src/core/files'
+import { DirectoryItem } from '@src/core/files/fileSystem'
 import { ProjectType } from '@src/core/framework'
 import { NpmProject } from './npm'
 

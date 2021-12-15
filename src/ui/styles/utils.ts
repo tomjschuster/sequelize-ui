@@ -14,23 +14,13 @@ export const text = classnames('text-sm', 'mb-2')
 
 export const list = classnames('text-sm', 'list-disc', 'list-inside', 'leading-loose')
 
-export const panel = classnames(
-  'border',
-  'border-gray-400',
-  'w-full',
-  'h-full',
-  'p-2',
-  'rounded',
-  'bg-white',
-)
+const panelBase = classnames('border', 'border-gray-400', 'p-2', 'rounded', 'bg-white')
+
+export const panel = classnames(panelBase, 'w-full', 'h-full')
 
 export const panelAction = classnames(panel, flexCenter, 'hover:border-gray-800')
 
-export const inlineButton = classnames(panel, 'py-0.5', 'px-1.5', 'p-0.5', 'hover:bg-gray-100', {
-  flex: false,
-  'w-full': false,
-  'inline-flex': true,
-})
+export const inlineButton = classnames(panelBase, 'py-0.5', 'px-1.5', 'p-0.5', 'hover:bg-gray-100')
 
 export const panelGrid = classnames(
   'grid',

@@ -1,5 +1,5 @@
 /** @jest-environment jsdom */
-import { directory, file } from '@src/core/files'
+import { directory, file } from '@src/core/files/fileSystem'
 import { saveAs } from 'file-saver'
 import Zip from 'jszip'
 import { download, FAILED_TO_CREATE_FOLDER_ERROR } from '../download'

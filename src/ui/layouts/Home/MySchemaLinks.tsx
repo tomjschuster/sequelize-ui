@@ -12,12 +12,14 @@ type MySchemaButtonsProps = {
   schemas: Schema[]
   onClickCreate: () => void
   onSelectSchema: (schema: Schema) => void
+  onMouseOverSchema: () => void
 }
 
 export default function MySchemaButtons({
   schemas,
   onClickCreate,
   onSelectSchema,
+  onMouseOverSchema,
 }: MySchemaButtonsProps): React.ReactElement {
   return (
     <ul className={panelGrid}>
@@ -28,6 +30,8 @@ export default function MySchemaButtons({
           icon={PlusCircleIcon}
           iconProps={{ size: 6 }}
           onClick={onClickCreate}
+          onMouseOver={onMouseOverSchema}
+          onTouchStartCapture={onMouseOverSchema}
         />
       </li>
       {schemas
@@ -35,7 +39,11 @@ export default function MySchemaButtons({
         .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
         .map((schema) => (
           <li key={schema.id}>
-            <MySchemaButton schema={schema} onClick={onSelectSchema} />
+            <MySchemaButton
+              schema={schema}
+              onClick={onSelectSchema}
+              onMouseOver={onMouseOverSchema}
+            />
           </li>
         ))}
     </ul>
@@ -45,8 +53,9 @@ export default function MySchemaButtons({
 type MySchemaButtonProps = {
   schema: Schema
   onClick: (schema: Schema) => void
+  onMouseOver: () => void
 }
-function MySchemaButton({ schema, onClick }: MySchemaButtonProps): React.ReactElement {
+function MySchemaButton({ schema, onClick, onMouseOver }: MySchemaButtonProps): React.ReactElement {
   const modelCount = schema.models.length
   const handleClick = React.useCallback(() => onClick(schema), [onClick, schema])
 
@@ -62,6 +71,8 @@ function MySchemaButton({ schema, onClick }: MySchemaButtonProps): React.ReactEl
         'hover:bg-indigo-50',
       )}
       onClick={handleClick}
+      onMouseOver={onMouseOver}
+      onTouchStartCapture={onMouseOver}
     >
       <span
         className={classnames(

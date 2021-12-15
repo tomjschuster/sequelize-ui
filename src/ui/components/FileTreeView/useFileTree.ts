@@ -1,4 +1,4 @@
-import { FileSystemItem, listPaths } from '@src/core/files'
+import { FileSystemItem, listPaths } from '@src/core/files/fileSystem'
 import * as FileTree from '@src/core/files/fileTree'
 import usePrevious from '@src/ui/hooks/usePrevious'
 import React from 'react'

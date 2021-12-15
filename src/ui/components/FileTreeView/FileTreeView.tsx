@@ -5,7 +5,7 @@ import {
   isDirectory,
   isFile,
   itemName,
-} from '@src/core/files'
+} from '@src/core/files/fileSystem'
 import * as FileTree from '@src/core/files/fileTree'
 import { classnames } from '@src/ui/styles/classnames'
 import { focusById } from '@src/utils/dom'
@@ -23,8 +23,6 @@ function FileTreeView({ fileTree, onSelect, onKeyDown }: FileTreeProps): React.R
   const root = FileTree.rootItem(fileTree)
   const activePath = FileTree.activeFilePath(fileTree)
   const focusedPath = FileTree.focusedFilePath(fileTree)
-
-  console.log(fileTree)
 
   React.useEffect(() => {
     if (focusedPath) {

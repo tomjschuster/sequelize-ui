@@ -1,4 +1,4 @@
-import { directory, file } from '../..'
+import { directory, file } from '../../fileSystem'
 
 export const profileImage = file('profile.jpg', 'profile')
 

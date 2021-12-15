@@ -1,5 +1,5 @@
 import { DbOptions } from '@src/core/database'
-import { activeFilePath, FileTree } from '@src/core/files'
+import { activeFilePath, FileTree } from '@src/core/files/fileTree'
 import { isNewSchema, Model, Schema } from '@src/core/schema'
 import {
   emptyModelErrors,

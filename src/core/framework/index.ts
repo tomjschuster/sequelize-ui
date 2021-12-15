@@ -1,5 +1,5 @@
 import { DbOptions } from '@src/core/database'
-import { DirectoryItem } from '@src/core/files'
+import { DirectoryItem } from '@src/core/files/fileSystem'
 import { Model, Schema } from '@src/core/schema'
 
 export type GenerateArgs = {

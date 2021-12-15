@@ -1,4 +1,4 @@
-import { DirectoryItem, itemName } from '@src/core/files'
+import { DirectoryItem, itemName } from '@src/core/files/fileSystem'
 import {
   clearDirectory,
   deleteFileOrDirectory,

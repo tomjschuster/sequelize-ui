@@ -1,1 +1,1 @@
-export { default } from './SchemaFlyout'
+export { default, SchemaFlyoutPreloads } from './SchemaFlyout'

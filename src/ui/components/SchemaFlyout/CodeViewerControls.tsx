@@ -1,5 +1,5 @@
 import { DbOptions } from '@src/core/database'
-import { FileItem, FileSystemItem, itemName } from '@src/core/files'
+import { FileItem, FileSystemItem, itemName } from '@src/core/files/fileSystem'
 import useIsOpen from '@src/ui/hooks/useIsOpen'
 import useOnClickOutside from '@src/ui/hooks/useOnClickOutside'
 import { useAlert } from '@src/ui/lib/alert'
@@ -61,6 +61,8 @@ export default function CodeViewerControls({
         icon={CopyIcon}
         iconProps={{ size: 6 }}
         onClick={handleClickCopy}
+        onMouseOver={prefetchCopy}
+        onTouchStartCapture={prefetchCopy}
         disabled={!activeFile}
       />
       <IconButton
@@ -70,6 +72,8 @@ export default function CodeViewerControls({
           size: 6,
         }}
         onClick={handleClickDownload}
+        onMouseOver={prefetchDownload}
+        onTouchStartCapture={prefetchDownload}
       />
       <IconButton
         label="edit code"
@@ -83,7 +87,7 @@ export default function CodeViewerControls({
         icon={SettingsIcon}
         iconProps={{ size: 6 }}
         onMouseDown={(evt) => evt.stopPropagation()}
-        onTouchStart={(evt) => evt.stopPropagation()}
+        onTouchStartCapture={console.log}
       />
       {isDbOptionsOpen && (
         <div
@@ -124,8 +128,16 @@ async function download(item: FileSystemItem): Promise<void> {
   _download(item)
 }
 
+export function prefetchDownload(): void {
+  import('@src/io/download')
+}
+
 /** Dynamically imported io copy */
 async function copyFile(file: FileItem): Promise<void> {
   const { copyFile: copyFile_ } = await import('@src/io/copy')
   copyFile_(file)
+}
+
+export function prefetchCopy(): void {
+  import('@src/io/copy')
 }

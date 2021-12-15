@@ -1,4 +1,4 @@
-import { fileLanguage } from '@src/core/files'
+import { fileLanguage } from '@src/core/files/fileSystem'
 import * as FileTree from '@src/core/files/fileTree'
 import Code from '@src/ui/components/Code'
 import FileTreeView from '@src/ui/components/FileTreeView'

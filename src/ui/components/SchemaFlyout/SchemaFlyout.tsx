@@ -1,8 +1,9 @@
 import { DbOptions, defaultDbOptions } from '@src/core/database'
-import { itemName } from '@src/core/files'
+import { itemName } from '@src/core/files/fileSystem'
 import * as FileTree from '@src/core/files/fileTree'
-import { Model, Schema } from '@src/core/schema'
+import { emptySchema, Model, Schema } from '@src/core/schema'
 import Flyout from '@src/ui/components/Flyout'
+import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import { useAlert } from '@src/ui/lib/alert'
 import { scrollToTop } from '@src/utils/dom'
 import React from 'react'
@@ -106,4 +107,9 @@ export default function SchemaFlyout({
       />
     </Flyout>
   )
+}
+
+export function SchemaFlyoutPreloads(): React.ReactElement {
+  useGeneratedCode({ schema: emptySchema(), dbOptions: defaultDbOptions })
+  return <></>
 }
