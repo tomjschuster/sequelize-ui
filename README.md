@@ -15,7 +15,6 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
   - [ ] breadcrumbs
   - [ ] panel view header
 - [ ] Error boundary
-- [ ] Prefetch code, modal
 - [ ] GitHub link
 - [ ] a11y
   - [ ] Alerts aria attrs
