@@ -1,6 +1,7 @@
 import { DbOptions } from '@src/core/database'
 import * as FileTree from '@src/core/files/fileTree'
 import { classnames } from '@src/ui/styles/classnames'
+import { flexCenterBetween } from '@src/ui/styles/utils'
 import React from 'react'
 import Button from '../form/Button'
 import IconButton from '../form/IconButton'
@@ -37,7 +38,7 @@ export default function SchemaFlyoutControls({
   onSave,
 }: SchemaFlyoutControlsProps): React.ReactElement | null {
   return (
-    <div className={classnames('flex', 'p-2', 'items-center', 'justify-between', 'w-full')}>
+    <div className={classnames(flexCenterBetween, 'p-2', 'w-full')}>
       <div className={classnames('flex')}>
         {!isEditing && (
           <SchemaCodeToggle
@@ -109,7 +110,7 @@ function SchemaFlyoutControlsActions({
   return (
     <>
       <Button
-        className={classnames('hover:bg-blue-100', 'w-16', 'md:w-20')}
+        className={classnames('w-16', 'md:w-20', 'hover:bg-blue-100')}
         icon={CloseIcon}
         iconProps={{ size: 4 }}
         onClick={onCancel}
@@ -119,12 +120,12 @@ function SchemaFlyoutControlsActions({
       <Button
         className={classnames(
           'text-white',
-          'bg-blue-600',
-          'hover:bg-blue-400',
+          'font-bold',
           'w-16',
           'md:w-20',
           'ml-2',
-          'font-bold',
+          'bg-blue-600',
+          'hover:bg-blue-400',
         )}
         icon={FloppyDiscIcon}
         onClick={onSave}

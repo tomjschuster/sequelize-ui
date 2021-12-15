@@ -1,4 +1,5 @@
 import { classnames } from '@src/ui/styles/classnames'
+import { flexCenterBetween } from '@src/ui/styles/utils'
 import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
@@ -16,12 +17,12 @@ function Layout({ children, title }: Props): React.ReactElement {
       </Head>
       <div
         className={classnames(
-          'bg-gray-50',
+          'h-screen',
+          'w-screen',
           'flex',
           'flex-col',
           'items-stretch',
-          'h-screen',
-          'w-screen',
+          'bg-gray-50',
         )}
       >
         <header className={classnames('shadow', 'p-2', 'flex', 'items-center')}>
@@ -40,15 +41,13 @@ function Layout({ children, title }: Props): React.ReactElement {
         <main className={classnames('flex-1')}>{children}</main>
         <footer
           className={classnames(
-            'shadow-inner',
-            'bg-indigo-50',
-            'p-2',
-            'flex',
-            'justify-between',
-            'items-center',
-            'children:flex',
+            flexCenterBetween,
             'flex-col',
             'sm:flex-row-reverse',
+            'children:flex',
+            'p-2',
+            'bg-indigo-50',
+            'shadow-inner',
           )}
         >
           <a

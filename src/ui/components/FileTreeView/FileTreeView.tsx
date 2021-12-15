@@ -86,9 +86,9 @@ function FileTreeItem({
         className={classnames(
           'flex',
           'items-center',
+          'w-full',
           'text-sm',
           'leading-relaxed',
-          'w-full',
           'cursor-pointer',
           'block',
           'border-transparent',

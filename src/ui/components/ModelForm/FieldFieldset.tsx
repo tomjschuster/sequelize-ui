@@ -156,7 +156,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         value={field.type.type}
         onChange={handleChangeDataType}
       />
-      <div className={classnames('col-span-6', 'flex', 'row-span-4')}>
+      <div className={classnames('col-span-6', 'row-span-4', 'flex')}>
         {isStringType(field.type) && (
           <IntegerInput
             id={`field-string-length-${field.id}`}

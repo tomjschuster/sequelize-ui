@@ -1,6 +1,6 @@
 import { DemoSchemaType, displayDemoSchemaType } from '@src/data/schemas'
 import { classnames } from '@src/ui/styles/classnames'
-import { panelButton, panelGrid } from '@src/ui/styles/utils'
+import { panelAction, panelGrid } from '@src/ui/styles/utils'
 import React from 'react'
 import FilmIcon from '../../components/icons/Film'
 import RssIcon from '../../components/icons/Rss'
@@ -17,7 +17,7 @@ export default function DemoSchemaButtons({ onClick }: DemoSchemaButtonsProps): 
         <li key={schemaType}>
           <button
             type="button"
-            className={classnames(panelButton, 'hover:bg-yellow-50')}
+            className={classnames(panelAction, 'text-sm', 'hover:bg-yellow-50')}
             onClick={onClick.bind(null, schemaType)}
           >
             <span className={classnames('mr-2')}>

@@ -1,6 +1,7 @@
 import { Schema } from '@src/core/schema'
+import PanelButton from '@src/ui/components/form/PanelButton'
 import { classnames } from '@src/ui/styles/classnames'
-import { panelAction, panelButton, panelGrid } from '@src/ui/styles/utils'
+import { panelAction, panelGrid } from '@src/ui/styles/utils'
 import { now, TimeGranularity, timeSince } from '@src/utils/dateTime'
 import React from 'react'
 import ClockIcon from '../../components/icons/Clock'
@@ -21,7 +22,13 @@ export default function MySchemaButtons({
   return (
     <ul className={panelGrid}>
       <li>
-        <NewSchemaButton onClick={onClickCreate} />
+        <PanelButton
+          label="Create a new schema"
+          className={classnames('hover:bg-green-50')}
+          icon={PlusCircleIcon}
+          iconProps={{ size: 6 }}
+          onClick={onClickCreate}
+        />
       </li>
       {schemas
         .slice()
@@ -46,7 +53,14 @@ function MySchemaButton({ schema, onClick }: MySchemaButtonProps): React.ReactEl
   return (
     <button
       type="button"
-      className={classnames(panelButton, 'min-h-20', 'h-full', 'hover:bg-indigo-50')}
+      className={classnames(
+        panelAction,
+        'flex-wrap',
+        'text-sm',
+        'min-h-20',
+        'h-full',
+        'hover:bg-indigo-50',
+      )}
       onClick={handleClick}
     >
       <span
@@ -85,23 +99,5 @@ function MySchemaButtonsMetaItem({
       <span className={classnames('mr-1')}>{icon}</span>
       {children}
     </span>
-  )
-}
-
-type NewSchemaButtonProps = {
-  onClick: () => void
-}
-function NewSchemaButton({ onClick }: NewSchemaButtonProps): React.ReactElement {
-  return (
-    <button
-      type="button"
-      className={classnames(panelAction, 'min-h-16', 'hover:bg-green-50')}
-      onClick={onClick}
-    >
-      <span className={classnames('mr-2')}>
-        <PlusCircleIcon size={6} />
-      </span>
-      Create a new schema
-    </button>
   )
 }

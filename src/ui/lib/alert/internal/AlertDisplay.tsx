@@ -1,5 +1,6 @@
 import CloseCircleIcon from '@src/ui/components/icons/CloseCircle'
 import { classnames } from '@src/ui/styles/classnames'
+import { flexCenterBetween } from '@src/ui/styles/utils'
 import React from 'react'
 import { AlertLevel } from '../types'
 import { Alert } from './alert'
@@ -15,9 +16,7 @@ export default function AlertDisplay({ alert, onDismiss }: AlertDisplayProps): R
   return (
     <p
       className={classnames(
-        'flex',
-        'justify-between',
-        'items-center',
+        flexCenterBetween,
         'pl-4',
         'pr-1',
         'py-1',

@@ -10,6 +10,7 @@ import {
 import Select from '@src/ui/components/form/Select'
 import { classnames } from '@src/ui/styles/classnames'
 import React from 'react'
+import { autofillDisable } from '../form/shared/utils'
 
 type DbOptionsFormProps = {
   dbOptions: DbOptions
@@ -21,10 +22,8 @@ export default function DbOptionsForm({
 }: DbOptionsFormProps): React.ReactElement {
   return (
     <form
-      autoComplete="off"
-      data-lpignore="true"
-      data-form-type="other"
       className={classnames('grid', 'grid-cols-12', 'gap-x-4', 'sm:gap-x-8', 'gap-y-1')}
+      {...autofillDisable}
     >
       <Select<SqlDialect>
         id="sql-dialect"

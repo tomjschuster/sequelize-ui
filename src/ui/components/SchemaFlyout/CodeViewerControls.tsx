@@ -91,17 +91,17 @@ export default function CodeViewerControls({
           className={classnames(
             'absolute',
             'top-full',
-            'rounded-lg',
             'right-0',
-            'bg-gray-50',
+            'w-screen',
+            'md:w-auto',
+            'lg:w-auto',
             'p-4',
             'pt-10',
             'border',
             'border-gray-900',
+            'rounded-lg',
+            'bg-gray-50',
             'shadow-2xl',
-            'w-screen',
-            'md:w-auto',
-            'lg:w-auto',
           )}
         >
           <IconButton

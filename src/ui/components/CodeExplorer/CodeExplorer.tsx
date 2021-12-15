@@ -21,15 +21,15 @@ export default function CodeExplorer({
     <div className={classnames('h-full', 'grid', 'grid-cols-12')}>
       <div
         className={classnames(
+          'col-span-12',
+          'lg:col-span-3',
+          'row-span-3',
+          'lg:row-span-12',
+          'overflow-y-scroll',
+          'text-gray-600',
           'border-b',
           'border-gray-900',
           'bg-gray-100',
-          'text-gray-600',
-          'overflow-y-scroll',
-          'row-span-3',
-          'col-span-12',
-          'lg:row-span-12',
-          'lg:col-span-3',
         )}
       >
         <FileTreeView onSelect={onSelectFileSystemItem} onKeyDown={onKeyDown} fileTree={fileTree} />

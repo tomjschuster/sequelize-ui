@@ -2,9 +2,11 @@ import { Association, emptyAssociation, emptyField, Field, Model, Schema } from 
 import { ModelErrors } from '@src/core/validation/schema'
 import usePrevious from '@src/ui/hooks/usePrevious'
 import { classnames } from '@src/ui/styles/classnames'
-import { largeTitle, newButton, panel, panelGrid, section } from '@src/ui/styles/utils'
+import { largeTitle, panel, panelGrid, section } from '@src/ui/styles/utils'
 import { focusById } from '@src/utils/dom'
 import React from 'react'
+import PanelButton from '../form/PanelButton'
+import { autofillDisable } from '../form/shared/utils'
 import PlusCircleIcon from '../icons/Plus'
 import AssociationFieldset, { associationTypeId } from './AssociationFieldset'
 import FieldFieldset, { fieldNameId } from './FieldFieldset'
@@ -124,10 +126,8 @@ export default function ModelForm({
   return (
     <form
       onSubmit={(evt) => evt.preventDefault()}
-      autoComplete="off"
-      data-lpignore="true"
-      data-form-type="other"
       className={classnames('p-6', 'pt-11')}
+      {...autofillDisable}
     >
       <div className={classnames(section)}>
         <h2 className={classnames(largeTitle)}>Model</h2>
@@ -150,12 +150,13 @@ export default function ModelForm({
             )
           })}
           <li>
-            <button type="button" className={newButton} onClick={handleClickAddField}>
-              <span>
-                <PlusCircleIcon size={6} />
-              </span>
-              Add Field
-            </button>
+            <PanelButton
+              label="Add Field"
+              className={classnames('hover:bg-green-50')}
+              icon={PlusCircleIcon}
+              iconProps={{ size: 6 }}
+              onClick={handleClickAddField}
+            />
           </li>
         </ul>
       </div>
@@ -177,12 +178,13 @@ export default function ModelForm({
             </li>
           ))}
           <li>
-            <button type="button" className={newButton} onClick={handleClickAddAssociation}>
-              <span>
-                <PlusCircleIcon size={6} />
-              </span>
-              Add association
-            </button>
+            <PanelButton
+              label="Add association"
+              className={classnames('hover:bg-green-50')}
+              icon={PlusCircleIcon}
+              iconProps={{ size: 6 }}
+              onClick={handleClickAddAssociation}
+            />
           </li>
         </ul>
       </div>

@@ -1,9 +1,10 @@
 import { DbOptions, defaultDbOptions } from '@src/core/database'
 import { itemName } from '@src/core/files'
 import * as FileTree from '@src/core/files/fileTree'
-import { Schema } from '@src/core/schema'
+import { Model, Schema } from '@src/core/schema'
 import Flyout from '@src/ui/components/Flyout'
 import { useAlert } from '@src/ui/lib/alert'
+import { scrollToTop } from '@src/utils/dom'
 import React from 'react'
 import SchemaFlyoutContent from './SchemaFlyoutContent'
 import SchemaFlyoutControls from './SchemaFlyoutControls'
@@ -56,10 +57,23 @@ export default function SchemaFlyout({
     cancel,
   } = useSchemaFlyout({ schema, schemas, dbOptions, onChange: handleChange, onExit: onClickClose })
 
+  const flyoutContentRef = React.useRef() as React.MutableRefObject<HTMLDivElement>
+
+  const handleViewSchema = React.useCallback(
+    (model?: Model) => {
+      if (flyoutContentRef.current) {
+        scrollToTop(flyoutContentRef.current)
+      }
+      viewSchema(model)
+    },
+    [viewSchema],
+  )
+
   const title = itemName(FileTree.rootItem(fileTree))
 
   return (
     <Flyout
+      contentRef={flyoutContentRef}
       title={title}
       onClickClose={onClickClose}
       controls={
@@ -70,7 +84,7 @@ export default function SchemaFlyout({
           dbOptions={dbOptions}
           onChangeDbOptions={setDbOptions}
           onSelectCode={viewCode}
-          onSelectSchema={viewSchema}
+          onSelectSchema={handleViewSchema}
           onEdit={edit}
           onCancel={cancel}
           onSave={save}
@@ -85,7 +99,7 @@ export default function SchemaFlyout({
         onKeyDown={handleKeyDown}
         updateSchema={updateSchema}
         updateModel={updateModel}
-        onViewSchema={viewSchema}
+        onViewSchema={handleViewSchema}
         onClickAddModel={addModel}
         onClickAddField={addField}
         onClickAddAssociation={addAssociation}

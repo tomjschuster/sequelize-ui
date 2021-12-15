@@ -2,17 +2,12 @@ import { emptyModel, Model, Schema } from '@src/core/schema'
 import { SchemaErrors } from '@src/core/validation/schema'
 import usePrevious from '@src/ui/hooks/usePrevious'
 import { classnames } from '@src/ui/styles/classnames'
-import {
-  flexCenter,
-  largeTitle,
-  panel,
-  panelAction,
-  panelGrid,
-  section,
-} from '@src/ui/styles/utils'
+import { largeTitle, panel, panelGrid, section } from '@src/ui/styles/utils'
 import { focusById } from '@src/utils/dom'
 import React from 'react'
 import IconButton from '../form/IconButton'
+import PanelButton from '../form/PanelButton'
+import { autofillDisable } from '../form/shared/utils'
 import TextInput from '../form/TextInput'
 import PlusCircleIcon from '../icons/Plus'
 import TrashIcon from '../icons/Trash'
@@ -80,10 +75,8 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
   return (
     <form
       onSubmit={(evt) => evt.preventDefault()}
-      autoComplete="off"
-      data-lpignore="true"
-      data-form-type="other"
       className={classnames('p-6', 'pt-11')}
+      {...autofillDisable}
     >
       <div className={classnames(section)}>
         <h2 className={classnames(largeTitle)}>Schema</h2>
@@ -119,17 +112,15 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
               />
             </li>
           ))}
-          <li className={classnames(panelAction, 'hover:bg-green-50')}>
-            <button
+          <li>
+            <PanelButton
               id={createNewModelId()}
-              className={classnames(flexCenter, 'p-1.5', 'flex-1')}
+              className={classnames('hover:bg-green-50')}
+              label="Create a new model"
+              icon={PlusCircleIcon}
+              iconProps={{ size: 6 }}
               onClick={handleClickAddModel}
-            >
-              <span className={classnames('mr-2')}>
-                <PlusCircleIcon title="add model" size={6} />
-              </span>
-              Create a new model
-            </button>
+            />
           </li>
         </ul>
       </div>

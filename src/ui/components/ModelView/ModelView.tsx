@@ -1,9 +1,10 @@
 import { Model, Schema } from '@src/core/schema'
 import breadcrumbs from '@src/ui/styles/breadcrumbs.module.css'
 import { classnames, toClassname } from '@src/ui/styles/classnames'
-import { largeTitle, newButton, panel, panelGrid, section } from '@src/ui/styles/utils'
+import { largeTitle, panel, panelGrid, section } from '@src/ui/styles/utils'
 import { titleCase } from '@src/utils/string'
 import React from 'react'
+import PanelButton from '../form/PanelButton'
 import PlusCircleIcon from '../icons/Plus'
 import AssociationView from './AssociationView'
 import FieldView from './FieldView'
@@ -56,12 +57,13 @@ export default function ModelView({
             )
           })}
           <li>
-            <button type="button" className={newButton} onClick={onClickAddField}>
-              <span>
-                <PlusCircleIcon size={6} />
-              </span>
-              Add Field
-            </button>
+            <PanelButton
+              label="Add Field"
+              className={classnames('hover:bg-green-50')}
+              icon={PlusCircleIcon}
+              iconProps={{ size: 6 }}
+              onClick={onClickAddField}
+            />
           </li>
         </ul>
       </div>
@@ -79,12 +81,13 @@ export default function ModelView({
             </li>
           ))}
           <li>
-            <button type="button" className={newButton} onClick={onClickAddAssociation}>
-              <span>
-                <PlusCircleIcon size={6} />
-              </span>
-              Add association
-            </button>
+            <PanelButton
+              label="Add association"
+              className={classnames('hover:bg-green-50')}
+              icon={PlusCircleIcon}
+              iconProps={{ size: 6 }}
+              onClick={onClickAddAssociation}
+            />
           </li>
         </ul>
       </div>
