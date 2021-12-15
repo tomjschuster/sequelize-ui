@@ -22,6 +22,7 @@ describe('io', () => {
     })
 
     it('should return a rejected promise when saveAs fails', () => {
+      // @ts-expect-error only using partial overlap
       ;(saveAs as jest.Mock).mockImplementationOnce(() => {
         throw new Error('foo')
       })

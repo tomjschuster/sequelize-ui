@@ -10,7 +10,7 @@ const capitalizeFirst = plugin(function ({ addUtilities }) {
 })
 
 module.exports = {
-  purge: [
+  content: [
     './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/ui/components/**/*.{js,ts,jsx,tsx}',
     './src/ui/layouts/**/*.{js,ts,jsx,tsx}',

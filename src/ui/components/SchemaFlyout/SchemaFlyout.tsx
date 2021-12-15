@@ -30,7 +30,7 @@ export default function SchemaFlyout({
     (schema: Schema): Promise<Schema> =>
       onChange(schema)
         .then((schema) => {
-          success(`Schema ${schema.name} saved.`)
+          success(`Schema ${schema.name} saved.`, { ttl: 2000 })
           return schema
         })
         .catch((e) => {
