@@ -1,7 +1,6 @@
 import { clearData, createSchema, listSchemas, updateSchema } from '@src/api/schema'
 import { emptySchema, isNewSchema, Schema } from '@src/core/schema'
 import { DemoSchemaType, getDemoSchema, isDemoSchema } from '@src/data/schemas'
-import Layout from '@src/ui/components/Layout'
 import useAsync from '@src/ui/hooks/useAsync'
 import useSetOnce from '@src/ui/hooks/useSetOnce'
 import { classnames } from '@src/ui/styles/classnames'
@@ -51,28 +50,26 @@ export default function Home(): React.ReactElement {
 
   return (
     <>
-      <Layout title="Home | Sequelize UI">
-        <div className={classnames('p-6')}>
-          <div className={classnames(section, 'mb-6')}>
-            <h2 className={largeTitle}>My Schemas</h2>
-            <div className={classnames(flexCenter, 'w-full', 'min-h-20')}>
-              <MySchemas
-                schemas={schemas}
-                loading={loading}
-                error={error}
-                onClickCreate={handleClickCreate}
-                onSelectSchema={setSchema}
-                onMouseOverSchema={setPreloaded}
-                onClickClearData={handleClickClearData}
-              />
-            </div>
-          </div>
-          <div className={section}>
-            <h2 className={largeTitle}>Demo Schemas</h2>
-            <DemoSchemas onSelectSchema={setSchema} onMouseOverSchema={setPreloaded} />
+      <div className={classnames('p-6')}>
+        <div className={classnames(section, 'mb-6')}>
+          <h2 className={largeTitle}>My Schemas</h2>
+          <div className={classnames(flexCenter, 'w-full', 'min-h-20')}>
+            <MySchemas
+              schemas={schemas}
+              loading={loading}
+              error={error}
+              onClickCreate={handleClickCreate}
+              onSelectSchema={setSchema}
+              onMouseOverSchema={setPreloaded}
+              onClickClearData={handleClickClearData}
+            />
           </div>
         </div>
-      </Layout>
+        <div className={section}>
+          <h2 className={largeTitle}>Demo Schemas</h2>
+          <DemoSchemas onSelectSchema={setSchema} onMouseOverSchema={setPreloaded} />
+        </div>
+      </div>
       {preloaded && <PreloadSchemaFlyout />}
       {schema && (
         <SchemaFlyout

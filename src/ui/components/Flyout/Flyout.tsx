@@ -54,6 +54,7 @@ export default function Flyout({
         <div className={classnames('p-1', 'flex', 'items-center')}>
           <img
             className={classnames('h-6')}
+            alt="Sequelize UI logo"
             src="https://sequelizeui.app/static/images/sequelize-ui-tiny-white.svg"
           />
         </div>

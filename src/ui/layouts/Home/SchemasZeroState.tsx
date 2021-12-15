@@ -12,7 +12,7 @@ export default function SchemasZeroState({
   onMouseOver,
 }: SchemasZeroStateProps): React.ReactElement | null {
   return (
-    <p className={classnames('text-lg', 'text-center', 'leading-loose')}>
+    <p className={classnames('text-lg', 'leading-loose')}>
       To get started,{' '}
       <button
         type="button"

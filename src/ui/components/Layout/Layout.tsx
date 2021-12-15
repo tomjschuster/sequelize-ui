@@ -6,14 +6,16 @@ import React from 'react'
 
 type Props = React.PropsWithChildren<{
   title: string
+  metaDescription?: string
 }>
 
-function Layout({ children, title }: Props): React.ReactElement {
+function Layout({ children, title, metaDescription }: Props): React.ReactElement {
   return (
     <>
       <Head>
         <title>{title}</title>
         <script async defer src="https://buttons.github.io/buttons.js"></script>
+        {metaDescription && <meta name="description" content={metaDescription} />}
       </Head>
       <div
         className={classnames(
@@ -31,6 +33,7 @@ function Layout({ children, title }: Props): React.ReactElement {
               <h1 className={classnames('text-2xl', 'flex', 'items-center')}>
                 <img
                   className={classnames('inline', 'mr-2', 'h-8')}
+                  alt="Sequelize UI logo"
                   src="https://sequelizeui.app/static/images/sequelize-ui-tiny-white.svg"
                 />
                 Sequelize UI
