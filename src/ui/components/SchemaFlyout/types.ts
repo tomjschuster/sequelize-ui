@@ -11,7 +11,7 @@ export const enum SchemaFlyoutStateType {
 
 export type SchemaFlyoutState =
   | { type: SchemaFlyoutStateType.CODE }
-  | { type: SchemaFlyoutStateType.VIEW_SCHEMA }
+  | { type: SchemaFlyoutStateType.VIEW_SCHEMA; schema: Schema }
   | {
       type: SchemaFlyoutStateType.EDIT_SCHEMA
       schema: Schema

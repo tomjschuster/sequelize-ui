@@ -22,6 +22,7 @@ type UseSchemaFlyoutArgs = {
   dbOptions: DbOptions
   code?: boolean
   onChange: (schema: Schema) => Promise<Schema>
+  onDelete: () => Promise<void>
   onExit: () => void
 }
 
@@ -32,6 +33,7 @@ type UseSchemaFlyoutResult = {
   selectItem: (path: string) => void
   handleKeyDown: (evt: React.KeyboardEvent) => void
   edit: () => void
+  delete_: () => void
   viewCode: () => void
   viewSchema: (model?: Model) => void
   updateSchema: (schema: Schema) => void
@@ -48,6 +50,7 @@ export function useSchemaFlyout({
   dbOptions,
   code = true,
   onChange,
+  onDelete,
   onExit,
 }: UseSchemaFlyoutArgs): UseSchemaFlyoutResult {
   const [state, setState] = React.useState<SchemaFlyoutState>(() =>
@@ -103,7 +106,7 @@ export function useSchemaFlyout({
 
         const nextState: SchemaFlyoutState = currModel
           ? { type: SchemaFlyoutStateType.VIEW_MODEL, model: currModel }
-          : { type: SchemaFlyoutStateType.VIEW_SCHEMA }
+          : { type: SchemaFlyoutStateType.VIEW_SCHEMA, schema }
 
         setState(nextState)
         return
@@ -114,7 +117,7 @@ export function useSchemaFlyout({
         return
       }
 
-      setState({ type: SchemaFlyoutStateType.VIEW_SCHEMA })
+      setState({ type: SchemaFlyoutStateType.VIEW_SCHEMA, schema })
     },
     [state, fileTree, framework, schema],
   )
@@ -182,7 +185,7 @@ export function useSchemaFlyout({
         return
       }
 
-      setState({ type: SchemaFlyoutStateType.VIEW_SCHEMA })
+      setState({ type: SchemaFlyoutStateType.VIEW_SCHEMA, schema: nextSchema })
     },
     [state],
   )
@@ -234,6 +237,30 @@ export function useSchemaFlyout({
     }
   }, [schema, schemas, state, onChange, exitEdit, onExit])
 
+  const delete_ = React.useCallback(async () => {
+    if (
+      state.type === SchemaFlyoutStateType.VIEW_SCHEMA ||
+      state.type === SchemaFlyoutStateType.EDIT_SCHEMA
+    ) {
+      await onDelete()
+      onExit()
+      return
+    }
+
+    if (
+      state.type === SchemaFlyoutStateType.VIEW_MODEL ||
+      state.type === SchemaFlyoutStateType.EDIT_MODEL
+    ) {
+      const updatedSchema = await onChange({
+        ...schema,
+        models: schema.models.filter((m) => m.id !== state.model.id),
+      })
+
+      setState({ type: SchemaFlyoutStateType.VIEW_SCHEMA, schema: updatedSchema })
+      return
+    }
+  }, [schema, state, onChange, onExit, onDelete])
+
   const cancel = React.useCallback(() => {
     if (isNewSchema(schema)) {
       onExit()
@@ -257,6 +284,7 @@ export function useSchemaFlyout({
     selectItem,
     handleKeyDown,
     edit,
+    delete_,
     updateModel,
     updateSchema,
     addModel,

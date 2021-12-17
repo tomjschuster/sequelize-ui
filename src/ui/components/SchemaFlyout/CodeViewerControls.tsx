@@ -87,7 +87,6 @@ export default function CodeViewerControls({
         icon={SettingsIcon}
         iconProps={{ size: 6 }}
         onMouseDown={(evt) => evt.stopPropagation()}
-        onTouchStartCapture={console.log}
       />
       {isDbOptionsOpen && (
         <div

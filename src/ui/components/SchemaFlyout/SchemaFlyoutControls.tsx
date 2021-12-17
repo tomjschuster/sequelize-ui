@@ -1,5 +1,7 @@
 import { DbOptions } from '@src/core/database'
 import * as FileTree from '@src/core/files/fileTree'
+import { Schema } from '@src/core/schema'
+import { isDemoSchema } from '@src/data/schemas'
 import { classnames } from '@src/ui/styles/classnames'
 import { flexCenterBetween } from '@src/ui/styles/utils'
 import React from 'react'
@@ -8,12 +10,14 @@ import IconButton from '../form/IconButton'
 import CloseIcon from '../icons/Close'
 import FloppyDiscIcon from '../icons/FloppyDisc'
 import PencilIcon from '../icons/Pencil'
+import TrashIcon from '../icons/Trash'
 import CodeViewerControls from './CodeViewerControls'
 import SchemaCodeToggle from './SchemaCodeToggle'
 import { SchemaFlyoutState, SchemaFlyoutStateType } from './types'
 
 type SchemaFlyoutControlsProps = {
   state: SchemaFlyoutState
+  schema: Schema
   isEditing: boolean
   fileTree: FileTree.FileTree
   dbOptions: DbOptions
@@ -21,12 +25,14 @@ type SchemaFlyoutControlsProps = {
   onSelectSchema: () => void
   onChangeDbOptions: (options: DbOptions) => void
   onEdit: () => void
+  onDelete: () => void
   onCancel: () => void
   onSave: () => void
 }
 
 export default function SchemaFlyoutControls({
   state,
+  schema,
   isEditing,
   fileTree,
   dbOptions,
@@ -34,6 +40,7 @@ export default function SchemaFlyoutControls({
   onSelectSchema,
   onChangeDbOptions,
   onEdit,
+  onDelete,
   onCancel,
   onSave,
 }: SchemaFlyoutControlsProps): React.ReactElement | null {
@@ -52,10 +59,12 @@ export default function SchemaFlyoutControls({
       <div className={classnames('flex')}>
         <SchemaFlyoutControlsActions
           state={state}
+          schema={schema}
           dbOptions={dbOptions}
           fileTree={fileTree}
           onChangeDbOptions={onChangeDbOptions}
           onEdit={onEdit}
+          onDelete={onDelete}
           onCancel={onCancel}
           onSave={onSave}
         />
@@ -66,20 +75,24 @@ export default function SchemaFlyoutControls({
 
 type SchemaFlyoutControlsActionsProps = {
   state: SchemaFlyoutState
+  schema: Schema
   fileTree: FileTree.FileTree
   dbOptions: DbOptions
   onChangeDbOptions: (options: DbOptions) => void
   onEdit: () => void
+  onDelete: () => void
   onCancel: () => void
   onSave: () => void
 }
 
 function SchemaFlyoutControlsActions({
   state,
+  schema,
   fileTree,
   dbOptions,
   onChangeDbOptions,
   onEdit,
+  onDelete,
   onCancel,
   onSave,
 }: SchemaFlyoutControlsActionsProps): React.ReactElement | null {
@@ -97,13 +110,43 @@ function SchemaFlyoutControlsActions({
 
   if (state.type === SchemaFlyoutStateType.VIEW_SCHEMA) {
     return (
-      <IconButton label="edit schema" icon={PencilIcon} iconProps={{ size: 6 }} onClick={onEdit} />
+      <>
+        <IconButton
+          label="edit schema"
+          icon={PencilIcon}
+          iconProps={{ size: 6 }}
+          onClick={onEdit}
+        />
+        {!isDemoSchema(schema) && (
+          <IconButton
+            label="delete schema"
+            icon={TrashIcon}
+            iconProps={{ size: 6 }}
+            onClick={onDelete}
+          />
+        )}
+      </>
     )
   }
 
   if (state.type === SchemaFlyoutStateType.VIEW_MODEL) {
     return (
-      <IconButton label="edit schema" icon={PencilIcon} iconProps={{ size: 6 }} onClick={onEdit} />
+      <>
+        <IconButton
+          label="edit schema"
+          icon={PencilIcon}
+          iconProps={{ size: 6 }}
+          onClick={onEdit}
+        />
+        {!isDemoSchema(schema) && (
+          <IconButton
+            label="delete schema"
+            icon={TrashIcon}
+            iconProps={{ size: 6 }}
+            onClick={onDelete}
+          />
+        )}
+      </>
     )
   }
 
@@ -117,6 +160,24 @@ function SchemaFlyoutControlsActions({
       >
         Cancel
       </Button>
+
+      {!isDemoSchema(schema) && (
+        <Button
+          className={classnames(
+            'text-white',
+            'font-bold',
+            'w-16',
+            'md:w-20',
+            'ml-2',
+            'bg-pink-500',
+            'hover:bg-red-400',
+          )}
+          icon={TrashIcon}
+          onClick={onDelete}
+        >
+          Delete
+        </Button>
+      )}
       <Button
         className={classnames(
           'text-white',

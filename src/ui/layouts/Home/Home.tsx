@@ -1,4 +1,4 @@
-import { clearData, createSchema, listSchemas, updateSchema } from '@src/api/schema'
+import { clearData, createSchema, deleteSchema, listSchemas, updateSchema } from '@src/api/schema'
 import { emptySchema, isNewSchema, Schema } from '@src/core/schema'
 import { DemoSchemaType, getDemoSchema, isDemoSchema } from '@src/data/schemas'
 import useAsync from '@src/ui/hooks/useAsync'
@@ -44,6 +44,12 @@ export default function Home(): React.ReactElement {
     return updated
   }
 
+  const handleDelete = async () => {
+    if (!schema) return
+    await deleteSchema(schema.id)
+    refetch()
+  }
+
   const handleCancel = () => {
     setSchema(undefined)
   }
@@ -76,6 +82,7 @@ export default function Home(): React.ReactElement {
           schema={schema}
           schemas={schemas || []}
           onChange={handleChange}
+          onDelete={handleDelete}
           onClickClose={handleCancel}
         />
       )}

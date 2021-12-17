@@ -23,43 +23,47 @@ function AssociationView({
   schema,
   onClickModel,
 }: AssociationViewProps): React.ReactElement {
-  const targetModel: Model = React.useMemo(
-    () => schema.models.find((m) => m.id === association.targetModelId) as Model,
-    [schema.models, association.targetModelId],
-  )
+  const targetModel: Model | null =
+    React.useMemo(
+      () => schema.models.find((m) => m.id === association.targetModelId) as Model,
+      [schema.models, association.targetModelId],
+    ) || null
 
   return (
-    <div className={classnames('p-4')}>
-      <p className={classnames('mb-2')}>
-        {displayAssociationTypeType(association.type.type)}{' '}
-        {targetModel.id === association.sourceModelId ? (
-          <span className={classnames('font-bold')}>{titleCase(targetModel.name)}</span>
-        ) : (
-          <button className={classnames('font-bold')} onClick={() => onClickModel(targetModel)}>
-            {titleCase(targetModel.name)}
-          </button>
+    // model might be missing briefly after deletion and before switching flyout state
+    targetModel && (
+      <div className={classnames('p-4')}>
+        <p className={classnames('mb-2')}>
+          {displayAssociationTypeType(association.type.type)}{' '}
+          {targetModel.id === association.sourceModelId ? (
+            <span className={classnames('font-bold')}>{titleCase(targetModel.name)}</span>
+          ) : (
+            <button className={classnames('font-bold')} onClick={() => onClickModel(targetModel)}>
+              {titleCase(targetModel.name)}
+            </button>
+          )}
+        </p>
+        {(association.alias || association.foreignKey || isManytoMany(association)) && (
+          <ul className={classnames(list)}>
+            {association.alias && <li>as {noCase(association.alias)}</li>}
+            {association.foreignKey && <li>Foreign key: {noCase(association.foreignKey)}</li>}
+            {isManytoMany(association) && (
+              <li>
+                through{' '}
+                <ThroughView
+                  through={association.type.through}
+                  schema={schema}
+                  onClickModel={onClickModel}
+                />
+              </li>
+            )}
+            {isManytoMany(association) && association.type.targetFk && (
+              <li>Target foreign key: {noCase(association.type.targetFk)}</li>
+            )}
+          </ul>
         )}
-      </p>
-      {(association.alias || association.foreignKey || isManytoMany(association)) && (
-        <ul className={classnames(list)}>
-          {association.alias && <li>as {noCase(association.alias)}</li>}
-          {association.foreignKey && <li>Foreign key: {noCase(association.foreignKey)}</li>}
-          {isManytoMany(association) && (
-            <li>
-              through{' '}
-              <ThroughView
-                through={association.type.through}
-                schema={schema}
-                onClickModel={onClickModel}
-              />
-            </li>
-          )}
-          {isManytoMany(association) && association.type.targetFk && (
-            <li>Target foreign key: {noCase(association.type.targetFk)}</li>
-          )}
-        </ul>
-      )}
-    </div>
+      </div>
+    )
   )
 }
 

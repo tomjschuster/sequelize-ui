@@ -15,12 +15,14 @@ type SchemaFlyoutProps = {
   schema: Schema
   schemas: Schema[]
   onChange: (schema: Schema) => Promise<Schema>
+  onDelete: () => Promise<void>
   onClickClose: () => void
 }
 export default function SchemaFlyout({
   schema,
   schemas,
   onChange,
+  onDelete,
   onClickClose,
 }: SchemaFlyoutProps): React.ReactElement | null {
   const [dbOptions, setDbOptions] = React.useState<DbOptions>(defaultDbOptions)
@@ -49,6 +51,7 @@ export default function SchemaFlyout({
     viewCode,
     viewSchema,
     edit,
+    delete_,
     updateModel,
     updateSchema,
     addModel,
@@ -56,7 +59,14 @@ export default function SchemaFlyout({
     addAssociation,
     save,
     cancel,
-  } = useSchemaFlyout({ schema, schemas, dbOptions, onChange: handleChange, onExit: onClickClose })
+  } = useSchemaFlyout({
+    schema,
+    schemas,
+    dbOptions,
+    onChange: handleChange,
+    onExit: onClickClose,
+    onDelete,
+  })
 
   const flyoutContentRef = React.useRef() as React.MutableRefObject<HTMLDivElement>
 
@@ -80,6 +90,7 @@ export default function SchemaFlyout({
       controls={
         <SchemaFlyoutControls
           state={state}
+          schema={schema}
           isEditing={isEditing}
           fileTree={fileTree}
           dbOptions={dbOptions}
@@ -87,6 +98,7 @@ export default function SchemaFlyout({
           onSelectCode={viewCode}
           onSelectSchema={handleViewSchema}
           onEdit={edit}
+          onDelete={delete_}
           onCancel={cancel}
           onSave={save}
         />

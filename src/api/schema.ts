@@ -54,9 +54,7 @@ export async function updateModel(model: Model, schema: Schema): Promise<Schema>
 
 function removeTargetingAssociations(schema: Schema, updatedSchema: Schema): Schema {
   const modelById = arrayToLookup(updatedSchema.models, (m) => m.id)
-  const removedModels = schema.models.filter(
-    (m) => !updatedSchema.models.some((um) => um.id === m.id),
-  )
+  const removedModels = schema.models.filter((m) => !modelById.get(m.id))
 
   const models = updatedSchema.models.map((m) => ({
     ...m,

@@ -54,7 +54,11 @@ export default function SchemaFlyoutContent({
       )
     case SchemaFlyoutStateType.VIEW_SCHEMA:
       return (
-        <SchemaView schema={schema} onClickModel={onViewSchema} onClickAddModel={onClickAddModel} />
+        <SchemaView
+          schema={state.schema}
+          onClickModel={onViewSchema}
+          onClickAddModel={onClickAddModel}
+        />
       )
     case SchemaFlyoutStateType.EDIT_MODEL:
       return (
