@@ -1,4 +1,4 @@
-import { FileSystemItem, listPaths } from '@src/core/files/fileSystem'
+import { FileSystemItem } from '@src/core/files/fileSystem'
 import * as FileTree from '@src/core/files/fileTree'
 import usePrevious from '@src/ui/hooks/usePrevious'
 import React from 'react'
@@ -28,12 +28,26 @@ function useFileTree({ root, key, defaultPath }: UseFileTreeArgs): UseFileTreeRe
     [fileTree],
   )
 
-  // Generate file tree when root is set for the first time
   React.useEffect(() => {
-    if (!previousRoot && root) {
-      setFileTree(FileTree.create(root, defaultPath))
+    if (!root) {
+      return
     }
-  }, [root, previousRoot, defaultPath])
+
+    const isFirst = !previousRoot && root
+    const isNew = key !== previousKey
+
+    if (isFirst || isNew) {
+      setFileTree(FileTree.create(root, defaultPath))
+      return
+    }
+
+    const hasChanged = root !== previousRoot
+
+    if (hasChanged) {
+      setFileTree(FileTree.updateRoot(fileTree, root))
+      return
+    }
+  }, [root, previousRoot, key, previousKey])
 
   // Select default path when there is no active file
   React.useEffect(() => {
@@ -41,26 +55,6 @@ function useFileTree({ root, key, defaultPath }: UseFileTreeArgs): UseFileTreeRe
       setFileTree(FileTree.selectItem(fileTree, defaultPath))
     }
   }, [root, previousRoot, fileTree, defaultPath])
-
-  // Regenerate file tree when the key changes
-  React.useEffect(() => {
-    if (root && key !== previousKey) {
-      setFileTree(FileTree.create(root, defaultPath))
-    }
-  }, [root, key, previousKey, defaultPath])
-
-  // Whenever new paths are added, refresh the file tree
-  React.useEffect(() => {
-    if (root && previousRoot && root !== previousRoot && key === previousKey) {
-      const previousPaths = listPaths(previousRoot)
-      const paths = listPaths(root)
-      const newPaths = paths.filter((path) => !previousPaths.includes(path))
-
-      if (newPaths.length > 0) {
-        setFileTree(FileTree.updateRoot(fileTree, root))
-      }
-    }
-  }, [root, previousRoot, fileTree])
 
   const selectItem = React.useCallback(
     (path: string) => setFileTree(FileTree.selectItem(fileTree, path)),
