@@ -1,12 +1,24 @@
-import { classnames, toClassname } from '@src/ui/styles/classnames'
+import {
+  alignSelf,
+  backgroundColor,
+  Classname,
+  classnames,
+  margin,
+  padding,
+} from '@src/ui/styles/classnames'
+import { Override } from '@src/utils/types'
 import React from 'react'
 import { SvgProps } from '../../icons/Svg'
 
-type IconButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  label: string
-  icon: React.ComponentType<SvgProps>
-  iconProps?: SvgProps
-}
+type IconButtonProps = Override<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  {
+    className?: Classname
+    label: string
+    icon: React.ComponentType<SvgProps>
+    iconProps?: SvgProps
+  }
+>
 
 function IconButton({
   label,
@@ -19,11 +31,11 @@ function IconButton({
     <button
       type="button"
       className={classnames(
-        'p-1',
-        'hover:bg-gray-200',
-        'self-start',
-        'ml-0.5',
-        toClassname(className),
+        padding('p-1'),
+        backgroundColor('hover:bg-gray-200'),
+        alignSelf('self-start'),
+        margin('ml-0.5'),
+        className,
       )}
       {...rest}
     >

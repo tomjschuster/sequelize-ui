@@ -1,44 +1,112 @@
-import { classnames } from './classnames'
+import {
+  alignItems,
+  backgroundColor,
+  borderColor,
+  borderRadius,
+  borderWidth,
+  classnames,
+  display,
+  flexDirection,
+  fontSize,
+  gap,
+  gridAutoRows,
+  gridTemplateColumns,
+  height,
+  inset,
+  justifyContent,
+  lineHeight,
+  listStylePosition,
+  listStyleType,
+  margin,
+  maxWidth,
+  padding,
+  position,
+  width,
+} from './classnames'
 
-export const fullscreen = classnames('h-screen', 'w-screen', 'fixed', 'top-0', 'left-0')
+export const fullscreen = classnames(
+  height('h-screen'),
+  width('w-screen'),
+  position('fixed'),
+  inset('top-0', 'left-0'),
+)
 
-export const flexCenter = classnames('flex', 'items-center', 'justify-center')
+export const flexCenter = classnames(
+  display('flex'),
+  alignItems('items-center'),
+  justifyContent('justify-center'),
+)
 
-export const flexCenterBetween = classnames('flex', 'items-center', 'justify-between')
+export const flexCenterBetween = classnames(
+  display('flex'),
+  alignItems('items-center'),
+  justifyContent('justify-between'),
+)
 
-export const section = classnames('w-full', 'flex', 'flex-col', 'max-w-screen-lg', 'mx-auto')
+export const section = classnames(
+  width('w-full'),
+  display('flex'),
+  flexDirection('flex-col'),
+  maxWidth('max-w-screen-lg'),
+  margin('mx-auto'),
+)
 
-export const largeTitle = classnames('text-2xl', 'mb-4')
+export const title = classnames(fontSize('text-2xl'), margin('mb-4'))
+export const subtitle = classnames(fontSize('text-xl'), margin('mb-2'))
 
-export const text = classnames('text-sm', 'mb-2')
+export const text = classnames(fontSize('text-sm'), margin('mb-2'))
 
-export const list = classnames('text-sm', 'list-disc', 'list-inside', 'leading-loose')
+export const list = classnames(
+  fontSize('text-sm'),
+  listStyleType('list-disc'),
+  listStylePosition('list-inside'),
+  lineHeight('leading-loose'),
+)
 
-const panelBase = classnames('border', 'border-gray-400', 'p-2', 'rounded', 'bg-white')
+const panelBase = classnames(
+  borderWidth('border'),
+  borderColor('border-gray-400'),
+  borderRadius('rounded'),
+  backgroundColor('bg-white'),
+)
 
-export const panel = classnames(panelBase, 'w-full', 'h-full')
+export const panel = classnames(panelBase, width('w-full'), height('h-full'))
 
-export const panelAction = classnames(panel, flexCenter, 'hover:border-gray-800')
+export const panelHeader = classnames(
+  padding('p-2'),
+  borderWidth('border-b'),
+  borderColor('border-gray-400'),
+)
 
-export const inlineButton = classnames(panelBase, 'py-0.5', 'px-1.5', 'p-0.5', 'hover:bg-gray-100')
+export const panelAction = classnames(
+  panel,
+  flexCenter,
+  padding('p-2'),
+  borderColor('hover:border-gray-800'),
+)
+
+export const inlineButton = classnames(
+  panelBase,
+  padding('p-2'),
+  padding('py-0.5'),
+  padding('px-1.5'),
+  padding('p-0.5'),
+  backgroundColor('hover:bg-gray-100'),
+)
 
 export const panelGrid = classnames(
-  'grid',
-  'lg:grid-cols-3',
-  'md:grid-cols-2',
-  'sm:grid-cols-2',
-  'grid-cols-1',
-  'gap-6',
-  'auto-rows-fr',
-  'w-full',
+  display('grid'),
+  gridTemplateColumns('lg:grid-cols-3', 'md:grid-cols-2', 'sm:grid-cols-2', 'grid-cols-1'),
+  gap('gap-6'),
+  gridAutoRows('auto-rows-fr'),
+  width('w-full'),
 )
 
 export const fieldsetGrid = classnames(
-  'p-4',
-  'pt-8',
-  'grid',
-  'grid-cols-12',
-  'gap-y-0',
-  'gap-x-4',
-  'relative',
+  padding('p-4'),
+  padding('pt-8'),
+  display('grid'),
+  gridTemplateColumns('grid-cols-12'),
+  gap('gap-y-0', 'gap-x-4'),
+  position('relative'),
 )

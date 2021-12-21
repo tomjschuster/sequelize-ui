@@ -1,7 +1,24 @@
 import CloseCircleIcon from '@src/ui/components/icons/CloseCircle'
 import useLockScroll from '@src/ui/hooks/useLockScroll'
 import { useTrapFocus } from '@src/ui/lib/focus'
-import { classnames } from '@src/ui/styles/classnames'
+import {
+  alignItems,
+  backgroundColor,
+  backgroundImage,
+  borderColor,
+  borderWidth,
+  boxShadow,
+  classnames,
+  display,
+  flex,
+  flexDirection,
+  gradientColorStops,
+  height,
+  overflow,
+  padding,
+  position,
+  zIndex,
+} from '@src/ui/styles/classnames'
 import { flexCenterBetween, fullscreen } from '@src/ui/styles/utils'
 import React from 'react'
 import IconButton from '../form/IconButton'
@@ -28,34 +45,33 @@ export default function Flyout({
     <div
       className={classnames(
         fullscreen,
-        'bg-gray-50',
-        'overflow-y-scroll',
-        'z-10',
-        'border-gray-500',
-        'border-2',
-        'flex',
-        'flex-col',
+        backgroundColor('bg-gray-50'),
+        overflow('overflow-y-scroll'),
+        zIndex('z-10'),
+        borderColor('border-gray-500'),
+        borderWidth('border-2'),
+        display('flex'),
+        flexDirection('flex-col'),
       )}
       ref={ref}
     >
       <div
         className={classnames(
           flexCenterBetween,
-          'relative',
-          'h-8',
-          'border-b',
-          'bg-gradient-to-r',
-          'from-blue-100',
-          'to-blue-50',
-          'border-gray-900',
-          'shadow-inner',
+          position('relative'),
+          height('h-8'),
+          borderWidth('border-b'),
+          backgroundImage('bg-gradient-to-r'),
+          gradientColorStops('from-blue-100', 'to-blue-50'),
+          borderColor('border-gray-900'),
+          boxShadow('shadow-inner'),
         )}
       >
-        <div className={classnames('p-1', 'flex', 'items-center')}>
+        <div className={classnames(padding('p-1'), display('flex'), alignItems('items-center'))}>
           <img
             width="50px"
             height="50px"
-            className={classnames('h-6')}
+            className={classnames(height('h-6'))}
             alt="Sequelize UI logo"
             src="https://sequelizeui.app/static/images/sequelize-ui-tiny-white.svg"
           />
@@ -71,20 +87,23 @@ export default function Flyout({
       {controls && (
         <div
           className={classnames(
-            'relative',
-            'bg-white',
-            'overflow-visible',
-            'h-10',
-            'flex',
-            'items-center',
-            'border-b',
-            'border-gray-900',
+            position('relative'),
+            backgroundColor('bg-white'),
+            overflow('overflow-visible'),
+            height('h-10'),
+            display('flex'),
+            alignItems('items-center'),
+            borderWidth('border-b'),
+            borderColor('border-gray-900'),
           )}
         >
           {controls}
         </div>
       )}
-      <div ref={contentRef} className={classnames('flex-auto', 'overflow-y-scroll')}>
+      <div
+        ref={contentRef}
+        className={classnames(flex('flex-auto'), overflow('overflow-y-scroll'))}
+      >
         {children}
       </div>
     </div>

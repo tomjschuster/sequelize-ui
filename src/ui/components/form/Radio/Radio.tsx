@@ -1,4 +1,12 @@
-import { Classname, classnames } from '@src/ui/styles/classnames'
+import {
+  Classname,
+  classnames,
+  display,
+  fontSize,
+  margin,
+  padding,
+  width,
+} from '@src/ui/styles/classnames'
 import React from 'react'
 import { lookupOptionValue, optionsToList } from '../shared/options'
 import { OptionsProps } from '../shared/types'
@@ -13,7 +21,7 @@ function Radio<T>({
   className,
   value,
   options,
-  display,
+  display: displayValue,
   onChange,
   disabled = () => false,
   ...rest
@@ -25,9 +33,9 @@ function Radio<T>({
   }
 
   return (
-    <div className={classnames(className, 'flex', 'w-full')}>
+    <div className={classnames(className, display('flex'), width('w-full'))}>
       {optionsToList(options).map(([k, v]) => (
-        <label key={k} className={classnames('mr-2', 'last:mr-0')}>
+        <label key={k} className={classnames(margin('mr-2', 'last:mr-0'))}>
           <input
             type="radio"
             value={k}
@@ -37,7 +45,9 @@ function Radio<T>({
             {...autofillDisable}
             {...rest}
           />
-          <span className={classnames('pl-2', 'text-sm')}>{display(v)}</span>
+          <span className={classnames(padding('pl-2'), fontSize('text-sm'))}>
+            {displayValue(v)}
+          </span>
         </label>
       ))}
     </div>

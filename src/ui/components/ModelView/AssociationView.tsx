@@ -7,8 +7,15 @@ import {
   Schema,
   ThroughType,
 } from '@src/core/schema'
-import { classnames } from '@src/ui/styles/classnames'
-import { list } from '@src/ui/styles/utils'
+import {
+  borderColor,
+  borderStyle,
+  borderWidth,
+  classnames,
+  fontWeight,
+  padding,
+} from '@src/ui/styles/classnames'
+import { list, panelHeader } from '@src/ui/styles/utils'
 import { noCase, titleCase } from '@src/utils/string'
 import React from 'react'
 
@@ -32,19 +39,29 @@ function AssociationView({
   return (
     // model might be missing briefly after deletion and before switching flyout state
     targetModel && (
-      <div className={classnames('p-4')}>
-        <p className={classnames('mb-2')}>
+      <>
+        <p className={classnames(panelHeader)}>
           {displayAssociationTypeType(association.type.type)}{' '}
           {targetModel.id === association.sourceModelId ? (
-            <span className={classnames('font-bold')}>{titleCase(targetModel.name)}</span>
+            <span className={classnames(fontWeight('font-semibold'))}>
+              {titleCase(targetModel.name)}
+            </span>
           ) : (
-            <button className={classnames('font-bold')} onClick={() => onClickModel(targetModel)}>
+            <button
+              className={classnames(
+                fontWeight('font-semibold'),
+                borderWidth('border-b-2'),
+                borderStyle('border-dashed'),
+                borderColor('border-gray-700'),
+              )}
+              onClick={() => onClickModel(targetModel)}
+            >
               {titleCase(targetModel.name)}
             </button>
           )}
         </p>
         {(association.alias || association.foreignKey || isManytoMany(association)) && (
-          <ul className={classnames(list)}>
+          <ul className={classnames(list, padding('p-2', 'pl-4'))}>
             {association.alias && <li>as {noCase(association.alias)}</li>}
             {association.foreignKey && <li>Foreign key: {noCase(association.foreignKey)}</li>}
             {isManytoMany(association) && (
@@ -62,7 +79,7 @@ function AssociationView({
             )}
           </ul>
         )}
-      </div>
+      </>
     )
   )
 }
@@ -84,7 +101,10 @@ function ThroughView({
   const throughModel = schema.models.find((m) => m.id === through.modelId)
   if (throughModel) {
     return (
-      <button className={classnames('font-bold')} onClick={() => onClickModel(throughModel)}>
+      <button
+        className={classnames(fontWeight('font-bold'))}
+        onClick={() => onClickModel(throughModel)}
+      >
         {titleCase(throughModel.name)}
       </button>
     )

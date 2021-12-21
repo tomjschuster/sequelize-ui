@@ -1,4 +1,12 @@
-import { Classname, classnames } from '@src/ui/styles/classnames'
+import {
+  borderColor,
+  borderStyle,
+  Classname,
+  classnames,
+  fontSize,
+  margin,
+  minHeight,
+} from '@src/ui/styles/classnames'
 import { panelAction } from '@src/ui/styles/utils'
 import { Override } from '@src/utils/types'
 import React from 'react'
@@ -28,15 +36,15 @@ export default function PanelButton({
       className={classnames(
         className,
         panelAction,
-        'min-h-16',
-        'text-lg',
-        'border-dashed',
-        'hover:border-gray-800',
+        minHeight('min-h-16'),
+        fontSize('text-lg'),
+        borderStyle('border-dashed'),
+        borderColor('hover:border-gray-800'),
       )}
       onClick={onClick}
       {...props}
     >
-      <span className={classnames('mr-2')}>
+      <span className={classnames(margin('mr-2'))}>
         <Icon {...iconProps} />
       </span>
       {label}

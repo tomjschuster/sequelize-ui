@@ -1,8 +1,8 @@
 import { Association, emptyAssociation, emptyField, Field, Model, Schema } from '@src/core/schema'
 import { ModelErrors } from '@src/core/validation/schema'
 import usePrevious from '@src/ui/hooks/usePrevious'
-import { classnames } from '@src/ui/styles/classnames'
-import { largeTitle, panel, panelGrid, section } from '@src/ui/styles/utils'
+import { backgroundColor, classnames, margin, padding } from '@src/ui/styles/classnames'
+import { panel, panelGrid, section, title } from '@src/ui/styles/utils'
 import { focusById } from '@src/utils/dom'
 import React from 'react'
 import PanelButton from '../form/PanelButton'
@@ -126,15 +126,15 @@ export default function ModelForm({
   return (
     <form
       onSubmit={(evt) => evt.preventDefault()}
-      className={classnames('p-6', 'pt-11')}
+      className={classnames(padding('p-6', 'pt-11'))}
       {...autofillDisable}
     >
       <div className={classnames(section)}>
-        <h2 className={classnames(largeTitle)}>Model</h2>
+        <h2 className={classnames(title)}>Model</h2>
         <ModelFieldset name={model.name} onChange={handleChangeModel} errors={errors} />
       </div>
-      <div className={classnames(section, 'mb-6')}>
-        <h3 className={classnames(largeTitle)}>Fields</h3>
+      <div className={classnames(section, margin('mb-6'))}>
+        <h3 className={classnames(title)}>Fields</h3>
 
         <ul className={classnames(panelGrid)}>
           {model.fields.map((field) => {
@@ -152,7 +152,7 @@ export default function ModelForm({
           <li>
             <PanelButton
               label="Add Field"
-              className={classnames('hover:bg-green-50')}
+              className={classnames(backgroundColor('hover:bg-green-50'))}
               icon={PlusCircleIcon}
               iconProps={{ size: 6 }}
               onClick={handleClickAddField}
@@ -162,7 +162,7 @@ export default function ModelForm({
       </div>
 
       <div className={classnames(section)}>
-        <h3 className={classnames(largeTitle)}>Associations</h3>
+        <h3 className={classnames(title)}>Associations</h3>
 
         <ul className={panelGrid}>
           {model.associations.map((association) => (
@@ -180,7 +180,7 @@ export default function ModelForm({
           <li>
             <PanelButton
               label="Add association"
-              className={classnames('hover:bg-green-50')}
+              className={classnames(backgroundColor('hover:bg-green-50'))}
               icon={PlusCircleIcon}
               iconProps={{ size: 6 }}
               onClick={handleClickAddAssociation}

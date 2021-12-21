@@ -1,4 +1,13 @@
-import { Classname, classnames } from '@src/ui/styles/classnames'
+import {
+  alignItems,
+  Classname,
+  classnames,
+  display,
+  flexDirection,
+  fontSize,
+  padding,
+  width,
+} from '@src/ui/styles/classnames'
 import React from 'react'
 import FormError from './FormError'
 import { FieldWrapperProps } from './types'
@@ -19,12 +28,17 @@ export default function InputWrapper({
   children,
 }: InputWrapperProps): React.ReactElement {
   return (
-    <div className={classnames('w-full', className)}>
+    <div className={classnames(width('w-full'), className)}>
       <label
         htmlFor={id}
-        className={classnames('flex', 'flex-col', 'items-start', { 'pb-6': !error })}
+        className={classnames(
+          display('flex'),
+          flexDirection('flex-col'),
+          alignItems('items-start'),
+          padding({ 'pb-6': !error }),
+        )}
       >
-        <span className={classnames('text-sm')}>{label}</span>
+        <span className={classnames(fontSize('text-sm'))}>{label}</span>
         {children}
       </label>
       <FormError id={alertId(id)} error={error} />

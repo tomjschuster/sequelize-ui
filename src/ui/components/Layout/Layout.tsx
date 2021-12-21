@@ -1,4 +1,19 @@
-import { classnames } from '@src/ui/styles/classnames'
+import {
+  alignItems,
+  backgroundColor,
+  boxShadow,
+  classnames,
+  display,
+  flex,
+  flexDirection,
+  fontSize,
+  fontWeight,
+  height,
+  margin,
+  padding,
+  textDecoration,
+  width,
+} from '@src/ui/styles/classnames'
 import { flexCenterBetween } from '@src/ui/styles/utils'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -19,22 +34,35 @@ function Layout({ children, title, metaDescription }: Props): React.ReactElement
       </Head>
       <div
         className={classnames(
-          'h-screen',
-          'w-screen',
-          'flex',
-          'flex-col',
-          'items-stretch',
-          'bg-gray-50',
+          height('h-screen'),
+          width('w-screen'),
+          display('flex'),
+          flexDirection('flex-col'),
+          alignItems('items-stretch'),
+          backgroundColor('bg-gray-50'),
         )}
       >
-        <header className={classnames('shadow', 'p-2', 'flex', 'items-center')}>
+        <header
+          className={classnames(
+            boxShadow('shadow'),
+            padding('p-2'),
+            display('flex'),
+            alignItems('items-center'),
+          )}
+        >
           <Link href="/">
-            <a title="Go to Sequelize UI Home" className={classnames('inline-block')}>
-              <h1 className={classnames('text-2xl', 'flex', 'items-center')}>
+            <a title="Go to Sequelize UI Home" className={classnames(display('inline-block'))}>
+              <h1
+                className={classnames(
+                  fontSize('text-2xl'),
+                  display('flex'),
+                  alignItems('items-center'),
+                )}
+              >
                 <img
                   width="50px"
                   height="50px"
-                  className={classnames('inline', 'mr-2', 'h-8')}
+                  className={classnames(display('inline'), margin('mr-2'), height('h-8'))}
                   alt="Sequelize UI logo"
                   src="https://sequelizeui.app/static/images/sequelize-ui-tiny-white.svg"
                 />
@@ -43,16 +71,15 @@ function Layout({ children, title, metaDescription }: Props): React.ReactElement
             </a>
           </Link>
         </header>
-        <main className={classnames('flex-1')}>{children}</main>
+        <main className={classnames(flex('flex-1'))}>{children}</main>
         <footer
           className={classnames(
             flexCenterBetween,
-            'flex-col',
-            'sm:flex-row-reverse',
-            'children:flex',
-            'p-2',
-            'bg-indigo-50',
-            'shadow-inner',
+            flexDirection('flex-col', 'sm:flex-row-reverse'),
+            // display('children:flex'),
+            padding('p-2'),
+            backgroundColor('bg-indigo-50'),
+            boxShadow('shadow-inner'),
           )}
         >
           <a
@@ -64,10 +91,15 @@ function Layout({ children, title, metaDescription }: Props): React.ReactElement
           >
             Star
           </a>
-          <span className={classnames('mt-2', 'sm:mt-0', 'text-sm')}>
+          <span className={classnames(margin('mt-2', 'sm:mt-0'), fontSize('text-sm'))}>
             Copyright &copy; {new Date().getFullYear()}
             <a
-              className={classnames('hover:underline', 'font-bold', 'text-sm', 'ml-1.5')}
+              className={classnames(
+                textDecoration('hover:underline'),
+                fontWeight('font-bold'),
+                fontSize('text-sm'),
+                margin('ml-1.5'),
+              )}
               href="https://github.com/tomjschuster"
             >
               Tom Schuster

@@ -1,4 +1,4 @@
-import { classnames } from '@src/ui/styles/classnames'
+import { classnames, fontSize, textColor } from '@src/ui/styles/classnames'
 import React from 'react'
 
 type FormErrorProps = {
@@ -10,7 +10,7 @@ function FormError({ id, error }: FormErrorProps): React.ReactElement {
   return (
     <span
       id={id}
-      className={classnames('text-red-700', 'text-xs')}
+      className={classnames(textColor('text-red-700'), fontSize('text-xs'))}
       role={error ? 'alert' : undefined}
       aria-hidden={!error}
     >

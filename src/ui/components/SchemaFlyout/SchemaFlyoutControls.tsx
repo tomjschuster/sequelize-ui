@@ -2,7 +2,16 @@ import { DbOptions } from '@src/core/database'
 import * as FileTree from '@src/core/files/fileTree'
 import { Schema } from '@src/core/schema'
 import { isDemoSchema } from '@src/data/schemas'
-import { classnames } from '@src/ui/styles/classnames'
+import {
+  backgroundColor,
+  classnames,
+  display,
+  fontWeight,
+  margin,
+  padding,
+  textColor,
+  width,
+} from '@src/ui/styles/classnames'
 import { flexCenterBetween } from '@src/ui/styles/utils'
 import React from 'react'
 import Button from '../form/Button'
@@ -45,8 +54,8 @@ export default function SchemaFlyoutControls({
   onSave,
 }: SchemaFlyoutControlsProps): React.ReactElement | null {
   return (
-    <div className={classnames(flexCenterBetween, 'p-2', 'w-full')}>
-      <div className={classnames('flex')}>
+    <div className={classnames(flexCenterBetween, padding('p-2'), width('w-full'))}>
+      <div className={classnames(display('flex'))}>
         {!isEditing && (
           <SchemaCodeToggle
             code={state.type === SchemaFlyoutStateType.CODE}
@@ -56,7 +65,7 @@ export default function SchemaFlyoutControls({
           />
         )}
       </div>
-      <div className={classnames('flex')}>
+      <div className={classnames(display('flex'))}>
         <SchemaFlyoutControlsActions
           state={state}
           schema={schema}
@@ -153,7 +162,7 @@ function SchemaFlyoutControlsActions({
   return (
     <>
       <Button
-        className={classnames('w-16', 'md:w-20', 'hover:bg-blue-100')}
+        className={classnames(width('w-16', 'md:w-20'), backgroundColor('hover:bg-blue-100'))}
         icon={CloseIcon}
         iconProps={{ size: 4 }}
         onClick={onCancel}
@@ -164,13 +173,11 @@ function SchemaFlyoutControlsActions({
       {!isDemoSchema(schema) && (
         <Button
           className={classnames(
-            'text-white',
-            'font-bold',
-            'w-16',
-            'md:w-20',
-            'ml-2',
-            'bg-pink-500',
-            'hover:bg-red-400',
+            textColor('text-white'),
+            fontWeight('font-bold'),
+            width('w-16', 'md:w-20'),
+            margin('ml-2'),
+            backgroundColor('bg-pink-500', 'hover:bg-red-400'),
           )}
           icon={TrashIcon}
           onClick={onDelete}
@@ -180,13 +187,11 @@ function SchemaFlyoutControlsActions({
       )}
       <Button
         className={classnames(
-          'text-white',
-          'font-bold',
-          'w-16',
-          'md:w-20',
-          'ml-2',
-          'bg-blue-600',
-          'hover:bg-blue-400',
+          textColor('text-white'),
+          fontWeight('font-bold'),
+          width('w-16', 'md:w-20'),
+          margin('ml-2'),
+          backgroundColor('bg-blue-600', 'hover:bg-blue-400'),
         )}
         icon={FloppyDiscIcon}
         onClick={onSave}

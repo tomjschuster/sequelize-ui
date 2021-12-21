@@ -1,7 +1,18 @@
 import { Model, Schema } from '@src/core/schema'
 import breadcrumbs from '@src/ui/styles/breadcrumbs.module.css'
-import { classnames, toClassname } from '@src/ui/styles/classnames'
-import { largeTitle, panel, panelGrid, section } from '@src/ui/styles/utils'
+import {
+  backgroundColor,
+  classnames,
+  display,
+  fontSize,
+  fontWeight,
+  margin,
+  minHeight,
+  padding,
+  textDecoration,
+  toClassname,
+} from '@src/ui/styles/classnames'
+import { panel, panelGrid, section, title } from '@src/ui/styles/utils'
 import { titleCase } from '@src/utils/string'
 import React from 'react'
 import PanelButton from '../form/PanelButton'
@@ -25,12 +36,12 @@ export default function ModelView({
   onClickAddAssociation,
 }: ModelViewProps): React.ReactElement {
   return (
-    <div className={classnames('pt-2', 'px-6', 'mb-3')}>
-      <div className={classnames('mb-4', 'flex', 'text-sm')}>
+    <div className={classnames(padding('pt-2', 'px-6'), margin('mb-3'))}>
+      <div className={classnames(margin('mb-4'), display('flex'), fontSize('text-sm'))}>
         <button
           className={classnames(
-            'font-semibold',
-            'hover:underline',
+            fontWeight('font-semibold'),
+            textDecoration('hover:underline'),
             toClassname(breadcrumbs.breadcrumb),
           )}
           onClick={() => onViewSchema()}
@@ -40,13 +51,13 @@ export default function ModelView({
         <span>{titleCase(model.name)} (model)</span>
       </div>
       <div className={classnames(section)}>
-        <h2 className={classnames(largeTitle)}>Model</h2>
-        <div className={classnames('mb-11')}>
-          <p className={classnames('text-lg')}>Name: {titleCase(model.name)}</p>
+        <h2 className={classnames(title)}>Model</h2>
+        <div className={classnames(margin('mb-11'))}>
+          <p className={classnames(fontSize('text-lg'))}>Name: {titleCase(model.name)}</p>
         </div>
       </div>
       <div className={classnames(section)}>
-        <h3 className={classnames(largeTitle)}>Fields</h3>
+        <h3 className={classnames(title)}>Fields</h3>
 
         <ul className={classnames(panelGrid)}>
           {model.fields.map((field) => {
@@ -59,7 +70,7 @@ export default function ModelView({
           <li>
             <PanelButton
               label="Add Field"
-              className={classnames('hover:bg-green-50')}
+              className={classnames(backgroundColor('hover:bg-green-50'))}
               icon={PlusCircleIcon}
               iconProps={{ size: 6 }}
               onClick={onClickAddField}
@@ -68,11 +79,11 @@ export default function ModelView({
         </ul>
       </div>
       <div className={classnames(section)}>
-        <h3 className={classnames(largeTitle, 'mt-6')}>Associations</h3>
+        <h3 className={classnames(title, margin('mt-6'))}>Associations</h3>
 
         <ul className={panelGrid}>
           {model.associations.map((association) => (
-            <li key={association.id} className={classnames(panel)}>
+            <li key={association.id} className={classnames(panel, minHeight('min-h-22'))}>
               <AssociationView
                 association={association}
                 schema={schema}
@@ -83,7 +94,7 @@ export default function ModelView({
           <li>
             <PanelButton
               label="Add association"
-              className={classnames('hover:bg-green-50')}
+              className={classnames(backgroundColor('hover:bg-green-50'))}
               icon={PlusCircleIcon}
               iconProps={{ size: 6 }}
               onClick={onClickAddAssociation}

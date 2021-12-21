@@ -1,12 +1,29 @@
-import { classnames, toClassname } from '@src/ui/styles/classnames'
+import {
+  borderColor,
+  borderRadius,
+  borderWidth,
+  Classname,
+  classnames,
+  fontSize,
+  fontWeight,
+  margin,
+  outlineStyle,
+  padding,
+} from '@src/ui/styles/classnames'
+import { flexCenter } from '@src/ui/styles/utils'
+import { Override } from '@src/utils/types'
 import React from 'react'
 import { SvgProps } from '../../icons/Svg'
 import IconButton from '../IconButton'
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  icon?: React.ComponentType<SvgProps>
-  iconProps?: SvgProps
-}
+type ButtonProps = Override<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  {
+    className?: Classname
+    icon?: React.ComponentType<SvgProps>
+    iconProps?: SvgProps
+  }
+>
 
 function Button({
   className,
@@ -18,27 +35,24 @@ function Button({
   return (
     <button
       className={classnames(
-        'flex',
-        'items-center',
-        'justify-center',
-        'p-1',
-        'border',
-        'border-gray-400',
-        'rounded',
-        'focus:outline-none',
-        'focus-visible:border-blue-500',
-        'focus-visible:font-bold',
-        toClassname(className),
+        flexCenter,
+        padding('p-1'),
+        borderWidth('border'),
+        borderColor('border-gray-400'),
+        borderRadius('rounded'),
+        outlineStyle('focus:outline-none'),
+        borderColor('focus-visible:border-blue-500'),
+        fontWeight('focus-visible:font-bold'),
+        className,
       )}
       {...props}
     >
       {Icon && <Icon {...iconProps} />}
       <span
-        className={classnames({
-          'text-sm': !IconButton,
-          'text-xs': !!IconButton,
-          'ml-1': !!IconButton,
-        })}
+        className={classnames(
+          fontSize({ 'text-sm': !IconButton, 'text-xs': !!IconButton }),
+          margin({ 'ml-1': !!IconButton }),
+        )}
       >
         {children}
       </span>

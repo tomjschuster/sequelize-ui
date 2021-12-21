@@ -13,7 +13,6 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 - [ ] Refactor styles
   - [ ] breadcrumbs
-  - [ ] panel view header
 - [ ] Delete schemas
 - [ ] Error boundary
 - [ ] GitHub link

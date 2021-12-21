@@ -3,8 +3,8 @@ import { emptySchema, isNewSchema, Schema } from '@src/core/schema'
 import { DemoSchemaType, getDemoSchema, isDemoSchema } from '@src/data/schemas'
 import useAsync from '@src/ui/hooks/useAsync'
 import useSetOnce from '@src/ui/hooks/useSetOnce'
-import { classnames } from '@src/ui/styles/classnames'
-import { flexCenter, largeTitle, section } from '@src/ui/styles/utils'
+import { classnames, margin, minHeight, padding, width } from '@src/ui/styles/classnames'
+import { flexCenter, section, title } from '@src/ui/styles/utils'
 import dynamic, { LoaderComponent } from 'next/dynamic'
 import React from 'react'
 import DemoSchemaButtons from './DemoSchemaButtons'
@@ -56,10 +56,10 @@ export default function Home(): React.ReactElement {
 
   return (
     <>
-      <div className={classnames('p-6')}>
-        <div className={classnames(section, 'mb-6')}>
-          <h2 className={largeTitle}>My Schemas</h2>
-          <div className={classnames(flexCenter, 'w-full', 'min-h-20')}>
+      <div className={classnames(padding('p-6'))}>
+        <div className={classnames(section, margin('mb-6'))}>
+          <h2 className={title}>My Schemas</h2>
+          <div className={classnames(flexCenter, width('w-full'), minHeight('min-h-20'))}>
             <MySchemas
               schemas={schemas}
               loading={loading}
@@ -72,7 +72,7 @@ export default function Home(): React.ReactElement {
           </div>
         </div>
         <div className={section}>
-          <h2 className={largeTitle}>Demo Schemas</h2>
+          <h2 className={title}>Demo Schemas</h2>
           <DemoSchemas onSelectSchema={setSchema} onMouseOverSchema={setPreloaded} />
         </div>
       </div>

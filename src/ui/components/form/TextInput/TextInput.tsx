@@ -1,4 +1,4 @@
-import { Classname, classnames } from '@src/ui/styles/classnames'
+import { Classname, classnames, fontSize, padding, width } from '@src/ui/styles/classnames'
 import { Override } from '@src/utils/types'
 import React from 'react'
 import InputWrapper, { alertId } from '../shared/InputWrapper'
@@ -28,7 +28,7 @@ function TextInput({
     <InputWrapper id={id} className={className} label={label} error={error}>
       <input
         id={id}
-        className={classnames('w-full', 'text-sm', 'py-1', 'px-2')}
+        className={classnames(width('w-full'), fontSize('text-sm'), padding('py-1', 'px-2'))}
         type="text"
         value={value}
         onChange={handleChange}

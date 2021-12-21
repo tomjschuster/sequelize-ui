@@ -1,4 +1,4 @@
-import { classnames } from '@src/ui/styles/classnames'
+import { classnames, fontSize, padding, width } from '@src/ui/styles/classnames'
 import { Override } from '@src/utils/types'
 import React from 'react'
 import InputWrapper, { alertId } from '../shared/InputWrapper'
@@ -37,7 +37,11 @@ function IntegerInput({
   return (
     <InputWrapper id={id} label={label} error={error}>
       <input
-        className={classnames('py-1', 'px-2', 'p-0.5', 'w-full', 'text-sm')}
+        className={classnames(
+          padding('py-1', 'px-2', 'p-0.5'),
+          width('w-full'),
+          fontSize('text-sm'),
+        )}
         id={id}
         type="number"
         min={min}

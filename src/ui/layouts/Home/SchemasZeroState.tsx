@@ -1,4 +1,10 @@
-import { classnames } from '@src/ui/styles/classnames'
+import {
+  backgroundColor,
+  classnames,
+  fontSize,
+  fontWeight,
+  lineHeight,
+} from '@src/ui/styles/classnames'
 import { inlineButton } from '@src/ui/styles/utils'
 import React from 'react'
 
@@ -12,11 +18,16 @@ export default function SchemasZeroState({
   onMouseOver,
 }: SchemasZeroStateProps): React.ReactElement | null {
   return (
-    <p className={classnames('text-lg', 'leading-loose')}>
+    <p className={classnames(fontSize('text-lg'), lineHeight('leading-loose'))}>
       To get started,{' '}
       <button
         type="button"
-        className={classnames(inlineButton, 'text-sm', 'font-bold', 'hover:bg-green-100')}
+        className={classnames(
+          inlineButton,
+          fontSize('text-sm'),
+          fontWeight('font-bold'),
+          backgroundColor('hover:bg-green-100'),
+        )}
         onClick={onClickCreate}
         onMouseOver={onMouseOver}
         onTouchStartCapture={onMouseOver}

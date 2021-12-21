@@ -1,5 +1,5 @@
 import { DemoSchemaType, displayDemoSchemaType } from '@src/data/schemas'
-import { classnames } from '@src/ui/styles/classnames'
+import { backgroundColor, classnames, fontSize, margin } from '@src/ui/styles/classnames'
 import { panelAction, panelGrid } from '@src/ui/styles/utils'
 import React from 'react'
 import FilmIcon from '../../components/icons/Film'
@@ -21,12 +21,16 @@ export default function DemoSchemaButtons({
         <li key={schemaType}>
           <button
             type="button"
-            className={classnames(panelAction, 'text-sm', 'hover:bg-yellow-50')}
+            className={classnames(
+              panelAction,
+              fontSize('text-sm'),
+              backgroundColor('hover:bg-yellow-50'),
+            )}
             onClick={onClick.bind(null, schemaType)}
             onMouseOver={onMouseOver.bind(null, schemaType)}
             onTouchStartCapture={onMouseOver.bind(null, schemaType)}
           >
-            <span className={classnames('mr-2')}>
+            <span className={classnames(margin('mr-2'))}>
               <DemoSchemaIcon schemaType={schemaType} />
             </span>
             {displayDemoSchemaType(schemaType)}

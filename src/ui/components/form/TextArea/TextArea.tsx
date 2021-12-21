@@ -1,4 +1,4 @@
-import { classnames } from '@src/ui/styles/classnames'
+import { classnames, fontSize, width } from '@src/ui/styles/classnames'
 import React from 'react'
 import InputWrapper, { alertId } from '../shared/InputWrapper'
 import { FieldProps } from '../shared/types'
@@ -26,7 +26,7 @@ function TextArea({
     <InputWrapper id={id} label={label} error={error}>
       <textarea
         id={id}
-        className={classnames('w-full', 'text-sm')}
+        className={classnames(width('w-full'), fontSize('text-sm'))}
         value={value}
         onChange={handleChange}
         aria-invalid={!!error}

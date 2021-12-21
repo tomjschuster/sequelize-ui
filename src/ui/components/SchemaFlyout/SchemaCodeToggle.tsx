@@ -1,4 +1,4 @@
-import { classnames } from '@src/ui/styles/classnames'
+import { classnames, margin, width } from '@src/ui/styles/classnames'
 import { flexCenter } from '@src/ui/styles/utils'
 import React from 'react'
 import ToggleButton from '../form/ToggleButton'
@@ -25,9 +25,9 @@ export default function SchemaCodeToggle({
       options={{ code: true, schema: false }}
       disabled={() => disabled}
       display={(v) => (
-        <span className={classnames(flexCenter, 'w-16')}>
+        <span className={classnames(flexCenter, width('w-16'))}>
           {v ? <CodeIcon /> : <CubeIcon />}
-          <span className={classnames('ml-1')}>{v ? 'Code' : 'Schema'}</span>
+          <span className={classnames(margin('ml-1'))}>{v ? 'Code' : 'Schema'}</span>
         </span>
       )}
       onChange={handleChange}

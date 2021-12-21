@@ -1,4 +1,11 @@
-import { classnames } from '@src/ui/styles/classnames'
+import {
+  backgroundColor,
+  classnames,
+  display,
+  fontSize,
+  maxWidth,
+  padding,
+} from '@src/ui/styles/classnames'
 import { inlineButton, list, section, text } from '@src/ui/styles/utils'
 import React from 'react'
 
@@ -7,7 +14,14 @@ type SchemasErrorProps = {
 }
 export default function SchemasError({ onClickClearData }: SchemasErrorProps): React.ReactElement {
   return (
-    <div className={classnames(section, 'p-4', 'max-w-lg', 'bg-red-50')}>
+    <div
+      className={classnames(
+        section,
+        padding('p-4'),
+        maxWidth('max-w-lg'),
+        backgroundColor('bg-red-50'),
+      )}
+    >
       <p className={text}>Sorry, there was a problem loading your previously saved schemas.</p>
       <p className={text}>
         Please try the following:
@@ -17,14 +31,16 @@ export default function SchemasError({ onClickClearData }: SchemasErrorProps): R
             <button
               type="button"
               onClick={onClickClearData}
-              className={classnames(inlineButton, 'hover:bg-green-100')}
+              className={classnames(inlineButton, backgroundColor('hover:bg-green-100'))}
             >
               Reset your data
             </button>
           </li>
           <li>
-            <pre className={classnames('inline', 'text-xs')}>localStorage.clear()</pre> in your
-            console
+            <pre className={classnames(display('inline'), fontSize('text-xs'))}>
+              localStorage.clear()
+            </pre>{' '}
+            in your console
           </li>
         </ul>
       </p>

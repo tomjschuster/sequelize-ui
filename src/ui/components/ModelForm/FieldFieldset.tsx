@@ -16,7 +16,18 @@ import IntegerInput from '@src/ui/components/form/IntegerInput'
 import Select from '@src/ui/components/form/Select'
 import TextInput from '@src/ui/components/form/TextInput'
 import TrashIcon from '@src/ui/components/icons/Trash'
-import { classnames } from '@src/ui/styles/classnames'
+import {
+  alignSelf,
+  classnames,
+  display,
+  flexDirection,
+  gridColumn,
+  gridRow,
+  inset,
+  justifyContent,
+  padding,
+  position,
+} from '@src/ui/styles/classnames'
 import { fieldsetGrid } from '@src/ui/styles/utils'
 import React from 'react'
 import IconButton from '../form/IconButton'
@@ -133,7 +144,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
   return (
     <fieldset className={classnames(fieldsetGrid)}>
       <IconButton
-        className={classnames('absolute', 'top-0', 'right-0', 'p-1')}
+        className={classnames(position('absolute'), inset('top-0', 'right-0'), padding('p-1'))}
         label="delete"
         icon={TrashIcon}
         iconProps={{ size: 6 }}
@@ -141,7 +152,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
       />
       <TextInput
         id={fieldNameId(field)}
-        className={classnames('col-span-12')}
+        className={classnames(gridColumn('col-span-12'))}
         label="Field name"
         value={field.name}
         error={errors?.name}
@@ -149,14 +160,14 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
       />
       <Select<DataTypeType>
         id={`field-type-${field.id}`}
-        className={classnames('col-span-6')}
+        className={classnames(gridColumn('col-span-6'))}
         label="Data type"
         options={DataTypeType}
         display={displayDataTypeType}
         value={field.type.type}
         onChange={handleChangeDataType}
       />
-      <div className={classnames('col-span-6', 'row-span-4', 'flex')}>
+      <div className={classnames(gridColumn('col-span-6'), gridRow('row-span-4'), display('flex'))}>
         {isStringType(field.type) && (
           <IntegerInput
             id={`field-string-length-${field.id}`}
@@ -168,7 +179,15 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
           />
         )}
         {isNumberType(field.type) && (
-          <div className={classnames('flex', 'flex-col', 'justify-center', 'self-start', 'pt-4')}>
+          <div
+            className={classnames(
+              display('flex'),
+              flexDirection('flex-col'),
+              justifyContent('justify-center'),
+              alignSelf('self-start'),
+              padding('pt-4'),
+            )}
+          >
             <Checkbox
               id={`field-unsigned-${field.id}`}
               label="Unsigned"
@@ -197,7 +216,15 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         )}
 
         {isDateTimeType(field.type) && (
-          <div className={classnames('flex', 'flex-col', 'justify-center', 'self-start', 'pt-4')}>
+          <div
+            className={classnames(
+              display('flex'),
+              flexDirection('flex-col'),
+              justifyContent('justify-center'),
+              alignSelf('self-start'),
+              padding('pt-4'),
+            )}
+          >
             <Checkbox
               id={`field-default-now-${field.id}`}
               label="Default to now"
@@ -222,7 +249,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         <>
           <IntegerInput
             id={`field-precision-${field.id}`}
-            className={classnames('col-span-6')}
+            className={classnames(gridColumn('col-span-6'))}
             label="Precision"
             value={field.type.precision?.precision}
             min={1}
@@ -231,7 +258,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
           />
           <IntegerInput
             id={`field-scale-${field.id}`}
-            className={classnames('col-span-6')}
+            className={classnames(gridColumn('col-span-6'))}
             label="Precision"
             value={field.type.precision?.scale}
             min={0}
@@ -240,7 +267,9 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
           />
         </>
       )}
-      <div className={classnames('col-span-6', 'flex', 'flex-col')}>
+      <div
+        className={classnames(gridColumn('col-span-6'), display('flex'), flexDirection('flex-col'))}
+      >
         <Checkbox
           id={`field-pk-${field.id}`}
           label="Primary key"

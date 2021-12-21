@@ -1,4 +1,4 @@
-import { Classname, classnames } from '@src/ui/styles/classnames'
+import { Classname, classnames, cursor, fontSize, padding, width } from '@src/ui/styles/classnames'
 import { Override } from '@src/utils/types'
 import React from 'react'
 import InputWrapper from '../shared/InputWrapper'
@@ -32,7 +32,12 @@ function Select<T>({
   const select = (
     <select
       id={id}
-      className={classnames('p-1', 'px-2', 'w-full', 'cursor-pointer', 'text-sm')}
+      className={classnames(
+        padding('p-1', 'px-2'),
+        width('w-full'),
+        cursor('cursor-pointer'),
+        fontSize('text-sm'),
+      )}
       onChange={handleChange}
       value={lookupOptionKey(options, value)}
       aria-invalid={!!error}

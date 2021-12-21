@@ -1,14 +1,20 @@
 import { Model, Schema } from '@src/core/schema'
-import { classnames } from '@src/ui/styles/classnames'
-import { flexCenterBetween, largeTitle, panel, panelGrid, section } from '@src/ui/styles/utils'
+import {
+  backgroundColor,
+  classnames,
+  display,
+  fontSize,
+  margin,
+  padding,
+  textDecoration,
+} from '@src/ui/styles/classnames'
+import { flexCenterBetween, panel, panelGrid, section, subtitle, title } from '@src/ui/styles/utils'
 import { titleCase } from '@src/utils/string'
 import React from 'react'
 import IconButton from '../form/IconButton'
 import PanelButton from '../form/PanelButton'
 import PlusCircleIcon from '../icons/Plus'
 import SelectorIcon from '../icons/Selector'
-
-export const subtitle = classnames('text-xl', 'mb-2')
 
 type SchemaViewProps = {
   schema: Schema
@@ -22,24 +28,31 @@ function SchemaView({
   onClickAddModel,
 }: SchemaViewProps): React.ReactElement {
   return (
-    <div className={classnames('p-6', 'pt-2')}>
-      <div className={classnames('mb-4', 'flex', 'text-sm')}>
+    <div className={classnames(padding('p-6', 'pt-2'))}>
+      <div className={classnames(margin('mb-4'), display('flex'), fontSize('text-sm'))}>
         <span>{titleCase(schema.name)} (schema)</span>
       </div>
       <div className={classnames(section)}>
-        <h2 className={classnames(largeTitle)}>Schema</h2>
-        <div className={classnames('mb-11')}>
-          <p className={classnames('text-lg')}>Name: {titleCase(schema.name)}</p>
+        <h2 className={classnames(title)}>Schema</h2>
+        <div className={classnames(margin('mb-11'))}>
+          <p className={classnames(fontSize('text-lg'))}>Name: {titleCase(schema.name)}</p>
         </div>
       </div>
       <div className={classnames(section)}>
         <h3 className={classnames(subtitle)}>Models</h3>
         <ul className={classnames(panelGrid)}>
           {schema.models.map((m) => (
-            <li key={m.id} className={classnames(panel, flexCenterBetween, 'px-2', 'py-3')}>
+            <li
+              key={m.id}
+              className={classnames(panel, flexCenterBetween, padding('px-2', 'py-3'))}
+            >
               <button
                 tabIndex={-1}
-                className={classnames('hover:underline', 'px-1.5', 'text-lg')}
+                className={classnames(
+                  textDecoration('hover:underline'),
+                  padding('px-1.5'),
+                  fontSize('text-lg'),
+                )}
                 onClick={() => onClickModel(m)}
               >
                 {titleCase(m.name)}
@@ -54,7 +67,7 @@ function SchemaView({
           ))}
           <li>
             <PanelButton
-              className={classnames('hover:bg-green-50')}
+              className={classnames(backgroundColor('hover:bg-green-50'))}
               label="Create a new model"
               icon={PlusCircleIcon}
               iconProps={{ size: 6 }}

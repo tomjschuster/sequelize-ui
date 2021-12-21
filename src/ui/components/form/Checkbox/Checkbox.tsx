@@ -1,4 +1,10 @@
-import { classnames } from '@src/ui/styles/classnames/__generated__/tailwindcss-classnames'
+import {
+  alignItems,
+  classnames,
+  display,
+  fontSize,
+  padding,
+} from '@src/ui/styles/classnames/__generated__/tailwindcss-classnames'
 import { Override } from '@src/utils/types'
 import React from 'react'
 import { FieldProps } from '../shared/types'
@@ -16,7 +22,7 @@ function Checkbox({ id, label, checked, onChange, ...rest }: CheckboxProps): Rea
   )
 
   return (
-    <label className={classnames('flex', 'items-center')} htmlFor={id}>
+    <label className={classnames(display('flex'), alignItems('items-center'))} htmlFor={id}>
       <input
         id={id}
         type="checkbox"
@@ -25,7 +31,7 @@ function Checkbox({ id, label, checked, onChange, ...rest }: CheckboxProps): Rea
         {...autofillDisable}
         {...rest}
       />
-      <span className={classnames('pl-2', 'text-sm')}>{label}</span>
+      <span className={classnames(padding('pl-2'), fontSize('text-sm'))}>{label}</span>
     </label>
   )
 }

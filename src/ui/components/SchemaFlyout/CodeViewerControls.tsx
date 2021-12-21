@@ -3,7 +3,18 @@ import { FileItem, FileSystemItem, itemName } from '@src/core/files/fileSystem'
 import useIsOpen from '@src/ui/hooks/useIsOpen'
 import useOnClickOutside from '@src/ui/hooks/useOnClickOutside'
 import { useAlert } from '@src/ui/lib/alert'
-import { classnames } from '@src/ui/styles/classnames'
+import {
+  backgroundColor,
+  borderColor,
+  borderRadius,
+  borderWidth,
+  boxShadow,
+  classnames,
+  inset,
+  padding,
+  position,
+  width,
+} from '@src/ui/styles/classnames'
 import React from 'react'
 import DbOptionsForm from '../DbOptionsForm'
 import IconButton from '../form/IconButton'
@@ -92,24 +103,20 @@ export default function CodeViewerControls({
         <div
           ref={dbOptionsRef}
           className={classnames(
-            'absolute',
-            'top-full',
-            'right-0',
-            'w-screen',
-            'md:w-auto',
-            'lg:w-auto',
-            'p-4',
-            'pt-10',
-            'border',
-            'border-gray-900',
-            'rounded-lg',
-            'bg-gray-50',
-            'shadow-2xl',
+            position('absolute'),
+            inset('top-full', 'right-0'),
+            width('w-screen', 'md:w-auto', 'lg:w-auto'),
+            padding('p-4', 'pt-10'),
+            borderWidth('border'),
+            borderColor('border-gray-900'),
+            borderRadius('rounded-lg'),
+            backgroundColor('bg-gray-50'),
+            boxShadow('shadow-2xl'),
           )}
         >
           <IconButton
             label="close settings"
-            className={classnames('absolute', 'right-1', 'top-1')}
+            className={classnames(position('absolute'), inset('right-1', 'top-1'))}
             icon={CloseIcon}
             iconProps={{ size: 6 }}
             onClick={closeDbOptions}

@@ -16,7 +16,7 @@ import { AssociationErrors } from '@src/core/validation/schema'
 import Radio from '@src/ui/components/form/Radio'
 import Select from '@src/ui/components/form/Select'
 import TextInput from '@src/ui/components/form/TextInput'
-import { classnames } from '@src/ui/styles/classnames'
+import { classnames, gridColumn, height, inset, padding, position } from '@src/ui/styles/classnames'
 import { fieldsetGrid } from '@src/ui/styles/utils'
 import { plural, singular, snakeCase } from '@src/utils/string'
 import React from 'react'
@@ -157,9 +157,9 @@ function AssociationFieldset({
   const handleDelete = React.useCallback(() => onDelete(association.id), [onDelete, association.id])
 
   return (
-    <fieldset className={classnames(fieldsetGrid, 'pb-0')}>
+    <fieldset className={classnames(fieldsetGrid, padding('pb-0'))}>
       <IconButton
-        className={classnames('absolute', 'top-0', 'right-0', 'p-1')}
+        className={classnames(position('absolute'), inset('top-0', 'right-0'), padding('p-1'))}
         label="delete"
         icon={TrashIcon}
         iconProps={{ size: 6 }}
@@ -167,7 +167,7 @@ function AssociationFieldset({
       />
       <Select
         id={associationTypeId(association)}
-        className={classnames('col-span-6')}
+        className={classnames(gridColumn('col-span-6'))}
         label="Type"
         options={AssociationTypeType}
         display={displayAssociationTypeType}
@@ -176,7 +176,7 @@ function AssociationFieldset({
       />
       <Select
         id={`association-target-model-${association.id}`}
-        className={classnames('col-span-6')}
+        className={classnames(gridColumn('col-span-6'))}
         label="Target model"
         options={modelOptions}
         display={modelName}
@@ -185,7 +185,7 @@ function AssociationFieldset({
       />
       <TextInput
         id={`association-alias-${association.id}`}
-        className={classnames('col-span-6')}
+        className={classnames(gridColumn('col-span-6'))}
         label="as"
         value={association.alias || ''}
         placeholder={aliasPlaceholder(association, targetModel)}
@@ -194,17 +194,17 @@ function AssociationFieldset({
       />
       <TextInput
         id={`association-fk-${association.id}`}
-        className={classnames('col-span-6')}
+        className={classnames(gridColumn('col-span-6'))}
         label="Foreign key"
         value={association.foreignKey || ''}
         error={errors?.foreignKey}
         onChange={handleChangeForeignKey}
       />
-      {!isManytoMany(association) && <div className={classnames('h-30')} />}
+      {!isManytoMany(association) && <div className={classnames(height('h-30'))} />}
       {isManytoMany(association) && schema.models.length > 0 && (
         <>
           <Radio
-            className={classnames('col-span-12', 'pb-5')}
+            className={classnames(gridColumn('col-span-12'), padding('pb-5'))}
             options={ThroughType}
             value={association.type.through.type}
             display={displayThroughType}
@@ -213,7 +213,7 @@ function AssociationFieldset({
           {isThroughModel(association.type.through) && (
             <Select
               id={`association-through-model-${association.id}`}
-              className={classnames('col-span-6')}
+              className={classnames(gridColumn('col-span-6'))}
               label="Through model"
               options={modelOptions}
               display={modelName}
@@ -224,7 +224,7 @@ function AssociationFieldset({
           {isThroughTable(association.type.through) && (
             <TextInput
               id={`association-through-table-${association.id}`}
-              className={classnames('col-span-6')}
+              className={classnames(gridColumn('col-span-6'))}
               label="Through table"
               value={association.type.through.table}
               error={errors?.throughTable}
@@ -233,7 +233,7 @@ function AssociationFieldset({
           )}
           <TextInput
             id={`association-target-fk-${association.id}`}
-            className={classnames('col-span-6')}
+            className={classnames(gridColumn('col-span-6'))}
             label="Target FK"
             value={association.type.targetFk || ''}
             error={errors?.targetForeignKey}

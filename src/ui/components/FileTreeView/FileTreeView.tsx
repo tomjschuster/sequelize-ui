@@ -7,7 +7,22 @@ import {
   itemName,
 } from '@src/core/files/fileSystem'
 import * as FileTree from '@src/core/files/fileTree'
-import { classnames } from '@src/ui/styles/classnames'
+import {
+  alignItems,
+  backgroundColor,
+  borderColor,
+  borderWidth,
+  classnames,
+  cursor,
+  display,
+  fontSize,
+  fontWeight,
+  lineHeight,
+  outlineStyle,
+  overflow,
+  whitespace,
+  width,
+} from '@src/ui/styles/classnames'
 import { focusById } from '@src/utils/dom'
 import React from 'react'
 import ChevronIcon, { ChevronDirection } from '../icons/Chevron'
@@ -40,7 +55,7 @@ function FileTreeView({ fileTree, onSelect, onKeyDown }: FileTreeProps): React.R
   return (
     <ul
       role="tree"
-      className={classnames('whitespace-nowrap', 'overflow-x-scroll')}
+      className={classnames(whitespace('whitespace-nowrap'), overflow('overflow-x-scroll'))}
       onKeyDown={onKeyDown}
     >
       <FileTreeListItem item={root} depth={1} index={1} fileTree={fileTree} onSelect={onSelect} />
@@ -82,24 +97,21 @@ function FileTreeItem({
         tabIndex={focused ? 0 : -1}
         id={pathId(path)}
         className={classnames(
-          'flex',
-          'items-center',
-          'w-full',
-          'text-sm',
-          'leading-relaxed',
-          'cursor-pointer',
-          'block',
-          'border-transparent',
-          'border-2',
-          'focus-visible:outline-none',
-          'focus:outline-none',
-          {
-            'font-semibold': active,
+          display('flex'),
+          alignItems('items-center'),
+          width('w-full'),
+          fontSize('text-sm'),
+          lineHeight('leading-relaxed'),
+          cursor('cursor-pointer'),
+          display('block'),
+          borderColor('border-transparent', { 'focus:border-black': focused }),
+          borderWidth('border-2', { 'border-t': depth === 1 }),
+          outlineStyle('focus-visible:outline-none', 'focus:outline-none'),
+          fontWeight({ 'font-semibold': active }),
+          backgroundColor({
             'hover:bg-gray-200': !active,
             'bg-indigo-100': active,
-            'border-t': depth === 1,
-            'focus:border-black': focused,
-          },
+          }),
         )}
         style={{ paddingLeft: depth === 1 ? '0.25rem' : `calc(${depth - 1} * 0.75rem + 0.25rem)` }}
         onClick={handleClick}
@@ -117,7 +129,7 @@ function FileTreeItem({
         {itemName(item)}
       </span>
       {isDirectory(item) && item.files.length > 0 && (
-        <ul role="group" className={classnames({ hidden: !expanded })}>
+        <ul role="group" className={classnames(display({ hidden: !expanded }))}>
           {item.files
             .slice()
             .sort(compareItems)

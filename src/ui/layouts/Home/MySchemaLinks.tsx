@@ -1,6 +1,21 @@
 import { Schema } from '@src/core/schema'
 import PanelButton from '@src/ui/components/form/PanelButton'
-import { classnames } from '@src/ui/styles/classnames'
+import {
+  alignItems,
+  backgroundColor,
+  classnames,
+  display,
+  flexDirection,
+  flexWrap,
+  fontSize,
+  fontWeight,
+  height,
+  margin,
+  minHeight,
+  overflow,
+  textOverflow,
+  width,
+} from '@src/ui/styles/classnames'
 import { panelAction, panelGrid } from '@src/ui/styles/utils'
 import { now, TimeGranularity, timeSince } from '@src/utils/dateTime'
 import React from 'react'
@@ -26,7 +41,7 @@ export default function MySchemaButtons({
       <li>
         <PanelButton
           label="Create a new schema"
-          className={classnames('hover:bg-green-50')}
+          className={classnames(backgroundColor('hover:bg-green-50'))}
           icon={PlusCircleIcon}
           iconProps={{ size: 6 }}
           onClick={onClickCreate}
@@ -64,11 +79,11 @@ function MySchemaButton({ schema, onClick, onMouseOver }: MySchemaButtonProps): 
       type="button"
       className={classnames(
         panelAction,
-        'flex-wrap',
-        'text-sm',
-        'min-h-20',
-        'h-full',
-        'hover:bg-indigo-50',
+        flexWrap('flex-wrap'),
+        fontSize('text-sm'),
+        minHeight('min-h-20'),
+        height('h-full'),
+        backgroundColor('hover:bg-indigo-50'),
       )}
       onClick={handleClick}
       onMouseOver={onMouseOver}
@@ -76,16 +91,16 @@ function MySchemaButton({ schema, onClick, onMouseOver }: MySchemaButtonProps): 
     >
       <span
         className={classnames(
-          'font-bold',
-          'overflow-ellipsis',
-          'overflow-hidden',
-          'w-full',
-          'mb-2',
+          fontWeight('font-bold'),
+          overflow('overflow-hidden'),
+          textOverflow('text-ellipsis'),
+          width('w-full'),
+          margin('mb-2'),
         )}
       >
         {schema.name || 'Untitled'}
       </span>
-      <span className={classnames('flex', 'flex-col', 'w-full')}>
+      <span className={classnames(display('flex'), flexDirection('flex-col'), width('w-full'))}>
         <MySchemaButtonsMetaItem icon={<CollectionIcon size={3} />}>
           {modelCount} {modelCount === 1 ? 'model' : 'models'}
         </MySchemaButtonsMetaItem>
@@ -106,8 +121,8 @@ function MySchemaButtonsMetaItem({
   children,
 }: MySchemaButtonsMetaItemProps): React.ReactElement {
   return (
-    <span className={classnames('flex', 'items-center', 'text-xs')}>
-      <span className={classnames('mr-1')}>{icon}</span>
+    <span className={classnames(display('flex'), alignItems('items-center'), fontSize('text-xs'))}>
+      <span className={classnames(margin('mr-1'))}>{icon}</span>
       {children}
     </span>
   )

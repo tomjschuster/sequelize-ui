@@ -1,8 +1,8 @@
 import { emptyModel, Model, Schema } from '@src/core/schema'
 import { SchemaErrors } from '@src/core/validation/schema'
 import usePrevious from '@src/ui/hooks/usePrevious'
-import { classnames } from '@src/ui/styles/classnames'
-import { largeTitle, panel, panelGrid, section } from '@src/ui/styles/utils'
+import { backgroundColor, classnames, display, padding, width } from '@src/ui/styles/classnames'
+import { panel, panelGrid, section, subtitle, title } from '@src/ui/styles/utils'
 import { focusById } from '@src/utils/dom'
 import React from 'react'
 import IconButton from '../form/IconButton'
@@ -11,8 +11,6 @@ import { autofillDisable } from '../form/shared/utils'
 import TextInput from '../form/TextInput'
 import PlusCircleIcon from '../icons/Plus'
 import TrashIcon from '../icons/Trash'
-
-export const subtitle = classnames('text-xl', 'mb-2')
 
 type SchemaFormProps = {
   schema: Schema
@@ -75,12 +73,12 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
   return (
     <form
       onSubmit={(evt) => evt.preventDefault()}
-      className={classnames('p-6', 'pt-11')}
+      className={classnames(padding('p-6', 'pt-11'))}
       {...autofillDisable}
     >
       <div className={classnames(section)}>
-        <h2 className={classnames(largeTitle)}>Schema</h2>
-        <div className={classnames('sm:w-1/2')}>
+        <h2 className={classnames(title)}>Schema</h2>
+        <div className={classnames(width('sm:w-1/2'))}>
           <TextInput
             id={schemaNameId()}
             label="Name"
@@ -94,10 +92,10 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
         <h3 className={classnames(subtitle)}>Models</h3>
         <ul className={classnames(panelGrid)}>
           {schema.models.map((m) => (
-            <li key={m.id} className={classnames(panel, 'flex', 'p-1', 'pl-4')}>
+            <li key={m.id} className={classnames(panel, display('flex'), padding('p-1', 'pl-4'))}>
               <TextInput
                 id={modelNameId(m)}
-                className={classnames('pt-4')}
+                className={classnames(padding('pt-4'))}
                 label="Name"
                 error={errors.models[m.id]?.name}
                 value={m.name}
@@ -115,7 +113,7 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
           <li>
             <PanelButton
               id={createNewModelId()}
-              className={classnames('hover:bg-green-50')}
+              className={classnames(backgroundColor('hover:bg-green-50'))}
               label="Create a new model"
               icon={PlusCircleIcon}
               iconProps={{ size: 6 }}

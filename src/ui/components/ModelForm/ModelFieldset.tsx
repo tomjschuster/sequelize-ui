@@ -1,7 +1,7 @@
 import { Model } from '@src/core/schema'
 import { ModelErrors } from '@src/core/validation/schema'
 import TextInput from '@src/ui/components/form/TextInput'
-import { classnames } from '@src/ui/styles/classnames'
+import { classnames, width } from '@src/ui/styles/classnames'
 import React from 'react'
 
 type ModelFieldsetProps = {
@@ -17,8 +17,8 @@ function ModelFieldset({ name, errors, onChange }: ModelFieldsetProps): React.Re
   )
 
   return (
-    <fieldset className={classnames('w-full')}>
-      <div className={classnames('sm:w-1/2')}>
+    <fieldset className={classnames(width('w-full'))}>
+      <div className={classnames(width('sm:w-1/2'))}>
         <TextInput
           id={modelNameId()}
           label="Name"

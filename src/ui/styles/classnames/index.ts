@@ -1,4 +1,4 @@
-export { default as classnames } from './__generated__/tailwindcss-classnames'
+export * from './__generated__/tailwindcss-classnames'
 export type { Classname }
 import type { TArg as Classname } from './__generated__/tailwindcss-classnames'
 

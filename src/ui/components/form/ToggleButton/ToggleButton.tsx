@@ -1,4 +1,19 @@
-import { classnames } from '@src/ui/styles/classnames'
+import {
+  alignItems,
+  backgroundColor,
+  borderColor,
+  borderRadius,
+  borderWidth,
+  classnames,
+  display,
+  fontSize,
+  fontWeight,
+  outlineColor,
+  outlineStyle,
+  padding,
+  textColor,
+  width,
+} from '@src/ui/styles/classnames'
 import React from 'react'
 import { lookupOptionValue, optionsToList } from '../shared/options'
 import { CommonOptionsProps } from '../shared/types'
@@ -11,7 +26,7 @@ type ToggleButtonProps<T> = CommonOptionsProps<T> & {
 function ToggleButton<T>({
   value,
   options,
-  display,
+  display: displayValue,
   disabled = () => false,
   onChange,
 }: ToggleButtonProps<T>): React.ReactElement {
@@ -21,7 +36,7 @@ function ToggleButton<T>({
   }
 
   return (
-    <div className={classnames('flex', 'w-full')} role="group">
+    <div className={classnames(display('flex'), width('w-full'))} role="group">
       {optionsToList(options).map(([k, v]) => {
         const selected = v === value
 
@@ -29,23 +44,18 @@ function ToggleButton<T>({
           <button
             key={k}
             className={classnames(
-              'flex',
-              'items-center',
-              'text-xs',
-              'p-1',
-              'border',
-              'border-gray-400',
-              'border-l-0',
-              'first:border-l',
-              'first:rounded-l',
-              'last:rounded-r',
-              'focus:outline-none',
-              'focus-visible:outline-black',
-              {
-                'text-blue-900': selected,
-                'bg-blue-50': selected,
-                'font-semibold': selected,
-              },
+              display('flex'),
+              alignItems('items-center'),
+              fontSize('text-xs'),
+              padding('p-1'),
+              borderWidth('border', 'border-l-0', 'first:border-l'),
+              borderColor('border-gray-400'),
+              borderRadius('first:rounded-l', 'last:rounded-r'),
+              outlineStyle('focus:outline-none'),
+              outlineColor('focus-visible:outline-black'),
+              textColor({ 'text-blue-900': selected }),
+              backgroundColor({ 'bg-blue-50': selected }),
+              fontWeight({ 'font-semibold': selected }),
             )}
             type="button"
             aria-pressed={selected ? 'true' : 'false'}
@@ -53,7 +63,7 @@ function ToggleButton<T>({
             disabled={disabled(v)}
             onClick={handleChange(k)}
           >
-            {display(v)}
+            {displayValue(v)}
           </button>
         )
       })}
