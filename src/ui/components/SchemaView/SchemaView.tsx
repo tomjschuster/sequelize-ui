@@ -11,6 +11,7 @@ import {
 import { flexCenterBetween, panel, panelGrid, section, subtitle, title } from '@src/ui/styles/utils'
 import { titleCase } from '@src/utils/string'
 import React from 'react'
+import Breadcrumbs from '../Breadcrumbs'
 import IconButton from '../form/IconButton'
 import PanelButton from '../form/PanelButton'
 import PlusCircleIcon from '../icons/Plus'
@@ -29,6 +30,7 @@ function SchemaView({
 }: SchemaViewProps): React.ReactElement {
   return (
     <div className={classnames(padding('p-6', 'pt-2'))}>
+      <Breadcrumbs items={[]} current={`${titleCase(schema.name)} (schema)`} />
       <div className={classnames(margin('mb-4'), display('flex'), fontSize('text-sm'))}>
         <span>{titleCase(schema.name)} (schema)</span>
       </div>

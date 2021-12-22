@@ -1,4 +1,4 @@
-import { Model, Schema } from '@src/core/schema'
+import { Field, Model, Schema } from '@src/core/schema'
 import { ModelErrors, SchemaErrors } from '@src/core/validation/schema'
 
 export const enum SchemaFlyoutStateType {
@@ -24,5 +24,6 @@ export type SchemaFlyoutState =
       model: Model
       errors: ModelErrors
       newField?: boolean
+      initialField?: Field
       newAssociation?: boolean
     }

@@ -11,19 +11,24 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Refactor styles
-  - [ ] breadcrumbs
-- [ ] Delete schemas
+- [ ] Action menu
+  - [ ] Delete/edit assocs via action menu
+  - [ ] Delete/edit model via action menu
+  - [ ] Refactor action menu
+- [ ] Notifications
+  - [ ] CRUD specific messages
+  - [ ] Fix UI
+  - [ ] Aria attrs
 - [ ] Error boundary
 - [ ] GitHub link
 - [ ] a11y
-  - [ ] Alerts aria attrs
-  - [ ] Form errors aria attrs
+  - [ ] Form errors
 - [ ] Home page copy
 - [ ] demo schema tooltips
 - [ ] migrate old sequelize ui
 - [ ] Dark mode
 - [ ] db compatibility warnings
+- [ ] Schema Flyout context
 
 #### Codegen
 

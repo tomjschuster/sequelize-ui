@@ -1,4 +1,4 @@
-import { classnames, height, toClassname, width } from '@src/ui/styles/classnames'
+import { Classname, classnames, height, width } from '@src/ui/styles/classnames'
 import React from 'react'
 
 export type SvgProps = {
@@ -6,7 +6,7 @@ export type SvgProps = {
   fill?: string
   stroke?: string
   strokeWidth?: number
-  className?: string
+  className?: Classname
   size?: SvgSize
 }
 
@@ -44,7 +44,7 @@ export default function Svg({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={classnames(height(`h-${size}`), width(`w-${size}`), toClassname(className))}
+      className={classnames(height(`h-${size}`), width(`w-${size}`), className)}
       fill={fill}
       viewBox="0 0 24 24"
       stroke={stroke}

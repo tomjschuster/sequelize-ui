@@ -1,6 +1,6 @@
 import { DbOptions } from '@src/core/database'
 import { activeFilePath, FileTree } from '@src/core/files/fileTree'
-import { isNewSchema, Model, Schema } from '@src/core/schema'
+import { Field, isNewSchema, Model, Schema } from '@src/core/schema'
 import {
   emptyModelErrors,
   emptySchemaErrors,
@@ -40,6 +40,8 @@ type UseSchemaFlyoutResult = {
   updateModel: (model: Model) => void
   addModel: () => void
   addField: () => void
+  editField: (field: Field) => void
+  deleteField: (field: Field) => void
   addAssociation: () => void
   save: () => void
   cancel: () => void
@@ -237,6 +239,46 @@ export function useSchemaFlyout({
     }
   }, [schema, schemas, state, onChange, exitEdit, onExit])
 
+  const deleteField = React.useCallback(
+    async (field: Field) => {
+      if (state.type === SchemaFlyoutStateType.VIEW_MODEL) {
+        const model: Model = {
+          ...state.model,
+          fields: state.model.fields.filter((f) => f.id !== field.id),
+        }
+
+        const updatedSchema = await onChange({
+          ...schema,
+          models: schema.models.map((m) => (m.id === state.model.id ? model : m)),
+        })
+
+        const updatedModel = updatedSchema.models.find((m) => m.id === model.id)
+
+        if (updatedModel) {
+          setState({
+            type: SchemaFlyoutStateType.VIEW_MODEL,
+            model: updatedModel,
+          })
+        }
+
+        return
+      }
+    },
+    [schema, state, onChange],
+  )
+
+  const editField = React.useCallback(async (field: Field) => {
+    const model = schema.models.find((m) => m.fields.some((f) => f.id === field.id))
+    if (model) {
+      setState({
+        type: SchemaFlyoutStateType.EDIT_MODEL,
+        model,
+        initialField: field,
+        errors: emptyModelErrors,
+      })
+    }
+  }, [])
+
   const delete_ = React.useCallback(async () => {
     if (
       state.type === SchemaFlyoutStateType.VIEW_SCHEMA ||
@@ -289,6 +331,8 @@ export function useSchemaFlyout({
     updateSchema,
     addModel,
     addField,
+    editField,
+    deleteField,
     addAssociation,
     viewCode,
     viewSchema,

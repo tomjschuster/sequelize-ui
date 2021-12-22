@@ -1,19 +1,54 @@
 import { displayDataType, Field } from '@src/core/schema'
-import { classnames, fontWeight, padding } from '@src/ui/styles/classnames'
+import {
+  classnames,
+  display,
+  fontWeight,
+  inset,
+  justifyContent,
+  padding,
+  position,
+} from '@src/ui/styles/classnames'
 import { list, panelHeader } from '@src/ui/styles/utils'
 import { noCase } from '@src/utils/string'
 import React from 'react'
+import PencilIcon from '../icons/Pencil'
+import TrashIcon from '../icons/Trash'
+import MeatballMenu from '../MeatballMenu'
 
 type FieldViewProps = {
   field: Field
+  onClickEdit: (field: Field) => void
+  onClickDelete: (field: Field) => void
 }
-function FieldView({ field }: FieldViewProps) {
+function FieldView({ field, onClickEdit, onClickDelete }: FieldViewProps) {
   return (
     <>
-      <p className={classnames(panelHeader)}>
+      <p
+        className={classnames(
+          panelHeader,
+          display('flex'),
+          justifyContent('justify-between'),
+          position('relative'),
+        )}
+      >
         <span className={classnames(padding('px-1'), fontWeight('font-bold'))}>
           {noCase(field.name)}
         </span>
+        <MeatballMenu
+          className={classnames(position('absolute'), inset('right-0', 'top-1', 'right-1'))}
+          items={[
+            {
+              icon: PencilIcon,
+              label: 'Edit',
+              onClick: () => onClickEdit(field),
+            },
+            {
+              icon: TrashIcon,
+              label: 'Delete',
+              onClick: () => onClickDelete(field),
+            },
+          ]}
+        />
       </p>
       <ul className={classnames(list, padding('p-2', 'pl-4'))}>
         <li>{displayDataType(field.type)}</li>

@@ -37,6 +37,13 @@ export const flexCenter = classnames(
   justifyContent('justify-center'),
 )
 
+export const flexCenterColumn = classnames(
+  display('flex'),
+  alignItems('items-center'),
+  justifyContent('justify-center'),
+  flexDirection('flex-col'),
+)
+
 export const flexCenterBetween = classnames(
   display('flex'),
   alignItems('items-center'),

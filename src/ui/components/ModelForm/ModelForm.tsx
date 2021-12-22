@@ -17,6 +17,7 @@ type ModelFormProps = {
   schema: Schema
   newField?: boolean
   newAssociation?: boolean
+  initialField?: Field
   errors: ModelErrors
   onChange: (model: Model) => void
 }
@@ -26,6 +27,7 @@ export default function ModelForm({
   schema,
   newField,
   newAssociation,
+  initialField,
   errors,
   onChange,
 }: ModelFormProps): React.ReactElement {
@@ -39,6 +41,11 @@ export default function ModelForm({
 
     if (newAssociation) {
       handleClickAddAssociation()
+      return
+    }
+
+    if (initialField) {
+      focusById(fieldNameId(initialField))
       return
     }
 

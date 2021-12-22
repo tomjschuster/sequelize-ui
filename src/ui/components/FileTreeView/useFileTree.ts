@@ -1,6 +1,7 @@
 import { FileSystemItem } from '@src/core/files/fileSystem'
 import * as FileTree from '@src/core/files/fileTree'
 import usePrevious from '@src/ui/hooks/usePrevious'
+import { Key } from '@src/utils/dom'
 import React from 'react'
 
 export type UseFileTreeArgs = {
@@ -62,17 +63,6 @@ function useFileTree({ root, key, defaultPath }: UseFileTreeArgs): UseFileTreeRe
   )
 
   return { fileTree, selectItem, handleKeyDown }
-}
-
-enum Key {
-  ArrowDown = 'ArrowDown',
-  ArrowLeft = 'ArrowLeft',
-  ArrowRight = 'ArrowRight',
-  ArrowUp = 'ArrowUp',
-  End = 'End',
-  Enter = 'Enter',
-  Home = 'Home',
-  Space = ' ',
 }
 
 function handleFileTreeKeydown(

@@ -1,20 +1,16 @@
-import { Model, Schema } from '@src/core/schema'
-import breadcrumbs from '@src/ui/styles/breadcrumbs.module.css'
+import { Field, Model, Schema } from '@src/core/schema'
 import {
   backgroundColor,
   classnames,
-  display,
   fontSize,
-  fontWeight,
   margin,
   minHeight,
   padding,
-  textDecoration,
-  toClassname,
 } from '@src/ui/styles/classnames'
 import { panel, panelGrid, section, title } from '@src/ui/styles/utils'
 import { titleCase } from '@src/utils/string'
 import React from 'react'
+import Breadcrumbs from '../Breadcrumbs'
 import PanelButton from '../form/PanelButton'
 import PlusCircleIcon from '../icons/Plus'
 import AssociationView from './AssociationView'
@@ -25,6 +21,8 @@ type ModelViewProps = {
   model: Model
   onViewSchema: (model?: Model) => void
   onClickAddField: () => void
+  onClickEditField: (field: Field) => void
+  onClickDeleteField: (field: Field) => void
   onClickAddAssociation: () => void
 }
 
@@ -33,23 +31,16 @@ export default function ModelView({
   model,
   onViewSchema,
   onClickAddField,
+  onClickEditField,
+  onClickDeleteField,
   onClickAddAssociation,
 }: ModelViewProps): React.ReactElement {
   return (
     <div className={classnames(padding('pt-2', 'px-6'), margin('mb-3'))}>
-      <div className={classnames(margin('mb-4'), display('flex'), fontSize('text-sm'))}>
-        <button
-          className={classnames(
-            fontWeight('font-semibold'),
-            textDecoration('hover:underline'),
-            toClassname(breadcrumbs.breadcrumb),
-          )}
-          onClick={() => onViewSchema()}
-        >
-          {titleCase(schema.name)} (schema)
-        </button>
-        <span>{titleCase(model.name)} (model)</span>
-      </div>
+      <Breadcrumbs
+        items={[{ label: `${titleCase(schema.name)} (schema)`, onClick: () => onViewSchema() }]}
+        current={`${model && titleCase(model.name)} (model)`}
+      />
       <div className={classnames(section)}>
         <h2 className={classnames(title)}>Model</h2>
         <div className={classnames(margin('mb-11'))}>
@@ -63,7 +54,11 @@ export default function ModelView({
           {model.fields.map((field) => {
             return (
               <li key={field.id} className={classnames(panel)}>
-                <FieldView field={field} />
+                <FieldView
+                  field={field}
+                  onClickEdit={onClickEditField}
+                  onClickDelete={onClickDeleteField}
+                />
               </li>
             )
           })}

@@ -299,6 +299,14 @@ module.exports = {
         3.5: '0.875rem',
       },
     },
+    borderWidth: {
+      DEFAULT: '1px',
+      0: '0px',
+      2: '2px',
+      4: '4px',
+      6: '6px',
+      8: '8px',
+    },
     flex: {
       1: '1 1 0%',
       2: '2 2 0%',
