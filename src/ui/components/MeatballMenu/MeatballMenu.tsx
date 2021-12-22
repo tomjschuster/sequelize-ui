@@ -50,7 +50,7 @@ function MeatballMenu({
   ...props
 }: MeatballMenuProps): React.ReactElement {
   const ref = React.useRef() as React.MutableRefObject<HTMLDivElement>
-  const [open, setOpen] = React.useState<boolean>(false)
+  const [isOpen, setIsOpen] = React.useState<boolean>(false)
   const [activeIndex, setActiveIndex] = React.useState<number>()
 
   const activeItem = React.useMemo(
@@ -59,7 +59,7 @@ function MeatballMenu({
   )
 
   const close = React.useCallback(() => {
-    setOpen(false)
+    setIsOpen(false)
     setActiveIndex(undefined)
   }, [])
 
@@ -67,7 +67,7 @@ function MeatballMenu({
 
   const handleClick = React.useCallback(
     (evt: React.MouseEvent<HTMLButtonElement>) => {
-      setOpen((x) => !x)
+      setIsOpen((x) => !x)
       setActiveIndex(undefined)
       if (onClick) onClick(evt)
     },
@@ -76,7 +76,7 @@ function MeatballMenu({
 
   const handleKeyDown = React.useCallback(
     (evt: React.KeyboardEvent): void => {
-      if (!open) return
+      if (!isOpen) return
 
       if ([Key.ArrowUp, Key.ArrowDown, Key.Home, Key.End].some((key) => key === evt.key)) {
         evt.preventDefault()
@@ -99,10 +99,13 @@ function MeatballMenu({
         case Key.End:
           return setActiveIndex(items.length - 1)
 
+        case Key.Tab:
+          return close()
+
         default:
       }
     },
-    [open, activeItem, items.length],
+    [isOpen, close, activeItem, items.length],
   )
 
   return (
@@ -110,7 +113,7 @@ function MeatballMenu({
       <div className={classnames(position('relative'))}>
         <button
           aria-haspopup={true}
-          aria-expanded={open}
+          aria-expanded={isOpen}
           title="Actions"
           aria-label="actions"
           className={classnames(
@@ -122,11 +125,10 @@ function MeatballMenu({
             borderRadius('rounded-full'),
             padding('p-2'),
             cursor('cursor-pointer'),
-            backgroundColor({ 'bg-gray-300': open, 'hover:bg-gray-200': !open }),
+            backgroundColor({ 'bg-gray-300': isOpen, 'hover:bg-gray-200': !isOpen }),
           )}
           onClick={handleClick}
           onKeyDown={handleKeyDown}
-          onBlur={close}
           {...props}
         >
           <span className={classnames(dot)} />
@@ -147,7 +149,7 @@ function MeatballMenu({
               borderRadius('rounded'),
               boxShadow('shadow-lg'),
               padding('py-1'),
-              display({ hidden: !open }),
+              display({ hidden: !isOpen }),
             )}
             onMouseOut={() => setActiveIndex(undefined)}
           >
