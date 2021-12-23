@@ -2,7 +2,6 @@ import { Model, Schema } from '@src/core/schema'
 import {
   backgroundColor,
   classnames,
-  display,
   fontSize,
   margin,
   padding,
@@ -31,9 +30,6 @@ function SchemaView({
   return (
     <div className={classnames(padding('p-6', 'pt-2'))}>
       <Breadcrumbs items={[]} current={`${titleCase(schema.name)} (schema)`} />
-      <div className={classnames(margin('mb-4'), display('flex'), fontSize('text-sm'))}>
-        <span>{titleCase(schema.name)} (schema)</span>
-      </div>
       <div className={classnames(section)}>
         <h2 className={classnames(title)}>Schema</h2>
         <div className={classnames(margin('mb-11'))}>

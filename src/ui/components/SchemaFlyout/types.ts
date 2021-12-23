@@ -1,4 +1,4 @@
-import { Field, Model, Schema } from '@src/core/schema'
+import { Association, Field, Model, Schema } from '@src/core/schema'
 import { ModelErrors, SchemaErrors } from '@src/core/validation/schema'
 
 export const enum SchemaFlyoutStateType {
@@ -23,7 +23,18 @@ export type SchemaFlyoutState =
       type: SchemaFlyoutStateType.EDIT_MODEL
       model: Model
       errors: ModelErrors
-      newField?: boolean
-      initialField?: Field
-      newAssociation?: boolean
+      initialState?: InitialEditModelState
     }
+
+export const enum InitialEditModelStateType {
+  NEW_FIELD = 'new-field',
+  NEW_ASSOCIATION = 'new-association',
+  EDIT_FIELD = 'edit-field',
+  EDIT_ASSOCIATION = 'edit-association',
+}
+
+export type InitialEditModelState =
+  | { type: InitialEditModelStateType.NEW_FIELD }
+  | { type: InitialEditModelStateType.NEW_ASSOCIATION }
+  | { type: InitialEditModelStateType.EDIT_FIELD; field: Field }
+  | { type: InitialEditModelStateType.EDIT_ASSOCIATION; association: Association }

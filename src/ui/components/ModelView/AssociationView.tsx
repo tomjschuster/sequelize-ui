@@ -13,22 +13,31 @@ import {
   borderWidth,
   classnames,
   fontWeight,
+  inset,
   padding,
+  position,
 } from '@src/ui/styles/classnames'
 import { list, panelHeader } from '@src/ui/styles/utils'
 import { noCase, titleCase } from '@src/utils/string'
 import React from 'react'
+import PencilIcon from '../icons/Pencil'
+import TrashIcon from '../icons/Trash'
+import MeatballMenu from '../MeatballMenu'
 
 type AssociationViewProps = {
   association: Association
   schema: Schema
   onClickModel: (model: Model) => void
+  onClickEdit: () => void
+  onClickDelete: () => void
 }
 
 function AssociationView({
   association,
   schema,
   onClickModel,
+  onClickEdit,
+  onClickDelete,
 }: AssociationViewProps): React.ReactElement {
   const targetModel: Model | null =
     React.useMemo(
@@ -40,7 +49,7 @@ function AssociationView({
     // model might be missing briefly after deletion and before switching flyout state
     targetModel && (
       <>
-        <p className={classnames(panelHeader)}>
+        <p className={classnames(panelHeader, position('relative'))}>
           {displayAssociationTypeType(association.type.type)}{' '}
           {targetModel.id === association.sourceModelId ? (
             <span className={classnames(fontWeight('font-semibold'))}>
@@ -59,6 +68,13 @@ function AssociationView({
               {titleCase(targetModel.name)}
             </button>
           )}
+          <MeatballMenu
+            className={classnames(position('absolute'), inset('right-0', 'top-1', 'right-1'))}
+            items={[
+              { icon: PencilIcon, label: 'Edit', onClick: onClickEdit },
+              { icon: TrashIcon, label: 'Delete', onClick: onClickDelete },
+            ]}
+          />
         </p>
         {(association.alias || association.foreignKey || isManytoMany(association)) && (
           <ul className={classnames(list, padding('p-2', 'pl-4'))}>

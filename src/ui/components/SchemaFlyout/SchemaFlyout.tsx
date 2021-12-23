@@ -59,6 +59,8 @@ export default function SchemaFlyout({
     editField,
     deleteField,
     addAssociation,
+    editAssociation,
+    deleteAssociation,
     save,
     cancel,
   } = useSchemaFlyout({
@@ -120,6 +122,8 @@ export default function SchemaFlyout({
         onClickEditField={editField}
         onClickDeleteField={deleteField}
         onClickAddAssociation={addAssociation}
+        onClickEditAssociation={editAssociation}
+        onClickDeleteAssociation={deleteAssociation}
       />
     </Flyout>
   )

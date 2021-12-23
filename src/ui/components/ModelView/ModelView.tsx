@@ -1,4 +1,4 @@
-import { Field, Model, Schema } from '@src/core/schema'
+import { Association, Field, Model, Schema } from '@src/core/schema'
 import {
   backgroundColor,
   classnames,
@@ -24,6 +24,8 @@ type ModelViewProps = {
   onClickEditField: (field: Field) => void
   onClickDeleteField: (field: Field) => void
   onClickAddAssociation: () => void
+  onClickEditAssociation: (association: Association) => void
+  onClickDeleteAssociation: (association: Association) => void
 }
 
 export default function ModelView({
@@ -34,6 +36,8 @@ export default function ModelView({
   onClickEditField,
   onClickDeleteField,
   onClickAddAssociation,
+  onClickEditAssociation,
+  onClickDeleteAssociation,
 }: ModelViewProps): React.ReactElement {
   return (
     <div className={classnames(padding('pt-2', 'px-6'), margin('mb-3'))}>
@@ -56,8 +60,8 @@ export default function ModelView({
               <li key={field.id} className={classnames(panel)}>
                 <FieldView
                   field={field}
-                  onClickEdit={onClickEditField}
-                  onClickDelete={onClickDeleteField}
+                  onClickEdit={onClickEditField.bind(null, field)}
+                  onClickDelete={onClickDeleteField.bind(null, field)}
                 />
               </li>
             )
@@ -83,6 +87,8 @@ export default function ModelView({
                 association={association}
                 schema={schema}
                 onClickModel={onViewSchema}
+                onClickEdit={onClickEditAssociation.bind(null, association)}
+                onClickDelete={onClickDeleteAssociation.bind(null, association)}
               />
             </li>
           ))}

@@ -17,8 +17,8 @@ import MeatballMenu from '../MeatballMenu'
 
 type FieldViewProps = {
   field: Field
-  onClickEdit: (field: Field) => void
-  onClickDelete: (field: Field) => void
+  onClickEdit: () => void
+  onClickDelete: () => void
 }
 function FieldView({ field, onClickEdit, onClickDelete }: FieldViewProps) {
   return (
@@ -37,16 +37,8 @@ function FieldView({ field, onClickEdit, onClickDelete }: FieldViewProps) {
         <MeatballMenu
           className={classnames(position('absolute'), inset('right-0', 'top-1', 'right-1'))}
           items={[
-            {
-              icon: PencilIcon,
-              label: 'Edit',
-              onClick: () => onClickEdit(field),
-            },
-            {
-              icon: TrashIcon,
-              label: 'Delete',
-              onClick: () => onClickDelete(field),
-            },
+            { icon: PencilIcon, label: 'Edit', onClick: onClickEdit },
+            { icon: TrashIcon, label: 'Delete', onClick: onClickDelete },
           ]}
         />
       </p>

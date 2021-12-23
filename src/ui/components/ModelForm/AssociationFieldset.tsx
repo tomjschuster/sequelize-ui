@@ -93,7 +93,7 @@ function AssociationFieldset({
 
       handleChange({ type: { type: typeType } })
     },
-    [model.name, targetModel.name, handleChange],
+    [model.name, targetModel?.name, handleChange],
   )
 
   const handleChangeTarget = React.useCallback(

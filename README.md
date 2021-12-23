@@ -12,7 +12,6 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 #### UI
 
 - [ ] Action menu
-  - [ ] Delete/edit assocs via action menu
   - [ ] Delete/edit model via action menu
   - [ ] Refactor action menu
 - [ ] Notifications

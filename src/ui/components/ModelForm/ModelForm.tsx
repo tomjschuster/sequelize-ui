@@ -8,6 +8,7 @@ import React from 'react'
 import PanelButton from '../form/PanelButton'
 import { autofillDisable } from '../form/shared/utils'
 import PlusCircleIcon from '../icons/Plus'
+import { InitialEditModelState, InitialEditModelStateType } from '../SchemaFlyout/types'
 import AssociationFieldset, { associationTypeId } from './AssociationFieldset'
 import FieldFieldset, { fieldNameId } from './FieldFieldset'
 import ModelFieldset, { modelNameId } from './ModelFieldset'
@@ -15,9 +16,7 @@ import ModelFieldset, { modelNameId } from './ModelFieldset'
 type ModelFormProps = {
   model: Model
   schema: Schema
-  newField?: boolean
-  newAssociation?: boolean
-  initialField?: Field
+  initialState?: InitialEditModelState
   errors: ModelErrors
   onChange: (model: Model) => void
 }
@@ -25,31 +24,38 @@ type ModelFormProps = {
 export default function ModelForm({
   model,
   schema,
-  newField,
-  newAssociation,
-  initialField,
+  initialState,
   errors,
   onChange,
 }: ModelFormProps): React.ReactElement {
   const prevModel = usePrevious(model)
 
   React.useEffect(() => {
-    if (newField) {
+    if (!initialState) {
+      focusById(modelNameId())
+      return
+    }
+
+    if (initialState.type === InitialEditModelStateType.NEW_FIELD) {
       handleClickAddField()
       return
     }
 
-    if (newAssociation) {
+    if (initialState.type === InitialEditModelStateType.NEW_ASSOCIATION) {
       handleClickAddAssociation()
       return
     }
 
-    if (initialField) {
-      focusById(fieldNameId(initialField))
+    if (initialState.type === InitialEditModelStateType.EDIT_FIELD) {
+      focusById(fieldNameId(initialState.field))
       return
     }
 
-    focusById(modelNameId())
+    if (initialState.type === InitialEditModelStateType.EDIT_ASSOCIATION) {
+      focusById(associationTypeId(initialState.association))
+      return
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

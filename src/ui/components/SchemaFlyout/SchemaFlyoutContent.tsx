@@ -1,5 +1,5 @@
 import { FileTree } from '@src/core/files/fileTree'
-import { Field, Model, Schema } from '@src/core/schema'
+import { Association, Field, Model, Schema } from '@src/core/schema'
 import React from 'react'
 import CodeExplorer from '../CodeExplorer/CodeExplorer'
 import ModelForm from '../ModelForm'
@@ -22,6 +22,8 @@ type SchemaFlyoutContentProps = {
   onClickEditField: (field: Field) => void
   onClickDeleteField: (field: Field) => void
   onClickAddAssociation: () => void
+  onClickEditAssociation: (field: Association) => void
+  onClickDeleteAssociation: (field: Association) => void
 }
 export default function SchemaFlyoutContent({
   schema,
@@ -37,6 +39,8 @@ export default function SchemaFlyoutContent({
   onClickDeleteField,
   onClickEditField,
   onClickAddAssociation,
+  onClickEditAssociation,
+  onClickDeleteAssociation,
 }: SchemaFlyoutContentProps): React.ReactElement | null {
   switch (state.type) {
     case SchemaFlyoutStateType.CODE:
@@ -69,9 +73,7 @@ export default function SchemaFlyoutContent({
         <ModelForm
           model={state.model}
           schema={schema}
-          newField={state.newField}
-          newAssociation={state.newAssociation}
-          initialField={state.initialField}
+          initialState={state.initialState}
           errors={state.errors}
           onChange={updateModel}
         />
@@ -86,6 +88,8 @@ export default function SchemaFlyoutContent({
           onClickEditField={onClickEditField}
           onClickDeleteField={onClickDeleteField}
           onClickAddAssociation={onClickAddAssociation}
+          onClickEditAssociation={onClickEditAssociation}
+          onClickDeleteAssociation={onClickDeleteAssociation}
         />
       )
   }

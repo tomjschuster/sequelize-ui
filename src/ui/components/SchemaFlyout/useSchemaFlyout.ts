@@ -1,6 +1,6 @@
 import { DbOptions } from '@src/core/database'
 import { activeFilePath, FileTree } from '@src/core/files/fileTree'
-import { Field, isNewSchema, Model, Schema } from '@src/core/schema'
+import { Association, Field, isNewSchema, Model, Schema } from '@src/core/schema'
 import {
   emptyModelErrors,
   emptySchemaErrors,
@@ -14,7 +14,7 @@ import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import equal from 'fast-deep-equal/es6'
 import React from 'react'
 import { useFileTree } from '../FileTreeView'
-import { SchemaFlyoutState, SchemaFlyoutStateType } from './types'
+import { InitialEditModelStateType, SchemaFlyoutState, SchemaFlyoutStateType } from './types'
 
 type UseSchemaFlyoutArgs = {
   schema: Schema
@@ -43,6 +43,8 @@ type UseSchemaFlyoutResult = {
   editField: (field: Field) => void
   deleteField: (field: Field) => void
   addAssociation: () => void
+  editAssociation: (association: Association) => void
+  deleteAssociation: (association: Association) => void
   save: () => void
   cancel: () => void
 }
@@ -159,7 +161,7 @@ export function useSchemaFlyout({
         type: SchemaFlyoutStateType.EDIT_MODEL,
         model: state.model,
         errors: emptyModelErrors,
-        newField: true,
+        initialState: { type: InitialEditModelStateType.NEW_FIELD },
       })
     }
   }, [state])
@@ -170,10 +172,53 @@ export function useSchemaFlyout({
         type: SchemaFlyoutStateType.EDIT_MODEL,
         model: state.model,
         errors: emptyModelErrors,
-        newAssociation: true,
+        initialState: { type: InitialEditModelStateType.NEW_ASSOCIATION },
       })
     }
   }, [state])
+
+  const editAssociation = React.useCallback(
+    async (association: Association) => {
+      const model = schema.models.find((m) => m.id === association.sourceModelId)
+      if (model) {
+        setState({
+          type: SchemaFlyoutStateType.EDIT_MODEL,
+          model,
+          initialState: { type: InitialEditModelStateType.EDIT_ASSOCIATION, association },
+          errors: emptyModelErrors,
+        })
+      }
+    },
+    [schema.models],
+  )
+
+  const deleteAssociation = React.useCallback(
+    async (association: Association) => {
+      if (state.type === SchemaFlyoutStateType.VIEW_MODEL) {
+        const model: Model = {
+          ...state.model,
+          associations: state.model.associations.filter((a) => a.id !== association.id),
+        }
+
+        const updatedSchema = await onChange({
+          ...schema,
+          models: schema.models.map((m) => (m.id === state.model.id ? model : m)),
+        })
+
+        const updatedModel = updatedSchema.models.find((m) => m.id === model.id)
+
+        if (updatedModel) {
+          setState({
+            type: SchemaFlyoutStateType.VIEW_MODEL,
+            model: updatedModel,
+          })
+        }
+
+        return
+      }
+    },
+    [schema, state, onChange],
+  )
 
   const exitEdit = React.useCallback(
     (nextSchema: Schema) => {
@@ -267,17 +312,20 @@ export function useSchemaFlyout({
     [schema, state, onChange],
   )
 
-  const editField = React.useCallback(async (field: Field) => {
-    const model = schema.models.find((m) => m.fields.some((f) => f.id === field.id))
-    if (model) {
-      setState({
-        type: SchemaFlyoutStateType.EDIT_MODEL,
-        model,
-        initialField: field,
-        errors: emptyModelErrors,
-      })
-    }
-  }, [])
+  const editField = React.useCallback(
+    async (field: Field) => {
+      const model = schema.models.find((m) => m.fields.some((f) => f.id === field.id))
+      if (model) {
+        setState({
+          type: SchemaFlyoutStateType.EDIT_MODEL,
+          model,
+          initialState: { type: InitialEditModelStateType.EDIT_FIELD, field },
+          errors: emptyModelErrors,
+        })
+      }
+    },
+    [schema.models],
+  )
 
   const delete_ = React.useCallback(async () => {
     if (
@@ -334,6 +382,8 @@ export function useSchemaFlyout({
     editField,
     deleteField,
     addAssociation,
+    editAssociation,
+    deleteAssociation,
     viewCode,
     viewSchema,
     save,
