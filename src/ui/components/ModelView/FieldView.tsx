@@ -13,7 +13,7 @@ import { noCase } from '@src/utils/string'
 import React from 'react'
 import PencilIcon from '../icons/Pencil'
 import TrashIcon from '../icons/Trash'
-import MeatballMenu from '../MeatballMenu'
+import ActionMenu from '../menus/ActionMenu'
 
 type FieldViewProps = {
   field: Field
@@ -34,7 +34,7 @@ function FieldView({ field, onClickEdit, onClickDelete }: FieldViewProps) {
         <span className={classnames(padding('px-1'), fontWeight('font-bold'))}>
           {noCase(field.name)}
         </span>
-        <MeatballMenu
+        <ActionMenu
           className={classnames(position('absolute'), inset('right-0', 'top-1', 'right-1'))}
           items={[
             { icon: PencilIcon, label: 'Edit', onClick: onClickEdit },

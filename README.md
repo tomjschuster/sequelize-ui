@@ -11,9 +11,6 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Action menu
-  - [ ] Delete/edit model via action menu
-  - [ ] Refactor action menu
 - [ ] Notifications
   - [ ] CRUD specific messages
   - [ ] Fix UI
@@ -28,6 +25,7 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 - [ ] Dark mode
 - [ ] db compatibility warnings
 - [ ] Schema Flyout context
+- [ ] Transition panels on delete
 
 #### Codegen
 

@@ -55,6 +55,8 @@ export default function SchemaFlyout({
     updateModel,
     updateSchema,
     addModel,
+    editModel,
+    deleteModel,
     addField,
     editField,
     deleteField,
@@ -118,6 +120,8 @@ export default function SchemaFlyout({
         updateModel={updateModel}
         onViewSchema={handleViewSchema}
         onClickAddModel={addModel}
+        onClickEditModel={editModel}
+        onClickDeleteModel={deleteModel}
         onClickAddField={addField}
         onClickEditField={editField}
         onClickDeleteField={deleteField}

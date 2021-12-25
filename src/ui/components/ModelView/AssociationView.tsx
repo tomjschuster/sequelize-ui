@@ -22,7 +22,7 @@ import { noCase, titleCase } from '@src/utils/string'
 import React from 'react'
 import PencilIcon from '../icons/Pencil'
 import TrashIcon from '../icons/Trash'
-import MeatballMenu from '../MeatballMenu'
+import ActionMenu from '../menus/ActionMenu'
 
 type AssociationViewProps = {
   association: Association
@@ -68,7 +68,7 @@ function AssociationView({
               {titleCase(targetModel.name)}
             </button>
           )}
-          <MeatballMenu
+          <ActionMenu
             className={classnames(position('absolute'), inset('right-0', 'top-1', 'right-1'))}
             items={[
               { icon: PencilIcon, label: 'Edit', onClick: onClickEdit },

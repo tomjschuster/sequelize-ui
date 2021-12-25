@@ -18,6 +18,8 @@ type SchemaFlyoutContentProps = {
   updateSchema: (schema: Schema) => void
   updateModel: (model: Model) => void
   onClickAddModel: () => void
+  onClickEditModel: (field: Model) => void
+  onClickDeleteModel: (field: Model) => void
   onClickAddField: () => void
   onClickEditField: (field: Field) => void
   onClickDeleteField: (field: Field) => void
@@ -35,6 +37,8 @@ export default function SchemaFlyoutContent({
   updateSchema,
   updateModel,
   onClickAddModel,
+  onClickDeleteModel,
+  onClickEditModel,
   onClickAddField,
   onClickDeleteField,
   onClickEditField,
@@ -66,6 +70,8 @@ export default function SchemaFlyoutContent({
           schema={state.schema}
           onClickModel={onViewSchema}
           onClickAddModel={onClickAddModel}
+          onClickEditModel={onClickEditModel}
+          onClickDeleteModel={onClickDeleteModel}
         />
       )
     case SchemaFlyoutStateType.EDIT_MODEL:

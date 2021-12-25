@@ -2,6 +2,7 @@ import { Model, Schema } from '@src/core/schema'
 import {
   backgroundColor,
   classnames,
+  display,
   fontSize,
   margin,
   padding,
@@ -11,21 +12,27 @@ import { flexCenterBetween, panel, panelGrid, section, subtitle, title } from '@
 import { titleCase } from '@src/utils/string'
 import React from 'react'
 import Breadcrumbs from '../Breadcrumbs'
-import IconButton from '../form/IconButton'
 import PanelButton from '../form/PanelButton'
+import EyeIcon from '../icons/Eye'
+import PencilIcon from '../icons/Pencil'
 import PlusCircleIcon from '../icons/Plus'
-import SelectorIcon from '../icons/Selector'
+import TrashIcon from '../icons/Trash'
+import ActionMenu from '../menus/ActionMenu'
 
 type SchemaViewProps = {
   schema: Schema
   onClickModel: (model: Model) => void
   onClickAddModel: () => void
+  onClickEditModel: (model: Model) => void
+  onClickDeleteModel: (model: Model) => void
 }
 
 function SchemaView({
   schema,
   onClickModel,
   onClickAddModel,
+  onClickEditModel,
+  onClickDeleteModel,
 }: SchemaViewProps): React.ReactElement {
   return (
     <div className={classnames(padding('p-6', 'pt-2'))}>
@@ -39,9 +46,9 @@ function SchemaView({
       <div className={classnames(section)}>
         <h3 className={classnames(subtitle)}>Models</h3>
         <ul className={classnames(panelGrid)}>
-          {schema.models.map((m) => (
+          {schema.models.map((model) => (
             <li
-              key={m.id}
+              key={model.id}
               className={classnames(panel, flexCenterBetween, padding('px-2', 'py-3'))}
             >
               <button
@@ -51,16 +58,31 @@ function SchemaView({
                   padding('px-1.5'),
                   fontSize('text-lg'),
                 )}
-                onClick={() => onClickModel(m)}
+                onClick={onClickModel.bind(null, model)}
               >
-                {titleCase(m.name)}
+                {titleCase(model.name)}
               </button>
-              <IconButton
-                label={`select ${m.name} model`}
-                icon={SelectorIcon}
-                iconProps={{ size: 6 }}
-                onClick={() => onClickModel(m)}
-              />
+              <div className={classnames(display('flex'))}>
+                <ActionMenu
+                  items={[
+                    {
+                      icon: EyeIcon,
+                      label: 'View',
+                      onClick: onClickModel.bind(null, model),
+                    },
+                    {
+                      icon: PencilIcon,
+                      label: 'Edit',
+                      onClick: onClickEditModel.bind(null, model),
+                    },
+                    {
+                      icon: TrashIcon,
+                      label: 'Delete',
+                      onClick: onClickDeleteModel.bind(null, model),
+                    },
+                  ]}
+                />
+              </div>
             </li>
           ))}
           <li>
