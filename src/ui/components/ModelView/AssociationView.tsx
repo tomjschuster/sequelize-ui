@@ -40,12 +40,10 @@ function AssociationView({
     // model might be missing briefly after deletion and before switching flyout state
     targetModel && (
       <>
-        <p className={classnames(panelHeader, position('relative'))}>
+        <div className={classnames(panelHeader, position('relative'))}>
           {displayAssociationTypeType(association.type.type)}{' '}
           {targetModel.id === association.sourceModelId ? (
-            <span className={classnames(fontWeight('font-semibold'))}>
-              {titleCase(targetModel.name)}
-            </span>
+            <p className={classnames(fontWeight('font-semibold'))}>{titleCase(targetModel.name)}</p>
           ) : (
             <button
               className={classnames(inlineButton('bg-yellow-50'), fontWeight('font-semibold'))}
@@ -61,7 +59,7 @@ function AssociationView({
               { icon: TrashIcon, label: 'Delete', onClick: onClickDelete },
             ]}
           />
-        </p>
+        </div>
         {(association.alias || association.foreignKey || isManytoMany(association)) && (
           <ul className={classnames(list, padding('p-2', 'pl-4'))}>
             {association.alias && <li>as {noCase(association.alias)}</li>}

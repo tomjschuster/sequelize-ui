@@ -11,8 +11,9 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Home buttons to links
+- [ ] Refactor routing
 - [ ] Error boundary
+- [ ] Allow duplicate name with incrementer
 - [ ] GitHub link
 - [ ] Home page copy
 - [ ] demo schema tooltips

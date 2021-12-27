@@ -2,10 +2,10 @@ import { Schema } from '@src/core/schema'
 import * as DemoSchemaIds from './demoSchemaIds'
 
 export function isDemoSchema(schema: Schema): boolean {
-  return !!getDemoSchemaType(schema)
+  return !!getDemoSchemaType(schema.id)
 }
 
-function getDemoSchemaType({ id }: Schema): DemoSchemaType | undefined {
+export function getDemoSchemaType(id: string): DemoSchemaType | undefined {
   switch (id) {
     case DemoSchemaIds.DEMO_SCHEMA_BLOG_ID:
       return DemoSchemaType.Blog
@@ -15,6 +15,17 @@ function getDemoSchemaType({ id }: Schema): DemoSchemaType | undefined {
       return DemoSchemaType.Sakila
     default:
       return undefined
+  }
+}
+
+export function getDemoSchemaId(type: DemoSchemaType): string {
+  switch (type) {
+    case DemoSchemaType.Blog:
+      return DemoSchemaIds.DEMO_SCHEMA_BLOG_ID
+    case DemoSchemaType.Employee:
+      return DemoSchemaIds.DEMO_SCHEMA_EMPLOYEE_ID
+    case DemoSchemaType.Sakila:
+      return DemoSchemaIds.DEMO_SCHEMA_SAKILA_ID
   }
 }
 

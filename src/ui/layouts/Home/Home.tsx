@@ -1,11 +1,13 @@
 import { clearData, createSchema, deleteSchema, listSchemas, updateSchema } from '@src/api/schema'
 import { emptySchema, isNewSchema, Schema } from '@src/core/schema'
-import { DemoSchemaType, getDemoSchema, isDemoSchema } from '@src/data/schemas'
+import { DemoSchemaType, getDemoSchema, getDemoSchemaType, isDemoSchema } from '@src/data/schemas'
 import useAsync from '@src/ui/hooks/useAsync'
 import useSetOnce from '@src/ui/hooks/useSetOnce'
+import { useAlert } from '@src/ui/lib/alert'
 import { classnames, margin, minHeight, padding, width } from '@src/ui/styles/classnames'
 import { flexCenter, section, title } from '@src/ui/styles/utils'
 import dynamic, { LoaderComponent } from 'next/dynamic'
+import { useRouter } from 'next/router'
 import React from 'react'
 import DemoSchemaButtons from './DemoSchemaButtons'
 import MySchemaLinks from './MySchemaLinks'
@@ -24,10 +26,59 @@ const PreloadSchemaFlyout = dynamic(
 export default function Home(): React.ReactElement {
   const [schema, setSchema] = React.useState<Schema>()
   const { data: schemas, error, refetch, loading } = useAsync({ getData: listSchemas })
+  const { error: alertError } = useAlert()
   const [preloaded, setPreloaded] = useSetOnce()
+  const router = useRouter()
 
+  /**
+   * @TODO
+   * 1. Abstract router query logic
+   * 2. Handle list params
+   * 3. Handle not found param
+   */
+  React.useEffect(() => {
+    const schemaId = router.query?.schema
+    if (
+      typeof schemaId === 'string' &&
+      schemaId !== schema?.id &&
+      !(schemaId === 'new' && schema && isNewSchema(schema))
+    ) {
+      const demoSchemaType = getDemoSchemaType(schemaId)
+      const savedSchema = demoSchemaType ? undefined : schemas?.find((s) => s.id === schemaId)
+
+      if (demoSchemaType) {
+        getDemoSchema(demoSchemaType).then(setSchema)
+        return
+      }
+
+      if (savedSchema) {
+        setSchema(savedSchema)
+        return
+      }
+
+      if (schemaId === 'new' && (!schema || !isNewSchema(schema))) {
+        setSchema(emptySchema())
+        return
+      }
+
+      alertError(`Schema with id ${schemaId} not found.`)
+
+      if (schema) {
+        setSchema(undefined)
+      }
+
+      router.replace('/')
+      return
+    }
+
+    if (!(typeof schemaId === 'string') && schema) {
+      setSchema(undefined)
+    }
+  }, [schemas, schema, router, alertError])
+
+  // @TODO make create buttons be links
   const handleClickCreate = async () => {
-    setSchema(emptySchema())
+    router.push('/?schema=new')
   }
 
   const handleClickClearData = async () => {
@@ -39,6 +90,7 @@ export default function Home(): React.ReactElement {
     const shouldCreate = isDemoSchema(schema) || isNewSchema(schema)
     const updated = await (shouldCreate ? createSchema(schema) : updateSchema(schema))
     setSchema(updated)
+    if (shouldCreate) router.replace(`/?schema=${updated.id}`)
 
     refetch()
     return updated
@@ -52,6 +104,8 @@ export default function Home(): React.ReactElement {
 
   const handleCancel = () => {
     setSchema(undefined)
+    // @TODO preserve other params
+    router.push('/')
   }
 
   return (
@@ -65,7 +119,6 @@ export default function Home(): React.ReactElement {
               loading={loading}
               error={error}
               onClickCreate={handleClickCreate}
-              onSelectSchema={setSchema}
               onMouseOverSchema={setPreloaded}
               onClickClearData={handleClickClearData}
             />
@@ -73,7 +126,7 @@ export default function Home(): React.ReactElement {
         </div>
         <div className={section}>
           <h2 className={title}>Demo Schemas</h2>
-          <DemoSchemas onSelectSchema={setSchema} onMouseOverSchema={setPreloaded} />
+          <DemoSchemas onMouseOverSchema={setPreloaded} />
         </div>
       </div>
       {preloaded && <PreloadSchemaFlyout />}
@@ -95,7 +148,6 @@ type MySchemasProps = {
   loading: boolean
   error: Error | undefined
   onClickCreate: () => void
-  onSelectSchema: (schema: Schema | undefined) => void
   onMouseOverSchema: () => void
   onClickClearData: () => void
 }
@@ -104,7 +156,6 @@ function MySchemas({
   loading,
   schemas,
   onClickCreate,
-  onSelectSchema,
   onMouseOverSchema,
   onClickClearData,
 }: MySchemasProps): React.ReactElement | null {
@@ -119,7 +170,6 @@ function MySchemas({
   return (
     <MySchemaLinks
       schemas={schemas}
-      onSelectSchema={onSelectSchema}
       onMouseOverSchema={onMouseOverSchema}
       onClickCreate={onClickCreate}
     />
@@ -127,15 +177,9 @@ function MySchemas({
 }
 
 type DemoSchemasProps = {
-  onSelectSchema: (schema: Schema | undefined) => void
   onMouseOverSchema: () => void
 }
-function DemoSchemas({ onSelectSchema, onMouseOverSchema }: DemoSchemasProps): React.ReactElement {
-  const handleSelectDemoSchema = React.useCallback(
-    (schemaType: DemoSchemaType) => getDemoSchema(schemaType).then(onSelectSchema),
-    [onSelectSchema],
-  )
-
+function DemoSchemas({ onMouseOverSchema }: DemoSchemasProps): React.ReactElement {
   const handleMouseOverDemoSchema = React.useCallback(
     (schemaType: DemoSchemaType) => {
       onMouseOverSchema()
@@ -144,7 +188,5 @@ function DemoSchemas({ onSelectSchema, onMouseOverSchema }: DemoSchemasProps): R
     [onMouseOverSchema],
   )
 
-  return (
-    <DemoSchemaButtons onClick={handleSelectDemoSchema} onMouseOver={handleMouseOverDemoSchema} />
-  )
+  return <DemoSchemaButtons onMouseOver={handleMouseOverDemoSchema} />
 }

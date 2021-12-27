@@ -23,7 +23,7 @@ type FieldViewProps = {
 function FieldView({ field, onClickEdit, onClickDelete }: FieldViewProps) {
   return (
     <>
-      <p
+      <div
         className={classnames(
           panelHeader,
           display('flex'),
@@ -31,9 +31,7 @@ function FieldView({ field, onClickEdit, onClickDelete }: FieldViewProps) {
           position('relative'),
         )}
       >
-        <span className={classnames(padding('px-1'), fontWeight('font-bold'))}>
-          {noCase(field.name)}
-        </span>
+        <p className={classnames(padding('px-1'), fontWeight('font-bold'))}>{noCase(field.name)}</p>
         <ActionMenu
           className={classnames(position('absolute'), inset('right-0', 'top-1', 'right-1'))}
           items={[
@@ -41,7 +39,7 @@ function FieldView({ field, onClickEdit, onClickDelete }: FieldViewProps) {
             { icon: TrashIcon, label: 'Delete', onClick: onClickDelete },
           ]}
         />
-      </p>
+      </div>
       <ul className={classnames(list, padding('p-2', 'pl-4'))}>
         <li>{displayDataType(field.type)}</li>
         {field.primaryKey && <li>Primary key</li>}
