@@ -1,6 +1,13 @@
-import { DbOptions } from '@src/core/database'
+import { DbOptions, defaultDbOptions } from '@src/core/database'
 import { activeFilePath, FileTree } from '@src/core/files/fileTree'
-import { Association, Field, isNewSchema, Model, Schema } from '@src/core/schema'
+import {
+  Association,
+  displayAssociation,
+  Field,
+  isNewSchema,
+  Model,
+  Schema,
+} from '@src/core/schema'
 import {
   emptyModelErrors,
   emptySchemaErrors,
@@ -11,6 +18,7 @@ import {
 } from '@src/core/validation/schema'
 import { isDemoSchema } from '@src/data/schemas'
 import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
+import { useAlert } from '@src/ui/lib/alert'
 import equal from 'fast-deep-equal/es6'
 import React from 'react'
 import { useFileTree } from '../FileTreeView'
@@ -19,7 +27,6 @@ import { InitialEditModelStateType, SchemaFlyoutState, SchemaFlyoutStateType } f
 type UseSchemaFlyoutArgs = {
   schema: Schema
   schemas: Schema[]
-  dbOptions: DbOptions
   code?: boolean
   onChange: (schema: Schema) => Promise<Schema>
   onDelete: () => Promise<void>
@@ -30,10 +37,12 @@ type UseSchemaFlyoutResult = {
   state: SchemaFlyoutState
   isEditing: boolean
   fileTree: FileTree
+  dbOptions: DbOptions
   selectItem: (path: string) => void
   handleKeyDown: (evt: React.KeyboardEvent) => void
   edit: () => void
   delete_: () => void
+  updateDbOptions: (dbOptions: DbOptions) => void
   viewCode: () => void
   viewSchema: (model?: Model) => void
   updateSchema: (schema: Schema) => void
@@ -53,7 +62,6 @@ type UseSchemaFlyoutResult = {
 export function useSchemaFlyout({
   schema,
   schemas,
-  dbOptions,
   code = true,
   onChange,
   onDelete,
@@ -63,6 +71,24 @@ export function useSchemaFlyout({
     isNewSchema(schema) || !code
       ? { type: SchemaFlyoutStateType.EDIT_SCHEMA, schema, errors: emptySchemaErrors }
       : { type: SchemaFlyoutStateType.CODE },
+  )
+
+  const [dbOptions, setDbOptions] = React.useState<DbOptions>(defaultDbOptions)
+  const { success, error } = useAlert()
+
+  const change = React.useCallback(
+    (schema: Schema, message: string): Promise<Schema> =>
+      onChange(schema)
+        .then((schema) => {
+          success(message || `Schema "${schema.name}" saved.`, { ttl: 60000 })
+          return schema
+        })
+        .catch((e) => {
+          console.error(e)
+          error(`Error saving schema "${schema.name}"`)
+          return schema
+        }),
+    [error, success, onChange],
   )
 
   const { root, framework, defaultPath } = useGeneratedCode({ schema, dbOptions })
@@ -167,15 +193,18 @@ export function useSchemaFlyout({
 
   const deleteModel = React.useCallback(
     async (model: Model) => {
-      const updatedSchema = await onChange({
-        ...schema,
-        models: schema.models.filter((m) => m.id !== model.id),
-      })
+      const updatedSchema = await change(
+        {
+          ...schema,
+          models: schema.models.filter((m) => m.id !== model.id),
+        },
+        `Model "${model.name}" deleted.`,
+      )
 
       setState({ type: SchemaFlyoutStateType.VIEW_SCHEMA, schema: updatedSchema })
       return
     },
-    [onChange, schema],
+    [change, schema],
   )
 
   const addField = React.useCallback(() => {
@@ -223,10 +252,17 @@ export function useSchemaFlyout({
           associations: state.model.associations.filter((a) => a.id !== association.id),
         }
 
-        const updatedSchema = await onChange({
-          ...schema,
-          models: schema.models.map((m) => (m.id === state.model.id ? model : m)),
-        })
+        const targetModel = schema.models.find((m) => m.id === association.targetModelId)
+
+        const updatedSchema = await change(
+          {
+            ...schema,
+            models: schema.models.map((m) => (m.id === state.model.id ? model : m)),
+          },
+          `Association "${displayAssociation(association)}${
+            targetModel ? ` ${targetModel.name}` : ''
+          }" deleted.`,
+        )
 
         const updatedModel = updatedSchema.models.find((m) => m.id === model.id)
 
@@ -240,7 +276,7 @@ export function useSchemaFlyout({
         return
       }
     },
-    [schema, state, onChange],
+    [schema, state, change],
   )
 
   const exitEdit = React.useCallback(
@@ -270,7 +306,7 @@ export function useSchemaFlyout({
       }
 
       if (isDemoSchema(state.schema) || !equal(state.schema, schema)) {
-        const updatedSchema = await onChange(state.schema)
+        const updatedSchema = await change(state.schema, `Schema "${state.schema.name}" saved.`)
         exitEdit(updatedSchema)
         return
       }
@@ -285,6 +321,7 @@ export function useSchemaFlyout({
 
     if (state.type === SchemaFlyoutStateType.EDIT_MODEL) {
       const errors = validateModel(state.model, schema)
+
       if (noModelErrors(errors)) {
         const newSchema: Schema = {
           ...schema,
@@ -292,10 +329,13 @@ export function useSchemaFlyout({
         }
 
         if (!equal(newSchema, schema)) {
-          const updatedSchema = await await onChange({
-            ...schema,
-            models: schema.models.map((m) => (m.id === state.model.id ? state.model : m)),
-          })
+          const updatedSchema = await await change(
+            {
+              ...schema,
+              models: schema.models.map((m) => (m.id === state.model.id ? state.model : m)),
+            },
+            `Model "${state.model.name}" saved`,
+          )
           exitEdit(updatedSchema)
           return
         }
@@ -305,7 +345,7 @@ export function useSchemaFlyout({
         setState({ ...state, errors })
       }
     }
-  }, [schema, schemas, state, onChange, exitEdit, onExit])
+  }, [schema, schemas, state, change, exitEdit, onExit])
 
   const deleteField = React.useCallback(
     async (field: Field) => {
@@ -315,10 +355,13 @@ export function useSchemaFlyout({
           fields: state.model.fields.filter((f) => f.id !== field.id),
         }
 
-        const updatedSchema = await onChange({
-          ...schema,
-          models: schema.models.map((m) => (m.id === state.model.id ? model : m)),
-        })
+        const updatedSchema = await change(
+          {
+            ...schema,
+            models: schema.models.map((m) => (m.id === state.model.id ? model : m)),
+          },
+          `Field "${field.name}" deleted.`,
+        )
 
         const updatedModel = updatedSchema.models.find((m) => m.id === model.id)
 
@@ -332,7 +375,7 @@ export function useSchemaFlyout({
         return
       }
     },
-    [schema, state, onChange],
+    [schema, state, change],
   )
 
   const editField = React.useCallback(
@@ -355,24 +398,32 @@ export function useSchemaFlyout({
       state.type === SchemaFlyoutStateType.VIEW_SCHEMA ||
       state.type === SchemaFlyoutStateType.EDIT_SCHEMA
     ) {
-      await onDelete()
-      onExit()
-      return
+      return await onDelete()
+        .then(() => {
+          success(`Schema ${schema.name} deleted.`)
+          onExit()
+        })
+        .catch(() => {
+          error(`Failed to delete schema ${schema.name}.`)
+        })
     }
 
     if (
       state.type === SchemaFlyoutStateType.VIEW_MODEL ||
       state.type === SchemaFlyoutStateType.EDIT_MODEL
     ) {
-      const updatedSchema = await onChange({
-        ...schema,
-        models: schema.models.filter((m) => m.id !== state.model.id),
-      })
+      const updatedSchema = await change(
+        {
+          ...schema,
+          models: schema.models.filter((m) => m.id !== state.model.id),
+        },
+        `Model "${state.model.name}" deleted.`,
+      )
 
       setState({ type: SchemaFlyoutStateType.VIEW_SCHEMA, schema: updatedSchema })
       return
     }
-  }, [schema, state, onChange, onExit, onDelete])
+  }, [schema, state, change, onExit, onDelete])
 
   const cancel = React.useCallback(() => {
     if (isNewSchema(schema)) {
@@ -394,10 +445,12 @@ export function useSchemaFlyout({
       state.type === SchemaFlyoutStateType.EDIT_MODEL ||
       state.type === SchemaFlyoutStateType.EDIT_SCHEMA,
     fileTree,
+    dbOptions,
     selectItem,
     handleKeyDown,
     edit,
     delete_,
+    updateDbOptions: setDbOptions,
     updateModel,
     updateSchema,
     addModel,

@@ -1,12 +1,16 @@
 import { useTrapFocus } from '@src/ui/lib/focus'
 import {
   classnames,
+  display,
   hardwareAcceleration,
   inset,
+  maxWidth,
+  minWidth,
   padding,
   position,
   scale,
   transitionProperty,
+  translate,
   zIndex,
 } from '@src/ui/styles/classnames'
 import React from 'react'
@@ -18,19 +22,25 @@ type AlertsContainerProps = {
   onDismiss: (id: string) => void
 }
 
-// const AlertsContainer = React.forwardRef<HTMLUListElement, AlertsContainerProps>(
 function AlertsContainer({ alerts, onDismiss }: AlertsContainerProps): React.ReactElement {
   const ref = React.useRef() as React.MutableRefObject<HTMLUListElement>
-  useTrapFocus({ ref, global: true })
+  const hidden = alerts.length === 0
+
+  useTrapFocus({ ref, global: true, skip: hidden })
+
   return (
-    <ul ref={ref}>
+    <ul
+      ref={ref}
+      aria-live={hidden ? 'off' : 'assertive'}
+      className={classnames(display({ hidden }))}
+    >
       {alerts.map((alert) => (
         <AlertItem key={alert.id} alert={alert} onDismiss={onDismiss} />
       ))}
     </ul>
   )
 }
-// )
+// )K
 
 type AlertItemProps = {
   alert: Alert
@@ -42,10 +52,12 @@ function AlertItem({ alert, onDismiss }: AlertItemProps): React.ReactElement {
       key={`${alert.id}`}
       className={classnames(
         zIndex('z-50'),
+        minWidth('min-w-72'),
+        maxWidth('max-w-full', 'lg:max-w-72'),
         position('fixed'),
         padding('p-1', 'sm:p-1.5'),
         inset('top-0', 'left-0', 'sm:left-1/2'),
-        // translate('sm:-translate-x-1/2'),
+        translate('sm:-translate-x-1/2'),
         transitionProperty('transition-transform'),
         hardwareAcceleration('transform-gpu'),
         scale({

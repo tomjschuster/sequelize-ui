@@ -10,9 +10,12 @@ import {
   fontSize,
   fontWeight,
   height,
+  inset,
   margin,
   minHeight,
+  outlineStyle,
   overflow,
+  position,
   textOverflow,
   width,
 } from '@src/ui/styles/classnames'
@@ -75,41 +78,48 @@ function MySchemaButton({ schema, onClick, onMouseOver }: MySchemaButtonProps): 
   const handleClick = React.useCallback(() => onClick(schema), [onClick, schema])
 
   return (
-    <button
-      type="button"
+    <div
       className={classnames(
         panelAction,
+        outlineStyle('focus-within:outline'),
         flexWrap('flex-wrap'),
+        position('relative'),
         fontSize('text-sm'),
         minHeight('min-h-20'),
         height('h-full'),
         backgroundColor('hover:bg-indigo-50'),
       )}
-      onClick={handleClick}
-      onMouseOver={onMouseOver}
-      onTouchStartCapture={onMouseOver}
     >
-      <span
-        className={classnames(
-          fontWeight('font-bold'),
-          overflow('overflow-hidden'),
-          textOverflow('text-ellipsis'),
-          width('w-full'),
-          margin('mb-2'),
-        )}
-      >
-        {schema.name || 'Untitled'}
-      </span>
+      <h3>
+        <button
+          type="button"
+          className={classnames(
+            fontWeight('font-bold'),
+            overflow('overflow-hidden'),
+            textOverflow('text-ellipsis'),
+            width('w-full'),
+            margin('mb-2'),
+            position('after:absolute'),
+            inset('after:top-0', 'after:bottom-0', 'after:left-0', 'after:right-0'),
+            outlineStyle('outline-none'),
+          )}
+          onClick={handleClick}
+          onMouseOver={onMouseOver}
+          onTouchStartCapture={onMouseOver}
+        >
+          {schema.name || 'Untitled'}
+        </button>
+      </h3>
       <span className={classnames(display('flex'), flexDirection('flex-col'), width('w-full'))}>
         <MySchemaButtonsMetaItem icon={<CollectionIcon size={3} />}>
           {modelCount} {modelCount === 1 ? 'model' : 'models'}
         </MySchemaButtonsMetaItem>
-        <MySchemaButtonsMetaItem icon={<ClockIcon title="last updated" size={3} />}>
+        <MySchemaButtonsMetaItem icon={<ClockIcon size={3} />}>
           {schema.createdAt === schema.updatedAt ? 'created' : 'updated'}{' '}
           {timeSince(now(), schema.updatedAt, TimeGranularity.MINUTES)} ago
         </MySchemaButtonsMetaItem>
       </span>
-    </button>
+    </div>
   )
 }
 

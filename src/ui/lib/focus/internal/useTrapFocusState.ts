@@ -20,15 +20,10 @@ export default function useTrapFocusState(): UseTrapFocusStateResult {
   }, [])
 
   React.useEffect(() => {
+    // noop when traps have not changed
     if (prevTraps === traps && prevGlobalTraps === globalTraps) return
 
-    const globalElements = globalTraps
-      .map((trap) => trap.current)
-      .filter((el): el is HTMLElement => !!el)
-
-    const element = traps.map((trap) => trap.current).filter((el): el is HTMLElement => !!el)[0]
-
-    const elements = element ? [...globalElements, element] : globalElements
+    const elements = getCurrentTrapElements(traps, globalTraps)
 
     if (elements.length > 0 && focusTrap.current) {
       focusTrap.current.updateContainerElements(elements)
@@ -67,4 +62,21 @@ export default function useTrapFocusState(): UseTrapFocusStateResult {
   React.useEffect(() => cleanup, [])
 
   return { trapFocus, removeTrap }
+}
+
+function getCurrentTrapElements(
+  traps: React.RefObject<HTMLElement>[],
+  globalTraps: React.RefObject<HTMLElement>[],
+): HTMLElement[] {
+  const topTrapElement = traps
+    .map((trap) => trap.current)
+    .filter((el): el is HTMLElement => !!el)[0]
+
+  const globalElements = globalTraps
+    .map((trap) => trap.current)
+    .filter((el): el is HTMLElement => !!el)
+
+  // We only need to trap global elements when there is a regular trap element.
+  // Otherwise global elements are part of normal flow
+  return topTrapElement ? [...globalElements, topTrapElement] : []
 }

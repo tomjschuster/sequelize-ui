@@ -56,7 +56,7 @@ export default function Home(): React.ReactElement {
 
   return (
     <>
-      <div className={classnames(padding('p-6'))}>
+      <div aria-hidden={!!schema} className={classnames(padding('p-6'))}>
         <div className={classnames(section, margin('mb-6'))}>
           <h2 className={title}>My Schemas</h2>
           <div className={classnames(flexCenter, width('w-full'), minHeight('min-h-20'))}>

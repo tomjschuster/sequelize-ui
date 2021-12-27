@@ -63,7 +63,7 @@ function Layout({ children, title, metaDescription }: Props): React.ReactElement
                   width="50px"
                   height="50px"
                   className={classnames(display('inline'), margin('mr-2'), height('h-8'))}
-                  alt="Sequelize UI logo"
+                  alt=""
                   src="https://sequelizeui.app/static/images/sequelize-ui-tiny-white.svg"
                 />
                 Sequelize UI

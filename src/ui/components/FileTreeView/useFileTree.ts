@@ -118,7 +118,7 @@ function handleFileTreeKeydown(
 }
 
 function isFileTreeKeydown(evt: React.KeyboardEvent): boolean {
-  if (evt.altKey || evt.ctrlKey || evt.metaKey) return false
+  if (evt.altKey || evt.ctrlKey || evt.metaKey || evt.key === Key.Tab) return false
   return /^[\w*]$/.test(evt.key) || Object.values(Key).some((key) => key === evt.key)
 }
 

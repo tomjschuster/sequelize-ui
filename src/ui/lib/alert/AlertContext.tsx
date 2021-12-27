@@ -52,13 +52,7 @@ export function AlertProvider({ children }: { children: React.ReactNode }): Reac
       <AlertContext.Provider value={{ alert, info, success, warning, error }}>
         {children}
       </AlertContext.Provider>
-      {alerts.length > 0 && (
-        <AlertsContainer
-          // ref={ref}
-          alerts={alerts}
-          onDismiss={dismissAlert}
-        />
-      )}
+      <AlertsContainer alerts={alerts} onDismiss={dismissAlert} />
     </>
   )
 }

@@ -1,7 +1,7 @@
 import { DbOptions } from '@src/core/database'
 import { FileItem, FileSystemItem, itemName } from '@src/core/files/fileSystem'
-import useIsOpen from '@src/ui/hooks/useIsOpen'
 import useOnClickOutside from '@src/ui/hooks/useOnClickOutside'
+import useToggle from '@src/ui/hooks/useToggle'
 import { useAlert } from '@src/ui/lib/alert'
 import {
   backgroundColor,
@@ -40,7 +40,7 @@ export default function CodeViewerControls({
   onChangeDbOptions,
 }: CodeViewerControlsProps): React.ReactElement {
   const { info, success, error } = useAlert()
-  const { isOpen: isDbOptionsOpen, toggle: toggleDbOptions, close: closeDbOptions } = useIsOpen()
+  const { state: isDbOptionsOpen, toggle: toggleDbOptions, setOff: closeDbOptions } = useToggle()
 
   const handleClickDownload = () => {
     download(root)
@@ -94,10 +94,12 @@ export default function CodeViewerControls({
       />
       <IconButton
         label={isDbOptionsOpen ? 'close settings' : 'open settings'}
-        onClick={toggleDbOptions}
         icon={SettingsIcon}
         iconProps={{ size: 6 }}
-        onMouseDown={(evt) => evt.stopPropagation()}
+        onClick={(evt) => {
+          evt.stopPropagation()
+          toggleDbOptions()
+        }}
       />
       {isDbOptionsOpen && (
         <div

@@ -7,17 +7,8 @@ import {
   Schema,
   ThroughType,
 } from '@src/core/schema'
-import {
-  borderColor,
-  borderStyle,
-  borderWidth,
-  classnames,
-  fontWeight,
-  inset,
-  padding,
-  position,
-} from '@src/ui/styles/classnames'
-import { list, panelHeader } from '@src/ui/styles/utils'
+import { classnames, fontWeight, inset, padding, position } from '@src/ui/styles/classnames'
+import { inlineButton, list, panelHeader } from '@src/ui/styles/utils'
 import { noCase, titleCase } from '@src/utils/string'
 import React from 'react'
 import PencilIcon from '../icons/Pencil'
@@ -57,12 +48,7 @@ function AssociationView({
             </span>
           ) : (
             <button
-              className={classnames(
-                fontWeight('font-semibold'),
-                borderWidth('border-b-2'),
-                borderStyle('border-dashed'),
-                borderColor('border-gray-700'),
-              )}
+              className={classnames(inlineButton('bg-yellow-50'), fontWeight('font-semibold'))}
               onClick={() => onClickModel(targetModel)}
             >
               {titleCase(targetModel.name)}

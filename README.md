@@ -11,14 +11,10 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Notifications
-  - [ ] CRUD specific messages
-  - [ ] Fix UI
-  - [ ] Aria attrs
+- [ ] Schema view padding
+- [ ] Home buttons to links
 - [ ] Error boundary
 - [ ] GitHub link
-- [ ] a11y
-  - [ ] Form errors
 - [ ] Home page copy
 - [ ] demo schema tooltips
 - [ ] migrate old sequelize ui

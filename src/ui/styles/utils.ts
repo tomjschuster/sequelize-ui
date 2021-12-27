@@ -21,6 +21,7 @@ import {
   maxWidth,
   padding,
   position,
+  TBackgroundColor,
   width,
 } from './classnames'
 
@@ -92,14 +93,15 @@ export const panelAction = classnames(
   borderColor('hover:border-gray-800'),
 )
 
-export const inlineButton = classnames(
-  panelBase,
-  padding('p-2'),
-  padding('py-0.5'),
-  padding('px-1.5'),
-  padding('p-0.5'),
-  backgroundColor('hover:bg-gray-100'),
-)
+export const inlineButton = (bgColor: TBackgroundColor = 'bg-gray-100') =>
+  classnames(
+    panelBase,
+    padding('p-2'),
+    padding('py-0.5'),
+    padding('px-1.5'),
+    padding('p-0.5'),
+    backgroundColor(`hover:${bgColor}`),
+  )
 
 export const panelGrid = classnames(
   display('grid'),

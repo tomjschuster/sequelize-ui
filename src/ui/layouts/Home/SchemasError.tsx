@@ -31,7 +31,7 @@ export default function SchemasError({ onClickClearData }: SchemasErrorProps): R
             <button
               type="button"
               onClick={onClickClearData}
-              className={classnames(inlineButton, backgroundColor('hover:bg-green-100'))}
+              className={classnames(inlineButton(), backgroundColor('hover:bg-green-100'))}
             >
               Reset your data
             </button>

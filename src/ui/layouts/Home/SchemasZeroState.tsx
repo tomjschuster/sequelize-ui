@@ -23,7 +23,7 @@ export default function SchemasZeroState({
       <button
         type="button"
         className={classnames(
-          inlineButton,
+          inlineButton(),
           fontSize('text-sm'),
           fontWeight('font-bold'),
           backgroundColor('hover:bg-green-100'),

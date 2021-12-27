@@ -6,8 +6,8 @@ import {
   boxShadow,
   classnames,
   margin,
-  maxWidth,
   padding,
+  width,
 } from '@src/ui/styles/classnames'
 import { flexCenterBetween } from '@src/ui/styles/utils'
 import React from 'react'
@@ -30,7 +30,7 @@ export default function AlertDisplay({ alert, onDismiss }: AlertDisplayProps): R
         borderRadius('rounded-lg'),
         borderWidth('border'),
         boxShadow('shadow-lg'),
-        maxWidth('max-w-72'),
+        width('w-full'),
         backgroundColor({
           'bg-gray-50': alert.level === AlertLevel.Info,
           'bg-green-50': alert.level === AlertLevel.Success,

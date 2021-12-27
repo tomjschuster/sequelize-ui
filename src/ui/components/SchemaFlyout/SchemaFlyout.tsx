@@ -1,10 +1,9 @@
-import { DbOptions, defaultDbOptions } from '@src/core/database'
+import { defaultDbOptions } from '@src/core/database'
 import { itemName } from '@src/core/files/fileSystem'
 import * as FileTree from '@src/core/files/fileTree'
 import { emptySchema, Model, Schema } from '@src/core/schema'
 import Flyout from '@src/ui/components/Flyout'
 import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
-import { useAlert } from '@src/ui/lib/alert'
 import { scrollToTop } from '@src/utils/dom'
 import React from 'react'
 import SchemaFlyoutContent from './SchemaFlyoutContent'
@@ -25,33 +24,18 @@ export default function SchemaFlyout({
   onDelete,
   onClickClose,
 }: SchemaFlyoutProps): React.ReactElement | null {
-  const [dbOptions, setDbOptions] = React.useState<DbOptions>(defaultDbOptions)
-  const { success, error } = useAlert()
-
-  const handleChange = React.useCallback(
-    (schema: Schema): Promise<Schema> =>
-      onChange(schema)
-        .then((schema) => {
-          success(`Schema ${schema.name} saved.`, { ttl: 2000 })
-          return schema
-        })
-        .catch((e) => {
-          console.error(e)
-          error(`Error saving schema ${schema.name}`)
-          return schema
-        }),
-    [error, success, onChange],
-  )
   const {
     state,
     isEditing,
     fileTree,
+    dbOptions,
     selectItem,
     handleKeyDown,
     viewCode,
     viewSchema,
     edit,
     delete_,
+    updateDbOptions,
     updateModel,
     updateSchema,
     addModel,
@@ -68,8 +52,7 @@ export default function SchemaFlyout({
   } = useSchemaFlyout({
     schema,
     schemas,
-    dbOptions,
-    onChange: handleChange,
+    onChange,
     onExit: onClickClose,
     onDelete,
   })
@@ -100,7 +83,7 @@ export default function SchemaFlyout({
           isEditing={isEditing}
           fileTree={fileTree}
           dbOptions={dbOptions}
-          onChangeDbOptions={setDbOptions}
+          onChangeDbOptions={updateDbOptions}
           onSelectCode={viewCode}
           onSelectSchema={handleViewSchema}
           onEdit={edit}

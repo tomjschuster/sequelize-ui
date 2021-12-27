@@ -7,6 +7,7 @@ import {
   itemName,
 } from '@src/core/files/fileSystem'
 import * as FileTree from '@src/core/files/fileTree'
+import useToggle from '@src/ui/hooks/useToggle'
 import {
   alignItems,
   backgroundColor,
@@ -23,7 +24,7 @@ import {
   whitespace,
   width,
 } from '@src/ui/styles/classnames'
-import { focusById } from '@src/utils/dom'
+import { focusById, scrollIntoViewIfNeededById } from '@src/utils/dom'
 import React from 'react'
 import ChevronIcon, { ChevronDirection } from '../icons/Chevron'
 import LanguageIcon from '../icons/Language'
@@ -36,29 +37,32 @@ type FileTreeProps = {
 
 function FileTreeView({ fileTree, onSelect, onKeyDown }: FileTreeProps): React.ReactElement {
   const root = FileTree.rootItem(fileTree)
-  const activePath = FileTree.activeFilePath(fileTree)
   const focusedPath = FileTree.focusedFilePath(fileTree)
+  const { state: focused, setOn: setFocused, setOff: unsetFocused } = useToggle(true)
 
   React.useEffect(() => {
     if (focusedPath) {
-      focusById(pathId(focusedPath))
+      focusById(treeItemId(focusedPath))
+      scrollIntoViewIfNeededById(treeItemLabelId(focusedPath))
     }
   }, [focusedPath])
-
-  React.useEffect(() => {
-    if (activePath) {
-      const li = document.getElementById(pathId(activePath))
-      if (li) li.scrollIntoView({ block: 'center', behavior: 'auto' })
-    }
-  }, [])
 
   return (
     <ul
       role="tree"
       className={classnames(whitespace('whitespace-nowrap'), overflow('overflow-x-scroll'))}
       onKeyDown={onKeyDown}
+      onFocus={setFocused}
+      onBlur={unsetFocused}
     >
-      <FileTreeListItem item={root} depth={1} index={1} fileTree={fileTree} onSelect={onSelect} />
+      <FileTreeListItem
+        item={root}
+        depth={1}
+        index={1}
+        fileTree={fileTree}
+        focused={focused}
+        onSelect={onSelect}
+      />
     </ul>
   )
 }
@@ -68,6 +72,7 @@ type FileTreeItemProps = {
   path: string
   depth: number
   fileTree: FileTree.FileTree
+  focused: boolean
   onSelect: (path: string) => void
 }
 
@@ -76,10 +81,11 @@ function FileTreeItem({
   path,
   depth,
   fileTree,
+  focused,
   onSelect,
 }: FileTreeItemProps): React.ReactElement {
   const active = FileTree.isActive(fileTree, path)
-  const focused = FileTree.isFocused(fileTree, path)
+  const pathFocused = FileTree.isFocused(fileTree, path)
   const expanded = FileTree.directoryIsExpanded(fileTree, path)
   const language = isFile(item) && fileLanguage(item)
 
@@ -94,8 +100,7 @@ function FileTreeItem({
   return (
     <>
       <span
-        tabIndex={focused ? 0 : -1}
-        id={pathId(path)}
+        id={treeItemLabelId(path)}
         className={classnames(
           display('flex'),
           alignItems('items-center'),
@@ -104,9 +109,8 @@ function FileTreeItem({
           lineHeight('leading-relaxed'),
           cursor('cursor-pointer'),
           display('block'),
-          borderColor('border-transparent', { 'focus:border-black': focused }),
+          borderColor('border-transparent', { 'border-black': focused && pathFocused }),
           borderWidth('border-2', { 'border-t': depth === 1 }),
-          outlineStyle('focus-visible:outline-none', 'focus:outline-none'),
           fontWeight({ 'font-semibold': active }),
           backgroundColor({
             'hover:bg-gray-200': !active,
@@ -142,6 +146,7 @@ function FileTreeItem({
                 depth={depth + 1}
                 index={i}
                 fileTree={fileTree}
+                focused={focused}
                 onSelect={onSelect}
               />
             ))}
@@ -158,6 +163,7 @@ type FileTreeListItemProps = {
   depth: number
   index: number
   fileTree: FileTree.FileTree
+  focused: boolean
   onSelect: (path: string) => void
 }
 
@@ -168,20 +174,32 @@ function FileTreeListItem({
   depth,
   index,
   fileTree,
+  focused,
   onSelect,
 }: FileTreeListItemProps): React.ReactElement {
   const path = parentPath ? `${parentPath}/${itemName(item)}` : itemName(item)
+  const pathFocused = FileTree.isFocused(fileTree, path)
 
   return (
     <li
       role="treeitem"
+      id={treeItemId(path)}
+      className={classnames(outlineStyle('focus:outline-none'))}
+      tabIndex={pathFocused ? 0 : -1}
       aria-level={depth}
       aria-setsize={parent?.files.length || 1}
       aria-posinset={index + 1}
       aria-expanded={FileTree.directoryIsExpanded(fileTree, path)}
       key={itemName(item)}
     >
-      <FileTreeItem item={item} path={path} depth={depth} fileTree={fileTree} onSelect={onSelect} />
+      <FileTreeItem
+        item={item}
+        path={path}
+        depth={depth}
+        fileTree={fileTree}
+        focused={focused}
+        onSelect={onSelect}
+      />
     </li>
   )
 }
@@ -192,8 +210,12 @@ function compareItems(a: FileSystemItem, b: FileSystemItem): number {
   return itemName(a).localeCompare(itemName(b))
 }
 
-function pathId(path: string): string {
+function treeItemId(path: string): string {
   return path.replace(/\W/g, '-')
+}
+
+function treeItemLabelId(path: string): string {
+  return `${treeItemId(path)}-label`
 }
 
 export default React.memo(FileTreeView)

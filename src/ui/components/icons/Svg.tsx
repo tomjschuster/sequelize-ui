@@ -44,6 +44,7 @@ export default function Svg({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      aria-hidden={!title}
       className={classnames(height(`h-${size}`), width(`w-${size}`), className)}
       fill={fill}
       viewBox="0 0 24 24"
