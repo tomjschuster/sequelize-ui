@@ -40,7 +40,7 @@ export default function ModelView({
   onClickDeleteAssociation,
 }: ModelViewProps): React.ReactElement {
   return (
-    <div className={classnames(padding('pt-2', 'px-6'), margin('mb-3'))}>
+    <div className={classnames(padding('pt-2', 'p-6'), margin('mb-3'))}>
       <Breadcrumbs
         items={[{ label: `${titleCase(schema.name)} (schema)`, onClick: () => onViewSchema() }]}
         current={`${model && titleCase(model.name)} (model)`}

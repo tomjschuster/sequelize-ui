@@ -2,6 +2,7 @@ import breadcrumbs from '@src/ui/styles/breadcrumbs.module.css'
 import {
   classnames,
   display,
+  flexWrap,
   fontSize,
   fontWeight,
   margin,
@@ -22,7 +23,14 @@ type BreadcrumbsProps = {
 
 function Breadcrumbs({ items, current }: BreadcrumbsProps): React.ReactElement {
   return (
-    <div className={classnames(margin('mb-4'), display('flex'), fontSize('text-sm'))}>
+    <div
+      className={classnames(
+        margin('mb-4'),
+        display('flex'),
+        flexWrap('flex-wrap'),
+        fontSize('text-sm'),
+      )}
+    >
       {items.map(({ label, onClick }) => (
         <button
           key={label}
