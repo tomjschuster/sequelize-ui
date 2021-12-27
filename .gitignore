@@ -18,6 +18,9 @@ npm-debug.log*
 /.next
 /out
 
+# Firebase
+firebase-debug.log
+
 # Istanbul/NYC
 .nyc_output
 /coverage

@@ -80,7 +80,7 @@ export function useSchemaFlyout({
     (schema: Schema, message: string): Promise<Schema> =>
       onChange(schema)
         .then((schema) => {
-          success(message || `Schema "${schema.name}" saved.`, { ttl: 60000 })
+          success(message || `Schema "${schema.name}" saved.`, { ttl: 6000 })
           return schema
         })
         .catch((e) => {
