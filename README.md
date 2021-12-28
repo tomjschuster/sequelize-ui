@@ -22,6 +22,8 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 - [ ] db compatibility warnings
 - [ ] Schema Flyout context
 - [ ] Transition panels on delete
+- [ ] Cache file tree by schema id
+- [ ] Loading state for schema url
 
 #### Codegen
 

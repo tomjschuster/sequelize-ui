@@ -61,7 +61,9 @@ export default function Home(): React.ReactElement {
         return
       }
 
-      alertError(`Schema with id ${schemaId} not found.`)
+      if (loading) {
+        alertError(`Schema with id ${schemaId} not found.`)
+      }
 
       if (schema) {
         setSchema(undefined)
@@ -74,7 +76,7 @@ export default function Home(): React.ReactElement {
     if (!(typeof schemaId === 'string') && schema) {
       setSchema(undefined)
     }
-  }, [schemas, schema, router, alertError])
+  }, [loading, schemas, schema, router, alertError])
 
   // @TODO make create buttons be links
   const handleClickCreate = async () => {
