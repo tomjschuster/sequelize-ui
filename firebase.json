@@ -2,6 +2,7 @@
   "hosting": {
     "public": "out",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "cleanUrls": true,
     "headers": [
       {
         "source": "**/*.@(jpg|jpeg|gif|png)",

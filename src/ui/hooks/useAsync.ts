@@ -5,6 +5,8 @@ type UseAsyncArgs<Data, Variables> = {
   variables?: Variables
   getCacheKey?: (variables: Variables) => string | undefined
   onLoad?: (data: Data) => void
+  onError?: (error: unknown) => void
+  skip?: boolean
 }
 
 type UseAsyncResult<Data> = {
@@ -18,6 +20,8 @@ export default function useAsync<Data, Variables = undefined>({
   variables,
   getCacheKey,
   onLoad,
+  onError,
+  skip,
 }: UseAsyncArgs<Data, Variables>): UseAsyncResult<Data> {
   const [data, setData] = React.useState<Data>()
   const [loading, setLoading] = React.useState<boolean>(true)
@@ -49,15 +53,17 @@ export default function useAsync<Data, Variables = undefined>({
         return newData
       })
       .catch((error) => {
+        onError && onError(error)
         setLoading(false)
         setError(error)
+
         return undefined
       })
   }, [cache, variables, getData, getCacheKey, onLoad])
 
   React.useEffect(() => {
-    fetchData()
-  }, [fetchData])
+    if (!skip) fetchData()
+  }, [skip, fetchData])
 
   return { data, loading, error, refetch: fetchData }
 }

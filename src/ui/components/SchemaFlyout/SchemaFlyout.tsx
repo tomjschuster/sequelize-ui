@@ -14,7 +14,7 @@ type SchemaFlyoutProps = {
   schema: Schema
   schemas: Schema[]
   onChange: (schema: Schema) => Promise<Schema>
-  onDelete: () => Promise<void>
+  onDelete?: () => Promise<void>
   onClickClose: () => void
 }
 export default function SchemaFlyout({

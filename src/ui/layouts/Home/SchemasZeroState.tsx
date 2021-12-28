@@ -1,3 +1,5 @@
+import RouteLink from '@src/routing/RouteLink'
+import { newSchemaRoute } from '@src/routing/routes'
 import {
   backgroundColor,
   classnames,
@@ -8,32 +10,21 @@ import {
 import { inlineButton } from '@src/ui/styles/utils'
 import React from 'react'
 
-type SchemasZeroStateProps = {
-  onClickCreate: () => void
-  onMouseOver: () => void
-}
-
-export default function SchemasZeroState({
-  onClickCreate,
-  onMouseOver,
-}: SchemasZeroStateProps): React.ReactElement | null {
+export default function SchemasZeroState(): React.ReactElement | null {
   return (
     <p className={classnames(fontSize('text-lg'), lineHeight('leading-loose'))}>
       To get started,{' '}
-      <button
-        type="button"
+      <RouteLink
+        route={newSchemaRoute()}
         className={classnames(
           inlineButton(),
           fontSize('text-sm'),
           fontWeight('font-bold'),
           backgroundColor('hover:bg-green-100'),
         )}
-        onClick={onClickCreate}
-        onMouseOver={onMouseOver}
-        onTouchStartCapture={onMouseOver}
       >
         create a new schema
-      </button>{' '}
+      </RouteLink>{' '}
       or select one of the demo schemas below.
     </p>
   )

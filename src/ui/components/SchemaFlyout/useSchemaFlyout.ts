@@ -29,7 +29,7 @@ type UseSchemaFlyoutArgs = {
   schemas: Schema[]
   code?: boolean
   onChange: (schema: Schema) => Promise<Schema>
-  onDelete: () => Promise<void>
+  onDelete?: () => Promise<void>
   onExit: () => void
 }
 
@@ -77,10 +77,11 @@ export function useSchemaFlyout({
   const { success, error } = useAlert()
 
   const change = React.useCallback(
-    (schema: Schema, message: string): Promise<Schema> =>
+    (schema: Schema, message: string | ((schema: Schema) => string)): Promise<Schema> =>
       onChange(schema)
         .then((schema) => {
-          success(message || `Schema "${schema.name}" saved.`, { ttl: 6000 })
+          const messageString = typeof message === 'string' ? message : message(schema)
+          success(messageString, { ttl: 6000 })
           return schema
         })
         .catch((e) => {
@@ -306,7 +307,7 @@ export function useSchemaFlyout({
       }
 
       if (isDemoSchema(state.schema) || !equal(state.schema, schema)) {
-        const updatedSchema = await change(state.schema, `Schema "${state.schema.name}" saved.`)
+        const updatedSchema = await change(state.schema, (s) => `Schema "${s.name}" saved.`)
         exitEdit(updatedSchema)
         return
       }
@@ -395,8 +396,9 @@ export function useSchemaFlyout({
 
   const delete_ = React.useCallback(async () => {
     if (
-      state.type === SchemaFlyoutStateType.VIEW_SCHEMA ||
-      state.type === SchemaFlyoutStateType.EDIT_SCHEMA
+      onDelete &&
+      (state.type === SchemaFlyoutStateType.VIEW_SCHEMA ||
+        state.type === SchemaFlyoutStateType.EDIT_SCHEMA)
     ) {
       return await onDelete()
         .then(() => {

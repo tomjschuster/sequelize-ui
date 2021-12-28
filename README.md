@@ -11,9 +11,12 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Refactor routing
+- [ ] Schema page build size
+- [ ] Refactor/restyle flyout to schema layout
+- [ ] Schema page title/metadata
+- [ ] Cleanup unused code
+- [ ] Schema page CLS
 - [ ] Error boundary
-- [ ] Allow duplicate name with incrementer
 - [ ] GitHub link
 - [ ] Home page copy
 - [ ] demo schema tooltips

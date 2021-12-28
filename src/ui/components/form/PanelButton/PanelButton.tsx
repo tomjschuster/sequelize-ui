@@ -1,53 +1,76 @@
+import RouteLink, { RouteLinkProps } from '@src/routing/RouteLink'
 import {
   borderColor,
   borderStyle,
-  Classname,
   classnames,
   fontSize,
   margin,
   minHeight,
+  WithClassname,
 } from '@src/ui/styles/classnames'
 import { panelAction } from '@src/ui/styles/utils'
-import { Override } from '@src/utils/types'
 import React from 'react'
 import { SvgProps } from '../../icons/Svg'
 
-type PanelButtonProps = Override<
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
-  {
-    className?: Classname
-    label: string
-    icon: React.ComponentType<SvgProps>
-    iconProps?: SvgProps
-  }
+const panelActionClassname = classnames(
+  panelAction,
+  minHeight('min-h-16'),
+  fontSize('text-lg'),
+  borderStyle('border-dashed'),
+  borderColor('hover:border-gray-800'),
+)
+
+type PanelButtonProps = WithClassname<
+  React.ButtonHTMLAttributes<HTMLButtonElement> & PanelActionContentProps
 >
 
-export default function PanelButton({
+export function PanelButton({
   label,
-  icon: Icon,
+  icon,
   iconProps,
   className,
-  onClick,
   ...props
 }: PanelButtonProps): React.ReactElement {
   return (
-    <button
-      type="button"
-      className={classnames(
-        className,
-        panelAction,
-        minHeight('min-h-16'),
-        fontSize('text-lg'),
-        borderStyle('border-dashed'),
-        borderColor('hover:border-gray-800'),
-      )}
-      onClick={onClick}
-      {...props}
-    >
+    <button type="button" className={classnames(className, panelActionClassname)} {...props}>
+      <PanelActionContent icon={icon} iconProps={iconProps} label={label} />
+    </button>
+  )
+}
+
+type PanelLinkProps = WithClassname<RouteLinkProps & PanelActionContentProps>
+
+export function PanelLink({
+  route,
+  label,
+  icon,
+  iconProps,
+  className,
+  ...props
+}: PanelLinkProps): React.ReactElement {
+  return (
+    <RouteLink route={route} className={classnames(className, panelActionClassname)} {...props}>
+      <PanelActionContent icon={icon} iconProps={iconProps} label={label} />
+    </RouteLink>
+  )
+}
+
+type PanelActionContentProps = {
+  label: string
+  icon: React.ComponentType<SvgProps>
+  iconProps?: SvgProps
+}
+function PanelActionContent({
+  icon: Icon,
+  iconProps,
+  label,
+}: PanelActionContentProps): React.ReactElement {
+  return (
+    <>
       <span className={classnames(margin('mr-2'))}>
         <Icon {...iconProps} />
       </span>
       {label}
-    </button>
+    </>
   )
 }

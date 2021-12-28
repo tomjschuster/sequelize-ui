@@ -1,39 +1,31 @@
-import { DemoSchemaType, displayDemoSchemaType, getDemoSchemaId } from '@src/data/schemas'
+import { DemoSchemaType, displayDemoSchemaType } from '@src/data/schemas'
+import RouteLink from '@src/routing/RouteLink'
+import { demoSchemaRoute } from '@src/routing/routes'
 import { backgroundColor, classnames, fontSize, margin } from '@src/ui/styles/classnames'
 import { panelAction, panelGrid } from '@src/ui/styles/utils'
-import Link from 'next/link'
 import React from 'react'
 import FilmIcon from '../../components/icons/Film'
 import RssIcon from '../../components/icons/Rss'
 import UserGroupIcon from '../../components/icons/UserGroup'
 
-type DemoSchemaButtonsProps = {
-  onMouseOver: (schemaType: DemoSchemaType) => void
-}
-
-export default function DemoSchemaButtons({
-  onMouseOver,
-}: DemoSchemaButtonsProps): React.ReactElement {
+export default function DemoSchemaButtons(): React.ReactElement {
   return (
     <ul className={classnames(panelGrid)}>
       {Object.values(DemoSchemaType).map((schemaType) => (
         <li key={schemaType}>
-          <Link href={`/?schema=${getDemoSchemaId(schemaType)}`}>
-            <a
-              className={classnames(
-                panelAction,
-                fontSize('text-sm'),
-                backgroundColor('hover:bg-yellow-50'),
-              )}
-              onMouseOver={onMouseOver.bind(null, schemaType)}
-              onTouchStartCapture={onMouseOver.bind(null, schemaType)}
-            >
-              <span className={classnames(margin('mr-2'))}>
-                <DemoSchemaIcon schemaType={schemaType} />
-              </span>
-              {displayDemoSchemaType(schemaType)}
-            </a>
-          </Link>
+          <RouteLink
+            route={demoSchemaRoute(schemaType)}
+            className={classnames(
+              panelAction,
+              fontSize('text-sm'),
+              backgroundColor('hover:bg-yellow-50'),
+            )}
+          >
+            <span className={classnames(margin('mr-2'))}>
+              <DemoSchemaIcon schemaType={schemaType} />
+            </span>
+            {displayDemoSchemaType(schemaType)}
+          </RouteLink>
         </li>
       ))}
     </ul>

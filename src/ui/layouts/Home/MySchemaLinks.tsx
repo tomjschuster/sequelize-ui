@@ -1,5 +1,7 @@
 import { Schema } from '@src/core/schema'
-import PanelButton from '@src/ui/components/form/PanelButton'
+import RouteLink from '@src/routing/RouteLink'
+import { newSchemaRoute, schemaRoute } from '@src/routing/routes'
+import { PanelLink } from '@src/ui/components/form/PanelButton'
 import {
   alignItems,
   backgroundColor,
@@ -21,7 +23,6 @@ import {
 } from '@src/ui/styles/classnames'
 import { panelAction, panelGrid } from '@src/ui/styles/utils'
 import { now, TimeGranularity, timeSince } from '@src/utils/dateTime'
-import Link from 'next/link'
 import React from 'react'
 import ClockIcon from '../../components/icons/Clock'
 import CollectionIcon from '../../components/icons/Collection'
@@ -29,26 +30,18 @@ import PlusCircleIcon from '../../components/icons/Plus'
 
 type MySchemaLinksProps = {
   schemas: Schema[]
-  onClickCreate: () => void
-  onMouseOverSchema: () => void
 }
 
-export default function MySchemaLinks({
-  schemas,
-  onClickCreate,
-  onMouseOverSchema,
-}: MySchemaLinksProps): React.ReactElement {
+export default function MySchemaLinks({ schemas }: MySchemaLinksProps): React.ReactElement {
   return (
     <ul className={panelGrid}>
       <li>
-        <PanelButton
+        <PanelLink
+          route={newSchemaRoute()}
           label="Create a new schema"
           className={classnames(backgroundColor('hover:bg-green-50'))}
           icon={PlusCircleIcon}
           iconProps={{ size: 6 }}
-          onClick={onClickCreate}
-          onMouseOver={onMouseOverSchema}
-          onTouchStartCapture={onMouseOverSchema}
         />
       </li>
       {schemas
@@ -56,7 +49,7 @@ export default function MySchemaLinks({
         .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
         .map((schema) => (
           <li key={schema.id}>
-            <MySchemaButton schema={schema} onMouseOver={onMouseOverSchema} />
+            <MySchemaButton schema={schema} />
           </li>
         ))}
     </ul>
@@ -65,9 +58,8 @@ export default function MySchemaLinks({
 
 type MySchemaButtonProps = {
   schema: Schema
-  onMouseOver: () => void
 }
-function MySchemaButton({ schema, onMouseOver }: MySchemaButtonProps): React.ReactElement {
+function MySchemaButton({ schema }: MySchemaButtonProps): React.ReactElement {
   const modelCount = schema.models.length
 
   return (
@@ -84,25 +76,21 @@ function MySchemaButton({ schema, onMouseOver }: MySchemaButtonProps): React.Rea
       )}
     >
       <h3>
-        {/* @TODO: abstract link */}
-        <Link href={`/?schema=${schema.id}`}>
-          <a
-            className={classnames(
-              fontWeight('font-bold'),
-              overflow('overflow-hidden'),
-              textOverflow('text-ellipsis'),
-              width('w-full'),
-              margin('mb-2'),
-              position('after:absolute'),
-              inset('after:top-0', 'after:bottom-0', 'after:left-0', 'after:right-0'),
-              outlineStyle('outline-none'),
-            )}
-            onMouseOver={onMouseOver}
-            onTouchStartCapture={onMouseOver}
-          >
-            {schema.name || 'Untitled'}
-          </a>
-        </Link>
+        <RouteLink
+          route={schemaRoute(schema.id)}
+          className={classnames(
+            fontWeight('font-bold'),
+            overflow('overflow-hidden'),
+            textOverflow('text-ellipsis'),
+            width('w-full'),
+            margin('mb-2'),
+            position('after:absolute'),
+            inset('after:top-0', 'after:bottom-0', 'after:left-0', 'after:right-0'),
+            outlineStyle('outline-none'),
+          )}
+        >
+          {schema.name || 'Untitled'}
+        </RouteLink>
       </h3>
       <span className={classnames(display('flex'), flexDirection('flex-col'), width('w-full'))}>
         <MySchemaLinksMetaItem icon={<CollectionIcon size={3} />}>
