@@ -61,6 +61,7 @@ function Header({ compact }: HeaderProps): React.ReactElement {
         </h1>
       </RouteLink>
       <a
+        title="GitHub"
         className={classnames(padding('px-2'), textColor('hover:text-blue-700'))}
         href="https://github.com/tomjschuster/sequelize-ui"
         target="_blank"
