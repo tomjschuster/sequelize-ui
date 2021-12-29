@@ -200,7 +200,7 @@ function SchemaLayoutControlsActions({
             fontWeight('font-bold'),
             width('w-16', 'md:w-20'),
             margin('ml-2'),
-            backgroundColor('bg-pink-500', 'hover:bg-red-400'),
+            backgroundColor('bg-red-600', 'hover:bg-red-400'),
           )}
           icon={TrashIcon}
           onClick={onDelete}
