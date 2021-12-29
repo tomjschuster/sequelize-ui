@@ -8,6 +8,6 @@ function IndexPage(): React.ReactElement {
 
 export default withLayout(() => ({
   title: 'Sequelize UI',
-  metaDescripton:
+  metaDescription:
     'Use Sequelize UI to quickly generate Sequelize TypeScript code online. Customize your data model and database settings, then export your Node.js project.',
 }))(IndexPage)

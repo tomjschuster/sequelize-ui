@@ -61,6 +61,6 @@ export async function getStaticProps(
 export default withLayout<DemoSchemaPageProps>(({ demoSchemaType }) => ({
   compact: true,
   title: `Example Sequelize ${displayDemoSchemaType(demoSchemaType)} code`,
-  metaDescripton:
+  metaDescription:
     'Use Sequelize UI to quickly generate Sequelize TypeScript code online. Customize your data model and database settings, then export your Node.js project.',
 }))(DemoSchemaPage)

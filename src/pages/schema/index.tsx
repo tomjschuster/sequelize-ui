@@ -70,6 +70,6 @@ function SchemaPage(): React.ReactElement {
 export default withLayout(() => ({
   compact: true,
   title: 'Sequelize UI | Schema',
-  metaDescripton:
+  metaDescription:
     'Use Sequelize UI to quickly generate Sequelize TypeScript code online. Customize your data model and database settings, then export your Node.js project.',
 }))(SchemaPage)
