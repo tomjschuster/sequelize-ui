@@ -2,10 +2,11 @@ import { createSchema } from '@src/api/schema'
 import { emptySchema, Schema } from '@src/core/schema'
 import { goTo } from '@src/routing/navigation'
 import { indexRoute, schemaRoute } from '@src/routing/routes'
-import SchemaFlyout from '@src/ui/components/SchemaFlyout'
+import withLayout from '@src/ui/hocs/withLayout'
+import SchemaLayout from '@src/ui/layouts/SchemaLayout'
 import React from 'react'
 
-export default function SchemaPage(): React.ReactElement {
+function SchemaPage(): React.ReactElement {
   const schema = React.useMemo(emptySchema, [])
 
   const handleChange = React.useCallback(async (schema: Schema) => {
@@ -17,11 +18,18 @@ export default function SchemaPage(): React.ReactElement {
   const handleCancel = () => goTo(indexRoute())
 
   return (
-    <SchemaFlyout
+    <SchemaLayout
+      initiallyEditing
       schema={schema}
-      schemas={[]}
       onChange={handleChange}
       onClickClose={handleCancel}
     />
   )
 }
+
+export default withLayout(() => ({
+  compact: true,
+  title: 'Sequelize UI | Create a Schema',
+  metaDescripton:
+    'Use Sequelize UI to quickly generate Sequelize TypeScript code online. Customize your data model and database settings, then export your Node.js project.',
+}))(SchemaPage)

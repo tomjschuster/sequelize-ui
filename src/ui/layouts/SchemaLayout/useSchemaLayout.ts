@@ -1,5 +1,6 @@
 import { DbOptions, defaultDbOptions } from '@src/core/database'
 import { activeFilePath, FileTree } from '@src/core/files/fileTree'
+import { Framework } from '@src/core/framework'
 import {
   Association,
   displayAssociation,
@@ -21,20 +22,20 @@ import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import { useAlert } from '@src/ui/lib/alert'
 import equal from 'fast-deep-equal/es6'
 import React from 'react'
-import { useFileTree } from '../FileTreeView'
-import { InitialEditModelStateType, SchemaFlyoutState, SchemaFlyoutStateType } from './types'
+import { useFileTree } from '../../components/FileTreeView'
+import { InitialEditModelStateType, SchemaLayoutState, SchemaLayoutStateType } from './types'
 
-type UseSchemaFlyoutArgs = {
+type UseSchemaLayoutArgs = {
   schema: Schema
-  schemas: Schema[]
-  code?: boolean
+  initialFramework?: Framework
+  initiallyEditing?: boolean
   onChange: (schema: Schema) => Promise<Schema>
   onDelete?: () => Promise<void>
   onExit: () => void
 }
 
-type UseSchemaFlyoutResult = {
-  state: SchemaFlyoutState
+type UseSchemaLayoutResult = {
+  state: SchemaLayoutState
   isEditing: boolean
   fileTree: FileTree
   dbOptions: DbOptions
@@ -59,18 +60,18 @@ type UseSchemaFlyoutResult = {
   save: () => void
   cancel: () => void
 }
-export function useSchemaFlyout({
+export function useSchemaLayout({
   schema,
-  schemas,
-  code = true,
+  initialFramework,
+  initiallyEditing = false,
   onChange,
   onDelete,
   onExit,
-}: UseSchemaFlyoutArgs): UseSchemaFlyoutResult {
-  const [state, setState] = React.useState<SchemaFlyoutState>(() =>
-    isNewSchema(schema) || !code
-      ? { type: SchemaFlyoutStateType.EDIT_SCHEMA, schema, errors: emptySchemaErrors }
-      : { type: SchemaFlyoutStateType.CODE },
+}: UseSchemaLayoutArgs): UseSchemaLayoutResult {
+  const [state, setState] = React.useState<SchemaLayoutState>(() =>
+    initiallyEditing
+      ? { type: SchemaLayoutStateType.EDIT_SCHEMA, schema, errors: emptySchemaErrors }
+      : { type: SchemaLayoutStateType.CODE },
   )
 
   const [dbOptions, setDbOptions] = React.useState<DbOptions>(defaultDbOptions)
@@ -92,72 +93,72 @@ export function useSchemaFlyout({
     [error, success, onChange],
   )
 
-  const { root, framework, defaultPath } = useGeneratedCode({ schema, dbOptions })
+  const { root, framework, defaultPath } = useGeneratedCode({ schema, dbOptions, initialFramework })
   const { fileTree, selectItem, handleKeyDown } = useFileTree({ root, key: schema.id, defaultPath })
 
   const edit = React.useCallback(() => {
-    if (state.type === SchemaFlyoutStateType.CODE) {
+    if (state.type === SchemaLayoutStateType.CODE) {
       const path = activeFilePath(fileTree)
       const model = path && framework?.modelFromPath(path, schema)
 
       if (model) {
-        setState({ type: SchemaFlyoutStateType.EDIT_MODEL, model, errors: emptyModelErrors })
+        setState({ type: SchemaLayoutStateType.EDIT_MODEL, model, errors: emptyModelErrors })
       } else {
-        setState({ type: SchemaFlyoutStateType.EDIT_SCHEMA, schema, errors: emptySchemaErrors })
+        setState({ type: SchemaLayoutStateType.EDIT_SCHEMA, schema, errors: emptySchemaErrors })
       }
       return
     }
 
-    if (state.type === SchemaFlyoutStateType.VIEW_MODEL) {
+    if (state.type === SchemaLayoutStateType.VIEW_MODEL) {
       setState({
-        type: SchemaFlyoutStateType.EDIT_MODEL,
+        type: SchemaLayoutStateType.EDIT_MODEL,
         model: state.model,
         errors: emptyModelErrors,
       })
       return
     }
 
-    setState({ type: SchemaFlyoutStateType.EDIT_SCHEMA, schema, errors: emptySchemaErrors })
+    setState({ type: SchemaLayoutStateType.EDIT_SCHEMA, schema, errors: emptySchemaErrors })
   }, [state, schema, fileTree, framework])
 
   const viewCode = React.useCallback(() => {
     const path =
-      state.type === SchemaFlyoutStateType.VIEW_MODEL &&
+      state.type === SchemaLayoutStateType.VIEW_MODEL &&
       root &&
       framework?.defaultModelFile(state.model, root)
 
     if (path) selectItem(path)
 
-    setState({ type: SchemaFlyoutStateType.CODE })
+    setState({ type: SchemaLayoutStateType.CODE })
   }, [state, root, framework, selectItem])
 
   const viewSchema = React.useCallback(
     (model?: Model) => {
-      if (state.type === SchemaFlyoutStateType.CODE) {
+      if (state.type === SchemaLayoutStateType.CODE) {
         const path = activeFilePath(fileTree)
         const currModel = path && framework?.modelFromPath(path, schema)
 
-        const nextState: SchemaFlyoutState = currModel
-          ? { type: SchemaFlyoutStateType.VIEW_MODEL, model: currModel }
-          : { type: SchemaFlyoutStateType.VIEW_SCHEMA, schema }
+        const nextState: SchemaLayoutState = currModel
+          ? { type: SchemaLayoutStateType.VIEW_MODEL, model: currModel }
+          : { type: SchemaLayoutStateType.VIEW_SCHEMA, schema }
 
         setState(nextState)
         return
       }
 
       if (model) {
-        setState({ type: SchemaFlyoutStateType.VIEW_MODEL, model })
+        setState({ type: SchemaLayoutStateType.VIEW_MODEL, model })
         return
       }
 
-      setState({ type: SchemaFlyoutStateType.VIEW_SCHEMA, schema })
+      setState({ type: SchemaLayoutStateType.VIEW_SCHEMA, schema })
     },
     [state, fileTree, framework, schema],
   )
 
   const updateSchema = React.useCallback(
     (schema: Schema) => {
-      if (state.type === SchemaFlyoutStateType.EDIT_SCHEMA) {
+      if (state.type === SchemaLayoutStateType.EDIT_SCHEMA) {
         setState({ ...state, schema })
       }
     },
@@ -166,7 +167,7 @@ export function useSchemaFlyout({
 
   const updateModel = React.useCallback(
     (model: Model) => {
-      if (state.type === SchemaFlyoutStateType.EDIT_MODEL) {
+      if (state.type === SchemaLayoutStateType.EDIT_MODEL) {
         setState({ ...state, model })
       }
     },
@@ -174,9 +175,9 @@ export function useSchemaFlyout({
   )
 
   const addModel = React.useCallback(() => {
-    if (state.type === SchemaFlyoutStateType.VIEW_SCHEMA) {
+    if (state.type === SchemaLayoutStateType.VIEW_SCHEMA) {
       setState({
-        type: SchemaFlyoutStateType.EDIT_SCHEMA,
+        type: SchemaLayoutStateType.EDIT_SCHEMA,
         schema,
         errors: emptySchemaErrors,
         newModel: true,
@@ -186,7 +187,7 @@ export function useSchemaFlyout({
 
   const editModel = React.useCallback((model: Model) => {
     setState({
-      type: SchemaFlyoutStateType.EDIT_MODEL,
+      type: SchemaLayoutStateType.EDIT_MODEL,
       model,
       errors: emptyModelErrors,
     })
@@ -202,16 +203,16 @@ export function useSchemaFlyout({
         `Model "${model.name}" deleted.`,
       )
 
-      setState({ type: SchemaFlyoutStateType.VIEW_SCHEMA, schema: updatedSchema })
+      setState({ type: SchemaLayoutStateType.VIEW_SCHEMA, schema: updatedSchema })
       return
     },
     [change, schema],
   )
 
   const addField = React.useCallback(() => {
-    if (state.type === SchemaFlyoutStateType.VIEW_MODEL) {
+    if (state.type === SchemaLayoutStateType.VIEW_MODEL) {
       setState({
-        type: SchemaFlyoutStateType.EDIT_MODEL,
+        type: SchemaLayoutStateType.EDIT_MODEL,
         model: state.model,
         errors: emptyModelErrors,
         initialState: { type: InitialEditModelStateType.NEW_FIELD },
@@ -220,9 +221,9 @@ export function useSchemaFlyout({
   }, [state])
 
   const addAssociation = React.useCallback(() => {
-    if (state.type === SchemaFlyoutStateType.VIEW_MODEL) {
+    if (state.type === SchemaLayoutStateType.VIEW_MODEL) {
       setState({
-        type: SchemaFlyoutStateType.EDIT_MODEL,
+        type: SchemaLayoutStateType.EDIT_MODEL,
         model: state.model,
         errors: emptyModelErrors,
         initialState: { type: InitialEditModelStateType.NEW_ASSOCIATION },
@@ -235,7 +236,7 @@ export function useSchemaFlyout({
       const model = schema.models.find((m) => m.id === association.sourceModelId)
       if (model) {
         setState({
-          type: SchemaFlyoutStateType.EDIT_MODEL,
+          type: SchemaLayoutStateType.EDIT_MODEL,
           model,
           initialState: { type: InitialEditModelStateType.EDIT_ASSOCIATION, association },
           errors: emptyModelErrors,
@@ -247,7 +248,7 @@ export function useSchemaFlyout({
 
   const deleteAssociation = React.useCallback(
     async (association: Association) => {
-      if (state.type === SchemaFlyoutStateType.VIEW_MODEL) {
+      if (state.type === SchemaLayoutStateType.VIEW_MODEL) {
         const model: Model = {
           ...state.model,
           associations: state.model.associations.filter((a) => a.id !== association.id),
@@ -269,7 +270,7 @@ export function useSchemaFlyout({
 
         if (updatedModel) {
           setState({
-            type: SchemaFlyoutStateType.VIEW_MODEL,
+            type: SchemaLayoutStateType.VIEW_MODEL,
             model: updatedModel,
           })
         }
@@ -283,23 +284,23 @@ export function useSchemaFlyout({
   const exitEdit = React.useCallback(
     (nextSchema: Schema) => {
       const model =
-        state.type === SchemaFlyoutStateType.EDIT_MODEL
+        state.type === SchemaLayoutStateType.EDIT_MODEL
           ? nextSchema.models.find((m) => m.id === state.model.id)
           : undefined
 
       if (model) {
-        setState({ type: SchemaFlyoutStateType.VIEW_MODEL, model })
+        setState({ type: SchemaLayoutStateType.VIEW_MODEL, model })
         return
       }
 
-      setState({ type: SchemaFlyoutStateType.VIEW_SCHEMA, schema: nextSchema })
+      setState({ type: SchemaLayoutStateType.VIEW_SCHEMA, schema: nextSchema })
     },
     [state],
   )
 
   const save = React.useCallback(async () => {
-    if (state.type === SchemaFlyoutStateType.EDIT_SCHEMA) {
-      const errors = validateSchema(state.schema, schemas)
+    if (state.type === SchemaLayoutStateType.EDIT_SCHEMA) {
+      const errors = validateSchema(state.schema)
 
       if (hasSchemaErrors(errors)) {
         setState({ ...state, errors })
@@ -320,7 +321,7 @@ export function useSchemaFlyout({
       exitEdit(schema)
     }
 
-    if (state.type === SchemaFlyoutStateType.EDIT_MODEL) {
+    if (state.type === SchemaLayoutStateType.EDIT_MODEL) {
       const errors = validateModel(state.model, schema)
 
       if (noModelErrors(errors)) {
@@ -346,11 +347,11 @@ export function useSchemaFlyout({
         setState({ ...state, errors })
       }
     }
-  }, [schema, schemas, state, change, exitEdit, onExit])
+  }, [schema, state, change, exitEdit, onExit])
 
   const deleteField = React.useCallback(
     async (field: Field) => {
-      if (state.type === SchemaFlyoutStateType.VIEW_MODEL) {
+      if (state.type === SchemaLayoutStateType.VIEW_MODEL) {
         const model: Model = {
           ...state.model,
           fields: state.model.fields.filter((f) => f.id !== field.id),
@@ -368,7 +369,7 @@ export function useSchemaFlyout({
 
         if (updatedModel) {
           setState({
-            type: SchemaFlyoutStateType.VIEW_MODEL,
+            type: SchemaLayoutStateType.VIEW_MODEL,
             model: updatedModel,
           })
         }
@@ -384,7 +385,7 @@ export function useSchemaFlyout({
       const model = schema.models.find((m) => m.fields.some((f) => f.id === field.id))
       if (model) {
         setState({
-          type: SchemaFlyoutStateType.EDIT_MODEL,
+          type: SchemaLayoutStateType.EDIT_MODEL,
           model,
           initialState: { type: InitialEditModelStateType.EDIT_FIELD, field },
           errors: emptyModelErrors,
@@ -397,8 +398,8 @@ export function useSchemaFlyout({
   const delete_ = React.useCallback(async () => {
     if (
       onDelete &&
-      (state.type === SchemaFlyoutStateType.VIEW_SCHEMA ||
-        state.type === SchemaFlyoutStateType.EDIT_SCHEMA)
+      (state.type === SchemaLayoutStateType.VIEW_SCHEMA ||
+        state.type === SchemaLayoutStateType.EDIT_SCHEMA)
     ) {
       return await onDelete()
         .then(() => {
@@ -411,8 +412,8 @@ export function useSchemaFlyout({
     }
 
     if (
-      state.type === SchemaFlyoutStateType.VIEW_MODEL ||
-      state.type === SchemaFlyoutStateType.EDIT_MODEL
+      state.type === SchemaLayoutStateType.VIEW_MODEL ||
+      state.type === SchemaLayoutStateType.EDIT_MODEL
     ) {
       const updatedSchema = await change(
         {
@@ -422,7 +423,7 @@ export function useSchemaFlyout({
         `Model "${state.model.name}" deleted.`,
       )
 
-      setState({ type: SchemaFlyoutStateType.VIEW_SCHEMA, schema: updatedSchema })
+      setState({ type: SchemaLayoutStateType.VIEW_SCHEMA, schema: updatedSchema })
       return
     }
   }, [schema, state, change, onExit, onDelete])
@@ -444,8 +445,8 @@ export function useSchemaFlyout({
   return {
     state,
     isEditing:
-      state.type === SchemaFlyoutStateType.EDIT_MODEL ||
-      state.type === SchemaFlyoutStateType.EDIT_SCHEMA,
+      state.type === SchemaLayoutStateType.EDIT_MODEL ||
+      state.type === SchemaLayoutStateType.EDIT_SCHEMA,
     fileTree,
     dbOptions,
     selectItem,

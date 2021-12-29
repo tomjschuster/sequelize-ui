@@ -1,14 +1,14 @@
 import { Association, emptyAssociation, emptyField, Field, Model, Schema } from '@src/core/schema'
 import { ModelErrors } from '@src/core/validation/schema'
 import usePrevious from '@src/ui/hooks/usePrevious'
-import { backgroundColor, classnames, margin, padding } from '@src/ui/styles/classnames'
+import { backgroundColor, classnames, margin, overflow, padding } from '@src/ui/styles/classnames'
 import { panel, panelGrid, section, title } from '@src/ui/styles/utils'
 import { focusById } from '@src/utils/dom'
 import React from 'react'
+import { InitialEditModelState, InitialEditModelStateType } from '../../layouts/SchemaLayout/types'
 import PanelButton from '../form/PanelButton'
 import { autofillDisable } from '../form/shared/utils'
 import PlusCircleIcon from '../icons/Plus'
-import { InitialEditModelState, InitialEditModelStateType } from '../SchemaFlyout/types'
 import AssociationFieldset, { associationTypeId } from './AssociationFieldset'
 import FieldFieldset, { fieldNameId } from './FieldFieldset'
 import ModelFieldset, { modelNameId } from './ModelFieldset'
@@ -139,7 +139,7 @@ export default function ModelForm({
   return (
     <form
       onSubmit={(evt) => evt.preventDefault()}
-      className={classnames(padding('p-6', 'pt-11'))}
+      className={classnames(overflow('overflow-y-scroll'), padding('p-6', 'pt-11'))}
       {...autofillDisable}
     >
       <div className={classnames(section)}>

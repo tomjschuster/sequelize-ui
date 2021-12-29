@@ -1,16 +1,13 @@
-import Layout from '@src/ui/components/Layout'
-import Home from '@src/ui/layouts/Home'
+import withLayout from '@src/ui/hocs/withLayout'
+import HomeLayout from '@src/ui/layouts/HomeLayout'
 import React from 'react'
 
-const title = 'Sequelize UI'
-
-const metaDescripton =
-  'Use Sequelize UI to quickly generate Sequelize TypeScript code online. Customize your data model and database settings, then export your Node.js project.'
-
-export default function IndexPage(): React.ReactElement {
-  return (
-    <Layout title={title} metaDescription={metaDescripton}>
-      <Home />
-    </Layout>
-  )
+function IndexPage(): React.ReactElement {
+  return <HomeLayout />
 }
+
+export default withLayout(() => ({
+  title: 'Sequelize UI',
+  metaDescripton:
+    'Use Sequelize UI to quickly generate Sequelize TypeScript code online. Customize your data model and database settings, then export your Node.js project.',
+}))(IndexPage)

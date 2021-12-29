@@ -1,5 +1,5 @@
 import { DbOptions } from '@src/core/database'
-import { DirectoryItem } from '@src/core/files/fileSystem'
+import { FileSystemItem } from '@src/core/files/fileSystem'
 import { Framework } from '@src/core/framework'
 import { Schema } from '@src/core/schema'
 import React from 'react'
@@ -7,11 +7,12 @@ import React from 'react'
 export type UseGeneratedCodeArgs = {
   schema?: Schema
   dbOptions: DbOptions
+  initialFramework?: Framework
   skip?: boolean
 }
 
 export type UseGeneratedCodeResult = {
-  root: DirectoryItem | undefined
+  root: FileSystemItem | undefined
   framework: Framework | undefined
   defaultPath: string | undefined
 }
@@ -19,9 +20,10 @@ export type UseGeneratedCodeResult = {
 export default function useGeneratedCode({
   schema,
   dbOptions,
+  initialFramework,
   skip,
 }: UseGeneratedCodeArgs): UseGeneratedCodeResult {
-  const [framework, setFramework] = React.useState<Framework | undefined>()
+  const [framework, setFramework] = React.useState<Framework | undefined>(initialFramework)
 
   // TODO abstract framework loading by type
   React.useEffect(() => {
@@ -32,8 +34,8 @@ export default function useGeneratedCode({
     }
   }, [skip, framework])
 
-  const root = React.useMemo<DirectoryItem | undefined>(() => {
-    if (!schema || !framework) return undefined
+  const root = React.useMemo<FileSystemItem | undefined>(() => {
+    if (!schema || !framework) return
     return framework.generate({ schema, dbOptions })
   }, [schema, dbOptions, framework])
 

@@ -25,7 +25,7 @@ export default function SchemasZeroState(): React.ReactElement | null {
       >
         create a new schema
       </RouteLink>{' '}
-      or select one of the demo schemas below.
+      or select one of the example schemas below.
     </p>
   )
 }

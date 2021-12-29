@@ -1,7 +1,14 @@
 import { emptyModel, Model, Schema } from '@src/core/schema'
 import { SchemaErrors } from '@src/core/validation/schema'
 import usePrevious from '@src/ui/hooks/usePrevious'
-import { backgroundColor, classnames, display, padding, width } from '@src/ui/styles/classnames'
+import {
+  backgroundColor,
+  classnames,
+  display,
+  overflow,
+  padding,
+  width,
+} from '@src/ui/styles/classnames'
 import { panel, panelGrid, section, subtitle, title } from '@src/ui/styles/utils'
 import { focusById } from '@src/utils/dom'
 import React from 'react'
@@ -73,7 +80,7 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
   return (
     <form
       onSubmit={(evt) => evt.preventDefault()}
-      className={classnames(padding('p-6', 'pt-11'))}
+      className={classnames(overflow('overflow-y-scroll'), padding('p-6', 'pt-11'))}
       {...autofillDisable}
     >
       <div className={classnames(section)}>

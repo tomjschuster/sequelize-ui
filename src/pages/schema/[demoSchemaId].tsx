@@ -2,21 +2,25 @@ import { createSchema } from '@src/api/schema'
 import { Schema } from '@src/core/schema'
 import {
   DemoSchemaType,
+  displayDemoSchemaType,
   getDemoSchema,
   getDemoSchemaId,
   getDemoSchemaType,
 } from '@src/data/schemas'
+import { SequelizeFramework } from '@src/frameworks/sequelize'
 import { goTo } from '@src/routing/navigation'
 import { indexRoute, schemaRoute } from '@src/routing/routes'
-import SchemaFlyout from '@src/ui/components/SchemaFlyout'
+import withLayout from '@src/ui/hocs/withLayout'
+import SchemaLayout from '@src/ui/layouts/SchemaLayout'
 import { GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult } from 'next'
 import React from 'react'
 
 type DemoSchemaPageProps = {
+  demoSchemaType: DemoSchemaType
   schema: Schema
 }
 
-export default function DemoSchemaPage({ schema }: DemoSchemaPageProps): React.ReactElement {
+function DemoSchemaPage({ schema }: DemoSchemaPageProps): React.ReactElement {
   const handleChange = React.useCallback(async (schema: Schema) => {
     const created = await createSchema(schema)
     goTo(schemaRoute(created.id), { replace: true })
@@ -26,9 +30,9 @@ export default function DemoSchemaPage({ schema }: DemoSchemaPageProps): React.R
   const handleCancel = () => goTo(indexRoute())
 
   return (
-    <SchemaFlyout
+    <SchemaLayout
       schema={schema}
-      schemas={[]}
+      initialFramework={SequelizeFramework}
       onChange={handleChange}
       onClickClose={handleCancel}
     />
@@ -51,5 +55,12 @@ export async function getStaticProps(
   const demoSchemaType = typeof schemaId === 'string' ? getDemoSchemaType(schemaId) : undefined
   const schema = await getDemoSchema(demoSchemaType)
 
-  return schema ? { props: { schema } } : { notFound: true }
+  return schema && demoSchemaType ? { props: { schema, demoSchemaType } } : { notFound: true }
 }
+
+export default withLayout<DemoSchemaPageProps>(({ demoSchemaType }) => ({
+  compact: true,
+  title: `Example Sequelize ${displayDemoSchemaType(demoSchemaType)} code`,
+  metaDescripton:
+    'Use Sequelize UI to quickly generate Sequelize TypeScript code online. Customize your data model and database settings, then export your Node.js project.',
+}))(DemoSchemaPage)

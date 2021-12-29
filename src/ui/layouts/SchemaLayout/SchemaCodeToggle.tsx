@@ -1,9 +1,9 @@
 import { classnames, margin, width } from '@src/ui/styles/classnames'
 import { flexCenter } from '@src/ui/styles/utils'
 import React from 'react'
-import ToggleButton from '../form/ToggleButton'
-import CodeIcon from '../icons/Code'
-import CubeIcon from '../icons/Cube'
+import ToggleButton from '../../components/form/ToggleButton'
+import CodeIcon from '../../components/icons/Code'
+import CubeIcon from '../../components/icons/Cube'
 
 type SchemaCodeToggleProps = {
   code: boolean

@@ -59,9 +59,9 @@ export const emptySchemaErrors: SchemaErrors = Object.freeze({
   models: {},
 })
 
-export function validateSchema(schema: Schema, schemas: Schema[]): SchemaErrors {
+export function validateSchema(schema: Schema): SchemaErrors {
   return {
-    name: validateSchemaName(schema, schemas),
+    name: validateSchemaName(schema),
     models: validateModels(schema),
   }
 }
@@ -74,7 +74,7 @@ export function hasSchemaErrors(errors: SchemaErrors): boolean {
   return !noSchemaErrors(errors)
 }
 
-function validateSchemaName(schema: Schema, schemas: Schema[]): string | undefined {
+function validateSchemaName(schema: Schema): string | undefined {
   if (nameEmpty(schema.name)) {
     return NAME_REQUIRED_MESSAGE
   }
@@ -86,14 +86,6 @@ function validateSchemaName(schema: Schema, schemas: Schema[]): string | undefin
   if (nameLongerThan(schema.name, MAX_IDENTIFIER_LENGTH)) {
     return NAME_TOO_LONG_MESSAGE
   }
-
-  if (findDuplicateSchema(schema, schemas)) {
-    return NAME_UNIQUE_MESSAGE
-  }
-}
-
-function findDuplicateSchema(schema: Schema, schemas: Schema[]): Schema | undefined {
-  return schemas.find((s) => s.id !== schema.id && namesEqSingular(s.name, schema.name))
 }
 
 function validateModels(schema: Schema): { [id: string]: ModelErrors } {

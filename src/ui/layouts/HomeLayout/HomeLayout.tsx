@@ -1,7 +1,7 @@
 import { clearData, listSchemas } from '@src/api/schema'
 import { Schema } from '@src/core/schema'
 import useAsync from '@src/ui/hooks/useAsync'
-import { classnames, margin, minHeight, padding, width } from '@src/ui/styles/classnames'
+import { classnames, margin, minHeight, overflow, padding, width } from '@src/ui/styles/classnames'
 import { flexCenter, section, title } from '@src/ui/styles/utils'
 import React from 'react'
 import DemoSchemaButtons from './DemoSchemaButtons'
@@ -9,7 +9,7 @@ import MySchemaLinks from './MySchemaLinks'
 import SchemasError from './SchemasError'
 import SchemasZeroState from './SchemasZeroState'
 
-export default function Home(): React.ReactElement {
+export default function HomeLayout(): React.ReactElement {
   const { data: schemas, error, refetch, loading } = useAsync({ getData: listSchemas })
 
   const handleClickClearData = async () => {
@@ -18,7 +18,7 @@ export default function Home(): React.ReactElement {
   }
 
   return (
-    <div className={classnames(padding('p-6'))}>
+    <div className={classnames(padding('p-6'), overflow('overflow-y-scroll'))}>
       <div className={classnames(section, margin('mb-6'))}>
         <h2 className={title}>My Schemas</h2>
         <div className={classnames(flexCenter, width('w-full'), minHeight('min-h-20'))}>
@@ -31,7 +31,7 @@ export default function Home(): React.ReactElement {
         </div>
       </div>
       <div className={section}>
-        <h2 className={title}>Demo Schemas</h2>
+        <h2 className={title}>Example Schemas</h2>
         <DemoSchemaButtons />
       </div>
     </div>

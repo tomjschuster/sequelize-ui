@@ -1,16 +1,18 @@
 import { FileTree } from '@src/core/files/fileTree'
 import { Association, Field, Model, Schema } from '@src/core/schema'
+import dynamic from 'next/dynamic'
 import React from 'react'
-import CodeExplorer from '../CodeExplorer/CodeExplorer'
-import ModelForm from '../ModelForm'
-import ModelView from '../ModelView'
-import SchemaForm from '../SchemaForm'
-import SchemaView from '../SchemaView'
-import { SchemaFlyoutState, SchemaFlyoutStateType } from './types'
+import CodeExplorer from '../../components/CodeExplorer/CodeExplorer'
+import { SchemaLayoutState, SchemaLayoutStateType } from './types'
 
-type SchemaFlyoutContentProps = {
+const SchemaView = dynamic(() => import('../../components/SchemaView'))
+const SchemaForm = dynamic(() => import('../../components/SchemaForm'))
+const ModelView = dynamic(() => import('../../components/ModelView'))
+const ModelForm = dynamic(() => import('../../components/ModelForm'))
+
+type SchemaLayoutContentProps = {
   schema: Schema
-  state: SchemaFlyoutState
+  state: SchemaLayoutState
   fileTree: FileTree
   onSelectFileSystemItem: (path: string) => void
   onKeyDown: (evt: React.KeyboardEvent) => void
@@ -27,7 +29,7 @@ type SchemaFlyoutContentProps = {
   onClickEditAssociation: (field: Association) => void
   onClickDeleteAssociation: (field: Association) => void
 }
-export default function SchemaFlyoutContent({
+export default function SchemaLayoutContent({
   schema,
   state,
   fileTree,
@@ -45,9 +47,9 @@ export default function SchemaFlyoutContent({
   onClickAddAssociation,
   onClickEditAssociation,
   onClickDeleteAssociation,
-}: SchemaFlyoutContentProps): React.ReactElement | null {
+}: SchemaLayoutContentProps): React.ReactElement | null {
   switch (state.type) {
-    case SchemaFlyoutStateType.CODE:
+    case SchemaLayoutStateType.CODE:
       return (
         <CodeExplorer
           fileTree={fileTree}
@@ -55,7 +57,7 @@ export default function SchemaFlyoutContent({
           onKeyDown={onKeyDown}
         />
       )
-    case SchemaFlyoutStateType.EDIT_SCHEMA:
+    case SchemaLayoutStateType.EDIT_SCHEMA:
       return (
         <SchemaForm
           schema={state.schema}
@@ -64,7 +66,7 @@ export default function SchemaFlyoutContent({
           onChange={updateSchema}
         />
       )
-    case SchemaFlyoutStateType.VIEW_SCHEMA:
+    case SchemaLayoutStateType.VIEW_SCHEMA:
       return (
         <SchemaView
           schema={state.schema}
@@ -74,7 +76,7 @@ export default function SchemaFlyoutContent({
           onClickDeleteModel={onClickDeleteModel}
         />
       )
-    case SchemaFlyoutStateType.EDIT_MODEL:
+    case SchemaLayoutStateType.EDIT_MODEL:
       return (
         <ModelForm
           model={state.model}
@@ -84,7 +86,7 @@ export default function SchemaFlyoutContent({
           onChange={updateModel}
         />
       )
-    case SchemaFlyoutStateType.VIEW_MODEL:
+    case SchemaLayoutStateType.VIEW_MODEL:
       return (
         <ModelView
           model={state.model}

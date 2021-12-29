@@ -99,3 +99,7 @@ function pipeFromArray<T, R>(fns: Array<UnaryFunction<T, R>>): UnaryFunction<T, 
     return fns.reduce((prev: any, fn: UnaryFunction<T, R>) => fn(prev), input as any)
   }
 }
+
+export function noop(): void {
+  return void 0
+}

@@ -16,19 +16,21 @@ import {
   width,
 } from '@src/ui/styles/classnames'
 import React from 'react'
-import DbOptionsForm from '../DbOptionsForm'
-import IconButton from '../form/IconButton'
-import CloseIcon from '../icons/Close'
-import CopyIcon from '../icons/Copy'
-import FolderIcon from '../icons/Folder'
-import PencilIcon from '../icons/Pencil'
-import SettingsIcon from '../icons/Settings'
+import DbOptionsForm from '../../components/DbOptionsForm'
+import IconButton from '../../components/form/IconButton'
+import CloseIcon from '../../components/icons/Close'
+import CloseCircleIcon from '../../components/icons/CloseCircle'
+import CopyIcon from '../../components/icons/Copy'
+import FolderIcon from '../../components/icons/Folder'
+import PencilIcon from '../../components/icons/Pencil'
+import SettingsIcon from '../../components/icons/Settings'
 
 type CodeViewerControlsProps = {
   root: FileSystemItem
   activeFile?: FileItem
   dbOptions: DbOptions
   onClickEdit: () => void
+  onClickClose: () => void
   onChangeDbOptions: (dbOptions: DbOptions) => void
 }
 
@@ -37,6 +39,7 @@ export default function CodeViewerControls({
   activeFile,
   dbOptions,
   onClickEdit,
+  onClickClose,
   onChangeDbOptions,
 }: CodeViewerControlsProps): React.ReactElement {
   const { info, success, error } = useAlert()
@@ -100,6 +103,12 @@ export default function CodeViewerControls({
           evt.stopPropagation()
           toggleDbOptions()
         }}
+      />
+      <IconButton
+        label="close schema"
+        icon={CloseCircleIcon}
+        iconProps={{ size: 6 }}
+        onClick={onClickClose}
       />
       {isDbOptionsOpen && (
         <div

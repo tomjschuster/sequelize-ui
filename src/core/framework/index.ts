@@ -1,5 +1,5 @@
 import { DbOptions } from '@src/core/database'
-import { DirectoryItem } from '@src/core/files/fileSystem'
+import { FileSystemItem } from '@src/core/files/fileSystem'
 import { Model, Schema } from '@src/core/schema'
 
 export type GenerateArgs = {
@@ -13,9 +13,9 @@ export enum ProjectType {
 
 export interface Framework {
   displayName(): string
-  generate(args: GenerateArgs): DirectoryItem
+  generate(args: GenerateArgs): FileSystemItem
   projectType(): ProjectType
-  defaultFile?(root: DirectoryItem): string | undefined
-  defaultModelFile(model: Model, root: DirectoryItem): string | undefined
+  defaultFile?(root: FileSystemItem): string | undefined
+  defaultModelFile(model: Model, root: FileSystemItem): string | undefined
   modelFromPath(path: string, schema: Schema): Model | undefined
 }

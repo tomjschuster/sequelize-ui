@@ -5,6 +5,7 @@ import {
   fontSize,
   margin,
   minHeight,
+  overflow,
   padding,
 } from '@src/ui/styles/classnames'
 import { panel, panelGrid, section, title } from '@src/ui/styles/utils'
@@ -40,7 +41,9 @@ export default function ModelView({
   onClickDeleteAssociation,
 }: ModelViewProps): React.ReactElement {
   return (
-    <div className={classnames(padding('pt-2', 'p-6'), margin('mb-3'))}>
+    <div
+      className={classnames(overflow('overflow-y-scroll'), padding('pt-2', 'p-6'), margin('mb-3'))}
+    >
       <Breadcrumbs
         items={[{ label: `${titleCase(schema.name)} (schema)`, onClick: () => onViewSchema() }]}
         current={`${model && titleCase(model.name)} (model)`}

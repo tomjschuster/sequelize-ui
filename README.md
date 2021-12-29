@@ -11,19 +11,16 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Schema page build size
-- [ ] Refactor/restyle flyout to schema layout
 - [ ] Schema page title/metadata
 - [ ] Cleanup unused code
-- [ ] Schema page CLS
 - [ ] Error boundary
-- [ ] GitHub link
 - [ ] Home page copy
 - [ ] demo schema tooltips
 - [ ] migrate old sequelize ui
+- [ ] Reset schemas
 - [ ] Dark mode
 - [ ] db compatibility warnings
-- [ ] Schema Flyout context
+- [ ] Schema Layout context
 - [ ] Transition panels on delete
 - [ ] Cache file tree by schema id
 - [ ] Loading state for schema url

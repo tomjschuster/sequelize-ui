@@ -5,6 +5,7 @@ import {
   display,
   fontSize,
   margin,
+  overflow,
   padding,
   textDecoration,
 } from '@src/ui/styles/classnames'
@@ -35,7 +36,7 @@ function SchemaView({
   onClickDeleteModel,
 }: SchemaViewProps): React.ReactElement {
   return (
-    <div className={classnames(padding('p-6', 'pt-2'))}>
+    <div className={classnames(overflow('overflow-y-scroll'), padding('p-6', 'pt-2'))}>
       <Breadcrumbs items={[]} current={`${titleCase(schema.name)} (schema)`} />
       <div className={classnames(section)}>
         <h2 className={classnames(title)}>Schema</h2>

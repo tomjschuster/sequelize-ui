@@ -31,7 +31,12 @@ export default function CodeExplorer({
 
   return (
     <div
-      className={classnames(height('h-full'), display('grid'), gridTemplateColumns('grid-cols-12'))}
+      className={classnames(
+        height('h-full'),
+        display('grid'),
+        gridTemplateColumns('grid-cols-12'),
+        overflow('overflow-hidden'),
+      )}
     >
       <div
         className={classnames(

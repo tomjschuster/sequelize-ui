@@ -1,6 +1,5 @@
 import { manyToManyTableType } from '@src/core/schema'
 import blogSchema from '@src/data/schemas/blog'
-import shortid from 'shortid'
 import {
   NAME_REQUIRED_MESSAGE,
   NAME_TOO_LONG_MESSAGE,
@@ -19,23 +18,18 @@ import {
 describe('schema validation', () => {
   describe('validateSchema', () => {
     it('returns an error when name is missing', () => {
-      const errors = validateSchema({ ...blogSchema, name: '' }, [])
+      const errors = validateSchema({ ...blogSchema, name: '' })
       expect(errors.name).toBe(NAME_REQUIRED_MESSAGE)
     })
 
     it('returns an error when name starts with a number', () => {
-      const errors = validateSchema({ ...blogSchema, name: '1blog' }, [])
+      const errors = validateSchema({ ...blogSchema, name: '1blog' })
       expect(errors.name).toBe(NAME_WITH_NUMBER_MESSAGE)
     })
 
     it('returns an error when name is too long', () => {
-      const errors = validateSchema({ ...blogSchema, name: 'blog'.repeat(16) }, [])
+      const errors = validateSchema({ ...blogSchema, name: 'blog'.repeat(16) })
       expect(errors.name).toBe(NAME_TOO_LONG_MESSAGE)
-    })
-
-    it('returns an error when name is not unique', () => {
-      const errors = validateSchema(blogSchema, [{ ...blogSchema, id: shortid() }])
-      expect(errors.name).toBe(NAME_UNIQUE_MESSAGE)
     })
   })
 
@@ -45,12 +39,12 @@ describe('schema validation', () => {
     })
 
     it('returns true for valid schema', () => {
-      const errors = validateSchema(blogSchema, [])
+      const errors = validateSchema(blogSchema)
       expect(noSchemaErrors(errors)).toBe(true)
     })
 
     it('returns false when errors', () => {
-      const errors = validateSchema({ ...blogSchema, name: '' }, [])
+      const errors = validateSchema({ ...blogSchema, name: '' })
       expect(noSchemaErrors(errors)).toBe(false)
     })
   })

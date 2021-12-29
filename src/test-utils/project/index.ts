@@ -1,10 +1,10 @@
-import { DirectoryItem } from '@src/core/files/fileSystem'
+import { FileSystemItem } from '@src/core/files/fileSystem'
 import { ProjectType } from '@src/core/framework'
 import { NpmProject } from './npm'
 
 export function buildProject(
   projectType: ProjectType,
-  directory: DirectoryItem,
+  directory: FileSystemItem,
   preinstall?: string,
 ): Promise<void> {
   switch (projectType) {

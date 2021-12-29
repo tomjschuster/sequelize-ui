@@ -1,29 +1,31 @@
-import { defaultDbOptions } from '@src/core/database'
-import { itemName } from '@src/core/files/fileSystem'
 import * as FileTree from '@src/core/files/fileTree'
-import { emptySchema, Model, Schema } from '@src/core/schema'
-import Flyout from '@src/ui/components/Flyout'
-import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
+import { Framework } from '@src/core/framework'
+import { Model, Schema } from '@src/core/schema'
+import { classnames, height } from '@src/ui/styles/classnames'
 import { scrollToTop } from '@src/utils/dom'
+import { noop } from '@src/utils/functions'
 import React from 'react'
-import SchemaFlyoutContent from './SchemaFlyoutContent'
-import SchemaFlyoutControls from './SchemaFlyoutControls'
-import { useSchemaFlyout } from './useSchemaFlyout'
+import CodeExplorer from '../../components/CodeExplorer/CodeExplorer'
+import SchemaLayoutContent from './SchemaLayoutContent'
+import SchemaLayoutControls, { SchemaLayoutControlsWrapper } from './SchemaLayoutControls'
+import { useSchemaLayout } from './useSchemaLayout'
 
-type SchemaFlyoutProps = {
+type SchemaLayoutProps = {
   schema: Schema
-  schemas: Schema[]
+  initialFramework?: Framework
+  initiallyEditing?: boolean
   onChange: (schema: Schema) => Promise<Schema>
   onDelete?: () => Promise<void>
   onClickClose: () => void
 }
-export default function SchemaFlyout({
+export default function SchemaLayout({
   schema,
-  schemas,
+  initialFramework,
+  initiallyEditing,
   onChange,
   onDelete,
   onClickClose,
-}: SchemaFlyoutProps): React.ReactElement | null {
+}: SchemaLayoutProps): React.ReactElement | null {
   const {
     state,
     isEditing,
@@ -49,9 +51,10 @@ export default function SchemaFlyout({
     deleteAssociation,
     save,
     cancel,
-  } = useSchemaFlyout({
+  } = useSchemaLayout({
     schema,
-    schemas,
+    initialFramework,
+    initiallyEditing,
     onChange,
     onExit: onClickClose,
     onDelete,
@@ -69,31 +72,24 @@ export default function SchemaFlyout({
     [viewSchema],
   )
 
-  const title = itemName(FileTree.rootItem(fileTree))
-
   return (
-    <Flyout
-      contentRef={flyoutContentRef}
-      title={title}
-      onClickClose={onClickClose}
-      controls={
-        <SchemaFlyoutControls
-          state={state}
-          schema={schema}
-          isEditing={isEditing}
-          fileTree={fileTree}
-          dbOptions={dbOptions}
-          onChangeDbOptions={updateDbOptions}
-          onSelectCode={viewCode}
-          onSelectSchema={handleViewSchema}
-          onEdit={edit}
-          onDelete={delete_}
-          onCancel={cancel}
-          onSave={save}
-        />
-      }
-    >
-      <SchemaFlyoutContent
+    <>
+      <SchemaLayoutControls
+        state={state}
+        schema={schema}
+        isEditing={isEditing}
+        fileTree={fileTree}
+        dbOptions={dbOptions}
+        onChangeDbOptions={updateDbOptions}
+        onSelectCode={viewCode}
+        onSelectSchema={handleViewSchema}
+        onEdit={edit}
+        onDelete={delete_}
+        onCancel={cancel}
+        onSave={save}
+        onClose={onClickClose}
+      />
+      <SchemaLayoutContent
         state={state}
         schema={schema}
         fileTree={fileTree}
@@ -112,11 +108,17 @@ export default function SchemaFlyout({
         onClickEditAssociation={editAssociation}
         onClickDeleteAssociation={deleteAssociation}
       />
-    </Flyout>
+    </>
   )
 }
 
-export function SchemaFlyoutPreloads(): React.ReactElement {
-  useGeneratedCode({ schema: emptySchema(), dbOptions: defaultDbOptions })
-  return <></>
+export function EmptySchemaLayout() {
+  return (
+    <>
+      <SchemaLayoutControlsWrapper>
+        <div className={classnames(height('h-8'))} />
+      </SchemaLayoutControlsWrapper>
+      <CodeExplorer fileTree={FileTree.empty()} onSelectFileSystemItem={noop} onKeyDown={noop} />
+    </>
+  )
 }
