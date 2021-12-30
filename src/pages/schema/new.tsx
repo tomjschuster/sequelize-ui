@@ -31,5 +31,5 @@ export default withLayout(() => ({
   compact: true,
   title: 'Sequelize UI | Create a Schema',
   metaDescription:
-    'Use Sequelize UI to quickly generate Sequelize TypeScript code online. Customize your data model and database settings, then export your Node.js project.',
+    'Generate a new Node.js project with TypeScript and Sequelize code for your data model. Configure for MySQL, Postgres, SQLite or SQL Server.',
 }))(SchemaPage)

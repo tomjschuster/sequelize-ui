@@ -13,6 +13,7 @@ import {
 import { createModelMigration, migrationCreateFilename } from './templates/migrations/createModel'
 import { modelTemplate } from './templates/model'
 import { packageJsonTemplate } from './templates/packageJson'
+import { readmeTemplate } from './templates/readme'
 import { serverTemplate } from './templates/server'
 import { tsconfigTemplate } from './templates/tsconfig'
 import { typesTemplate } from './templates/types'
@@ -70,6 +71,7 @@ export function generateSequelizeProject({
     file('.gitignore', gitignoreTemplate()),
     file('db.ts', dbTemplate({ dbOptions })),
     file('package.json', packageJsonTemplate({ schema, dbOptions })),
+    file('README.md', readmeTemplate({ schema, dbOptions })),
     file('server.ts', serverTemplate({ dbOptions })),
     schema.models.some(hasJsonType) ? file('types.ts', typesTemplate()) : null,
     file('tsconfig.json', tsconfigTemplate()),

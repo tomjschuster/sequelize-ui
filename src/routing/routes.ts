@@ -1,4 +1,4 @@
-import { DemoSchemaType, getDemoSchemaId, getDemoSchemaType } from '@src/data/schemas'
+import { DemoSchemaType, getDemoSchemaSlug, getDemoSchemaTypeBySlug } from '@src/data/schemas'
 import { ParsedUrlQuery } from 'querystring'
 
 export enum RouteType {
@@ -45,7 +45,7 @@ export function parseRoute(pathname: string, query: ParsedUrlQuery): Route {
   const isIndexPath = pathname === '/'
   if (isIndexPath) return indexRoute()
 
-  const isNewSchemaPath = pathname === '/new'
+  const isNewSchemaPath = pathname === '/schema/new'
   if (isNewSchemaPath) return newSchemaRoute()
 
   const demoSchemaType = parseDemoSchemaType(pathname)
@@ -61,8 +61,8 @@ export function parseRoute(pathname: string, query: ParsedUrlQuery): Route {
 
 export function parseDemoSchemaType(pathname: string): DemoSchemaType | undefined {
   const matches = pathname.match(/^\/schema\/([\w-]+)$/)
-  const schemaId = matches?.[1]
-  return schemaId !== undefined ? getDemoSchemaType(schemaId) : undefined
+  const slug = matches?.[1]
+  return slug !== undefined ? getDemoSchemaTypeBySlug(slug) : undefined
 }
 
 export function parseSchemaId(query: ParsedUrlQuery): string | undefined {
@@ -76,11 +76,11 @@ export function routeToUrl(route: Route): string {
     case RouteType.Index:
       return '/'
     case RouteType.NewSchema:
-      return '/new'
+      return '/schema/new'
     case RouteType.Schema:
       return `/schema?id=${route.id}`
     case RouteType.DemoSchema:
-      return `/schema/${getDemoSchemaId(route.schemaType)}`
+      return `/schema/${getDemoSchemaSlug(route.schemaType)}`
   }
 }
 

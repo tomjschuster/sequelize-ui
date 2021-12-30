@@ -3,6 +3,7 @@ import React from 'react'
 import GitIcon from './Git'
 import JavaScriptIcon from './JavaScript'
 import JsonIcon from './Json'
+import MarkdownIcon from './Markdown'
 import TypeScriptIcon from './TypeScript'
 
 type LanguageIconProps = {
@@ -17,6 +18,8 @@ export default function LanguageIcon({ language }: LanguageIconProps): React.Rea
       return <JavaScriptIcon fill="#374151" />
     case Language.Json:
       return <JsonIcon fill="#374151" />
+    case Language.Markdown:
+      return <MarkdownIcon fill="#374151" />
     case Language.TypeScript:
       return <TypeScriptIcon fill="#374151" />
     default:

@@ -1,16 +1,22 @@
+import { License } from '@src/core/oss/license'
 import { Schema } from '@src/core/schema'
 import * as DemoSchemaIds from './demoSchemaIds'
 
 export function isDemoSchema(schema: Schema): boolean {
-  return !!getDemoSchemaType(schema.id)
+  return !!getDemoSchemaTypeById(schema.id)
 }
 
-export function getDemoSchemaType(id: string): DemoSchemaType | undefined {
+export function isForkedFromDemoSchema(schema: Schema): boolean {
+  if (!schema.forkedFrom) return false
+  return !!getDemoSchemaTypeById(schema.forkedFrom)
+}
+
+export function getDemoSchemaTypeById(id: string): DemoSchemaType | undefined {
   switch (id) {
     case DemoSchemaIds.DEMO_SCHEMA_BLOG_ID:
       return DemoSchemaType.Blog
     case DemoSchemaIds.DEMO_SCHEMA_EMPLOYEE_ID:
-      return DemoSchemaType.Employee
+      return DemoSchemaType.Employees
     case DemoSchemaIds.DEMO_SCHEMA_SAKILA_ID:
       return DemoSchemaType.Sakila
     default:
@@ -22,7 +28,7 @@ export function getDemoSchemaId(type: DemoSchemaType): string {
   switch (type) {
     case DemoSchemaType.Blog:
       return DemoSchemaIds.DEMO_SCHEMA_BLOG_ID
-    case DemoSchemaType.Employee:
+    case DemoSchemaType.Employees:
       return DemoSchemaIds.DEMO_SCHEMA_EMPLOYEE_ID
     case DemoSchemaType.Sakila:
       return DemoSchemaIds.DEMO_SCHEMA_SAKILA_ID
@@ -31,7 +37,7 @@ export function getDemoSchemaId(type: DemoSchemaType): string {
 
 export enum DemoSchemaType {
   Blog = 'blog',
-  Employee = 'employee',
+  Employees = 'employee',
   Sakila = 'sakila',
 }
 
@@ -39,10 +45,36 @@ export function displayDemoSchemaType(type: DemoSchemaType): string {
   switch (type) {
     case DemoSchemaType.Blog:
       return 'Blog'
-    case DemoSchemaType.Employee:
-      return 'Employee Dataset'
+    case DemoSchemaType.Employees:
+      return 'Employees'
     case DemoSchemaType.Sakila:
       return 'Sakila'
+  }
+}
+
+const BLOG_SLUG = 'blog'
+const EMPLOYEES_SLUG = 'employees'
+const SAKILA = 'sakila'
+
+export function getDemoSchemaSlug(type: DemoSchemaType): string {
+  switch (type) {
+    case DemoSchemaType.Blog:
+      return BLOG_SLUG
+    case DemoSchemaType.Employees:
+      return EMPLOYEES_SLUG
+    case DemoSchemaType.Sakila:
+      return SAKILA
+  }
+}
+
+export function getDemoSchemaTypeBySlug(slug: string): DemoSchemaType | undefined {
+  switch (slug) {
+    case BLOG_SLUG:
+      return DemoSchemaType.Blog
+    case EMPLOYEES_SLUG:
+      return DemoSchemaType.Employees
+    case SAKILA:
+      return DemoSchemaType.Sakila
   }
 }
 
@@ -51,7 +83,7 @@ export async function getDemoSchema(type: DemoSchemaType | undefined): Promise<S
     case DemoSchemaType.Blog: {
       return (await import('./blog')).default
     }
-    case DemoSchemaType.Employee: {
+    case DemoSchemaType.Employees: {
       return (await import('./employee')).default
     }
     case DemoSchemaType.Sakila: {
@@ -59,5 +91,16 @@ export async function getDemoSchema(type: DemoSchemaType | undefined): Promise<S
     }
     default:
       return Promise.resolve(undefined)
+  }
+}
+
+export function getDemoSchemaLicense(type: DemoSchemaType): License {
+  switch (type) {
+    case DemoSchemaType.Blog:
+      return License.Mit
+    case DemoSchemaType.Employees:
+      return License.CcBySa3
+    case DemoSchemaType.Sakila:
+      return License.NewBsd
   }
 }

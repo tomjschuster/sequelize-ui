@@ -16,7 +16,7 @@ export async function getSchema(id: string): Promise<Schema> {
   return schema || Promise.reject(new Error(SCHEMA_NOT_FOUND_ERROR))
 }
 
-export async function createSchema(schemaPayload: Omit<Schema, 'id'>): Promise<Schema> {
+export async function createSchema(schemaPayload: Schema, fork?: boolean): Promise<Schema> {
   const schemas = await listSchemas()
   const name = versionedName(
     schemaPayload.name,
@@ -25,7 +25,18 @@ export async function createSchema(schemaPayload: Omit<Schema, 'id'>): Promise<S
   const id = shortid()
   const time = now()
   const models = schemaPayload.models.map((m) => ({ ...m, createdAt: time, updatedAt: time }))
-  const schema: Schema = { ...schemaPayload, id, name, createdAt: time, updatedAt: time, models }
+  const forkedFrom = fork ? schemaPayload.id : undefined
+
+  const schema: Schema = {
+    ...schemaPayload,
+    id,
+    forkedFrom,
+    name,
+    createdAt: time,
+    updatedAt: time,
+    models,
+  }
+
   await set(schemasKey(), [...schemas, schema])
   return schema
 }

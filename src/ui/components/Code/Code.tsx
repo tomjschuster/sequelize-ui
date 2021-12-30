@@ -1,8 +1,9 @@
 import { Language } from '@src/core/files/fileSystem'
-import { classnames, fontSize, height, padding } from '@src/ui/styles/classnames'
+import { classnames, fontSize, height, overflow, padding } from '@src/ui/styles/classnames'
 import Highlight, { defaultProps, Language as PrismLanguage } from 'prism-react-renderer'
 import theme from 'prism-react-renderer/themes/vsLight'
 import React from 'react'
+import Markdown from '../Markdown'
 
 type CodeProps = {
   content?: string
@@ -10,6 +11,15 @@ type CodeProps = {
 }
 
 function Code({ content = '', language = Language.TypeScript }: CodeProps): React.ReactElement {
+  if (language === Language.Markdown) {
+    return (
+      <Markdown
+        className={classnames(height('h-full'), overflow('overflow-y-scroll'))}
+        content={content}
+      />
+    )
+  }
+
   return (
     <Highlight {...defaultProps} theme={theme} code={content} language={toPrismLanguage(language)}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => (

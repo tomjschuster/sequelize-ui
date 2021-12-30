@@ -16,6 +16,7 @@ export enum Language {
   Git = 'GIT',
   JavaScript = 'JAVASCRIPT',
   Json = 'JSON',
+  Markdown = 'MARKDOWN',
   TypeScript = 'TYPESCRIPT',
 }
 
@@ -131,6 +132,7 @@ type FileExtension = KnownExtension | UnknownExtension
 enum KnownExtension {
   Js = 'js',
   Json = 'json',
+  Md = 'md',
   Ts = 'ts',
   Gitignore = 'gitignore',
 }
@@ -150,7 +152,7 @@ function isKnownExtension(ext: FileExtension): ext is KnownExtension {
   return Object.values(KnownExtension).some((e) => e === ext)
 }
 
-function languageFromKnownExtension(ext: KnownExtension) {
+function languageFromKnownExtension(ext: KnownExtension): Language {
   switch (ext) {
     case KnownExtension.Gitignore:
       return Language.Git
@@ -158,6 +160,8 @@ function languageFromKnownExtension(ext: KnownExtension) {
       return Language.JavaScript
     case KnownExtension.Json:
       return Language.Json
+    case KnownExtension.Md:
+      return Language.Markdown
     case KnownExtension.Ts:
       return Language.TypeScript
   }

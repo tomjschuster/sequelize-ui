@@ -36,7 +36,7 @@ function DemoSchemaIcon({ schemaType }: { schemaType: DemoSchemaType }): React.R
   switch (schemaType) {
     case DemoSchemaType.Blog:
       return <RssIcon size={6} />
-    case DemoSchemaType.Employee:
+    case DemoSchemaType.Employees:
       return <UserGroupIcon size={6} />
     case DemoSchemaType.Sakila:
       return <FilmIcon size={6} />

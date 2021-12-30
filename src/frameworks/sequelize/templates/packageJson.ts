@@ -41,7 +41,7 @@ function scripts({ sqlDialect, migrations }: DbOptions): string {
         : null,
       dbCreate && migrations ? '"db:reset": "npm run db:drop && npm run db:up"' : null,
       dbCreate ? '"db:create": "sequelize db:create"' : null,
-      dbCreate ? '"db:drop": "sequelize db:drop"' : null,
+      dbCreate ? '"db:drop": "[[ $NODE_ENV == production ]] && exit 1 || sequelize db:drop"' : null,
       migrations ? '"db:migrate": "sequelize db:migrate"' : null,
       migrations ? '"db:rollback": "sequelize db:migrate:undo"' : null,
       migrations ? '"db:rollback:all": "sequelize db:migrate:undo:all"' : null,

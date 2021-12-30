@@ -7,6 +7,7 @@ export type Schema = {
   id: string
   name: string
   models: Model[]
+  forkedFrom?: string
   createdAt: string
   updatedAt: string
 }
