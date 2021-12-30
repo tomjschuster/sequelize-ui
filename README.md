@@ -18,6 +18,7 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 - [ ] Home page copy
 - [ ] Link to legacy
 - [ ] Dark mode
+- [ ] Favicon
 
 - [ ] Cleanup unused code
 - [ ] db compatibility warnings
