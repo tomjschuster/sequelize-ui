@@ -33,6 +33,7 @@ export function readmeTemplate({ schema, dbOptions }: ReadmeTemplateArgs): strin
     '### Setup',
     '1. Install dependencies: `npm install`',
     '2. Setup database: `npm run db:up`',
+    blank(),
     '### Run',
     '- Local development: `npm run dev`',
     '- Production build: `npm run build && npm start`',
