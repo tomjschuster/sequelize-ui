@@ -10,7 +10,6 @@ function Metadata({ title, metaDescription }: MetadataProps): React.ReactElement
   return (
     <Head>
       <title>{title}</title>
-      <script async defer src="https://buttons.github.io/buttons.js"></script>
       {metaDescription && <meta name="description" content={metaDescription} />}
     </Head>
   )
