@@ -1121,7 +1121,7 @@ export default db
     \\"db:up\\": \\"echo creating && npm run db:create && echo created && npm run db:migrate && echo migrated\\",
     \\"db:reset\\": \\"npm run db:drop && npm run db:up\\",
     \\"db:create\\": \\"sequelize db:create\\",
-    \\"db:drop\\": \\"sequelize db:drop\\",
+    \\"db:drop\\": \\"[[ $NODE_ENV == production ]] && exit 1 || sequelize db:drop\\",
     \\"db:migrate\\": \\"sequelize db:migrate\\",
     \\"db:rollback\\": \\"sequelize db:migrate:undo\\",
     \\"db:rollback:all\\": \\"sequelize db:migrate:undo:all\\",
@@ -1147,6 +1147,43 @@ export default db
 
 ",
       "name": "package.json",
+      "type": "FILE",
+    },
+    Object {
+      "content": "# employee dataset
+This project was generated with [Sequelize UI](https://github.com/tomjschuster/sequelize-ui).
+
+## Schema Background
+The schema for this project was derived from the Employees sample database.
+
+The Employees sample database schema was created by Fusheng Wang and Carlo Zaniolo and is available XML format at http://www.cs.aau.dk/TimeCenter/software.htm.
+
+The relational schema for this data was created by Giuseppe Maxia and the data was converted from XML to relational by Patrick Crews. The schema and data are available at https://github.com/datacharmer/test_db.
+
+The Sequelize code for this schema was created by Tom Schuster made available through Sequelize UI at https://github.com/tomjschuster/sequelize-ui.
+
+## Getting Started
+
+### Prerequesites
+- [Node.js](https://nodejs.dev/)
+- [PostgreSQL](https://www.postgresql.org/)
+
+### Setup
+1. Install dependencies: \`npm install\`
+2. Setup database: \`npm run db:up\`
+### Run
+- Local development: \`npm run dev\`
+- Production build: \`npm run build && npm start\`
+
+## Bug Reports
+Please report any bugs with generated code at [Sequelize UI Issues](https://github.com/tomjschuster/sequelize-ui/issues).
+
+## License
+Creative Commons Attribution-ShareAlike 3.0 Unported License
+
+This work is licensed under the Creative Commons Attribution-Share Alike 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/ or send a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
+",
+      "name": "README.md",
       "type": "FILE",
     },
     Object {

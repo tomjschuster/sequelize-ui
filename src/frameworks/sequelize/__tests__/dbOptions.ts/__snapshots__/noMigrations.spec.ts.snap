@@ -1590,7 +1590,7 @@ export default db
   \\"scripts\\": {
     \\"test\\": \\"echo \\\\\\"Error: no test specified\\\\\\" && exit 1\\",
     \\"db:create\\": \\"sequelize db:create\\",
-    \\"db:drop\\": \\"sequelize db:drop\\",
+    \\"db:drop\\": \\"[[ $NODE_ENV == production ]] && exit 1 || sequelize db:drop\\",
     \\"build\\": \\"tsc\\",
     \\"start\\": \\"node ./dist/server.js\\",
     \\"dev\\": \\"tsc-watch --onSuccess \\\\\\"node ./dist/server.js\\\\\\"\\"
@@ -1613,6 +1613,49 @@ export default db
 
 ",
       "name": "package.json",
+      "type": "FILE",
+    },
+    Object {
+      "content": "# sakila
+This project was generated with [Sequelize UI](https://github.com/tomjschuster/sequelize-ui).
+
+## Schema Background
+The schema for this project was derived from the Sakila sample database.
+
+The Sakila sample database schema and data were created by Mike Hillyer with the MySQL AB documentation team and is available at https://dev.mysql.com/doc/index-other.html.
+
+The Sequelize code for this schema was created by Tom Schuster made available through Sequelize UI at https://github.com/tomjschuster/sequelize-ui.
+
+## Getting Started
+
+### Prerequesites
+- [Node.js](https://nodejs.dev/)
+- [PostgreSQL](https://www.postgresql.org/)
+
+### Setup
+1. Install dependencies: \`npm install\`
+2. Setup database: \`npm run db:up\`
+### Run
+- Local development: \`npm run dev\`
+- Production build: \`npm run build && npm start\`
+
+## Bug Reports
+Please report any bugs with generated code at [Sequelize UI Issues](https://github.com/tomjschuster/sequelize-ui/issues).
+
+## License
+3-Clause BSD License
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \\"AS IS\\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+",
+      "name": "README.md",
       "type": "FILE",
     },
     Object {
