@@ -16,7 +16,6 @@ function Markdown({ content, className }: MarkdownProps): React.ReactElement {
   return (
     <div
       className={classnames(className, padding('p-4'), toClassname(css.markdownBody))}
-      //   style={{ marginTop: 0 }}
       dangerouslySetInnerHTML={{ __html: markdown || placeholderSpaces(content) }}
     />
   )
