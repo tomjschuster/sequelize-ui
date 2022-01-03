@@ -161,7 +161,7 @@ function associationType({
         `public readonly ${name}?: ${targetName}`,
         `public get${singularMethodPostfix}!: Sequelize.HasOneGetAssociationMixin<${targetName}>`,
         `public set${singularMethodPostfix}!: Sequelize.HasOneSetAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public create${singularMethodPostfix}!: Sequelize.HasOneCreateAssociationMixin<${targetName}CreationAttributes>`,
+        `public create${singularMethodPostfix}!: Sequelize.HasOneCreateAssociationMixin<${targetName}>`,
         blank(),
       ].join('\n')
     case AssociationTypeType.ManyToMany:

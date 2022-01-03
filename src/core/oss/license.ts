@@ -4,6 +4,23 @@ export enum License {
   NewBsd = 'new-bsd',
 }
 
+export function fullLicense(
+  license: License,
+  years: number[],
+  holder: string,
+  modifications: string[],
+): string {
+  return [
+    licenseTitle(license),
+    '',
+    licenseCopyright(license, years, holder),
+    '',
+    ...modifications,
+    '',
+    licenseText(license),
+  ].join('\n')
+}
+
 export function licenseTitle(license: License): string {
   switch (license) {
     case License.CcBySa3:
@@ -11,7 +28,17 @@ export function licenseTitle(license: License): string {
     case License.Mit:
       return 'MIT'
     case License.NewBsd:
-      return '3-Clause BSD'
+      return 'BSD 3-Clause License'
+  }
+}
+
+export function licenseCopyright(license: License, years: number[], holder: string): string {
+  switch (license) {
+    case License.CcBySa3:
+    case License.Mit:
+      return `Copyright (c) ${years.join(', ')} ${holder}}`
+    case License.NewBsd:
+      return `Copyright (c) ${years.join(', ')} ${holder}} All rights reserved`
   }
 }
 

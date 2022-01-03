@@ -1,4 +1,4 @@
-import { License } from '@src/core/oss/license'
+import { License, licenseTitle } from '@src/core/oss/license'
 import { Schema } from '@src/core/schema'
 import * as DemoSchemaIds from './demoSchemaIds'
 
@@ -103,4 +103,49 @@ export function getDemoSchemaLicense(type: DemoSchemaType): License {
     case DemoSchemaType.Sakila:
       return License.NewBsd
   }
+}
+
+export type SampleSchemaBackgroundCopy = {
+  description: string
+  attribution: string
+  license: string
+}
+
+export function sampleSchemaDescription(demoSchemaType: DemoSchemaType): string[] {
+  const name = displayDemoSchemaType(demoSchemaType)
+  const license = getDemoSchemaLicense(demoSchemaType)
+
+  switch (demoSchemaType) {
+    case DemoSchemaType.Blog:
+      return [
+        `The ${name} sample database schema was created by Bhagwat Singh Chouhan with Tutorials24x7 and is available at https://github.com/tutorials24x7/blog-database-mysql.`,
+        licenseCopy(
+          license,
+          'https://github.com/tomjschuster/sequelize-ui-ts/blob/main/src/data/employee/empllyee.ts',
+        ),
+      ]
+    case DemoSchemaType.Employees:
+      return [
+        `The ${name} sample database schema was created by Fusheng Wang and Carlo Zaniolo and is available XML format at http://timecenter.cs.aau.dk/software.htm.`,
+        'The relational schema for this data was created by Giuseppe Maxia and the data was converted from XML to relational by Patrick Crews. The schema and data are available at https://github.com/datacharmer/test_db.',
+        licenseCopy(
+          license,
+          'https://github.com/tomjschuster/sequelize-ui-ts/blob/main/src/data/employee/sakila.ts',
+        ),
+      ]
+    case DemoSchemaType.Sakila:
+      return [
+        `The ${name} sample database is a schema for a video rental store commonly used as an example database for SQL tutorials.`,
+        `The schema and data were created by Mike Hillyer with the MySQL AB documentation team and is available at https://dev.mysql.com/doc/index-other.html.`,
+        licenseCopy(
+          license,
+          'https://github.com/tomjschuster/sequelize-ui-ts/blob/main/src/data/schemas/sakila.ts',
+        ),
+      ]
+  }
+}
+
+export function licenseCopy(license: License, url: string): string {
+  const title = licenseTitle(license)
+  return `The schema was converted to TypeScript for Sequelize UI by Tom Schuster and is licensed under the [${title} license](${url}).`
 }

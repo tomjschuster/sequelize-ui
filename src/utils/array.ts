@@ -20,3 +20,16 @@ export function dedupBy<T>(array: T[], fn: (v: T) => string): T[] {
   }
   return output
 }
+
+export function intersperse<T>(array: T[], value: T): T[] {
+  if (array.length <= 1) return array
+
+  const output: T[] = new Array(array.length * 2 - 1)
+
+  for (let i = 0; i < array.length; i++) {
+    output[i * 2] = array[i]
+    if (i !== array.length - 1) output[i * 2 + 1] = value
+  }
+
+  return output
+}

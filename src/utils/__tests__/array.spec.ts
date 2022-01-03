@@ -1,4 +1,4 @@
-import { arrayToLookup, dedupBy } from '../array'
+import { arrayToLookup, dedupBy, intersperse } from '../array'
 
 describe('array utils', () => {
   describe('arrayToLookup', () => {
@@ -43,6 +43,18 @@ describe('array utils', () => {
 
     it.each(cases)('dedupBy(%o, %o) === %o', (array, fn, expected) => {
       expect(dedupBy(array, fn)).toEqual(expected)
+    })
+  })
+
+  describe('intersperse', () => {
+    const cases: [array: number[], value: number, expected: number[]][] = [
+      [[], 0, []],
+      [[1], 0, [1]],
+      [[1, 2], 0, [1, 0, 2]],
+      [[1, 2, 3], 0, [1, 0, 2, 0, 3]],
+    ]
+    it.each(cases)('intersperse([%s], %s) === [%s]}', (array, value, expected) => {
+      expect(intersperse(array, value)).toEqual(expected)
     })
   })
 })

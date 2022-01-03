@@ -2,6 +2,9 @@
  * Sakila Sample Database Schema
  * Version 1.2
  *
+ * Original schema and data created by Mike Hillyer with the MySQL AB documentation team
+ * https://dev.mysql.com/doc/index-other.html
+ *
  * Sequelize UI TypeScript schema by Tom Schuster
  *
  * Copyright (c) 2006, 2019, Oracle and/or its affiliates.

@@ -1,6 +1,6 @@
 import { lines } from '@src/core/codegen'
 import { DbOptions } from '@src/core/database'
-import { AssociationTypeType, DataType, DataTypeType, Model } from '@src/core/schema'
+import { DataType, DataTypeType, Model } from '@src/core/schema'
 import { hasJsonType, noSupportedDetails, notSupportedComment } from '../../utils/dataTypes'
 import { ModelAssociation, modelName } from '../../utils/model'
 
@@ -85,12 +85,6 @@ function getAssociationTypes({
   )
 }
 
-function associationTypes({ model, association }: ModelAssociation): string[] {
-  return [
-    modelName(model),
-    `${modelName(model)}Id`,
-    association.type.type === AssociationTypeType.HasOne
-      ? `${modelName(model)}CreationAttributes`
-      : null,
-  ].filter((x): x is string => !!x)
+function associationTypes({ model }: ModelAssociation): string[] {
+  return [modelName(model), `${modelName(model)}Id`].filter((x): x is string => !!x)
 }
