@@ -1,10 +1,6 @@
 import {
   alignItems,
   backgroundColor,
-  borderColor,
-  borderRadius,
-  borderWidth,
-  boxShadow,
   Classname,
   classnames,
   cursor,
@@ -14,6 +10,7 @@ import {
   position,
   width,
 } from '@src/ui/styles/classnames'
+import { overlayContainer } from '@src/ui/styles/utils'
 import React from 'react'
 import { SvgProps } from '../../icons/Svg'
 
@@ -46,15 +43,9 @@ function Menu({
       aria-haspopup={true}
       className={classnames(
         className,
+        overlayContainer,
         position('absolute'),
         inset('top-full', 'right-0'),
-        width('w-32'),
-        backgroundColor('bg-white'),
-        borderWidth('border'),
-        borderColor('border-gray-300'),
-        borderRadius('rounded'),
-        boxShadow('shadow-lg'),
-        padding('py-1'),
         display({ hidden: !isOpen }),
       )}
       onMouseOut={onMouseOut}

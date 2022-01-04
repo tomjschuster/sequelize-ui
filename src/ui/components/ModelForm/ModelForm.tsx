@@ -1,7 +1,14 @@
 import { Association, emptyAssociation, emptyField, Field, Model, Schema } from '@src/core/schema'
 import { ModelErrors } from '@src/core/validation/schema'
 import usePrevious from '@src/ui/hooks/usePrevious'
-import { backgroundColor, classnames, margin, overflow, padding } from '@src/ui/styles/classnames'
+import {
+  backgroundColor,
+  classnames,
+  height,
+  margin,
+  overflow,
+  padding,
+} from '@src/ui/styles/classnames'
 import { panel, panelGrid, section, title } from '@src/ui/styles/utils'
 import { focusById } from '@src/utils/dom'
 import React from 'react'
@@ -139,7 +146,11 @@ export default function ModelForm({
   return (
     <form
       onSubmit={(evt) => evt.preventDefault()}
-      className={classnames(overflow('overflow-y-scroll'), padding('p-6', 'pt-11'))}
+      className={classnames(
+        overflow('overflow-y-scroll'),
+        height('h-full'),
+        padding('p-6', 'pt-11'),
+      )}
       {...autofillDisable}
     >
       <div className={classnames(section)}>

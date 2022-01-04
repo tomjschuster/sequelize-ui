@@ -3,6 +3,7 @@ import {
   backgroundColor,
   classnames,
   fontSize,
+  height,
   margin,
   minHeight,
   overflow,
@@ -42,7 +43,12 @@ export default function ModelView({
 }: ModelViewProps): React.ReactElement {
   return (
     <div
-      className={classnames(overflow('overflow-y-scroll'), padding('pt-2', 'p-6'), margin('mb-3'))}
+      className={classnames(
+        overflow('overflow-y-scroll'),
+        height('h-full'),
+        padding('pt-2', 'p-6'),
+        margin('mb-3'),
+      )}
     >
       <Breadcrumbs
         items={[{ label: `${titleCase(schema.name)} (schema)`, onClick: () => onViewSchema() }]}

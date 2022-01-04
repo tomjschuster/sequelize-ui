@@ -115,26 +115,28 @@ function exampleSchemaDescription(schemaType: ExampleSchemaType): string[] {
   switch (schemaType) {
     case ExampleSchemaType.Blog:
       return [
-        `The ${name} sample database schema was created by Bhagwat Singh Chouhan with Tutorials24x7 ${licenseCopy} and is available at https://github.com/tutorials24x7/blog-database-mysql.`,
+        `The ${name} sample database is a schema for blogging website with users, posts, comments, tags and categories.`,
+        `The schema was created by Bhagwat Singh Chouhan with Tutorials24x7 ${licenseCopy} and is available at <https://github.com/tutorials24x7/blog-database-mysql>.`,
         sequelizeConversion,
       ]
     case ExampleSchemaType.Employees:
       return [
-        `The ${name} sample database schema was created by Fusheng Wang and Carlo Zaniolo ${licenseCopy} and is available XML format at http://timecenter.cs.aau.dk/software.htm.`,
-        'The relational schema for this data was created by Giuseppe Maxia and the data was converted from XML to relational by Patrick Crews. The schema and data are available at https://github.com/datacharmer/test_db.',
+        `The ${name} sample database is a temporal database for tracking salary, title and department for a company's employees over time.`,
+        `The schema was created by Fusheng Wang and Carlo Zaniolo ${licenseCopy} and is available XML format at <http://timecenter.cs.aau.dk/software.htm>.`,
+        'The relational schema for this data was created by Giuseppe Maxia and the data was converted from XML to relational by Patrick Crews. The schema and data are available at <https://github.com/datacharmer/test_db>.',
         sequelizeConversion,
       ]
     case ExampleSchemaType.Sakila:
       return [
         `The ${name} sample database is a schema for a video rental store commonly used as an example database for SQL tutorials.`,
-        `The schema and data were created by Mike Hillyer with the MySQL AB documentation team ${licenseCopy} and is available at https://dev.mysql.com/doc/index-other.html.`,
+        `The schema and data were created by Mike Hillyer with the MySQL AB documentation team ${licenseCopy} and is available at <https://dev.mysql.com/doc/index-other.html>.`,
         sequelizeConversion,
       ]
   }
 }
 
 function sequelizeConversionCopy(source: string): string {
-  return `The schema was converted to TypeScript for Sequelize UI by Tom Schuster and is available at ${source}.`
+  return `The schema was converted to TypeScript for Sequelize UI by Tom Schuster and is available at <${source}>.`
 }
 
 function getExampleSchemaSlug(type: ExampleSchemaType): string {

@@ -2,7 +2,15 @@ import { SchemaMeta } from '@src/api/meta'
 import { clearData, listSchemas } from '@src/api/schema'
 import { Schema } from '@src/core/schema'
 import useAsync from '@src/ui/hooks/useAsync'
-import { classnames, margin, minHeight, overflow, padding, width } from '@src/ui/styles/classnames'
+import {
+  classnames,
+  height,
+  margin,
+  minHeight,
+  overflow,
+  padding,
+  width,
+} from '@src/ui/styles/classnames'
 import { flexCenter, section, title } from '@src/ui/styles/utils'
 import React from 'react'
 import ExampleSchemaLinks from './ExampleSchemaLinks'
@@ -23,7 +31,7 @@ export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.Reac
   }
 
   return (
-    <div className={classnames(padding('p-6'), overflow('overflow-y-scroll'))}>
+    <div className={classnames(overflow('overflow-y-scroll'), height('h-full'), padding('p-6'))}>
       <div className={classnames(section, margin('mb-6'))}>
         <h2 className={title}>My Schemas</h2>
         <div className={classnames(flexCenter, width('w-full'), minHeight('min-h-20'))}>

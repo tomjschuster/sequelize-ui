@@ -4,6 +4,7 @@ import {
   borderColor,
   borderRadius,
   borderWidth,
+  boxShadow,
   classnames,
   display,
   flexDirection,
@@ -118,4 +119,14 @@ export const fieldsetGrid = classnames(
   gridTemplateColumns('grid-cols-12'),
   gap('gap-y-0', 'gap-x-4'),
   position('relative'),
+)
+
+export const overlayContainer = classnames(
+  width('w-32'),
+  backgroundColor('bg-white'),
+  borderWidth('border'),
+  borderColor('border-gray-300'),
+  borderRadius('rounded'),
+  boxShadow('shadow-lg'),
+  padding('py-1'),
 )

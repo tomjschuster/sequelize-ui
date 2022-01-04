@@ -16,6 +16,7 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 - [ ] Reset schemas
 - [ ] Error boundary
 - [ ] Refactor undefined/null
+- [ ] Refactor markdown link rendering
 - [ ] Home page copy
 - [ ] Link to legacy
 - [ ] Dark mode

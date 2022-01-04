@@ -5,6 +5,7 @@ import {
   backgroundColor,
   classnames,
   display,
+  height,
   overflow,
   padding,
   width,
@@ -80,7 +81,11 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
   return (
     <form
       onSubmit={(evt) => evt.preventDefault()}
-      className={classnames(overflow('overflow-y-scroll'), padding('p-6', 'pt-11'))}
+      className={classnames(
+        overflow('overflow-y-scroll'),
+        height('h-full'),
+        padding('p-6', 'pt-11'),
+      )}
       {...autofillDisable}
     >
       <div className={classnames(section)}>
