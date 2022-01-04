@@ -1,3 +1,4 @@
+import { SchemaMeta } from '@src/api/meta'
 import { DbOptions } from '@src/core/database'
 import { directory, DirectoryItem, file, itemName } from '@src/core/files/fileSystem'
 import { Schema } from '@src/core/schema'
@@ -24,11 +25,13 @@ import { normalizeSchema } from './utils/schema'
 
 type GenerateSequelizeProjectArgs = {
   schema: Schema
+  meta?: SchemaMeta
   dbOptions: DbOptions
 }
 
 export function generateSequelizeProject({
   schema: nonNormalizedSchema,
+  meta,
   dbOptions,
 }: GenerateSequelizeProjectArgs): DirectoryItem {
   const schema = normalizeSchema({ schema: nonNormalizedSchema, dbOptions })
@@ -71,7 +74,7 @@ export function generateSequelizeProject({
     file('.gitignore', gitignoreTemplate()),
     file('db.ts', dbTemplate({ dbOptions })),
     file('package.json', packageJsonTemplate({ schema, dbOptions })),
-    file('README.md', readmeTemplate({ schema, dbOptions })),
+    file('README.md', readmeTemplate({ schema, meta, dbOptions })),
     file('server.ts', serverTemplate({ dbOptions })),
     schema.models.some(hasJsonType) ? file('types.ts', typesTemplate()) : null,
     file('tsconfig.json', tsconfigTemplate()),

@@ -1,3 +1,4 @@
+import { SchemaMeta } from '@src/api/meta'
 import { DbOptions, defaultDbOptions } from '@src/core/database'
 import { activeFilePath, FileTree } from '@src/core/files/fileTree'
 import { Framework } from '@src/core/framework'
@@ -17,7 +18,6 @@ import {
   validateModel,
   validateSchema,
 } from '@src/core/validation/schema'
-import { isDemoSchema } from '@src/data/schemas'
 import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import { useAlert } from '@src/ui/lib/alert'
 import equal from 'fast-deep-equal/es6'
@@ -27,6 +27,7 @@ import { InitialEditModelStateType, SchemaLayoutState, SchemaLayoutStateType } f
 
 type UseSchemaLayoutArgs = {
   schema: Schema
+  meta?: SchemaMeta
   initialFramework?: Framework
   initiallyEditing?: boolean
   onChange: (schema: Schema) => Promise<Schema>
@@ -62,6 +63,7 @@ type UseSchemaLayoutResult = {
 }
 export function useSchemaLayout({
   schema,
+  meta,
   initialFramework,
   initiallyEditing = false,
   onChange,
@@ -93,7 +95,12 @@ export function useSchemaLayout({
     [error, success, onChange],
   )
 
-  const { root, framework, defaultPath } = useGeneratedCode({ schema, dbOptions, initialFramework })
+  const { root, framework, defaultPath } = useGeneratedCode({
+    schema,
+    meta,
+    dbOptions,
+    initialFramework,
+  })
   const { fileTree, selectItem, handleKeyDown } = useFileTree({ root, key: schema.id, defaultPath })
 
   const edit = React.useCallback(() => {
@@ -307,7 +314,7 @@ export function useSchemaLayout({
         return
       }
 
-      if (isDemoSchema(state.schema) || !equal(state.schema, schema)) {
+      if (meta?.isExample || !equal(state.schema, schema)) {
         const updatedSchema = await change(state.schema, (s) => `Schema "${s.name}" saved.`)
         exitEdit(updatedSchema)
         return
@@ -347,7 +354,7 @@ export function useSchemaLayout({
         setState({ ...state, errors })
       }
     }
-  }, [schema, state, change, exitEdit, onExit])
+  }, [schema, state, meta, change, exitEdit, onExit])
 
   const deleteField = React.useCallback(
     async (field: Field) => {
@@ -426,7 +433,7 @@ export function useSchemaLayout({
       setState({ type: SchemaLayoutStateType.VIEW_SCHEMA, schema: updatedSchema })
       return
     }
-  }, [schema, state, change, onExit, onDelete])
+  }, [onDelete, state, schema, success, onExit, error, change])
 
   const cancel = React.useCallback(() => {
     if (isNewSchema(schema)) {
@@ -434,13 +441,13 @@ export function useSchemaLayout({
       return
     }
 
-    if (isDemoSchema(schema)) {
+    if (meta?.isExample) {
       viewCode()
       return
     }
 
     exitEdit(schema)
-  }, [schema, exitEdit, onExit, viewCode])
+  }, [schema, meta, exitEdit, onExit, viewCode])
 
   return {
     state,

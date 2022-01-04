@@ -1,32 +1,24 @@
+import { SchemaMeta } from '@src/api/meta'
 import { blank, lines } from '@src/core/codegen'
 import { DbOptions, SqlDialect } from '@src/core/database'
 import { Schema } from '@src/core/schema'
-import {
-  DemoSchemaType,
-  displayDemoSchemaType,
-  getDemoSchemaTypeById,
-  sampleSchemaDescription,
-} from '@src/data/schemas'
 import { intersperse } from '@src/utils/array'
 
 export type ReadmeTemplateArgs = {
   schema: Schema
+  meta?: SchemaMeta | null
   dbOptions: DbOptions
 }
 
-export function readmeTemplate({ schema, dbOptions }: ReadmeTemplateArgs): string {
-  const demoSchemaType = schema.forkedFrom
-    ? getDemoSchemaTypeById(schema.forkedFrom)
-    : getDemoSchemaTypeById(schema.id)
-
+export function readmeTemplate({ schema, meta, dbOptions }: ReadmeTemplateArgs): string {
   return lines([
     `# ${schema.name}`,
     'This project was generated with [Sequelize UI](https://github.com/tomjschuster/sequelize-ui).',
     blank(),
     'The project is a simple [Node.js](https://nodejs.dev/) server with [Sequelize ORM](https://sequelize.org/)',
     blank(),
-    schemaDescription(demoSchemaType),
-    '## Getting Started',
+    meta ? schemaDescription(meta) : null,
+    '## Running Project',
     blank(),
     '### Prerequesites',
     '- [Node.js](https://nodejs.dev/)',
@@ -61,16 +53,12 @@ function dbDependency(dialect: SqlDialect): string {
   }
 }
 
-function schemaDescription(demoSchemaType: DemoSchemaType | undefined): string | null {
-  if (!demoSchemaType) return null
-
-  const name = displayDemoSchemaType(demoSchemaType)
-
+function schemaDescription({ displayName, description }: SchemaMeta): string | null {
   return lines([
-    '### Schema',
-    `The Sequelize schema for this project was derived from the ${name} sample database.`,
+    '## Schema',
+    `The Sequelize schema for this project was derived from the ${displayName} sample database.`,
     blank(),
-    ...intersperse(sampleSchemaDescription(demoSchemaType), blank()),
+    ...intersperse(description, blank()),
     blank(),
   ])
 }

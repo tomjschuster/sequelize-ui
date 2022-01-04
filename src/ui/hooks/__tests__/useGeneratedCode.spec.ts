@@ -1,5 +1,5 @@
+import blogSchema from '@src/api/examples/blog'
 import { defaultDbOptions, SqlDialect } from '@src/core/database'
-import blogSchema from '@src/data/schemas/blog'
 import { SequelizeFramework } from '@src/frameworks/sequelize'
 import { renderHook } from '@testing-library/react-hooks'
 import useGeneratedCode, { UseGeneratedCodeArgs, UseGeneratedCodeResult } from '../useGeneratedCode'

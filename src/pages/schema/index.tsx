@@ -1,3 +1,4 @@
+import { getSchemaMetaById } from '@src/api/meta'
 import { deleteSchema, getSchema, SCHEMA_NOT_FOUND_ERROR, updateSchema } from '@src/api/schema'
 import { emptySchema, isNewSchema, Schema } from '@src/core/schema'
 import { goTo } from '@src/routing/navigation'
@@ -17,11 +18,16 @@ function SchemaPage(): React.ReactElement {
 
   React.useEffect(() => {
     if (router.isReady && !schemaId) {
-      console.log('LEAVING')
       goTo(indexRoute())
     }
-  }, [])
+  }, [router.isReady, schemaId])
 
+  const meta = React.useMemo(
+    () => (schemaId ? getSchemaMetaById(schemaId) || undefined : undefined),
+    [schemaId],
+  )
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const getData = React.useCallback(() => getSchema(schemaId!), [schemaId])
 
   const handleError = React.useCallback(
@@ -60,6 +66,7 @@ function SchemaPage(): React.ReactElement {
   return (
     <SchemaLayout
       schema={schema}
+      meta={meta}
       onChange={handleChange}
       onDelete={handleDelete}
       onClickClose={handleCancel}

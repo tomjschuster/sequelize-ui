@@ -21,7 +21,8 @@
 
 import { AssociationTypeType, DataTypeType, Model, Schema, ThroughType } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import { DEMO_SCHEMA_SAKILA_ID } from './demoSchemaIds'
+import shortid from 'shortid'
+import { SAKILA_ID } from './ids'
 
 const time = fromParts(2020, 1, 1)
 
@@ -51,20 +52,20 @@ const actor: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '1',
+      id: shortid(),
       name: 'actor_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '2',
+      id: shortid(),
       name: 'first_name',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '3',
+      id: shortid(),
       name: 'last_name',
       type: { type: DataTypeType.String },
       required: true,
@@ -72,7 +73,7 @@ const actor: Model = {
   ],
   associations: [
     {
-      id: '-20',
+      id: shortid(),
       foreignKey: 'actor_id',
       sourceModelId: Id.Actor,
       targetModelId: Id.Film,
@@ -92,64 +93,64 @@ const film: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '4',
+      id: shortid(),
       name: 'film_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '5',
+      id: shortid(),
       name: 'title',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '6',
+      id: shortid(),
       name: 'description',
       type: { type: DataTypeType.String },
     },
     {
-      id: '7',
+      id: shortid(),
       name: 'release_year',
       type: { type: DataTypeType.Integer },
     },
     {
-      id: '8',
+      id: shortid(),
       name: 'language_id',
       type: { type: DataTypeType.Integer },
       required: true,
     },
     {
-      id: '9',
+      id: shortid(),
       name: 'original_language_id',
       type: { type: DataTypeType.Integer },
     },
     {
-      id: '10',
+      id: shortid(),
       name: 'rental_duration',
       type: { type: DataTypeType.Integer },
       required: true,
     },
     {
-      id: '11',
+      id: shortid(),
       name: 'rental_rate',
       type: { type: DataTypeType.Decimal },
       required: true,
     },
     {
-      id: '12',
+      id: shortid(),
       name: 'length',
       type: { type: DataTypeType.Integer },
     },
     {
-      id: '13',
+      id: shortid(),
       name: 'rating',
       type: { type: DataTypeType.Enum, values: ['G', 'PG', 'PG-13', 'R', 'NC-17'] },
       required: true,
     },
     {
-      id: '14',
+      id: shortid(),
       name: 'special_feature',
       type: {
         type: DataTypeType.Array,
@@ -163,13 +164,13 @@ const film: Model = {
   ],
   associations: [
     {
-      id: '-19',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.Film,
       targetModelId: Id.Language,
     },
     {
-      id: '-18',
+      id: shortid(),
       alias: 'original_language',
       foreignKey: 'original_language_id',
       type: { type: AssociationTypeType.BelongsTo },
@@ -177,14 +178,14 @@ const film: Model = {
       targetModelId: Id.Language,
     },
     {
-      id: '-17',
+      id: shortid(),
       foreignKey: 'film_id',
       type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Film,
       targetModelId: Id.Inventory,
     },
     {
-      id: '-16',
+      id: shortid(),
       foreignKey: 'film_id',
       sourceModelId: Id.Film,
       targetModelId: Id.Actor,
@@ -195,7 +196,7 @@ const film: Model = {
       },
     },
     {
-      id: '-15',
+      id: shortid(),
       foreignKey: 'film_id',
       sourceModelId: Id.Film,
       targetModelId: Id.Category,
@@ -215,14 +216,14 @@ const language: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '15',
+      id: shortid(),
       name: 'language_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '16',
+      id: shortid(),
       name: 'name',
       type: { type: DataTypeType.String },
       required: true,
@@ -230,13 +231,13 @@ const language: Model = {
   ],
   associations: [
     {
-      id: '-14',
+      id: shortid(),
       type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Language,
       targetModelId: Id.Film,
     },
     {
-      id: '-13',
+      id: shortid(),
       alias: 'original_language_film',
       foreignKey: 'original_language_id',
       type: { type: AssociationTypeType.HasMany },
@@ -253,7 +254,7 @@ const category: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '17',
+      id: shortid(),
       name: 'category_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
@@ -262,7 +263,7 @@ const category: Model = {
   ],
   associations: [
     {
-      id: '-12',
+      id: shortid(),
       foreignKey: 'category_id',
       sourceModelId: Id.Category,
       targetModelId: Id.Film,
@@ -282,7 +283,7 @@ const inventory: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '18',
+      id: shortid(),
       name: 'inventory_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
@@ -291,13 +292,13 @@ const inventory: Model = {
   ],
   associations: [
     {
-      id: '-11',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.Inventory,
       targetModelId: Id.Film,
     },
     {
-      id: '-10',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.Inventory,
       targetModelId: Id.Store,
@@ -312,7 +313,7 @@ const store: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '19',
+      id: shortid(),
       name: 'store_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
@@ -321,25 +322,25 @@ const store: Model = {
   ],
   associations: [
     {
-      id: '-9',
+      id: shortid(),
       type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Store,
       targetModelId: Id.Inventory,
     },
     {
-      id: '-8',
+      id: shortid(),
       type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Store,
       targetModelId: Id.Staff,
     },
     {
-      id: '-7',
+      id: shortid(),
       type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Store,
       targetModelId: Id.Customer,
     },
     {
-      id: '-6',
+      id: shortid(),
       alias: 'manager',
       foreignKey: 'manager_staff_id',
       type: { type: AssociationTypeType.BelongsTo },
@@ -347,7 +348,7 @@ const store: Model = {
       targetModelId: Id.Staff,
     },
     {
-      id: '-5',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.Store,
       targetModelId: Id.Address,
@@ -362,61 +363,61 @@ const staff: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '20',
+      id: shortid(),
       name: 'staff_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '21',
+      id: shortid(),
       name: 'first_name',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '22',
+      id: shortid(),
       name: 'last_name',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '23',
+      id: shortid(),
       name: 'picture',
       type: { type: DataTypeType.Blob },
     },
     {
-      id: '24',
+      id: shortid(),
       name: 'email',
       type: { type: DataTypeType.String },
     },
     {
-      id: '25',
+      id: shortid(),
       name: 'active',
       type: { type: DataTypeType.Boolean },
       required: true,
     },
     {
-      id: '26',
+      id: shortid(),
       name: 'username',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '27',
+      id: shortid(),
       name: 'password',
       type: { type: DataTypeType.String },
     },
   ],
   associations: [
     {
-      id: '-4',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Store,
       sourceModelId: Id.Staff,
     },
     {
-      id: '-3',
+      id: shortid(),
       alias: 'managed_store',
       foreignKey: 'manager_staff_id',
       type: { type: AssociationTypeType.HasMany },
@@ -424,19 +425,19 @@ const staff: Model = {
       sourceModelId: Id.Staff,
     },
     {
-      id: '-2',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Address,
       sourceModelId: Id.Staff,
     },
     {
-      id: '1',
+      id: shortid(),
       type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.Rental,
       sourceModelId: Id.Staff,
     },
     {
-      id: '0',
+      id: shortid(),
       type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.Payment,
       sourceModelId: Id.Staff,
@@ -451,31 +452,31 @@ const customer: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '28',
+      id: shortid(),
       name: 'customer_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '29',
+      id: shortid(),
       name: 'first_name',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '30',
+      id: shortid(),
       name: 'last_name',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '31',
+      id: shortid(),
       name: 'email',
       type: { type: DataTypeType.String },
     },
     {
-      id: '32',
+      id: shortid(),
       name: 'active',
       type: { type: DataTypeType.Boolean },
       required: true,
@@ -483,25 +484,25 @@ const customer: Model = {
   ],
   associations: [
     {
-      id: '1',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Store,
       sourceModelId: Id.Customer,
     },
     {
-      id: '2',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Address,
       sourceModelId: Id.Customer,
     },
     {
-      id: '3',
+      id: shortid(),
       type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.Rental,
       sourceModelId: Id.Customer,
     },
     {
-      id: '4',
+      id: shortid(),
       type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.Payment,
       sourceModelId: Id.Customer,
@@ -516,31 +517,31 @@ const address: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '33',
+      id: shortid(),
       name: 'address_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '34',
+      id: shortid(),
       name: 'address',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '35',
+      id: shortid(),
       name: 'address2',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '36',
+      id: shortid(),
       name: 'postal_code',
       type: { type: DataTypeType.String },
     },
     {
-      id: '37',
+      id: shortid(),
       name: 'phone',
       type: { type: DataTypeType.String },
       required: true,
@@ -548,25 +549,25 @@ const address: Model = {
   ],
   associations: [
     {
-      id: '5',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.City,
       sourceModelId: Id.Address,
     },
     {
-      id: '6',
+      id: shortid(),
       type: { type: AssociationTypeType.HasOne },
       targetModelId: Id.Customer,
       sourceModelId: Id.Address,
     },
     {
-      id: '7',
+      id: shortid(),
       type: { type: AssociationTypeType.HasOne },
       targetModelId: Id.Staff,
       sourceModelId: Id.Address,
     },
     {
-      id: '8',
+      id: shortid(),
       type: { type: AssociationTypeType.HasOne },
       targetModelId: Id.Store,
       sourceModelId: Id.Address,
@@ -581,45 +582,45 @@ const rental: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '38',
+      id: shortid(),
       name: 'rental_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '39',
+      id: shortid(),
       name: 'rental_date',
       type: { type: DataTypeType.Date },
       required: true,
     },
     {
-      id: '40',
+      id: shortid(),
       name: 'return_date',
       type: { type: DataTypeType.String },
     },
   ],
   associations: [
     {
-      id: '9',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Inventory,
       sourceModelId: Id.Rental,
     },
     {
-      id: '10',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Customer,
       sourceModelId: Id.Rental,
     },
     {
-      id: '11',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Staff,
       sourceModelId: Id.Rental,
     },
     {
-      id: '12',
+      id: shortid(),
       type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.Payment,
       sourceModelId: Id.Rental,
@@ -634,20 +635,20 @@ const payment: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '41',
+      id: shortid(),
       name: 'payment_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '42',
+      id: shortid(),
       name: 'amount',
       type: { type: DataTypeType.Decimal },
       required: true,
     },
     {
-      id: '43',
+      id: shortid(),
       name: 'payment_date',
       type: { type: DataTypeType.DateTime },
       required: true,
@@ -655,19 +656,19 @@ const payment: Model = {
   ],
   associations: [
     {
-      id: '13',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Customer,
       sourceModelId: Id.Payment,
     },
     {
-      id: '14',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Staff,
       sourceModelId: Id.Payment,
     },
     {
-      id: '15',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Rental,
       sourceModelId: Id.Payment,
@@ -682,14 +683,14 @@ const city: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '44',
+      id: shortid(),
       name: 'city_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '45',
+      id: shortid(),
       name: 'city',
       type: { type: DataTypeType.String },
       required: true,
@@ -697,13 +698,13 @@ const city: Model = {
   ],
   associations: [
     {
-      id: '16',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       targetModelId: Id.Country,
       sourceModelId: Id.City,
     },
     {
-      id: '17',
+      id: shortid(),
       type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.Address,
       sourceModelId: Id.City,
@@ -718,14 +719,14 @@ const country: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '46',
+      id: shortid(),
       name: 'country_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '47',
+      id: shortid(),
       name: 'country',
       type: { type: DataTypeType.String },
       required: true,
@@ -733,7 +734,7 @@ const country: Model = {
   ],
   associations: [
     {
-      id: '18',
+      id: shortid(),
       type: { type: AssociationTypeType.HasMany },
       targetModelId: Id.City,
       sourceModelId: Id.Country,
@@ -748,7 +749,7 @@ const film_actor: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '48',
+      id: shortid(),
       name: 'film_actor_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
@@ -757,13 +758,13 @@ const film_actor: Model = {
   ],
   associations: [
     {
-      id: '19',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.FilmActor,
       targetModelId: Id.Film,
     },
     {
-      id: '20',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.FilmActor,
       targetModelId: Id.Actor,
@@ -778,7 +779,7 @@ const film_category: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '49',
+      id: shortid(),
       name: 'film_category_id',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
@@ -787,13 +788,13 @@ const film_category: Model = {
   ],
   associations: [
     {
-      id: '21',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.FilmCategory,
       targetModelId: Id.Film,
     },
     {
-      id: '22',
+      id: shortid(),
       type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.FilmCategory,
       targetModelId: Id.Category,
@@ -803,7 +804,7 @@ const film_category: Model = {
 
 // https://dev.mysql.com/doc/sakila/en/
 const sakilaSchema: Schema = {
-  id: DEMO_SCHEMA_SAKILA_ID,
+  id: SAKILA_ID,
   name: 'sakila',
   createdAt: time,
   updatedAt: time,

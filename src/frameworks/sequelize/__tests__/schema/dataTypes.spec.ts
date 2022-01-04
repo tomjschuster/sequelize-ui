@@ -1,5 +1,5 @@
 import { defaultDbOptions } from '@src/core/database'
-import dataTypesSchema from '@src/data/schemas/dataTypes'
+import dataTypesSchema from '@src/frameworks/__fixtures__/schemas/dataTypes'
 import { SequelizeFramework } from '../..'
 
 describe('Sequelize Framework', () => {

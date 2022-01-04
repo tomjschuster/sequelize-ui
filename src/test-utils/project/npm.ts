@@ -44,5 +44,5 @@ const install = async (preinstall?: string): Promise<void> => {
   }
   return exec('npm install').then()
 }
-const build = (): Promise<void> => exec('npm run build -- --incremental').then()
+const build = (): Promise<void> => exec('npm run build').then()
 const migrate = (): Promise<void> => exec('npm run db:migrate').then()

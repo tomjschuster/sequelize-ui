@@ -3,6 +3,7 @@ import { arrayToLookup } from '@src/utils/array'
 import { now } from '@src/utils/dateTime'
 import { versionedName } from '@src/utils/string'
 import shortid from 'shortid'
+import * as Ids from './examples/ids'
 
 export const SCHEMA_NOT_FOUND_ERROR = '[Schema Api Error] Schema not found'
 
@@ -11,6 +12,10 @@ export async function listSchemas(): Promise<Schema[]> {
 }
 
 export async function getSchema(id: string): Promise<Schema> {
+  const exampleSchema = await getExampleSchema(id)
+
+  if (exampleSchema) return exampleSchema
+
   const schemas = await listSchemas()
   const schema = schemas.find((s) => s.id === id)
   return schema || Promise.reject(new Error(SCHEMA_NOT_FOUND_ERROR))
@@ -165,5 +170,18 @@ function joinModelToTable(
       ...association.type,
       through: { type: ThroughType.ThroughTable, table: `${nameA} ${nameB}` },
     },
+  }
+}
+
+async function getExampleSchema(id: string): Promise<Schema | null> {
+  switch (id) {
+    case Ids.BLOG_ID:
+      return (await import('./examples/blog')).default
+    case Ids.EMPLOYEES_ID:
+      return (await import('./examples/employees')).default
+    case Ids.SAKILA_ID:
+      return (await import('./examples/sakila')).default
+    default:
+      return await Promise.resolve(null)
   }
 }

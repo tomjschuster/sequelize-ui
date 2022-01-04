@@ -1,9 +1,11 @@
+import { SchemaMeta } from '@src/api/meta'
 import { DbOptions } from '@src/core/database'
 import { FileSystemItem } from '@src/core/files/fileSystem'
 import { Model, Schema } from '@src/core/schema'
 
 export type GenerateArgs = {
   schema: Schema
+  meta?: SchemaMeta
   dbOptions: DbOptions
 }
 

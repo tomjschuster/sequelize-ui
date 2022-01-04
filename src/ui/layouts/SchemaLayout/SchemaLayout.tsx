@@ -1,3 +1,4 @@
+import { SchemaMeta } from '@src/api/meta'
 import * as FileTree from '@src/core/files/fileTree'
 import { Framework } from '@src/core/framework'
 import { Model, Schema } from '@src/core/schema'
@@ -12,6 +13,7 @@ import { useSchemaLayout } from './useSchemaLayout'
 
 type SchemaLayoutProps = {
   schema: Schema
+  meta?: SchemaMeta
   initialFramework?: Framework
   initiallyEditing?: boolean
   onChange: (schema: Schema) => Promise<Schema>
@@ -20,6 +22,7 @@ type SchemaLayoutProps = {
 }
 export default function SchemaLayout({
   schema,
+  meta,
   initialFramework,
   initiallyEditing,
   onChange,
@@ -53,6 +56,7 @@ export default function SchemaLayout({
     cancel,
   } = useSchemaLayout({
     schema,
+    meta,
     initialFramework,
     initiallyEditing,
     onChange,
@@ -76,7 +80,7 @@ export default function SchemaLayout({
     <>
       <SchemaLayoutControls
         state={state}
-        schema={schema}
+        meta={meta}
         isEditing={isEditing}
         fileTree={fileTree}
         dbOptions={dbOptions}

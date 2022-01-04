@@ -109,9 +109,9 @@ export class Actor
         Object {
           "content": "import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
 import type { City, CityId } from './City'
-import type { Customer, CustomerCreationAttributes, CustomerId } from './Customer'
-import type { Staff, StaffCreationAttributes, StaffId } from './Staff'
-import type { Store, StoreCreationAttributes, StoreId } from './Store'
+import type { Customer, CustomerId } from './Customer'
+import type { Staff, StaffId } from './Staff'
+import type { Store, StoreId } from './Store'
 
 export interface AddressAttributes {
   addressId: number
@@ -144,19 +144,19 @@ export class Address
   public readonly Customer?: Customer
   public getCustomer!: Sequelize.HasOneGetAssociationMixin<Customer>
   public setCustomer!: Sequelize.HasOneSetAssociationMixin<Customer, CustomerId>
-  public createCustomer!: Sequelize.HasOneCreateAssociationMixin<CustomerCreationAttributes>
+  public createCustomer!: Sequelize.HasOneCreateAssociationMixin<Customer>
   
   // Address hasOne Staff
   public readonly Staff?: Staff
   public getStaff!: Sequelize.HasOneGetAssociationMixin<Staff>
   public setStaff!: Sequelize.HasOneSetAssociationMixin<Staff, StaffId>
-  public createStaff!: Sequelize.HasOneCreateAssociationMixin<StaffCreationAttributes>
+  public createStaff!: Sequelize.HasOneCreateAssociationMixin<Staff>
   
   // Address hasOne Store
   public readonly Store?: Store
   public getStore!: Sequelize.HasOneGetAssociationMixin<Store>
   public setStore!: Sequelize.HasOneSetAssociationMixin<Store, StoreId>
-  public createStore!: Sequelize.HasOneCreateAssociationMixin<StoreCreationAttributes>
+  public createStore!: Sequelize.HasOneCreateAssociationMixin<Store>
   
   public static associations: {
     City: Association<Address, City>,
@@ -1619,14 +1619,9 @@ export default db
       "content": "# sakila
 This project was generated with [Sequelize UI](https://github.com/tomjschuster/sequelize-ui).
 
-## Schema Background
-The schema for this project was derived from the Sakila sample database.
+The project is a simple [Node.js](https://nodejs.dev/) server with [Sequelize ORM](https://sequelize.org/)
 
-The Sakila sample database schema and data were created by Mike Hillyer with the MySQL AB documentation team and is available at https://dev.mysql.com/doc/index-other.html.
-
-The Sequelize code for this schema was created by Tom Schuster made available through Sequelize UI at https://github.com/tomjschuster/sequelize-ui.
-
-## Getting Started
+## Running Project
 
 ### Prerequesites
 - [Node.js](https://nodejs.dev/)
@@ -1642,19 +1637,6 @@ The Sequelize code for this schema was created by Tom Schuster made available th
 
 ## Bug Reports
 Please report any bugs with generated code at [Sequelize UI Issues](https://github.com/tomjschuster/sequelize-ui/issues).
-
-## License
-3-Clause BSD License
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \\"AS IS\\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ",
       "name": "README.md",
       "type": "FILE",

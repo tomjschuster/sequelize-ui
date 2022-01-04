@@ -1,4 +1,3 @@
-import { DemoSchemaType, getDemoSchemaSlug, getDemoSchemaTypeBySlug } from '@src/data/schemas'
 import { ParsedUrlQuery } from 'querystring'
 
 export enum RouteType {
@@ -6,7 +5,7 @@ export enum RouteType {
   Index = 'INDEX',
   NewSchema = 'NEW_SCHEMA',
   Schema = 'SCHEMA',
-  DemoSchema = 'DEMO_SCHEMA',
+  ExampleSchema = 'EXAMPLE_SCHEMA',
 }
 
 export type BaseRoute<T = RouteType, P = undefined> = P extends undefined
@@ -17,9 +16,9 @@ export type NotFoundRoute = BaseRoute<typeof RouteType.NotFound>
 export type IndexRoute = BaseRoute<typeof RouteType.Index>
 export type NewSchemaRoute = BaseRoute<typeof RouteType.NewSchema>
 export type SchemaRoute = BaseRoute<typeof RouteType.Schema, { id: string }>
-export type DemoSchemaRoute = BaseRoute<typeof RouteType.DemoSchema, { schemaType: DemoSchemaType }>
+export type ExampleSchemaRoute = BaseRoute<typeof RouteType.ExampleSchema, { slug: string }>
 
-export type Route = NotFoundRoute | IndexRoute | NewSchemaRoute | SchemaRoute | DemoSchemaRoute
+export type Route = NotFoundRoute | IndexRoute | NewSchemaRoute | SchemaRoute | ExampleSchemaRoute
 
 export function notFoundRoute(): NotFoundRoute {
   return { type: RouteType.NotFound }
@@ -37,8 +36,8 @@ export function schemaRoute(id: string): SchemaRoute {
   return { type: RouteType.Schema, id }
 }
 
-export function demoSchemaRoute(schemaType: DemoSchemaType): DemoSchemaRoute {
-  return { type: RouteType.DemoSchema, schemaType }
+export function exampleSchemaRoute(slug: string): ExampleSchemaRoute {
+  return { type: RouteType.ExampleSchema, slug }
 }
 
 export function parseRoute(pathname: string, query: ParsedUrlQuery): Route {
@@ -48,9 +47,9 @@ export function parseRoute(pathname: string, query: ParsedUrlQuery): Route {
   const isNewSchemaPath = pathname === '/schema/new'
   if (isNewSchemaPath) return newSchemaRoute()
 
-  const demoSchemaType = parseDemoSchemaType(pathname)
-  const isDemoSchemaPath = !!demoSchemaType
-  if (isDemoSchemaPath) return demoSchemaRoute(demoSchemaType)
+  const slug = parseExampleSchemaSlug(pathname)
+  const isExampleSchemaPath = !!slug
+  if (isExampleSchemaPath) return exampleSchemaRoute(slug)
 
   const schemaId = parseSchemaId(query)
   const isSchemaPath = pathname === '/schema' && !!schemaId
@@ -59,10 +58,9 @@ export function parseRoute(pathname: string, query: ParsedUrlQuery): Route {
   return notFoundRoute()
 }
 
-export function parseDemoSchemaType(pathname: string): DemoSchemaType | undefined {
+export function parseExampleSchemaSlug(pathname: string): string | undefined {
   const matches = pathname.match(/^\/schema\/([\w-]+)$/)
-  const slug = matches?.[1]
-  return slug !== undefined ? getDemoSchemaTypeBySlug(slug) : undefined
+  return matches?.[1]
 }
 
 export function parseSchemaId(query: ParsedUrlQuery): string | undefined {
@@ -79,8 +77,8 @@ export function routeToUrl(route: Route): string {
       return '/schema/new'
     case RouteType.Schema:
       return `/schema?id=${route.id}`
-    case RouteType.DemoSchema:
-      return `/schema/${getDemoSchemaSlug(route.schemaType)}`
+    case RouteType.ExampleSchema:
+      return `/schema/${route.slug}`
   }
 }
 

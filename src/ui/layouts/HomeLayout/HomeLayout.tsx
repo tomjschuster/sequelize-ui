@@ -1,15 +1,20 @@
+import { SchemaMeta } from '@src/api/meta'
 import { clearData, listSchemas } from '@src/api/schema'
 import { Schema } from '@src/core/schema'
 import useAsync from '@src/ui/hooks/useAsync'
 import { classnames, margin, minHeight, overflow, padding, width } from '@src/ui/styles/classnames'
 import { flexCenter, section, title } from '@src/ui/styles/utils'
 import React from 'react'
-import DemoSchemaButtons from './DemoSchemaButtons'
+import ExampleSchemaLinks from './ExampleSchemaLinks'
 import MySchemaLinks from './MySchemaLinks'
 import SchemasError from './SchemasError'
 import SchemasZeroState from './SchemasZeroState'
 
-export default function HomeLayout(): React.ReactElement {
+type HomeLayoutProps = {
+  exampleMeta: SchemaMeta[]
+}
+
+export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.ReactElement {
   const { data: schemas, error, refetch, loading } = useAsync({ getData: listSchemas })
 
   const handleClickClearData = async () => {
@@ -32,7 +37,7 @@ export default function HomeLayout(): React.ReactElement {
       </div>
       <div className={section}>
         <h2 className={title}>Example Schemas</h2>
-        <DemoSchemaButtons />
+        <ExampleSchemaLinks exampleMeta={exampleMeta} />
       </div>
     </div>
   )

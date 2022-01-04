@@ -1,7 +1,6 @@
+import { SchemaMeta } from '@src/api/meta'
 import { DbOptions } from '@src/core/database'
 import * as FileTree from '@src/core/files/fileTree'
-import { Schema } from '@src/core/schema'
-import { isDemoSchema } from '@src/data/schemas'
 import {
   backgroundColor,
   borderColor,
@@ -30,7 +29,7 @@ import { SchemaLayoutState, SchemaLayoutStateType } from './types'
 
 type SchemaLayoutControlsProps = {
   state: SchemaLayoutState
-  schema: Schema
+  meta?: SchemaMeta
   isEditing: boolean
   fileTree: FileTree.FileTree
   dbOptions: DbOptions
@@ -46,7 +45,7 @@ type SchemaLayoutControlsProps = {
 
 export default function SchemaLayoutControls({
   state,
-  schema,
+  meta,
   isEditing,
   fileTree,
   dbOptions,
@@ -74,7 +73,7 @@ export default function SchemaLayoutControls({
       <div className={classnames(display('flex'))}>
         <SchemaLayoutControlsActions
           state={state}
-          schema={schema}
+          meta={meta}
           dbOptions={dbOptions}
           fileTree={fileTree}
           onChangeDbOptions={onChangeDbOptions}
@@ -91,7 +90,7 @@ export default function SchemaLayoutControls({
 
 type SchemaLayoutControlsActionsProps = {
   state: SchemaLayoutState
-  schema: Schema
+  meta?: SchemaMeta
   fileTree: FileTree.FileTree
   dbOptions: DbOptions
   onChangeDbOptions: (options: DbOptions) => void
@@ -104,7 +103,7 @@ type SchemaLayoutControlsActionsProps = {
 
 function SchemaLayoutControlsActions({
   state,
-  schema,
+  meta,
   fileTree,
   dbOptions,
   onChangeDbOptions,
@@ -130,7 +129,7 @@ function SchemaLayoutControlsActions({
   if (state.type === SchemaLayoutStateType.VIEW_SCHEMA) {
     return (
       <>
-        {!isDemoSchema(schema) && (
+        {!meta?.isExample && (
           <IconButton
             label="delete schema"
             icon={TrashIcon}
@@ -157,7 +156,7 @@ function SchemaLayoutControlsActions({
   if (state.type === SchemaLayoutStateType.VIEW_MODEL) {
     return (
       <>
-        {!isDemoSchema(schema) && (
+        {!meta?.isExample && (
           <IconButton
             label="delete schema"
             icon={TrashIcon}
@@ -193,7 +192,7 @@ function SchemaLayoutControlsActions({
         Cancel
       </Button>
 
-      {!isDemoSchema(schema) && (
+      {!meta?.isExample && (
         <Button
           className={classnames(
             textColor('text-white'),

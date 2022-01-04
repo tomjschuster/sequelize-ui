@@ -1,7 +1,7 @@
+import blogSchema from '@src/api/examples/blog'
+import employee from '@src/api/examples/employees'
+import sakila from '@src/api/examples/sakila'
 import { AssociationTypeType, ThroughType } from '@src/core/schema'
-import blogSchema from '@src/data/schemas/blog'
-import employee from '@src/data/schemas/employee'
-import sakila from '@src/data/schemas/sakila'
 import * as DateTimeUtils from '@src/utils/dateTime'
 import {
   clearSchemas,

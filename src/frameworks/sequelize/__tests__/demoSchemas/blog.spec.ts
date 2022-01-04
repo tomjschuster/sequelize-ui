@@ -1,5 +1,5 @@
+import schema from '@src/api/examples/blog'
 import { defaultDbOptions } from '@src/core/database'
-import schema from '@src/data/schemas/blog'
 import { SequelizeFramework } from '../..'
 
 describe('Sequelize Framework', () => {

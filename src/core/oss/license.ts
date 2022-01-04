@@ -32,6 +32,17 @@ export function licenseTitle(license: License): string {
   }
 }
 
+export function licenseUrl(license: License): string {
+  switch (license) {
+    case License.CcBySa3:
+      return 'https://creativecommons.org/licenses/by-sa/3.0/legalcode'
+    case License.Mit:
+      return 'https://opensource.org/licenses/MIT'
+    case License.NewBsd:
+      return 'https://opensource.org/licenses/BSD-3-Clause'
+  }
+}
+
 export function licenseCopyright(license: License, years: number[], holder: string): string {
   switch (license) {
     case License.CcBySa3:

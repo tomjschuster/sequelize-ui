@@ -78,6 +78,7 @@ function MySchemaButton({ schema }: MySchemaButtonProps): React.ReactElement {
       <h3>
         <RouteLink
           route={schemaRoute(schema.id)}
+          prefetch={false}
           className={classnames(
             fontWeight('font-bold'),
             overflow('overflow-hidden'),

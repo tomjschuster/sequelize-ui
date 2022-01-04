@@ -1,6 +1,6 @@
+import blogSchema from '@src/api/examples/blog'
 import { defaultDbOptions } from '@src/core/database'
 import { directory, isDirectory } from '@src/core/files/fileSystem'
-import blogSchema from '@src/data/schemas/blog'
 import { Framework, GenerateArgs, ProjectType } from '..'
 
 const MockFramework: Framework = {

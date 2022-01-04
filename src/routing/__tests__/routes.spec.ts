@@ -1,5 +1,14 @@
 import { ParsedUrlQuery } from 'querystring'
-import { indexRoute, notFoundRoute, parseRoute, Route, routesMatch, routeToUrl } from '../routes'
+import {
+  exampleSchemaRoute,
+  indexRoute,
+  notFoundRoute,
+  parseRoute,
+  Route,
+  routesMatch,
+  routeToUrl,
+  schemaRoute,
+} from '../routes'
 
 describe('routes', () => {
   describe('parseRoute', () => {
@@ -7,8 +16,8 @@ describe('routes', () => {
       ['', {}, notFoundRoute()],
       ['/', {}, indexRoute()],
       ['/', { foo: 'bar' }, indexRoute()],
-      ['/schema/', { id: 'foo' }, notFoundRoute()],
-      ['/schema/foo', { id: 'foo' }, notFoundRoute()],
+      ['/schema', { id: 'foo' }, schemaRoute('foo')],
+      ['/schema/foo', { id: 'foo' }, exampleSchemaRoute('foo')],
       ['/foo', {}, notFoundRoute()],
     ]
 

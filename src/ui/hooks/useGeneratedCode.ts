@@ -1,3 +1,4 @@
+import { SchemaMeta } from '@src/api/meta'
 import { DbOptions } from '@src/core/database'
 import { FileSystemItem } from '@src/core/files/fileSystem'
 import { Framework } from '@src/core/framework'
@@ -6,6 +7,7 @@ import React from 'react'
 
 export type UseGeneratedCodeArgs = {
   schema?: Schema
+  meta?: SchemaMeta
   dbOptions: DbOptions
   initialFramework?: Framework
   skip?: boolean
@@ -19,6 +21,7 @@ export type UseGeneratedCodeResult = {
 
 export default function useGeneratedCode({
   schema,
+  meta,
   dbOptions,
   initialFramework,
   skip,
@@ -36,8 +39,8 @@ export default function useGeneratedCode({
 
   const root = React.useMemo<FileSystemItem | undefined>(() => {
     if (!schema || !framework) return
-    return framework.generate({ schema, dbOptions })
-  }, [schema, dbOptions, framework])
+    return framework.generate({ schema, meta, dbOptions })
+  }, [schema, meta, dbOptions, framework])
 
   const defaultPath = framework && root && framework.defaultFile && framework.defaultFile(root)
 

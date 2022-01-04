@@ -21,7 +21,8 @@
  */
 import { AssociationTypeType, DataTypeType, Model, Schema, ThroughType } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import { DEMO_SCHEMA_EMPLOYEE_ID } from './demoSchemaIds'
+import shortid from 'shortid'
+import { EMPLOYEES_ID } from './ids'
 
 const time = fromParts(2020, 10, 1)
 
@@ -41,38 +42,38 @@ const employee: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '1',
+      id: shortid(),
       name: 'emp_no',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '2',
+      id: shortid(),
       name: 'birth_date',
       type: { type: DataTypeType.Date },
       required: true,
     },
     {
-      id: '3',
+      id: shortid(),
       name: 'first_name',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '4',
+      id: shortid(),
       name: 'last_name',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '5',
+      id: shortid(),
       name: 'gender',
       type: { type: DataTypeType.Enum, values: ['M', 'F', 'O'] },
       required: true,
     },
     {
-      id: '6',
+      id: shortid(),
       name: 'hire_date',
       type: { type: DataTypeType.Date },
       required: true,
@@ -80,21 +81,21 @@ const employee: Model = {
   ],
   associations: [
     {
-      id: '1',
+      id: shortid(),
       foreignKey: 'emp_no',
       type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Employees,
       targetModelId: Id.Salaries,
     },
     {
-      id: '2',
+      id: shortid(),
       foreignKey: 'emp_no',
       type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Employees,
       targetModelId: Id.Titles,
     },
     {
-      id: '3',
+      id: shortid(),
       alias: 'employingDepartment',
       foreignKey: 'emp_no',
       sourceModelId: Id.Employees,
@@ -106,7 +107,7 @@ const employee: Model = {
       },
     },
     {
-      id: '4',
+      id: shortid(),
       alias: 'managedDepartment',
       foreignKey: 'emp_no',
       sourceModelId: Id.Employees,
@@ -127,14 +128,14 @@ const department: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '7',
+      id: shortid(),
       name: 'dept_no',
       type: { type: DataTypeType.String },
       primaryKey: true,
       required: true,
     },
     {
-      id: '8',
+      id: shortid(),
       name: 'dept_name',
       type: { type: DataTypeType.String },
       required: true,
@@ -142,7 +143,7 @@ const department: Model = {
   ],
   associations: [
     {
-      id: '5',
+      id: shortid(),
       alias: 'employee',
       sourceModelId: Id.Departments,
       targetModelId: Id.Employees,
@@ -152,7 +153,7 @@ const department: Model = {
       },
     },
     {
-      id: '5',
+      id: shortid(),
       alias: 'manager',
       sourceModelId: Id.Departments,
       targetModelId: Id.Employees,
@@ -162,14 +163,14 @@ const department: Model = {
       },
     },
     {
-      id: '6',
+      id: shortid(),
       foreignKey: 'dept_no',
       type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Departments,
       targetModelId: Id.DepartmentEmployees,
     },
     {
-      id: '7',
+      id: shortid(),
       foreignKey: 'dept_no',
       type: { type: AssociationTypeType.HasMany },
       sourceModelId: Id.Departments,
@@ -185,27 +186,27 @@ const departmentEmployee: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '9',
+      id: shortid(),
       name: 'emp_no',
       type: { type: DataTypeType.Integer },
       primaryKey: true,
       required: true,
     },
     {
-      id: '10',
+      id: shortid(),
       name: 'dept_no',
       type: { type: DataTypeType.String },
       primaryKey: true,
       required: true,
     },
     {
-      id: '11',
+      id: shortid(),
       name: 'from_date',
       type: { type: DataTypeType.Date },
       required: true,
     },
     {
-      id: '12',
+      id: shortid(),
       name: 'to_date',
       type: { type: DataTypeType.Date },
       required: true,
@@ -213,14 +214,14 @@ const departmentEmployee: Model = {
   ],
   associations: [
     {
-      id: '8',
+      id: shortid(),
       foreignKey: 'emp_no',
       type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.DepartmentEmployees,
       targetModelId: Id.Employees,
     },
     {
-      id: '9',
+      id: shortid(),
       foreignKey: 'dept_no',
       type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.DepartmentEmployees,
@@ -236,27 +237,27 @@ const departmentManager: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '13',
+      id: shortid(),
       name: 'emp_no',
       type: { type: DataTypeType.Integer },
       primaryKey: true,
       required: true,
     },
     {
-      id: '14',
+      id: shortid(),
       name: 'dept_no',
       type: { type: DataTypeType.String },
       primaryKey: true,
       required: true,
     },
     {
-      id: '15',
+      id: shortid(),
       name: 'from_date',
       type: { type: DataTypeType.Date },
       required: true,
     },
     {
-      id: '16',
+      id: shortid(),
       name: 'to_date',
       type: { type: DataTypeType.Date },
       required: true,
@@ -264,14 +265,14 @@ const departmentManager: Model = {
   ],
   associations: [
     {
-      id: '10',
+      id: shortid(),
       foreignKey: 'emp_no',
       type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.DepartmentManagers,
       targetModelId: Id.Employees,
     },
     {
-      id: '11',
+      id: shortid(),
       foreignKey: 'dept_no',
       type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.DepartmentManagers,
@@ -287,34 +288,34 @@ const title: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '17',
+      id: shortid(),
       name: 'emp_no',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '18',
+      id: shortid(),
       name: 'title',
       type: { type: DataTypeType.String },
       required: true,
     },
     {
-      id: '19',
+      id: shortid(),
       name: 'from_date',
       type: { type: DataTypeType.Date },
       primaryKey: true,
       required: true,
     },
     {
-      id: '20',
+      id: shortid(),
       name: 'to_date',
       type: { type: DataTypeType.Date },
     },
   ],
   associations: [
     {
-      id: '12',
+      id: shortid(),
       foreignKey: 'emp_no',
       type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.Titles,
@@ -330,34 +331,34 @@ const salary: Model = {
   updatedAt: time,
   fields: [
     {
-      id: '21',
+      id: shortid(),
       name: 'emp_no',
       type: { type: DataTypeType.Integer, autoincrement: true },
       primaryKey: true,
       required: true,
     },
     {
-      id: '22',
+      id: shortid(),
       name: 'salary',
       type: { type: DataTypeType.Integer },
       required: true,
     },
     {
-      id: '23',
+      id: shortid(),
       name: 'from_date',
       type: { type: DataTypeType.Date },
       primaryKey: true,
       required: true,
     },
     {
-      id: '24',
+      id: shortid(),
       name: 'to_date',
       type: { type: DataTypeType.Date },
     },
   ],
   associations: [
     {
-      id: '13',
+      id: shortid(),
       foreignKey: 'emp_no',
       type: { type: AssociationTypeType.BelongsTo },
       sourceModelId: Id.Salaries,
@@ -368,7 +369,7 @@ const salary: Model = {
 
 // https://github.com/datacharmer/test_db
 const employeeSchema: Schema = {
-  id: DEMO_SCHEMA_EMPLOYEE_ID,
+  id: EMPLOYEES_ID,
   name: 'employee dataset',
   createdAt: time,
   updatedAt: time,

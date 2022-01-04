@@ -1,5 +1,5 @@
 import { DbCaseStyle, defaultDbOptions } from '@src/core/database'
-import associationsSchema from '@src/data/schemas/associations'
+import associationsSchema from '@src/frameworks/__fixtures__/schemas/associations'
 import { SequelizeFramework } from '../..'
 
 describe('Sequelize Framework', () => {
