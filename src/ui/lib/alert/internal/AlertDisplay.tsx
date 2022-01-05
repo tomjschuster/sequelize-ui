@@ -7,6 +7,7 @@ import {
   classnames,
   margin,
   padding,
+  toClassname,
   width,
 } from '@src/ui/styles/classnames'
 import { flexCenterBetween } from '@src/ui/styles/utils'
@@ -26,11 +27,12 @@ export default function AlertDisplay({ alert, onDismiss }: AlertDisplayProps): R
     <p
       className={classnames(
         flexCenterBetween,
-        padding('pl-4', 'pr-1', 'py-1'),
+        padding('pl-2', 'sm:pl-4', 'pr-1', 'py-1'),
         borderRadius('rounded-lg'),
         borderWidth('border'),
         boxShadow('shadow-lg'),
         width('w-full'),
+        toClassname('max-w-[100vw]'),
         backgroundColor({
           'bg-gray-50': alert.level === AlertLevel.Info,
           'bg-green-50': alert.level === AlertLevel.Success,

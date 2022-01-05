@@ -1,5 +1,9 @@
 import scrollIntoView from 'scroll-into-view-if-needed'
 
+export function isBrowser(): boolean {
+  return typeof window !== 'undefined'
+}
+
 export function focusById(id: string): void {
   document.getElementById(id)?.focus()
 }
@@ -24,6 +28,7 @@ export enum Key {
   ArrowUp = 'ArrowUp',
   End = 'End',
   Enter = 'Enter',
+  Escape = 'Escape',
   Home = 'Home',
   Space = ' ',
   Tab = 'Tab',

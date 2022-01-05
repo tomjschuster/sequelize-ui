@@ -1,4 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { MODAL_PORTAL_ID } from '@src/ui/components/Portal'
 import Document, {
   DocumentContext,
   DocumentInitialProps,
@@ -21,6 +22,7 @@ class SequelizeUiDocument extends Document {
         <Head />
         <body>
           <Main />
+          <div id={MODAL_PORTAL_ID} />
           <NextScript />
         </body>
       </Html>

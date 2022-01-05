@@ -9,17 +9,18 @@ import {
   margin,
   outlineStyle,
   padding,
+  TFontSize,
 } from '@src/ui/styles/classnames'
 import { flexCenter } from '@src/ui/styles/utils'
 import { Override } from '@src/utils/types'
 import React from 'react'
 import { SvgProps } from '../../icons/Svg'
-import IconButton from '../IconButton'
 
 type ButtonProps = Override<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   {
     className?: Classname
+    size?: TFontSize
     icon?: React.ComponentType<SvgProps>
     iconProps?: SvgProps
   }
@@ -29,6 +30,7 @@ function Button({
   className,
   children,
   icon: Icon,
+  size = 'text-lg',
   iconProps,
   ...props
 }: ButtonProps): React.ReactElement {
@@ -48,14 +50,7 @@ function Button({
       {...props}
     >
       {Icon && <Icon {...iconProps} />}
-      <span
-        className={classnames(
-          fontSize({ 'text-sm': !IconButton, 'text-xs': !!IconButton }),
-          margin({ 'ml-1': !!IconButton }),
-        )}
-      >
-        {children}
-      </span>
+      <span className={classnames(fontSize(size), margin({ 'ml-1': !!Icon }))}>{children}</span>
     </button>
   )
 }

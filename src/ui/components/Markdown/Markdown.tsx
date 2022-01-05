@@ -1,4 +1,4 @@
-import { classnames, padding, toClassname, WithClassname } from '@src/ui/styles/classnames'
+import { classnames, toClassname, WithClassname } from '@src/ui/styles/classnames'
 import React from 'react'
 import css from './markdown.module.css'
 
@@ -15,7 +15,7 @@ function Markdown({ content, className }: MarkdownProps): React.ReactElement {
 
   return (
     <div
-      className={classnames(className, padding('p-4'), toClassname(css.markdownBody))}
+      className={classnames(className, toClassname(css.markdownBody))}
       dangerouslySetInnerHTML={{ __html: markdown || placeholderSpaces(content) }}
     />
   )

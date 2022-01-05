@@ -14,7 +14,7 @@ function Code({ content = '', language = Language.TypeScript }: CodeProps): Reac
   if (language === Language.Markdown) {
     return (
       <Markdown
-        className={classnames(height('h-full'), overflow('overflow-y-scroll'))}
+        className={classnames(height('h-full'), overflow('overflow-y-scroll'), padding('p-4'))}
         content={content}
       />
     )

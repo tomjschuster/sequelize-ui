@@ -57,7 +57,7 @@ export default function CodeViewerControls({
   const handleClickCopy = () => {
     if (activeFile) {
       copyFile(activeFile)
-        .then(() => success(`${itemName(activeFile)} copied to clipboard.`))
+        .then(() => success(`${itemName(activeFile)} copied to clipboard.`, { ttl: 600000 }))
         .catch((e) => {
           console.error(e)
           error('Failed to download project.')

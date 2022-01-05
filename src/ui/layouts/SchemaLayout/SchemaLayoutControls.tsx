@@ -9,6 +9,7 @@ import {
   display,
   fontWeight,
   margin,
+  overflow,
   padding,
   position,
   textColor,
@@ -70,7 +71,7 @@ export default function SchemaLayoutControls({
           />
         )}
       </div>
-      <div className={classnames(display('flex'))}>
+      <div className={classnames(display('flex'), overflow('overflow-x-scroll'))}>
         <SchemaLayoutControlsActions
           state={state}
           meta={meta}
@@ -187,6 +188,7 @@ function SchemaLayoutControlsActions({
         className={classnames(width('w-16', 'md:w-20'), backgroundColor('hover:bg-blue-100'))}
         icon={CloseIcon}
         iconProps={{ size: 4 }}
+        size="text-xs"
         onClick={onCancel}
       >
         Cancel
@@ -202,6 +204,7 @@ function SchemaLayoutControlsActions({
             backgroundColor('bg-red-600', 'hover:bg-red-400'),
           )}
           icon={TrashIcon}
+          size="text-xs"
           onClick={onDelete}
         >
           Delete
@@ -216,6 +219,7 @@ function SchemaLayoutControlsActions({
           backgroundColor('bg-blue-600', 'hover:bg-blue-400'),
         )}
         icon={FloppyDiscIcon}
+        size="text-xs"
         onClick={onSave}
       >
         Save

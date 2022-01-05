@@ -55,7 +55,7 @@ function AlertItem({ alert, onDismiss }: AlertItemProps): React.ReactElement {
         minWidth('min-w-72'),
         maxWidth('max-w-full', 'lg:max-w-72'),
         position('fixed'),
-        padding('p-1', 'sm:p-1.5'),
+        padding('sm:p-1.5'),
         inset('top-0', 'left-0', 'sm:left-1/2'),
         translate('sm:-translate-x-1/2'),
         transitionProperty('transition-transform'),
