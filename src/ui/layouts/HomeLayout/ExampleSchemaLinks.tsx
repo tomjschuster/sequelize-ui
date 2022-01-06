@@ -5,7 +5,7 @@ import { exampleSchemaRoute } from '@src/routing/routes'
 import IconButton from '@src/ui/components/form/IconButton'
 import InfoIcon from '@src/ui/components/icons/Info'
 import Markdown from '@src/ui/components/Markdown'
-import Modal from '@src/ui/components/Modal/Modal'
+import Modal from '@src/ui/components/Modal'
 import useIsOpen from '@src/ui/hooks/useIsOpen'
 import {
   backgroundColor,

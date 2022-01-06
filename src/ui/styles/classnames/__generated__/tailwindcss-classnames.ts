@@ -6367,7 +6367,7 @@ export type TObjectPosition =
   | 'object-right-top'
   | 'object-top'
 
-type TInset = WithNegative<
+export type TInset = WithNegative<
   | 'inset-0'
   | 'inset-x-0'
   | 'inset-y-0'
@@ -6895,6 +6895,7 @@ export type TMaxWidth =
   | 'max-w-max'
   | 'max-w-fit'
   | 'max-w-prose'
+  | 'max-w-screen-xs'
   | 'max-w-screen-sm'
   | 'max-w-screen-md'
   | 'max-w-screen-lg'
@@ -8240,6 +8241,9 @@ export type TPseudoClassVariants =
   | 'file:'
   | 'placeholder:'
   | 'print:'
+  | 'ltr:'
+  | 'rtl:'
+  | 'xs:'
   | 'sm:'
   | 'md:'
   | 'lg:'

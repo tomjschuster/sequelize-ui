@@ -5,9 +5,7 @@ import {
   classnames,
   cursor,
   display,
-  inset,
   padding,
-  position,
   width,
 } from '@src/ui/styles/classnames'
 import { overlayContainer } from '@src/ui/styles/utils'
@@ -16,41 +14,37 @@ import { SvgProps } from '../../icons/Svg'
 
 export type MenuItem = {
   icon?: React.ComponentType<SvgProps>
+  iconProps?: SvgProps
   label: string
   onClick: () => void
 }
 
 export type MenuProps = {
   className?: Classname
+  style?: React.CSSProperties
   items: MenuItem[]
   isOpen: boolean
   activeIndex?: number
+  onClick?: React.MouseEventHandler<HTMLElement>
   onMouseOut: () => void
   onMouseOverItem: (index: number) => void
 }
 
-function Menu({
-  className,
-  items,
-  isOpen,
-  activeIndex,
-  onMouseOut,
-  onMouseOverItem,
-}: MenuProps): React.ReactElement {
+function Menu(
+  { className, style, items, isOpen, activeIndex, onMouseOut, onMouseOverItem, onClick }: MenuProps,
+  ref: React.ForwardedRef<HTMLDivElement>,
+): React.ReactElement {
   return (
     <div
+      ref={ref}
       role="menu"
       aria-haspopup={true}
-      className={classnames(
-        className,
-        overlayContainer,
-        position('absolute'),
-        inset('top-full', 'right-0'),
-        display({ hidden: !isOpen }),
-      )}
+      className={classnames(className, overlayContainer, display({ hidden: !isOpen }))}
+      style={style}
       onMouseOut={onMouseOut}
+      onClick={onClick}
     >
-      {items.map(({ icon: Icon, label, onClick }, i) => (
+      {items.map(({ icon: Icon, iconProps, label, onClick }, i) => (
         <div
           key={label}
           role="menu-item"
@@ -69,7 +63,7 @@ function Menu({
         >
           {Icon && (
             <span className={classnames(width('w-6'))}>
-              <Icon />
+              <Icon {...iconProps} />
             </span>
           )}
           {label}
@@ -79,4 +73,4 @@ function Menu({
   )
 }
 
-export default React.memo(Menu)
+export default React.memo(React.forwardRef(Menu))

@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { MODAL_PORTAL_ID } from '@src/ui/components/Portal'
+import { MODAL_PORTAL_ID } from '@src/ui/components/Modal'
 import Document, {
   DocumentContext,
   DocumentInitialProps,

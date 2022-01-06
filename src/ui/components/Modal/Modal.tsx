@@ -32,9 +32,10 @@ import { Key } from '@src/utils/dom'
 import React from 'react'
 import Portal from '../Portal'
 
+export const MODAL_PORTAL_ID = 'modal-container'
 const MODAL_LABEL = 'modal-label'
 
-type ModalProps = React.PropsWithChildren<{
+export type ModalProps = React.PropsWithChildren<{
   id: string
   title: React.ReactNode
   isOpen: boolean
@@ -53,7 +54,7 @@ function Modal({
   children,
 }: ModalProps): React.ReactElement {
   return (
-    <Portal>
+    <Portal id={MODAL_PORTAL_ID}>
       <ModalBackdrop isOpen={isOpen} onClose={onClose}>
         <Dialog id={id} isOpen={isOpen}>
           <Title isOpen={isOpen}>{title}</Title>
@@ -95,12 +96,12 @@ function ModalBackdrop({ isOpen, children, onClose }: ModalBackdropProps): React
       <div
         className={classnames(
           position('absolute'),
-          inset('top-0', 'bottom-0', 'sm:top-8', 'sm:bottom-auto', 'sm:left-1/2'),
-          padding('sm:pb-8'),
-          translate('sm:-translate-x-1/2'),
+          inset('top-0', 'bottom-0', 'xs:top-8', 'xs:bottom-auto', 'xs:left-1/2'),
+          padding('xs:pb-8'),
+          translate('xs:-translate-x-1/2'),
           width('w-full'),
-          toClassname('sm:w-[theme(screens.sm)]'),
-          toClassname('sm:max-w-[calc(100vw-theme(space.16))]'),
+          toClassname('xs:w-[theme(screens.sm)]'),
+          toClassname('xs:max-w-[calc(100vw-theme(space.16))]'),
         )}
       >
         {children}
@@ -130,10 +131,10 @@ function Dialog({ id, isOpen, children }: DialogProps): React.ReactElement {
         backgroundColor('bg-white'),
         position('absolute'),
         maxWidth('max-w-full'),
-        padding('p-4'),
+        padding('p-2', 'sm:p-4'),
         borderWidth('border'),
-        borderColor('sm:border-blue-600'),
-        borderRadius('sm:rounded'),
+        borderColor('xs:border-blue-600'),
+        borderRadius('xs:rounded'),
         boxShadow('shadow-xl'),
       )}
       onClick={(evt) => evt.stopPropagation()}
@@ -186,7 +187,7 @@ type ContentProps = {
 
 const modalButtonClass = classnames(
   minWidth('min-w-28'),
-  width('w-full', 'sm:w-auto'),
+  width('w-full', 'xs:w-auto'),
   maxWidth('max-w-full'),
 )
 
@@ -201,7 +202,7 @@ function Actions({ confirmText, onConfirm, onClose }: ActionsProps): React.React
     <div
       className={classnames(
         display('flex'),
-        flexDirection('flex-col', 'sm:flex-row'),
+        flexDirection('flex-col', 'xs:flex-row'),
         justifyContent('justify-end'),
       )}
     >
@@ -211,7 +212,7 @@ function Actions({ confirmText, onConfirm, onClose }: ActionsProps): React.React
       {onConfirm && (
         <Button
           color="blue"
-          className={classnames(modalButtonClass, margin('ml-0', 'mt-4', 'sm:mt-0', 'sm:ml-4'))}
+          className={classnames(modalButtonClass, margin('ml-0', 'mt-4', 'xs:mt-0', 'xs:ml-4'))}
           onClick={onConfirm}
         >
           {confirmText}

@@ -7,12 +7,14 @@ import {
   borderWidth,
   classnames,
   display,
+  flex,
   fontWeight,
+  justifyContent,
   margin,
-  overflow,
   padding,
   position,
   width,
+  zIndex,
 } from '@src/ui/styles/classnames'
 import { flexCenterBetween } from '@src/ui/styles/utils'
 import React from 'react'
@@ -70,7 +72,14 @@ export default function SchemaLayoutControls({
           />
         )}
       </div>
-      <div className={classnames(display('flex'), overflow('overflow-x-scroll'))}>
+      <div
+        className={classnames(
+          display('flex'),
+          // overflow('overflow-x-auto'),
+          flex('flex-1'),
+          justifyContent('justify-end'),
+        )}
+      >
         <SchemaLayoutControlsActions
           state={state}
           meta={meta}
@@ -233,6 +242,7 @@ export function SchemaLayoutControlsWrapper({
         backgroundColor('bg-white'),
         borderColor('border-gray-900'),
         borderWidth('border-b'),
+        zIndex('z-50'),
       )}
     >
       {children}

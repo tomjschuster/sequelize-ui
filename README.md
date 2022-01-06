@@ -11,13 +11,11 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] extract modal
-- [ ] code action menu on xs screen
-- [ ] migrate old sequelize ui
-- [ ] Reset schemas
+- [ ] Clear data
 - [ ] Error boundary
+- [ ] migrate old sequelize ui
 - [ ] Refactor undefined/null
-- [ ] Refactor markdown link rendering
+- [ ] Refactor code view controls
 - [ ] Home page copy
 - [ ] Link to legacy
 - [ ] Dark mode

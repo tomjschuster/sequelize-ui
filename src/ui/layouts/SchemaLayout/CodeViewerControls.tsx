@@ -1,5 +1,6 @@
 import { DbOptions } from '@src/core/database'
 import { FileItem, FileSystemItem, itemName } from '@src/core/files/fileSystem'
+import ActionMenu from '@src/ui/components/menus/ActionMenu'
 import useOnClickOutside from '@src/ui/hooks/useOnClickOutside'
 import useToggle from '@src/ui/hooks/useToggle'
 import { useAlert } from '@src/ui/lib/alert'
@@ -10,6 +11,7 @@ import {
   borderWidth,
   boxShadow,
   classnames,
+  display,
   inset,
   padding,
   position,
@@ -18,8 +20,8 @@ import {
 import React from 'react'
 import DbOptionsForm from '../../components/DbOptionsForm'
 import IconButton from '../../components/form/IconButton'
+import ArrowLeftIcon from '../../components/icons/ArrowLeft'
 import CloseIcon from '../../components/icons/Close'
-import CloseCircleIcon from '../../components/icons/CloseCircle'
 import CopyIcon from '../../components/icons/Copy'
 import FolderIcon from '../../components/icons/Folder'
 import PencilIcon from '../../components/icons/Pencil'
@@ -68,9 +70,18 @@ export default function CodeViewerControls({
   const dbOptionsRef = React.useRef(null)
   useOnClickOutside(dbOptionsRef, closeDbOptions)
 
+  console.log({ isDbOptionsOpen })
+
   return (
     <>
       <IconButton
+        label="go back"
+        icon={ArrowLeftIcon}
+        iconProps={{ size: 6 }}
+        onClick={onClickClose}
+      />
+      <IconButton
+        className={classnames(display('hidden', 'xs:inline-block'))}
         label="copy current file code"
         icon={CopyIcon}
         iconProps={{ size: 6 }}
@@ -80,6 +91,7 @@ export default function CodeViewerControls({
         disabled={!activeFile}
       />
       <IconButton
+        className={classnames(display('hidden', 'xs:inline-block'))}
         label="download project code"
         icon={FolderIcon}
         iconProps={{
@@ -90,11 +102,13 @@ export default function CodeViewerControls({
         onTouchStartCapture={prefetchDownload}
       />
       <IconButton
+        className={classnames(display('hidden', 'xs:inline-block'))}
         label="edit code"
         icon={PencilIcon}
         iconProps={{ size: 6 }}
         onClick={onClickEdit}
       />
+
       <IconButton
         label={isDbOptionsOpen ? 'close settings' : 'open settings'}
         icon={SettingsIcon}
@@ -104,12 +118,30 @@ export default function CodeViewerControls({
           toggleDbOptions()
         }}
       />
-      <IconButton
-        label="close schema"
-        icon={CloseCircleIcon}
-        iconProps={{ size: 6 }}
-        onClick={onClickClose}
+      <ActionMenu
+        className={classnames(display('xs:hidden', 'inline-block'))}
+        items={[
+          {
+            label: 'Copy file',
+            icon: CopyIcon,
+            iconProps: { size: 5 },
+            onClick: handleClickCopy,
+          },
+          {
+            label: 'Download',
+            icon: FolderIcon,
+            iconProps: { size: 5 },
+            onClick: handleClickDownload,
+          },
+          {
+            label: 'Edit code',
+            icon: PencilIcon,
+            iconProps: { size: 5 },
+            onClick: onClickEdit,
+          },
+        ]}
       />
+
       {isDbOptionsOpen && (
         <div
           ref={dbOptionsRef}

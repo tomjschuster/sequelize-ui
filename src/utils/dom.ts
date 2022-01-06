@@ -1,3 +1,4 @@
+import React from 'react'
 import scrollIntoView from 'scroll-into-view-if-needed'
 
 export function isBrowser(): boolean {
@@ -32,4 +33,12 @@ export enum Key {
   Home = 'Home',
   Space = ' ',
   Tab = 'Tab',
+}
+
+export function preventDefault(evt: React.MouseEvent | React.KeyboardEvent): void {
+  evt.preventDefault()
+}
+
+export function stopPropagation(evt: React.MouseEvent | React.KeyboardEvent): void {
+  evt.stopPropagation()
 }
