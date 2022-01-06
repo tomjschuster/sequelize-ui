@@ -19,6 +19,7 @@ import {
   margin,
   maxWidth,
   minWidth,
+  outlineStyle,
   overflow,
   padding,
   position,
@@ -32,12 +33,6 @@ import React from 'react'
 import Portal from '../Portal'
 
 const MODAL_LABEL = 'modal-label'
-
-const modalButtonClass = classnames(
-  minWidth('min-w-28'),
-  width('w-full', 'sm:w-auto'),
-  maxWidth('max-w-full'),
-)
 
 type ModalProps = React.PropsWithChildren<{
   id: string
@@ -57,77 +52,35 @@ function Modal({
   onClose,
   children,
 }: ModalProps): React.ReactElement {
-  const ref = React.useRef() as React.MutableRefObject<HTMLDivElement>
-  useLockScroll(ref)
-  useTrapFocus({ ref, skip: !isOpen })
+  return (
+    <Portal>
+      <ModalBackdrop isOpen={isOpen} onClose={onClose}>
+        <Dialog id={id} isOpen={isOpen}>
+          <Title isOpen={isOpen}>{title}</Title>
+          <Content>{children}</Content>
+          <Actions confirmText={confirmText} onConfirm={onConfirm} onClose={onClose} />
+          <CloseButton onClose={onClose} />
+        </Dialog>
+      </ModalBackdrop>
+    </Portal>
+  )
+}
 
+type ModalBackdropProps = React.PropsWithChildren<{
+  isOpen: boolean
+  onClose: () => void
+}>
+
+function ModalBackdrop({ isOpen, children, onClose }: ModalBackdropProps): React.ReactElement {
   const handleKeyDown = React.useCallback(
     (evt: React.KeyboardEvent): void => {
-      if (!isOpen && evt.key === Key.Escape) {
+      if (isOpen && evt.key === Key.Escape) {
         onClose()
       }
     },
     [isOpen, onClose],
   )
 
-  return (
-    <Portal>
-      <ModalBackdrop isOpen={isOpen}>
-        <div
-          ref={ref}
-          role="dialog"
-          id={id}
-          aria-labelledby={MODAL_LABEL}
-          aria-modal={true}
-          className={classnames(
-            display({ hidden: !isOpen }),
-            backgroundColor('bg-white'),
-            position('absolute'),
-            maxWidth('max-w-full'),
-            padding('p-4'),
-            borderWidth('border'),
-            borderColor('sm:border-blue-600'),
-            borderRadius('sm:rounded'),
-            boxShadow('shadow-xl'),
-          )}
-          onKeyDown={handleKeyDown}
-          onClick={(evt) => evt.stopPropagation()}
-        >
-          <Title>{title}</Title>
-
-          <div className={classnames(margin('my-4'))}>{children}</div>
-          <div
-            className={classnames(
-              display('flex'),
-              flexDirection('flex-col', 'sm:flex-row'),
-              justifyContent('justify-end'),
-            )}
-          >
-            <Button className={classnames(modalButtonClass)} onClick={onClose}>
-              Close
-            </Button>
-            {onConfirm && (
-              <Button
-                color="blue"
-                className={classnames(
-                  modalButtonClass,
-                  margin('ml-0', 'mt-4', 'sm:mt-0', 'sm:ml-4'),
-                )}
-                onClick={onConfirm}
-              >
-                {confirmText}
-              </Button>
-            )}
-          </div>
-          <CloseButton onClose={onClose} />
-        </div>
-      </ModalBackdrop>
-    </Portal>
-  )
-}
-
-type ModalBackdropProps = React.PropsWithChildren<{ isOpen: boolean }>
-function ModalBackdrop({ isOpen, children }: ModalBackdropProps): React.ReactElement {
   return (
     <div
       className={classnames(
@@ -137,6 +90,7 @@ function ModalBackdrop({ isOpen, children }: ModalBackdropProps): React.ReactEle
         backgroundOpacity('!bg-opacity-30'),
         overflow('overflow-y-auto'),
       )}
+      onKeyDown={handleKeyDown}
     >
       <div
         className={classnames(
@@ -155,24 +109,120 @@ function ModalBackdrop({ isOpen, children }: ModalBackdropProps): React.ReactEle
   )
 }
 
-type TitleProps = {
-  children: React.ReactNode
+type DialogProps = React.PropsWithChildren<{
+  id: string
+  isOpen: boolean
+}>
+
+function Dialog({ id, isOpen, children }: DialogProps): React.ReactElement {
+  const ref = React.useRef() as React.MutableRefObject<HTMLDivElement>
+  useLockScroll(ref)
+  useTrapFocus({ ref, skip: !isOpen })
+
+  return (
+    <div
+      ref={ref}
+      role="dialog"
+      id={id}
+      aria-labelledby={MODAL_LABEL}
+      aria-modal={true}
+      className={classnames(
+        backgroundColor('bg-white'),
+        position('absolute'),
+        maxWidth('max-w-full'),
+        padding('p-4'),
+        borderWidth('border'),
+        borderColor('sm:border-blue-600'),
+        borderRadius('sm:rounded'),
+        boxShadow('shadow-xl'),
+      )}
+      onClick={(evt) => evt.stopPropagation()}
+    >
+      {children}
+    </div>
+  )
 }
 
-function Title({ children }: TitleProps): React.ReactElement {
+type TitleProps = React.PropsWithChildren<{
+  isOpen: boolean
+}>
+
+function Title({ isOpen, children }: TitleProps): React.ReactElement {
+  const ref = React.useRef() as React.MutableRefObject<HTMLDivElement>
+  const [focusable, setFocusable] = React.useState<boolean>(false)
+
+  const setUnfocusable = React.useCallback(() => setFocusable(false), [])
+
+  React.useEffect(() => {
+    if (isOpen) setFocusable(true)
+  }, [isOpen])
+
+  React.useEffect(() => {
+    if (focusable && ref.current) ref.current.focus()
+  }, [focusable])
+
   return (
     <h2
+      ref={ref}
       id={MODAL_LABEL}
+      tabIndex={focusable ? 0 : -1}
       className={classnames(
         subtitle,
         display('flex'),
         alignItems('items-center'),
+        outlineStyle('outline-none'),
         breakWordsMinus8,
       )}
+      onBlur={setUnfocusable}
     >
       {children}
     </h2>
   )
+}
+
+type ContentProps = {
+  children: React.ReactNode
+}
+
+const modalButtonClass = classnames(
+  minWidth('min-w-28'),
+  width('w-full', 'sm:w-auto'),
+  maxWidth('max-w-full'),
+)
+
+type ActionsProps = {
+  confirmText?: string
+  onConfirm?: () => void
+  onClose: () => void
+}
+
+function Actions({ confirmText, onConfirm, onClose }: ActionsProps): React.ReactElement {
+  return (
+    <div
+      className={classnames(
+        display('flex'),
+        flexDirection('flex-col', 'sm:flex-row'),
+        justifyContent('justify-end'),
+      )}
+    >
+      <Button className={classnames(modalButtonClass)} onClick={onClose}>
+        Close
+      </Button>
+      {onConfirm && (
+        <Button
+          color="blue"
+          className={classnames(modalButtonClass, margin('ml-0', 'mt-4', 'sm:mt-0', 'sm:ml-4'))}
+          onClick={onConfirm}
+        >
+          {confirmText}
+        </Button>
+      )}
+    </div>
+  )
+}
+
+function Content({ children }: ContentProps): React.ReactElement {
+  return <div className={classnames(margin('my-4'))}>{children}</div>
 }
 
 type CloseButtonProps = {

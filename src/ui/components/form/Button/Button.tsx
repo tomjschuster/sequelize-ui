@@ -6,9 +6,9 @@ import {
   Classname,
   classnames,
   fontSize,
-  fontWeight,
   margin,
-  outlineStyle,
+  outlineColor,
+  outlineWidth,
   padding,
   textColor,
   TFontSize,
@@ -64,9 +64,8 @@ function Button({
         borderWidth('border'),
         borderColor('border-gray-400'),
         borderRadius('rounded'),
-        outlineStyle('focus:outline-none'),
-        borderColor('focus-visible:border-blue-500'),
-        fontWeight('focus-visible:font-bold'),
+        outlineColor('outline-black'),
+        outlineWidth('outline-2'),
         className,
       )}
       {...props}

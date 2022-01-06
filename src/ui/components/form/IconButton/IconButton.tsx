@@ -14,6 +14,7 @@ type IconButtonProps = Override<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   {
     className?: Classname
+    padding?: Classname
     label: string
     icon: React.ComponentType<SvgProps>
     iconProps?: SvgProps
@@ -21,8 +22,9 @@ type IconButtonProps = Override<
 >
 
 function IconButton({
-  label,
   className,
+  padding: padding_ = padding('p-1'),
+  label,
   icon: Icon,
   iconProps,
   ...rest
@@ -31,7 +33,7 @@ function IconButton({
     <button
       type="button"
       className={classnames(
-        padding('p-1'),
+        padding_,
         backgroundColor('hover:bg-gray-200'),
         alignSelf('self-start'),
         margin('ml-0.5'),

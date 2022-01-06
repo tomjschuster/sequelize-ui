@@ -30,9 +30,7 @@ export function useTrapFocus({ ref, skip, global }: UseTrapFocusArgs): void {
     } else {
       removeTrap(ref)
     }
-
-    return () => {
-      removeTrap(ref)
-    }
   }, [skip, ref, global])
+
+  React.useEffect(() => () => removeTrap(ref), [])
 }

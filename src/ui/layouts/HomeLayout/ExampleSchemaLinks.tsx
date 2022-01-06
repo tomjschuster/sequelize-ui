@@ -9,11 +9,14 @@ import Modal from '@src/ui/components/Modal/Modal'
 import useIsOpen from '@src/ui/hooks/useIsOpen'
 import {
   backgroundColor,
+  borderRadius,
   classnames,
   fontSize,
   inset,
   margin,
+  padding,
   position,
+  toClassname,
   translate,
 } from '@src/ui/styles/classnames'
 import { breakWordsMinus24, breakWordsMinus8, panelAction, panelGrid } from '@src/ui/styles/utils'
@@ -135,13 +138,14 @@ function ExampleSchemaInfo({
         position('absolute'),
         inset('right-0', 'top-1/2'),
         translate('-translate-y-1/2'),
-        margin('mr-2'),
       )}
     >
       <IconButton
         onClick={handleClick}
         icon={InfoIcon}
         iconProps={{ size: 5, strokeWidth: 2 }}
+        padding={toClassname(padding('p-2.5'))}
+        className={classnames(margin('mr-px'), borderRadius('rounded'))}
         label="schema info"
       />
     </div>
