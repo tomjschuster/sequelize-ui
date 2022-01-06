@@ -23,7 +23,9 @@ import {
   padding,
   position,
   TBackgroundColor,
+  toClassname,
   width,
+  wordBreak,
 } from './classnames'
 
 export const fullscreen = classnames(
@@ -64,6 +66,18 @@ export const title = classnames(fontSize('text-2xl'), margin('mb-4'))
 export const subtitle = classnames(fontSize('text-xl'), margin('mb-2'))
 
 export const text = classnames(fontSize('text-sm'), margin('mb-2'))
+
+export const breakWords = classnames(wordBreak('break-words'), width('w-full'))
+
+export const breakWordsMinus8 = classnames(
+  wordBreak('break-words'),
+  toClassname('w-[calc(100%-theme(space.8))]'),
+)
+
+export const breakWordsMinus24 = classnames(
+  wordBreak('break-words'),
+  toClassname('w-[calc(100%-theme(space.24))]'),
+)
 
 export const list = classnames(
   fontSize('text-sm'),

@@ -8,7 +8,7 @@ import {
   ThroughType,
 } from '@src/core/schema'
 import { classnames, fontWeight, inset, padding, position } from '@src/ui/styles/classnames'
-import { inlineButton, list, panelHeader } from '@src/ui/styles/utils'
+import { breakWordsMinus8, inlineButton, list, panelHeader } from '@src/ui/styles/utils'
 import { noCase, titleCase } from '@src/utils/string'
 import React from 'react'
 import PencilIcon from '../icons/Pencil'
@@ -41,17 +41,21 @@ function AssociationView({
     targetModel && (
       <>
         <div className={classnames(panelHeader, position('relative'))}>
-          {displayAssociationTypeType(association.type.type)}{' '}
-          {targetModel.id === association.sourceModelId ? (
-            <p className={classnames(fontWeight('font-semibold'))}>{titleCase(targetModel.name)}</p>
-          ) : (
-            <button
-              className={classnames(inlineButton('bg-yellow-50'), fontWeight('font-semibold'))}
-              onClick={() => onClickModel(targetModel)}
-            >
-              {titleCase(targetModel.name)}
-            </button>
-          )}
+          <p className={classnames(breakWordsMinus8)}>
+            {displayAssociationTypeType(association.type.type)}{' '}
+            {targetModel.id === association.sourceModelId ? (
+              <span className={classnames(fontWeight('font-semibold'))}>
+                {titleCase(targetModel.name)}
+              </span>
+            ) : (
+              <button
+                className={classnames(inlineButton('bg-yellow-50'), fontWeight('font-semibold'))}
+                onClick={() => onClickModel(targetModel)}
+              >
+                {titleCase(targetModel.name)}
+              </button>
+            )}
+          </p>
           <ActionMenu
             className={classnames(position('absolute'), inset('right-0', 'top-1', 'right-1'))}
             items={[

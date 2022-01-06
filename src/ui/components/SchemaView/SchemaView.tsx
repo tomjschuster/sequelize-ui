@@ -8,9 +8,19 @@ import {
   margin,
   overflow,
   padding,
+  textAlign,
   textDecoration,
 } from '@src/ui/styles/classnames'
-import { flexCenterBetween, panel, panelGrid, section, subtitle, title } from '@src/ui/styles/utils'
+import {
+  breakWords,
+  breakWordsMinus8,
+  flexCenterBetween,
+  panel,
+  panelGrid,
+  section,
+  subtitle,
+  title,
+} from '@src/ui/styles/utils'
 import { titleCase } from '@src/utils/string'
 import React from 'react'
 import Breadcrumbs from '../Breadcrumbs'
@@ -48,7 +58,9 @@ function SchemaView({
       <div className={classnames(section)}>
         <h2 className={classnames(title)}>Schema</h2>
         <div className={classnames(margin('mb-11'))}>
-          <p className={classnames(fontSize('text-lg'))}>Name: {titleCase(schema.name)}</p>
+          <p className={classnames(fontSize('text-lg'), breakWords)}>
+            Name: {titleCase(schema.name)}
+          </p>
         </div>
       </div>
       <div className={classnames(section)}>
@@ -62,6 +74,8 @@ function SchemaView({
               <button
                 tabIndex={-1}
                 className={classnames(
+                  breakWordsMinus8,
+                  textAlign('text-left'),
                   textDecoration('hover:underline'),
                   padding('px-1.5'),
                   fontSize('text-lg'),

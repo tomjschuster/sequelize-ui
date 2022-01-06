@@ -9,7 +9,7 @@ import {
   overflow,
   padding,
 } from '@src/ui/styles/classnames'
-import { panel, panelGrid, section, title } from '@src/ui/styles/utils'
+import { breakWords, panel, panelGrid, section, title } from '@src/ui/styles/utils'
 import { titleCase } from '@src/utils/string'
 import React from 'react'
 import Breadcrumbs from '../Breadcrumbs'
@@ -57,7 +57,9 @@ export default function ModelView({
       <div className={classnames(section)}>
         <h2 className={classnames(title)}>Model</h2>
         <div className={classnames(margin('mb-11'))}>
-          <p className={classnames(fontSize('text-lg'))}>Name: {titleCase(model.name)}</p>
+          <p className={classnames(fontSize('text-lg'), breakWords)}>
+            Name: {titleCase(model.name)}
+          </p>
         </div>
       </div>
       <div className={classnames(section)}>

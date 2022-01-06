@@ -6,9 +6,11 @@ import {
   fontSize,
   fontWeight,
   margin,
+  textAlign,
   textDecoration,
   toClassname,
 } from '@src/ui/styles/classnames'
+import { breakWords } from '@src/ui/styles/utils'
 import React from 'react'
 
 export type Breadcrumb = {
@@ -37,14 +39,16 @@ function Breadcrumbs({ items, current }: BreadcrumbsProps): React.ReactElement {
           className={classnames(
             fontWeight('font-semibold'),
             textDecoration('hover:underline'),
+            textAlign('text-left'),
             toClassname(breadcrumbs.breadcrumb),
+            breakWords,
           )}
           onClick={onClick}
         >
           {label}
         </button>
       ))}
-      <span>{current}</span>
+      <span className={classnames(breakWords, textAlign('text-left'))}>{current}</span>
     </div>
   )
 }

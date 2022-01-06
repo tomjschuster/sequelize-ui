@@ -36,7 +36,13 @@ import {
   translate,
   width,
 } from '@src/ui/styles/classnames'
-import { panelAction, panelGrid, subtitle } from '@src/ui/styles/utils'
+import {
+  breakWordsMinus24,
+  breakWordsMinus8,
+  panelAction,
+  panelGrid,
+  subtitle,
+} from '@src/ui/styles/utils'
 import { Key } from '@src/utils/dom'
 import React from 'react'
 import FilmIcon from '../../components/icons/Film'
@@ -85,7 +91,9 @@ function ExampleSchemaLinks({ exampleMeta }: ExampleSchemaLinksProps): React.Rea
                 <span className={classnames(margin('mr-2'))}>
                   <ExampleSchemaIcon meta={selectedMeta} />
                 </span>
-                {selectedMeta.displayName} Sample Database
+                <span className={classnames(breakWordsMinus8)}>
+                  {selectedMeta.displayName} Sample Database
+                </span>
               </>
             }
             isOpen={isOpen}
@@ -124,7 +132,7 @@ function ExampleSchemaLink({ meta }: ExampleSchemaLinkProps): React.ReactElement
       <span className={classnames(margin('mr-2'))}>
         <ExampleSchemaIcon meta={meta} />
       </span>
-      {meta.displayName}
+      <span className={classnames(breakWordsMinus24)}>{meta.displayName}</span>
     </RouteLink>
   )
 }
@@ -239,7 +247,6 @@ function Modal({
             backgroundColor('bg-white'),
             position('absolute'),
             maxWidth('max-w-full'),
-
             padding('p-4'),
             borderWidth('border'),
             borderColor('sm:border-blue-600'),
@@ -255,7 +262,7 @@ function Modal({
               subtitle,
               display('flex'),
               alignItems('items-center'),
-              toClassname('w-[calc(100%-theme(space.11))]'),
+              breakWordsMinus8,
             )}
           >
             {title}

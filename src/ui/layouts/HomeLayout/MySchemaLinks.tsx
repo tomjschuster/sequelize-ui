@@ -21,7 +21,7 @@ import {
   textOverflow,
   width,
 } from '@src/ui/styles/classnames'
-import { panelAction, panelGrid } from '@src/ui/styles/utils'
+import { breakWords, panelAction, panelGrid } from '@src/ui/styles/utils'
 import { now, TimeGranularity, timeSince } from '@src/utils/dateTime'
 import React from 'react'
 import ClockIcon from '../../components/icons/Clock'
@@ -75,7 +75,7 @@ function MySchemaButton({ schema }: MySchemaButtonProps): React.ReactElement {
         backgroundColor('hover:bg-indigo-50'),
       )}
     >
-      <h3>
+      <h3 className={classnames(breakWords)}>
         <RouteLink
           route={schemaRoute(schema.id)}
           prefetch={false}

@@ -8,7 +8,7 @@ import {
   padding,
   position,
 } from '@src/ui/styles/classnames'
-import { list, panelHeader } from '@src/ui/styles/utils'
+import { breakWordsMinus8, list, panelHeader } from '@src/ui/styles/utils'
 import { noCase } from '@src/utils/string'
 import React from 'react'
 import PencilIcon from '../icons/Pencil'
@@ -31,7 +31,9 @@ function FieldView({ field, onClickEdit, onClickDelete }: FieldViewProps) {
           position('relative'),
         )}
       >
-        <p className={classnames(padding('px-1'), fontWeight('font-bold'))}>{noCase(field.name)}</p>
+        <p className={classnames(padding('px-1'), fontWeight('font-bold'), breakWordsMinus8)}>
+          {noCase(field.name)}
+        </p>
         <ActionMenu
           className={classnames(position('absolute'), inset('right-0', 'top-1', 'right-1'))}
           items={[
