@@ -12,7 +12,6 @@ import {
   overflow,
   padding,
   position,
-  textColor,
   width,
 } from '@src/ui/styles/classnames'
 import { flexCenterBetween } from '@src/ui/styles/utils'
@@ -185,7 +184,7 @@ function SchemaLayoutControlsActions({
   return (
     <div className={classnames(display('flex'), padding('p-1', 'pb-0.5'))}>
       <Button
-        className={classnames(width('w-16', 'md:w-20'), backgroundColor('hover:bg-blue-100'))}
+        className={classnames(width('w-16', 'md:w-20'))}
         icon={CloseIcon}
         iconProps={{ size: 4 }}
         size="text-xs"
@@ -196,13 +195,8 @@ function SchemaLayoutControlsActions({
 
       {!meta?.isExample && (
         <Button
-          className={classnames(
-            textColor('text-white'),
-            fontWeight('font-bold'),
-            width('w-16', 'md:w-20'),
-            margin('ml-2'),
-            backgroundColor('bg-red-600', 'hover:bg-red-400'),
-          )}
+          color="red"
+          className={classnames(fontWeight('font-bold'), width('w-16', 'md:w-20'), margin('ml-2'))}
           icon={TrashIcon}
           size="text-xs"
           onClick={onDelete}
@@ -211,13 +205,8 @@ function SchemaLayoutControlsActions({
         </Button>
       )}
       <Button
-        className={classnames(
-          textColor('text-white'),
-          fontWeight('font-bold'),
-          width('w-16', 'md:w-20'),
-          margin('ml-2'),
-          backgroundColor('bg-blue-600', 'hover:bg-blue-400'),
-        )}
+        color="blue"
+        className={classnames(fontWeight('font-bold'), width('w-16', 'md:w-20'), margin('ml-2'))}
         icon={FloppyDiscIcon}
         size="text-xs"
         onClick={onSave}
