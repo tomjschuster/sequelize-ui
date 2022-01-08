@@ -8,14 +8,17 @@ import {
   padding,
   width,
 } from '@src/ui/styles/classnames'
-import { overlayContainer } from '@src/ui/styles/utils'
+import { MediaQuery, overlayContainer } from '@src/ui/styles/utils'
 import React from 'react'
 import { SvgProps } from '../../icons/Svg'
 
 export type MenuItem = {
+  ref?: React.RefObject<HTMLDivElement>
   icon?: React.ComponentType<SvgProps>
   iconProps?: SvgProps
   label: string
+  hideAboveQuery?: MediaQuery
+  hidden?: boolean
   onClick: () => void
 }
 
@@ -44,31 +47,35 @@ function Menu(
       onMouseOut={onMouseOut}
       onClick={onClick}
     >
-      {items.map(({ icon: Icon, iconProps, label, onClick }, i) => (
-        <div
-          key={label}
-          role="menu-item"
-          className={classnames(
-            display('flex'),
-            alignItems('items-center'),
-            cursor('cursor-pointer'),
-            padding('pr-4', 'py-1', { 'pl-8': !Icon, 'pl-2': !!Icon }),
-            backgroundColor('bg-white', {
-              'bg-gray-200': activeIndex === i,
-              'hover:bg-gray-200': activeIndex === undefined,
-            }),
-          )}
-          onClick={onClick}
-          onMouseOver={() => onMouseOverItem(i)}
-        >
-          {Icon && (
-            <span className={classnames(width('w-6'))}>
-              <Icon {...iconProps} />
-            </span>
-          )}
-          {label}
-        </div>
-      ))}
+      {items.map(
+        ({ icon: Icon, ref, iconProps, label, hideAboveQuery, hidden, onClick }, i) =>
+          !hidden && (
+            <div
+              ref={ref}
+              key={label}
+              role="menu-item"
+              className={classnames(
+                display('flex', hideAboveQuery && `${hideAboveQuery}:hidden`),
+                alignItems('items-center'),
+                cursor('cursor-pointer'),
+                padding('pr-4', 'py-1', { 'pl-8': !Icon, 'pl-2': !!Icon }),
+                backgroundColor('bg-white', {
+                  'bg-gray-200': activeIndex === i,
+                  'hover:bg-gray-200': activeIndex === undefined,
+                }),
+              )}
+              onClick={onClick}
+              onMouseOver={() => onMouseOverItem(i)}
+            >
+              {Icon && (
+                <span className={classnames(width('w-6'))}>
+                  <Icon {...iconProps} />
+                </span>
+              )}
+              {label}
+            </div>
+          ),
+      )}
     </div>
   )
 }

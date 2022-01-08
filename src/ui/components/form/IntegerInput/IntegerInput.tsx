@@ -1,17 +1,20 @@
-import { classnames, fontSize, padding, width } from '@src/ui/styles/classnames'
+import { classnames, fontSize, padding, width, WithClassname } from '@src/ui/styles/classnames'
 import { Override } from '@src/utils/types'
 import React from 'react'
 import InputWrapper, { alertId } from '../shared/InputWrapper'
 import { FieldProps } from '../shared/types'
 import { autofillDisable } from '../shared/utils'
 
-type IntegerInputProps = FieldProps<
-  number | undefined,
-  Override<React.InputHTMLAttributes<HTMLInputElement>, { min?: number; max?: number }>
+type IntegerInputProps = WithClassname<
+  FieldProps<
+    number | undefined,
+    Override<React.InputHTMLAttributes<HTMLInputElement>, { min?: number; max?: number }>
+  >
 >
 
 function IntegerInput({
   id,
+  className,
   label,
   value,
   min,
@@ -22,6 +25,7 @@ function IntegerInput({
 }: IntegerInputProps): React.ReactElement {
   const handleChange = React.useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {
+      console.log('e', evt.target.value)
       if (!evt.target.value) onChange(undefined, evt)
 
       const updatedValue = parseInt(evt.target.value)
@@ -35,7 +39,7 @@ function IntegerInput({
   )
 
   return (
-    <InputWrapper id={id} label={label} error={error}>
+    <InputWrapper id={id} className={className} label={label} error={error}>
       <input
         className={classnames(
           padding('py-1', 'px-2', 'p-0.5'),

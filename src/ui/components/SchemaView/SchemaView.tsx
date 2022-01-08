@@ -51,7 +51,7 @@ function SchemaView({
       className={classnames(
         overflow('overflow-y-scroll'),
         height('h-full'),
-        padding('p-6', 'pt-2'),
+        padding('p-2', 'xs:p-4', 'sm:p-6', 'pt-2'),
       )}
     >
       <Breadcrumbs items={[]} current={`${titleCase(schema.name)} (schema)`} />

@@ -1,6 +1,8 @@
 import { SchemaMeta } from '@src/api/meta'
 import { DbOptions } from '@src/core/database'
 import * as FileTree from '@src/core/files/fileTree'
+import ArrowLeftIcon from '@src/ui/components/icons/ArrowLeft'
+import ActionMenu from '@src/ui/components/menus/ActionMenu'
 import {
   backgroundColor,
   borderColor,
@@ -21,7 +23,6 @@ import React from 'react'
 import Button from '../../components/form/Button'
 import IconButton from '../../components/form/IconButton'
 import CloseIcon from '../../components/icons/Close'
-import CloseCircleIcon from '../../components/icons/CloseCircle'
 import FloppyDiscIcon from '../../components/icons/FloppyDisc'
 import PencilIcon from '../../components/icons/Pencil'
 import TrashIcon from '../../components/icons/Trash'
@@ -72,14 +73,7 @@ export default function SchemaLayoutControls({
           />
         )}
       </div>
-      <div
-        className={classnames(
-          display('flex'),
-          // overflow('overflow-x-auto'),
-          flex('flex-1'),
-          justifyContent('justify-end'),
-        )}
-      >
+      <div className={classnames(display('flex'), flex('flex-1'))}>
         <SchemaLayoutControlsActions
           state={state}
           meta={meta}
@@ -138,8 +132,16 @@ function SchemaLayoutControlsActions({
   if (state.type === SchemaLayoutStateType.VIEW_SCHEMA) {
     return (
       <>
+        <IconButton
+          className={classnames(display('hidden', '2xs:inline-block'))}
+          label="close schema"
+          icon={ArrowLeftIcon}
+          iconProps={{ size: 6 }}
+          onClick={onClose}
+        />
         {!meta?.isExample && (
           <IconButton
+            className={classnames(display('hidden', '2xs:inline-block'))}
             label="delete schema"
             icon={TrashIcon}
             iconProps={{ size: 6 }}
@@ -147,16 +149,35 @@ function SchemaLayoutControlsActions({
           />
         )}
         <IconButton
+          className={classnames(display('hidden', '2xs:inline-block'))}
           label="edit schema"
           icon={PencilIcon}
           iconProps={{ size: 6 }}
           onClick={onEdit}
         />
-        <IconButton
-          label="close schema"
-          icon={CloseCircleIcon}
-          iconProps={{ size: 6 }}
-          onClick={onClose}
+        <ActionMenu
+          className={classnames(display('2xs:hidden', 'inline-block'))}
+          items={[
+            {
+              label: 'Go back',
+              icon: ArrowLeftIcon,
+              iconProps: { size: 5 },
+              onClick: onClose,
+            },
+            {
+              label: 'Edit',
+              icon: PencilIcon,
+              iconProps: { size: 5 },
+              onClick: onEdit,
+            },
+            {
+              label: 'Delete',
+              icon: TrashIcon,
+              iconProps: { size: 5 },
+              hidden: !!meta?.isExample,
+              onClick: onDelete,
+            },
+          ]}
         />
       </>
     )
@@ -165,33 +186,66 @@ function SchemaLayoutControlsActions({
   if (state.type === SchemaLayoutStateType.VIEW_MODEL) {
     return (
       <>
+        <IconButton
+          className={classnames(display('hidden', '2xs:inline-block'))}
+          label="close model"
+          icon={ArrowLeftIcon}
+          iconProps={{ size: 6 }}
+          onClick={onClose}
+        />
         {!meta?.isExample && (
           <IconButton
-            label="delete schema"
+            className={classnames(display('hidden', '2xs:inline-block'))}
+            label="delete model"
             icon={TrashIcon}
             iconProps={{ size: 6 }}
             onClick={onDelete}
           />
         )}
         <IconButton
-          label="edit schema"
+          className={classnames(display('hidden', '2xs:inline-block'))}
+          label="edit model"
           icon={PencilIcon}
           iconProps={{ size: 6 }}
           onClick={onEdit}
         />
-
-        <IconButton
-          label="close schema"
-          icon={CloseCircleIcon}
-          iconProps={{ size: 6 }}
-          onClick={onClose}
+        <ActionMenu
+          className={classnames(display('2xs:hidden', 'inline-block'))}
+          items={[
+            {
+              label: 'Go back',
+              icon: ArrowLeftIcon,
+              iconProps: { size: 5 },
+              onClick: onClose,
+            },
+            {
+              label: 'Edit',
+              icon: PencilIcon,
+              iconProps: { size: 5 },
+              onClick: onEdit,
+            },
+            {
+              label: 'Delete',
+              icon: TrashIcon,
+              iconProps: { size: 5 },
+              hidden: !!meta?.isExample,
+              onClick: onDelete,
+            },
+          ]}
         />
       </>
     )
   }
 
   return (
-    <div className={classnames(display('flex'), padding('p-1', 'pb-0.5'))}>
+    <div
+      className={classnames(
+        display('flex'),
+        flex('flex-1'),
+        justifyContent('justify-evenly', '2xs:justify-end'),
+        padding('p-1', 'pb-0.5'),
+      )}
+    >
       <Button
         className={classnames(width('w-16', 'md:w-20'))}
         icon={CloseIcon}
@@ -205,7 +259,11 @@ function SchemaLayoutControlsActions({
       {!meta?.isExample && (
         <Button
           color="red"
-          className={classnames(fontWeight('font-bold'), width('w-16', 'md:w-20'), margin('ml-2'))}
+          className={classnames(
+            fontWeight('font-bold'),
+            width('w-16', 'md:w-20'),
+            margin('2xs:ml-2'),
+          )}
           icon={TrashIcon}
           size="text-xs"
           onClick={onDelete}
@@ -215,7 +273,11 @@ function SchemaLayoutControlsActions({
       )}
       <Button
         color="blue"
-        className={classnames(fontWeight('font-bold'), width('w-16', 'md:w-20'), margin('ml-2'))}
+        className={classnames(
+          fontWeight('font-bold'),
+          width('w-16', 'md:w-20'),
+          margin('2xs:ml-2'),
+        )}
         icon={FloppyDiscIcon}
         size="text-xs"
         onClick={onSave}
@@ -237,8 +299,8 @@ export function SchemaLayoutControlsWrapper({
         flexCenterBetween,
         position('relative'),
         width('w-full'),
-        padding('p-1', 'pt-0'),
-        margin('mt-1'),
+        padding('p-0.5', 'xs:p-1', 'pt-0'),
+        margin('mt-0.5', 'xs:mt-1'),
         backgroundColor('bg-white'),
         borderColor('border-gray-900'),
         borderWidth('border-b'),

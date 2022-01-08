@@ -149,7 +149,7 @@ export default function ModelForm({
       className={classnames(
         overflow('overflow-y-scroll'),
         height('h-full'),
-        padding('p-6', 'pt-11'),
+        padding('p-2', 'xs:p-4', 'sm:p-6', 'pt-11'),
       )}
       {...autofillDisable}
     >

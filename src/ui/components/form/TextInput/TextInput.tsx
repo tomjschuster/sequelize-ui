@@ -1,13 +1,11 @@
-import { Classname, classnames, fontSize, padding, width } from '@src/ui/styles/classnames'
-import { Override } from '@src/utils/types'
+import { classnames, fontSize, padding, width, WithClassname } from '@src/ui/styles/classnames'
 import React from 'react'
 import InputWrapper, { alertId } from '../shared/InputWrapper'
 import { FieldProps } from '../shared/types'
 import { autofillDisable } from '../shared/utils'
 
-type TextInputProps = Override<
-  FieldProps<string | undefined, React.InputHTMLAttributes<HTMLInputElement>>,
-  { className?: Classname }
+type TextInputProps = WithClassname<
+  FieldProps<string | undefined, React.InputHTMLAttributes<HTMLInputElement>>
 >
 
 function TextInput({

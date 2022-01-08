@@ -316,6 +316,7 @@ module.exports = {
       full: '0 0 100%',
     },
     screens: {
+      '2xs': '350px',
       xs: '475px',
       sm: '640px',
       md: '768px',

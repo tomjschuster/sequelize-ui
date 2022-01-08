@@ -60,7 +60,7 @@ function Button({
       className={classnames(
         flexCenter,
         buttonColorClassname(color),
-        padding('p-1'),
+        padding('p-0.5', '2xs:p-1'),
         borderWidth('border'),
         borderColor('border-gray-400'),
         borderRadius('rounded'),
@@ -71,7 +71,11 @@ function Button({
       {...props}
     >
       {Icon && <Icon {...iconProps} />}
-      <span className={classnames(fontSize(size), margin({ 'ml-1': !!Icon }))}>{children}</span>
+      <span
+        className={classnames(fontSize(size), margin({ 'ml-0.5': !!Icon, '2xs:ml-1': !!Icon }))}
+      >
+        {children}
+      </span>
     </button>
   )
 }

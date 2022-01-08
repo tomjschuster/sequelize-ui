@@ -3,7 +3,6 @@ import {
   backgroundColor,
   Classname,
   classnames,
-  margin,
   padding,
 } from '@src/ui/styles/classnames'
 import { Override } from '@src/utils/types'
@@ -11,7 +10,7 @@ import React from 'react'
 import { SvgProps } from '../../icons/Svg'
 
 type IconButtonProps = Override<
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
   {
     className?: Classname
     padding?: Classname
@@ -21,22 +20,25 @@ type IconButtonProps = Override<
   }
 >
 
-function IconButton({
-  className,
-  padding: padding_ = padding('p-1'),
-  label,
-  icon: Icon,
-  iconProps,
-  ...rest
-}: IconButtonProps): React.ReactElement {
+function IconButton(
+  {
+    className,
+    padding: padding_ = padding('p-1'),
+    label,
+    icon: Icon,
+    iconProps,
+    ...rest
+  }: IconButtonProps,
+  ref?: React.ForwardedRef<HTMLButtonElement>,
+): React.ReactElement {
   return (
     <button
+      ref={ref}
       type="button"
       className={classnames(
         padding_,
         backgroundColor('hover:bg-gray-200'),
         alignSelf('self-start'),
-        margin('ml-0.5'),
         className,
       )}
       {...rest}
@@ -47,4 +49,4 @@ function IconButton({
 }
 
 // Cast is necessary because HOC's don't preserve generics
-export default React.memo(IconButton) as typeof IconButton
+export default React.memo(React.forwardRef(IconButton)) as typeof IconButton

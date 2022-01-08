@@ -81,10 +81,7 @@ function ActionMenu({ className, onClick, items }: ActionMenuProps): React.React
           isOpen={isOpen}
           onMouseOverItem={setActiveIndex}
           onMouseOut={() => setActiveIndex(undefined)}
-          onClick={(evt) => {
-            evt.stopPropagation()
-            close()
-          }}
+          onClick={close}
         />
       </div>
     </div>

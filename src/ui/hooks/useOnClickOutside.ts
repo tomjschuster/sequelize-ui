@@ -2,15 +2,15 @@ import React from 'react'
 
 type AnyEvent = MouseEvent | TouchEvent
 
-export default function useOnClickOutside<T extends HTMLElement = HTMLElement>(
-  ref: React.RefObject<T>,
+export default function useOnClickOutside(
+  refs: React.RefObject<HTMLElement> | React.RefObject<HTMLElement>[],
   onClick: (event: AnyEvent) => void,
 ): void {
   React.useEffect(() => {
     const listener = (event: AnyEvent) => {
-      const el = ref?.current
+      const els = 'current' in refs ? [refs] : refs
 
-      if (!el || el.contains(event.target as Node)) {
+      if (els.some((el) => el.current?.contains(event.target as Node))) {
         return
       }
 
@@ -22,5 +22,5 @@ export default function useOnClickOutside<T extends HTMLElement = HTMLElement>(
     return () => {
       document.removeEventListener(`click`, listener)
     }
-  }, [ref, onClick])
+  }, [refs, onClick])
 }

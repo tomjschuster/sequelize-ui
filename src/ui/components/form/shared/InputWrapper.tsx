@@ -1,20 +1,18 @@
 import {
   alignItems,
-  Classname,
   classnames,
   display,
   flexDirection,
   fontSize,
   padding,
   width,
+  WithClassname,
 } from '@src/ui/styles/classnames'
 import React from 'react'
 import FormError from './FormError'
 import { FieldWrapperProps } from './types'
 
-export type InputWrapperProps = React.PropsWithChildren<
-  FieldWrapperProps & { className?: Classname }
->
+export type InputWrapperProps = React.PropsWithChildren<WithClassname<FieldWrapperProps>>
 
 export function alertId(id: string): string {
   return `${id}-alert`

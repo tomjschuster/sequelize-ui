@@ -46,7 +46,7 @@ export default function ModelView({
       className={classnames(
         overflow('overflow-y-scroll'),
         height('h-full'),
-        padding('pt-2', 'p-6'),
+        padding('pt-2', 'p-2', 'xs:p-4', 'sm:p-6'),
         margin('mb-3'),
       )}
     >

@@ -59,7 +59,7 @@ export default function CodeViewerControls({
   const handleClickCopy = () => {
     if (activeFile) {
       copyFile(activeFile)
-        .then(() => success(`${itemName(activeFile)} copied to clipboard.`, { ttl: 600000 }))
+        .then(() => success(`${itemName(activeFile)} copied to clipboard.`, { ttl: 6000 }))
         .catch((e) => {
           console.error(e)
           error('Failed to download project.')
@@ -67,14 +67,15 @@ export default function CodeViewerControls({
     }
   }
 
-  const dbOptionsRef = React.useRef(null)
-  useOnClickOutside(dbOptionsRef, closeDbOptions)
-
-  console.log({ isDbOptionsOpen })
+  const settingsRef = React.useRef() as React.MutableRefObject<HTMLButtonElement>
+  const settingsMenuRef = React.useRef() as React.MutableRefObject<HTMLDivElement>
+  const dbOptionsRef = React.useRef() as React.MutableRefObject<HTMLDivElement>
+  useOnClickOutside([dbOptionsRef, settingsRef, settingsMenuRef], closeDbOptions)
 
   return (
     <>
       <IconButton
+        className={classnames(display('hidden', '2xs:inline-block'))}
         label="go back"
         icon={ArrowLeftIcon}
         iconProps={{ size: 6 }}
@@ -102,7 +103,7 @@ export default function CodeViewerControls({
         onTouchStartCapture={prefetchDownload}
       />
       <IconButton
-        className={classnames(display('hidden', 'xs:inline-block'))}
+        className={classnames(display('hidden', '2xs:inline-block'))}
         label="edit code"
         icon={PencilIcon}
         iconProps={{ size: 6 }}
@@ -110,17 +111,23 @@ export default function CodeViewerControls({
       />
 
       <IconButton
+        ref={settingsRef}
+        className={classnames(display('hidden', 'xs:inline-block'))}
         label={isDbOptionsOpen ? 'close settings' : 'open settings'}
         icon={SettingsIcon}
         iconProps={{ size: 6 }}
-        onClick={(evt) => {
-          evt.stopPropagation()
-          toggleDbOptions()
-        }}
+        onClick={toggleDbOptions}
       />
       <ActionMenu
         className={classnames(display('xs:hidden', 'inline-block'))}
         items={[
+          {
+            label: 'Go back',
+            icon: ArrowLeftIcon,
+            iconProps: { size: 5 },
+            hideAboveQuery: '2xs',
+            onClick: onClickClose,
+          },
           {
             label: 'Copy file',
             icon: CopyIcon,
@@ -134,10 +141,18 @@ export default function CodeViewerControls({
             onClick: handleClickDownload,
           },
           {
-            label: 'Edit code',
+            label: 'Edit',
             icon: PencilIcon,
             iconProps: { size: 5 },
             onClick: onClickEdit,
+          },
+          {
+            ref: settingsMenuRef,
+            label: 'Settings',
+            icon: SettingsIcon,
+            iconProps: { size: 5 },
+            hideAboveQuery: '2xs',
+            onClick: toggleDbOptions,
           },
         ]}
       />

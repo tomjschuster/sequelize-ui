@@ -25,6 +25,7 @@ import {
   gridRow,
   inset,
   justifyContent,
+  margin,
   padding,
   position,
 } from '@src/ui/styles/classnames'
@@ -109,7 +110,10 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
   const handleChangePrecision = React.useCallback(
     (precision?: number) => {
       if (!isNumericType(field.type)) return
-      if (precision === undefined) return { ...field.type, precision: undefined }
+      if (precision === undefined) {
+        handleChange({ type: { ...field.type, precision: undefined } })
+        return
+      }
       handleChange({
         type: { ...field.type, precision: { ...field.type.precision, precision } },
       })
@@ -160,14 +164,21 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
       />
       <Select<DataTypeType>
         id={`field-type-${field.id}`}
-        className={classnames(gridColumn('col-span-6'))}
+        className={classnames(gridColumn('col-span-12', 'xs:col-span-6'))}
         label="Data type"
         options={DataTypeType}
         display={displayDataTypeType}
         value={field.type.type}
         onChange={handleChangeDataType}
       />
-      <div className={classnames(gridColumn('col-span-6'), gridRow('row-span-4'), display('flex'))}>
+      <div
+        className={classnames(
+          gridColumn('col-span-12', 'xs:col-span-6'),
+          gridRow('row-span-4'),
+          margin('mb-4', 'xs:mb-0'),
+          display('flex'),
+        )}
+      >
         {isStringType(field.type) && (
           <IntegerInput
             id={`field-string-length-${field.id}`}
@@ -249,7 +260,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         <>
           <IntegerInput
             id={`field-precision-${field.id}`}
-            className={classnames(gridColumn('col-span-6'))}
+            className={classnames(gridColumn('col-span-12', 'xs:col-span-6'))}
             label="Precision"
             value={field.type.precision?.precision}
             min={1}
@@ -258,8 +269,9 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
           />
           <IntegerInput
             id={`field-scale-${field.id}`}
-            className={classnames(gridColumn('col-span-6'))}
-            label="Precision"
+            className={classnames(gridColumn('col-span-12', 'xs:col-span-6'))}
+            disabled={field.type.precision?.precision === undefined}
+            label="Scale"
             value={field.type.precision?.scale}
             min={0}
             max={field.type.precision?.precision || 1000}
@@ -268,7 +280,11 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         </>
       )}
       <div
-        className={classnames(gridColumn('col-span-6'), display('flex'), flexDirection('flex-col'))}
+        className={classnames(
+          gridColumn('col-span-12', 'xs:col-span-6'),
+          display('flex'),
+          flexDirection('flex-col'),
+        )}
       >
         <Checkbox
           id={`field-pk-${field.id}`}

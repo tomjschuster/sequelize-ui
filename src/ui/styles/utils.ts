@@ -127,7 +127,7 @@ export const panelGrid = classnames(
 )
 
 export const fieldsetGrid = classnames(
-  padding('p-4'),
+  padding('p-2', 'xs:p-4'),
   padding('pt-8'),
   display('grid'),
   gridTemplateColumns('grid-cols-12'),
@@ -144,3 +144,25 @@ export const overlayContainer = classnames(
   boxShadow('shadow-lg'),
   padding('py-1'),
 )
+
+export type MediaQuery = '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+
+export const HIDDEN_MEDIA_QUERIES = [
+  '2xs:hidden',
+  'xs:hidden',
+  'sm:hidden',
+  'md:hidden',
+  'lg:hidden',
+  'xl:hidden',
+  '2xl:hidden',
+]
+
+export const FLEX_MEDIA_QUERIES = [
+  '2xs:flex',
+  'xs:flex',
+  'sm:flex',
+  'md:flex',
+  'lg:flex',
+  'xl:flex',
+  '2xl:flex',
+]
