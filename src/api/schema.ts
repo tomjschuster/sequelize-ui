@@ -1,6 +1,7 @@
 import { Association, AssociationTypeType, Model, Schema, ThroughType } from '@src/core/schema'
 import { arrayToLookup } from '@src/utils/array'
 import { now } from '@src/utils/dateTime'
+import { get, remove, set } from '@src/utils/localStorage'
 import { versionedName } from '@src/utils/string'
 import shortid from 'shortid'
 import * as Ids from './examples/ids'
@@ -98,49 +99,8 @@ export async function clearData(): Promise<void> {
   return await Promise.all([clearSchemas()]).then()
 }
 
-function get<T>(key: string): Promise<T | null> {
-  return new Promise<T | null>((resolve, reject) => {
-    try {
-      const item: string | null = localStorage.getItem(lsKey(key))
-      if (item === null) return resolve(item)
-      const result: T = JSON.parse(item)
-      resolve(result)
-    } catch (e) {
-      reject(e)
-    }
-  })
-}
-
-function set<T>(key: string, value: T): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    try {
-      const payload = JSON.stringify(value)
-      localStorage.setItem(lsKey(key), payload)
-      resolve()
-    } catch (e) {
-      reject(e)
-    }
-  })
-}
-
-function remove(key: string): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    try {
-      localStorage.removeItem(lsKey(key))
-      resolve()
-    } catch (e) {
-      reject(e)
-    }
-  })
-}
-
 function schemasKey(): string {
   return '/schemas'
-}
-
-export const NAMESPACE = `__SEQUELIZEUI__`
-function lsKey(key: string): string {
-  return NAMESPACE + key
 }
 
 function joinModelToTable(

@@ -1,5 +1,5 @@
 import { SchemaMeta } from '@src/api/meta'
-import { clearData, listSchemas } from '@src/api/schema'
+import { listSchemas } from '@src/api/schema'
 import { Schema } from '@src/core/schema'
 import useAsync from '@src/ui/hooks/useAsync'
 import {
@@ -12,6 +12,7 @@ import {
   width,
 } from '@src/ui/styles/classnames'
 import { flexCenter, section, title } from '@src/ui/styles/utils'
+import { clear } from '@src/utils/localStorage'
 import React from 'react'
 import ExampleSchemaLinks from './ExampleSchemaLinks'
 import MySchemaLinks from './MySchemaLinks'
@@ -26,7 +27,7 @@ export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.Reac
   const { data: schemas, error, refetch, loading } = useAsync({ getData: listSchemas })
 
   const handleClickClearData = async () => {
-    await clearData()
+    await clear()
     refetch()
   }
 

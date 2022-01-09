@@ -37,6 +37,7 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 - Persist db options for user
 - JSON schema for localStorage API
+- import swagger/json schema
 
 ### Testing
 
