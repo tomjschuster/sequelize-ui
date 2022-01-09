@@ -13,8 +13,10 @@ import {
   classnames,
   display,
   inset,
+  overflow,
   padding,
   position,
+  toClassname,
   width,
 } from '@src/ui/styles/classnames'
 import React from 'react'
@@ -109,7 +111,6 @@ export default function CodeViewerControls({
         iconProps={{ size: 6 }}
         onClick={onClickEdit}
       />
-
       <IconButton
         ref={settingsRef}
         className={classnames(display('hidden', 'xs:inline-block'))}
@@ -162,6 +163,7 @@ export default function CodeViewerControls({
           ref={dbOptionsRef}
           className={classnames(
             position('absolute'),
+            overflow('overflow-y-auto'),
             inset('top-full', 'right-0'),
             width('w-screen', 'md:w-auto', 'lg:w-auto'),
             padding('p-4', 'pt-10'),
@@ -170,6 +172,7 @@ export default function CodeViewerControls({
             borderRadius('rounded-lg'),
             backgroundColor('bg-gray-50'),
             boxShadow('shadow-2xl'),
+            toClassname('max-h-[calc(100vh-theme(space.18))]'),
           )}
         >
           <IconButton

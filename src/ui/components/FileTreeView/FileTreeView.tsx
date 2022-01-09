@@ -50,7 +50,7 @@ function FileTreeView({ fileTree, onSelect, onKeyDown }: FileTreeProps): React.R
   return (
     <ul
       role="tree"
-      className={classnames(whitespace('whitespace-nowrap'), overflow('overflow-x-scroll'))}
+      className={classnames(whitespace('whitespace-nowrap'))}
       onKeyDown={onKeyDown}
       onFocus={setFocused}
       onBlur={unsetFocused}
@@ -103,6 +103,7 @@ function FileTreeItem({
         id={treeItemLabelId(path)}
         className={classnames(
           display('flex'),
+          overflow('overflow-x-auto'),
           alignItems('items-center'),
           width('w-full'),
           fontSize('text-sm'),

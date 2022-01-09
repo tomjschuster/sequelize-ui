@@ -73,7 +73,7 @@ export default function SchemaLayoutControls({
           />
         )}
       </div>
-      <div className={classnames(display('flex'), flex('flex-1'))}>
+      <div className={classnames(display('flex'), flex('flex-1'), justifyContent('justify-end'))}>
         <SchemaLayoutControlsActions
           state={state}
           meta={meta}
