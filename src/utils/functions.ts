@@ -103,3 +103,7 @@ function pipeFromArray<T, R>(fns: Array<UnaryFunction<T, R>>): UnaryFunction<T, 
 export function noop(): void {
   return void 0
 }
+
+export function void_(_v: unknown): void {
+  return undefined
+}

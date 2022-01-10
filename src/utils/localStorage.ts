@@ -35,7 +35,9 @@ export function remove(key: string): Promise<void> {
 }
 
 export function clear(): Promise<void> {
-  const removePromises = Object.keys(localStorage).filter(isLsKey).map(remove)
+  const removePromises = Object.keys(localStorage)
+    .filter(isLsKey)
+    .map((key) => localStorage.removeItem(key))
 
   return Promise.all(removePromises).then()
 }
@@ -45,5 +47,6 @@ function lsKey(key: string): string {
   return NAMESPACE + key
 }
 function isLsKey(key: string): boolean {
+  console.log({ key })
   return key.startsWith(NAMESPACE)
 }

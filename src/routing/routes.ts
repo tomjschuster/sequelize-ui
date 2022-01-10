@@ -1,4 +1,5 @@
-import { ParsedUrlQuery } from 'querystring'
+import { isBrowser } from '@src/utils/dom'
+import { parse, ParsedUrlQuery } from 'querystring'
 
 export enum RouteType {
   NotFound = 'NOT_FOUND',
@@ -86,4 +87,19 @@ export function routesMatch(a: Route, b: Route): boolean {
   return Object.entries(a as Record<string, unknown>).every(
     ([k, v]: [string, unknown]) => (b as Record<string, unknown>)[k] === v,
   )
+}
+
+export function currentRoute(): Route | undefined {
+  if (!isBrowser()) return undefined
+  const query = parse(window.location.search)
+  return parseRoute(window.location.pathname, query)
+}
+
+export function isOnRoute(type: RouteType): boolean {
+  const route = currentRoute()
+  return !!route && route.type === type
+}
+
+export function isOnIndex(): boolean {
+  return isOnRoute(RouteType.Index)
 }

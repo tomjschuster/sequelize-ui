@@ -1,6 +1,7 @@
 import { isBrowser } from '@src/utils/dom'
 import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import ErrorBoundary from '../ErrorBoundary'
 
 type PortalProps = React.PropsWithChildren<{
   id: string
@@ -16,7 +17,7 @@ function Portal({ id, children }: PortalProps): React.ReactPortal | null {
     return () => setMounted(false)
   }, [])
 
-  return mounted && node ? createPortal(children, node) : null
+  return mounted && node ? createPortal(<ErrorBoundary>{children}</ErrorBoundary>, node) : null
 }
 
 export default Portal

@@ -1,5 +1,15 @@
-import { classnames, display, flex, flexDirection, overflow } from '@src/ui/styles/classnames'
+import {
+  classnames,
+  display,
+  flex,
+  flexDirection,
+  justifyContent,
+  maxHeight,
+  overflow,
+  padding,
+} from '@src/ui/styles/classnames'
 import React from 'react'
+import ErrorBoundary from '../ErrorBoundary'
 import Footer from './Footer'
 import Header from './Header'
 import Metadata, { MetadataProps } from './Metadata'
@@ -18,15 +28,20 @@ function Layout({ children, compact = false, ...metadataProps }: LayoutProps): R
             flex('flex-1'),
             display('flex'),
             flexDirection('flex-col'),
+            justifyContent('justify-center'),
             overflow('overflow-hidden'),
           )}
         >
-          {children}
+          <ErrorBoundary wrapper={ErrorWrapper}>{children}</ErrorBoundary>
         </main>
         {!compact && <Footer />}
       </PageWrapper>
     </>
   )
+}
+
+function ErrorWrapper({ children }: { children?: React.ReactNode }): React.ReactElement {
+  return <div className={classnames(maxHeight('max-h-full'), padding('p-4'))}>{children}</div>
 }
 
 export default Layout

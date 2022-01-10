@@ -30,6 +30,7 @@ import {
 import { breakWordsMinus8, fullscreen, subtitle } from '@src/ui/styles/utils'
 import { Key } from '@src/utils/dom'
 import React from 'react'
+import ErrorBoundary from '../ErrorBoundary'
 import Portal from '../Portal'
 
 export const MODAL_PORTAL_ID = 'modal-container'
@@ -57,9 +58,11 @@ function Modal({
     <Portal id={MODAL_PORTAL_ID}>
       <ModalBackdrop isOpen={isOpen} onClose={onClose}>
         <Dialog id={id} isOpen={isOpen}>
-          <Title isOpen={isOpen}>{title}</Title>
-          <Content>{children}</Content>
-          <Actions confirmText={confirmText} onConfirm={onConfirm} onClose={onClose} />
+          <ErrorBoundary wrapper={ErrorWrapper}>
+            <Title isOpen={isOpen}>{title}</Title>
+            <Content>{children}</Content>
+            <Actions confirmText={confirmText} onConfirm={onConfirm} onClose={onClose} />
+          </ErrorBoundary>
           <CloseButton onClose={onClose} />
         </Dialog>
       </ModalBackdrop>
@@ -243,6 +246,10 @@ function CloseButton({ onClose }: CloseButtonProps): React.ReactElement {
       onClick={onClose}
     />
   )
+}
+
+function ErrorWrapper({ children }: { children?: React.ReactNode }): React.ReactElement {
+  return <div className={classnames(padding('pt-8'))}>{children}</div>
 }
 
 export default React.memo(Modal)

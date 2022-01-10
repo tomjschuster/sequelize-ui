@@ -9,6 +9,7 @@ import {
   display,
   flexDirection,
   fontSize,
+  fontWeight,
   gap,
   gridAutoRows,
   gridTemplateColumns,
@@ -23,6 +24,7 @@ import {
   padding,
   position,
   TBackgroundColor,
+  textDecoration,
   toClassname,
   width,
   wordBreak,
@@ -58,7 +60,7 @@ export const section = classnames(
   width('w-full'),
   display('flex'),
   flexDirection('flex-col'),
-  maxWidth('max-w-screen-lg'),
+  maxWidth('max-w-screen-md'),
   margin('mx-auto'),
 )
 
@@ -66,6 +68,8 @@ export const title = classnames(fontSize('text-2xl'), margin('mb-4'))
 export const subtitle = classnames(fontSize('text-xl'), margin('mb-2'))
 
 export const text = classnames(fontSize('text-sm'), margin('mb-2'))
+
+export const link = classnames(fontWeight('font-semibold'), textDecoration('underline'))
 
 export const breakWords = classnames(wordBreak('break-words'), width('w-full'))
 
