@@ -40,7 +40,6 @@ function AlertsContainer({ alerts, onDismiss }: AlertsContainerProps): React.Rea
     </ul>
   )
 }
-// )K
 
 type AlertItemProps = {
   alert: Alert

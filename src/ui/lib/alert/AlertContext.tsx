@@ -1,3 +1,4 @@
+import ErrorBoundary from '@src/ui/components/ErrorBoundary'
 import dynamic from 'next/dynamic'
 import React from 'react'
 import useAlertState from './internal/useAlertState'
@@ -21,6 +22,17 @@ const AlertContext = React.createContext<AlertContext>({
 })
 
 export function AlertProvider({ children }: { children: React.ReactNode }): React.ReactElement {
+  // just render children when provider errors
+  const ErrorWrapper: React.FC = React.useCallback(() => <>{children}</>, [children])
+
+  return (
+    <ErrorBoundary wrapper={ErrorWrapper}>
+      <AlertProvider_>{children}</AlertProvider_>
+    </ErrorBoundary>
+  )
+}
+
+function AlertProvider_({ children }: { children: React.ReactNode }): React.ReactElement {
   const { alerts, alert, dismissAlert } = useAlertState()
 
   const info = React.useCallback(
