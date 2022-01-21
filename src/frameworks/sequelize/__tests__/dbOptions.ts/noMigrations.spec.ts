@@ -1,4 +1,4 @@
-import schema from '@src/api/examples/sakila'
+import schema from '@src/api/schema/examples/sakila'
 import { defaultDbOptions } from '@src/core/database'
 import { SequelizeFramework } from '../..'
 

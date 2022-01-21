@@ -1,4 +1,4 @@
-import blogSchema from '@src/api/examples/blog'
+import blogSchema from '@src/api/schema/examples/blog'
 import { defaultDbOptions, SqlDialect } from '@src/core/database'
 import { SequelizeFramework } from '@src/frameworks/sequelize'
 import { renderHook } from '@testing-library/react-hooks'

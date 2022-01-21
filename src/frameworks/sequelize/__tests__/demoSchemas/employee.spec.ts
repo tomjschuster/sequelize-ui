@@ -1,4 +1,4 @@
-import schema from '@src/api/examples/employees'
+import schema from '@src/api/schema/examples/employees'
 import { defaultDbOptions } from '@src/core/database'
 import { SequelizeFramework } from '../..'
 

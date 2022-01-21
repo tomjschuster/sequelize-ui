@@ -12,14 +12,15 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 #### UI
 
 - [ ] Refactor local storage keys
+- [ ] Field "generated" key
 - [ ] Home page copy
 - [ ] Link to legacy
+- [ ] Refactor undefined/null
 - [ ] Dark mode
 - [ ] Logo image
 - [ ] Favicon
 
 - [ ] Refactor code view controls
-- [ ] Refactor undefined/null
 - [ ] Cleanup unused code
 - [ ] db compatibility warnings
 - [ ] Schema Layout context

@@ -1,4 +1,4 @@
-import blogSchema from '@src/api/examples/blog'
+import blogSchema from '@src/api/schema/examples/blog'
 import { defaultDbOptions } from '@src/core/database'
 import { directory, isDirectory } from '@src/core/files/fileSystem'
 import { Framework, GenerateArgs, ProjectType } from '..'

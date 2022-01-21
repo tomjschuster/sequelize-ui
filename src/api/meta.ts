@@ -1,5 +1,5 @@
 import { License, licenseTitle, licenseUrl } from '@src/core/oss/license'
-import * as Ids from './examples/ids'
+import * as Ids from './schema/examples/ids'
 
 export type SchemaMeta = {
   schemaId: string

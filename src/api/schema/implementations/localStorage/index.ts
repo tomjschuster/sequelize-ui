@@ -4,8 +4,8 @@ import { now } from '@src/utils/dateTime'
 import { get, set } from '@src/utils/localStorage'
 import { versionedName } from '@src/utils/string'
 import shortid from 'shortid'
-import * as Ids from '../../../examples/ids'
 import { SchemaApi, SCHEMA_NOT_FOUND_ERROR } from '../../api'
+import * as Ids from '../../examples/ids'
 import { parseSchema, parseV0Lazy } from './parse'
 import { toV1 } from './v1/translate'
 
@@ -205,11 +205,11 @@ function joinModelToTable(
 async function getExampleSchema(id: string): Promise<Schema | null> {
   switch (id) {
     case Ids.BLOG_ID:
-      return (await import('../../../examples/blog')).default
+      return (await import('../../examples/blog')).default
     case Ids.EMPLOYEES_ID:
-      return (await import('../../../examples/employees')).default
+      return (await import('../../examples/employees')).default
     case Ids.SAKILA_ID:
-      return (await import('../../../examples/sakila')).default
+      return (await import('../../examples/sakila')).default
     default:
       return await Promise.resolve(null)
   }

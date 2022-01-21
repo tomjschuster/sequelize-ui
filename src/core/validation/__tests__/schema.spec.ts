@@ -1,4 +1,4 @@
-import blogSchema from '@src/api/examples/blog'
+import blogSchema from '@src/api/schema/examples/blog'
 import { manyToManyTableType } from '@src/core/schema'
 import {
   NAME_REQUIRED_MESSAGE,
