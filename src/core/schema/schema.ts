@@ -1,13 +1,14 @@
 import { now } from '@src/utils/dateTime'
 import shortid from 'shortid'
+import { stringDataType } from '.'
 import { Association, AssociationTypeType } from './association'
-import { DataType, DataTypeType } from './dataType'
+import { DataType } from './dataType'
 
 export type Schema = {
   id: string
   name: string
   models: Model[]
-  forkedFrom?: string
+  forkedFrom: string | null
   createdAt: string
   updatedAt: string
 }
@@ -25,10 +26,10 @@ export type Field = {
   id: string
   name: string
   type: DataType
-  primaryKey?: boolean
-  required?: boolean
-  unique?: boolean
-  generated?: boolean
+  primaryKey: boolean
+  required: boolean
+  unique: boolean
+  generated: boolean
 }
 
 export function emptySchema(): Schema {
@@ -37,6 +38,7 @@ export function emptySchema(): Schema {
     id: '',
     name: '',
     models: [],
+    forkedFrom: null,
     createdAt: time,
     updatedAt: time,
   }
@@ -55,7 +57,22 @@ export function emptyModel(): Model {
 }
 
 export function emptyField(): Field {
-  return { id: shortid(), name: '', type: { type: DataTypeType.String } }
+  return {
+    id: shortid(),
+    name: '',
+    type: stringDataType(),
+    primaryKey: false,
+    required: false,
+    unique: false,
+    generated: false,
+  }
+}
+
+export function field(props: Partial<Field> = {}): Field {
+  return {
+    ...emptyField(),
+    ...props,
+  }
 }
 
 export function emptyAssociation(
@@ -67,7 +84,17 @@ export function emptyAssociation(
     sourceModelId,
     type: { type: AssociationTypeType.BelongsTo },
     targetModelId,
+    foreignKey: null,
+    alias: null,
   }
+}
+
+export function association(
+  sourceModelId: Model['id'],
+  targetModelId: Model['id'],
+  props: Partial<Association>,
+): Association {
+  return { ...emptyAssociation(sourceModelId, targetModelId), ...props }
 }
 
 export function isNewSchema(schema: Schema): boolean {

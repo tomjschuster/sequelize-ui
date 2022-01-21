@@ -5,8 +5,8 @@ export type Association<T extends AssociationType = AssociationType> = {
   type: T
   sourceModelId: string
   targetModelId: string
-  foreignKey?: string
-  alias?: string
+  foreignKey: string | null
+  alias: string | null
 }
 
 export enum AssociationTypeType {
@@ -29,7 +29,7 @@ export type HasManyAssociation = { type: AssociationTypeType.HasMany }
 export type ManyToManyAssociation = {
   type: AssociationTypeType.ManyToMany
   through: ManyToManyThrough
-  targetFk?: string
+  targetFk: string | null
 }
 
 export type ManyToManyThrough = ManyToManyThroughModel | ManyToManyThroughTable
@@ -113,17 +113,25 @@ export function throughModel(modelId: string): ManyToManyThrough {
   }
 }
 
-export function manyToManyTableType(table: string): ManyToManyAssociation {
+export function manyToManyTableType(
+  table: string,
+  targetFk: string | null = null,
+): ManyToManyAssociation {
   return {
     type: AssociationTypeType.ManyToMany,
     through: throughTable(table),
+    targetFk,
   }
 }
 
-export function manyToManyModelType(modelId: string): ManyToManyAssociation {
+export function manyToManyModelType(
+  modelId: string,
+  targetFk: string | null = null,
+): ManyToManyAssociation {
   return {
     type: AssociationTypeType.ManyToMany,
     through: throughModel(modelId),
+    targetFk,
   }
 }
 

@@ -24,11 +24,11 @@ import {
   jsonBDataType,
   jsonDataType,
   realDataType,
+  resetType,
   smallIntDataType,
   stringDataType,
   textDataType,
   timeDataType,
-  typeWithoutOptions,
   uuidDataType,
   UuidType,
 } from '../dataType'
@@ -142,7 +142,7 @@ describe('schema dataTypes', () => {
     ]
     describe.each(cases)('', (type, expected) => {
       it(`${type} === ${expected}`, () => {
-        expect(typeWithoutOptions(type)).toEqual(expected)
+        expect(resetType(type)).toEqual(expected)
       })
     })
   })

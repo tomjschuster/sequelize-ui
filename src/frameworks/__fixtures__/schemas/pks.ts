@@ -25,7 +25,17 @@ const id: Model = {
   name: 'id',
   createdAt: time,
   updatedAt: time,
-  fields: [{ id: shortid(), name: 'id', type: integerDataType(), primaryKey: true }],
+  fields: [
+    {
+      id: shortid(),
+      name: 'id',
+      type: integerDataType(),
+      primaryKey: true,
+      required: false,
+      unique: false,
+      generated: false,
+    },
+  ],
   associations: [],
 }
 
@@ -34,7 +44,17 @@ const prefixed: Model = {
   name: 'prefixed',
   createdAt: time,
   updatedAt: time,
-  fields: [{ id: shortid(), name: 'prefixed_id', type: integerDataType(), primaryKey: true }],
+  fields: [
+    {
+      id: shortid(),
+      name: 'prefixed_id',
+      type: integerDataType(),
+      primaryKey: true,
+      required: false,
+      unique: false,
+      generated: false,
+    },
+  ],
   associations: [],
 }
 
@@ -43,7 +63,17 @@ const nonstandard: Model = {
   name: 'nonstandard',
   createdAt: time,
   updatedAt: time,
-  fields: [{ id: shortid(), name: 'other_id', type: integerDataType(), primaryKey: true }],
+  fields: [
+    {
+      id: shortid(),
+      name: 'other_id',
+      type: integerDataType(),
+      primaryKey: true,
+      required: false,
+      unique: false,
+      generated: false,
+    },
+  ],
   associations: [],
 }
 
@@ -52,6 +82,7 @@ const fieldsSchema: Schema = {
   name: 'fields',
   createdAt: time,
   updatedAt: time,
+  forkedFrom: null,
   models: [defaultPk, id, prefixed, nonstandard],
 }
 

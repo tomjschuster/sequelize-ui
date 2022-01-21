@@ -27,14 +27,18 @@ export const throughModel_: ManyToManyThroughModel = {
 export const manyToManyTableType_: ManyToManyAssociation = {
   type: AssociationTypeType.ManyToMany,
   through: throughTable_,
+  targetFk: null,
 }
 export const manyToManyModelType_: ManyToManyAssociation = {
   type: AssociationTypeType.ManyToMany,
   through: throughModel_,
+  targetFk: null,
 }
 
 export const baseAssociation: Omit<Association, 'type'> = {
   id: shortid(),
+  alias: null,
+  foreignKey: null,
   sourceModelId: shortid(),
   targetModelId: shortid(),
 }

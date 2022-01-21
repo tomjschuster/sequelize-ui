@@ -3,15 +3,10 @@ import employee from '@src/api/examples/employees'
 import sakila from '@src/api/examples/sakila'
 import { AssociationTypeType, ThroughType } from '@src/core/schema'
 import * as DateTimeUtils from '@src/utils/dateTime'
-import {
-  clearSchemas,
-  createSchema,
-  deleteSchema,
-  getSchema,
-  listSchemas,
-  SCHEMA_NOT_FOUND_ERROR,
-  updateSchema,
-} from '../schema'
+import { SCHEMA_NOT_FOUND_ERROR } from '../api'
+import LocalStorageSchemaApi from '../implementations/localStorage'
+
+const schemaApi = new LocalStorageSchemaApi()
 
 describe('schema api', () => {
   beforeEach(() => {
@@ -21,23 +16,23 @@ describe('schema api', () => {
 
   describe('listSchemas', () => {
     it('should return an empty list when there is no storage', async () => {
-      const schemas = await listSchemas()
+      const schemas = await schemaApi.listSchemas()
       expect(schemas).toEqual([])
-      expect(localStorage.length).toBe(0)
     })
 
     it('should return all created schemas', async () => {
-      const schemaA = await createSchema(sakila)
-      const schemaB = await createSchema(employee)
-      const schemas = await listSchemas()
+      const schemaA = await schemaApi.createSchema(sakila)
+      const schemaB = await schemaApi.createSchema(employee)
+      const schemas = await schemaApi.listSchemas()
       expect(schemas).toEqual([schemaA, schemaB])
     })
 
     it('should return a rejected promise when localStorage.getItem throws', () => {
+      jest.spyOn(console, 'error').mockImplementationOnce(() => undefined)
       ;(localStorage.getItem as jest.Mock).mockImplementationOnce(() => {
         throw new Error('foo')
       })
-      listSchemas().catch((e) => {
+      schemaApi.listSchemas().catch((e) => {
         expect(e).toEqual(new Error('foo'))
       })
     })
@@ -45,31 +40,31 @@ describe('schema api', () => {
 
   describe('getSchema', () => {
     it('return a rejected promise when there is no storage', async () => {
-      getSchema('foo').catch((e) => {
+      schemaApi.getSchema('foo').catch((e) => {
         expect(e).toEqual(new Error(SCHEMA_NOT_FOUND_ERROR))
       })
     })
 
     it('return a rejected promise when schema does not exist', async () => {
-      await createSchema(sakila)
-      getSchema('foo').catch((e) => {
+      await schemaApi.createSchema(sakila)
+      schemaApi.getSchema('foo').catch((e) => {
         expect(e).toEqual(new Error(SCHEMA_NOT_FOUND_ERROR))
       })
     })
 
     it('returns schema when it exists', async () => {
-      const expectedSchema = await createSchema(sakila)
-      const schema = await getSchema(expectedSchema.id)
+      const expectedSchema = await schemaApi.createSchema(sakila)
+      const schema = await schemaApi.getSchema(expectedSchema.id)
       expect(schema).toEqual(expectedSchema)
     })
   })
 
-  describe('createSchema', () => {
+  describe('schemaApi.createSchema', () => {
     it('creates new storage with new schema when no storage', async () => {
       const mockDate = '2020-01-01T00:00:00Z'
 
       jest.spyOn(DateTimeUtils, 'now').mockReturnValueOnce(mockDate)
-      const schema = await createSchema(sakila)
+      const schema = await schemaApi.createSchema(sakila)
 
       const models = schema.models.map((m) => ({
         ...m,
@@ -89,8 +84,8 @@ describe('schema api', () => {
     })
 
     it('increments the schema name when other schema has name', async () => {
-      await createSchema(sakila)
-      const schema = await createSchema(sakila)
+      await schemaApi.createSchema(sakila)
+      const schema = await schemaApi.createSchema(sakila)
       expect(schema.name).toEqual(`${sakila.name} (1)`)
     })
 
@@ -98,7 +93,7 @@ describe('schema api', () => {
       ;(localStorage.setItem as jest.Mock).mockImplementationOnce(() => {
         throw new Error('foo')
       })
-      createSchema(sakila).catch((e) => {
+      schemaApi.createSchema(sakila).catch((e) => {
         expect(e).toEqual(new Error('foo'))
       })
     })
@@ -106,30 +101,30 @@ describe('schema api', () => {
 
   describe('updateSchema', () => {
     it('return a rejected promise when there is no storage', async () => {
-      updateSchema(sakila).catch((e) => {
+      schemaApi.updateSchema(sakila).catch((e) => {
         expect(e).toEqual(new Error(SCHEMA_NOT_FOUND_ERROR))
       })
     })
 
     it('returns an error when there is storage, but schema does not exist', async () => {
-      await createSchema(sakila)
-      updateSchema(employee).catch((e) => {
+      await schemaApi.createSchema(sakila)
+      schemaApi.updateSchema(employee).catch((e) => {
         expect(e).toEqual(new Error(SCHEMA_NOT_FOUND_ERROR))
       })
     })
 
     it('updates the schema when it exists', async () => {
-      const existingSchema = await createSchema(sakila)
+      const existingSchema = await schemaApi.createSchema(sakila)
 
-      const schema = await updateSchema({ ...existingSchema, name: 'foo' })
+      const schema = await schemaApi.updateSchema({ ...existingSchema, name: 'foo' })
       expect(schema.name).toBe('foo')
 
-      const persistedSchema = await getSchema(schema.id)
+      const persistedSchema = await schemaApi.getSchema(schema.id)
       expect(persistedSchema.name).toBe('foo')
     })
 
     it('removes targeting associations when removing a model', async () => {
-      const existingSchema = await createSchema(blogSchema)
+      const existingSchema = await schemaApi.createSchema(blogSchema)
 
       // Assert the following to make sure test is valid
       // If schemas change, update test cases
@@ -142,7 +137,7 @@ describe('schema api', () => {
         ...existingSchema,
         models: existingSchema.models.filter((m) => m.id !== user?.id),
       }
-      const updatedSchema = await updateSchema(schema)
+      const updatedSchema = await schemaApi.updateSchema(schema)
       const updatedPost = updatedSchema.models.find((m) => m.id === post?.id)
       const updatedUser = updatedSchema.models.find((m) => m.id === user?.id)
       const updatedPostHasUserAssoc = updatedPost?.associations.some(
@@ -154,7 +149,7 @@ describe('schema api', () => {
     })
 
     it('converts join models associations to join tables when removing a join model', async () => {
-      const existingSchema = await createSchema(blogSchema)
+      const existingSchema = await schemaApi.createSchema(blogSchema)
 
       // Assert the following to make sure test is valid
       // If schemas change, update test cases
@@ -174,7 +169,7 @@ describe('schema api', () => {
         models: existingSchema.models.filter((m) => m.id !== postCategory?.id),
       }
 
-      const updatedSchema = await updateSchema(schema)
+      const updatedSchema = await schemaApi.updateSchema(schema)
       const updatedPost = updatedSchema.models.find((m) => post && m.id === post.id)
 
       const modelTableManyToMany = updatedPost?.associations.find(
@@ -188,7 +183,7 @@ describe('schema api', () => {
     })
 
     it('converts join models associations to join tables when removing a join model', async () => {
-      const existingSchema = await createSchema(blogSchema)
+      const existingSchema = await schemaApi.createSchema(blogSchema)
 
       // Assert the following to make sure test is valid
       // If schemas change, update test cases
@@ -208,7 +203,7 @@ describe('schema api', () => {
         models: existingSchema.models.filter((m) => m.id !== postCategory?.id),
       }
 
-      const updatedSchema = await updateSchema(schema)
+      const updatedSchema = await schemaApi.updateSchema(schema)
       const updatedPost = updatedSchema.models.find((m) => post && m.id === post.id)
 
       const modelTableManyToMany = updatedPost?.associations.find(
@@ -224,38 +219,22 @@ describe('schema api', () => {
 
   describe('deleteSchema', () => {
     it('should have no effect when there is no storage', async () => {
-      await deleteSchema('foo')
+      await schemaApi.deleteSchema('foo')
       expect(localStorage.length).toBe(0)
     })
 
     it('should return a rejected promise when schema does not exist', async () => {
-      await createSchema(sakila)
-      deleteSchema('foo').catch((e) => {
+      await schemaApi.createSchema(sakila)
+      schemaApi.deleteSchema('foo').catch((e) => {
         expect(e).toEqual(new Error(SCHEMA_NOT_FOUND_ERROR))
       })
     })
 
     it('should remove a schema from storage', async () => {
-      const expectedSchema = await createSchema(sakila)
-      await deleteSchema(expectedSchema.id)
-      getSchema(expectedSchema.id).catch((e) => {
+      const expectedSchema = await schemaApi.createSchema(sakila)
+      await schemaApi.deleteSchema(expectedSchema.id)
+      schemaApi.getSchema(expectedSchema.id).catch((e) => {
         expect(e).toEqual(new Error(SCHEMA_NOT_FOUND_ERROR))
-      })
-    })
-  })
-
-  describe('clearSchemas', () => {
-    it('should have no effect when there is no storage', async () => {
-      await clearSchemas()
-      expect(localStorage.length).toBe(0)
-    })
-
-    it('should return a rejected promise when localStorage.removeItem throws', async () => {
-      ;(localStorage.removeItem as jest.Mock).mockImplementationOnce(() => {
-        throw new Error('foo')
-      })
-      clearSchemas().catch((e) => {
-        expect(e).toEqual(new Error('foo'))
       })
     })
   })

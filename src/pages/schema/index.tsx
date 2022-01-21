@@ -1,5 +1,6 @@
 import { getSchemaMetaById } from '@src/api/meta'
-import { deleteSchema, getSchema, SCHEMA_NOT_FOUND_ERROR, updateSchema } from '@src/api/schema'
+import schemaApi from '@src/api/schema'
+import { SCHEMA_NOT_FOUND_ERROR } from '@src/api/schema/api'
 import { emptySchema, isNewSchema, Schema } from '@src/core/schema'
 import { goTo } from '@src/routing/navigation'
 import { indexRoute, parseSchemaId } from '@src/routing/routes'
@@ -28,7 +29,7 @@ function SchemaPage(): React.ReactElement {
   )
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const getData = React.useCallback(() => getSchema(schemaId!), [schemaId])
+  const getData = React.useCallback(() => schemaApi.getSchema(schemaId!), [schemaId])
 
   const handleError = React.useCallback(
     (e: unknown) => {
@@ -49,7 +50,7 @@ function SchemaPage(): React.ReactElement {
 
   const handleChange = async (schema: Schema) => {
     if (isNewSchema(schema)) return schema
-    const updated = await updateSchema(schema)
+    const updated = await schemaApi.updateSchema(schema)
     setSchema(updated)
     refetch()
     return updated
@@ -57,7 +58,7 @@ function SchemaPage(): React.ReactElement {
 
   const handleDelete = async () => {
     if (isNewSchema(schema)) return
-    schema && (await deleteSchema(schema.id))
+    schema && (await schemaApi.deleteSchema(schema.id))
     goTo(indexRoute())
   }
 

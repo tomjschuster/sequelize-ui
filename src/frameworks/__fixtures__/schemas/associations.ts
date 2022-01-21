@@ -1,11 +1,11 @@
 import {
-  AssociationTypeType,
   belongsToType,
   bigIntDataType,
   hasManyType,
+  manyToManyModelType,
+  manyToManyTableType,
   Model,
   Schema,
-  ThroughType,
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
 import shortid from 'shortid'
@@ -30,6 +30,7 @@ const category: Model = {
     {
       id: shortid(),
       alias: 'parent',
+      foreignKey: null,
       sourceModelId: Id.Category,
       targetModelId: Id.Category,
       type: belongsToType(),
@@ -37,24 +38,26 @@ const category: Model = {
     {
       id: shortid(),
       alias: 'children',
+      foreignKey: null,
       sourceModelId: Id.Category,
       targetModelId: Id.Category,
       type: hasManyType(),
     },
     {
       id: shortid(),
+      alias: null,
+      foreignKey: null,
       sourceModelId: Id.Category,
       targetModelId: Id.PostCategory,
       type: hasManyType(),
     },
     {
       id: shortid(),
+      alias: null,
+      foreignKey: null,
       sourceModelId: Id.Category,
       targetModelId: Id.Post,
-      type: {
-        type: AssociationTypeType.ManyToMany,
-        through: { type: ThroughType.ThroughModel, modelId: Id.PostCategory },
-      },
+      type: manyToManyModelType(Id.PostCategory),
     },
   ],
 }
@@ -77,40 +80,42 @@ const post: Model = {
     {
       id: shortid(),
       alias: 'children',
+      foreignKey: null,
       sourceModelId: Id.Post,
       targetModelId: Id.Post,
       type: hasManyType(),
     },
     {
       id: shortid(),
+      alias: null,
+      foreignKey: null,
       sourceModelId: Id.Post,
       targetModelId: Id.PostCategory,
       type: hasManyType(),
     },
     {
       id: shortid(),
+      alias: null,
+      foreignKey: null,
       sourceModelId: Id.Post,
       targetModelId: Id.Category,
-      type: {
-        type: AssociationTypeType.ManyToMany,
-        through: { type: ThroughType.ThroughModel, modelId: Id.PostCategory },
-      },
+      type: manyToManyModelType(Id.PostCategory),
     },
     {
       id: shortid(),
+      alias: null,
+      foreignKey: null,
       sourceModelId: Id.Post,
       targetModelId: Id.PostTag,
       type: hasManyType(),
     },
     {
       id: shortid(),
+      alias: null,
+      foreignKey: null,
       sourceModelId: Id.Post,
       targetModelId: Id.Tag,
-      type: {
-        type: AssociationTypeType.ManyToMany,
-        targetFk: 'tag_id',
-        through: { type: ThroughType.ThroughTable, table: 'post_tag' },
-      },
+      type: manyToManyTableType('post_tag', 'tag_id'),
     },
   ],
 }
@@ -121,18 +126,38 @@ const postCategory: Model = {
   createdAt: time,
   updatedAt: time,
   fields: [
-    { id: shortid(), name: 'post id', type: bigIntDataType(), primaryKey: true },
-    { id: shortid(), name: 'category id', type: bigIntDataType(), primaryKey: true },
+    {
+      id: shortid(),
+      name: 'post id',
+      type: bigIntDataType(),
+      primaryKey: true,
+      required: false,
+      unique: false,
+      generated: false,
+    },
+    {
+      id: shortid(),
+      name: 'category id',
+      type: bigIntDataType(),
+      primaryKey: true,
+      required: false,
+      unique: false,
+      generated: false,
+    },
   ],
   associations: [
     {
       id: shortid(),
+      alias: null,
+      foreignKey: null,
       sourceModelId: Id.PostCategory,
       targetModelId: Id.Post,
       type: belongsToType(),
     },
     {
       id: shortid(),
+      alias: null,
+      foreignKey: null,
       sourceModelId: Id.PostCategory,
       targetModelId: Id.Category,
       type: belongsToType(),
@@ -149,12 +174,16 @@ const postTag: Model = {
   associations: [
     {
       id: shortid(),
+      alias: null,
+      foreignKey: null,
       sourceModelId: Id.PostTag,
       targetModelId: Id.Post,
       type: belongsToType(),
     },
     {
       id: shortid(),
+      alias: null,
+      foreignKey: null,
       sourceModelId: Id.PostTag,
       targetModelId: Id.Tag,
       type: belongsToType(),
@@ -171,18 +200,19 @@ const tag: Model = {
   associations: [
     {
       id: shortid(),
+      alias: null,
+      foreignKey: null,
       sourceModelId: Id.Tag,
       targetModelId: Id.PostTag,
       type: hasManyType(),
     },
     {
       id: shortid(),
+      alias: null,
+      foreignKey: null,
       sourceModelId: Id.Tag,
       targetModelId: Id.Post,
-      type: {
-        type: AssociationTypeType.ManyToMany,
-        through: { type: ThroughType.ThroughModel, modelId: Id.PostTag },
-      },
+      type: manyToManyModelType(Id.PostTag),
     },
   ],
 }
@@ -192,6 +222,7 @@ const associationsSchema: Schema = {
   createdAt: time,
   updatedAt: time,
   name: 'associations',
+  forkedFrom: null,
   models: [category, post, postCategory, postTag, tag],
 }
 

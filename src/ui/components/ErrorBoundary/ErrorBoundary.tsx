@@ -91,9 +91,9 @@ function ErrorView(): React.ReactElement {
           </button>
         </li>
         <li>
-          <pre className={classnames(display('inline'), fontSize('text-xs'))}>
+          <code className={classnames(display('inline'), fontSize('text-xs'))}>
             localStorage.clear()
-          </pre>{' '}
+          </code>{' '}
           in your browser&apos;s JavaScript console
         </li>
         <li>Try another browser or device</li>

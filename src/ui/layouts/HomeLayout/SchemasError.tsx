@@ -23,27 +23,25 @@ export default function SchemasError({ onClickClearData }: SchemasErrorProps): R
       )}
     >
       <p className={text}>Sorry, there was a problem loading your previously saved schemas.</p>
-      <p className={text}>
-        Please try the following:
-        <ul className={list}>
-          <li>Reload the page</li>
-          <li>
-            <button
-              type="button"
-              onClick={onClickClearData}
-              className={classnames(inlineButton(), backgroundColor('hover:bg-green-100'))}
-            >
-              Reset your data
-            </button>
-          </li>
-          <li>
-            <pre className={classnames(display('inline'), fontSize('text-xs'))}>
-              localStorage.clear()
-            </pre>{' '}
-            in your console
-          </li>
-        </ul>
-      </p>
+      <p className={text}>Please try the following:</p>
+      <ul className={list}>
+        <li>Reload the page</li>
+        <li>
+          <button
+            type="button"
+            onClick={onClickClearData}
+            className={classnames(inlineButton(), backgroundColor('hover:bg-green-100'))}
+          >
+            Reset your data
+          </button>
+        </li>
+        <li>
+          <code className={classnames(display('inline'), fontSize('text-xs'))}>
+            localStorage.clear()
+          </code>{' '}
+          in your console
+        </li>
+      </ul>
     </div>
   )
 }

@@ -67,32 +67,32 @@ function getNameVersion(name: string, matchName: string): number | undefined {
 }
 
 /** Check if normalized names are equal */
-export function namesEq(a?: string, b?: string): boolean {
+export function namesEq(a?: string | null, b?: string): boolean {
   if (!a && !b) return true
   if (!a || !b) return false
   return normalize(a) === normalize(b)
 }
 
 /** Check if normalized names are equal */
-export function namesEqSingular(a?: string, b?: string): boolean {
+export function namesEqSingular(a?: string | null, b?: string): boolean {
   if (!a && !b) return true
   if (!a || !b) return false
   return normalizeSingular(a) === normalizeSingular(b)
 }
 
 /** Check if normalized name is empty */
-export function nameEmpty(a?: string): boolean {
+export function nameEmpty(a?: string | null): boolean {
   if (!a) return true
   return !normalize(a)
 }
 
-export function nameLongerThan(a: string | undefined, length: number): boolean {
+export function nameLongerThan(a: string | null, length: number): boolean {
   if (!a) return false
   return singular(normalize(a)).length > length && plural(normalize(a)).length > length
 }
 
 /** Check if normalized name starts with a number */
-export function nameStartsWithNumber(x?: string): boolean {
+export function nameStartsWithNumber(x?: string | null): boolean {
   if (!x) return false
   return /^\d/.test(normalize(x))
 }

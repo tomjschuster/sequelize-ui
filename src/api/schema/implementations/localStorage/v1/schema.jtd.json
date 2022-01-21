@@ -1,0 +1,151 @@
+{
+  "ref": "schema",
+  "metadata": {
+    "version": "1.0.0"
+  },
+  "definitions": {
+    "schema": {
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" },
+        "models": { "elements": { "ref": "model" } },
+        "forkedFrom": { "nullable": true, "type": "string" }
+      }
+    },
+    "model": {
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "updatedAt": { "type": "timestamp" },
+        "createdAt": { "type": "timestamp" },
+        "fields": { "elements": { "ref": "field" } },
+        "associations": { "elements": { "ref": "association" } }
+      }
+    },
+    "field": {
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "ref": "dataType" },
+        "primaryKey": { "type": "boolean" },
+        "required": { "type": "boolean" },
+        "unique": { "type": "boolean" }
+      }
+    },
+    "association": {
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string" },
+        "sourceModelId": { "type": "string" },
+        "targetModelId": { "type": "string" },
+        "type": { "ref": "associationType" },
+        "alias": { "nullable": true, "type": "string" },
+        "foreignKey": { "nullable": true, "type": "string" }
+      }
+    },
+    "dataType": {
+      "discriminator": "type",
+      "mapping": {
+        "ARRAY": {
+          "properties": {
+            "arrayType": { "ref": "dataType" }
+          }
+        },
+        "BIGINT": {
+          "properties": {
+            "unsigned": { "type": "boolean" },
+            "autoincrement": { "type": "boolean" }
+          }
+        },
+        "BLOB": { "properties": {} },
+        "BOOLEAN": { "properties": {} },
+        "CITEXT": { "properties": {} },
+        "DATE": {
+          "properties": { "defaultNow": { "type": "boolean" } }
+        },
+        "DATE_TIME": {
+          "properties": { "defaultNow": { "type": "boolean" } }
+        },
+        "DECIMAL": {
+          "properties": {
+            "precision": {
+              "nullable": true,
+              "properties": {
+                "precision": { "type": "int8" },
+                "scale": { "nullable": true, "type": "int8" }
+              }
+            },
+            "unsigned": { "type": "boolean" }
+          }
+        },
+        "DOUBLE": {
+          "properties": { "unsigned": { "type": "boolean" } }
+        },
+        "ENUM": { "properties": { "values": { "elements": { "type": "string" } } } },
+        "FLOAT": {
+          "properties": { "unsigned": { "type": "boolean" } }
+        },
+        "INTEGER": {
+          "properties": {
+            "unsigned": { "type": "boolean" },
+            "autoincrement": { "type": "boolean" }
+          }
+        },
+        "JSON": { "properties": {} },
+        "JSONB": { "properties": {} },
+        "REAL": {
+          "properties": { "unsigned": { "type": "boolean" } }
+        },
+        "SMALLINT": {
+          "properties": {
+            "unsigned": { "type": "boolean" },
+            "autoincrement": { "type": "boolean" }
+          }
+        },
+        "STRING": { "properties": { "length": { "nullable": true, "type": "uint8" } } },
+        "TEXT": { "properties": {} },
+        "TIME": {
+          "properties": { "defaultNow": { "type": "boolean" } }
+        },
+        "UUID": {
+          "properties": {
+            "defaultVersion": { "nullable": true, "enum": ["V1", "V4"] }
+          }
+        }
+      }
+    },
+    "associationType": {
+      "discriminator": "type",
+      "mapping": {
+        "BELONGS_TO": { "properties": {} },
+        "HAS_MANY": { "properties": {} },
+        "HAS_ONE": { "properties": {} },
+        "MANY_TO_MANY": {
+          "properties": {
+            "through": {
+              "discriminator": "type",
+              "mapping": {
+                "THROUGH_MODEL": {
+                  "properties": {
+                    "modelId": { "type": "string" }
+                  }
+                },
+                "THROUGH_TABLE": {
+                  "properties": {
+                    "table": { "type": "string" }
+                  }
+                }
+              }
+            },
+            "targetFk": { "nullable": true, "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

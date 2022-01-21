@@ -40,20 +40,18 @@ import {
   textDataType,
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import shortid from 'shortid'
-import { BLOG_ID } from './ids'
 
 const time = fromParts(2021, 4, 1)
 
 const Id = {
-  Category: shortid(),
-  Post: shortid(),
-  PostCategory: shortid(),
-  PostComment: shortid(),
-  PostMeta: shortid(),
-  PostTag: shortid(),
-  Tag: shortid(),
-  User: shortid(),
+  Category: 'RZw1R8F3R',
+  Post: 'ZEtbbSMiMN',
+  PostCategory: 'eJhVQn-fbl',
+  PostComment: 'ZUWpjWOLq0',
+  PostMeta: 'uLIROucWln',
+  PostTag: 'TXvlm_CHfJ',
+  Tag: 'ttHbif2iFE',
+  User: 'ivaiETEdGs',
 } as const
 
 const category: Model = {
@@ -63,7 +61,7 @@ const category: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: 'T4qQXIU57t',
       name: 'id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -72,7 +70,7 @@ const category: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'wLaKerwKHR',
       name: 'title',
       type: stringDataType({ length: 75 }),
       primaryKey: false,
@@ -81,7 +79,7 @@ const category: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'B1XfKBFlVl',
       name: 'meta title',
       type: stringDataType({ length: 100 }),
       primaryKey: false,
@@ -90,7 +88,7 @@ const category: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'BCinV1ySl1',
       name: 'slug',
       type: stringDataType({ length: 100 }),
       primaryKey: false,
@@ -99,7 +97,7 @@ const category: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'F8N_KcjAqE',
       name: 'content',
       type: textDataType(),
       primaryKey: false,
@@ -110,7 +108,7 @@ const category: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: 'oDibzTR5C',
       alias: 'parent',
       sourceModelId: Id.Category,
       targetModelId: Id.Category,
@@ -118,7 +116,7 @@ const category: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: '7lc6O2PM91',
       alias: 'children',
       sourceModelId: Id.Category,
       targetModelId: Id.Category,
@@ -126,7 +124,7 @@ const category: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: 'wcfc-hVPMo',
       alias: null,
       sourceModelId: Id.Category,
       targetModelId: Id.PostCategory,
@@ -134,7 +132,7 @@ const category: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: 'hN7l0LA6k5l',
       alias: null,
       sourceModelId: Id.Category,
       targetModelId: Id.Post,
@@ -151,7 +149,7 @@ const post: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: 'JF3PYgKWdxc',
       name: 'id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -161,7 +159,7 @@ const post: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'uS6fbupku5b',
       name: 'title',
       type: stringDataType({ length: 75 }),
       primaryKey: false,
@@ -170,7 +168,7 @@ const post: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: '8tK7CCDZt2R',
       name: 'meta title',
       type: stringDataType({ length: 100 }),
       primaryKey: false,
@@ -179,7 +177,7 @@ const post: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'ljY-X8RoAL_',
       name: 'slug',
       type: stringDataType({ length: 100 }),
       primaryKey: false,
@@ -188,7 +186,7 @@ const post: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: '6rlsTFVLWD8',
       name: 'summary',
       type: textDataType(),
       primaryKey: false,
@@ -197,7 +195,7 @@ const post: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'vDhgus3e1M8',
       name: 'published',
       type: booleanDataType(),
       primaryKey: false,
@@ -206,7 +204,7 @@ const post: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'WWVBERtnLH5',
       name: 'published at',
       type: dateTimeDataType(),
       primaryKey: false,
@@ -215,7 +213,7 @@ const post: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'JZX74kV3RJB',
       name: 'content',
       type: textDataType(),
       primaryKey: false,
@@ -226,7 +224,7 @@ const post: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: '_XbLHymzQ54',
       alias: 'author',
       sourceModelId: Id.Post,
       targetModelId: Id.User,
@@ -234,7 +232,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: 'XHnda0nh3I8',
       alias: 'parent',
       sourceModelId: Id.Post,
       targetModelId: Id.Post,
@@ -242,7 +240,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: 'uokEC1_-88B',
       alias: 'children',
       sourceModelId: Id.Post,
       targetModelId: Id.Post,
@@ -250,7 +248,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: 'nZBcsVQMiVe',
       alias: null,
       sourceModelId: Id.Post,
       targetModelId: Id.PostCategory,
@@ -258,7 +256,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: 'GTvEzMsP-CY',
       alias: null,
       sourceModelId: Id.Post,
       targetModelId: Id.Category,
@@ -266,7 +264,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: 'nMAVYlaMC77',
       alias: 'comments',
       sourceModelId: Id.Post,
       targetModelId: Id.PostComment,
@@ -274,7 +272,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: 'MXFKBquNNI6',
       alias: 'meta',
       sourceModelId: Id.Post,
       targetModelId: Id.PostMeta,
@@ -282,7 +280,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: 'UV43MPRd0Lt',
       alias: null,
       sourceModelId: Id.Post,
       targetModelId: Id.PostTag,
@@ -290,7 +288,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: 'skZFJbJB6hh',
       alias: null,
       sourceModelId: Id.Post,
       targetModelId: Id.Tag,
@@ -307,7 +305,7 @@ const postCategory: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: 'jdRrJjdcKkE',
       name: 'post id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -316,7 +314,7 @@ const postCategory: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: '3woIOm-7Iwk',
       name: 'category id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -327,7 +325,7 @@ const postCategory: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: '3woIOm-7Iwk',
       alias: null,
       sourceModelId: Id.PostCategory,
       targetModelId: Id.Post,
@@ -335,7 +333,7 @@ const postCategory: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: 'YN5x8WTSUv0',
       alias: null,
       sourceModelId: Id.PostCategory,
       targetModelId: Id.Category,
@@ -352,7 +350,7 @@ const postComment: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: 'pPx2dKSCxUU',
       name: 'id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -361,7 +359,7 @@ const postComment: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'Unedw8_4esY',
       name: 'title',
       type: stringDataType({ length: 75 }),
       primaryKey: false,
@@ -370,7 +368,7 @@ const postComment: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'py--ks_YQhk',
       name: 'published',
       type: booleanDataType(),
       primaryKey: false,
@@ -379,7 +377,7 @@ const postComment: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'AqsMlWfzsrp',
       name: 'published at',
       type: dateTimeDataType(),
       primaryKey: false,
@@ -388,7 +386,7 @@ const postComment: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'P_KCQh8vR4i',
       name: 'content',
       type: textDataType(),
       primaryKey: false,
@@ -399,7 +397,7 @@ const postComment: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: 'w5mBh5K4X3W',
       alias: null,
       sourceModelId: Id.PostComment,
       targetModelId: Id.Post,
@@ -407,7 +405,7 @@ const postComment: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: '57xLCZkr22k',
       alias: 'parent',
       sourceModelId: Id.PostComment,
       targetModelId: Id.PostComment,
@@ -415,7 +413,7 @@ const postComment: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: 'XZuWMYVjX9q',
       alias: 'children',
       sourceModelId: Id.PostComment,
       targetModelId: Id.PostComment,
@@ -432,7 +430,7 @@ const postMeta: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: '_9jdNTR-39N',
       name: 'id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -441,7 +439,7 @@ const postMeta: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'u98W4zMVB7K',
       name: 'key',
       type: stringDataType({ length: 50 }),
       primaryKey: false,
@@ -450,7 +448,7 @@ const postMeta: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: '_EqtSrP0p6x',
       name: 'content',
       type: textDataType(),
       primaryKey: false,
@@ -461,7 +459,7 @@ const postMeta: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: '0uE8EJCVIAD',
       alias: null,
       sourceModelId: Id.PostMeta,
       targetModelId: Id.Post,
@@ -478,7 +476,7 @@ const postTag: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: 'wGszJWpxTPh',
       name: 'post id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -487,7 +485,7 @@ const postTag: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'YlgLSgY8Skr',
       name: 'tag id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -498,7 +496,7 @@ const postTag: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: '6Uh5opGS8LM',
       alias: null,
       sourceModelId: Id.PostTag,
       targetModelId: Id.Post,
@@ -506,7 +504,7 @@ const postTag: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: 'xCR4XtTuYjT',
       alias: null,
       sourceModelId: Id.PostTag,
       targetModelId: Id.Tag,
@@ -523,7 +521,7 @@ const tag: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: 'FshuF93yknb',
       name: 'id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -532,7 +530,7 @@ const tag: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: '8x7OAEK9LjG',
       name: 'title',
       type: stringDataType({ length: 75 }),
       primaryKey: false,
@@ -541,7 +539,7 @@ const tag: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'M2LEr5WWtYq',
       name: 'meta title',
       type: stringDataType({ length: 100 }),
       primaryKey: false,
@@ -550,7 +548,7 @@ const tag: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'ePkkPVQvLF5',
       name: 'slug',
       type: stringDataType({ length: 100 }),
       primaryKey: false,
@@ -559,7 +557,7 @@ const tag: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'eC71J1JAiW5',
       name: 'content',
       type: textDataType(),
       primaryKey: false,
@@ -570,7 +568,7 @@ const tag: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: 'Ch1tFcak4kC',
       alias: null,
       sourceModelId: Id.Tag,
       targetModelId: Id.PostTag,
@@ -578,7 +576,7 @@ const tag: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: 'zUJ6zJEZ_TB',
       alias: null,
       sourceModelId: Id.Tag,
       targetModelId: Id.Post,
@@ -595,7 +593,7 @@ const user: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: 'qjr5fhyBQJk',
       name: 'id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -604,7 +602,7 @@ const user: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'QpCuohYW2Hs',
       name: 'first name',
       type: stringDataType({ length: 50 }),
       primaryKey: false,
@@ -613,7 +611,7 @@ const user: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: '4XJNERwnZG5',
       name: 'middle name',
       type: stringDataType({ length: 50 }),
       primaryKey: false,
@@ -622,7 +620,7 @@ const user: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'zG96hHN_eh2',
       name: 'last name',
       type: stringDataType({ length: 50 }),
       primaryKey: false,
@@ -631,7 +629,7 @@ const user: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: '8fYf5Z9TdLb',
       name: 'mobile',
       type: stringDataType({ length: 15 }),
       primaryKey: false,
@@ -640,7 +638,7 @@ const user: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'fKxR-4rs0UV',
       name: 'email',
       type: stringDataType({ length: 50 }),
       primaryKey: false,
@@ -649,7 +647,7 @@ const user: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'rcsZ85LnFsf',
       name: 'password hash',
       type: stringDataType({ length: 32 }),
       primaryKey: false,
@@ -658,7 +656,7 @@ const user: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'uHB2pNmoPGS',
       name: 'registered at',
       type: dateTimeDataType({ defaultNow: true }),
       primaryKey: false,
@@ -667,7 +665,7 @@ const user: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: '_MA5Jrs0QRM',
       name: 'last login',
       type: dateTimeDataType(),
       primaryKey: false,
@@ -676,7 +674,7 @@ const user: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'tOGxTjl7N8V',
       name: 'intro',
       type: textDataType(),
       primaryKey: false,
@@ -685,7 +683,7 @@ const user: Model = {
       generated: false,
     },
     {
-      id: shortid(),
+      id: 'X2g0Pw8QFq1',
       name: 'profile',
       type: textDataType(),
       primaryKey: false,
@@ -696,7 +694,7 @@ const user: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: 'pbNmGR7mt4P',
       alias: null,
       sourceModelId: Id.User,
       targetModelId: Id.Post,
@@ -706,13 +704,11 @@ const user: Model = {
   ],
 }
 
-const blogSchema: Schema = {
-  id: BLOG_ID,
+export const blogTranslatedFromV1: Schema = {
+  id: 'akwgxGmESSK',
   name: 'blog',
   createdAt: time,
   updatedAt: time,
   forkedFrom: null,
   models: [category, post, postCategory, postComment, postMeta, postTag, tag, user],
 }
-
-export default blogSchema

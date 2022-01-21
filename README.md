@@ -11,7 +11,7 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] migrate old sequelize ui
+- [ ] Refactor local storage keys
 - [ ] Home page copy
 - [ ] Link to legacy
 - [ ] Dark mode
@@ -35,7 +35,6 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 #### API
 
 - Persist db options for user
-- JSON schema for localStorage API
 - import swagger/json schema
 
 ### Testing

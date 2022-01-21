@@ -102,36 +102,41 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
   )
 
   const handleChangeStringLength = React.useCallback(
-    (length?: number) =>
+    (length: number | null = null) =>
       isStringType(field.type) && handleChange({ type: { ...field.type, length } }),
     [field.type, handleChange],
   )
 
   const handleChangePrecision = React.useCallback(
-    (precision?: number) => {
+    (precision: number | null = null) => {
       if (!isNumericType(field.type)) return
-      if (precision === undefined) {
-        handleChange({ type: { ...field.type, precision: undefined } })
+      if (!precision) {
+        handleChange({ type: { ...field.type, precision: null } })
         return
       }
       handleChange({
-        type: { ...field.type, precision: { ...field.type.precision, precision } },
+        type: {
+          ...field.type,
+          precision: field.type.precision
+            ? { ...field.type.precision, precision }
+            : { precision, scale: null },
+        },
       })
     },
     [field.type, handleChange],
   )
 
   const handleChangeScale = React.useCallback(
-    (scale?: number) => {
+    (scale: number | null = null) => {
       if (!isNumericType(field.type)) return
-      if (field.type.precision === undefined) return
+      if (!field.type.precision) return
       handleChange({ type: { ...field.type, precision: { ...field.type.precision, scale } } })
     },
     [field.type, handleChange],
   )
 
   const handleChangeUuidDefault = React.useCallback(
-    (defaultVersion: UuidType | undefined) =>
+    (defaultVersion: UuidType | null = null) =>
       field.type.type === DataTypeType.Uuid &&
       handleChange({ type: { ...field.type, defaultVersion } }),
     [field.type, handleChange],

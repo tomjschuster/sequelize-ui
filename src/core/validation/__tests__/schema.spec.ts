@@ -151,8 +151,8 @@ describe('schema validation', () => {
             {
               ...model,
               associations: [
-                { ...assoc, alias: target2?.name },
-                { ...assoc2, alias: undefined },
+                { ...assoc, alias: target2?.name || null },
+                { ...assoc2, alias: null },
                 ...assocs,
               ],
             },
@@ -166,8 +166,8 @@ describe('schema validation', () => {
             {
               ...model,
               associations: [
-                { ...assoc, alias: undefined },
-                { ...assoc2, alias: target?.name },
+                { ...assoc, alias: null },
+                { ...assoc2, alias: target?.name || null },
                 ...assocs,
               ],
             },

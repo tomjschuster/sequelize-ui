@@ -9,7 +9,7 @@ export type FieldProps<T, P> = P extends React.HTMLAttributes<infer E>
   : never
 
 export type CommonFieldProps<E extends HTMLElement, T> = {
-  value?: T
+  value: T | null
   onChange: (value: T, evt: React.ChangeEvent<E>) => void
 }
 

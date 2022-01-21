@@ -12,9 +12,9 @@ import {
   Field,
   ManyToManyAssociation,
   Model,
+  resetType,
   Schema,
   ThroughType,
-  typeWithoutOptions,
 } from '@src/core/schema'
 import { arrayToLookup, dedupBy } from '@src/utils/array'
 import { addSeconds, now, toNumericTimestamp } from '@src/utils/dateTime'
@@ -84,12 +84,20 @@ function getTimestampFields({ dbOptions }: GetTimestampFieldsTemplateArgs): Fiel
     id: shortid(),
     name: caseByDbCaseStyle('created at', dbOptions.caseStyle),
     type: dateTimeDataType(),
+    primaryKey: false,
+    required: false,
+    unique: false,
+    generated: false,
   }
 
   const updatedAt: Field = {
     id: shortid(),
     name: caseByDbCaseStyle('updated at', dbOptions.caseStyle),
     type: dateTimeDataType(),
+    primaryKey: false,
+    required: false,
+    unique: false,
+    generated: false,
   }
 
   return [createdAt, updatedAt]
@@ -211,7 +219,7 @@ function getFieldWithReference({
   model,
   fk,
   dbOptions,
-  primaryKey,
+  primaryKey = false,
 }: GetFieldWithReferenceArgs): FieldWithReference {
   const pk =
     model.fields.find((field) => field.primaryKey) ||
@@ -220,7 +228,16 @@ function getFieldWithReference({
   const table = dbTableName({ model: model, dbOptions })
   const columnField = prefixPk({ field: pk, model: model, dbOptions })
   const column = caseByDbCaseStyle(columnField.name, dbOptions.caseStyle)
-  const field = { id: shortid(), name: fk, type: typeWithoutOptions(pk.type), primaryKey }
+
+  const field: Field = {
+    id: shortid(),
+    name: fk,
+    type: resetType(pk.type),
+    primaryKey,
+    required: false,
+    unique: false,
+    generated: false,
+  }
 
   return { ...field, reference: { table, column } }
 }
@@ -268,6 +285,8 @@ function getJoinTableModel(
 
   const sourceAssoc: Association = {
     id: shortid(),
+    alias: null,
+    foreignKey: null,
     sourceModelId: id,
     targetModelId: source.id,
     type: belongsToType(),
@@ -279,6 +298,8 @@ function getJoinTableModel(
 
   const targetAssoc: Association = {
     id: shortid(),
+    alias: null,
+    foreignKey: null,
     sourceModelId: id,
     targetModelId: target.id,
     type: belongsToType(),

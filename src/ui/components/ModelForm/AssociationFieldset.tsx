@@ -8,6 +8,7 @@ import {
   isThroughModel,
   isThroughTable,
   ManyToManyAssociation,
+  manyToManyTableType,
   Model,
   Schema,
   ThroughType,
@@ -80,13 +81,7 @@ function AssociationFieldset({
     (typeType: AssociationTypeType) => {
       if (typeType === AssociationTypeType.ManyToMany) {
         handleChange({
-          type: {
-            type: typeType,
-            through: {
-              type: ThroughType.ThroughTable,
-              table: snakeCase(`${model.name} ${targetModel.name}`),
-            },
-          },
+          type: manyToManyTableType(snakeCase(`${model.name} ${targetModel.name}`)),
         })
         return
       }
@@ -217,7 +212,7 @@ function AssociationFieldset({
               label="Through model"
               options={modelOptions}
               display={modelName}
-              value={throughModel}
+              value={throughModel || null}
               onChange={handleChangeThroughModel}
             />
           )}

@@ -53,6 +53,7 @@ export default function useAsync<Data, Variables = undefined>({
         return newData
       })
       .catch((error) => {
+        console.error(error)
         onError && onError(error)
         setLoading(false)
         setError(error)

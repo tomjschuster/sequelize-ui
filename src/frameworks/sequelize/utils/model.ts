@@ -37,7 +37,7 @@ function mergeFields(x: Model, y: Model): Model {
 
   const [, yDiffs] = y.fields.reduce(
     (acc, y_) => {
-      const { primaryKey: _, ...yWithoutPk } = y_
+      const yWithoutPk = { ...y_, primaryKey: false }
       const y = xHasPk ? yWithoutPk : y_
       if (x.fields.some((x) => namesEqSingular(x.name, y.name))) {
         acc[0].push(y)

@@ -1,5 +1,5 @@
 import { getExampleSchemaMeta, getSchemaMetaBySlug, SchemaMeta } from '@src/api/meta'
-import { createSchema, getSchema } from '@src/api/schema'
+import schemaApi from '@src/api/schema'
 import { Schema } from '@src/core/schema'
 import { SequelizeFramework } from '@src/frameworks/sequelize'
 import { goTo } from '@src/routing/navigation'
@@ -16,7 +16,7 @@ type SchemaPageProps = {
 
 export function SchemaPage({ schema, meta }: SchemaPageProps): React.ReactElement {
   const handleChange = React.useCallback(async (schema: Schema) => {
-    const created = await createSchema(schema, true)
+    const created = await schemaApi.createSchema(schema, true)
     goTo(schemaRoute(created.id), { replace: true })
     return created
   }, [])
@@ -50,7 +50,7 @@ export async function getStaticProps(
     throw new Error('Can only statically generate example schemas')
   }
 
-  const schema = await getSchema(meta?.schemaId)
+  const schema = await schemaApi.getSchema(meta?.schemaId)
 
   return { props: { schema, meta } }
 }

@@ -27,7 +27,7 @@ function TextArea({
       <textarea
         id={id}
         className={classnames(width('w-full'), fontSize('text-sm'))}
-        value={value}
+        value={value || undefined}
         onChange={handleChange}
         aria-invalid={!!error}
         aria-describedby={alertId(id)}

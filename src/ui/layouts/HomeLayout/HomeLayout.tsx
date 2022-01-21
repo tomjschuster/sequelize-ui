@@ -1,5 +1,5 @@
 import { SchemaMeta } from '@src/api/meta'
-import { listSchemas } from '@src/api/schema'
+import schemaApi from '@src/api/schema'
 import { Schema } from '@src/core/schema'
 import useAsync from '@src/ui/hooks/useAsync'
 import {
@@ -24,7 +24,7 @@ type HomeLayoutProps = {
 }
 
 export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.ReactElement {
-  const { data: schemas, error, refetch, loading } = useAsync({ getData: listSchemas })
+  const { data: schemas, error, refetch, loading } = useAsync({ getData: schemaApi.listSchemas })
 
   const handleClickClearData = async () => {
     await clear()

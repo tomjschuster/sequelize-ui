@@ -20,17 +20,17 @@ export type DataType =
   | BlobDataType
   | UuidDataType
 
-export type Precision = { precision: number; scale?: number }
+export type Precision = { precision: number; scale: number | null }
 
 type DataTypeBase<T extends DataTypeType> = { type: T }
-type StringOptions = { length?: number }
-type DateTimeOptions = { defaultNow?: boolean }
-type NumberOptions = { unsigned?: boolean }
-type IntegerOptions = NumberOptions & { autoincrement?: boolean }
-type NumericOptions = NumberOptions & { precision?: Precision }
+type StringOptions = { length: number | null }
+type DateTimeOptions = { defaultNow: boolean }
+type NumberOptions = { unsigned: boolean }
+type IntegerOptions = NumberOptions & { autoincrement: boolean }
+type NumericOptions = NumberOptions & { precision: Precision | null }
 type EnumOptions = { values: string[] }
 type ArrayOptions = { arrayType: DataType }
-type UuidOptions = { defaultVersion?: UuidType }
+type UuidOptions = { defaultVersion: UuidType | null }
 
 export type StringDataType = DataTypeBase<DataTypeType.String> & StringOptions
 export type TextDataType = DataTypeBase<DataTypeType.Text>
@@ -132,7 +132,7 @@ export function displayDataTypeType(type: DataTypeType): string {
 
 function displayDataTypeOptions(dataType: DataType): string {
   const options: string[] = [
-    isStringType(dataType) && dataType.length !== undefined && `length: ${dataType.length}`,
+    isStringType(dataType) && dataType.length !== null && `length: ${dataType.length}`,
     dataType.type === DataTypeType.Uuid &&
       !!dataType.defaultVersion &&
       `${dataType.defaultVersion}`,
@@ -153,7 +153,7 @@ function displayDataTypeOptions(dataType: DataType): string {
   return options.length ? ` (${options.join(', ')})` : ''
 }
 
-export function typeWithoutOptions(dataType: DataType): DataType {
+export function resetType(dataType: DataType): DataType {
   switch (dataType.type) {
     case DataTypeType.String:
     case DataTypeType.Text:
@@ -171,20 +171,17 @@ export function typeWithoutOptions(dataType: DataType): DataType {
       return dataType
     }
     case DataTypeType.Uuid: {
-      const { defaultVersion: _, ...type } = dataType
-      return type
+      return { type: dataType.type, ...defaultUuidOptions }
     }
     case DataTypeType.DateTime:
     case DataTypeType.Time:
     case DataTypeType.Date: {
-      const { defaultNow: _, ...type } = dataType
-      return type
+      return { type: dataType.type, ...defaultDateTimeOptions }
     }
     case DataTypeType.Integer:
     case DataTypeType.BigInt:
     case DataTypeType.SmallInt: {
-      const { autoincrement: _, ...type } = dataType
-      return type
+      return { type: dataType.type, ...defaultIntegerOptions }
     }
   }
 }
@@ -246,8 +243,16 @@ const numericTypes: DataTypeType[] = [DataTypeType.Decimal]
 export function isNumericType(dataType: DataType): dataType is NumericType {
   return numericTypes.includes(dataType.type)
 }
-export function stringDataType(opts: StringOptions = {}): StringDataType {
-  return { type: DataTypeType.String, ...opts }
+
+const defaultStringOptions: StringOptions = { length: null }
+const defaultNumberOptions: NumberOptions = { unsigned: false }
+const defaultIntegerOptions: IntegerOptions = { ...defaultNumberOptions, autoincrement: false }
+const defaultNumericOptions: NumericOptions = { ...defaultNumberOptions, precision: null }
+const defaultDateTimeOptions: DateTimeOptions = { defaultNow: false }
+const defaultUuidOptions: UuidOptions = { defaultVersion: null }
+
+export function stringDataType(opts: Partial<StringOptions> = {}): StringDataType {
+  return { type: DataTypeType.String, ...defaultStringOptions, ...opts }
 }
 
 export function textDataType(): TextDataType {
@@ -258,44 +263,44 @@ export function ciTextDataType(): CiTextDataType {
   return { type: DataTypeType.CiText }
 }
 
-export function integerDataType(opts: IntegerOptions = {}): IntegerDataType {
-  return { type: DataTypeType.Integer, ...opts }
+export function integerDataType(opts: Partial<IntegerOptions> = {}): IntegerDataType {
+  return { type: DataTypeType.Integer, ...defaultIntegerOptions, ...opts }
 }
 
-export function bigIntDataType(opts: IntegerOptions = {}): BigIntDataType {
-  return { type: DataTypeType.BigInt, ...opts }
+export function bigIntDataType(opts: Partial<IntegerOptions> = {}): BigIntDataType {
+  return { type: DataTypeType.BigInt, ...defaultIntegerOptions, ...opts }
 }
 
-export function smallIntDataType(opts: IntegerOptions = {}): SmallIntDataType {
-  return { type: DataTypeType.SmallInt, ...opts }
+export function smallIntDataType(opts: Partial<IntegerOptions> = {}): SmallIntDataType {
+  return { type: DataTypeType.SmallInt, ...defaultIntegerOptions, ...opts }
 }
 
-export function floatDataType(opts: NumberOptions = {}): FloatDataType {
-  return { type: DataTypeType.Float, ...opts }
+export function floatDataType(opts: Partial<NumberOptions> = {}): FloatDataType {
+  return { type: DataTypeType.Float, ...defaultNumberOptions, ...opts }
 }
 
-export function realDataType(opts: NumberOptions = {}): RealDataType {
-  return { type: DataTypeType.Real, ...opts }
+export function realDataType(opts: Partial<NumberOptions> = {}): RealDataType {
+  return { type: DataTypeType.Real, ...defaultNumberOptions, ...opts }
 }
 
-export function doubleDataType(opts: NumberOptions = {}): DoubleDataType {
-  return { type: DataTypeType.Double, ...opts }
+export function doubleDataType(opts: Partial<NumberOptions> = {}): DoubleDataType {
+  return { type: DataTypeType.Double, ...defaultNumberOptions, ...opts }
 }
 
-export function decimalDataType(opts: NumericOptions = {}): DecimalDataType {
-  return { type: DataTypeType.Decimal, ...opts }
+export function decimalDataType(opts: Partial<NumericOptions> = {}): DecimalDataType {
+  return { type: DataTypeType.Decimal, ...defaultNumericOptions, ...opts }
 }
 
-export function dateTimeDataType(opts: DateTimeOptions = {}): DateTimeDataType {
-  return { type: DataTypeType.DateTime, ...opts }
+export function dateTimeDataType(opts: Partial<DateTimeOptions> = {}): DateTimeDataType {
+  return { type: DataTypeType.DateTime, ...defaultDateTimeOptions, ...opts }
 }
 
-export function dateDataType(opts: DateTimeOptions = {}): DateDataType {
-  return { type: DataTypeType.Date, ...opts }
+export function dateDataType(opts: Partial<DateTimeOptions> = {}): DateDataType {
+  return { type: DataTypeType.Date, ...defaultDateTimeOptions, ...opts }
 }
 
-export function timeDataType(opts: DateTimeOptions = {}): TimeDataType {
-  return { type: DataTypeType.Time, ...opts }
+export function timeDataType(opts: Partial<DateTimeOptions> = {}): TimeDataType {
+  return { type: DataTypeType.Time, ...defaultDateTimeOptions, ...opts }
 }
 
 export function booleanDataType(): BooleanDataType {
@@ -322,8 +327,8 @@ export function blobDataType(): BlobDataType {
   return { type: DataTypeType.Blob }
 }
 
-export function uuidDataType(opts: UuidOptions = {}): UuidDataType {
-  return { type: DataTypeType.Uuid, ...opts }
+export function uuidDataType(opts: Partial<UuidOptions> = {}): UuidDataType {
+  return { type: DataTypeType.Uuid, ...defaultUuidOptions, ...opts }
 }
 
 export function dataTypeFromDataTypeType(type: DataTypeType): DataType {

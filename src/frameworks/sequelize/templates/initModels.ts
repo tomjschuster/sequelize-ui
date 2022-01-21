@@ -200,7 +200,7 @@ function associationOptions({
   ])
 }
 
-function asField(alias: string | undefined, type: AssociationTypeType): string | null {
+function asField(alias: string | null, type: AssociationTypeType): string | null {
   return alias ? `as: '${aliasValue({ alias: alias, type: type })}'` : null
 }
 

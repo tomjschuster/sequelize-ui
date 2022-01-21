@@ -1,4 +1,4 @@
-import { createSchema } from '@src/api/schema'
+import schemaApi from '@src/api/schema'
 import { emptySchema, Schema } from '@src/core/schema'
 import { goTo } from '@src/routing/navigation'
 import { indexRoute, schemaRoute } from '@src/routing/routes'
@@ -10,7 +10,7 @@ function SchemaPage(): React.ReactElement {
   const schema = React.useMemo(emptySchema, [])
 
   const handleChange = React.useCallback(async (schema: Schema) => {
-    const created = await createSchema(schema)
+    const created = await schemaApi.createSchema(schema)
     goTo(schemaRoute(created.id), { replace: true })
     return created
   }, [])

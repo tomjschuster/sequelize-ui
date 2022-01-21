@@ -28,7 +28,7 @@ function TextInput({
         id={id}
         className={classnames(width('w-full'), fontSize('text-sm'), padding('py-1', 'px-2'))}
         type="text"
-        value={value}
+        value={value || undefined}
         onChange={handleChange}
         aria-invalid={!!error}
         aria-describedby={alertId(id)}

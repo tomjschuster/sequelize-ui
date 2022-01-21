@@ -4,6 +4,7 @@ import {
   DataType,
   DataTypeType,
   Field,
+  integerDataType,
   isDateTimeType,
   isIntegerType,
   Model,
@@ -72,19 +73,19 @@ function defineField(name: string, caseStyle: DbCaseStyle, define?: boolean): st
 }
 
 function allowNullField(required?: boolean): string | null {
-  return required === undefined ? null : `allowNull: ${!required}`
+  return required ? `allowNull: ${!required}` : null
 }
 
 function primaryKeyField(primaryKey?: boolean): string | null {
-  return primaryKey ? `primaryKey: ${primaryKey}` : null
+  return primaryKey ? 'primaryKey: true' : null
 }
 
 function uniqueField(unique?: boolean): string | null {
-  return unique === undefined ? null : `unique: ${unique}`
+  return unique ? 'unique: true' : null
 }
 
 function autoincrementField(dataType: DataType): string | null {
-  return isIntegerType(dataType) && dataType.autoincrement !== undefined
+  return isIntegerType(dataType) && dataType.autoincrement
     ? `autoIncrement: ${dataType.autoincrement}`
     : null
 }
@@ -124,8 +125,10 @@ export function idField({ model, dbOptions }: IdFieldArgs): Field {
   return {
     id: shortid(),
     name: getPkName({ model, dbOptions }),
-    type: { type: DataTypeType.Integer },
+    type: integerDataType(),
     primaryKey: true,
+    required: false,
+    unique: false,
     generated: true,
   }
 }

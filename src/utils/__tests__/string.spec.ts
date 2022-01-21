@@ -250,11 +250,11 @@ describe('string utils', () => {
     })
   })
   describe('nameLongerThan', () => {
-    const cases: [name: string | undefined, length: number, expected: boolean][] = [
+    const cases: [name: string | null, length: number, expected: boolean][] = [
       ['', 0, false],
       ['', 1, false],
-      [undefined, 0, false],
-      [undefined, 1, false],
+      [null, 0, false],
+      [null, 1, false],
       ['foo', 0, true],
       ['foo', 2, true],
       ['foo', 3, false],

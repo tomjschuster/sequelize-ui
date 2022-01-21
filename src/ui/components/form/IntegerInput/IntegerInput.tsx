@@ -25,7 +25,6 @@ function IntegerInput({
 }: IntegerInputProps): React.ReactElement {
   const handleChange = React.useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {
-      console.log('e', evt.target.value)
       if (!evt.target.value) onChange(undefined, evt)
 
       const updatedValue = parseInt(evt.target.value)
@@ -50,7 +49,7 @@ function IntegerInput({
         type="number"
         min={min}
         max={max}
-        value={value === undefined ? '' : value}
+        value={value === null ? '' : value}
         onChange={handleChange}
         aria-invalid={!!error}
         aria-describedby={alertId(id)}
