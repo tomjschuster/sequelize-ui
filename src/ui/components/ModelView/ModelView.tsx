@@ -8,6 +8,7 @@ import {
   minHeight,
   overflow,
   padding,
+  toClassname,
 } from '@src/ui/styles/classnames'
 import { breakWords, panel, panelGrid, section, title } from '@src/ui/styles/utils'
 import { titleCase } from '@src/utils/string'
@@ -80,7 +81,9 @@ export default function ModelView({
           <li>
             <PanelButton
               label="Add Field"
-              className={classnames(backgroundColor('hover:bg-green-50'))}
+              className={classnames(
+                backgroundColor('hover:bg-green-50', toClassname('dark:hover:bg-green-900')),
+              )}
               icon={PlusCircleIcon}
               iconProps={{ size: 6 }}
               onClick={onClickAddField}
@@ -106,7 +109,9 @@ export default function ModelView({
           <li>
             <PanelButton
               label="Add association"
-              className={classnames(backgroundColor('hover:bg-green-50'))}
+              className={classnames(
+                backgroundColor('hover:bg-green-50', toClassname('dark:hover:bg-green-900')),
+              )}
               icon={PlusCircleIcon}
               iconProps={{ size: 6 }}
               onClick={onClickAddAssociation}

@@ -16,7 +16,7 @@ export default function Dot() {
         width('w-1'),
         height('h-1'),
         borderRadius('rounded-full'),
-        backgroundColor('bg-gray-700', 'hover:bg-black'),
+        backgroundColor('bg-gray-700', 'dark:bg-gray-300'),
       )}
     />
   )

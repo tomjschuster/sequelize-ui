@@ -6,6 +6,7 @@ import {
   height,
   padding,
   space,
+  TBackgroundColor,
   transitionProperty,
   width,
   WithClassname,
@@ -40,7 +41,12 @@ function StackButton(
         borderRadius('rounded-full'),
         padding('px-1'),
         cursor('cursor-pointer'),
-        backgroundColor({ 'bg-gray-300': isActive, 'hover:bg-gray-200': !isActive }),
+        backgroundColor({
+          'bg-gray-300': isActive,
+          'hover:bg-gray-200': !isActive,
+          'dark:bg-gray-600': isActive,
+          ['dark:hover:bg-gray-700' as TBackgroundColor]: !isActive,
+        }),
         transitionProperty('transition'),
       )}
       {...props}

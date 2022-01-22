@@ -1,6 +1,7 @@
 import { classnames, fontSize, padding, width, WithClassname } from '@src/ui/styles/classnames'
 import { Override } from '@src/utils/types'
 import React from 'react'
+import Input from '../shared/Input'
 import InputWrapper, { alertId } from '../shared/InputWrapper'
 import { FieldProps } from '../shared/types'
 import { autofillDisable } from '../shared/utils'
@@ -39,7 +40,7 @@ function IntegerInput({
 
   return (
     <InputWrapper id={id} className={className} label={label} error={error}>
-      <input
+      <Input
         className={classnames(
           padding('py-1', 'px-2', 'p-0.5'),
           width('w-full'),

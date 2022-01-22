@@ -4,7 +4,6 @@ import * as FileTree from '@src/core/files/fileTree'
 import ArrowLeftIcon from '@src/ui/components/icons/ArrowLeft'
 import ActionMenu from '@src/ui/components/menus/ActionMenu'
 import {
-  backgroundColor,
   borderColor,
   borderWidth,
   classnames,
@@ -18,7 +17,7 @@ import {
   width,
   zIndex,
 } from '@src/ui/styles/classnames'
-import { flexCenterBetween } from '@src/ui/styles/utils'
+import { backgroundWhite, flexCenterBetween } from '@src/ui/styles/utils'
 import React from 'react'
 import Button from '../../components/form/Button'
 import IconButton from '../../components/form/IconButton'
@@ -301,7 +300,7 @@ export function SchemaLayoutControlsWrapper({
         width('w-full'),
         padding('p-0.5', 'xs:p-1', 'pt-0'),
         margin('mt-0.5', 'xs:mt-1'),
-        backgroundColor('bg-white'),
+        backgroundWhite,
         borderColor('border-gray-900'),
         borderWidth('border-b'),
         zIndex('z-50'),

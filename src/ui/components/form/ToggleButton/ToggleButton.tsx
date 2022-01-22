@@ -13,15 +13,17 @@ import {
   padding,
   textColor,
   width,
+  WithClassname,
 } from '@src/ui/styles/classnames'
 import React from 'react'
 import { lookupOptionValue, optionsToList } from '../shared/options'
 import { CommonOptionsProps } from '../shared/types'
 
-type ToggleButtonProps<T> = CommonOptionsProps<T> & {
-  value: T
-  onChange: (value: T, evt: React.MouseEvent<HTMLButtonElement>) => void
-}
+type ToggleButtonProps<T> = CommonOptionsProps<T> &
+  WithClassname<{
+    value: T
+    onChange: (value: T, evt: React.MouseEvent<HTMLButtonElement>) => void
+  }>
 
 function ToggleButton<T>({
   value,
@@ -29,6 +31,7 @@ function ToggleButton<T>({
   display: displayValue,
   disabled = () => false,
   onChange,
+  className,
 }: ToggleButtonProps<T>): React.ReactElement {
   const handleChange = (key: string) => (evt: React.MouseEvent<HTMLButtonElement>) => {
     const option = lookupOptionValue(options, key)
@@ -44,6 +47,7 @@ function ToggleButton<T>({
           <button
             key={k}
             className={classnames(
+              className,
               display('flex'),
               alignItems('items-center'),
               fontSize('text-xs'),
@@ -53,8 +57,8 @@ function ToggleButton<T>({
               borderRadius('first:rounded-l', 'last:rounded-r'),
               outlineStyle('focus:outline-none'),
               outlineColor('focus-visible:outline-black'),
-              textColor({ 'text-blue-900': selected }),
-              backgroundColor({ 'bg-blue-50': selected }),
+              textColor({ 'text-blue-900': selected, 'dark:text-blue-50': selected }),
+              backgroundColor({ 'bg-blue-50': selected, 'dark:bg-blue-900': selected }),
               fontWeight({ 'font-semibold': selected }),
             )}
             type="button"

@@ -18,9 +18,12 @@ import {
   display,
   fontSize,
   fontWeight,
+  height,
   lineHeight,
   outlineStyle,
   overflow,
+  TBackgroundColor,
+  textColor,
   whitespace,
   width,
 } from '@src/ui/styles/classnames'
@@ -50,7 +53,12 @@ function FileTreeView({ fileTree, onSelect, onKeyDown }: FileTreeProps): React.R
   return (
     <ul
       role="tree"
-      className={classnames(whitespace('whitespace-nowrap'))}
+      className={classnames(
+        whitespace('whitespace-nowrap'),
+        textColor('text-gray-600', 'dark:text-gray-200'),
+        backgroundColor('bg-gray-100', 'dark:bg-gray-800'),
+        height('h-full'),
+      )}
       onKeyDown={onKeyDown}
       onFocus={setFocused}
       onBlur={unsetFocused}
@@ -110,12 +118,17 @@ function FileTreeItem({
           lineHeight('leading-relaxed'),
           cursor('cursor-pointer'),
           display('block'),
-          borderColor('border-transparent', { 'border-black': focused && pathFocused }),
+          borderColor('border-transparent', {
+            'border-black': focused && pathFocused,
+            'dark:border-gray-400': focused && pathFocused,
+          }),
           borderWidth('border-2', { 'border-t': depth === 1 }),
           fontWeight({ 'font-semibold': active }),
           backgroundColor({
             'hover:bg-gray-200': !active,
             'bg-indigo-100': active,
+            ['dark:hover:bg-gray-700' as TBackgroundColor]: !active,
+            'dark:bg-indigo-900': active,
           }),
         )}
         style={{ paddingLeft: depth === 1 ? '0.25rem' : `calc(${depth - 1} * 0.75rem + 0.25rem)` }}

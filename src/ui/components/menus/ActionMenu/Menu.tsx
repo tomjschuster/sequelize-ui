@@ -6,6 +6,7 @@ import {
   cursor,
   display,
   padding,
+  TBackgroundColor,
   width,
 } from '@src/ui/styles/classnames'
 import { MediaQuery, overlayContainer } from '@src/ui/styles/utils'
@@ -59,9 +60,11 @@ function Menu(
                 alignItems('items-center'),
                 cursor('cursor-pointer'),
                 padding('pr-4', 'py-1', { 'pl-8': !Icon, 'pl-2': !!Icon }),
-                backgroundColor('bg-white', {
+                backgroundColor({
                   'bg-gray-200': activeIndex === i,
                   'hover:bg-gray-200': activeIndex === undefined,
+                  'dark:bg-gray-700': activeIndex === i,
+                  ['dark:hover:bg-gray-700' as TBackgroundColor]: activeIndex === undefined,
                 }),
               )}
               onClick={onClick}

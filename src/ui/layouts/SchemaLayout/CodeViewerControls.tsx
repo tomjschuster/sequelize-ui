@@ -168,9 +168,9 @@ export default function CodeViewerControls({
             width('w-screen', 'md:w-auto', 'lg:w-auto'),
             padding('p-4', 'pt-10'),
             borderWidth('border'),
-            borderColor('border-gray-900'),
+            borderColor('border-gray-900', 'dark:border-gray-600'),
             borderRadius('rounded-lg'),
-            backgroundColor('bg-gray-50'),
+            backgroundColor('bg-gray-50', 'dark:bg-gray-800'),
             boxShadow('shadow-2xl'),
             toClassname('max-h-[calc(100vh-theme(space.18))]'),
           )}

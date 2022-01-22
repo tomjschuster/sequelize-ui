@@ -19,6 +19,7 @@ import {
   overflow,
   position,
   textOverflow,
+  toClassname,
   width,
 } from '@src/ui/styles/classnames'
 import { breakWords, panelAction, panelGrid } from '@src/ui/styles/utils'
@@ -39,7 +40,9 @@ export default function MySchemaLinks({ schemas }: MySchemaLinksProps): React.Re
         <PanelLink
           route={newSchemaRoute()}
           label="Create a new schema"
-          className={classnames(backgroundColor('hover:bg-green-50'))}
+          className={classnames(
+            backgroundColor('hover:bg-green-50', toClassname('hover:dark:bg-green-900')),
+          )}
           icon={PlusCircleIcon}
           iconProps={{ size: 6 }}
         />
@@ -72,7 +75,7 @@ function MySchemaButton({ schema }: MySchemaButtonProps): React.ReactElement {
         fontSize('text-sm'),
         minHeight('min-h-20'),
         height('h-full'),
-        backgroundColor('hover:bg-indigo-50'),
+        backgroundColor('hover:bg-indigo-50', toClassname('hover:dark:bg-indigo-900')),
       )}
     >
       <h3 className={classnames(breakWords)}>

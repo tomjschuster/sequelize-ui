@@ -25,7 +25,7 @@ export default function SchemaCodeToggle({
       options={{ code: true, schema: false }}
       disabled={() => disabled}
       display={(v) => (
-        <span className={classnames(flexCenter, width('w-16'))}>
+        <span className={classnames(flexCenter, width('w-18'))}>
           {v ? <CodeIcon /> : <CubeIcon />}
           <span className={classnames(margin('ml-1'))}>{v ? 'Code' : 'Schema'}</span>
         </span>

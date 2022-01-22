@@ -5,6 +5,8 @@ import {
   borderRadius,
   borderWidth,
   boxShadow,
+  boxShadowColor,
+  Classname,
   classnames,
   display,
   flexDirection,
@@ -23,7 +25,7 @@ import {
   maxWidth,
   padding,
   position,
-  TBackgroundColor,
+  textColor,
   textDecoration,
   toClassname,
   width,
@@ -64,12 +66,15 @@ export const section = classnames(
   margin('mx-auto'),
 )
 
-export const title = classnames(fontSize('text-2xl'), margin('mb-4'))
-export const subtitle = classnames(fontSize('text-xl'), margin('mb-2'))
+export const fontColor = textColor('text-black', 'dark:text-gray-200')
+export const backgroundWhite = backgroundColor('bg-white', 'dark:bg-gray-900')
 
-export const text = classnames(fontSize('text-sm'), margin('mb-2'))
+export const title = classnames(fontColor, fontSize('text-2xl'), margin('mb-4'))
+export const subtitle = classnames(fontColor, fontSize('text-xl'), margin('mb-2'))
 
-export const link = classnames(fontWeight('font-semibold'), textDecoration('underline'))
+export const text = classnames(fontColor, fontSize('text-sm'), margin('mb-2'))
+
+export const link = classnames(fontColor, fontWeight('font-semibold'), textDecoration('underline'))
 
 export const breakWords = classnames(wordBreak('break-words'), width('w-full'))
 
@@ -92,9 +97,9 @@ export const list = classnames(
 
 const panelBase = classnames(
   borderWidth('border'),
-  borderColor('border-gray-400'),
+  borderColor('border-gray-400', 'dark:border-gray-600'),
   borderRadius('rounded'),
-  backgroundColor('bg-white'),
+  backgroundColor('bg-white', 'dark:bg-gray-800'),
 )
 
 export const panel = classnames(panelBase, width('w-full'), height('h-full'))
@@ -102,24 +107,24 @@ export const panel = classnames(panelBase, width('w-full'), height('h-full'))
 export const panelHeader = classnames(
   padding('p-2'),
   borderWidth('border-b'),
-  borderColor('border-gray-400'),
+  borderColor('border-gray-400', 'dark:border-gray-600'),
 )
 
 export const panelAction = classnames(
   panel,
   flexCenter,
   padding('p-2'),
-  borderColor('hover:border-gray-800'),
+  borderColor('hover:border-gray-800', toClassname('dark:hover:border-gray-400')),
 )
 
-export const inlineButton = (bgColor: TBackgroundColor = 'bg-gray-100') =>
+export const inlineButton = (bgColor: Classname = backgroundColor('bg-gray-100')) =>
   classnames(
     panelBase,
     padding('p-2'),
     padding('py-0.5'),
     padding('px-1.5'),
     padding('p-0.5'),
-    backgroundColor(`hover:${bgColor}`),
+    toClassname(`hover:${bgColor}`),
   )
 
 export const panelGrid = classnames(
@@ -141,11 +146,12 @@ export const fieldsetGrid = classnames(
 
 export const overlayContainer = classnames(
   width('w-32'),
-  backgroundColor('bg-white'),
+  backgroundColor('bg-white', 'dark:bg-gray-800'),
   borderWidth('border'),
-  borderColor('border-gray-300'),
+  borderColor('border-gray-300', 'dark:border-gray-600'),
   borderRadius('rounded'),
-  boxShadow('shadow-lg'),
+  boxShadow('shadow-lg', 'dark:shadow-sm'),
+  boxShadowColor('shadow-black', 'dark:shadow-gray-800'),
   padding('py-1'),
 )
 

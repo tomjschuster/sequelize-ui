@@ -27,7 +27,7 @@ import {
   translate,
   width,
 } from '@src/ui/styles/classnames'
-import { breakWordsMinus8, fullscreen, subtitle } from '@src/ui/styles/utils'
+import { backgroundWhite, breakWordsMinus8, fullscreen, subtitle } from '@src/ui/styles/utils'
 import { Key } from '@src/utils/dom'
 import React from 'react'
 import ErrorBoundary from '../ErrorBoundary'
@@ -131,7 +131,7 @@ function Dialog({ id, isOpen, children }: DialogProps): React.ReactElement {
       aria-labelledby={MODAL_LABEL}
       aria-modal={true}
       className={classnames(
-        backgroundColor('bg-white'),
+        backgroundWhite,
         position('absolute'),
         maxWidth('max-w-full'),
         padding('p-2', 'sm:p-4'),

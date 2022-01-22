@@ -13,10 +13,10 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 - [ ] Home page copy
 - [ ] Link to legacy
-- [ ] Dark mode
 - [ ] Logo image
 - [ ] Favicon
 
+- [ ] Refactor css themes
 - [ ] Refactor code view controls
 - [ ] Cleanup unused code
 - [ ] db compatibility warnings

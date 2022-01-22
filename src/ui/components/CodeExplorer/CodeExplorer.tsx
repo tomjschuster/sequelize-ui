@@ -3,7 +3,6 @@ import * as FileTree from '@src/core/files/fileTree'
 import Code from '@src/ui/components/Code'
 import FileTreeView from '@src/ui/components/FileTreeView'
 import {
-  backgroundColor,
   borderColor,
   borderWidth,
   classnames,
@@ -13,7 +12,6 @@ import {
   gridTemplateColumns,
   height,
   overflow,
-  textColor,
 } from '@src/ui/styles/classnames'
 import React from 'react'
 
@@ -43,10 +41,8 @@ export default function CodeExplorer({
           gridColumn('col-span-12', 'lg:col-span-3'),
           gridRow('row-span-3', 'lg:row-span-12'),
           overflow('overflow-y-scroll'),
-          textColor('text-gray-600'),
           borderWidth('border-b'),
           borderColor('border-gray-900'),
-          backgroundColor('bg-gray-100'),
         )}
       >
         <FileTreeView onSelect={onSelectFileSystemItem} onKeyDown={onKeyDown} fileTree={fileTree} />

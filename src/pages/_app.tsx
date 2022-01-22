@@ -1,5 +1,6 @@
 // import '@src/theme/cobalt2.prism.css'
 import '@src/theme/globals.css'
+// import '@src/theme/theme.prism.css'
 import ErrorBoundary from '@src/ui/components/ErrorBoundary'
 import { renderWithLayout } from '@src/ui/hocs/withLayout'
 import { AlertProvider } from '@src/ui/lib/alert'

@@ -1,4 +1,5 @@
 import { Classname, classnames, cursor, fontSize, padding, width } from '@src/ui/styles/classnames'
+import { backgroundWhite } from '@src/ui/styles/utils'
 import { Override } from '@src/utils/types'
 import React from 'react'
 import InputWrapper from '../shared/InputWrapper'
@@ -33,6 +34,7 @@ function Select<T>({
     <select
       id={id}
       className={classnames(
+        backgroundWhite,
         padding('p-1', 'px-2'),
         width('w-full'),
         cursor('cursor-pointer'),

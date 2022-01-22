@@ -13,15 +13,15 @@ type LanguageIconProps = {
 export default function LanguageIcon({ language }: LanguageIconProps): React.ReactElement {
   switch (language) {
     case Language.Git:
-      return <GitIcon fill="#374151" />
+      return <GitIcon fill="#f34f29" />
     case Language.JavaScript:
-      return <JavaScriptIcon fill="#374151" />
+      return <JavaScriptIcon fill="#f0db4f" />
     case Language.Json:
-      return <JsonIcon fill="#374151" />
+      return <JsonIcon fill="#f0db4f" />
     case Language.Markdown:
-      return <MarkdownIcon fill="#374151" />
+      return <MarkdownIcon fill="#2889b0" />
     case Language.TypeScript:
-      return <TypeScriptIcon fill="#374151" />
+      return <TypeScriptIcon fill="#007acc" />
     default:
       return <></>
   }

@@ -19,7 +19,7 @@ import {
   position,
   zIndex,
 } from '@src/ui/styles/classnames'
-import { flexCenterBetween, fullscreen } from '@src/ui/styles/utils'
+import { backgroundWhite, flexCenterBetween, fullscreen } from '@src/ui/styles/utils'
 import React from 'react'
 import IconButton from '../form/IconButton'
 
@@ -88,7 +88,7 @@ export default function Flyout({
         <div
           className={classnames(
             position('relative'),
-            backgroundColor('bg-white'),
+            backgroundWhite,
             overflow('overflow-visible'),
             height('h-10'),
             display('flex'),

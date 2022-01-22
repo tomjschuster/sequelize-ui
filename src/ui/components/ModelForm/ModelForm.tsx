@@ -8,6 +8,7 @@ import {
   margin,
   overflow,
   padding,
+  toClassname,
 } from '@src/ui/styles/classnames'
 import { panel, panelGrid, section, title } from '@src/ui/styles/utils'
 import { focusById } from '@src/utils/dom'
@@ -176,7 +177,9 @@ export default function ModelForm({
           <li>
             <PanelButton
               label="Add Field"
-              className={classnames(backgroundColor('hover:bg-green-50'))}
+              className={classnames(
+                backgroundColor('hover:bg-green-50', toClassname('hover:bg-green-900')),
+              )}
               icon={PlusCircleIcon}
               iconProps={{ size: 6 }}
               onClick={handleClickAddField}
@@ -204,7 +207,9 @@ export default function ModelForm({
           <li>
             <PanelButton
               label="Add association"
-              className={classnames(backgroundColor('hover:bg-green-50'))}
+              className={classnames(
+                backgroundColor('hover:bg-green-50', toClassname('hover:bg-green-900')),
+              )}
               icon={PlusCircleIcon}
               iconProps={{ size: 6 }}
               onClick={handleClickAddAssociation}

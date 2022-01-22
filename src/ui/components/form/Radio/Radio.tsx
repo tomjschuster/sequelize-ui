@@ -1,4 +1,5 @@
 import {
+  backgroundColor,
   Classname,
   classnames,
   display,
@@ -37,6 +38,7 @@ function Radio<T>({
       {optionsToList(options).map(([k, v]) => (
         <label key={k} className={classnames(margin('mr-2', 'last:mr-0'))}>
           <input
+            className={classnames(backgroundColor('dark:bg-gray-900'))}
             type="radio"
             value={k}
             checked={v === value}

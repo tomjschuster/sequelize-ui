@@ -7,7 +7,15 @@ import {
   Schema,
   ThroughType,
 } from '@src/core/schema'
-import { classnames, fontWeight, inset, padding, position } from '@src/ui/styles/classnames'
+import {
+  backgroundColor,
+  classnames,
+  fontWeight,
+  inset,
+  padding,
+  position,
+  toClassname,
+} from '@src/ui/styles/classnames'
 import { breakWordsMinus8, inlineButton, list, panelHeader } from '@src/ui/styles/utils'
 import { noCase, titleCase } from '@src/utils/string'
 import React from 'react'
@@ -49,7 +57,12 @@ function AssociationView({
               </span>
             ) : (
               <button
-                className={classnames(inlineButton('bg-yellow-50'), fontWeight('font-semibold'))}
+                className={classnames(
+                  inlineButton(
+                    backgroundColor('bg-yellow-50', toClassname('dark:hover:bg-yellow-900')),
+                  ),
+                  fontWeight('font-semibold'),
+                )}
                 onClick={() => onClickModel(targetModel)}
               >
                 {titleCase(targetModel.name)}

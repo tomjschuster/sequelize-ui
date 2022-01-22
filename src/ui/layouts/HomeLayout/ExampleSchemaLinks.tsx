@@ -16,6 +16,7 @@ import {
   margin,
   padding,
   position,
+  stroke,
   toClassname,
   translate,
 } from '@src/ui/styles/classnames'
@@ -95,7 +96,7 @@ function ExampleSchemaLink({ meta }: ExampleSchemaLinkProps): React.ReactElement
       className={classnames(
         panelAction,
         fontSize('text-sm'),
-        backgroundColor('hover:bg-yellow-50'),
+        backgroundColor('hover:bg-yellow-50', toClassname('dark:hover:bg-yellow-900')),
       )}
     >
       <span className={classnames(margin('mr-2'))}>
@@ -145,7 +146,7 @@ function ExampleSchemaInfo({
         icon={InfoIcon}
         iconProps={{ size: 5, strokeWidth: 2 }}
         padding={toClassname(padding('p-2.5'))}
-        className={classnames(margin('mr-px'), borderRadius('rounded'))}
+        className={classnames(margin('mr-px'), borderRadius('rounded'), stroke('stroke-current'))}
         label="schema info"
       />
     </div>

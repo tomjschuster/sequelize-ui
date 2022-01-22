@@ -12,6 +12,7 @@ import {
   padding,
   textColor,
   TFontSize,
+  toClassname,
 } from '@src/ui/styles/classnames'
 import { flexCenter } from '@src/ui/styles/utils'
 import { Override } from '@src/utils/types'
@@ -35,14 +36,27 @@ function buttonColorClassname(color?: ButtonColor): Classname {
   switch (color) {
     case 'white':
     case undefined:
-      return classnames(backgroundColor('hover:bg-blue-100'))
+      return classnames(backgroundColor('hover:bg-gray-100'), toClassname('dark:hover:bg-gray-700'))
     case 'blue':
       return classnames(
         textColor('text-white'),
-        backgroundColor('bg-blue-600', 'hover:bg-blue-400'),
+        backgroundColor(
+          'bg-blue-600',
+          'dark:bg-blue-700',
+          'hover:bg-blue-400',
+          toClassname('dark:hover:bg-blue-600'),
+        ),
       )
     case 'red':
-      return classnames(textColor('text-white'), backgroundColor('bg-red-600', 'hover:bg-red-400'))
+      return classnames(
+        textColor('text-white'),
+        backgroundColor(
+          'bg-red-600',
+          'dark:bg-red-700',
+          'hover:bg-red-400',
+          toClassname('dark:hover:bg-red-600'),
+        ),
+      )
   }
 }
 

@@ -1,10 +1,13 @@
 import {
   alignItems,
+  backgroundColor,
   classnames,
   display,
   fontSize,
   padding,
-} from '@src/ui/styles/classnames/__generated__/tailwindcss-classnames'
+  ringOffsetColor,
+  toClassname,
+} from '@src/ui/styles/classnames'
 import { Override } from '@src/utils/types'
 import React from 'react'
 import { FieldProps } from '../shared/types'
@@ -25,6 +28,10 @@ function Checkbox({ id, label, checked, onChange, ...rest }: CheckboxProps): Rea
     <label className={classnames(display('flex'), alignItems('items-center'))} htmlFor={id}>
       <input
         id={id}
+        className={classnames(
+          backgroundColor('bg-white', 'dark:bg-gray-900'),
+          ringOffsetColor(toClassname('dark:focus:ring-offset-black')),
+        )}
         type="checkbox"
         checked={checked}
         onChange={handleChange}

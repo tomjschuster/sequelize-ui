@@ -4,6 +4,7 @@ import {
   Classname,
   classnames,
   padding,
+  toClassname,
 } from '@src/ui/styles/classnames'
 import { Override } from '@src/utils/types'
 import React from 'react'
@@ -37,7 +38,7 @@ function IconButton(
       type="button"
       className={classnames(
         padding_,
-        backgroundColor('hover:bg-gray-200'),
+        backgroundColor('hover:bg-gray-200', toClassname('dark:hover:bg-gray-600')),
         alignSelf('self-start'),
         className,
       )}

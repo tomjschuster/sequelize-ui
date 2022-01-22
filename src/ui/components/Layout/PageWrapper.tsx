@@ -22,7 +22,7 @@ function PageWrapper({ children }: Props): React.ReactElement {
         display('flex'),
         flexDirection('flex-col'),
         alignItems('items-stretch'),
-        backgroundColor('bg-gray-50'),
+        backgroundColor('bg-gray-50', 'dark:bg-gray-900'),
       )}
     >
       {' '}

@@ -1,5 +1,5 @@
 import useOnClickOutside from '@src/ui/hooks/useOnClickOutside'
-import { Classname, classnames, inset, position } from '@src/ui/styles/classnames'
+import { Classname, classnames, inset, position, zIndex } from '@src/ui/styles/classnames'
 import { Key } from '@src/utils/dom'
 import { Override } from '@src/utils/types'
 import React, { ButtonHTMLAttributes } from 'react'
@@ -62,6 +62,7 @@ function ActionMenu({ className, onClick, items }: ActionMenuProps): React.React
         case Key.End:
           return setActiveIndex(items.length - 1)
 
+        case Key.Escape:
         case Key.Tab:
           return close()
 
@@ -76,7 +77,8 @@ function ActionMenu({ className, onClick, items }: ActionMenuProps): React.React
       <div className={classnames(position('relative'))}>
         <StackButton isActive={isOpen} onKeyDown={handleKeyDown} onClick={handleClick} />
         <Menu
-          className={classnames(position('absolute'), inset('right-0'))}
+          className={classnames(position('absolute'), inset('right-0'), zIndex('z-10'))}
+          activeIndex={activeIndex}
           items={items}
           isOpen={isOpen}
           onMouseOverItem={setActiveIndex}
