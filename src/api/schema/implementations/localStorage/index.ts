@@ -1,7 +1,7 @@
 import { Association, AssociationTypeType, Model, Schema, ThroughType } from '@src/core/schema'
 import { arrayToLookup } from '@src/utils/array'
 import { now } from '@src/utils/dateTime'
-import { get, set } from '@src/utils/localStorage'
+import { get, lsKey, set } from '@src/utils/localStorage'
 import { versionedName } from '@src/utils/string'
 import shortid from 'shortid'
 import { SchemaApi, SCHEMA_NOT_FOUND_ERROR } from '../../api'
@@ -169,7 +169,7 @@ export async function deleteSchema(id: string): Promise<void> {
 }
 
 function schemasKey(): string {
-  return '/schemas'
+  return lsKey('/schemas')
 }
 
 function joinModelToTable(
@@ -219,7 +219,7 @@ async function migrateLegacy(): Promise<void> {
   try {
     if (await hasMigratedLegacy()) return
 
-    const legacySchema = await get('SUI_STATE', (x) => x)
+    const legacySchema = await get('SUI_STATE')
 
     if (legacySchema) {
       const schema = await parseV0Lazy(legacySchema)
@@ -235,11 +235,11 @@ async function migrateLegacy(): Promise<void> {
 const MIGRATED_FROM_LEGACY_KEY = '/migrated-from-legacy'
 
 async function hasMigratedLegacy(): Promise<boolean> {
-  return (await get(MIGRATED_FROM_LEGACY_KEY)) === 'true'
+  return (await get(lsKey(MIGRATED_FROM_LEGACY_KEY))) === 'true'
 }
 
 function setHasMigratedLegacy(): Promise<void> {
-  return set(MIGRATED_FROM_LEGACY_KEY, 'true')
+  return set(lsKey(MIGRATED_FROM_LEGACY_KEY), 'true')
 }
 
 function setSchemas(schemas: Schema[]): Promise<void> {
