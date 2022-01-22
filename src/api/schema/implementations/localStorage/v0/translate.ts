@@ -25,7 +25,7 @@ import {
   uuidDataType,
 } from '@src/core/schema'
 import { now } from '@src/utils/dateTime'
-import shortid from 'shortid'
+import { uniqueId } from '@src/utils/string'
 import {
   Association as AssociationV0,
   Field as FieldV0,
@@ -36,7 +36,7 @@ import {
 
 export function fromV0(schema: SchemaV0): Schema {
   return {
-    id: shortid(),
+    id: uniqueId(),
     name: schema.config.name,
     createdAt: now(),
     updatedAt: now(),

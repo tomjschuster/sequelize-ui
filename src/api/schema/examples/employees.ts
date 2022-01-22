@@ -31,7 +31,7 @@ import {
   stringDataType,
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import shortid from 'shortid'
+import { uniqueId } from '@src/utils/string'
 import { EMPLOYEES_ID } from './ids'
 
 const time = fromParts(2020, 10, 1)
@@ -52,7 +52,7 @@ const employee: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'emp_no',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -60,7 +60,7 @@ const employee: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'birth_date',
       type: dateDataType(),
       primaryKey: false,
@@ -68,7 +68,7 @@ const employee: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'first_name',
       type: stringDataType(),
       primaryKey: false,
@@ -76,7 +76,7 @@ const employee: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'last_name',
       type: stringDataType(),
       primaryKey: false,
@@ -84,7 +84,7 @@ const employee: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'gender',
       type: enumDataType({ values: ['M', 'F', 'O'] }),
       primaryKey: false,
@@ -92,7 +92,7 @@ const employee: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'hire_date',
       type: dateDataType(),
       primaryKey: false,
@@ -102,7 +102,7 @@ const employee: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'emp_no',
       type: hasManyType(),
@@ -110,7 +110,7 @@ const employee: Model = {
       targetModelId: Id.Salaries,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'emp_no',
       type: hasManyType(),
@@ -118,7 +118,7 @@ const employee: Model = {
       targetModelId: Id.Titles,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'employingDepartment',
       foreignKey: 'emp_no',
       sourceModelId: Id.Employees,
@@ -126,7 +126,7 @@ const employee: Model = {
       type: manyToManyModelType(Id.DepartmentEmployees, 'dept_no'),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'managedDepartment',
       foreignKey: 'emp_no',
       sourceModelId: Id.Employees,
@@ -143,7 +143,7 @@ const department: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'dept_no',
       type: stringDataType(),
       primaryKey: true,
@@ -151,7 +151,7 @@ const department: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'dept_name',
       type: stringDataType(),
       primaryKey: false,
@@ -161,7 +161,7 @@ const department: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'employee',
       foreignKey: null,
       sourceModelId: Id.Departments,
@@ -169,7 +169,7 @@ const department: Model = {
       type: manyToManyModelType(Id.DepartmentEmployees),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'manager',
       foreignKey: null,
       sourceModelId: Id.Departments,
@@ -177,7 +177,7 @@ const department: Model = {
       type: manyToManyModelType(Id.DepartmentManagers),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'dept_no',
       type: hasManyType(),
@@ -185,7 +185,7 @@ const department: Model = {
       targetModelId: Id.DepartmentEmployees,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'dept_no',
       type: hasManyType(),
@@ -202,7 +202,7 @@ const departmentEmployee: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'emp_no',
       type: integerDataType(),
       primaryKey: true,
@@ -210,7 +210,7 @@ const departmentEmployee: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'dept_no',
       type: stringDataType(),
       primaryKey: true,
@@ -218,7 +218,7 @@ const departmentEmployee: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'from_date',
       type: dateDataType(),
       primaryKey: false,
@@ -226,7 +226,7 @@ const departmentEmployee: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'to_date',
       type: dateDataType(),
       primaryKey: false,
@@ -236,7 +236,7 @@ const departmentEmployee: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'emp_no',
       type: belongsToType(),
@@ -244,7 +244,7 @@ const departmentEmployee: Model = {
       targetModelId: Id.Employees,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'dept_no',
       type: belongsToType(),
@@ -261,7 +261,7 @@ const departmentManager: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'emp_no',
       type: integerDataType(),
       primaryKey: true,
@@ -269,7 +269,7 @@ const departmentManager: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'dept_no',
       type: stringDataType(),
       primaryKey: true,
@@ -277,7 +277,7 @@ const departmentManager: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'from_date',
       type: dateDataType(),
       primaryKey: false,
@@ -285,7 +285,7 @@ const departmentManager: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'to_date',
       type: dateDataType(),
       primaryKey: false,
@@ -295,7 +295,7 @@ const departmentManager: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'emp_no',
       type: belongsToType(),
@@ -303,7 +303,7 @@ const departmentManager: Model = {
       targetModelId: Id.Employees,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'dept_no',
       type: belongsToType(),
@@ -320,7 +320,7 @@ const title: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'emp_no',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -328,7 +328,7 @@ const title: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'title',
       type: stringDataType(),
       primaryKey: false,
@@ -336,7 +336,7 @@ const title: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'from_date',
       type: dateDataType(),
       primaryKey: true,
@@ -344,7 +344,7 @@ const title: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'to_date',
       type: dateDataType(),
       primaryKey: false,
@@ -354,7 +354,7 @@ const title: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'emp_no',
       type: belongsToType(),
@@ -371,7 +371,7 @@ const salary: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'emp_no',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -379,7 +379,7 @@ const salary: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'salary',
       type: integerDataType(),
       primaryKey: false,
@@ -387,7 +387,7 @@ const salary: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'from_date',
       type: dateDataType(),
       primaryKey: true,
@@ -395,7 +395,7 @@ const salary: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'to_date',
       type: dateDataType(),
       primaryKey: false,
@@ -405,7 +405,7 @@ const salary: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'emp_no',
       type: belongsToType(),

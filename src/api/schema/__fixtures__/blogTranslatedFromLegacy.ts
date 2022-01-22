@@ -6,10 +6,10 @@ import {
   ThroughType,
 } from '@src/core/schema'
 import { now } from '@src/utils/dateTime'
-import shortid from 'shortid'
+import { uniqueId } from '@src/utils/string'
 
 export const blogTranslatedFromLegacy: Schema = {
-  id: shortid(),
+  id: uniqueId(),
   name: 'Blog',
   createdAt: now(),
   updatedAt: now(),

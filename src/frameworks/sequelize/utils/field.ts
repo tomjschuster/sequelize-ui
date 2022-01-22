@@ -9,8 +9,7 @@ import {
   isIntegerType,
   Model,
 } from '@src/core/schema'
-import { camelCase, snakeCase } from '@src/utils/string'
-import shortid from 'shortid'
+import { camelCase, snakeCase, uniqueId } from '@src/utils/string'
 import {
   displaySequelizeDataType,
   noSupportedDetails,
@@ -125,7 +124,7 @@ type IdFieldArgs = {
 }
 export function idField({ model, dbOptions }: IdFieldArgs): SequelizeField {
   return {
-    id: shortid(),
+    id: uniqueId(),
     name: getPkName({ model, dbOptions }),
     type: integerDataType(),
     primaryKey: true,

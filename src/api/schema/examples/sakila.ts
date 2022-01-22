@@ -37,7 +37,7 @@ import {
   stringDataType,
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import shortid from 'shortid'
+import { uniqueId } from '@src/utils/string'
 import { SAKILA_ID } from './ids'
 
 const time = fromParts(2020, 1, 1)
@@ -68,7 +68,7 @@ const actor: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'actor_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -76,7 +76,7 @@ const actor: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'first_name',
       type: stringDataType(),
       primaryKey: false,
@@ -84,7 +84,7 @@ const actor: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'last_name',
       type: stringDataType(),
       primaryKey: false,
@@ -94,7 +94,7 @@ const actor: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'actor_id',
       sourceModelId: Id.Actor,
@@ -111,7 +111,7 @@ const film: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'film_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -119,7 +119,7 @@ const film: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'title',
       type: stringDataType(),
       primaryKey: false,
@@ -127,7 +127,7 @@ const film: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'description',
       type: stringDataType(),
       primaryKey: false,
@@ -135,7 +135,7 @@ const film: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'release_year',
       type: integerDataType(),
       primaryKey: false,
@@ -143,7 +143,7 @@ const film: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'language_id',
       type: integerDataType(),
       primaryKey: false,
@@ -151,7 +151,7 @@ const film: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'original_language_id',
       type: integerDataType(),
       primaryKey: false,
@@ -159,7 +159,7 @@ const film: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'rental_duration',
       type: integerDataType(),
       primaryKey: false,
@@ -167,7 +167,7 @@ const film: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'rental_rate',
       type: decimalDataType(),
       primaryKey: false,
@@ -175,7 +175,7 @@ const film: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'length',
       type: integerDataType(),
       primaryKey: false,
@@ -183,7 +183,7 @@ const film: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'rating',
       type: enumDataType({ values: ['G', 'PG', 'PG-13', 'R', 'NC-17'] }),
       primaryKey: false,
@@ -191,7 +191,7 @@ const film: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'special_feature',
       type: arrayDataType({
         arrayType: enumDataType({
@@ -205,7 +205,7 @@ const film: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -213,7 +213,7 @@ const film: Model = {
       targetModelId: Id.Language,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'original_language',
       foreignKey: 'original_language_id',
       type: belongsToType(),
@@ -221,7 +221,7 @@ const film: Model = {
       targetModelId: Id.Language,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'film_id',
       type: hasManyType(),
@@ -229,7 +229,7 @@ const film: Model = {
       targetModelId: Id.Inventory,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'film_id',
       sourceModelId: Id.Film,
@@ -237,7 +237,7 @@ const film: Model = {
       type: manyToManyModelType(Id.FilmActor, 'actor_id'),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'film_id',
       sourceModelId: Id.Film,
@@ -254,7 +254,7 @@ const language: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'language_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -262,7 +262,7 @@ const language: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'name',
       type: stringDataType(),
       primaryKey: false,
@@ -272,7 +272,7 @@ const language: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: hasManyType(),
@@ -280,7 +280,7 @@ const language: Model = {
       targetModelId: Id.Film,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'original_language_film',
       foreignKey: 'original_language_id',
       type: hasManyType(),
@@ -297,7 +297,7 @@ const category: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'category_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -307,7 +307,7 @@ const category: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: 'category_id',
       sourceModelId: Id.Category,
@@ -324,7 +324,7 @@ const inventory: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'inventory_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -334,7 +334,7 @@ const inventory: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -342,7 +342,7 @@ const inventory: Model = {
       targetModelId: Id.Film,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -359,7 +359,7 @@ const store: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'store_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -369,7 +369,7 @@ const store: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: hasManyType(),
@@ -377,7 +377,7 @@ const store: Model = {
       targetModelId: Id.Inventory,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: hasManyType(),
@@ -385,7 +385,7 @@ const store: Model = {
       targetModelId: Id.Staff,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: hasManyType(),
@@ -393,7 +393,7 @@ const store: Model = {
       targetModelId: Id.Customer,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'manager',
       foreignKey: 'manager_staff_id',
       type: belongsToType(),
@@ -401,7 +401,7 @@ const store: Model = {
       targetModelId: Id.Staff,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -418,7 +418,7 @@ const staff: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'staff_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -426,7 +426,7 @@ const staff: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'first_name',
       type: stringDataType(),
       primaryKey: false,
@@ -434,7 +434,7 @@ const staff: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'last_name',
       type: stringDataType(),
       primaryKey: false,
@@ -442,7 +442,7 @@ const staff: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'picture',
       type: blobDataType(),
       primaryKey: false,
@@ -450,7 +450,7 @@ const staff: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'email',
       type: stringDataType(),
       primaryKey: false,
@@ -458,7 +458,7 @@ const staff: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'active',
       type: booleanDataType(),
       primaryKey: false,
@@ -466,7 +466,7 @@ const staff: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'username',
       type: stringDataType(),
       primaryKey: false,
@@ -474,7 +474,7 @@ const staff: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'password',
       type: stringDataType(),
       primaryKey: false,
@@ -484,7 +484,7 @@ const staff: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -492,7 +492,7 @@ const staff: Model = {
       sourceModelId: Id.Staff,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'managed_store',
       foreignKey: 'manager_staff_id',
       type: hasManyType(),
@@ -500,7 +500,7 @@ const staff: Model = {
       sourceModelId: Id.Staff,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -508,7 +508,7 @@ const staff: Model = {
       sourceModelId: Id.Staff,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: hasManyType(),
@@ -516,7 +516,7 @@ const staff: Model = {
       sourceModelId: Id.Staff,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: hasManyType(),
@@ -533,7 +533,7 @@ const customer: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'customer_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -541,7 +541,7 @@ const customer: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'first_name',
       type: stringDataType(),
       primaryKey: false,
@@ -549,7 +549,7 @@ const customer: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'last_name',
       type: stringDataType(),
       primaryKey: false,
@@ -557,7 +557,7 @@ const customer: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'email',
       type: stringDataType(),
       primaryKey: false,
@@ -565,7 +565,7 @@ const customer: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'active',
       type: booleanDataType(),
       primaryKey: false,
@@ -575,7 +575,7 @@ const customer: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -583,7 +583,7 @@ const customer: Model = {
       sourceModelId: Id.Customer,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -591,7 +591,7 @@ const customer: Model = {
       sourceModelId: Id.Customer,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: hasManyType(),
@@ -599,7 +599,7 @@ const customer: Model = {
       sourceModelId: Id.Customer,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: hasManyType(),
@@ -616,7 +616,7 @@ const address: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'address_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -624,7 +624,7 @@ const address: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'address',
       type: stringDataType(),
       primaryKey: false,
@@ -632,7 +632,7 @@ const address: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'address2',
       type: stringDataType(),
       primaryKey: false,
@@ -640,7 +640,7 @@ const address: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'postal_code',
       type: stringDataType(),
       primaryKey: false,
@@ -648,7 +648,7 @@ const address: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'phone',
       type: stringDataType(),
       primaryKey: false,
@@ -658,7 +658,7 @@ const address: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -666,7 +666,7 @@ const address: Model = {
       sourceModelId: Id.Address,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: hasOneType(),
@@ -674,7 +674,7 @@ const address: Model = {
       sourceModelId: Id.Address,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: hasOneType(),
@@ -682,7 +682,7 @@ const address: Model = {
       sourceModelId: Id.Address,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: hasOneType(),
@@ -699,7 +699,7 @@ const rental: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'rental_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -707,7 +707,7 @@ const rental: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'rental_date',
       type: dateDataType(),
       primaryKey: false,
@@ -715,7 +715,7 @@ const rental: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'return_date',
       type: stringDataType(),
       primaryKey: false,
@@ -725,7 +725,7 @@ const rental: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -733,7 +733,7 @@ const rental: Model = {
       sourceModelId: Id.Rental,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -741,7 +741,7 @@ const rental: Model = {
       sourceModelId: Id.Rental,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -749,7 +749,7 @@ const rental: Model = {
       sourceModelId: Id.Rental,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: hasManyType(),
@@ -766,7 +766,7 @@ const payment: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'payment_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -774,7 +774,7 @@ const payment: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'amount',
       type: decimalDataType(),
       primaryKey: false,
@@ -782,7 +782,7 @@ const payment: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'payment_date',
       type: dateTimeDataType(),
       primaryKey: false,
@@ -792,7 +792,7 @@ const payment: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -800,7 +800,7 @@ const payment: Model = {
       sourceModelId: Id.Payment,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -808,7 +808,7 @@ const payment: Model = {
       sourceModelId: Id.Payment,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -825,7 +825,7 @@ const city: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'city_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -833,7 +833,7 @@ const city: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'city',
       type: stringDataType(),
       primaryKey: false,
@@ -843,7 +843,7 @@ const city: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -851,7 +851,7 @@ const city: Model = {
       sourceModelId: Id.City,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: hasManyType(),
@@ -868,7 +868,7 @@ const country: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'country_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -876,7 +876,7 @@ const country: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'country',
       type: stringDataType(),
       primaryKey: false,
@@ -886,7 +886,7 @@ const country: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: hasManyType(),
@@ -903,7 +903,7 @@ const film_actor: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'film_actor_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -913,7 +913,7 @@ const film_actor: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -921,7 +921,7 @@ const film_actor: Model = {
       targetModelId: Id.Film,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -938,7 +938,7 @@ const film_category: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'film_category_id',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
@@ -948,7 +948,7 @@ const film_category: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),
@@ -956,7 +956,7 @@ const film_category: Model = {
       targetModelId: Id.Film,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       type: belongsToType(),

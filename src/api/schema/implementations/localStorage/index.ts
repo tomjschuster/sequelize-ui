@@ -2,8 +2,7 @@ import { Association, AssociationTypeType, Model, Schema, ThroughType } from '@s
 import { arrayToLookup } from '@src/utils/array'
 import { now } from '@src/utils/dateTime'
 import { get, lsKey, set } from '@src/utils/localStorage'
-import { versionedName } from '@src/utils/string'
-import shortid from 'shortid'
+import { uniqueId, versionedName } from '@src/utils/string'
 import { SchemaApi, SCHEMA_NOT_FOUND_ERROR } from '../../api'
 import * as Ids from '../../examples/ids'
 import { parseSchema, parseV0Lazy } from './parse'
@@ -31,7 +30,7 @@ export default class LocalStorageSchemaApi implements SchemaApi {
       schemaPayload.name,
       schemas.map((s) => s.name),
     )
-    const id = shortid()
+    const id = uniqueId()
     const time = now()
     const models = schemaPayload.models.map((m) => ({ ...m, createdAt: time, updatedAt: time }))
     const forkedFrom = fork ? schemaPayload.id : null
@@ -105,7 +104,7 @@ export async function createSchema(schemaPayload: Schema, fork?: boolean): Promi
     schemaPayload.name,
     schemas.map((s) => s.name),
   )
-  const id = shortid()
+  const id = uniqueId()
   const time = now()
   const models = schemaPayload.models.map((m) => ({ ...m, createdAt: time, updatedAt: time }))
   const forkedFrom = fork ? schemaPayload.id : null

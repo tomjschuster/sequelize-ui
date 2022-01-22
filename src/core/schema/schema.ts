@@ -1,5 +1,5 @@
 import { now } from '@src/utils/dateTime'
-import shortid from 'shortid'
+import { uniqueId } from '@src/utils/string'
 import { stringDataType } from '.'
 import { Association, AssociationTypeType } from './association'
 import { DataType } from './dataType'
@@ -46,7 +46,7 @@ export function emptySchema(): Schema {
 export function emptyModel(): Model {
   const time = now()
   return {
-    id: shortid(),
+    id: uniqueId(),
     name: '',
     fields: [],
     associations: [],
@@ -57,7 +57,7 @@ export function emptyModel(): Model {
 
 export function emptyField(): Field {
   return {
-    id: shortid(),
+    id: uniqueId(),
     name: '',
     type: stringDataType(),
     primaryKey: false,
@@ -78,7 +78,7 @@ export function emptyAssociation(
   targetModelId: Model['id'],
 ): Association {
   return {
-    id: shortid(),
+    id: uniqueId(),
     sourceModelId,
     type: { type: AssociationTypeType.BelongsTo },
     targetModelId,

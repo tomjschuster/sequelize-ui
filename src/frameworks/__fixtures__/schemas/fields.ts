@@ -1,11 +1,11 @@
 import { Model, Schema, stringDataType } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import shortid from 'shortid'
+import { uniqueId } from '@src/utils/string'
 
 const time = fromParts(2020, 7, 1)
 
 const Id = {
-  Field: shortid(),
+  Field: uniqueId(),
 } as const
 
 const fields: Model = {
@@ -15,7 +15,7 @@ const fields: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'field',
       type: stringDataType(),
       primaryKey: false,
@@ -23,7 +23,7 @@ const fields: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'pk field',
       type: stringDataType(),
       primaryKey: true,
@@ -31,7 +31,7 @@ const fields: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'required field',
       type: stringDataType(),
       primaryKey: false,
@@ -39,7 +39,7 @@ const fields: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'optional field',
       type: stringDataType(),
       primaryKey: false,
@@ -51,7 +51,7 @@ const fields: Model = {
 }
 
 const fieldsSchema: Schema = {
-  id: shortid(),
+  id: uniqueId(),
   name: 'fields',
   createdAt: time,
   updatedAt: time,

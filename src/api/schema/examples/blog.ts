@@ -40,20 +40,20 @@ import {
   textDataType,
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import shortid from 'shortid'
+import { uniqueId } from '@src/utils/string'
 import { BLOG_ID } from './ids'
 
 const time = fromParts(2021, 4, 1)
 
 const Id = {
-  Category: shortid(),
-  Post: shortid(),
-  PostCategory: shortid(),
-  PostComment: shortid(),
-  PostMeta: shortid(),
-  PostTag: shortid(),
-  Tag: shortid(),
-  User: shortid(),
+  Category: uniqueId(),
+  Post: uniqueId(),
+  PostCategory: uniqueId(),
+  PostComment: uniqueId(),
+  PostMeta: uniqueId(),
+  PostTag: uniqueId(),
+  Tag: uniqueId(),
+  User: uniqueId(),
 } as const
 
 const category: Model = {
@@ -63,7 +63,7 @@ const category: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -71,7 +71,7 @@ const category: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'title',
       type: stringDataType({ length: 75 }),
       primaryKey: false,
@@ -79,7 +79,7 @@ const category: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'meta title',
       type: stringDataType({ length: 100 }),
       primaryKey: false,
@@ -87,7 +87,7 @@ const category: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'slug',
       type: stringDataType({ length: 100 }),
       primaryKey: false,
@@ -95,7 +95,7 @@ const category: Model = {
       unique: true,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'content',
       type: textDataType(),
       primaryKey: false,
@@ -105,7 +105,7 @@ const category: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'parent',
       sourceModelId: Id.Category,
       targetModelId: Id.Category,
@@ -113,7 +113,7 @@ const category: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'children',
       sourceModelId: Id.Category,
       targetModelId: Id.Category,
@@ -121,7 +121,7 @@ const category: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.Category,
       targetModelId: Id.PostCategory,
@@ -129,7 +129,7 @@ const category: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.Category,
       targetModelId: Id.Post,
@@ -146,7 +146,7 @@ const post: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -155,7 +155,7 @@ const post: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'title',
       type: stringDataType({ length: 75 }),
       primaryKey: false,
@@ -163,7 +163,7 @@ const post: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'meta title',
       type: stringDataType({ length: 100 }),
       primaryKey: false,
@@ -171,7 +171,7 @@ const post: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'slug',
       type: stringDataType({ length: 100 }),
       primaryKey: false,
@@ -179,7 +179,7 @@ const post: Model = {
       unique: true,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'summary',
       type: textDataType(),
       primaryKey: false,
@@ -187,7 +187,7 @@ const post: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'published',
       type: booleanDataType(),
       primaryKey: false,
@@ -195,7 +195,7 @@ const post: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'published at',
       type: dateTimeDataType(),
       primaryKey: false,
@@ -203,7 +203,7 @@ const post: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'content',
       type: textDataType(),
       primaryKey: false,
@@ -213,7 +213,7 @@ const post: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'author',
       sourceModelId: Id.Post,
       targetModelId: Id.User,
@@ -221,7 +221,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'parent',
       sourceModelId: Id.Post,
       targetModelId: Id.Post,
@@ -229,7 +229,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'children',
       sourceModelId: Id.Post,
       targetModelId: Id.Post,
@@ -237,7 +237,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.Post,
       targetModelId: Id.PostCategory,
@@ -245,7 +245,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.Post,
       targetModelId: Id.Category,
@@ -253,7 +253,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'comments',
       sourceModelId: Id.Post,
       targetModelId: Id.PostComment,
@@ -261,7 +261,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'meta',
       sourceModelId: Id.Post,
       targetModelId: Id.PostMeta,
@@ -269,7 +269,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.Post,
       targetModelId: Id.PostTag,
@@ -277,7 +277,7 @@ const post: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.Post,
       targetModelId: Id.Tag,
@@ -294,7 +294,7 @@ const postCategory: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'post id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -302,7 +302,7 @@ const postCategory: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'category id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -312,7 +312,7 @@ const postCategory: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.PostCategory,
       targetModelId: Id.Post,
@@ -320,7 +320,7 @@ const postCategory: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.PostCategory,
       targetModelId: Id.Category,
@@ -337,7 +337,7 @@ const postComment: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -345,7 +345,7 @@ const postComment: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'title',
       type: stringDataType({ length: 75 }),
       primaryKey: false,
@@ -353,7 +353,7 @@ const postComment: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'published',
       type: booleanDataType(),
       primaryKey: false,
@@ -361,7 +361,7 @@ const postComment: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'published at',
       type: dateTimeDataType(),
       primaryKey: false,
@@ -369,7 +369,7 @@ const postComment: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'content',
       type: textDataType(),
       primaryKey: false,
@@ -379,7 +379,7 @@ const postComment: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.PostComment,
       targetModelId: Id.Post,
@@ -387,7 +387,7 @@ const postComment: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'parent',
       sourceModelId: Id.PostComment,
       targetModelId: Id.PostComment,
@@ -395,7 +395,7 @@ const postComment: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'children',
       sourceModelId: Id.PostComment,
       targetModelId: Id.PostComment,
@@ -412,7 +412,7 @@ const postMeta: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -420,7 +420,7 @@ const postMeta: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'key',
       type: stringDataType({ length: 50 }),
       primaryKey: false,
@@ -428,7 +428,7 @@ const postMeta: Model = {
       unique: true,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'content',
       type: textDataType(),
       primaryKey: false,
@@ -438,7 +438,7 @@ const postMeta: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.PostMeta,
       targetModelId: Id.Post,
@@ -455,7 +455,7 @@ const postTag: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'post id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -463,7 +463,7 @@ const postTag: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'tag id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -473,7 +473,7 @@ const postTag: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.PostTag,
       targetModelId: Id.Post,
@@ -481,7 +481,7 @@ const postTag: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.PostTag,
       targetModelId: Id.Tag,
@@ -498,7 +498,7 @@ const tag: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -506,7 +506,7 @@ const tag: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'title',
       type: stringDataType({ length: 75 }),
       primaryKey: false,
@@ -514,7 +514,7 @@ const tag: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'meta title',
       type: stringDataType({ length: 100 }),
       primaryKey: false,
@@ -522,7 +522,7 @@ const tag: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'slug',
       type: stringDataType({ length: 100 }),
       primaryKey: false,
@@ -530,7 +530,7 @@ const tag: Model = {
       unique: true,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'content',
       type: textDataType(),
       primaryKey: false,
@@ -540,7 +540,7 @@ const tag: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.Tag,
       targetModelId: Id.PostTag,
@@ -548,7 +548,7 @@ const tag: Model = {
       foreignKey: null,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.Tag,
       targetModelId: Id.Post,
@@ -565,7 +565,7 @@ const user: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -573,7 +573,7 @@ const user: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'first name',
       type: stringDataType({ length: 50 }),
       primaryKey: false,
@@ -581,7 +581,7 @@ const user: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'middle name',
       type: stringDataType({ length: 50 }),
       primaryKey: false,
@@ -589,7 +589,7 @@ const user: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'last name',
       type: stringDataType({ length: 50 }),
       primaryKey: false,
@@ -597,7 +597,7 @@ const user: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'mobile',
       type: stringDataType({ length: 15 }),
       primaryKey: false,
@@ -605,7 +605,7 @@ const user: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'email',
       type: stringDataType({ length: 50 }),
       primaryKey: false,
@@ -613,7 +613,7 @@ const user: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'password hash',
       type: stringDataType({ length: 32 }),
       primaryKey: false,
@@ -621,7 +621,7 @@ const user: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'registered at',
       type: dateTimeDataType({ defaultNow: true }),
       primaryKey: false,
@@ -629,7 +629,7 @@ const user: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'last login',
       type: dateTimeDataType(),
       primaryKey: false,
@@ -637,7 +637,7 @@ const user: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'intro',
       type: textDataType(),
       primaryKey: false,
@@ -645,7 +645,7 @@ const user: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'profile',
       type: textDataType(),
       primaryKey: false,
@@ -655,7 +655,7 @@ const user: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       sourceModelId: Id.User,
       targetModelId: Id.Post,

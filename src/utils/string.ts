@@ -1,4 +1,5 @@
 import { noCase, sentenceCase } from 'change-case'
+import { nanoid } from 'nanoid'
 import { plural as plural_, singular } from 'pluralize'
 
 export {
@@ -103,4 +104,8 @@ export function normalize(name: string): string {
 
 export function normalizeSingular(name: string): string {
   return singular(noCase(name))
+}
+
+export function uniqueId(): string {
+  return nanoid()
 }

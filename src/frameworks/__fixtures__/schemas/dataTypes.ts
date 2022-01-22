@@ -24,12 +24,12 @@ import {
   UuidType,
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import shortid from 'shortid'
+import { uniqueId } from '@src/utils/string'
 
 const time = fromParts(2021, 1, 1)
 
 const Id = {
-  DataType: shortid(),
+  DataType: uniqueId(),
 } as const
 
 const dataTypes: Model = {
@@ -39,7 +39,7 @@ const dataTypes: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'string',
       type: stringDataType(),
       primaryKey: false,
@@ -47,7 +47,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'string with length',
       type: stringDataType({ length: 100 }),
       primaryKey: false,
@@ -55,7 +55,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'text',
       type: textDataType(),
       primaryKey: false,
@@ -63,7 +63,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'ci text',
       type: ciTextDataType(),
       primaryKey: false,
@@ -71,7 +71,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'integer',
       type: integerDataType(),
       primaryKey: false,
@@ -79,7 +79,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'integer unsigned',
       type: integerDataType({ unsigned: true }),
       primaryKey: false,
@@ -87,7 +87,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'integer autoincrement',
       type: integerDataType({ autoincrement: true }),
       primaryKey: false,
@@ -95,7 +95,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'big int',
       type: bigIntDataType(),
       primaryKey: false,
@@ -103,7 +103,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'small int',
       type: smallIntDataType(),
       primaryKey: false,
@@ -111,7 +111,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'float',
       type: floatDataType(),
       primaryKey: false,
@@ -119,7 +119,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'real',
       type: realDataType(),
       primaryKey: false,
@@ -127,7 +127,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'double',
       type: doubleDataType(),
       primaryKey: false,
@@ -135,7 +135,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'decimal',
       type: decimalDataType(),
       primaryKey: false,
@@ -143,7 +143,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'decimal precision',
       type: decimalDataType({ precision: { precision: 14, scale: null } }),
       primaryKey: false,
@@ -151,7 +151,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'decimal precision and scale',
       type: decimalDataType({ precision: { precision: 14, scale: 2 } }),
       primaryKey: false,
@@ -159,7 +159,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'date time',
       type: dateTimeDataType(),
       primaryKey: false,
@@ -167,7 +167,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'date time default now',
       type: dateTimeDataType({ defaultNow: true }),
       primaryKey: false,
@@ -175,7 +175,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'date',
       type: dateDataType(),
       primaryKey: false,
@@ -183,7 +183,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'date default now',
       type: dateDataType({ defaultNow: true }),
       primaryKey: false,
@@ -191,7 +191,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'time',
       type: timeDataType(),
       primaryKey: false,
@@ -199,7 +199,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'time default now',
       type: timeDataType({ defaultNow: true }),
       primaryKey: false,
@@ -207,7 +207,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'boolean',
       type: booleanDataType(),
       primaryKey: false,
@@ -215,7 +215,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'enum',
       type: enumDataType(),
       primaryKey: false,
@@ -223,7 +223,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'array',
       type: arrayDataType(),
       primaryKey: false,
@@ -231,7 +231,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'json',
       type: jsonDataType(),
       primaryKey: false,
@@ -239,7 +239,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'json b',
       type: jsonBDataType(),
       primaryKey: false,
@@ -247,7 +247,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'blob',
       type: blobDataType(),
       primaryKey: false,
@@ -255,7 +255,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'uuid',
       type: uuidDataType(),
       primaryKey: false,
@@ -263,7 +263,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'uuid default v4',
       type: uuidDataType({ defaultVersion: UuidType.V4 }),
       primaryKey: false,
@@ -271,7 +271,7 @@ const dataTypes: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'uuid default v1',
       type: uuidDataType({ defaultVersion: UuidType.V1 }),
       primaryKey: false,
@@ -283,7 +283,7 @@ const dataTypes: Model = {
 }
 
 const dataTypesSchema: Schema = {
-  id: shortid(),
+  id: uniqueId(),
   name: 'data types',
   createdAt: time,
   updatedAt: time,

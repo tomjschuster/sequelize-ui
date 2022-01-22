@@ -8,16 +8,16 @@ import {
   Schema,
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import shortid from 'shortid'
+import { uniqueId } from '@src/utils/string'
 
 const time = fromParts(2021, 7, 1)
 
 const Id = {
-  Category: shortid(),
-  Post: shortid(),
-  PostCategory: shortid(),
-  PostTag: shortid(),
-  Tag: shortid(),
+  Category: uniqueId(),
+  Post: uniqueId(),
+  PostCategory: uniqueId(),
+  PostTag: uniqueId(),
+  Tag: uniqueId(),
 } as const
 
 const category: Model = {
@@ -28,7 +28,7 @@ const category: Model = {
   fields: [],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'parent',
       foreignKey: null,
       sourceModelId: Id.Category,
@@ -36,7 +36,7 @@ const category: Model = {
       type: belongsToType(),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'children',
       foreignKey: null,
       sourceModelId: Id.Category,
@@ -44,7 +44,7 @@ const category: Model = {
       type: hasManyType(),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       sourceModelId: Id.Category,
@@ -52,7 +52,7 @@ const category: Model = {
       type: hasManyType(),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       sourceModelId: Id.Category,
@@ -70,7 +70,7 @@ const post: Model = {
   fields: [],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'parent',
       foreignKey: 'parent id',
       sourceModelId: Id.Post,
@@ -78,7 +78,7 @@ const post: Model = {
       type: belongsToType(),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: 'children',
       foreignKey: null,
       sourceModelId: Id.Post,
@@ -86,7 +86,7 @@ const post: Model = {
       type: hasManyType(),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       sourceModelId: Id.Post,
@@ -94,7 +94,7 @@ const post: Model = {
       type: hasManyType(),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       sourceModelId: Id.Post,
@@ -102,7 +102,7 @@ const post: Model = {
       type: manyToManyModelType(Id.PostCategory),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       sourceModelId: Id.Post,
@@ -110,7 +110,7 @@ const post: Model = {
       type: hasManyType(),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       sourceModelId: Id.Post,
@@ -127,7 +127,7 @@ const postCategory: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'post id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -135,7 +135,7 @@ const postCategory: Model = {
       unique: false,
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'category id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -145,7 +145,7 @@ const postCategory: Model = {
   ],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       sourceModelId: Id.PostCategory,
@@ -153,7 +153,7 @@ const postCategory: Model = {
       type: belongsToType(),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       sourceModelId: Id.PostCategory,
@@ -171,7 +171,7 @@ const postTag: Model = {
   fields: [],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       sourceModelId: Id.PostTag,
@@ -179,7 +179,7 @@ const postTag: Model = {
       type: belongsToType(),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       sourceModelId: Id.PostTag,
@@ -197,7 +197,7 @@ const tag: Model = {
   fields: [],
   associations: [
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       sourceModelId: Id.Tag,
@@ -205,7 +205,7 @@ const tag: Model = {
       type: hasManyType(),
     },
     {
-      id: shortid(),
+      id: uniqueId(),
       alias: null,
       foreignKey: null,
       sourceModelId: Id.Tag,
@@ -216,7 +216,7 @@ const tag: Model = {
 }
 
 const associationsSchema: Schema = {
-  id: shortid(),
+  id: uniqueId(),
   createdAt: time,
   updatedAt: time,
   name: 'associations',

@@ -1,4 +1,4 @@
-import shortid from 'shortid'
+import { uniqueId } from '@src/utils/string'
 import { AlertLevel, AlertMessage, AlertOptions } from '../types'
 
 enum AlertState {
@@ -21,7 +21,7 @@ const DEFAULT_OPTIONS = {
 } as const
 
 export function createAlert(message: AlertMessage, options: AlertOptions = {}): Alert {
-  return { id: shortid(), message, ...DEFAULT_OPTIONS, ...options, state: AlertState.Opening }
+  return { id: uniqueId(), message, ...DEFAULT_OPTIONS, ...options, state: AlertState.Opening }
 }
 
 export function showAlert(alert: Alert): Alert {

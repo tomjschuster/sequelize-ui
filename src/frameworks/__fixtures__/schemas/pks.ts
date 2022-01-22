@@ -1,14 +1,14 @@
 import { integerDataType, Model, Schema } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import shortid from 'shortid'
+import { uniqueId } from '@src/utils/string'
 
 const time = fromParts(2020, 4, 1)
 
 const Id = {
-  Default: shortid(),
-  Id: shortid(),
-  Prefixed: shortid(),
-  NonStandard: shortid(),
+  Default: uniqueId(),
+  Id: uniqueId(),
+  Prefixed: uniqueId(),
+  NonStandard: uniqueId(),
 } as const
 
 const defaultPk: Model = {
@@ -27,7 +27,7 @@ const id: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'id',
       type: integerDataType(),
       primaryKey: true,
@@ -45,7 +45,7 @@ const prefixed: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'prefixed_id',
       type: integerDataType(),
       primaryKey: true,
@@ -63,7 +63,7 @@ const nonstandard: Model = {
   updatedAt: time,
   fields: [
     {
-      id: shortid(),
+      id: uniqueId(),
       name: 'other_id',
       type: integerDataType(),
       primaryKey: true,
@@ -75,7 +75,7 @@ const nonstandard: Model = {
 }
 
 const fieldsSchema: Schema = {
-  id: shortid(),
+  id: uniqueId(),
   name: 'fields',
   createdAt: time,
   updatedAt: time,

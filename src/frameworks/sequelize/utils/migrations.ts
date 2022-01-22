@@ -18,8 +18,7 @@ import {
 } from '@src/core/schema'
 import { arrayToLookup, dedupBy } from '@src/utils/array'
 import { addSeconds, now, toNumericTimestamp } from '@src/utils/dateTime'
-import { namesEq, normalize, normalizeSingular } from '@src/utils/string'
-import shortid from 'shortid'
+import { namesEq, normalize, normalizeSingular, uniqueId } from '@src/utils/string'
 import { getForeignKey, getOtherKey } from './associations'
 import { idField, prefixPk } from './field'
 import { dedupModels } from './model'
@@ -81,7 +80,7 @@ type GetTimestampFieldsTemplateArgs = {
 function getTimestampFields({ dbOptions }: GetTimestampFieldsTemplateArgs): Field[] {
   if (!dbOptions.timestamps) return []
   const createdAt: Field = {
-    id: shortid(),
+    id: uniqueId(),
     name: caseByDbCaseStyle('created at', dbOptions.caseStyle),
     type: dateTimeDataType(),
     primaryKey: false,
@@ -90,7 +89,7 @@ function getTimestampFields({ dbOptions }: GetTimestampFieldsTemplateArgs): Fiel
   }
 
   const updatedAt: Field = {
-    id: shortid(),
+    id: uniqueId(),
     name: caseByDbCaseStyle('updated at', dbOptions.caseStyle),
     type: dateTimeDataType(),
     primaryKey: false,
@@ -228,7 +227,7 @@ function getFieldWithReference({
   const column = caseByDbCaseStyle(columnField.name, dbOptions.caseStyle)
 
   const field: Field = {
-    id: shortid(),
+    id: uniqueId(),
     name: fk,
     type: resetType(pk.type),
     primaryKey,
@@ -253,7 +252,7 @@ function getJoinTableModel(
 ): Model | null {
   if (association.type.type !== AssociationTypeType.ManyToMany) return null
 
-  const id = shortid()
+  const id = uniqueId()
 
   const tableName =
     association.type.through.type === ThroughType.ThroughTable
@@ -281,7 +280,7 @@ function getJoinTableModel(
   })
 
   const sourceAssoc: Association = {
-    id: shortid(),
+    id: uniqueId(),
     alias: null,
     foreignKey: null,
     sourceModelId: id,
@@ -294,7 +293,7 @@ function getJoinTableModel(
   const targetFkField = getFieldWithReference({ model: target, fk: targetFk, dbOptions })
 
   const targetAssoc: Association = {
-    id: shortid(),
+    id: uniqueId(),
     alias: null,
     foreignKey: null,
     sourceModelId: id,

@@ -1,4 +1,4 @@
-import shortid from 'shortid'
+import { uniqueId } from '@src/utils/string'
 import {
   Association,
   AssociationTypeType,
@@ -21,7 +21,7 @@ export const throughTable_: ManyToManyThroughTable = {
 
 export const throughModel_: ManyToManyThroughModel = {
   type: ThroughType.ThroughModel,
-  modelId: shortid(),
+  modelId: uniqueId(),
 }
 
 export const manyToManyTableType_: ManyToManyAssociation = {
@@ -36,11 +36,11 @@ export const manyToManyModelType_: ManyToManyAssociation = {
 }
 
 export const baseAssociation: Omit<Association, 'type'> = {
-  id: shortid(),
+  id: uniqueId(),
   alias: null,
   foreignKey: null,
-  sourceModelId: shortid(),
-  targetModelId: shortid(),
+  sourceModelId: uniqueId(),
+  targetModelId: uniqueId(),
 }
 
 export const belongsTo: Association<BelongsToAssociation> = {
