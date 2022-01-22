@@ -25,7 +25,7 @@ import {
 
 export function fromV1(schema: SchemaV1): Schema {
   const models = schema.models.map(fromV1Model)
-  return { ...schema, models }
+  return { ...schema, forkedFrom: schema.forkedFrom ?? null, models }
 }
 
 export function toV1(schema: Schema): SchemaV1 {
@@ -67,7 +67,7 @@ function toV1Field(field: Field): FieldV1 {
 function fromV1DataType(dataType: DataTypeV1): DataType {
   switch (dataType.type) {
     case 'STRING':
-      return { ...dataType, type: DataTypeType.String }
+      return { ...dataType, length: dataType.length ?? null, type: DataTypeType.String }
 
     case 'TEXT':
       return { ...dataType, type: DataTypeType.Text }
@@ -93,9 +93,13 @@ function fromV1DataType(dataType: DataTypeV1): DataType {
     case 'DOUBLE':
       return { ...dataType, type: DataTypeType.Double }
 
-    case 'DECIMAL':
-      return { ...dataType, type: DataTypeType.Decimal }
+    case 'DECIMAL': {
+      const precision = dataType.precision
+        ? { ...dataType.precision, scale: dataType.precision.scale || null }
+        : null
 
+      return { ...dataType, precision, type: DataTypeType.Decimal }
+    }
     case 'DATE_TIME':
       return { ...dataType, type: DataTypeType.DateTime }
 
@@ -127,7 +131,7 @@ function fromV1DataType(dataType: DataTypeV1): DataType {
       return {
         ...dataType,
         type: DataTypeType.Uuid,
-        defaultVersion: fromV1UuidVersion(dataType.defaultVersion),
+        defaultVersion: fromV1UuidVersion(dataType.defaultVersion ?? null),
       }
   }
 }
@@ -192,6 +196,8 @@ function toV1UuidVersion(version: UuidType | null): DataTypeUuidDefaultVersion |
 function fromV1Association(association: AssociationV1): Association {
   return {
     ...association,
+    alias: association.alias ?? null,
+    foreignKey: association.foreignKey ?? null,
     type: fromV1AssociationType(association.type),
   }
 }

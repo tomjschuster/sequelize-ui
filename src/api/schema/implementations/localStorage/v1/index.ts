@@ -3,12 +3,12 @@
 export type SchemaV1 = Schema
 
 export interface Association {
-  alias: string | null
-  foreignKey: string | null
   id: string
   sourceModelId: string
   targetModelId: string
   type: AssociationType
+  alias?: string | null
+  foreignKey?: string | null
 }
 
 export type AssociationType =
@@ -45,8 +45,8 @@ export interface AssociationTypeManyToManyThroughThroughTable {
 
 export interface AssociationTypeManyToMany {
   type: 'MANY_TO_MANY'
-  targetFk: string | null
   through: AssociationTypeManyToManyThrough
+  targetFk?: string | null
 }
 
 export type DataType =
@@ -106,7 +106,7 @@ export interface DataTypeDateTime {
 
 export interface DataTypeDecimalPrecision {
   precision: number
-  scale: number | null
+  scale?: number | null
 }
 
 export interface DataTypeDecimal {
@@ -157,7 +157,7 @@ export interface DataTypeSmallint {
 
 export interface DataTypeString {
   type: 'STRING'
-  length: number | null
+  length?: number | null
 }
 
 export interface DataTypeText {
@@ -176,7 +176,7 @@ export enum DataTypeUuidDefaultVersion {
 
 export interface DataTypeUuid {
   type: 'UUID'
-  defaultVersion: DataTypeUuidDefaultVersion | null
+  defaultVersion?: DataTypeUuidDefaultVersion | null
 }
 
 export interface Field {
@@ -199,9 +199,9 @@ export interface Model {
 
 export interface Schema {
   createdAt: string
-  forkedFrom: string | null
   id: string
   models: Model[]
   name: string
   updatedAt: string
+  forkedFrom?: string | null
 }

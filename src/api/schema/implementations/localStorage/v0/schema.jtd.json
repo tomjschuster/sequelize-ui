@@ -5,8 +5,10 @@
   "ref": "sequelizeState",
   "definitions": {
     "sequelizeState": {
+      "additionalProperties": true,
       "properties": {
         "config": {
+          "additionalProperties": true,
           "properties": {
             "dialect": { "enum": ["sqlite"] },
             "name": { "type": "string" },
@@ -15,12 +17,15 @@
             "timestamps": { "type": "boolean" }
           }
         },
-        "currentModelId": { "nullable": true, "type": "string" },
         "models": { "elements": { "ref": "model" } },
         "pageState": { "enum": ["ABOUT", "LOADING", "PROJECT", "MODEL"] }
+      },
+      "optionalProperties": {
+        "currentModelId": { "nullable": true, "type": "string" }
       }
     },
     "model": {
+      "additionalProperties": true,
       "properties": {
         "id": { "type": "string" },
         "name": { "type": "string" },
@@ -29,6 +34,7 @@
       }
     },
     "field": {
+      "additionalProperties": true,
       "properties": {
         "id": { "type": "string" },
         "modelId": { "type": "string" },
@@ -60,55 +66,60 @@
       "discriminator": "type",
       "mapping": {
         "BELONGS_TO": {
+          "additionalProperties": true,
           "properties": {
-            "foreignKey": { "nullable": true, "type": "string" },
             "id": { "type": "string" },
-            "name": { "nullable": true, "type": "string" },
             "sourceId": { "type": "string" },
             "targetId": { "type": "string" }
           },
           "optionalProperties": {
+            "name": { "nullable": true, "type": "string" },
+            "foreignKey": { "nullable": true, "type": "string" },
             "targetForeignKey": { "nullable": true, "type": "string" },
             "through": { "nullable": true, "type": "string" }
           }
         },
         "HAS_ONE": {
+          "additionalProperties": true,
           "properties": {
-            "foreignKey": { "nullable": true, "type": "string" },
             "id": { "type": "string" },
-            "name": { "nullable": true, "type": "string" },
             "sourceId": { "type": "string" },
             "targetId": { "type": "string" }
           },
           "optionalProperties": {
+            "foreignKey": { "nullable": true, "type": "string" },
+            "name": { "nullable": true, "type": "string" },
             "targetForeignKey": { "nullable": true, "type": "string" },
             "through": { "nullable": true, "type": "string" }
           }
         },
         "HAS_MANY": {
+          "additionalProperties": true,
           "properties": {
-            "foreignKey": { "nullable": true, "type": "string" },
             "id": { "type": "string" },
-            "name": { "nullable": true, "type": "string" },
             "sourceId": { "type": "string" },
             "targetId": { "type": "string" }
           },
           "optionalProperties": {
+            "foreignKey": { "nullable": true, "type": "string" },
+            "name": { "nullable": true, "type": "string" },
             "targetForeignKey": { "nullable": true, "type": "string" },
             "through": { "nullable": true, "type": "string" }
           }
         },
         "MANY_TO_MANY": {
+          "additionalProperties": true,
           "properties": {
-            "foreignKey": { "nullable": true, "type": "string" },
             "id": { "type": "string" },
-            "name": { "nullable": true, "type": "string" },
             "sourceId": { "type": "string" },
-            "targetForeignKey": { "nullable": true, "type": "string" },
             "targetId": { "type": "string" },
             "through": { "type": "string" }
           },
-          "additionalProperties": true
+          "optionalProperties": {
+            "foreignKey": { "nullable": true, "type": "string" },
+            "name": { "nullable": true, "type": "string" },
+            "targetForeignKey": { "nullable": true, "type": "string" }
+          }
         }
       }
     }

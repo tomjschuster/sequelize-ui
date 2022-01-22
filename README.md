@@ -11,7 +11,6 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- [ ] Refactor undefined/null
 - [ ] Field "generated" key
 - [ ] Home page copy
 - [ ] Link to legacy

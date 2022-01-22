@@ -107,8 +107,8 @@ function fromV0Association(association: AssociationV0): Association {
     type: fromV0AssociationType(association),
     sourceModelId: association.sourceId,
     targetModelId: association.targetId,
-    foreignKey: association.foreignKey,
-    alias: association.name,
+    foreignKey: association.foreignKey || null,
+    alias: association.name || null,
   }
 }
 

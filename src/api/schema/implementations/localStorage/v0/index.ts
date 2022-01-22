@@ -10,46 +10,46 @@ export type Association =
 
 export interface AssociationBelongsTo {
   type: 'BELONGS_TO'
-  foreignKey: string | null
   id: string
-  name: string | null
   sourceId: string
   targetId: string
+  foreignKey?: string | null
+  name?: string | null
   targetForeignKey?: string | null
   through?: string | null
 }
 
 export interface AssociationHasMany {
   type: 'HAS_MANY'
-  foreignKey: string | null
   id: string
-  name: string | null
   sourceId: string
   targetId: string
+  foreignKey?: string | null
+  name?: string | null
   targetForeignKey?: string | null
   through?: string | null
 }
 
 export interface AssociationHasOne {
   type: 'HAS_ONE'
-  foreignKey: string | null
   id: string
-  name: string | null
   sourceId: string
   targetId: string
+  foreignKey?: string | null
+  name?: string | null
   targetForeignKey?: string | null
   through?: string | null
 }
 
 export interface AssociationManyToMany {
   type: 'MANY_TO_MANY'
-  foreignKey: string | null
   id: string
-  name: string | null
   sourceId: string
-  targetForeignKey: string | null
   targetId: string
   through: string
+  foreignKey?: string | null
+  name?: string | null
+  targetForeignKey?: string | null
 }
 
 export enum FieldType {
@@ -107,7 +107,7 @@ export enum SequelizeStatePageState {
 
 export interface SequelizeState {
   config: SequelizeStateConfig
-  currentModelId: string | null
   models: Model[]
   pageState: SequelizeStatePageState
+  currentModelId?: string | null
 }
