@@ -26,7 +26,6 @@ export const blogTranslatedFromLegacy: Schema = {
           primaryKey: false,
           required: true,
           unique: false,
-          generated: false,
         },
         {
           id: '4c299161-38de-48b2-bab8-ccf451188344',
@@ -35,7 +34,6 @@ export const blogTranslatedFromLegacy: Schema = {
           primaryKey: false,
           required: false,
           unique: false,
-          generated: false,
         },
       ],
       associations: [
@@ -82,7 +80,6 @@ export const blogTranslatedFromLegacy: Schema = {
           primaryKey: false,
           required: true,
           unique: false,
-          generated: false,
         },
         {
           id: '12e09a2e-d370-48bf-ab8a-0072708170b7',
@@ -91,7 +88,6 @@ export const blogTranslatedFromLegacy: Schema = {
           primaryKey: false,
           required: true,
           unique: false,
-          generated: false,
         },
         {
           id: '0ddb0f8e-0a2f-413e-b2f2-d6bb5bdc8a84',
@@ -100,7 +96,6 @@ export const blogTranslatedFromLegacy: Schema = {
           primaryKey: false,
           required: true,
           unique: true,
-          generated: false,
         },
       ],
       associations: [
@@ -135,7 +130,6 @@ export const blogTranslatedFromLegacy: Schema = {
           primaryKey: false,
           required: true,
           unique: false,
-          generated: false,
         },
       ],
       associations: [
@@ -166,7 +160,6 @@ export const blogTranslatedFromLegacy: Schema = {
           primaryKey: false,
           required: true,
           unique: false,
-          generated: false,
         },
       ],
       associations: [

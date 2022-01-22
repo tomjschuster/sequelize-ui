@@ -87,7 +87,6 @@ function getTimestampFields({ dbOptions }: GetTimestampFieldsTemplateArgs): Fiel
     primaryKey: false,
     required: false,
     unique: false,
-    generated: false,
   }
 
   const updatedAt: Field = {
@@ -97,7 +96,6 @@ function getTimestampFields({ dbOptions }: GetTimestampFieldsTemplateArgs): Fiel
     primaryKey: false,
     required: false,
     unique: false,
-    generated: false,
   }
 
   return [createdAt, updatedAt]
@@ -236,7 +234,6 @@ function getFieldWithReference({
     primaryKey,
     required: false,
     unique: false,
-    generated: false,
   }
 
   return { ...field, reference: { table, column } }

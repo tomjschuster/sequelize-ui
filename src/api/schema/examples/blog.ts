@@ -69,7 +69,6 @@ const category: Model = {
       primaryKey: true,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -78,7 +77,6 @@ const category: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -87,7 +85,6 @@ const category: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -96,7 +93,6 @@ const category: Model = {
       primaryKey: false,
       required: true,
       unique: true,
-      generated: false,
     },
     {
       id: shortid(),
@@ -105,7 +101,6 @@ const category: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -158,7 +153,6 @@ const post: Model = {
 
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -167,7 +161,6 @@ const post: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -176,7 +169,6 @@ const post: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -185,7 +177,6 @@ const post: Model = {
       primaryKey: false,
       required: true,
       unique: true,
-      generated: false,
     },
     {
       id: shortid(),
@@ -194,7 +185,6 @@ const post: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -203,7 +193,6 @@ const post: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -212,7 +201,6 @@ const post: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -221,7 +209,6 @@ const post: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -313,7 +300,6 @@ const postCategory: Model = {
       primaryKey: true,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -322,7 +308,6 @@ const postCategory: Model = {
       primaryKey: true,
       required: false,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -358,7 +343,6 @@ const postComment: Model = {
       primaryKey: true,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -367,7 +351,6 @@ const postComment: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -376,7 +359,6 @@ const postComment: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -385,7 +367,6 @@ const postComment: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -394,7 +375,6 @@ const postComment: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -438,7 +418,6 @@ const postMeta: Model = {
       primaryKey: true,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -447,7 +426,6 @@ const postMeta: Model = {
       primaryKey: false,
       required: true,
       unique: true,
-      generated: false,
     },
     {
       id: shortid(),
@@ -456,7 +434,6 @@ const postMeta: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -484,7 +461,6 @@ const postTag: Model = {
       primaryKey: true,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -493,7 +469,6 @@ const postTag: Model = {
       primaryKey: true,
       required: false,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -529,7 +504,6 @@ const tag: Model = {
       primaryKey: true,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -538,7 +512,6 @@ const tag: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -547,7 +520,6 @@ const tag: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -556,7 +528,6 @@ const tag: Model = {
       primaryKey: false,
       required: true,
       unique: true,
-      generated: false,
     },
     {
       id: shortid(),
@@ -565,7 +536,6 @@ const tag: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -601,7 +571,6 @@ const user: Model = {
       primaryKey: true,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -610,7 +579,6 @@ const user: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -619,7 +587,6 @@ const user: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -628,7 +595,6 @@ const user: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -637,7 +603,6 @@ const user: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -646,7 +611,6 @@ const user: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -655,7 +619,6 @@ const user: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -664,7 +627,6 @@ const user: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -673,7 +635,6 @@ const user: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -682,7 +643,6 @@ const user: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -691,7 +651,6 @@ const user: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
   ],
   associations: [

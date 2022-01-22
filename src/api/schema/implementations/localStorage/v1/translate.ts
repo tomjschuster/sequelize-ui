@@ -53,7 +53,6 @@ function fromV1Field(field: FieldV1): Field {
   return {
     ...field,
     type: fromV1DataType(field.type),
-    generated: false,
   }
 }
 

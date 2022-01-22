@@ -18,7 +18,9 @@ import {
   sequelizeUuidVersion,
 } from './dataTypes'
 
-export function pkIsDefault(field: Field): boolean {
+export type SequelizeField = Field & { generated?: boolean }
+
+export function pkIsDefault(field: SequelizeField): boolean {
   return !!field.primaryKey && snakeCase(field.name) === 'id' && !!field.generated
 }
 
@@ -107,7 +109,7 @@ type PrefixPkArgs = {
   model: Model
   dbOptions: DbOptions
 }
-export function prefixPk({ field, model, dbOptions }: PrefixPkArgs): Field {
+export function prefixPk({ field, model, dbOptions }: PrefixPkArgs): SequelizeField {
   if (dbOptions.prefixPks === null || !field.primaryKey) return field
 
   const name = snakeCase(field.name)
@@ -121,7 +123,7 @@ type IdFieldArgs = {
   model: Model
   dbOptions: DbOptions
 }
-export function idField({ model, dbOptions }: IdFieldArgs): Field {
+export function idField({ model, dbOptions }: IdFieldArgs): SequelizeField {
   return {
     id: shortid(),
     name: getPkName({ model, dbOptions }),

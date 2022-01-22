@@ -29,7 +29,6 @@ export type Field = {
   primaryKey: boolean
   required: boolean
   unique: boolean
-  generated: boolean
 }
 
 export function emptySchema(): Schema {
@@ -64,7 +63,6 @@ export function emptyField(): Field {
     primaryKey: false,
     required: false,
     unique: false,
-    generated: false,
   }
 }
 

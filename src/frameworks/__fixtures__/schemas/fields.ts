@@ -21,7 +21,6 @@ const fields: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -30,7 +29,6 @@ const fields: Model = {
       primaryKey: true,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -39,7 +37,6 @@ const fields: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -48,7 +45,6 @@ const fields: Model = {
       primaryKey: false,
       required: false,
       unique: true,
-      generated: false,
     },
   ],
   associations: [],

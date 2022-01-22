@@ -133,7 +133,6 @@ const postCategory: Model = {
       primaryKey: true,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -142,7 +141,6 @@ const postCategory: Model = {
       primaryKey: true,
       required: false,
       unique: false,
-      generated: false,
     },
   ],
   associations: [

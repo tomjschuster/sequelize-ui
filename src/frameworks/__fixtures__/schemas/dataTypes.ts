@@ -45,7 +45,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -54,7 +53,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -63,7 +61,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -72,7 +69,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -81,7 +77,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -90,7 +85,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -99,7 +93,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -108,7 +101,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -117,7 +109,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -126,7 +117,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -135,7 +125,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -144,7 +133,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -153,7 +141,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -162,7 +149,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -171,7 +157,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -180,7 +165,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -189,7 +173,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -198,7 +181,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -207,7 +189,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -216,7 +197,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -225,7 +205,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -234,7 +213,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -243,7 +221,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -252,7 +229,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -261,7 +237,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -270,7 +245,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -279,7 +253,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -288,7 +261,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -297,7 +269,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -306,7 +277,6 @@ const dataTypes: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
   ],
   associations: [],

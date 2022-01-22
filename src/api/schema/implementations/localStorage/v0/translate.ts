@@ -64,7 +64,6 @@ function fromV0Field(field: FieldV0): Field {
     primaryKey: field.primaryKey,
     required: field.required,
     unique: field.unique,
-    generated: false,
   }
 }
 

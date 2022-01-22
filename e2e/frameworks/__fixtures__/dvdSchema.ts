@@ -29,7 +29,6 @@ const actor: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: '2',
@@ -38,7 +37,6 @@ const actor: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: '3',
@@ -47,7 +45,6 @@ const actor: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -109,7 +106,6 @@ const film: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: '5',
@@ -118,7 +114,6 @@ const film: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: '6',
@@ -127,7 +122,6 @@ const film: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: '7',
@@ -136,7 +130,6 @@ const film: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: '8',
@@ -147,7 +140,6 @@ const film: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: '9',
@@ -158,7 +150,6 @@ const film: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: '10',
@@ -167,7 +158,6 @@ const film: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
     {
       id: '11',
@@ -176,7 +166,6 @@ const film: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -270,7 +259,6 @@ const category: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: '13',
@@ -279,7 +267,6 @@ const category: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -315,7 +302,6 @@ const language: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: '15',
@@ -324,7 +310,6 @@ const language: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -352,7 +337,6 @@ const inventory: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -396,7 +380,6 @@ const store: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -432,7 +415,6 @@ const rental: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: '19',
@@ -441,7 +423,6 @@ const rental: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -477,7 +458,6 @@ const staff: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: '21',
@@ -486,7 +466,6 @@ const staff: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: '22',
@@ -495,7 +474,6 @@ const staff: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: '23',
@@ -504,7 +482,6 @@ const staff: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -540,7 +517,6 @@ const customer: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: '25',
@@ -549,7 +525,6 @@ const customer: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: '26',
@@ -558,7 +533,6 @@ const customer: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: '27',
@@ -567,7 +541,6 @@ const customer: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
   ],
   associations: [

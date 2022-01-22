@@ -58,7 +58,6 @@ const employee: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -67,7 +66,6 @@ const employee: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -76,7 +74,6 @@ const employee: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -85,7 +82,6 @@ const employee: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -94,7 +90,6 @@ const employee: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -103,7 +98,6 @@ const employee: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -155,7 +149,6 @@ const department: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -164,7 +157,6 @@ const department: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -216,7 +208,6 @@ const departmentEmployee: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -225,7 +216,6 @@ const departmentEmployee: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -234,7 +224,6 @@ const departmentEmployee: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -243,7 +232,6 @@ const departmentEmployee: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -279,7 +267,6 @@ const departmentManager: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -288,7 +275,6 @@ const departmentManager: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -297,7 +283,6 @@ const departmentManager: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -306,7 +291,6 @@ const departmentManager: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -342,7 +326,6 @@ const title: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -351,7 +334,6 @@ const title: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -360,7 +342,6 @@ const title: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -369,7 +350,6 @@ const title: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
@@ -397,7 +377,6 @@ const salary: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -406,7 +385,6 @@ const salary: Model = {
       primaryKey: false,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -415,7 +393,6 @@ const salary: Model = {
       primaryKey: true,
       required: true,
       unique: false,
-      generated: false,
     },
     {
       id: shortid(),
@@ -424,7 +401,6 @@ const salary: Model = {
       primaryKey: false,
       required: false,
       unique: false,
-      generated: false,
     },
   ],
   associations: [
