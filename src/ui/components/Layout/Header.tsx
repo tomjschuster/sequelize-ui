@@ -92,7 +92,7 @@ function Header({ compact }: HeaderProps): React.ReactElement {
               margin('mx-2'),
             )}
             alt=""
-            src="https://sequelizeui.app/static/images/sequelize-ui-tiny-white.svg"
+            src="/images/sequelize-ui-logo.svg"
           />
           Sequelize UI
         </h1>
