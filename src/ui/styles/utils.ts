@@ -75,6 +75,10 @@ export const subtitle = classnames(fontColor, fontSize('text-xl'), margin('mb-2'
 export const text = classnames(fontColor, fontSize('text-sm'), margin('mb-2'))
 
 export const link = classnames(fontColor, fontWeight('font-semibold'), textDecoration('underline'))
+export const linkBlue = classnames(
+  textColor('text-blue-700', 'dark:text-blue-300'),
+  textDecoration('hover:underline'),
+)
 
 export const breakWords = classnames(wordBreak('break-words'), width('w-full'))
 
@@ -91,8 +95,9 @@ export const breakWordsMinus24 = classnames(
 export const list = classnames(
   fontSize('text-sm'),
   listStyleType('list-disc'),
-  listStylePosition('list-inside'),
+  listStylePosition('list-outside'),
   lineHeight('leading-loose'),
+  margin('ml-8'),
 )
 
 const panelBase = classnames(

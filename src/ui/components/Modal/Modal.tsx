@@ -45,6 +45,7 @@ export type ModalProps = React.PropsWithChildren<{
   id: string
   title: React.ReactNode
   isOpen: boolean
+  confirmDestructive?: boolean
   confirmText?: string
   onConfirm?: () => void
   onClose: () => void
@@ -55,6 +56,7 @@ function Modal({
   title,
   isOpen,
   confirmText = 'OK',
+  confirmDestructive = false,
   onConfirm,
   onClose,
   children,
@@ -66,7 +68,12 @@ function Modal({
           <ErrorBoundary wrapper={ErrorWrapper}>
             <Title isOpen={isOpen}>{title}</Title>
             <Content>{children}</Content>
-            <Actions confirmText={confirmText} onConfirm={onConfirm} onClose={onClose} />
+            <Actions
+              confirmText={confirmText}
+              confirmDestructive={confirmDestructive}
+              onConfirm={onConfirm}
+              onClose={onClose}
+            />
           </ErrorBoundary>
           <CloseButton onClose={onClose} />
         </Dialog>
@@ -108,6 +115,8 @@ function ModalBackdrop({ isOpen, children, onClose }: ModalBackdropProps): React
           inset('top-0', 'bottom-0', 'xs:top-8', 'xs:bottom-auto', 'xs:left-1/2'),
           padding('xs:pb-8'),
           width('w-full'),
+          display('flex'),
+          justifyContent('justify-center'),
           toClassname('xs:-translate-x-1/2'),
           toClassname('xs:w-[theme(screens.sm)]'),
           toClassname('xs:max-w-[calc(100vw-theme(space.16))]'),
@@ -139,6 +148,7 @@ function Dialog({ id, isOpen, children }: DialogProps): React.ReactElement {
       className={classnames(
         backgroundWhite,
         position('absolute'),
+        width('w-full'),
         maxWidth('max-w-full'),
         padding('p-2', 'sm:p-4'),
         borderWidth('border'),
@@ -201,24 +211,40 @@ const modalButtonClass = classnames(
 )
 
 type ActionsProps = {
-  confirmText?: string
+  confirmText: string
+  confirmDestructive: boolean
   onConfirm?: () => void
   onClose: () => void
 }
 
-function Actions({ confirmText, onConfirm, onClose }: ActionsProps): React.ReactElement {
+function Actions({
+  confirmText,
+  confirmDestructive,
+  onConfirm,
+  onClose,
+}: ActionsProps): React.ReactElement {
   return (
     <div
       className={classnames(
         display('flex'),
         flexDirection('flex-col', 'xs:flex-row'),
         justifyContent('justify-end'),
+        margin('mt-4'),
       )}
     >
+      {onConfirm && confirmDestructive && (
+        <Button
+          color="red"
+          className={classnames(modalButtonClass, margin('mr-0', 'mb-4', 'xs:mb-0', 'xs:mr-4'))}
+          onClick={onConfirm}
+        >
+          {confirmText}
+        </Button>
+      )}
       <Button className={classnames(modalButtonClass)} onClick={onClose}>
         Close
       </Button>
-      {onConfirm && (
+      {onConfirm && !confirmDestructive && (
         <Button
           color="blue"
           className={classnames(modalButtonClass, margin('ml-0', 'mt-4', 'xs:mt-0', 'xs:ml-4'))}

@@ -164,11 +164,11 @@ function getExampleSchemaLicense(type: ExampleSchemaType): License {
 function getExampleSchemaSource(schemaType: ExampleSchemaType): string {
   switch (schemaType) {
     case ExampleSchemaType.Blog:
-      return 'https://github.com/tomjschuster/sequelize-ui-ts/blob/main/src/api/examples/blog.ts'
+      return 'https://github.com/tomjschuster/sequelize-ui-ts/blob/main/src/api/schema/examples/sakila.ts'
     case ExampleSchemaType.Employees:
-      return 'https://github.com/tomjschuster/sequelize-ui-ts/blob/main/src/api/examples/employees.ts'
+      return 'https://github.com/tomjschuster/sequelize-ui-ts/blob/main/src/api/schema/examples/employees.ts'
     case ExampleSchemaType.Sakila:
-      return 'https://github.com/tomjschuster/sequelize-ui-ts/blob/main/src/api/examples/sakila.ts'
+      return 'https://github.com/tomjschuster/sequelize-ui-ts/blob/main/src/api/schema/examples/sakila.ts'
   }
 }
 

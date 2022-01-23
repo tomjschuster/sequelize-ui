@@ -1,7 +1,7 @@
 import { Association, AssociationTypeType, Model, Schema, ThroughType } from '@src/core/schema'
 import { arrayToLookup } from '@src/utils/array'
 import { now } from '@src/utils/dateTime'
-import { get, lsKey, set } from '@src/utils/localStorage'
+import { get, lsKey, remove, set } from '@src/utils/localStorage'
 import { uniqueId, versionedName } from '@src/utils/string'
 import { SchemaApi, SCHEMA_NOT_FOUND_ERROR } from '../../api'
 import * as Ids from '../../examples/ids'
@@ -80,6 +80,10 @@ export default class LocalStorageSchemaApi implements SchemaApi {
       const updatedSchemas = schemas.filter((s) => s.id !== id)
       await setSchemas(updatedSchemas)
     }
+  }
+
+  async deleteAllSchemas(): Promise<void> {
+    remove(schemasKey())
   }
 }
 

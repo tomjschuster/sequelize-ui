@@ -74,7 +74,7 @@ function Button({
       className={classnames(
         flexCenter,
         buttonColorClassname(color),
-        padding('p-0.5', '2xs:p-1'),
+        padding('p-0.5', '2xs:p-1', 'xs:p-2'),
         borderWidth('border'),
         borderColor('border-gray-400'),
         borderRadius('rounded'),

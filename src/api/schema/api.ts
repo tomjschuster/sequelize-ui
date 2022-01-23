@@ -7,6 +7,7 @@ export interface SchemaApi {
   updateSchema(schema: Schema): Promise<Schema>
   updateModel(model: Model, schema: Schema): Promise<Schema>
   deleteSchema(id: string): Promise<void>
+  deleteAllSchemas(): Promise<void>
 }
 
-export const SCHEMA_NOT_FOUND_ERROR = '[Schema Api Error] Schema not found'
+export const SCHEMA_NOT_FOUND_ERROR = '[Schema API] Schema not found'
