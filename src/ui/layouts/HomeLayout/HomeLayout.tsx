@@ -32,6 +32,9 @@ type HomeLayoutProps = {
   exampleMeta: SchemaMeta[]
 }
 
+const CLEAER_DATA_SUCCESS_COPY = 'All schemas deleted.'
+const CLEAR_DATA_ERROR_COPY = `Failed to delete schemas. Try clearing localStorage or site data through your browser's developer console.`
+
 export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.ReactElement {
   const { data: schemas, error, refetch, loading } = useAsync({ getData: schemaApi.listSchemas })
 
@@ -48,14 +51,11 @@ export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.Reac
     try {
       await schemaApi.deleteAllSchemas()
       await refetch()
-      success('All schemas deleted.')
+      success(CLEAER_DATA_SUCCESS_COPY)
       closeInfoModal()
     } catch (e) {
       console.error(e)
-      logError(
-        `Failed to delete schemas. Try clearing localStorage or site data through your browser's developer console.`,
-        { ttl: 10000 },
-      )
+      logError(CLEAR_DATA_ERROR_COPY, { ttl: 10000 })
     }
   }
 
