@@ -7,6 +7,7 @@ import {
   classnames,
   margin,
   padding,
+  textColor,
   toClassname,
   width,
 } from '@src/ui/styles/classnames'
@@ -27,6 +28,7 @@ export default function AlertDisplay({ alert, onDismiss }: AlertDisplayProps): R
     <p
       className={classnames(
         flexCenterBetween,
+        textColor('text-black', 'dark:text-gray-50'),
         padding('pl-2', 'sm:pl-4', 'pr-1', 'py-1'),
         borderRadius('rounded-lg'),
         borderWidth('border'),
@@ -38,6 +40,10 @@ export default function AlertDisplay({ alert, onDismiss }: AlertDisplayProps): R
           'bg-green-50': alert.level === AlertLevel.Success,
           'bg-yellow-50': alert.level === AlertLevel.Warning,
           'bg-red-50': alert.level === AlertLevel.Error,
+          'dark:bg-gray-800': alert.level === AlertLevel.Info,
+          'dark:bg-green-900': alert.level === AlertLevel.Success,
+          'dark:bg-yellow-900': alert.level === AlertLevel.Warning,
+          'dark:bg-red-900': alert.level === AlertLevel.Error,
         }),
       )}
     >
