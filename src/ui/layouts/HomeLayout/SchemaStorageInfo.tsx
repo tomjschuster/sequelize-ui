@@ -18,7 +18,7 @@ export default function SchemaStorageInfo(): React.ReactElement {
         . This means:
       </p>
       <ul className={classnames(list, margin('mb-4'))}>
-        <li>Schemas you create are only saved in the current browser on your current device.</li>
+        <li>Schemas you create are saved in the current browser on your current device.</li>
         <li>
           Clearing <code>localStorage</code> or site data for https://sequelizeui.app in your
           browser&apos;s dev tools will erase any schemas you have created.

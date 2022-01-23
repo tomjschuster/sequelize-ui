@@ -104,7 +104,7 @@ function ModalBackdrop({ isOpen, children, onClose }: ModalBackdropProps): React
         fullscreen,
         display({ block: isOpen, hidden: !isOpen }),
         backgroundColor('bg-black'),
-        backgroundOpacity('!bg-opacity-30'),
+        backgroundOpacity('bg-opacity-30', 'dark:bg-opacity-60'),
         overflow('overflow-y-auto'),
       )}
       onKeyDown={handleKeyDown}

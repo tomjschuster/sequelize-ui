@@ -13,12 +13,13 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 - [ ] Home page copy
 
-  - [ ] Storage description
-  - [ ] Description
-  - [ ] TypeScript
-  - [ ] Alternatives
-  - [ ] Link to legacy
-  - [ ] Deploy legacy to /js
+  - [ ] Intro
+    - [ ] Link to legacy
+  - [ ] About
+    - [ ] TypeScript
+    - [ ] Alternatives
+  - [ ] Deploy to CloudFlare
+  - [ ] Switch domain
 
 - [ ] Dark mode build/cookie
 - [ ] Refactor css themes
@@ -55,5 +56,5 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 ### Documentation
 
-- Document modules/functions
 - Update README for project overview, contribution
+- Document modules/functions
