@@ -3,8 +3,8 @@ import employee from '@src/api/schema/examples/employees'
 import sakila from '@src/api/schema/examples/sakila'
 import { AssociationTypeType, ThroughType } from '@src/core/schema'
 import * as DateTimeUtils from '@src/utils/dateTime'
-import { SCHEMA_NOT_FOUND_ERROR } from '../api'
-import LocalStorageSchemaApi from '../implementations/localStorage'
+import LocalStorageSchemaApi from '..'
+import { SCHEMA_NOT_FOUND_ERROR } from '../../../api'
 
 const schemaApi = new LocalStorageSchemaApi()
 

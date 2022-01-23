@@ -1,7 +1,9 @@
-import { isBrowser } from './dom'
+function hasLocalStorage(): boolean {
+  return typeof localStorage !== 'undefined'
+}
 
 export function get<T>(key: string): T | null {
-  if (!isBrowser()) return null
+  if (!hasLocalStorage()) return null
 
   const item: string | null = localStorage.getItem(key)
   if (item === null) return null
@@ -10,20 +12,20 @@ export function get<T>(key: string): T | null {
 }
 
 export function set<T>(key: string, value: T): void {
-  if (!isBrowser()) return
+  if (!hasLocalStorage()) return
 
   const payload = JSON.stringify(value)
   localStorage.setItem(key, payload)
 }
 
 export function remove(key: string): void {
-  if (!isBrowser()) return
+  if (!hasLocalStorage()) return
 
   localStorage.removeItem(key)
 }
 
 export function clear(prefix: string = '__SEQUELIZEUI__'): void {
-  if (!isBrowser()) return
+  if (!hasLocalStorage()) return
 
   Object.keys(localStorage)
     .filter((key) => key.startsWith(prefix))
