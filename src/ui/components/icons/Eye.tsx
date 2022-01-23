@@ -1,7 +1,7 @@
 import React from 'react'
 import { withSvg } from './Svg'
 
-function PencilIcon(): React.ReactElement {
+function EyeIcon(): React.ReactElement {
   return (
     <>
       <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -14,4 +14,4 @@ function PencilIcon(): React.ReactElement {
   )
 }
 
-export default withSvg(PencilIcon)
+export default withSvg(EyeIcon)

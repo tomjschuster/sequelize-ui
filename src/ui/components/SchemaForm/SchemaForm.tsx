@@ -2,6 +2,7 @@ import { emptyModel, Model, Schema } from '@src/core/schema'
 import { SchemaErrors } from '@src/core/validation/schema'
 import usePrevious from '@src/ui/hooks/usePrevious'
 import {
+  alignSelf,
   backgroundColor,
   classnames,
   display,
@@ -115,6 +116,7 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
               />
 
               <IconButton
+                className={classnames(alignSelf('self-start'))}
                 label="delete modal"
                 icon={TrashIcon}
                 iconProps={{ size: 6 }}

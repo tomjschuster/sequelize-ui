@@ -17,7 +17,7 @@ module.exports = {
     './src/ui/lib/**/*.{js,ts,jsx,tsx}',
     './src/ui/styles/utils.ts',
   ],
-  darkMode: 'media', // or 'media' or 'class'
+  darkMode: 'class',
   theme: {
     extend: {
       flex: {
@@ -215,6 +215,9 @@ module.exports = {
         1.5: '0.375rem',
         2.5: '0.625rem',
         3.5: '0.875rem',
+      },
+      transitionProperty: {
+        size: 'height, width, margin, padding, font-size',
       },
     },
     borderWidth: {

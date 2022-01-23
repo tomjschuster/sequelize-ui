@@ -18,7 +18,6 @@ import {
   position,
   stroke,
   toClassname,
-  translate,
 } from '@src/ui/styles/classnames'
 import { breakWordsMinus24, breakWordsMinus8, panelAction, panelGrid } from '@src/ui/styles/utils'
 import React from 'react'
@@ -138,7 +137,7 @@ function ExampleSchemaInfo({
       className={classnames(
         position('absolute'),
         inset('right-0', 'top-1/2'),
-        translate('-translate-y-1/2'),
+        toClassname('-translate-y-1/2'),
       )}
     >
       <IconButton

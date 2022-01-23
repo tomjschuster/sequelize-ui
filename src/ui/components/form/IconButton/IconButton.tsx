@@ -1,5 +1,4 @@
 import {
-  alignSelf,
   backgroundColor,
   Classname,
   classnames,
@@ -39,7 +38,6 @@ function IconButton(
       className={classnames(
         padding_,
         backgroundColor('hover:bg-gray-200', toClassname('dark:hover:bg-gray-600')),
-        alignSelf('self-start'),
         className,
       )}
       {...rest}

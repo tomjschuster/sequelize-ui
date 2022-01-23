@@ -7,7 +7,6 @@
 //////////////////////////////////////////////////////////////////////////////
 
 import classnamesLib from 'clsx'
-import { WithNegative } from '../utils'
 
 export type TScreenReaders = 'sr-only' | 'not-sr-only'
 
@@ -4016,6 +4015,7 @@ export type TTransitionProperty =
   | 'transition-opacity'
   | 'transition-shadow'
   | 'transition-transform'
+  | 'transition-size'
 
 export type TTransitionDuration =
   | 'duration-75'
@@ -6503,7 +6503,7 @@ export type TObjectPosition =
   | 'object-right-top'
   | 'object-top'
 
-export type TInset = WithNegative<
+export type TInset =
   | 'inset-0'
   | 'inset-x-0'
   | 'inset-y-0'
@@ -6833,7 +6833,6 @@ export type TInset = WithNegative<
   | 'right-full'
   | 'bottom-full'
   | 'left-full'
->
 
 export type TZIndex = 'z-0' | 'z-10' | 'z-20' | 'z-30' | 'z-40' | 'z-50' | 'z-auto'
 
@@ -7335,7 +7334,7 @@ export type TRotate =
   | 'rotate-90'
   | 'rotate-180'
 
-export type TTranslate = WithNegative<
+export type TTranslate =
   | 'translate-x-0'
   | 'translate-x-1'
   | 'translate-x-2'
@@ -7428,7 +7427,6 @@ export type TTranslate = WithNegative<
   | 'translate-y-2/4'
   | 'translate-y-3/4'
   | 'translate-y-full'
->
 
 export type TSkew =
   | 'skew-x-0'

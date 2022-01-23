@@ -1,2 +1,2 @@
-export { default } from '../ActionMenu/Menu'
-export type { MenuItem } from '../ActionMenu/Menu'
+export { default } from './Menu'
+export type { MenuProps } from './Menu'

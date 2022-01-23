@@ -23,7 +23,7 @@ export type MenuItem = {
   onClick: () => void
 }
 
-export type MenuProps = {
+export type MenuPanelProps = {
   className?: Classname
   style?: React.CSSProperties
   items: MenuItem[]
@@ -34,8 +34,17 @@ export type MenuProps = {
   onMouseOverItem: (index: number) => void
 }
 
-function Menu(
-  { className, style, items, isOpen, activeIndex, onMouseOut, onMouseOverItem, onClick }: MenuProps,
+function MenuPanel(
+  {
+    className,
+    style,
+    items,
+    isOpen,
+    activeIndex,
+    onMouseOut,
+    onMouseOverItem,
+    onClick,
+  }: MenuPanelProps,
   ref: React.ForwardedRef<HTMLDivElement>,
 ): React.ReactElement {
   return (
@@ -83,4 +92,4 @@ function Menu(
   )
 }
 
-export default React.memo(React.forwardRef(Menu))
+export default React.memo(React.forwardRef(MenuPanel))

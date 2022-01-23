@@ -301,9 +301,9 @@ export function SchemaLayoutControlsWrapper({
         padding('p-0.5', 'xs:p-1', 'pt-0'),
         margin('mt-0.5', 'xs:mt-1'),
         backgroundWhite,
-        borderColor('border-gray-900'),
+        borderColor('border-gray-900', 'dark:border-gray-500'),
         borderWidth('border-b'),
-        zIndex('z-50'),
+        zIndex('z-10'),
       )}
     >
       {children}

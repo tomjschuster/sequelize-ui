@@ -1,5 +1,5 @@
 import { Language } from '@src/core/files/fileSystem'
-import { usePrefersDarkMode } from '@src/ui/hooks/useDarkMode'
+import { useDarkMode } from '@src/ui/components/DarkMode'
 import { classnames, fontSize, height, overflow, padding } from '@src/ui/styles/classnames'
 import Highlight, { defaultProps, Language as PrismLanguage } from 'prism-react-renderer'
 import darkTheme from 'prism-react-renderer/themes/vsDark'
@@ -13,9 +13,8 @@ type CodeProps = {
 }
 
 function Code({ content = '', language = Language.TypeScript }: CodeProps): React.ReactElement {
-  const prefersDarkMode = usePrefersDarkMode()
-  console.log({ prefersDarkMode })
-  const theme = prefersDarkMode ? darkTheme : lightTheme
+  const { darkMode } = useDarkMode()
+  const theme = darkMode ? darkTheme : lightTheme
 
   if (language === Language.Markdown) {
     return (

@@ -1,45 +1,33 @@
-export function get<T>(key: string): Promise<T | null> {
-  return new Promise<T | null>((resolve, reject) => {
-    try {
-      const item: string | null = localStorage.getItem(key)
-      if (item === null) return resolve(item)
-      const result: T = JSON.parse(item)
-      resolve(result)
-    } catch (e) {
-      reject(e)
-    }
-  })
+import { isBrowser } from './dom'
+
+export function get<T>(key: string): T | null {
+  if (!isBrowser()) return null
+
+  const item: string | null = localStorage.getItem(key)
+  if (item === null) return null
+  const result: T = JSON.parse(item)
+  return result
 }
 
-export function set<T>(key: string, value: T): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    try {
-      const payload = JSON.stringify(value)
-      localStorage.setItem(key, payload)
-      resolve()
-    } catch (e) {
-      reject(e)
-    }
-  })
+export function set<T>(key: string, value: T): void {
+  if (!isBrowser()) return
+
+  const payload = JSON.stringify(value)
+  localStorage.setItem(key, payload)
 }
 
-export function remove(key: string): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    try {
-      localStorage.removeItem(key)
-      resolve()
-    } catch (e) {
-      reject(e)
-    }
-  })
+export function remove(key: string): void {
+  if (!isBrowser()) return
+
+  localStorage.removeItem(key)
 }
 
-export function clear(prefix: string = '__SEQUELIZEUI__'): Promise<void> {
-  const removePromises = Object.keys(localStorage)
+export function clear(prefix: string = '__SEQUELIZEUI__'): void {
+  if (!isBrowser()) return
+
+  Object.keys(localStorage)
     .filter((key) => key.startsWith(prefix))
     .map((key) => localStorage.removeItem(key))
-
-  return Promise.all(removePromises).then()
 }
 
 const NAMESPACE = '__SEQUELIZEUI__'

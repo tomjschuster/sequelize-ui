@@ -24,7 +24,6 @@ import {
   padding,
   position,
   toClassname,
-  translate,
   width,
 } from '@src/ui/styles/classnames'
 import { backgroundWhite, breakWordsMinus8, fullscreen, subtitle } from '@src/ui/styles/utils'
@@ -101,8 +100,8 @@ function ModalBackdrop({ isOpen, children, onClose }: ModalBackdropProps): React
           position('absolute'),
           inset('top-0', 'bottom-0', 'xs:top-8', 'xs:bottom-auto', 'xs:left-1/2'),
           padding('xs:pb-8'),
-          translate('xs:-translate-x-1/2'),
           width('w-full'),
+          toClassname('xs:-translate-x-1/2'),
           toClassname('xs:w-[theme(screens.sm)]'),
           toClassname('xs:max-w-[calc(100vw-theme(space.16))]'),
         )}

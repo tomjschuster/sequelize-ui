@@ -43,6 +43,7 @@ export default function CodeExplorer({
           overflow('overflow-y-scroll'),
           borderWidth('border-b'),
           borderColor('border-gray-900'),
+          borderColor('dark:border-gray-500'),
         )}
       >
         <FileTreeView onSelect={onSelectFileSystemItem} onKeyDown={onKeyDown} fileTree={fileTree} />

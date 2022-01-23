@@ -9,6 +9,7 @@ import {
   padding,
   position,
   scale,
+  toClassname,
   transitionProperty,
   translate,
   zIndex,
@@ -56,7 +57,7 @@ function AlertItem({ alert, onDismiss }: AlertItemProps): React.ReactElement {
         position('fixed'),
         padding('sm:p-1.5'),
         inset('top-0', 'left-0', 'sm:left-1/2'),
-        translate('sm:-translate-x-1/2'),
+        translate(toClassname('sm:-translate-x-1/2')),
         transitionProperty('transition-transform'),
         hardwareAcceleration('transform-gpu'),
         scale({

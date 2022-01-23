@@ -218,7 +218,7 @@ async function migrateLegacy(): Promise<void> {
   try {
     if (await hasMigratedLegacy()) return
 
-    const legacySchema = await get('SUI_STATE')
+    const legacySchema = get('SUI_STATE')
 
     if (legacySchema) {
       const schema = await parseV0Lazy(legacySchema)
@@ -234,20 +234,20 @@ async function migrateLegacy(): Promise<void> {
 const MIGRATED_FROM_LEGACY_KEY = '/migrated-from-legacy'
 
 async function hasMigratedLegacy(): Promise<boolean> {
-  return (await get(lsKey(MIGRATED_FROM_LEGACY_KEY))) === 'true'
+  return get(lsKey(MIGRATED_FROM_LEGACY_KEY)) === true
 }
 
-function setHasMigratedLegacy(): Promise<void> {
-  return set(lsKey(MIGRATED_FROM_LEGACY_KEY), 'true')
+async function setHasMigratedLegacy(): Promise<void> {
+  return set(lsKey(MIGRATED_FROM_LEGACY_KEY), true)
 }
 
-function setSchemas(schemas: Schema[]): Promise<void> {
+async function setSchemas(schemas: Schema[]): Promise<void> {
   const payload = schemas.map(toV1)
   return set(schemasKey(), payload)
 }
 
 async function getSchemas(): Promise<Schema[]> {
-  const data = (await get(schemasKey())) || []
+  const data = get(schemasKey()) || []
   if (Array.isArray(data)) {
     const schemaResults = await Promise.all(data.map((schema) => parseSchema(schema)))
     const schemas = schemaResults.map((result) => result.schema)

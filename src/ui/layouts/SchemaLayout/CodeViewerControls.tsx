@@ -105,7 +105,7 @@ export default function CodeViewerControls({
         onTouchStartCapture={prefetchDownload}
       />
       <IconButton
-        className={classnames(display('hidden', '2xs:inline-block'))}
+        className={classnames(display('hidden', 'xs:inline-block'))}
         label="edit code"
         icon={PencilIcon}
         iconProps={{ size: 6 }}
@@ -113,13 +113,14 @@ export default function CodeViewerControls({
       />
       <IconButton
         ref={settingsRef}
-        className={classnames(display('hidden', 'xs:inline-block'))}
+        className={classnames(display('hidden', '2xs:inline-block'))}
         label={isDbOptionsOpen ? 'close settings' : 'open settings'}
         icon={SettingsIcon}
         iconProps={{ size: 6 }}
         onClick={toggleDbOptions}
       />
       <ActionMenu
+        small
         className={classnames(display('xs:hidden', 'inline-block'))}
         items={[
           {
