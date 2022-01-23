@@ -26,7 +26,13 @@ import {
   toClassname,
   width,
 } from '@src/ui/styles/classnames'
-import { backgroundWhite, breakWordsMinus8, fullscreen, subtitle } from '@src/ui/styles/utils'
+import {
+  backgroundWhite,
+  breakWordsMinus8,
+  fontColor,
+  fullscreen,
+  subtitle,
+} from '@src/ui/styles/utils'
 import { Key } from '@src/utils/dom'
 import React from 'react'
 import ErrorBoundary from '../ErrorBoundary'
@@ -87,6 +93,7 @@ function ModalBackdrop({ isOpen, children, onClose }: ModalBackdropProps): React
   return (
     <div
       className={classnames(
+        fontColor,
         fullscreen,
         display({ block: isOpen, hidden: !isOpen }),
         backgroundColor('bg-black'),

@@ -1,12 +1,14 @@
 import { classnames, toClassname, WithClassname } from '@src/ui/styles/classnames'
 import React from 'react'
 import css from './markdown.module.css'
+console.log({ css })
 
 type MarkdownProps = WithClassname<{
   content: string
+  darkMode?: boolean
 }>
 
-function Markdown({ content, className }: MarkdownProps): React.ReactElement {
+function Markdown({ content, darkMode = false, className }: MarkdownProps): React.ReactElement {
   const [markdown, setMarkdown] = React.useState<string>()
 
   React.useEffect(() => {
@@ -15,7 +17,11 @@ function Markdown({ content, className }: MarkdownProps): React.ReactElement {
 
   return (
     <div
-      className={classnames(className, toClassname(css.markdownBody))}
+      className={classnames(
+        toClassname({ [css.dark]: darkMode }),
+        className,
+        toClassname(css.markdownBody),
+      )}
       dangerouslySetInnerHTML={{ __html: markdown || placeholderSpaces(content) }}
     />
   )

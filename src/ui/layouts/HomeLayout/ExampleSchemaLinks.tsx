@@ -2,6 +2,7 @@ import { SchemaIconType, SchemaMeta } from '@src/api/meta'
 import { goTo } from '@src/routing/navigation'
 import RouteLink from '@src/routing/RouteLink'
 import { exampleSchemaRoute } from '@src/routing/routes'
+import { useDarkMode } from '@src/ui/components/DarkMode'
 import IconButton from '@src/ui/components/form/IconButton'
 import InfoIcon from '@src/ui/components/icons/Info'
 import Markdown from '@src/ui/components/Markdown'
@@ -30,6 +31,7 @@ type ExampleSchemaLinksProps = {
 }
 
 function ExampleSchemaLinks({ exampleMeta }: ExampleSchemaLinksProps): React.ReactElement {
+  const { darkMode } = useDarkMode()
   const { isOpen, open, close } = useIsOpen(false)
   const [selectedMeta, setSelectedMeta] = React.useState<SchemaMeta | undefined>(exampleMeta[0])
 
@@ -76,7 +78,7 @@ function ExampleSchemaLinks({ exampleMeta }: ExampleSchemaLinksProps): React.Rea
           onConfirm={handleConfirm}
           onClose={close}
         >
-          <Markdown content={selectedMeta.description.join('\n\n')} />
+          <Markdown darkMode={darkMode} content={selectedMeta.description.join('\n\n')} />
         </Modal>
       )}
     </>
