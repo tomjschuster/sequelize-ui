@@ -8,8 +8,13 @@ const DarkModeContext = React.createContext<DarkModeContext>({
   setDarkMode: () => void 0,
 })
 
-export function DarkModeProvider({ children }: { children: React.ReactNode }): React.ReactElement {
-  const value = useDarkModeInternal()
+export type DarkModeProviderProps = React.PropsWithChildren<{ initialDarkMode?: boolean }>
+
+export function DarkModeProvider({
+  initialDarkMode = false,
+  children,
+}: DarkModeProviderProps): React.ReactElement {
+  const value = useDarkModeInternal({ initialDarkMode })
   return <DarkModeContext.Provider value={value}>{children}</DarkModeContext.Provider>
 }
 

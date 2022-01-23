@@ -12,7 +12,8 @@ import React from 'react'
 function App({ Component, pageProps }: AppProps): React.ReactElement {
   return (
     <ErrorBoundary>
-      <DarkModeProvider>
+      {/* TODO: Two builds with initial dark/light mode, use JS cookie for serving proper build */}
+      <DarkModeProvider initialDarkMode={false}>
         <FocusProvider>
           <AlertProvider>{renderWithLayout(Component, pageProps)}</AlertProvider>
         </FocusProvider>

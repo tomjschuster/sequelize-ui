@@ -19,6 +19,7 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
   - [ ] Alternatives
   - [ ] Link to legacy
 
+- [ ] Dark mode build/cookie
 - [ ] Refactor css themes
 - [ ] Refactor code view controls
 - [ ] Cleanup unused code

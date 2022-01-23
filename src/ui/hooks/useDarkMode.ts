@@ -10,9 +10,12 @@ export type UseDarkModeResult = {
   setDarkMode: (value: boolean | null) => void
 }
 
-export default function useDarkMode(): UseDarkModeResult {
+type UseDarkModeProps = { initialDarkMode: boolean }
+export default function useDarkMode(
+  { initialDarkMode }: UseDarkModeProps = { initialDarkMode: false },
+): UseDarkModeResult {
   const [explicitDarkMode, setExplicitDarkMode] = React.useState<boolean | null>(false)
-  const prefersDarkMode = usePrefersDarkMode()
+  const prefersDarkMode = usePrefersDarkMode({ initialDarkMode })
   const darkMode = typeof explicitDarkMode === 'boolean' ? explicitDarkMode : prefersDarkMode
 
   React.useEffect(() => {
@@ -51,9 +54,11 @@ export default function useDarkMode(): UseDarkModeResult {
   return result
 }
 
-export function usePrefersDarkMode(): boolean {
+export function usePrefersDarkMode(
+  { initialDarkMode }: UseDarkModeProps = { initialDarkMode: false },
+): boolean {
   const mediaQueryList = React.useMemo(getPrefersDarkModeMql, [])
-  const [prefersDarkMode, setPrefersDarkMode] = React.useState<boolean>(false)
+  const [prefersDarkMode, setPrefersDarkMode] = React.useState<boolean>(initialDarkMode)
 
   React.useEffect(() => {
     setPrefersDarkMode(mediaQueryList?.matches || false)
