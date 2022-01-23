@@ -8,4 +8,8 @@ export function toClassname(classname: string | undefined | { [key: string]: boo
   return classnamesLib(classname) as Classname
 }
 
+export function darkModeClassname(darkMode: boolean): Classname {
+  return darkMode ? ('dark' as Classname) : undefined
+}
+
 export type WithClassname<T> = Override<T, { className?: Classname }>

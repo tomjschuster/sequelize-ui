@@ -1,4 +1,4 @@
-.markdownBody:not(.dark) {
+.markdownBody {
   color-scheme: light;
   --color-prettylights-syntax-comment: #6e7781;
   --color-prettylights-syntax-constant: #0550ae;
@@ -44,11 +44,7 @@
   --color-danger-fg: #cf222e;
 }
 
-.dark {
-  -ms-wrap-flow: initial;
-}
-
-.markdownBody.dark {
+:global(.dark) .markdownBody {
   color-scheme: dark;
   --color-prettylights-syntax-comment: #8b949e;
   --color-prettylights-syntax-constant: #79c0ff;

@@ -19,7 +19,6 @@ function Code({ content = '', language = Language.TypeScript }: CodeProps): Reac
   if (language === Language.Markdown) {
     return (
       <Markdown
-        darkMode={darkMode}
         className={classnames(height('h-full'), overflow('overflow-y-scroll'), padding('p-4'))}
         content={content}
       />
