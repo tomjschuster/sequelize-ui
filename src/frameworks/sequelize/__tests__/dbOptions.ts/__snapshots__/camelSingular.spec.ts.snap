@@ -486,9 +486,9 @@ export default db
     },
     Object {
       "content": "# data types
-This project was generated with [Sequelize UI](https://github.com/tomjschuster/sequelize-ui).
+This project was generated with [Sequelize UI](https://github.com/tomjschuster/sequelize-ui). The project is a simple [Node.js](https://nodejs.dev/) server with [Sequelize ORM](https://sequelize.org/).
 
-The project is a simple [Node.js](https://nodejs.dev/) server with [Sequelize ORM](https://sequelize.org/)
+Be sure to test all code for correctness and to test database migrations in a test environment before deploying to production.
 
 ## Running Project
 
