@@ -8,12 +8,13 @@ import {
   minHeight,
   WithClassname,
 } from '@src/ui/styles/classnames'
-import { panelAction } from '@src/ui/styles/utils'
+import { flexCenter, panelAction } from '@src/ui/styles/utils'
 import React from 'react'
 import { SvgProps } from '../../icons/Svg'
 
 const panelActionClassname = classnames(
   panelAction,
+  flexCenter,
   minHeight('min-h-16'),
   fontSize('text-lg'),
   borderStyle('border-dashed'),

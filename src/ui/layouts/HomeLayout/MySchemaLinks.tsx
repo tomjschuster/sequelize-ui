@@ -22,7 +22,7 @@ import {
   toClassname,
   width,
 } from '@src/ui/styles/classnames'
-import { breakWords, panelAction, panelGrid } from '@src/ui/styles/utils'
+import { breakWords, flexCenter, panelAction, panelGrid } from '@src/ui/styles/utils'
 import { now, TimeGranularity, timeSince } from '@src/utils/dateTime'
 import React from 'react'
 import ClockIcon from '../../components/icons/Clock'
@@ -69,6 +69,7 @@ function MySchemaButton({ schema }: MySchemaButtonProps): React.ReactElement {
     <div
       className={classnames(
         panelAction,
+        flexCenter,
         outlineStyle('focus-within:outline'),
         flexWrap('flex-wrap'),
         position('relative'),

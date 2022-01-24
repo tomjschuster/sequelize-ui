@@ -13,13 +13,20 @@ import {
   classnames,
   fontSize,
   inset,
+  lineHeight,
   margin,
   padding,
   position,
   stroke,
   toClassname,
 } from '@src/ui/styles/classnames'
-import { breakWordsMinus24, breakWordsMinus8, panelAction, panelGrid } from '@src/ui/styles/utils'
+import {
+  breakWordsMinus16,
+  breakWordsMinus8,
+  flexCenterVertical,
+  panelAction,
+  panelGrid,
+} from '@src/ui/styles/utils'
 import React from 'react'
 import FilmIcon from '../../components/icons/Film'
 import RssIcon from '../../components/icons/Rss'
@@ -94,14 +101,16 @@ function ExampleSchemaLink({ meta }: ExampleSchemaLinkProps): React.ReactElement
       prefetch={false}
       className={classnames(
         panelAction,
-        fontSize('text-sm'),
+        flexCenterVertical,
+        fontSize('text-base'),
+        lineHeight('leading-8'),
         backgroundColor('hover:bg-yellow-50', toClassname('dark:hover:bg-yellow-900')),
       )}
     >
       <span className={classnames(margin('mr-2'))}>
         <ExampleSchemaIcon meta={meta} />
       </span>
-      <span className={classnames(breakWordsMinus24)}>{meta.displayName}</span>
+      <span className={classnames(breakWordsMinus16)}>{meta.displayName}</span>
     </RouteLink>
   )
 }
@@ -143,8 +152,8 @@ function ExampleSchemaInfo({
       <IconButton
         onClick={handleClick}
         icon={InfoIcon}
-        iconProps={{ size: 5, strokeWidth: 2 }}
-        padding={toClassname(padding('p-2.5'))}
+        iconProps={{ size: 6, strokeWidth: 2 }}
+        padding={toClassname(padding('p-3'))}
         className={classnames(margin('mr-px'), borderRadius('rounded'), stroke('stroke-current'))}
         label="schema info"
       />

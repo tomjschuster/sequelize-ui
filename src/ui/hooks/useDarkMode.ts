@@ -39,7 +39,6 @@ export default function useDarkMode(
     } else {
       element.classList.remove(className)
     }
-    window.requestAnimationFrame(() => void 0)
   }, [darkMode])
 
   const result = React.useMemo(

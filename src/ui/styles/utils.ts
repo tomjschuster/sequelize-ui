@@ -89,9 +89,9 @@ export const breakWordsMinus8 = classnames(
   toClassname('w-[calc(100%-theme(space.8))]'),
 )
 
-export const breakWordsMinus24 = classnames(
+export const breakWordsMinus16 = classnames(
   wordBreak('break-words'),
-  toClassname('w-[calc(100%-theme(space.24))]'),
+  toClassname('w-[calc(100%-theme(space.16))]'),
 )
 
 export const list = classnames(
@@ -119,7 +119,6 @@ export const panelHeader = classnames(
 
 export const panelAction = classnames(
   panel,
-  flexCenter,
   padding('p-2'),
   borderColor('hover:border-gray-800', toClassname('dark:hover:border-gray-400')),
 )
