@@ -1,5 +1,6 @@
 import useOnClickOutside from '@src/ui/hooks/useOnClickOutside'
 import {
+  Classname,
   classnames,
   inset,
   position,
@@ -15,10 +16,16 @@ import MenuButton from '../MenuButton'
 import MenuPanel, { MenuItem } from '../MenuPanel'
 
 export type MenuProps = WithClassname<
-  ButtonHTMLAttributes<HTMLButtonElement> & { items: MenuItem[] }
+  ButtonHTMLAttributes<HTMLButtonElement> & { buttonClassName?: Classname; items: MenuItem[] }
 >
 
-function Menu({ className, onClick, items, ...props }: MenuProps): React.ReactElement {
+function Menu({
+  className,
+  buttonClassName,
+  onClick,
+  items,
+  ...props
+}: MenuProps): React.ReactElement {
   const ref = React.useRef() as React.MutableRefObject<HTMLDivElement>
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
   const [activeIndex, setActiveIndex] = React.useState<number>()
@@ -83,7 +90,7 @@ function Menu({ className, onClick, items, ...props }: MenuProps): React.ReactEl
     <div ref={ref} className={classnames(className)}>
       <div className={classnames(position('relative', flexCenter))}>
         <MenuButton
-          className={classnames(verticalAlign('align-middle'))}
+          className={classnames(buttonClassName, verticalAlign('align-middle'))}
           isActive={isOpen}
           onKeyDown={handleKeyDown}
           onClick={handleClick}

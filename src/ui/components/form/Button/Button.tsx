@@ -39,7 +39,7 @@ function buttonColorClassname(color?: ButtonColor): Classname {
       return classnames(backgroundColor('hover:bg-gray-100'), toClassname('dark:hover:bg-gray-700'))
     case 'blue':
       return classnames(
-        textColor('text-white'),
+        textColor('text-gray-200'),
         backgroundColor(
           'bg-blue-600',
           'dark:bg-blue-700',
@@ -49,7 +49,7 @@ function buttonColorClassname(color?: ButtonColor): Classname {
       )
     case 'red':
       return classnames(
-        textColor('text-white'),
+        textColor('text-gray-200'),
         backgroundColor(
           'bg-red-600',
           'dark:bg-red-700',

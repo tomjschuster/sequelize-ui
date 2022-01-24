@@ -97,7 +97,7 @@ function Header({ compact }: HeaderProps): React.ReactElement {
           Sequelize UI
         </h1>
       </RouteLink>
-      <div className={classnames(flexCenter)}>
+      <div className={classnames(flexCenter, margin('mr-2'))}>
         <a
           title="GitHub"
           className={classnames(padding('px-2'), textColor('hover:text-blue-700'))}
@@ -120,18 +120,27 @@ function Header({ compact }: HeaderProps): React.ReactElement {
             )}
           />
         </a>
-        <Menu className={margin('ml-1')} items={items} title="Appearance" aria-label="appearance">
+        <Menu
+          className={classnames(margin('ml-1'))}
+          buttonClassName={classnames(
+            boxShadow({ shadow: isExplicit }),
+            boxShadowColor('shadow-indigo-200'),
+          )}
+          items={items}
+          title="Appearance"
+          aria-label="appearance"
+        >
           {darkMode ? (
             <MoonIcon
               className={classnames(
-                textColor({ 'text-indigo-500': isExplicit, 'dark:text-indigo-400': isExplicit }),
+                textColor({ 'text-indigo-500': isExplicit, 'dark:text-indigo-300': isExplicit }),
               )}
               size={compact ? 5 : 6}
             />
           ) : (
             <SunIcon
               className={classnames(
-                textColor({ 'text-indigo-500': isExplicit, 'dark:text-indigo-600': isExplicit }),
+                textColor({ 'text-orange-700': isExplicit, 'dark:text-indigo-800': isExplicit }),
               )}
               size={compact ? 5 : 6}
             />

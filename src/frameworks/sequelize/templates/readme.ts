@@ -13,9 +13,9 @@ export type ReadmeTemplateArgs = {
 export function readmeTemplate({ schema, meta, dbOptions }: ReadmeTemplateArgs): string {
   return lines([
     `# ${schema.name}`,
-    'This project was generated with [Sequelize UI](https://github.com/tomjschuster/sequelize-ui).',
+    'This project was generated with [Sequelize UI](https://github.com/tomjschuster/sequelize-ui). The project is a simple [Node.js](https://nodejs.dev/) server with [Sequelize ORM](https://sequelize.org/).',
     blank(),
-    'The project is a simple [Node.js](https://nodejs.dev/) server with [Sequelize ORM](https://sequelize.org/)',
+    'Be sure to test all code for correctness and to test database migrations in a test environment before deploying to production.',
     blank(),
     meta ? schemaDescription(meta) : null,
     '## Running Project',

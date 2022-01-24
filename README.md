@@ -7,38 +7,35 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 ## Todo:
 
+### For Launch
+
+- Refactor home layout
+- Privacy policy
+- Update README for project overview, contribution
+- Deploy legacy to CloudFlare js.sequelizeui.app
+- Deploy new site to CloudFlare
+- Switch domain
+
 ### Features
 
 #### UI
 
-- [ ] Home page copy
-
-  - [ ] Link to legacy
-  - [ ] About
-    - [ ] TypeScript
-    - [ ] Alternatives
-  - [ ] Refactor home layout
-  - [ ] Deploy to CloudFlare
-  - [ ] Switch domain
-
-- [ ] Dark mode build/cookie
-- [ ] Refactor css themes
-  - [ ] Typeography
-  - [ ] Colors
-  - [ ] Layout
-  - [ ] Spacing
-- [ ] Refactor code view controls
-- [ ] Cleanup unused code
-- [ ] db compatibility warnings
-- [ ] Schema Layout context
-- [ ] Transition panels on delete
-- [ ] Cache file tree by schema id
-- [ ] Loading state for schema url
+- Dark mode build/cookie
+- Refactor css themes
+  - Typeography
+  - Colors
+  - Layout
+  - Spacing
+- Refactor code view controls
+- DB compatibility warnings
+- Transition panels on delete
+- Loading state for schema url
+- Cleanup unused code
 
 #### Codegen
 
-- [ ] JavaScript (non-TS) support
-  - [ ] Framework options
+- JavaScript (non-TS) support
+- Framework options
 
 #### API
 
@@ -50,15 +47,14 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 - unit
   - file tree
 - ci
-  - run e2e sql tests in ci
+  - run e2e sql tests in ci for all dialects
 - ui
-  - components (after UI complete)
-  - Browser tests (after UI complete)
+  - Browser tests
+  - Components?
 - sql
-  - verify all tables/columns for each db type with demo schema
+  - verify all tables/columns for each dialect with each example schema
   - review sequelize framework test coverage
 
 ### Documentation
 
-- Update README for project overview, contribution
 - Document modules/functions

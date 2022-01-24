@@ -68,11 +68,11 @@ export const section = classnames(
   margin('mx-auto'),
 )
 
-export const fontColor = textColor('text-black', 'dark:text-gray-200')
+export const fontColor = textColor('text-black', 'dark:text-gray-300')
 export const backgroundWhite = backgroundColor('bg-white', 'dark:bg-gray-900')
 
 export const title = classnames(fontColor, fontSize('text-2xl'), margin('mb-4'))
-export const subtitle = classnames(fontColor, fontSize('text-xl'), margin('mb-2'))
+export const subtitle = classnames(fontColor, fontSize('text-lg'), margin('mb-2'))
 
 export const text = classnames(fontColor, fontSize('text-sm'), margin('mb-2'))
 
