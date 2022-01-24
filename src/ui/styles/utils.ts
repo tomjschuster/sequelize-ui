@@ -45,6 +45,8 @@ export const flexCenter = classnames(
   justifyContent('justify-center'),
 )
 
+export const flexCenterVertical = classnames(display('flex'), alignItems('items-center'))
+
 export const flexCenterColumn = classnames(
   display('flex'),
   alignItems('items-center'),

@@ -92,7 +92,7 @@ function Header({ compact }: HeaderProps): React.ReactElement {
               margin('mx-2'),
             )}
             alt=""
-            src="/images/sequelize-ui-logo.svg"
+            src="/images/sequelize-ui-logo-small.svg"
           />
           Sequelize UI
         </h1>
@@ -120,7 +120,7 @@ function Header({ compact }: HeaderProps): React.ReactElement {
             )}
           />
         </a>
-        <Menu className={margin('ml-1')} items={items}>
+        <Menu className={margin('ml-1')} items={items} title="Appearance" aria-label="appearance">
           {darkMode ? (
             <MoonIcon
               className={classnames(

@@ -39,7 +39,10 @@ import ErrorBoundary from '../ErrorBoundary'
 import Portal from '../Portal'
 
 export const MODAL_PORTAL_ID = 'modal-container'
-const MODAL_LABEL = 'modal-label'
+
+function modalLabel(id: string): string {
+  return `modal-label-${id}`
+}
 
 export type ModalProps = React.PropsWithChildren<{
   id: string
@@ -66,7 +69,9 @@ function Modal({
       <ModalBackdrop isOpen={isOpen} onClose={onClose}>
         <Dialog id={id} isOpen={isOpen}>
           <ErrorBoundary wrapper={ErrorWrapper}>
-            <Title isOpen={isOpen}>{title}</Title>
+            <Title id={id} isOpen={isOpen}>
+              {title}
+            </Title>
             <Content>{children}</Content>
             <Actions
               confirmText={confirmText}
@@ -143,7 +148,7 @@ function Dialog({ id, isOpen, children }: DialogProps): React.ReactElement {
       ref={ref}
       role="dialog"
       id={id}
-      aria-labelledby={MODAL_LABEL}
+      aria-labelledby={modalLabel(id)}
       aria-modal={true}
       className={classnames(
         backgroundWhite,
@@ -164,10 +169,11 @@ function Dialog({ id, isOpen, children }: DialogProps): React.ReactElement {
 }
 
 type TitleProps = React.PropsWithChildren<{
+  id: string
   isOpen: boolean
 }>
 
-function Title({ isOpen, children }: TitleProps): React.ReactElement {
+function Title({ id, isOpen, children }: TitleProps): React.ReactElement {
   const ref = React.useRef() as React.MutableRefObject<HTMLDivElement>
   const [focusable, setFocusable] = React.useState<boolean>(false)
 
@@ -184,7 +190,7 @@ function Title({ isOpen, children }: TitleProps): React.ReactElement {
   return (
     <h2
       ref={ref}
-      id={MODAL_LABEL}
+      id={modalLabel(id)}
       tabIndex={focusable ? 0 : -1}
       className={classnames(
         subtitle,

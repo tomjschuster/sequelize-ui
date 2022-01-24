@@ -1,6 +1,7 @@
 import { SchemaMeta } from '@src/api/meta'
 import schemaApi from '@src/api/schema'
-import { Schema } from '@src/core/schema'
+import RouteLink from '@src/routing/RouteLink'
+import { newSchemaRoute } from '@src/routing/routes'
 import IconButton from '@src/ui/components/form/IconButton'
 import InfoIcon from '@src/ui/components/icons/Info'
 import Modal from '@src/ui/components/Modal'
@@ -8,23 +9,30 @@ import useAsync from '@src/ui/hooks/useAsync'
 import useIsOpen from '@src/ui/hooks/useIsOpen'
 import { useAlert } from '@src/ui/lib/alert'
 import {
+  alignItems,
+  backgroundColor,
   classnames,
   display,
+  fontSize,
+  fontWeight,
   height,
+  letterSpacing,
+  lineHeight,
   margin,
-  minHeight,
+  maxWidth,
   overflow,
   padding,
+  textAlign,
+  verticalAlign,
   width,
 } from '@src/ui/styles/classnames'
-import { flexCenter, section, title } from '@src/ui/styles/utils'
+import { flexCenter, inlineButton, section, title } from '@src/ui/styles/utils'
 import { clear } from '@src/utils/localStorage'
 import dynamic from 'next/dynamic'
 import React from 'react'
 import ExampleSchemaLinks from './ExampleSchemaLinks'
 import MySchemaLinks from './MySchemaLinks'
 import SchemasError from './SchemasError'
-import SchemasZeroState from './SchemasZeroState'
 
 const SchemaStorageInfo = dynamic(() => import('./SchemaStorageInfo'))
 
@@ -36,7 +44,7 @@ const CLEAER_DATA_SUCCESS_COPY = 'All schemas deleted.'
 const CLEAR_DATA_ERROR_COPY = `Failed to delete schemas. Try clearing localStorage or site data through your browser's developer console.`
 
 export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.ReactElement {
-  const { data: schemas, error, refetch, loading } = useAsync({ getData: schemaApi.listSchemas })
+  const { data: schemas, error, refetch } = useAsync({ getData: schemaApi.listSchemas })
 
   const { isOpen: isInfoModalOpen, open: openInfoModal, close: closeInfoModal } = useIsOpen()
 
@@ -63,29 +71,105 @@ export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.Reac
     <>
       <div className={classnames(overflow('overflow-y-scroll'), height('h-full'), padding('p-6'))}>
         <div className={classnames(section, margin('mb-6'))}>
-          <div className={classnames(display('flex'), title)}>
-            <h2>My Schemas</h2>
-            <IconButton
-              className={classnames(margin('ml-1'))}
-              icon={InfoIcon}
-              iconProps={{ size: 5, strokeWidth: 2 }}
-              label="my schemas info"
-              onClick={openInfoModal}
-            />
-          </div>
-          <div className={classnames(flexCenter, width('w-full'), minHeight('min-h-20'))}>
-            <MySchemas
-              schemas={schemas}
-              loading={loading}
-              error={error}
-              onClickClearData={handleClickClearData}
-            />
+          <div className={classnames(margin('mb-6'))}>
+            <h2
+              className={classnames(
+                fontSize('text-5xl'),
+                letterSpacing('tracking-wider'),
+                fontWeight('font-semibold'),
+                textAlign('text-center'),
+                margin('my-6'),
+              )}
+            >
+              <img
+                width="100px"
+                height="100px"
+                className={classnames(
+                  display('inline'),
+                  height('h-12'),
+                  width('w-12'),
+                  margin('mr-4'),
+                )}
+                alt=""
+                src="/images/sequelize-ui-logo-small.svg"
+              />
+              Sequelize UI
+            </h2>
+
+            <p
+              className={classnames(
+                maxWidth('max-w-md'),
+                margin('mx-auto'),
+                fontSize('text-2xl'),
+                textAlign('text-center'),
+              )}
+            >
+              Generate Sequelize code in TypeScript for any database, with any configuration.
+            </p>
           </div>
         </div>
-        <div className={section}>
+        <div className={classnames(section, margin('mb-12'))}>
+          {error && <SchemasError onClickClearData={handleClickClearData} />}
+          {schemas && schemas.length > 0 && (
+            <>
+              <div className={classnames(title, display('flex'), alignItems('items-center'))}>
+                <h2>My Schemas</h2>
+                <IconButton
+                  className={classnames(margin('ml-1'))}
+                  icon={InfoIcon}
+                  iconProps={{ size: 5, strokeWidth: 2 }}
+                  label="my schemas info"
+                  onClick={openInfoModal}
+                />
+              </div>
+              <div className={classnames(flexCenter, width('w-full'))}>
+                <MySchemaLinks schemas={schemas} />
+              </div>
+            </>
+          )}
+          {schemas && schemas.length === 0 && (
+            <>
+              <div className={classnames(flexCenter, width('w-full'))}>
+                <p className={classnames(fontSize('text-base'), lineHeight('leading-loose'))}>
+                  To get started,{' '}
+                  <RouteLink
+                    route={newSchemaRoute()}
+                    className={classnames(
+                      inlineButton(),
+                      margin('mx-1'),
+                      fontSize('text-sm'),
+                      fontWeight('font-bold'),
+                      backgroundColor('hover:bg-green-100'),
+                    )}
+                  >
+                    create a new schema
+                  </RouteLink>{' '}
+                  or select one of the example schemas{' '}
+                  <span className={classnames(display('inline-block'))}>
+                    below.
+                    <span className={classnames(verticalAlign('align-middle'))}>
+                      <IconButton
+                        className={classnames(margin('ml-1'))}
+                        icon={InfoIcon}
+                        iconProps={{ size: 5, strokeWidth: 2 }}
+                        label="my schemas info"
+                        onClick={openInfoModal}
+                      />
+                    </span>
+                  </span>
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+        <div className={classnames(section, margin('mb-12'))}>
           <h2 className={title}>Example Schemas</h2>
           <ExampleSchemaLinks exampleMeta={exampleMeta} />
         </div>
+        {/* <div className={classnames(section, margin('mb-12'))}>
+          <h2 className={title}>About Sequelize UI</h2>
+          <p className={classnames(text)}></p>
+        </div> */}
       </div>
       <Modal
         id="my-schemas-info"
@@ -100,27 +184,4 @@ export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.Reac
       </Modal>
     </>
   )
-}
-
-type MySchemasProps = {
-  schemas: Schema[] | undefined
-  loading: boolean
-  error: Error | undefined
-  onClickClearData: () => void
-}
-function MySchemas({
-  error,
-  loading,
-  schemas,
-  onClickClearData,
-}: MySchemasProps): React.ReactElement | null {
-  if (error) return <SchemasError onClickClearData={onClickClearData} />
-
-  if (loading) return null
-
-  if (!schemas?.length) {
-    return <SchemasZeroState />
-  }
-
-  return <MySchemaLinks schemas={schemas} />
 }
