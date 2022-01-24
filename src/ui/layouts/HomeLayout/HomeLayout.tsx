@@ -20,6 +20,7 @@ import {
   lineHeight,
   margin,
   maxWidth,
+  minHeight,
   overflow,
   padding,
   textAlign,
@@ -44,7 +45,7 @@ const CLEAER_DATA_SUCCESS_COPY = 'All schemas deleted.'
 const CLEAR_DATA_ERROR_COPY = `Failed to delete schemas. Try clearing localStorage or site data through your browser's developer console.`
 
 export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.ReactElement {
-  const { data: schemas, error, refetch } = useAsync({ getData: schemaApi.listSchemas })
+  const { data: schemas, error, loading, refetch } = useAsync({ getData: schemaApi.listSchemas })
 
   const { isOpen: isInfoModalOpen, open: openInfoModal, close: closeInfoModal } = useIsOpen()
 
@@ -74,7 +75,7 @@ export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.Reac
           <div className={classnames(margin('mb-6'))}>
             <h2
               className={classnames(
-                fontSize('text-5xl'),
+                fontSize('text-3xl', '2xs:text-4xl', 'xs:text-5xl'),
                 letterSpacing('tracking-wider'),
                 fontWeight('font-semibold'),
                 textAlign('text-center'),
@@ -93,14 +94,14 @@ export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.Reac
                 alt=""
                 src="/images/sequelize-ui-logo-small.svg"
               />
-              Sequelize UI
+              <span className={classnames(display('inline-block'))}>Sequelize UI</span>
             </h2>
 
             <p
               className={classnames(
                 maxWidth('max-w-md'),
                 margin('mx-auto'),
-                fontSize('text-2xl'),
+                fontSize('text-lg', '2xs:text-xl', 'xs:text-2xl'),
                 textAlign('text-center'),
               )}
             >
@@ -109,10 +110,20 @@ export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.Reac
           </div>
         </div>
         <div className={classnames(section, margin('mb-12'))}>
-          {error && <SchemasError onClickClearData={handleClickClearData} />}
+          {loading && !schemas && (
+            <div className={classnames(minHeight('min-h-26', 'xs:min-h-20', 'md:min-h-10'))} />
+          )}
+          {error && !schemas && <SchemasError onClickClearData={handleClickClearData} />}
           {schemas && schemas.length > 0 && (
             <>
-              <div className={classnames(title, display('flex'), alignItems('items-center'))}>
+              <div
+                className={classnames(
+                  title,
+                  display('flex'),
+                  alignItems('items-center'),
+                  minHeight('min-h-10'),
+                )}
+              >
                 <h2>My Schemas</h2>
                 <IconButton
                   className={classnames(margin('ml-1'))}
@@ -122,14 +133,26 @@ export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.Reac
                   onClick={openInfoModal}
                 />
               </div>
-              <div className={classnames(flexCenter, width('w-full'))}>
+              <div
+                className={classnames(
+                  flexCenter,
+                  width('w-full'),
+                  minHeight('min-h-26', 'xs:min-h-20', 'md:min-h-10'),
+                )}
+              >
                 <MySchemaLinks schemas={schemas} />
               </div>
             </>
           )}
           {schemas && schemas.length === 0 && (
             <>
-              <div className={classnames(flexCenter, width('w-full'))}>
+              <div
+                className={classnames(
+                  flexCenter,
+                  width('w-full'),
+                  minHeight('min-h-26', 'xs:min-h-20', 'md:min-h-10'),
+                )}
+              >
                 <p className={classnames(fontSize('text-base'), lineHeight('leading-loose'))}>
                   To get started,{' '}
                   <RouteLink
@@ -173,7 +196,7 @@ export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.Reac
       </div>
       <Modal
         id="my-schemas-info"
-        title="My Schemas"
+        title="Schema Storage"
         isOpen={isInfoModalOpen}
         onClose={closeInfoModal}
         confirmText="Clear my data"

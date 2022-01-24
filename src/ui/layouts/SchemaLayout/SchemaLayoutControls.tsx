@@ -242,11 +242,11 @@ function SchemaLayoutControlsActions({
         display('flex'),
         flex('flex-1'),
         justifyContent('justify-evenly', '2xs:justify-end'),
-        padding('p-1', 'pb-0.5'),
+        padding('p-1'),
       )}
     >
       <Button
-        className={classnames(width('w-16', 'md:w-20'))}
+        className={classnames(width('w-16', 'xs:w-20'))}
         icon={CloseIcon}
         iconProps={{ size: 4 }}
         size="text-xs"
@@ -260,8 +260,8 @@ function SchemaLayoutControlsActions({
           color="red"
           className={classnames(
             fontWeight('font-bold'),
-            width('w-16', 'md:w-20'),
-            margin('2xs:ml-2'),
+            width('w-16', 'xs:w-20'),
+            margin('2xs:ml-4'),
           )}
           icon={TrashIcon}
           size="text-xs"
@@ -274,8 +274,8 @@ function SchemaLayoutControlsActions({
         color="blue"
         className={classnames(
           fontWeight('font-bold'),
-          width('w-16', 'md:w-20'),
-          margin('2xs:ml-2'),
+          width('w-16', 'xs:w-20'),
+          margin('2xs:ml-4'),
         )}
         icon={FloppyDiscIcon}
         size="text-xs"
@@ -298,7 +298,7 @@ export function SchemaLayoutControlsWrapper({
         flexCenterBetween,
         position('relative'),
         width('w-full'),
-        padding('p-0.5', 'xs:p-1', 'pt-0'),
+        padding('p-0.5', 'xs:p-1'),
         margin('mt-0.5', 'xs:mt-1'),
         backgroundWhite,
         borderColor('border-gray-900', 'dark:border-gray-500'),
