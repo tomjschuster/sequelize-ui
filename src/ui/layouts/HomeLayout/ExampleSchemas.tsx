@@ -26,17 +26,18 @@ import {
   flexCenterVertical,
   panelAction,
   panelGrid,
+  title,
 } from '@src/ui/styles/utils'
 import React from 'react'
 import FilmIcon from '../../components/icons/Film'
 import RssIcon from '../../components/icons/Rss'
 import UserGroupIcon from '../../components/icons/UserGroup'
 
-type ExampleSchemaLinksProps = {
+type ExampleSchemasProps = {
   exampleMeta: SchemaMeta[]
 }
 
-function ExampleSchemaLinks({ exampleMeta }: ExampleSchemaLinksProps): React.ReactElement {
+function ExampleSchemas({ exampleMeta }: ExampleSchemasProps): React.ReactElement {
   const { isOpen, open, close } = useIsOpen(false)
   const [selectedMeta, setSelectedMeta] = React.useState<SchemaMeta | undefined>(exampleMeta[0])
 
@@ -55,6 +56,7 @@ function ExampleSchemaLinks({ exampleMeta }: ExampleSchemaLinksProps): React.Rea
 
   return (
     <>
+      <h2 className={title}>Example Schemas</h2>
       <ul className={classnames(panelGrid)}>
         {exampleMeta.map((meta) => {
           return (
@@ -161,4 +163,4 @@ function ExampleSchemaInfo({
   )
 }
 
-export default React.memo(ExampleSchemaLinks)
+export default React.memo(ExampleSchemas)

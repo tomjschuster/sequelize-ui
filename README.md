@@ -9,7 +9,6 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 ### For Launch
 
-- Refactor home layout
 - Privacy policy
 - Update README for project overview, contribution
 - Deploy legacy to CloudFlare js.sequelizeui.app
