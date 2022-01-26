@@ -7,6 +7,7 @@ import {
   borderWidth,
   classnames,
   display,
+  flex,
   gridColumn,
   gridRow,
   gridTemplateColumns,
@@ -32,6 +33,7 @@ export default function CodeExplorer({
     <div
       className={classnames(
         height('h-full'),
+        flex('flex-1'),
         display('grid'),
         gridTemplateColumns('grid-cols-12'),
         gridTemplateRows('grid-rows-12'),
