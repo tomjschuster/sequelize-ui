@@ -4473,6 +4473,8 @@ export type TGridTemplateRows =
   | 'grid-rows-4'
   | 'grid-rows-5'
   | 'grid-rows-6'
+  | 'grid-rows-9'
+  | 'grid-rows-12'
   | 'grid-rows-none'
 
 export type TGridAutoRows = 'auto-rows-auto' | 'auto-rows-min' | 'auto-rows-max' | 'auto-rows-fr'

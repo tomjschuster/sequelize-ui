@@ -9,23 +9,22 @@ import {
 } from '@src/ui/styles/classnames'
 import React from 'react'
 
-type Props = {
-  children: React.ReactNode
-}
+type Props = React.PropsWithChildren<{
+  compact?: boolean
+}>
 
-function PageWrapper({ children }: Props): React.ReactElement {
+function PageWrapper({ compact, children }: Props): React.ReactElement {
   return (
     <div
       className={classnames(
-        height('h-screen'),
-        width('w-screen'),
+        height({ 'h-screen': compact }),
+        width({ 'w-screen': compact }),
         display('flex'),
         flexDirection('flex-col'),
         alignItems('items-stretch'),
         backgroundColor('bg-gray-50', 'dark:bg-gray-900'),
       )}
     >
-      {' '}
       {children}
     </div>
   )

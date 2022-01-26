@@ -13,6 +13,7 @@ import {
   classnames,
   display,
   inset,
+  margin,
   overflow,
   padding,
   position,
@@ -28,6 +29,8 @@ import CopyIcon from '../../components/icons/Copy'
 import FolderIcon from '../../components/icons/Folder'
 import PencilIcon from '../../components/icons/Pencil'
 import SettingsIcon from '../../components/icons/Settings'
+
+const iconButtonMargin = margin('mr-1.5')
 
 type CodeViewerControlsProps = {
   root: FileSystemItem
@@ -77,14 +80,14 @@ export default function CodeViewerControls({
   return (
     <>
       <IconButton
-        className={classnames(display('hidden', '2xs:inline-block'))}
+        className={classnames(iconButtonMargin, display('hidden', '2xs:inline-block'))}
         label="go back"
         icon={ArrowLeftIcon}
         iconProps={{ size: 6 }}
         onClick={onClickClose}
       />
       <IconButton
-        className={classnames(display('hidden', 'xs:inline-block'))}
+        className={classnames(iconButtonMargin, display('hidden', 'xs:inline-block'))}
         label="copy current file code"
         icon={CopyIcon}
         iconProps={{ size: 6 }}
@@ -94,7 +97,7 @@ export default function CodeViewerControls({
         disabled={!activeFile}
       />
       <IconButton
-        className={classnames(display('hidden', 'xs:inline-block'))}
+        className={classnames(iconButtonMargin, display('hidden', 'xs:inline-block'))}
         label="download project code"
         icon={FolderIcon}
         iconProps={{
@@ -105,7 +108,7 @@ export default function CodeViewerControls({
         onTouchStartCapture={prefetchDownload}
       />
       <IconButton
-        className={classnames(display('hidden', 'xs:inline-block'))}
+        className={classnames(iconButtonMargin, display('hidden', 'xs:inline-block'))}
         label="edit code"
         icon={PencilIcon}
         iconProps={{ size: 6 }}
@@ -113,7 +116,7 @@ export default function CodeViewerControls({
       />
       <IconButton
         ref={settingsRef}
-        className={classnames(display('hidden', '2xs:inline-block'))}
+        className={classnames(iconButtonMargin, display('hidden', '2xs:inline-block'))}
         label={isDbOptionsOpen ? 'close settings' : 'open settings'}
         icon={SettingsIcon}
         iconProps={{ size: 6 }}
@@ -121,7 +124,7 @@ export default function CodeViewerControls({
       />
       <ActionMenu
         small
-        className={classnames(display('xs:hidden', 'inline-block'))}
+        className={classnames(iconButtonMargin, display('xs:hidden', 'inline-block'))}
         items={[
           {
             label: 'Go back',

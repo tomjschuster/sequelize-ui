@@ -10,6 +10,7 @@ import {
   gridColumn,
   gridRow,
   gridTemplateColumns,
+  gridTemplateRows,
   height,
   overflow,
 } from '@src/ui/styles/classnames'
@@ -33,6 +34,7 @@ export default function CodeExplorer({
         height('h-full'),
         display('grid'),
         gridTemplateColumns('grid-cols-12'),
+        gridTemplateRows('grid-rows-12'),
         overflow('overflow-hidden'),
       )}
     >
@@ -50,7 +52,7 @@ export default function CodeExplorer({
       </div>
       <div
         className={classnames(
-          overflow('overflow-y-scroll'),
+          overflow('overflow-y-hidden'),
           gridColumn('col-span-12', 'lg:col-span-9'),
           gridRow('row-span-9', 'lg:row-span-12'),
         )}

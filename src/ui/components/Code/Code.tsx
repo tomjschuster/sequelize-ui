@@ -31,6 +31,7 @@ function Code({ content = '', language = Language.TypeScript }: CodeProps): Reac
         <pre
           className={`${className} ${classnames(
             height('h-full'),
+            overflow('overflow-scroll'),
             fontSize('text-xs', 'md:text-sm'),
             padding('p-2'),
           )}`}

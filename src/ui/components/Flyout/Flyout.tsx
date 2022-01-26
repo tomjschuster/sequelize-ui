@@ -38,7 +38,7 @@ export default function Flyout({
   onClickClose,
 }: FlyoutProps): React.ReactElement | null {
   const ref = React.useRef() as React.MutableRefObject<HTMLDivElement>
-  useLockScroll(ref)
+  useLockScroll({ ref })
   useTrapFocus({ ref })
 
   return (

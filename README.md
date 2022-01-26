@@ -10,6 +10,7 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 ### For Launch
 
 - Privacy policy
+- v7
 - Update README for project overview, contribution
 - Deploy legacy to CloudFlare js.sequelizeui.app
 - Deploy new site to CloudFlare
@@ -19,7 +20,6 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- Dark mode build/cookie
 - Refactor css themes
   - Typeography
   - Colors

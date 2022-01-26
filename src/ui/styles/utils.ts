@@ -106,10 +106,14 @@ const panelBase = classnames(
   borderWidth('border'),
   borderColor('border-gray-400', 'dark:border-gray-600'),
   borderRadius('rounded'),
-  backgroundColor('bg-white', 'dark:bg-gray-800'),
 )
 
-export const panel = classnames(panelBase, width('w-full'), height('h-full'))
+export const panel = classnames(
+  panelBase,
+  backgroundColor('bg-white', 'dark:bg-gray-800'),
+  width('w-full'),
+  height('h-full'),
+)
 
 export const panelHeader = classnames(
   padding('p-2'),

@@ -10,6 +10,7 @@ import {
   padding,
   textAlign,
   textDecoration,
+  toClassname,
 } from '@src/ui/styles/classnames'
 import {
   breakWords,
@@ -109,7 +110,11 @@ function SchemaView({
           ))}
           <li>
             <PanelButton
-              className={classnames(backgroundColor('hover:bg-green-50'))}
+              className={classnames(
+                backgroundColor(
+                  backgroundColor('hover:bg-green-50', toClassname('dark:hover:bg-green-900')),
+                ),
+              )}
               label="Create a new model"
               icon={PlusCircleIcon}
               iconProps={{ size: 6 }}

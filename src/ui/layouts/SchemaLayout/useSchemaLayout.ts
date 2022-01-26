@@ -60,6 +60,7 @@ type UseSchemaLayoutResult = {
   deleteAssociation: (association: Association) => void
   save: () => void
   cancel: () => void
+  back: () => void
 }
 export function useSchemaLayout({
   schema,
@@ -84,7 +85,7 @@ export function useSchemaLayout({
       onChange(schema)
         .then((schema) => {
           const messageString = typeof message === 'string' ? message : message(schema)
-          success(messageString, { ttl: 6000 })
+          success(messageString, { ttl: 600000 })
           return schema
         })
         .catch((e) => {
@@ -449,6 +450,15 @@ export function useSchemaLayout({
     exitEdit(schema)
   }, [schema, meta, exitEdit, onExit, viewCode])
 
+  const back = React.useCallback(() => {
+    if (state.type === SchemaLayoutStateType.VIEW_MODEL) {
+      setState({ type: SchemaLayoutStateType.VIEW_SCHEMA, schema })
+      return
+    }
+
+    onExit()
+  }, [schema, state, onExit])
+
   return {
     state,
     isEditing:
@@ -476,5 +486,6 @@ export function useSchemaLayout({
     viewSchema,
     save,
     cancel,
+    back,
   }
 }

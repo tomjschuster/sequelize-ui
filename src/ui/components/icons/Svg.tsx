@@ -13,7 +13,7 @@ export type SvgProps = {
   lgSize?: SvgSize
 }
 
-type SvgSize = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+type SvgSize = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 
 export default function Svg({
   title,
@@ -142,4 +142,12 @@ const _SIZE_CLASSNAMES = [
   'sm:w-8',
   'md:w-8',
   'lg:w-8',
+  'w-9',
+  'sm:w-9',
+  'md:w-9',
+  'lg:w-9',
+  'w-10',
+  'sm:w-10',
+  'md:w-10',
+  'lg:w-10',
 ]

@@ -25,6 +25,7 @@ import {
   position,
   toClassname,
   width,
+  zIndex,
 } from '@src/ui/styles/classnames'
 import {
   backgroundWhite,
@@ -107,6 +108,7 @@ function ModalBackdrop({ isOpen, children, onClose }: ModalBackdropProps): React
       className={classnames(
         fontColor,
         fullscreen,
+        zIndex('z-20'),
         display({ block: isOpen, hidden: !isOpen }),
         backgroundColor('bg-black'),
         backgroundOpacity('bg-opacity-30', 'dark:bg-opacity-60'),
@@ -140,7 +142,7 @@ type DialogProps = React.PropsWithChildren<{
 
 function Dialog({ id, isOpen, children }: DialogProps): React.ReactElement {
   const ref = React.useRef() as React.MutableRefObject<HTMLDivElement>
-  useLockScroll(ref)
+  useLockScroll({ ref, skip: !isOpen })
   useTrapFocus({ ref, skip: !isOpen })
 
   return (

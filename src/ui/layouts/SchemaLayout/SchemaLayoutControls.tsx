@@ -4,6 +4,7 @@ import * as FileTree from '@src/core/files/fileTree'
 import ArrowLeftIcon from '@src/ui/components/icons/ArrowLeft'
 import ActionMenu from '@src/ui/components/menus/ActionMenu'
 import {
+  backgroundColor,
   borderColor,
   borderWidth,
   classnames,
@@ -17,7 +18,7 @@ import {
   width,
   zIndex,
 } from '@src/ui/styles/classnames'
-import { backgroundWhite, flexCenterBetween } from '@src/ui/styles/utils'
+import { flexCenterBetween } from '@src/ui/styles/utils'
 import React from 'react'
 import Button from '../../components/form/Button'
 import IconButton from '../../components/form/IconButton'
@@ -90,6 +91,8 @@ export default function SchemaLayoutControls({
   )
 }
 
+const iconButtonMargin = margin('mr-1.5')
+
 type SchemaLayoutControlsActionsProps = {
   state: SchemaLayoutState
   meta?: SchemaMeta
@@ -132,7 +135,7 @@ function SchemaLayoutControlsActions({
     return (
       <>
         <IconButton
-          className={classnames(display('hidden', '2xs:inline-block'))}
+          className={classnames(iconButtonMargin, display('hidden', '2xs:inline-block'))}
           label="close schema"
           icon={ArrowLeftIcon}
           iconProps={{ size: 6 }}
@@ -140,7 +143,7 @@ function SchemaLayoutControlsActions({
         />
         {!meta?.isExample && (
           <IconButton
-            className={classnames(display('hidden', '2xs:inline-block'))}
+            className={classnames(iconButtonMargin, display('hidden', '2xs:inline-block'))}
             label="delete schema"
             icon={TrashIcon}
             iconProps={{ size: 6 }}
@@ -148,14 +151,14 @@ function SchemaLayoutControlsActions({
           />
         )}
         <IconButton
-          className={classnames(display('hidden', '2xs:inline-block'))}
+          className={classnames(iconButtonMargin, display('hidden', '2xs:inline-block'))}
           label="edit schema"
           icon={PencilIcon}
           iconProps={{ size: 6 }}
           onClick={onEdit}
         />
         <ActionMenu
-          className={classnames(display('2xs:hidden', 'inline-block'))}
+          className={classnames(iconButtonMargin, display('2xs:hidden', 'inline-block'))}
           items={[
             {
               label: 'Go back',
@@ -186,7 +189,7 @@ function SchemaLayoutControlsActions({
     return (
       <>
         <IconButton
-          className={classnames(display('hidden', '2xs:inline-block'))}
+          className={classnames(iconButtonMargin, display('hidden', '2xs:inline-block'))}
           label="close model"
           icon={ArrowLeftIcon}
           iconProps={{ size: 6 }}
@@ -194,7 +197,7 @@ function SchemaLayoutControlsActions({
         />
         {!meta?.isExample && (
           <IconButton
-            className={classnames(display('hidden', '2xs:inline-block'))}
+            className={classnames(iconButtonMargin, display('hidden', '2xs:inline-block'))}
             label="delete model"
             icon={TrashIcon}
             iconProps={{ size: 6 }}
@@ -202,14 +205,14 @@ function SchemaLayoutControlsActions({
           />
         )}
         <IconButton
-          className={classnames(display('hidden', '2xs:inline-block'))}
+          className={classnames(iconButtonMargin, display('hidden', '2xs:inline-block'))}
           label="edit model"
           icon={PencilIcon}
           iconProps={{ size: 6 }}
           onClick={onEdit}
         />
         <ActionMenu
-          className={classnames(display('2xs:hidden', 'inline-block'))}
+          className={classnames(iconButtonMargin, display('2xs:hidden', 'inline-block'))}
           items={[
             {
               label: 'Go back',
@@ -298,9 +301,8 @@ export function SchemaLayoutControlsWrapper({
         flexCenterBetween,
         position('relative'),
         width('w-full'),
-        padding('p-0.5', 'xs:p-1'),
-        margin('mt-0.5', 'xs:mt-1'),
-        backgroundWhite,
+        padding('p-0.5'),
+        backgroundColor('bg-white', 'dark:bg-gray-800'),
         borderColor('border-gray-900', 'dark:border-gray-500'),
         borderWidth('border-b'),
         zIndex('z-10'),

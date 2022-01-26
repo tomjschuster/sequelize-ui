@@ -1,17 +1,15 @@
+import ExternalLink from '@src/routing/ExternalLink'
 import {
+  alignItems,
   backgroundColor,
-  boxShadow,
-  boxShadowColor,
   classnames,
+  display,
+  flexDirection,
   fontSize,
-  fontWeight,
-  margin,
+  justifyContent,
   padding,
   textColor,
-  textDecoration,
-  toClassname,
 } from '@src/ui/styles/classnames'
-import { flexCenterBetween } from '@src/ui/styles/utils'
 import React from 'react'
 
 function Footer(): React.ReactElement {
@@ -19,28 +17,24 @@ function Footer(): React.ReactElement {
     <footer
       className={classnames(
         backgroundColor('bg-white', 'dark:bg-gray-900'),
-        flexCenterBetween,
+        display('flex'),
+        alignItems('xs:items-center'),
+        justifyContent('xs:justify-between'),
+        flexDirection('flex-col', 'xs:flex-row'),
         padding('px-2', 'py-1'),
-        boxShadow('shadow-inner'),
-        boxShadowColor('dark:shadow-gray-700'),
       )}
     >
       <span
         className={classnames(textColor('text-black', 'dark:text-gray-200'), fontSize('text-xs'))}
       >
-        Copyright &copy; {new Date().getFullYear()}{' '}
-        <a
-          className={classnames(
-            textDecoration('hover:underline'),
-            textColor('hover:text-blue-700', toClassname('dark:hover:text-blue-300')),
-            fontWeight('font-bold'),
-            fontSize('text-sm'),
-            margin('ml-1.5'),
-          )}
+        Copyright &copy; 2022{' '}
+        <ExternalLink
+          className={classnames(fontSize('text-xs'))}
           href="https://github.com/tomjschuster"
         >
           Tom Schuster
-        </a>
+        </ExternalLink>
+        .
       </span>
     </footer>
   )

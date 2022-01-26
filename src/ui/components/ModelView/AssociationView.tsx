@@ -12,6 +12,7 @@ import {
   classnames,
   fontWeight,
   inset,
+  maxWidth,
   padding,
   position,
   toClassname,
@@ -58,8 +59,9 @@ function AssociationView({
             ) : (
               <button
                 className={classnames(
+                  maxWidth('max-w-full'),
                   inlineButton(
-                    backgroundColor('bg-yellow-50', toClassname('dark:hover:bg-yellow-900')),
+                    backgroundColor('bg-indigo-100', toClassname('dark:hover:bg-indigo-900')),
                   ),
                   fontWeight('font-semibold'),
                 )}

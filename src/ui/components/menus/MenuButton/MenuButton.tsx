@@ -30,7 +30,7 @@ function MenuButton(
         className,
         cursor('cursor-pointer'),
         borderRadius('rounded-full'),
-        padding('p-1'),
+        padding('p-0.5'),
         backgroundColor({
           'bg-gray-300': isActive,
           'hover:bg-gray-200': !isActive,

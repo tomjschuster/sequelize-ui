@@ -9,6 +9,7 @@ import {
   height,
   overflow,
   padding,
+  toClassname,
   width,
 } from '@src/ui/styles/classnames'
 import { panel, panelGrid, section, subtitle, title } from '@src/ui/styles/utils'
@@ -127,7 +128,11 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
           <li>
             <PanelButton
               id={createNewModelId()}
-              className={classnames(backgroundColor('hover:bg-green-50'))}
+              className={classnames(
+                backgroundColor(
+                  backgroundColor('hover:bg-green-50', toClassname('dark:hover:bg-green-900')),
+                ),
+              )}
               label="Create a new model"
               icon={PlusCircleIcon}
               iconProps={{ size: 6 }}

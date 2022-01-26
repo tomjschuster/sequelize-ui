@@ -10,6 +10,7 @@ import {
   textColor,
   toClassname,
   width,
+  wordBreak,
 } from '@src/ui/styles/classnames'
 import { flexCenterBetween } from '@src/ui/styles/utils'
 import React from 'react'
@@ -34,6 +35,7 @@ export default function AlertDisplay({ alert, onDismiss }: AlertDisplayProps): R
         borderWidth('border'),
         boxShadow('shadow-lg'),
         width('w-full'),
+        wordBreak('break-all'),
         toClassname('max-w-[100vw]'),
         backgroundColor({
           'bg-gray-50': alert.level === AlertLevel.Info,

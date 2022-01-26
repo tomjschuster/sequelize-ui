@@ -10,6 +10,7 @@ import {
   textAlign,
   width,
 } from '@src/ui/styles/classnames'
+import { flexCenter } from '@src/ui/styles/utils'
 import React from 'react'
 
 export default function Intro(): React.ReactElement {
@@ -17,6 +18,7 @@ export default function Intro(): React.ReactElement {
     <div className={classnames(margin('mb-6'))}>
       <h2
         className={classnames(
+          flexCenter,
           fontSize('text-3xl', '2xs:text-4xl', 'xs:text-5xl'),
           letterSpacing('tracking-wider'),
           fontWeight('font-semibold'),

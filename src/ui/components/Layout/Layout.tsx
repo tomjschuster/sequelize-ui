@@ -21,7 +21,7 @@ function Layout({ children, compact = false, ...metadataProps }: LayoutProps): R
   return (
     <>
       <Metadata {...metadataProps} />
-      <PageWrapper>
+      <PageWrapper compact={compact}>
         <Header compact={compact} />
         <main
           className={classnames(

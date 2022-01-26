@@ -18,7 +18,7 @@ export default function HomeLayout({ exampleMeta }: HomeLayoutProps): React.Reac
       <section className={classnames(section, margin('mb-6'))}>
         <Intro />
       </section>
-      <section id={MY_SCHEMAS_ID} className={classnames(section, margin('mb-12'))}>
+      <section id={MY_SCHEMAS_ID} className={classnames(section, margin('mb-6'))}>
         <MySchemas />
       </section>
       <section id={EXAMPLE_SCHEMAS_ID} className={classnames(section, margin('mb-12'))}>

@@ -26,7 +26,7 @@ export default function SchemaStorageInfo(): React.ReactElement {
         </li>
         <li>
           The data for schemas you create can be read by any JavaScript running on this website.
-          Sequelize UI does not explicitly send this data over the network, but&nbsp;
+          Sequelize UI does not intentionally send this data over the network, but&nbsp;
           <ExternalLink newTab href={XSS_URL}>
             XSS attacks
           </ExternalLink>

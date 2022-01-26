@@ -106,7 +106,7 @@ function ExampleSchemaLink({ meta }: ExampleSchemaLinkProps): React.ReactElement
         flexCenterVertical,
         fontSize('text-base'),
         lineHeight('leading-8'),
-        backgroundColor('hover:bg-yellow-50', toClassname('dark:hover:bg-yellow-900')),
+        backgroundColor('hover:bg-indigo-100', toClassname('dark:hover:bg-indigo-900')),
       )}
     >
       <span className={classnames(margin('mr-2'))}>

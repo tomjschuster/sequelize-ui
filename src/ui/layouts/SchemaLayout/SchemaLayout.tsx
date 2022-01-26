@@ -54,6 +54,7 @@ export default function SchemaLayout({
     deleteAssociation,
     save,
     cancel,
+    back,
   } = useSchemaLayout({
     schema,
     meta,
@@ -91,7 +92,7 @@ export default function SchemaLayout({
         onDelete={delete_}
         onCancel={cancel}
         onSave={save}
-        onClose={onClickClose}
+        onClose={back}
       />
       <SchemaLayoutContent
         state={state}

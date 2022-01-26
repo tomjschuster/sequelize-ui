@@ -54,10 +54,13 @@ function FileTreeView({ fileTree, onSelect, onKeyDown }: FileTreeProps): React.R
     <ul
       role="tree"
       className={classnames(
+        display('table'),
         whitespace('whitespace-nowrap'),
+        overflow('overflow-auto'),
         textColor('text-gray-600', 'dark:text-gray-200'),
         backgroundColor('bg-gray-100', 'dark:bg-gray-800'),
         height('h-full'),
+        width('w-full'),
       )}
       onKeyDown={onKeyDown}
       onFocus={setFocused}
@@ -111,7 +114,6 @@ function FileTreeItem({
         id={treeItemLabelId(path)}
         className={classnames(
           display('flex'),
-          overflow('overflow-x-auto'),
           alignItems('items-center'),
           width('w-full'),
           fontSize('text-sm'),
@@ -147,7 +149,10 @@ function FileTreeItem({
         {itemName(item)}
       </span>
       {isDirectory(item) && item.files.length > 0 && (
-        <ul role="group" className={classnames(display({ hidden: !expanded }))}>
+        <ul
+          role="group"
+          className={classnames(display({ hidden: !expanded, table: expanded }), width('w-full'))}
+        >
           {item.files
             .slice()
             .sort(compareItems)
@@ -198,7 +203,11 @@ function FileTreeListItem({
     <li
       role="treeitem"
       id={treeItemId(path)}
-      className={classnames(outlineStyle('focus:outline-none'))}
+      className={classnames(
+        display('table-row'),
+        width('w-full'),
+        outlineStyle('focus:outline-none'),
+      )}
       tabIndex={pathFocused ? 0 : -1}
       aria-level={depth}
       aria-setsize={parent?.files.length || 1}

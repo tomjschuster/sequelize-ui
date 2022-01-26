@@ -18,6 +18,7 @@ import {
   transitionDuration,
   transitionProperty,
   width,
+  zIndex,
 } from '@src/ui/styles/classnames'
 import { flexCenter } from '@src/ui/styles/utils'
 import React from 'react'
@@ -59,14 +60,14 @@ function Header({ compact }: HeaderProps): React.ReactElement {
   return (
     <header
       className={classnames(
+        zIndex('z-20'),
         backgroundColor('bg-white', 'dark:bg-gray-900'),
-        boxShadow('shadow-sm'),
+        boxShadow('shadow'),
         boxShadowColor('dark:shadow-gray-700'),
-        padding('p-1', { 'sm:p-2': !compact }),
+        padding('p-0.5', { 'sm:p-2': !compact }),
         display('flex'),
         alignItems('items-center'),
         justifyContent('justify-between'),
-        transitionProperty('transition-size'),
       )}
     >
       <RouteLink
@@ -76,7 +77,7 @@ function Header({ compact }: HeaderProps): React.ReactElement {
       >
         <h1
           className={classnames(
-            fontSize({ 'text-xl': !compact, 'sm:text-2xl': !compact, 'text-base': compact }),
+            fontSize({ 'text-xl': !compact, 'sm:text-2xl': !compact, 'text-lg': compact }),
             textColor('text-black', 'dark:text-gray-200'),
             display('flex'),
             alignItems('items-center'),
@@ -97,7 +98,9 @@ function Header({ compact }: HeaderProps): React.ReactElement {
           Sequelize UI
         </h1>
       </RouteLink>
-      <div className={classnames(flexCenter, margin('mr-2'))}>
+      <div
+        className={classnames(flexCenter, margin('mr-2'), padding('py-1', { 'sm:py-0': !compact }))}
+      >
         <a
           title="GitHub"
           className={classnames(padding('px-2'), textColor('hover:text-blue-700'))}
@@ -106,8 +109,7 @@ function Header({ compact }: HeaderProps): React.ReactElement {
           rel="noreferrer"
         >
           <GitHubIcon
-            size={6}
-            smSize={compact ? 6 : 8}
+            size={compact ? 6 : 8}
             className={classnames(
               fill(
                 'fill-black',
@@ -121,7 +123,7 @@ function Header({ compact }: HeaderProps): React.ReactElement {
           />
         </a>
         <Menu
-          className={classnames(margin('ml-1'))}
+          className={classnames(margin({ 'ml-1': compact, 'ml-2': !compact }))}
           buttonClassName={classnames(
             boxShadow({ shadow: isExplicit }),
             boxShadowColor('shadow-indigo-200'),
@@ -135,14 +137,14 @@ function Header({ compact }: HeaderProps): React.ReactElement {
               className={classnames(
                 textColor({ 'text-indigo-500': isExplicit, 'dark:text-indigo-300': isExplicit }),
               )}
-              size={compact ? 5 : 6}
+              size={compact ? 4 : 6}
             />
           ) : (
             <SunIcon
               className={classnames(
                 textColor({ 'text-orange-700': isExplicit, 'dark:text-indigo-800': isExplicit }),
               )}
-              size={compact ? 5 : 6}
+              size={compact ? 4 : 6}
             />
           )}
         </Menu>

@@ -178,7 +178,7 @@ export default function ModelForm({
             <PanelButton
               label="Add Field"
               className={classnames(
-                backgroundColor('hover:bg-green-50', toClassname('hover:bg-green-900')),
+                backgroundColor('hover:bg-green-50', toClassname('dark:hover:bg-green-900')),
               )}
               icon={PlusCircleIcon}
               iconProps={{ size: 6 }}
@@ -208,7 +208,7 @@ export default function ModelForm({
             <PanelButton
               label="Add association"
               className={classnames(
-                backgroundColor('hover:bg-green-50', toClassname('hover:bg-green-900')),
+                backgroundColor('hover:bg-green-50', toClassname('dark:hover:bg-green-900')),
               )}
               icon={PlusCircleIcon}
               iconProps={{ size: 6 }}

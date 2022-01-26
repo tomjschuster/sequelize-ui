@@ -12,10 +12,10 @@ import {
   classnames,
   display,
   fontSize,
-  fontWeight,
   lineHeight,
   margin,
   minHeight,
+  toClassname,
   verticalAlign,
   width,
 } from '@src/ui/styles/classnames'
@@ -89,9 +89,12 @@ export default function MySchemas(): React.ReactElement {
                   className={classnames(
                     inlineButton(),
                     margin('mx-1'),
-                    fontSize('text-sm'),
-                    fontWeight('font-bold'),
-                    backgroundColor('hover:bg-green-100'),
+                    backgroundColor(
+                      'bg-indigo-100',
+                      'hover:bg-indigo-200',
+                      'dark:bg-indigo-700',
+                      toClassname('dark:hover:bg-indigo-900'),
+                    ),
                   )}
                 >
                   create a new schema
