@@ -57,7 +57,7 @@ export async function getStaticProps(
 export default withLayout<SchemaPageProps>(({ meta }) => {
   return {
     compact: true,
-    title: `${meta.displayName} sample database Sequelize code`,
+    title: `${meta.displayName} sample database Sequelize code | Sequelize UI`,
     metaDescription: `A full Node.js project with TypeScript and Sequelize for the ${meta.displayName} sample database. Configure for MySQL, Postgres, SQLite or SQL Server.`,
   }
 })(SchemaPage)

@@ -1,10 +1,12 @@
 import {
+  alignItems,
+  backgroundColor,
   classnames,
   display,
   flex,
   flexDirection,
-  justifyContent,
   maxHeight,
+  minHeight,
   overflow,
   padding,
 } from '@src/ui/styles/classnames'
@@ -21,20 +23,30 @@ function Layout({ children, compact = false, ...metadataProps }: LayoutProps): R
   return (
     <>
       <Metadata {...metadataProps} />
-      <PageWrapper compact={compact}>
-        <Header compact={compact} />
-        <main
+      <PageWrapper>
+        <div
           className={classnames(
-            flex('flex-1'),
             display('flex'),
             flexDirection('flex-col'),
-            justifyContent('justify-center'),
-            overflow('overflow-hidden'),
+            alignItems('items-stretch'),
+            backgroundColor('bg-gray-50', 'dark:bg-gray-900'),
+            maxHeight({ 'max-h-full': compact }),
+            minHeight('min-h-full'),
           )}
         >
-          <ErrorBoundary wrapper={ErrorWrapper}>{children}</ErrorBoundary>
-        </main>
-        {!compact && <Footer />}
+          <Header compact={compact} />
+          <main
+            className={classnames(
+              flex('flex-1'),
+              display('flex'),
+              flexDirection('flex-col'),
+              overflow('overflow-hidden'),
+            )}
+          >
+            <ErrorBoundary wrapper={ErrorWrapper}>{children}</ErrorBoundary>
+          </main>
+          {!compact && <Footer />}
+        </div>
       </PageWrapper>
     </>
   )

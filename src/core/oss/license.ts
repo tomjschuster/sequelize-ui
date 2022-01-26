@@ -28,7 +28,18 @@ export function licenseTitle(license: License): string {
     case License.Mit:
       return 'MIT'
     case License.NewBsd:
-      return 'BSD 3-Clause License'
+      return 'BSD 3-Clause'
+  }
+}
+
+export function licenseShortTitle(license: License): string {
+  switch (license) {
+    case License.CcBySa3:
+      return 'CC By 3'
+    case License.Mit:
+      return 'MIT'
+    case License.NewBsd:
+      return 'BSD'
   }
 }
 

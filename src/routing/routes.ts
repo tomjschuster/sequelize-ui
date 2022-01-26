@@ -4,6 +4,7 @@ import { parse, ParsedUrlQuery } from 'querystring'
 export enum RouteType {
   NotFound = 'NOT_FOUND',
   Index = 'INDEX',
+  Privacy = 'PRIVACY',
   NewSchema = 'NEW_SCHEMA',
   Schema = 'SCHEMA',
   ExampleSchema = 'EXAMPLE_SCHEMA',
@@ -15,11 +16,18 @@ export type BaseRoute<T = RouteType, P = undefined> = P extends undefined
 
 export type NotFoundRoute = BaseRoute<typeof RouteType.NotFound>
 export type IndexRoute = BaseRoute<typeof RouteType.Index>
+export type PrivacyRoute = BaseRoute<typeof RouteType.Privacy>
 export type NewSchemaRoute = BaseRoute<typeof RouteType.NewSchema>
 export type SchemaRoute = BaseRoute<typeof RouteType.Schema, { id: string }>
 export type ExampleSchemaRoute = BaseRoute<typeof RouteType.ExampleSchema, { slug: string }>
 
-export type Route = NotFoundRoute | IndexRoute | NewSchemaRoute | SchemaRoute | ExampleSchemaRoute
+export type Route =
+  | NotFoundRoute
+  | IndexRoute
+  | PrivacyRoute
+  | NewSchemaRoute
+  | SchemaRoute
+  | ExampleSchemaRoute
 
 export function notFoundRoute(): NotFoundRoute {
   return { type: RouteType.NotFound }
@@ -27,6 +35,10 @@ export function notFoundRoute(): NotFoundRoute {
 
 export function indexRoute(): IndexRoute {
   return { type: RouteType.Index }
+}
+
+export function privacyRoute(): PrivacyRoute {
+  return { type: RouteType.Privacy }
 }
 
 export function newSchemaRoute(): NewSchemaRoute {
@@ -44,6 +56,9 @@ export function exampleSchemaRoute(slug: string): ExampleSchemaRoute {
 export function parseRoute(pathname: string, query: ParsedUrlQuery): Route {
   const isIndexPath = pathname === '/'
   if (isIndexPath) return indexRoute()
+
+  const isPrivacyPath = pathname === '/privacy'
+  if (isPrivacyPath) return newSchemaRoute()
 
   const isNewSchemaPath = pathname === '/schema/new'
   if (isNewSchemaPath) return newSchemaRoute()
@@ -74,6 +89,8 @@ export function routeToUrl(route: Route): string {
       return '/'
     case RouteType.Index:
       return '/'
+    case RouteType.Privacy:
+      return '/privacy'
     case RouteType.NewSchema:
       return '/schema/new'
     case RouteType.Schema:

@@ -1,4 +1,6 @@
 import ExternalLink from '@src/routing/ExternalLink'
+import RouteLink from '@src/routing/RouteLink'
+import { privacyRoute } from '@src/routing/routes'
 import {
   alignItems,
   backgroundColor,
@@ -7,8 +9,11 @@ import {
   flexDirection,
   fontSize,
   justifyContent,
+  margin,
   padding,
   textColor,
+  textDecoration,
+  toClassname,
 } from '@src/ui/styles/classnames'
 import React from 'react'
 
@@ -36,6 +41,17 @@ function Footer(): React.ReactElement {
         </ExternalLink>
         .
       </span>
+      <RouteLink
+        className={classnames(
+          margin('mt-1.5', 'xs:mt-0'),
+          textColor('hover:text-blue-700', toClassname('dark:hover:text-blue-300')),
+          textDecoration('hover:underline'),
+          fontSize('text-xs'),
+        )}
+        route={privacyRoute()}
+      >
+        Privacy Policy
+      </RouteLink>
     </footer>
   )
 }
