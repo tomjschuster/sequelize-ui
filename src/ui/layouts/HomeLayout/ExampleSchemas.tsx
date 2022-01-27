@@ -70,16 +70,7 @@ function ExampleSchemas({ exampleMeta }: ExampleSchemasProps): React.ReactElemen
       {selectedMeta && (
         <Modal
           id="example-schema-info"
-          title={
-            <>
-              <span className={classnames(margin('mr-2'))}>
-                <ExampleSchemaIcon meta={selectedMeta} />
-              </span>
-              <span className={classnames(breakWordsMinus8)}>
-                {selectedMeta.displayName} Sample Database
-              </span>
-            </>
-          }
+          title={<ExampleSchemaModalTitle meta={selectedMeta} />}
           isOpen={isOpen}
           confirmText="View code"
           onConfirm={handleConfirm}
@@ -160,6 +151,21 @@ function ExampleSchemaInfo({
         label="schema info"
       />
     </div>
+  )
+}
+
+type ExampleSchemaModalTitleProps = {
+  meta: SchemaMeta
+}
+
+function ExampleSchemaModalTitle({ meta }: ExampleSchemaModalTitleProps) {
+  return (
+    <>
+      <span className={classnames(margin('mr-2'))}>
+        <ExampleSchemaIcon meta={meta} />
+      </span>
+      <span className={classnames(breakWordsMinus8)}>{meta.displayName} Sample Database</span>
+    </>
   )
 }
 

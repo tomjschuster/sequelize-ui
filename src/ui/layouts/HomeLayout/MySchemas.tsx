@@ -1,4 +1,5 @@
 import schemaApi from '@src/api/schema'
+import { Schema } from '@src/core/schema'
 import RouteLink from '@src/routing/RouteLink'
 import { newSchemaRoute } from '@src/routing/routes'
 import IconButton from '@src/ui/components/form/IconButton'
@@ -61,60 +62,10 @@ export default function MySchemas(): React.ReactElement {
       <div
         className={classnames(minHeight('min-h-26', 'xs:min-h-20', 'md:min-h-10'), width('w-full'))}
       >
-        {error && !schemas && <SchemasError onClickClearData={handleClickClearData} />}
+        {!schemas && error && <SchemasError onClickClearData={handleClickClearData} />}
+        {schemas && schemas.length === 0 && <ZeroState onClickOpenInfo={openInfoModal} />}
         {schemas && schemas.length > 0 && (
-          <>
-            <div className={classnames(flexCenterVertical, margin('mb-4'))}>
-              <h2 className={classnames(fontColor, fontSize('text-2xl'))}>My Schemas</h2>
-              <IconButton
-                className={classnames(margin('ml-1'))}
-                icon={InfoIcon}
-                iconProps={{ size: 5, strokeWidth: 2 }}
-                label="my schemas info"
-                onClick={openInfoModal}
-              />
-            </div>
-            <div className={classnames(flexCenter)}>
-              <MySchemaLinks schemas={schemas} />
-            </div>
-          </>
-        )}
-        {schemas && schemas.length === 0 && (
-          <>
-            <div id={MY_SCHEMAS_ID} className={classnames(flexCenter)}>
-              <p className={classnames(fontSize('text-base'), lineHeight('leading-loose'))}>
-                To get started,{' '}
-                <RouteLink
-                  route={newSchemaRoute()}
-                  className={classnames(
-                    inlineButton(),
-                    margin('mx-1'),
-                    backgroundColor(
-                      'bg-indigo-100',
-                      'hover:bg-indigo-200',
-                      'dark:bg-indigo-700',
-                      toClassname('dark:hover:bg-indigo-900'),
-                    ),
-                  )}
-                >
-                  create a new schema
-                </RouteLink>{' '}
-                or select one of the example schemas{' '}
-                <span className={classnames(display('inline-block'))}>
-                  below.
-                  <span className={classnames(verticalAlign('align-middle'))}>
-                    <IconButton
-                      className={classnames(margin('ml-1'))}
-                      icon={InfoIcon}
-                      iconProps={{ size: 5, strokeWidth: 2 }}
-                      label="my schemas info"
-                      onClick={openInfoModal}
-                    />
-                  </span>
-                </span>
-              </p>
-            </div>
-          </>
+          <SchemasState schemas={schemas} onClickInfo={openInfoModal} />
         )}
       </div>
       <Modal
@@ -126,8 +77,72 @@ export default function MySchemas(): React.ReactElement {
         confirmDestructive
         onConfirm={handleConfirmMySchemaInfo}
       >
-        <SchemaStorageInfo />
+        {isInfoModalOpen && <SchemaStorageInfo />}
       </Modal>
+    </>
+  )
+}
+
+type ZeroStateProps = { onClickOpenInfo: () => void }
+
+function ZeroState({ onClickOpenInfo }: ZeroStateProps): React.ReactElement {
+  return (
+    <>
+      <div id={MY_SCHEMAS_ID} className={classnames(flexCenter)}>
+        <p className={classnames(fontSize('text-base'), lineHeight('leading-loose'))}>
+          To get started,{' '}
+          <RouteLink
+            route={newSchemaRoute()}
+            className={classnames(
+              inlineButton(),
+              margin('mx-1'),
+              backgroundColor(
+                'bg-indigo-100',
+                'hover:bg-indigo-200',
+                'dark:bg-indigo-700',
+                toClassname('dark:hover:bg-indigo-900'),
+              ),
+            )}
+          >
+            create a new schema
+          </RouteLink>{' '}
+          or select one of the example schemas{' '}
+          <span className={classnames(display('inline-block'))}>
+            below.
+            <span className={classnames(verticalAlign('align-middle'))}>
+              <IconButton
+                className={classnames(margin('ml-1'))}
+                icon={InfoIcon}
+                iconProps={{ size: 5, strokeWidth: 2 }}
+                label="my schemas info"
+                onClick={onClickOpenInfo}
+              />
+            </span>
+          </span>
+        </p>
+      </div>
+    </>
+  )
+}
+
+type SchemasStateProps = { schemas: Schema[]; onClickInfo: () => void }
+
+function SchemasState({ schemas, onClickInfo }: SchemasStateProps): React.ReactElement {
+  return (
+    <>
+      <div className={classnames(flexCenterVertical, margin('mb-4'))}>
+        <h2 className={classnames(fontColor, fontSize('text-2xl'))}>My Schemas</h2>
+        <IconButton
+          className={classnames(margin('ml-1'))}
+          icon={InfoIcon}
+          iconProps={{ size: 5, strokeWidth: 2 }}
+          label="my schemas info"
+          onClick={onClickInfo}
+        />
+      </div>
+      <div className={classnames(flexCenter)}>
+        <MySchemaLinks schemas={schemas} />
+      </div>
     </>
   )
 }

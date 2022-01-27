@@ -21,5 +21,5 @@ export async function getStaticProps(): Promise<GetStaticPropsResult<IndexPagePr
 export default withLayout<IndexPageProps>(() => ({
   title: 'Sequelize UI',
   metaDescription:
-    'Use Sequelize UI to quickly generate Sequelize TypeScript code online. Customize your data model and database settings, then export your Node.js project.',
+    'Use Sequelize UI to generate Sequelize TypeScript code online. Edit your data model and database settings, then export your Node.js project.',
 }))(IndexPage)
