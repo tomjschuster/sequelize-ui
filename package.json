@@ -99,7 +99,7 @@
     "prettier": "^2.5.1",
     "react-test-renderer": "^17.0.2",
     "source-map-support": "^0.5.21",
-    "sqlite3": "git@github.com:mapbox/node-sqlite3.git#3fb3715c4e699ca3bc19e47b136758c66f61e477",
+    "sqlite3": "npm:@vscode/sqlite3@^5.0.7",
     "tedious": "^14.1.0",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.5",
