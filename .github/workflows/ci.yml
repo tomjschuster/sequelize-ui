@@ -6,6 +6,9 @@ on:
       - main
   pull_request:
 
+env:
+  PAGES_PROJECT_NAME: sequelize-ui-ts
+
 jobs:
   install:
     runs-on: ubuntu-latest
@@ -90,14 +93,27 @@ jobs:
     runs-on: ubuntu-latest
     needs: [lint, test]
     steps:
-      - name: Deploy Cloudflare
+      - name: Deploy Cloudflare preview
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: tomjschuster/cloudflare-pages-deploy-action@v0
+        with:
+          account-id: '${{ secrets.CF_ACCOUNT_ID }}'
+          api-key: '${{ secrets.CF_GLOBAL_APIKEY }}'
+          email: '${{ secrets.CF_EMAIL }}'
+          project-name: '${{ env.PAGES_PROJECT_NAME }}'
+          branch: ${{ github.head_ref }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy Cloudflare production
         if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
         uses: tomjschuster/cloudflare-pages-deploy-action@v0
         with:
           account-id: '${{ secrets.CF_ACCOUNT_ID }}'
           api-key: '${{ secrets.CF_GLOBAL_APIKEY }}'
           email: '${{ secrets.CF_EMAIL }}'
-          project-name: '${{ secrets.PAGES_PROJECT_NAME }}'
+          project-name: '${{ env.PAGES_PROJECT_NAME }}'
+          production: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-firebase:
     runs-on: ubuntu-latest
