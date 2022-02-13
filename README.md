@@ -10,13 +10,15 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 ### For Launch
 
 - Update README for project overview, contribution
-- Deploy legacy to CloudFlare js.sequelizeui.app
-- Deploy new site to CloudFlare
-- Switch domain
+- Rebase onto tomjschuster/sequelize-ui main
+- Switch default/production branch to main
 
 ### Features
 
 #### UI
+
+- Code theme via CSS
+- Dark theme before mount
 
 - Refactor css themes
   - Typeography
