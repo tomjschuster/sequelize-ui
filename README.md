@@ -17,9 +17,6 @@ Rewrite of https://github.com/tomjschuster/sequelize-ui in TypeScript for genera
 
 #### UI
 
-- Code theme via CSS
-- Dark theme before mount
-
 - Refactor css themes
   - Typeography
   - Colors

@@ -1,8 +1,10 @@
-import { isBrowser } from '@src/utils/dom'
-import { get, remove, set } from '@src/utils/localStorage'
 import React from 'react'
-
-const LOCAL_STORAGE_KEY = 'dark-mode-enabled'
+import {
+  getPrefersDarkModeMql,
+  prefersDarkModeExplicit,
+  setPrefersDarkModeExplicit,
+  syncDomDarkMode,
+} from '../utils/darkMode'
 
 export type UseDarkModeResult = {
   darkMode: boolean
@@ -11,43 +13,35 @@ export type UseDarkModeResult = {
 }
 
 type UseDarkModeProps = { initialDarkMode: boolean }
+
 export default function useDarkMode(
   { initialDarkMode }: UseDarkModeProps = { initialDarkMode: false },
 ): UseDarkModeResult {
-  const [explicitDarkMode, setExplicitDarkMode] = React.useState<boolean | null>(false)
+  const [explicitDarkModeState, setExplicitDarkModeState] = React.useState<boolean | null>(null)
   const prefersDarkMode = usePrefersDarkMode({ initialDarkMode })
-  const darkMode = typeof explicitDarkMode === 'boolean' ? explicitDarkMode : prefersDarkMode
+  const darkMode =
+    typeof explicitDarkModeState === 'boolean' ? explicitDarkModeState : prefersDarkMode
 
   React.useEffect(() => {
-    setExplicitDarkMode(get(LOCAL_STORAGE_KEY))
+    setExplicitDarkModeState(prefersDarkModeExplicit())
   }, [])
 
   const setDarkMode = React.useCallback((value: boolean | null) => {
-    setExplicitDarkMode(value)
-    if (typeof value === 'boolean') {
-      set(LOCAL_STORAGE_KEY, value)
-    } else {
-      remove(LOCAL_STORAGE_KEY)
-    }
+    setExplicitDarkModeState(value)
+    setPrefersDarkModeExplicit(value)
   }, [])
 
   React.useEffect(() => {
-    const className = 'dark'
-    const element = window.document.body
-    if (darkMode) {
-      element.classList.add(className)
-    } else {
-      element.classList.remove(className)
-    }
+    syncDomDarkMode(darkMode)
   }, [darkMode])
 
   const result = React.useMemo(
     () => ({
       darkMode,
-      isExplicit: explicitDarkMode !== null,
+      isExplicit: explicitDarkModeState !== null,
       setDarkMode,
     }),
-    [darkMode, explicitDarkMode, setDarkMode],
+    [darkMode, explicitDarkModeState, setDarkMode],
   )
 
   return result
@@ -67,8 +61,4 @@ export function usePrefersDarkMode(
   }, [])
 
   return prefersDarkMode
-}
-
-function getPrefersDarkModeMql(): MediaQueryList | undefined {
-  return isBrowser() ? window.matchMedia('(prefers-color-scheme: dark)') : undefined
 }

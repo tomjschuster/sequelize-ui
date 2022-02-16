@@ -5,7 +5,5 @@
 html,
 body,
 #__next {
-  height: 100%;
-  margin: 0;
-  @apply text-black dark:text-gray-200;
+  @apply h-full m-0 text-black dark:text-gray-200;
 }

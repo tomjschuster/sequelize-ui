@@ -1,11 +1,9 @@
 import { Language } from '@src/core/files/fileSystem'
-import { useDarkMode } from '@src/ui/components/DarkMode'
-import { classnames, fontSize, height, overflow, padding } from '@src/ui/styles/classnames'
+import { classnames, height, overflow, padding, toClassname } from '@src/ui/styles/classnames'
 import Highlight, { defaultProps, Language as PrismLanguage } from 'prism-react-renderer'
-import darkTheme from 'prism-react-renderer/themes/vsDark'
-import lightTheme from 'prism-react-renderer/themes/vsLight'
 import React from 'react'
 import Markdown from '../Markdown'
+import css from './code.module.css'
 
 type CodeProps = {
   content?: string
@@ -13,9 +11,6 @@ type CodeProps = {
 }
 
 function Code({ content = '', language = Language.TypeScript }: CodeProps): React.ReactElement {
-  const { darkMode } = useDarkMode()
-  const theme = darkMode ? darkTheme : lightTheme
-
   if (language === Language.Markdown) {
     return (
       <Markdown
@@ -26,15 +21,15 @@ function Code({ content = '', language = Language.TypeScript }: CodeProps): Reac
   }
 
   return (
-    <Highlight {...defaultProps} theme={theme} code={content} language={toPrismLanguage(language)}>
+    <Highlight
+      {...defaultProps}
+      theme={undefined}
+      code={content}
+      language={toPrismLanguage(language)}
+    >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre
-          className={`${className} ${classnames(
-            height('h-full'),
-            overflow('overflow-scroll'),
-            fontSize('text-xs', 'md:text-sm'),
-            padding('p-2'),
-          )}`}
+          className={classnames(toClassname(css.code), toClassname(className), height('h-full'))}
           style={{ ...style, marginTop: 0 }}
         >
           {tokens.map((line, i) => (

@@ -32,7 +32,6 @@ export function PanelButton({
   className,
   ...props
 }: PanelButtonProps): React.ReactElement {
-  console.log({ className })
   return (
     <button type="button" className={classnames(className, panelActionClassname)} {...props}>
       <PanelActionContent icon={icon} iconProps={iconProps} label={label} />
