@@ -38,7 +38,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy Cloudflare production
-        if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+        if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' }}
         uses: tomjschuster/cloudflare-pages-deploy-action@v0
         with:
           account-id: "${{ env.CF_ACCOUNT_ID }}"
