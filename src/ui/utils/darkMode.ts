@@ -5,7 +5,7 @@ const LOCAL_STORAGE_KEY = 'dark-mode-enabled'
 const CLASS_NAME = 'dark'
 
 export function prefersDarkMode(): boolean {
-  return !!prefersDarkModeExplicit() || prefersDarkModeSystem()
+  return prefersDarkModeExplicit() ?? prefersDarkModeSystem()
 }
 
 export function prefersDarkModeExplicit(): boolean | null {
@@ -41,7 +41,7 @@ export function syncDomDarkModeScriptSource(): string {
   return `
       const explicitDarkMode = localStorage.getItem('${LOCAL_STORAGE_KEY}') === 'true'
       const darkModeMql =  window.matchMedia('(prefers-color-scheme: dark)')
-      const darkMode = explicitDarkMode || (darkModeMql && darkModeMql.matches)
+      const darkMode = explicitDarkMode !== null ? explicitDarkMode : (darkModeMql && darkModeMql.matches)
       const element = window.document.documentElement
 
       if (darkMode) {
