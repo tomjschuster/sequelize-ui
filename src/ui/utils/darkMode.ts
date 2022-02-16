@@ -39,9 +39,9 @@ export function syncDomDarkMode(darkMode: boolean): void {
 
 export function syncDomDarkModeScriptSource(): string {
   return `
-      const explicitDarkMode = localStorage.getItem('${LOCAL_STORAGE_KEY}') === 'true'
+      const explicitDarkModeLs = localStorage.getItem('${LOCAL_STORAGE_KEY}')
       const darkModeMql =  window.matchMedia('(prefers-color-scheme: dark)')
-      const darkMode = explicitDarkMode !== null ? explicitDarkMode : (darkModeMql && darkModeMql.matches)
+      const darkMode = explicitDarkModeLs ? explicitDarkModeLs === 'true' : darkModeMql.matches
       const element = window.document.documentElement
 
       if (darkMode) {
