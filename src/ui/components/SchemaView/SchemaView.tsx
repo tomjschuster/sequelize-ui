@@ -18,7 +18,7 @@ import {
   flexCenterBetween,
   panel,
   panelGrid,
-  section,
+  sectionWide,
   subtitle,
   title,
 } from '@src/ui/styles/utils'
@@ -56,7 +56,7 @@ function SchemaView({
       )}
     >
       <Breadcrumbs items={[]} current={`${titleCase(schema.name)} (schema)`} />
-      <div className={classnames(section)}>
+      <div className={classnames(sectionWide)}>
         <h2 className={classnames(title)}>Schema</h2>
         <div className={classnames(margin('mb-11'))}>
           <p className={classnames(fontSize('text-lg'), breakWords)}>
@@ -64,7 +64,7 @@ function SchemaView({
           </p>
         </div>
       </div>
-      <div className={classnames(section)}>
+      <div className={classnames(sectionWide)}>
         <h3 className={classnames(subtitle)}>Models</h3>
         <ul className={classnames(panelGrid)}>
           {schema.models.map((model) => (

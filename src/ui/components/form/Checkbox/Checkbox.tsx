@@ -1,7 +1,9 @@
 import {
   alignItems,
   backgroundColor,
+  borderColor,
   classnames,
+  cursor,
   display,
   fontSize,
   padding,
@@ -29,8 +31,10 @@ function Checkbox({ id, label, checked, onChange, ...rest }: CheckboxProps): Rea
       <input
         id={id}
         className={classnames(
-          backgroundColor('bg-white', 'dark:bg-gray-900'),
+          cursor('cursor-pointer'),
+          backgroundColor('bg-white', 'dark:bg-gray-900', toClassname('dark:checked:bg-blue-500')),
           ringOffsetColor(toClassname('dark:focus:ring-offset-black')),
+          borderColor(),
         )}
         type="checkbox"
         checked={checked}

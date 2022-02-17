@@ -68,6 +68,8 @@ export const section = classnames(
   margin('mx-auto'),
 )
 
+export const sectionWide = classnames(section, maxWidth('lg:max-w-screen-lg'))
+
 export const fontColor = textColor('text-black', 'dark:text-gray-300')
 export const backgroundWhite = backgroundColor('bg-white', 'dark:bg-gray-900')
 

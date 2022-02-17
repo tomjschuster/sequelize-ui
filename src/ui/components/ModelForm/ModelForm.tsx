@@ -10,7 +10,7 @@ import {
   padding,
   toClassname,
 } from '@src/ui/styles/classnames'
-import { panel, panelGrid, section, title } from '@src/ui/styles/utils'
+import { panel, panelGrid, sectionWide, title } from '@src/ui/styles/utils'
 import { focusById } from '@src/utils/dom'
 import React from 'react'
 import { InitialEditModelState, InitialEditModelStateType } from '../../layouts/SchemaLayout/types'
@@ -154,11 +154,11 @@ export default function ModelForm({
       )}
       {...autofillDisable}
     >
-      <div className={classnames(section)}>
+      <div className={classnames(sectionWide)}>
         <h2 className={classnames(title)}>Model</h2>
         <ModelFieldset name={model.name} onChange={handleChangeModel} errors={errors} />
       </div>
-      <div className={classnames(section, margin('mb-6'))}>
+      <div className={classnames(sectionWide, margin('mb-6'))}>
         <h3 className={classnames(title)}>Fields</h3>
 
         <ul className={classnames(panelGrid)}>
@@ -188,7 +188,7 @@ export default function ModelForm({
         </ul>
       </div>
 
-      <div className={classnames(section)}>
+      <div className={classnames(sectionWide)}>
         <h3 className={classnames(title)}>Associations</h3>
 
         <ul className={panelGrid}>

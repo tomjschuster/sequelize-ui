@@ -12,7 +12,7 @@ import {
   toClassname,
   width,
 } from '@src/ui/styles/classnames'
-import { panel, panelGrid, section, subtitle, title } from '@src/ui/styles/utils'
+import { panel, panelGrid, sectionWide, subtitle, title } from '@src/ui/styles/utils'
 import { focusById } from '@src/utils/dom'
 import React from 'react'
 import IconButton from '../form/IconButton'
@@ -90,7 +90,7 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
       )}
       {...autofillDisable}
     >
-      <div className={classnames(section)}>
+      <div className={classnames(sectionWide)}>
         <h2 className={classnames(title)}>Schema</h2>
         <div className={classnames(width('sm:w-1/2'))}>
           <TextInput
@@ -102,7 +102,7 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
           />
         </div>
       </div>
-      <div className={classnames(section)}>
+      <div className={classnames(sectionWide)}>
         <h3 className={classnames(subtitle)}>Models</h3>
         <ul className={classnames(panelGrid)}>
           {schema.models.map((m) => (

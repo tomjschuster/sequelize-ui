@@ -10,7 +10,7 @@ import {
   padding,
   toClassname,
 } from '@src/ui/styles/classnames'
-import { breakWords, panel, panelGrid, section, title } from '@src/ui/styles/utils'
+import { breakWords, panel, panelGrid, sectionWide, title } from '@src/ui/styles/utils'
 import { titleCase } from '@src/utils/string'
 import React from 'react'
 import Breadcrumbs from '../Breadcrumbs'
@@ -55,7 +55,7 @@ export default function ModelView({
         items={[{ label: `${titleCase(schema.name)} (schema)`, onClick: () => onViewSchema() }]}
         current={`${model && titleCase(model.name)} (model)`}
       />
-      <div className={classnames(section)}>
+      <div className={classnames(sectionWide)}>
         <h2 className={classnames(title)}>Model</h2>
         <div className={classnames(margin('mb-11'))}>
           <p className={classnames(fontSize('text-lg'), breakWords)}>
@@ -63,7 +63,7 @@ export default function ModelView({
           </p>
         </div>
       </div>
-      <div className={classnames(section)}>
+      <div className={classnames(sectionWide)}>
         <h3 className={classnames(title)}>Fields</h3>
 
         <ul className={classnames(panelGrid)}>
@@ -91,7 +91,7 @@ export default function ModelView({
           </li>
         </ul>
       </div>
-      <div className={classnames(section)}>
+      <div className={classnames(sectionWide)}>
         <h3 className={classnames(title, margin('mt-6'))}>Associations</h3>
 
         <ul className={panelGrid}>
