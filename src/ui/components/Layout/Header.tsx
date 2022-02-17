@@ -28,6 +28,7 @@ import GitHubIcon from '../icons/GitHub'
 import MoonIcon from '../icons/Moon'
 import SunIcon from '../icons/Sun'
 import Menu from '../menus/Menu'
+import SequelizeUiLogo from '../SequelizeUiLogo'
 
 type HeaderProps = {
   compact: boolean
@@ -64,7 +65,7 @@ function Header({ compact }: HeaderProps): React.ReactElement {
         backgroundColor('bg-white', 'dark:bg-gray-900'),
         boxShadow('shadow'),
         boxShadowColor('dark:shadow-gray-700'),
-        padding('p-0.5', { 'sm:p-2': !compact }),
+        padding('p-1', { 'sm:p-2': !compact }),
         display('flex'),
         alignItems('items-center'),
         justifyContent('justify-between'),
@@ -77,39 +78,26 @@ function Header({ compact }: HeaderProps): React.ReactElement {
       >
         <h1
           className={classnames(
-            fontSize({ 'text-xl': !compact, 'sm:text-2xl': !compact, 'text-lg': compact }),
+            fontSize('text-xl', { 'sm:text-2xl': !compact }),
             textColor('text-black', 'dark:text-gray-200'),
             display('flex'),
             alignItems('items-center'),
           )}
         >
-          <img
-            width="50px"
-            height="50px"
-            className={classnames(
-              display('inline'),
-              height({ 'h-6': !compact, 'sm:h-8': !compact, 'h-5': compact }),
-              width({ 'w-6': !compact, 'sm:w-8': !compact, 'w-5': compact }),
-              margin('mx-2'),
-            )}
-            alt=""
-            src="/images/sequelize-ui-logo-small.svg"
-          />
+          <SequelizeUiLogo className={classnames(display('inline'), height('h-8'), width('w-8'))} />
           Sequelize UI
         </h1>
       </RouteLink>
-      <div
-        className={classnames(flexCenter, margin('mr-2'), padding('py-1', { 'sm:py-0': !compact }))}
-      >
+      <div className={classnames(flexCenter, margin('mr-2'))}>
         <a
           title="GitHub"
-          className={classnames(padding('px-2'), textColor('hover:text-blue-700'))}
+          className={classnames(textColor('hover:text-blue-700'))}
           href="https://github.com/tomjschuster/sequelize-ui"
           target="_blank"
           rel="noreferrer"
         >
           <GitHubIcon
-            size={compact ? 6 : 8}
+            size={8}
             className={classnames(
               fill(
                 'fill-black',
@@ -123,7 +111,7 @@ function Header({ compact }: HeaderProps): React.ReactElement {
           />
         </a>
         <Menu
-          className={classnames(margin({ 'ml-1': compact, 'ml-2': !compact }))}
+          className={classnames(margin('ml-4'))}
           buttonClassName={classnames(
             boxShadow({ shadow: isExplicit }),
             boxShadowColor('shadow-indigo-200'),
@@ -137,14 +125,14 @@ function Header({ compact }: HeaderProps): React.ReactElement {
               className={classnames(
                 textColor({ 'text-indigo-500': isExplicit, 'dark:text-indigo-300': isExplicit }),
               )}
-              size={compact ? 4 : 6}
+              size={6}
             />
           ) : (
             <SunIcon
               className={classnames(
                 textColor({ 'text-orange-700': isExplicit, 'dark:text-indigo-800': isExplicit }),
               )}
-              size={compact ? 4 : 6}
+              size={6}
             />
           )}
         </Menu>

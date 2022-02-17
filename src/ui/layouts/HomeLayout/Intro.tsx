@@ -1,3 +1,4 @@
+import SequelizeUiLogo from '@src/ui/components/SequelizeUiLogo'
 import {
   classnames,
   display,
@@ -26,13 +27,7 @@ export default function Intro(): React.ReactElement {
           margin('my-6'),
         )}
       >
-        <img
-          width="100px"
-          height="100px"
-          className={classnames(display('inline'), height('h-12'), width('w-12'), margin('mr-4'))}
-          alt=""
-          src="/images/sequelize-ui-logo-small.svg"
-        />
+        <SequelizeUiLogo className={classnames(display('inline'), height('h-20'), width('w-20'))} />
         <span className={classnames(display('inline-block'))}>Sequelize UI</span>
       </h2>
 
