@@ -23,7 +23,13 @@
   },
   "overrides": [
     {
-      "files": ["jest.config.js", "next.config.js", "postcss.config.js", "tailwind.config.js"],
+      "files": [
+        "jest.config.js",
+        "next.config.js",
+        "next-sitemap.js",
+        "postcss.config.js",
+        "tailwind.config.js"
+      ],
       "rules": {
         "@typescript-eslint/no-var-requires": "off"
       },

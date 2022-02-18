@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://sequelizeui.app
+
+# Sitemaps
+Sitemap: https://sequelizeui.app/sitemap.xml
