@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+      - main
+      - js
   pull_request:
 
 env:
@@ -112,8 +114,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [lint, test]
     steps:
-      - name: Deploy legacy
-        if: ${{ github.ref == 'refs/heads/js' && github.event_name == 'push' }}
+      - name: Deploy branch
+        if: ${{ contains(fromJson('["refs/heads/js", "refs/heads/main"]'), github.ref) && github.event_name == 'push' }}
         uses: tomjschuster/cloudflare-pages-deploy-action@v0
         with:
           account-id: '${{ env.CF_ACCOUNT_ID }}'

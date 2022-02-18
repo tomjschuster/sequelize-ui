@@ -2,7 +2,6 @@
 
 ### Todo
 
-- [ ] Rebase onto tomjschuster/sequelize-ui main
 - [ ] Switch default/production branch to main
 
 - [ ] **API**: Persist db options for user
