@@ -12,7 +12,7 @@ export default function About(): React.ReactElement {
         <p className={classnames(text)}>
           Sequelize UI is an online{' '}
           <ExternalLink href="https://sequelize.org/">Sequelize ORM</ExternalLink> code generator,
-          which generates a full Node.js in{' '}
+          which generates a full Node.js project in{' '}
           <ExternalLink href="https://www.typescriptlang.org/">TypeScript</ExternalLink> project.
           Use the schema editor to create your database tables, fields and associations, then
           preview the Sequelize models and migrations in the code viewer before downloading the
