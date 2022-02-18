@@ -1,0 +1,35 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+    ],
+    "@typescript-eslint/no-inferrable-types": "off"
+  },
+  "overrides": [
+    {
+      "files": ["jest.config.js", "next.config.js", "postcss.config.js", "tailwind.config.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      },
+      "env": {
+        "node": true
+      }
+    }
+  ]
+}

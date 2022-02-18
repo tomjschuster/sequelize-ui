@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "isolatedModules": true,
+    "incremental": true,
+    "tsBuildInfoFile": "./.buildcache/tsbuildinfo",
+    "outDir": "./.buildcache/tsc-dist",
+    "paths": {
+      "@src/*": ["src/*"]
+    }
+  },
+  "exclude": ["node_modules"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+}

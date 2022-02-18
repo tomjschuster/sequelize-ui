@@ -1,0 +1,127 @@
+.code {
+  color-scheme: light;
+  --color-background: #fafafa;
+  --color-default: #121c22;
+
+  --color-boolean: var(--color-keyword);
+  --color-builtin: #0b564d;
+  --color-classname: var(--color-default);
+  --color-comment: #007a00;
+  --color-constant: #3730a3;
+  --color-function: var(--color-default);
+  --color-keyword: #1e40af;
+  --color-number: #972502;
+  --color-operator: #1e3a8a;
+  --color-punctuation: var(--color-operator);
+  --color-property: #0d5957;
+  --color-property-access: var(--color-property);
+  --color-string: #972502;
+}
+
+:global(.dark) .code {
+  color-scheme: dark;
+  --color-background: #1e1e1e;
+  --color-default: #eee;
+
+  --color-boolean: var(--color-keyword);
+  --color-builtin: #5eead4;
+  --color-classname: var(--color-default);
+  --color-comment: #6b7280;
+  --color-constant: #c7d2fe;
+  --color-function: var(--color-default);
+  --color-keyword: #73aedd;
+  --color-number: #fd9170;
+  --color-operator: #b0e9ff;
+  --color-punctuation: var(--color-operator);
+  --color-property: #80cbc4;
+  --color-property-access: var(--color-property);
+  --color-string: #d49d87;
+}
+
+.code {
+  @apply text-left text-xs sm:text-sm whitespace-pre;
+  color: var(--color-default);
+  background: var(--color-background);
+
+  font-family: Roboto Mono, monospace;
+
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+.code::-moz-selection,
+.code ::-moz-selection {
+  background: var(--color-background);
+}
+
+.code::selection,
+.code ::selection {
+  background: var(--color-background);
+}
+
+.code {
+  @apply relative overflow-auto my-1 p-2;
+}
+
+.code :global(.token):global(.boolean) {
+  color: var(--color-boolean);
+}
+
+.code :global(.token):global(.builtin) {
+  color: var(--color-builtin);
+}
+
+.code :global(.token):global(.class-name):not(.maybe-class-name) {
+  color: var(--color-classname);
+}
+
+.code :global(.token):global(.comment) {
+  color: var(--color-comment);
+  font-style: italic;
+}
+
+.code :global(.token):global(.constant) {
+  color: var(--color-constant);
+}
+
+.code :global(.token):global(.function) {
+  color: var(--color-function);
+}
+
+.code :global(.token):global(.keyword) {
+  color: var(--color-keyword);
+}
+
+.code :global(.token):global(.number) {
+  color: var(--color-number);
+}
+
+.code :global(.token):global(.operator) {
+  color: var(--color-operator);
+}
+
+.code :global(.token):global(.property) {
+  color: var(--color-property);
+}
+
+.code :global(.token):global(.property-access) {
+  color: var(--color-property-access);
+}
+
+.code :global(.token):global(.punctuation) {
+  color: var(--color-punctuation);
+}
+
+.code :global(.token):global(.string) {
+  color: var(--color-string);
+}

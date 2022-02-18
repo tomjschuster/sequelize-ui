@@ -1,0 +1,210 @@
+{
+  "ref": "schema",
+  "metadata": {
+    "version": "1.0.0"
+  },
+  "definitions": {
+    "schema": {
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" },
+        "models": { "elements": { "ref": "model" } }
+      },
+      "optionalProperties": {
+        "forkedFrom": { "nullable": true, "type": "string" }
+      }
+    },
+    "model": {
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "updatedAt": { "type": "timestamp" },
+        "createdAt": { "type": "timestamp" },
+        "fields": { "elements": { "ref": "field" } },
+        "associations": { "elements": { "ref": "association" } }
+      }
+    },
+    "field": {
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "ref": "dataType" },
+        "primaryKey": { "type": "boolean" },
+        "required": { "type": "boolean" },
+        "unique": { "type": "boolean" }
+      }
+    },
+    "association": {
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string" },
+        "sourceModelId": { "type": "string" },
+        "targetModelId": { "type": "string" },
+        "type": { "ref": "associationType" }
+      },
+      "optionalProperties": {
+        "alias": { "nullable": true, "type": "string" },
+        "foreignKey": { "nullable": true, "type": "string" }
+      }
+    },
+    "dataType": {
+      "discriminator": "type",
+      "mapping": {
+        "ARRAY": {
+          "additionalProperties": true,
+          "properties": {
+            "arrayType": { "ref": "dataType" }
+          }
+        },
+        "BIGINT": {
+          "additionalProperties": true,
+          "properties": {
+            "unsigned": { "type": "boolean" },
+            "autoincrement": { "type": "boolean" }
+          }
+        },
+        "BLOB": {
+          "additionalProperties": true,
+          "properties": {}
+        },
+        "BOOLEAN": {
+          "additionalProperties": true,
+          "properties": {}
+        },
+        "CITEXT": {
+          "additionalProperties": true,
+          "properties": {}
+        },
+        "DATE": {
+          "additionalProperties": true,
+          "properties": { "defaultNow": { "type": "boolean" } }
+        },
+        "DATE_TIME": {
+          "additionalProperties": true,
+          "properties": { "defaultNow": { "type": "boolean" } }
+        },
+        "DECIMAL": {
+          "additionalProperties": true,
+          "properties": {
+            "precision": {
+              "additionalProperties": true,
+              "nullable": true,
+              "properties": {
+                "precision": { "type": "int8" }
+              },
+              "optionalProperties": {
+                "scale": { "nullable": true, "type": "int8" }
+              }
+            },
+            "unsigned": { "type": "boolean" }
+          }
+        },
+        "DOUBLE": {
+          "additionalProperties": true,
+          "properties": { "unsigned": { "type": "boolean" } }
+        },
+        "ENUM": {
+          "additionalProperties": true,
+          "properties": { "values": { "elements": { "type": "string" } } }
+        },
+        "FLOAT": {
+          "additionalProperties": true,
+          "properties": { "unsigned": { "type": "boolean" } }
+        },
+        "INTEGER": {
+          "additionalProperties": true,
+          "properties": {
+            "unsigned": { "type": "boolean" },
+            "autoincrement": { "type": "boolean" }
+          }
+        },
+        "JSON": {
+          "additionalProperties": true,
+          "properties": {}
+        },
+        "JSONB": {
+          "additionalProperties": true,
+          "properties": {}
+        },
+        "REAL": {
+          "additionalProperties": true,
+          "properties": { "unsigned": { "type": "boolean" } }
+        },
+        "SMALLINT": {
+          "additionalProperties": true,
+          "properties": {
+            "unsigned": { "type": "boolean" },
+            "autoincrement": { "type": "boolean" }
+          }
+        },
+        "STRING": {
+          "additionalProperties": true,
+          "properties": {},
+          "optionalProperties": { "length": { "nullable": true, "type": "uint8" } }
+        },
+        "TEXT": {
+          "additionalProperties": true,
+          "properties": {}
+        },
+        "TIME": {
+          "additionalProperties": true,
+          "properties": { "defaultNow": { "type": "boolean" } }
+        },
+        "UUID": {
+          "additionalProperties": true,
+          "properties": {},
+          "optionalProperties": {
+            "defaultVersion": { "nullable": true, "enum": ["V1", "V4"] }
+          }
+        }
+      }
+    },
+    "associationType": {
+      "discriminator": "type",
+      "mapping": {
+        "BELONGS_TO": {
+          "additionalProperties": true,
+          "properties": {}
+        },
+        "HAS_MANY": {
+          "additionalProperties": true,
+          "properties": {}
+        },
+        "HAS_ONE": {
+          "additionalProperties": true,
+          "properties": {}
+        },
+        "MANY_TO_MANY": {
+          "additionalProperties": true,
+          "properties": {
+            "through": {
+              "discriminator": "type",
+              "mapping": {
+                "THROUGH_MODEL": {
+                  "additionalProperties": true,
+                  "properties": {
+                    "modelId": { "type": "string" }
+                  }
+                },
+                "THROUGH_TABLE": {
+                  "additionalProperties": true,
+                  "properties": {
+                    "table": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "optionalProperties": {
+            "targetFk": { "nullable": true, "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

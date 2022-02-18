@@ -1,0 +1,589 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sequelize Framework  SQL Server generates correct code with supported types and the proper config 1`] = `
+Object {
+  "files": Array [
+    Object {
+      "files": Array [
+        Object {
+          "content": "module.exports = {
+  development: {
+    dialect: 'mssql',
+    database: process.env.MSSQL_DB_NAME || 'DataTypes',
+    username: process.env.MSSQL_DB_USERNAME || 'sa',
+    password: process.env.MSSQL_DB_PASSWORD || 'Password1',
+    host: process.env.MSSQL_DB_HOST || 'localhost',
+    port: parseInt(process.env.MSSQL_DB_PORT || '1433')
+  },
+  test: {
+    dialect: 'mssql',
+    database: process.env.MSSQL_DB_NAME || 'DataTypes',
+    username: process.env.MSSQL_DB_USERNAME || 'sa',
+    password: process.env.MSSQL_DB_PASSWORD || 'Password1',
+    host: process.env.MSSQL_DB_HOST || 'localhost',
+    port: parseInt(process.env.MSSQL_DB_PORT || '1433')
+  },
+  production: {
+    dialect: 'mssql',
+    database: process.env.MSSQL_DB_NAME,
+    username: process.env.MSSQL_DB_USERNAME,
+    password: process.env.MSSQL_DB_PASSWORD,
+    host: process.env.MSSQL_DB_HOST,
+    port: parseInt(process.env.MSSQL_DB_PORT)
+  }
+}",
+          "name": "config.js",
+          "type": "FILE",
+        },
+      ],
+      "name": "config",
+      "type": "DIRECTORY",
+    },
+    Object {
+      "files": Array [
+        Object {
+          "content": "const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('categories', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      string: {
+        type: DataTypes.STRING,
+        field: 'string'
+      },
+      stringWithLength: {
+        type: DataTypes.STRING(100),
+        field: 'string_with_length'
+      },
+      text: {
+        type: DataTypes.TEXT,
+        field: 'text'
+      },
+      //// DataTypes.CITEXT not supported for SQL Server
+      // ciText: {
+      //   type: DataTypes.CITEXT,
+      //   field: 'ci_text'
+      // },
+      integer: {
+        type: DataTypes.INTEGER,
+        field: 'integer'
+      },
+      integerUnsigned: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        field: 'integer_unsigned'
+      },
+      integerAutoincrement: {
+        type: DataTypes.INTEGER,
+        field: 'integer_autoincrement',
+        autoIncrement: true
+      },
+      bigInt: {
+        type: DataTypes.BIGINT,
+        field: 'big_int'
+      },
+      smallInt: {
+        type: DataTypes.SMALLINT,
+        field: 'small_int'
+      },
+      float: {
+        type: DataTypes.FLOAT,
+        field: 'float'
+      },
+      real: {
+        type: DataTypes.REAL,
+        field: 'real'
+      },
+      double: {
+        type: DataTypes.DOUBLE,
+        field: 'double'
+      },
+      decimal: {
+        type: DataTypes.DECIMAL,
+        field: 'decimal'
+      },
+      decimalPrecision: {
+        type: DataTypes.DECIMAL.PRECISION(14),
+        field: 'decimal_precision'
+      },
+      decimalPrecisionAndScale: {
+        type: DataTypes.DECIMAL.PRECISION(14, 2),
+        field: 'decimal_precision_and_scale'
+      },
+      dateTime: {
+        type: DataTypes.DATE,
+        field: 'date_time'
+      },
+      dateTimeDefaultNow: {
+        type: DataTypes.DATE,
+        field: 'date_time_default_now',
+        defaultValue: DataTypes.NOW
+      },
+      date: {
+        type: DataTypes.DATEONLY,
+        field: 'date'
+      },
+      dateDefaultNow: {
+        type: DataTypes.DATEONLY,
+        field: 'date_default_now',
+        defaultValue: DataTypes.NOW
+      },
+      time: {
+        type: DataTypes.TIME,
+        field: 'time'
+      },
+      timeDefaultNow: {
+        type: DataTypes.TIME,
+        field: 'time_default_now',
+        defaultValue: DataTypes.NOW
+      },
+      boolean: {
+        type: DataTypes.BOOLEAN,
+        field: 'boolean'
+      },
+      enum: {
+        type: DataTypes.ENUM(),
+        field: 'enum'
+      },
+      //// DataTypes.ARRAY(DataTypes.STRING) not supported for SQL Server
+      // array: {
+      //   type: DataTypes.ARRAY(DataTypes.STRING),
+      //   field: 'array'
+      // },
+      //// DataTypes.JSON not supported for SQL Server
+      // json: {
+      //   type: DataTypes.JSON,
+      //   field: 'json'
+      // },
+      //// DataTypes.JSONB not supported for SQL Server
+      // jsonB: {
+      //   type: DataTypes.JSONB,
+      //   field: 'json_b'
+      // },
+      blob: {
+        type: DataTypes.BLOB,
+        field: 'blob'
+      },
+      uuid: {
+        type: DataTypes.UUID,
+        field: 'uuid'
+      },
+      uuidDefaultV4: {
+        type: DataTypes.UUID,
+        field: 'uuid_default_v4',
+        defaultValue: DataTypes.UUIDV4
+      },
+      uuidDefaultV1: {
+        type: DataTypes.UUID,
+        field: 'uuid_default_v1',
+        defaultValue: DataTypes.UUIDV1
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('categories');
+  },
+};",
+          "name": "20210101000000-create-categories.js",
+          "type": "FILE",
+        },
+      ],
+      "name": "migrations",
+      "type": "DIRECTORY",
+    },
+    Object {
+      "files": Array [
+        Object {
+          "content": "import Sequelize, { DataTypes, Model, Optional } from 'sequelize'
+//// DataTypes.JSON not supported for SQL Server
+// import { Json } from '../types'
+
+export interface CategoryAttributes {
+  string?: string
+  stringWithLength?: string
+  text?: string
+  //// DataTypes.CITEXT not supported for SQL Server
+  // ciText?: string
+  integer?: number
+  integerUnsigned?: number
+  integerAutoincrement?: number
+  bigInt?: number
+  smallInt?: number
+  float?: number
+  real?: number
+  double?: number
+  decimal?: number
+  decimalPrecision?: number
+  decimalPrecisionAndScale?: number
+  dateTime?: string
+  dateTimeDefaultNow?: string
+  date?: string
+  dateDefaultNow?: string
+  time?: string
+  timeDefaultNow?: string
+  boolean?: boolean
+  enum?: never
+  //// DataTypes.ARRAY(DataTypes.STRING) not supported for SQL Server
+  // array?: string[]
+  //// DataTypes.JSON not supported for SQL Server
+  // json?: Json
+  //// DataTypes.JSONB not supported for SQL Server
+  // jsonB?: Json
+  blob?: Buffer
+  uuid?: string
+  uuidDefaultV4?: string
+  uuidDefaultV1?: string
+}
+
+export type CategoryId = number
+export type CategoryCreationAttributes = CategoryAttributes & { id?: number }
+
+export class Category
+  extends Model<CategoryAttributes, CategoryCreationAttributes>
+  implements CategoryAttributes {
+  public readonly id?: number
+  public string?: string
+  public stringWithLength?: string
+  public text?: string
+  //// DataTypes.CITEXT not supported for SQL Server
+  // public ciText?: string
+  public integer?: number
+  public integerUnsigned?: number
+  public integerAutoincrement?: number
+  public bigInt?: number
+  public smallInt?: number
+  public float?: number
+  public real?: number
+  public double?: number
+  public decimal?: number
+  public decimalPrecision?: number
+  public decimalPrecisionAndScale?: number
+  public dateTime?: string
+  public dateTimeDefaultNow?: string
+  public date?: string
+  public dateDefaultNow?: string
+  public time?: string
+  public timeDefaultNow?: string
+  public boolean?: boolean
+  public enum?: never
+  //// DataTypes.ARRAY(DataTypes.STRING) not supported for SQL Server
+  // public array?: string[]
+  //// DataTypes.JSON not supported for SQL Server
+  // public json?: Json
+  //// DataTypes.JSONB not supported for SQL Server
+  // public jsonB?: Json
+  public blob?: Buffer
+  public uuid?: string
+  public uuidDefaultV4?: string
+  public uuidDefaultV1?: string
+  
+  static initModel(sequelize: Sequelize.Sequelize): typeof Category {
+    Category.init({
+      string: {
+        type: DataTypes.STRING
+      },
+      stringWithLength: {
+        type: DataTypes.STRING(100)
+      },
+      text: {
+        type: DataTypes.TEXT
+      },
+      //// DataTypes.CITEXT not supported for SQL Server
+      // ciText: {
+      //   type: DataTypes.CITEXT
+      // },
+      integer: {
+        type: DataTypes.INTEGER
+      },
+      integerUnsigned: {
+        type: DataTypes.INTEGER.UNSIGNED
+      },
+      integerAutoincrement: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true
+      },
+      bigInt: {
+        type: DataTypes.BIGINT
+      },
+      smallInt: {
+        type: DataTypes.SMALLINT
+      },
+      float: {
+        type: DataTypes.FLOAT
+      },
+      real: {
+        type: DataTypes.REAL
+      },
+      double: {
+        type: DataTypes.DOUBLE
+      },
+      decimal: {
+        type: DataTypes.DECIMAL
+      },
+      decimalPrecision: {
+        type: DataTypes.DECIMAL.PRECISION(14)
+      },
+      decimalPrecisionAndScale: {
+        type: DataTypes.DECIMAL.PRECISION(14, 2)
+      },
+      dateTime: {
+        type: DataTypes.DATE
+      },
+      dateTimeDefaultNow: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+      },
+      date: {
+        type: DataTypes.DATEONLY
+      },
+      dateDefaultNow: {
+        type: DataTypes.DATEONLY,
+        defaultValue: DataTypes.NOW
+      },
+      time: {
+        type: DataTypes.TIME
+      },
+      timeDefaultNow: {
+        type: DataTypes.TIME,
+        defaultValue: DataTypes.NOW
+      },
+      boolean: {
+        type: DataTypes.BOOLEAN
+      },
+      enum: {
+        type: DataTypes.ENUM()
+      },
+      //// DataTypes.ARRAY(DataTypes.STRING) not supported for SQL Server
+      // array: {
+      //   type: DataTypes.ARRAY(DataTypes.STRING)
+      // },
+      //// DataTypes.JSON not supported for SQL Server
+      // json: {
+      //   type: DataTypes.JSON
+      // },
+      //// DataTypes.JSONB not supported for SQL Server
+      // jsonB: {
+      //   type: DataTypes.JSONB
+      // },
+      blob: {
+        type: DataTypes.BLOB
+      },
+      uuid: {
+        type: DataTypes.UUID
+      },
+      uuidDefaultV4: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4
+      },
+      uuidDefaultV1: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV1
+      }
+    }, {
+      sequelize
+    })
+    
+    return Category
+  }
+}
+",
+          "name": "Category.ts",
+          "type": "FILE",
+        },
+        Object {
+          "content": "import type { Sequelize, Model } from 'sequelize'
+import { Category } from './Category'
+import type { CategoryAttributes, CategoryCreationAttributes } from './Category'
+
+export {
+  Category
+}
+
+export type {
+  CategoryAttributes,
+  CategoryCreationAttributes
+}
+
+export function initModels(sequelize: Sequelize) {
+  Category.initModel(sequelize)
+
+  return {
+    Category
+  }
+}
+",
+          "name": "index.ts",
+          "type": "FILE",
+        },
+      ],
+      "name": "models",
+      "type": "DIRECTORY",
+    },
+    Object {
+      "content": "node_modules/
+dist
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.tmp
+",
+      "name": ".gitignore",
+      "type": "FILE",
+    },
+    Object {
+      "content": "import { Sequelize, Options } from 'sequelize'
+import configs from './config/config.js'
+
+const env = process.env.NODE_ENV || 'development'
+const config = (configs as {[key: string]: Options})[env]
+
+const db: Sequelize = new Sequelize({
+  ...config,
+  define: {
+    underscored: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
+})
+
+export default db
+",
+      "name": "db.ts",
+      "type": "FILE",
+    },
+    Object {
+      "content": "{
+  \\"name\\": \\"data-types\\",
+  \\"version\\": \\"0.0.1\\",
+  \\"description\\": \\"\\",
+  \\"main\\": \\"server.ts\\",
+  \\"scripts\\": {
+    \\"test\\": \\"echo \\\\\\"Error: no test specified\\\\\\" && exit 1\\",
+    \\"db:up\\": \\"echo creating && npm run db:create && echo created && npm run db:migrate && echo migrated\\",
+    \\"db:reset\\": \\"npm run db:drop && npm run db:up\\",
+    \\"db:create\\": \\"sequelize db:create\\",
+    \\"db:drop\\": \\"[[ $NODE_ENV == production ]] && exit 1 || sequelize db:drop\\",
+    \\"db:migrate\\": \\"sequelize db:migrate\\",
+    \\"db:rollback\\": \\"sequelize db:migrate:undo\\",
+    \\"db:rollback:all\\": \\"sequelize db:migrate:undo:all\\",
+    \\"build\\": \\"tsc\\",
+    \\"start\\": \\"node ./dist/server.js\\",
+    \\"dev\\": \\"tsc-watch --onSuccess \\\\\\"node ./dist/server.js\\\\\\"\\"
+  },
+  \\"author\\": \\"\\",
+  \\"license\\": \\"ISC\\",
+  \\"dependencies\\": {
+    \\"sequelize\\": \\"^6.14.1\\",
+    \\"tedious\\": \\"^14.1.0\\"
+  },
+  \\"devDependencies\\": {
+    \\"@types/node\\": \\"^16.11.7\\",
+    \\"@types/tedious\\": \\"^4.0.3\\",
+    \\"@types/validator\\": \\"^13.7.1\\",
+    \\"sequelize-cli\\": \\"^6.4.1\\",
+    \\"tsc-watch\\": \\"^4.6.0\\",
+    \\"typescript\\": \\"^4.5.5\\"
+  }
+}
+
+",
+      "name": "package.json",
+      "type": "FILE",
+    },
+    Object {
+      "content": "# data types
+This project was generated with [Sequelize UI](https://github.com/tomjschuster/sequelize-ui). The project is a simple [Node.js](https://nodejs.dev/) server with [Sequelize ORM](https://sequelize.org/).
+
+Be sure to test all code for correctness and to test database migrations in a test environment before deploying to production.
+
+## Running Project
+
+### Prerequesites
+- [Node.js](https://nodejs.dev/)
+- [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-2019)
+
+### Setup
+1. Install dependencies: \`npm install\`
+2. Setup database: \`npm run db:up\`
+
+### Run
+- Local development: \`npm run dev\`
+- Production build: \`npm run build && npm start\`
+
+## Bug Reports
+Please report any bugs with generated code at [Sequelize UI Issues](https://github.com/tomjschuster/sequelize-ui/issues).
+",
+      "name": "README.md",
+      "type": "FILE",
+    },
+    Object {
+      "content": "import http from 'http'
+import db from './db'
+import { initModels } from './models'
+
+async function run() {
+  initModels(db)
+  const hostname = process.env.HOSTNAME || '127.0.0.1'
+  const port = parseInt(process.env.PORT || '3000')
+  
+  const server = http.createServer((req, res) => {
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'text/plain')
+    res.end('Hello World')
+  })
+  
+  server.listen(port, hostname, () => {
+    console.log(\`Server running at http://\${hostname}:\${port}/\`)
+  })
+}
+
+run()",
+      "name": "server.ts",
+      "type": "FILE",
+    },
+    Object {
+      "content": "export interface JsonMap {[member: string]: string | number | boolean | null | JsonArray | JsonMap }
+
+export interface JsonArray extends Array<string | number | boolean | null | JsonArray | JsonMap> {}
+
+export type Json = JsonMap | JsonArray | string | number | boolean | null
+",
+      "name": "types.ts",
+      "type": "FILE",
+    },
+    Object {
+      "content": "{
+  \\"compilerOptions\\": {
+    \\"target\\": \\"ES2020\\",
+    \\"module\\": \\"commonjs\\",
+    \\"lib\\": [\\"ES2020\\"],
+    \\"outDir\\": \\"dist\\",
+    \\"strict\\": true,
+    \\"moduleResolution\\": \\"node\\",
+    \\"esModuleInterop\\": true,
+    \\"allowJs\\": true,
+    \\"forceConsistentCasingInFileNames\\": true
+  }
+}
+",
+      "name": "tsconfig.json",
+      "type": "FILE",
+    },
+  ],
+  "name": "data-types",
+  "type": "DIRECTORY",
+}
+`;
