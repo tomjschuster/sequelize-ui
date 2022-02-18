@@ -10,7 +10,7 @@ on:
 
 env:
   CF_ACCOUNT_ID: c6b0fe2afa4b4d09801e9d18c859da8d
-  PAGES_PROJECT_NAME: sequelize-ui-ts
+  PAGES_PROJECT_NAME: sequelize-ui
 
 jobs:
   install:
