@@ -37,12 +37,12 @@ import { EMPLOYEES_ID } from './ids'
 const time = fromParts(2020, 10, 1)
 
 enum Id {
-  Employees = '1',
-  Departments = '2',
-  DepartmentEmployees = '3',
-  DepartmentManagers = '4',
-  Titles = '5',
-  Salaries = '6',
+  Employees = '8AjE1F73O7k-d_8424U8A',
+  Departments = 'UFlpanwFL8szZo5dtQct-',
+  DepartmentEmployees = 'hs68eEzZVDTT7MEegYEvH',
+  DepartmentManagers = 'zjM4z8Y5pvecG7TjIVajw',
+  Titles = 'Ky0xNM91RIzSFEKcWUqZS',
+  Salaries = 'Xq55KHZ19UT9ob31iT_D_',
 }
 
 const employee: Model = {

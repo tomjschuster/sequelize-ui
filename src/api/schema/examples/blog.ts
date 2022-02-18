@@ -45,16 +45,16 @@ import { BLOG_ID } from './ids'
 
 const time = fromParts(2021, 4, 1)
 
-const Id = {
-  Category: uniqueId(),
-  Post: uniqueId(),
-  PostCategory: uniqueId(),
-  PostComment: uniqueId(),
-  PostMeta: uniqueId(),
-  PostTag: uniqueId(),
-  Tag: uniqueId(),
-  User: uniqueId(),
-} as const
+enum Id {
+  Category = 'Xo4oKmkLNHD4Xg1D2AY1e',
+  Post = 'lPlVbtl-FUggStKQSxXxA',
+  PostCategory = 'AKpWI3wUUAC7LdqfmTmKh',
+  PostComment = 'dKGfmE5UiQZvpNY2JOrN9',
+  PostMeta = 'hS-D7bIrFW-BuyVjqVWiX',
+  PostTag = 'USuYXCnn6PdTmxw0eN_Jt',
+  Tag = 'ZkLt52OdJUx9_g1_d_uu1',
+  User = '6XfrfnVeY7KTKukt26dQZ',
+}
 
 const category: Model = {
   id: Id.Category,
@@ -62,14 +62,6 @@ const category: Model = {
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
-      name: 'id',
-      type: bigIntDataType(),
-      primaryKey: true,
-      required: false,
-      unique: false,
-    },
     {
       id: uniqueId(),
       name: 'title',
@@ -145,15 +137,6 @@ const post: Model = {
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
-      name: 'id',
-      type: bigIntDataType(),
-      primaryKey: true,
-
-      required: false,
-      unique: false,
-    },
     {
       id: uniqueId(),
       name: 'title',
@@ -295,14 +278,6 @@ const postCategory: Model = {
   fields: [
     {
       id: uniqueId(),
-      name: 'post id',
-      type: bigIntDataType(),
-      primaryKey: true,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
       name: 'category id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -336,14 +311,6 @@ const postComment: Model = {
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
-      name: 'id',
-      type: bigIntDataType(),
-      primaryKey: true,
-      required: false,
-      unique: false,
-    },
     {
       id: uniqueId(),
       name: 'title',
@@ -413,14 +380,6 @@ const postMeta: Model = {
   fields: [
     {
       id: uniqueId(),
-      name: 'id',
-      type: bigIntDataType(),
-      primaryKey: true,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
       name: 'key',
       type: stringDataType({ length: 50 }),
       primaryKey: false,
@@ -456,14 +415,6 @@ const postTag: Model = {
   fields: [
     {
       id: uniqueId(),
-      name: 'post id',
-      type: bigIntDataType(),
-      primaryKey: true,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
       name: 'tag id',
       type: bigIntDataType(),
       primaryKey: true,
@@ -497,14 +448,6 @@ const tag: Model = {
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
-      name: 'id',
-      type: bigIntDataType(),
-      primaryKey: true,
-      required: false,
-      unique: false,
-    },
     {
       id: uniqueId(),
       name: 'title',
@@ -564,14 +507,6 @@ const user: Model = {
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
-      name: 'id',
-      type: bigIntDataType(),
-      primaryKey: true,
-      required: false,
-      unique: false,
-    },
     {
       id: uniqueId(),
       name: 'first name',

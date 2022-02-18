@@ -48,7 +48,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('categories', {
       id: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'id',
         primaryKey: true
       },
@@ -80,11 +80,11 @@ module.exports = {
         field: 'updated_at'
       },
       parentId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'parent_id'
       },
       categoryId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'category_id'
       }
     })
@@ -103,7 +103,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('posts', {
       id: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'id',
         primaryKey: true
       },
@@ -148,15 +148,15 @@ module.exports = {
         field: 'updated_at'
       },
       authorId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'author_id'
       },
       parentId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'parent_id'
       },
       postId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'post_id'
       }
     })
@@ -174,11 +174,6 @@ module.exports = {
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('post_categories', {
-      postId: {
-        type: DataTypes.BIGINT,
-        field: 'post_id',
-        primaryKey: true
-      },
       categoryId: {
         type: DataTypes.BIGINT,
         field: 'category_id',
@@ -191,6 +186,10 @@ module.exports = {
       updatedAt: {
         type: DataTypes.DATE,
         field: 'updated_at'
+      },
+      postId: {
+        type: DataTypes.INTEGER,
+        field: 'post_id'
       }
     })
   },
@@ -208,7 +207,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('post_comments', {
       id: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'id',
         primaryKey: true
       },
@@ -239,15 +238,15 @@ module.exports = {
         field: 'updated_at'
       },
       postId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'post_id'
       },
       parentId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'parent_id'
       },
       postCommentId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'post_comment_id'
       }
     })
@@ -266,7 +265,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('post_metas', {
       id: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'id',
         primaryKey: true
       },
@@ -289,7 +288,7 @@ module.exports = {
         field: 'updated_at'
       },
       postId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'post_id'
       }
     })
@@ -307,11 +306,6 @@ module.exports = {
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('post_tags', {
-      postId: {
-        type: DataTypes.BIGINT,
-        field: 'post_id',
-        primaryKey: true
-      },
       tagId: {
         type: DataTypes.BIGINT,
         field: 'tag_id',
@@ -324,6 +318,10 @@ module.exports = {
       updatedAt: {
         type: DataTypes.DATE,
         field: 'updated_at'
+      },
+      postId: {
+        type: DataTypes.INTEGER,
+        field: 'post_id'
       }
     })
   },
@@ -341,7 +339,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('tags', {
       id: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'id',
         primaryKey: true
       },
@@ -388,7 +386,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('users', {
       id: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.INTEGER,
         field: 'id',
         primaryKey: true
       },
@@ -507,21 +505,21 @@ module.exports = {
     })
     
     await queryInterface.addConstraint('post_categories', {
-      fields: ['post_id'],
-      type: 'foreign key',
-      name: 'post_categories_post_id_fkey',
-      references: {
-        table: 'posts',
-        field: 'id'
-      }
-    })
-    
-    await queryInterface.addConstraint('post_categories', {
       fields: ['category_id'],
       type: 'foreign key',
       name: 'post_categories_category_id_fkey',
       references: {
         table: 'categories',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_categories', {
+      fields: ['post_id'],
+      type: 'foreign key',
+      name: 'post_categories_post_id_fkey',
+      references: {
+        table: 'posts',
         field: 'id'
       }
     })
@@ -567,21 +565,21 @@ module.exports = {
     })
     
     await queryInterface.addConstraint('post_tags', {
-      fields: ['post_id'],
-      type: 'foreign key',
-      name: 'post_tags_post_id_fkey',
-      references: {
-        table: 'posts',
-        field: 'id'
-      }
-    })
-    
-    await queryInterface.addConstraint('post_tags', {
       fields: ['tag_id'],
       type: 'foreign key',
       name: 'post_tags_tag_id_fkey',
       references: {
         table: 'tags',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_tags', {
+      fields: ['post_id'],
+      type: 'foreign key',
+      name: 'post_tags_post_id_fkey',
+      references: {
+        table: 'posts',
         field: 'id'
       }
     })
@@ -592,14 +590,14 @@ module.exports = {
     await queryInterface.removeConstraint('posts', 'posts_author_id_fkey')
     await queryInterface.removeConstraint('posts', 'posts_parent_id_fkey')
     await queryInterface.removeConstraint('posts', 'posts_post_id_fkey')
-    await queryInterface.removeConstraint('post_categories', 'post_categories_post_id_fkey')
     await queryInterface.removeConstraint('post_categories', 'post_categories_category_id_fkey')
+    await queryInterface.removeConstraint('post_categories', 'post_categories_post_id_fkey')
     await queryInterface.removeConstraint('post_comments', 'post_comments_post_id_fkey')
     await queryInterface.removeConstraint('post_comments', 'post_comments_parent_id_fkey')
     await queryInterface.removeConstraint('post_comments', 'post_comments_post_comment_id_fkey')
     await queryInterface.removeConstraint('post_metas', 'post_metas_post_id_fkey')
-    await queryInterface.removeConstraint('post_tags', 'post_tags_post_id_fkey')
     await queryInterface.removeConstraint('post_tags', 'post_tags_tag_id_fkey')
+    await queryInterface.removeConstraint('post_tags', 'post_tags_post_id_fkey')
   }
 };",
           "name": "20210401000120-add-foreign-keys.js",
@@ -617,16 +615,14 @@ import type { Post, PostId } from './Post'
 import type { PostCategory, PostCategoryId } from './PostCategory'
 
 export interface CategoryAttributes {
-  id?: number
   title: string
   metaTitle?: string
   slug: string
   content?: string
 }
 
-export type CategoryPk = 'id'
-export type CategoryId = CategoryAttributes[CategoryPk]
-export type CategoryCreationAttributes = Optional<CategoryAttributes, CategoryPk>
+export type CategoryId = number
+export type CategoryCreationAttributes = CategoryAttributes & { id?: number }
 
 export class Category
   extends Model<CategoryAttributes, CategoryCreationAttributes>
@@ -691,10 +687,6 @@ export class Category
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Category {
     Category.init({
-      id: {
-        type: DataTypes.BIGINT,
-        primaryKey: true
-      },
       title: {
         type: DataTypes.STRING(75),
         allowNull: false
@@ -900,7 +892,6 @@ import type { Tag, TagId } from './Tag'
 import type { User, UserId } from './User'
 
 export interface PostAttributes {
-  id?: number
   title: string
   metaTitle?: string
   slug: string
@@ -910,9 +901,8 @@ export interface PostAttributes {
   content?: string
 }
 
-export type PostPk = 'id'
-export type PostId = PostAttributes[PostPk]
-export type PostCreationAttributes = Optional<PostAttributes, PostPk>
+export type PostId = number
+export type PostCreationAttributes = PostAttributes & { id?: number }
 
 export class Post
   extends Model<PostAttributes, PostCreationAttributes>
@@ -1043,10 +1033,6 @@ export class Post
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Post {
     Post.init({
-      id: {
-        type: DataTypes.BIGINT,
-        primaryKey: true
-      },
       title: {
         type: DataTypes.STRING(75),
         allowNull: false
@@ -1089,18 +1075,16 @@ import type { Category, CategoryId } from './Category'
 import type { Post, PostId } from './Post'
 
 export interface PostCategoryAttributes {
-  postId?: number
   categoryId?: number
 }
 
-export type PostCategoryPk = 'postId' | 'categoryId'
+export type PostCategoryPk = 'categoryId'
 export type PostCategoryId = PostCategoryAttributes[PostCategoryPk]
 export type PostCategoryCreationAttributes = Optional<PostCategoryAttributes, PostCategoryPk>
 
 export class PostCategory
   extends Model<PostCategoryAttributes, PostCategoryCreationAttributes>
   implements PostCategoryAttributes {
-  public readonly postId?: number
   public readonly categoryId?: number
 
   // PostCategory belongsTo Post
@@ -1122,10 +1106,6 @@ export class PostCategory
 
   static initModel(sequelize: Sequelize.Sequelize): typeof PostCategory {
     PostCategory.init({
-      postId: {
-        type: DataTypes.BIGINT,
-        primaryKey: true
-      },
       categoryId: {
         type: DataTypes.BIGINT,
         primaryKey: true
@@ -1146,16 +1126,14 @@ export class PostCategory
 import type { Post, PostId } from './Post'
 
 export interface PostCommentAttributes {
-  id?: number
   title: string
   published: boolean
   publishedAt?: string
   content?: string
 }
 
-export type PostCommentPk = 'id'
-export type PostCommentId = PostCommentAttributes[PostCommentPk]
-export type PostCommentCreationAttributes = Optional<PostCommentAttributes, PostCommentPk>
+export type PostCommentId = number
+export type PostCommentCreationAttributes = PostCommentAttributes & { id?: number }
 
 export class PostComment
   extends Model<PostCommentAttributes, PostCommentCreationAttributes>
@@ -1199,10 +1177,6 @@ export class PostComment
 
   static initModel(sequelize: Sequelize.Sequelize): typeof PostComment {
     PostComment.init({
-      id: {
-        type: DataTypes.BIGINT,
-        primaryKey: true
-      },
       title: {
         type: DataTypes.STRING(75),
         allowNull: false
@@ -1233,14 +1207,12 @@ export class PostComment
 import type { Post, PostId } from './Post'
 
 export interface PostMetaAttributes {
-  id?: number
   key: string
   content?: string
 }
 
-export type PostMetaPk = 'id'
-export type PostMetaId = PostMetaAttributes[PostMetaPk]
-export type PostMetaCreationAttributes = Optional<PostMetaAttributes, PostMetaPk>
+export type PostMetaId = number
+export type PostMetaCreationAttributes = PostMetaAttributes & { id?: number }
 
 export class PostMeta
   extends Model<PostMetaAttributes, PostMetaCreationAttributes>
@@ -1261,10 +1233,6 @@ export class PostMeta
 
   static initModel(sequelize: Sequelize.Sequelize): typeof PostMeta {
     PostMeta.init({
-      id: {
-        type: DataTypes.BIGINT,
-        primaryKey: true
-      },
       key: {
         type: DataTypes.STRING(50),
         allowNull: false,
@@ -1290,18 +1258,16 @@ import type { Post, PostId } from './Post'
 import type { Tag, TagId } from './Tag'
 
 export interface PostTagAttributes {
-  postId?: number
   tagId?: number
 }
 
-export type PostTagPk = 'postId' | 'tagId'
+export type PostTagPk = 'tagId'
 export type PostTagId = PostTagAttributes[PostTagPk]
 export type PostTagCreationAttributes = Optional<PostTagAttributes, PostTagPk>
 
 export class PostTag
   extends Model<PostTagAttributes, PostTagCreationAttributes>
   implements PostTagAttributes {
-  public readonly postId?: number
   public readonly tagId?: number
 
   // PostTag belongsTo Post
@@ -1323,10 +1289,6 @@ export class PostTag
 
   static initModel(sequelize: Sequelize.Sequelize): typeof PostTag {
     PostTag.init({
-      postId: {
-        type: DataTypes.BIGINT,
-        primaryKey: true
-      },
       tagId: {
         type: DataTypes.BIGINT,
         primaryKey: true
@@ -1348,16 +1310,14 @@ import type { Post, PostId } from './Post'
 import type { PostTag, PostTagId } from './PostTag'
 
 export interface TagAttributes {
-  id?: number
   title: string
   metaTitle?: string
   slug: string
   content?: string
 }
 
-export type TagPk = 'id'
-export type TagId = TagAttributes[TagPk]
-export type TagCreationAttributes = Optional<TagAttributes, TagPk>
+export type TagId = number
+export type TagCreationAttributes = TagAttributes & { id?: number }
 
 export class Tag
   extends Model<TagAttributes, TagCreationAttributes>
@@ -1401,10 +1361,6 @@ export class Tag
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Tag {
     Tag.init({
-      id: {
-        type: DataTypes.BIGINT,
-        primaryKey: true
-      },
       title: {
         type: DataTypes.STRING(75),
         allowNull: false
@@ -1436,7 +1392,6 @@ export class Tag
 import type { Post, PostId } from './Post'
 
 export interface UserAttributes {
-  id?: number
   firstName?: string
   middleName?: string
   lastName?: string
@@ -1449,9 +1404,8 @@ export interface UserAttributes {
   profile?: string
 }
 
-export type UserPk = 'id'
-export type UserId = UserAttributes[UserPk]
-export type UserCreationAttributes = Optional<UserAttributes, UserPk>
+export type UserId = number
+export type UserCreationAttributes = UserAttributes & { id?: number }
 
 export class User
   extends Model<UserAttributes, UserCreationAttributes>
@@ -1487,10 +1441,6 @@ export class User
 
   static initModel(sequelize: Sequelize.Sequelize): typeof User {
     User.init({
-      id: {
-        type: DataTypes.BIGINT,
-        primaryKey: true
-      },
       firstName: {
         type: DataTypes.STRING(50)
       },
