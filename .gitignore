@@ -1,5 +1,5 @@
 # webpack-output / live-server location
-dist
+out
 .todo
 
 # Created by https://www.gitignore.io/api/vim,node,linux,macos,windows,sublimetext,visualstudiocode
