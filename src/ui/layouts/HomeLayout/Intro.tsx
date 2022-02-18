@@ -2,6 +2,7 @@ import SequelizeUiLogo from '@src/ui/components/SequelizeUiLogo'
 import {
   classnames,
   display,
+  flexDirection,
   fontSize,
   fontWeight,
   height,
@@ -20,6 +21,7 @@ export default function Intro(): React.ReactElement {
       <h2
         className={classnames(
           flexCenter,
+          flexDirection('flex-col-reverse', 'xs:flex-row'),
           fontSize('text-3xl', '2xs:text-4xl', 'xs:text-5xl'),
           letterSpacing('tracking-wider'),
           fontWeight('font-semibold'),
@@ -27,7 +29,14 @@ export default function Intro(): React.ReactElement {
           margin('my-6'),
         )}
       >
-        <SequelizeUiLogo className={classnames(display('inline'), height('h-20'), width('w-20'))} />
+        <SequelizeUiLogo
+          className={classnames(
+            margin('mt-2', 'xs:mt-0'),
+            display('inline'),
+            height('h-16', 'xs:h-20'),
+            width('w-16', 'xs:w-20'),
+          )}
+        />
         <span className={classnames(display('inline-block'))}>Sequelize UI</span>
       </h2>
 

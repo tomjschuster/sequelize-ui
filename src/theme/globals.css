@@ -7,3 +7,11 @@ body,
 #__next {
   @apply h-full m-0 text-black dark:text-gray-200;
 }
+
+html {
+  @apply bg-gray-50;
+}
+
+html.dark {
+  @apply bg-gray-900;
+}

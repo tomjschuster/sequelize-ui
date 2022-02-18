@@ -15,13 +15,13 @@ export default function LanguageIcon({ language }: LanguageIconProps): React.Rea
     case Language.Git:
       return <GitIcon fill="#f34f29" />
     case Language.JavaScript:
-      return <JavaScriptIcon fill="#f0db4f" />
+      return <JavaScriptIcon fill="#f1dd35" />
     case Language.Json:
-      return <JsonIcon fill="#f0db4f" />
+      return <JsonIcon fill="#f1dd35" />
     case Language.Markdown:
       return <MarkdownIcon fill="#2889b0" />
     case Language.TypeScript:
-      return <TypeScriptIcon fill="#007acc" />
+      return <TypeScriptIcon fill="#358ef1" />
     default:
       return <></>
   }

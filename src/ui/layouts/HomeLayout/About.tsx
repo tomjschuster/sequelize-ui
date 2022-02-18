@@ -12,10 +12,11 @@ export default function About(): React.ReactElement {
         <p className={classnames(text)}>
           Sequelize UI is an online{' '}
           <ExternalLink href="https://sequelize.org/">Sequelize ORM</ExternalLink> code generator,
-          which generates a full Node.js TypeScript project. Use the schema editor to create your
-          database tables, fields and associations, then preview the Sequelize models and migrations
-          in the code viewer before downloading the project as a zip file or copying code from
-          individual files.
+          which generates a full Node.js in{' '}
+          <ExternalLink href="https://www.typescriptlang.org/">TypeScript</ExternalLink> project.
+          Use the schema editor to create your database tables, fields and associations, then
+          preview the Sequelize models and migrations in the code viewer before downloading the
+          project as a zip file or copying code from individual files.
         </p>
 
         <p className={classnames(text)}>

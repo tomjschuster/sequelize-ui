@@ -1,6 +1,5 @@
 import {
   alignItems,
-  backgroundColor,
   classnames,
   display,
   flex,
@@ -29,7 +28,6 @@ function Layout({ children, compact = false, ...metadataProps }: LayoutProps): R
             display('flex'),
             flexDirection('flex-col'),
             alignItems('items-stretch'),
-            backgroundColor('bg-gray-50', 'dark:bg-gray-900'),
             maxHeight({ 'max-h-full': compact }),
             minHeight('min-h-full'),
           )}

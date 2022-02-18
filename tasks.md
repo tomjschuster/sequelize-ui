@@ -2,7 +2,6 @@
 
 ### Todo
 
-- [ ] **Example Schemas**: Use random id's and don't hard-code pk's
 - [ ] Rebase onto tomjschuster/sequelize-ui main
 - [ ] Switch default/production branch to main
 
