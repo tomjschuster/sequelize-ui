@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build && next export",
-    "postbuild": "next-sitemap",
+    "build:sitemap": "next-sitemap",
     "start": "next start",
     "lint": "eslint --cache",
     "format": "prettier --write {src,e2e}/**/*.{js,ts,tsx}",
