@@ -3,134 +3,22 @@ name: CI
 on:
   push:
     branches:
-      - main
       - js
-  pull_request:
 
 env:
   CF_ACCOUNT_ID: c6b0fe2afa4b4d09801e9d18c859da8d
   PAGES_PROJECT_NAME: sequelize-ui
 
 jobs:
-  install:
+  deploy-legacy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
-
-      - name: Use Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16.x'
-
-      - name: Check dependencies cache
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-deps-${{ hashFiles('**/package.json') }}-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install dependencies
-        run: |
-          if [ ! -d node_modules ];
-          then
-            npm ci --loglevel warn --yes;
-          else
-            echo package.json and package-lock.json unchanged. Using cache.;
-          fi
-
-  lint:
-    runs-on: ubuntu-latest
-    needs: install
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
-
-      - name: Use Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16.x'
-
-      - name: Check dependencies cache
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-deps-${{ hashFiles('**/package.json') }}-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Format check
-        run: npm run check:format
-
-      - name: Type check
-        run: npm run check:types
-
-  test:
-    runs-on: ubuntu-latest
-    needs: install
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
-
-      - name: Use Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16.x'
-
-      - name: Check dependencies cache
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-deps-${{ hashFiles('**/package.json') }}-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Test
-        run: npm run test:coverage
-      - name: Report coverage
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          flag-name: unit
-
-
-  deploy-preview:
-    if: ${{ !contains(fromJson('["refs/heads/js", "refs/heads/main"]'), github.ref) && github.event_name == 'pull_request' }}
-    runs-on: ubuntu-latest
-    needs: []
-    steps:
-      - name: Deploy preview
-        uses: tomjschuster/cloudflare-pages-deploy-action@v0
-        with:
-          account-id: '${{ env.CF_ACCOUNT_ID }}'
-          project-name: '${{ env.PAGES_PROJECT_NAME }}'
-          api-key: '${{ secrets.CF_GLOBAL_APIKEY }}'
-          email: '${{ secrets.CF_EMAIL }}'
-          branch: ${{ github.head_ref }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-
-  deploy-production:
-    if: ${{ github.event_name == 'push' }}
-    runs-on: ubuntu-latest
-    needs: [lint, test]
     steps:
       - name: Deploy legacy
-        if: ${{ github.ref == 'refs/heads/js' }}
         uses: tomjschuster/cloudflare-pages-deploy-action@v0
         with:
-          account-id: '${{ env.CF_ACCOUNT_ID }}'
-          project-name: '${{ env.PAGES_PROJECT_NAME }}'
-          api-key: '${{ secrets.CF_GLOBAL_APIKEY }}'
-          email: '${{ secrets.CF_EMAIL }}'
+          account-id: "${{ env.CF_ACCOUNT_ID }}"
+          project-name: "${{ env.PAGES_PROJECT_NAME }}"
+          api-key: "${{ secrets.CF_GLOBAL_APIKEY }}"
+          email: "${{ secrets.CF_EMAIL }}"
           branch: ${{ github.ref_name }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Deploy production
-        if: ${{ github.ref == 'refs/heads/main' }}
-        uses: tomjschuster/cloudflare-pages-deploy-action@v0
-        with:
-          account-id: '${{ env.CF_ACCOUNT_ID }}'
-          project-name: '${{ env.PAGES_PROJECT_NAME }}'
-          api-key: '${{ secrets.CF_GLOBAL_APIKEY }}'
-          email: '${{ secrets.CF_EMAIL }}'
-          production: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
