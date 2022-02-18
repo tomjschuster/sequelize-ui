@@ -15,7 +15,7 @@ You can customize the generated Sequelize code with the following database confi
 - Table name prefixed primary keys or plain id primary keys.
 - Created/updated timestamps or no timestamps.
 
-![Sequelize UI schema editor](./assets/schema-editor.png) ![Sequelize UI code preview](./assets/code-preview.png)
+![View your code](./assets/view-code.png) ![Edit your schema](./assets/edit-schema.png)
 
 ## Usage
 
@@ -32,32 +32,3 @@ Then go to http://localhost:3000
 ### Plain JavaScript
 
 Sequelize UI currenly only generates TypeScript Sequelize code, however, an older version is still available at https://js.sequelizeui.app/ which generates plain JavaScript Sequelize code.
-
-### Todo
-
-- [ ] Rebase onto tomjschuster/sequelize-ui main
-- [ ] Switch default/production branch to main
-
-- [ ] **API**: Persist db options for user
-- [ ] **API**: Import swagger/json schema
-
-- [ ] **CI**: Run E2E SQL tests for all dialects before prod deploy
-
-- [ ] **Codegen**: Add warning when SQL dialect doesn't support data type
-- [ ] **Codegen**: JS support
-- [ ] **Codegen**: Support multiple Sequelize versions
-
-- [ ] **Documentation**: Document functions and modules
-
-- [ ] **Tests**: Add E2E browser tests
-- [ ] **Tests**: Run E2E SQL tests against all example schemas
-- [ ] **Tests**: Consolidate snapshots
-- [ ] **Tests**: Increase unit test coverage
-
-- [ ] **UI**: Refactor css into theme
-  - [ ] Typeography
-  - [ ] Colors
-  - [ ] Grid
-  - [ ] Layout
-- [ ] **UI**: Refactor code view controls
-- [ ] **UI**: Animate panels on delete

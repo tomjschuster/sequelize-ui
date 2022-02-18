@@ -104,7 +104,7 @@ function ErrorView(): React.ReactElement {
             rel="noreferrer"
             href="https://github.com/tomjschuster/sequelize-ui/issues"
           >
-            File an issue
+            Open an issue
           </a>
         </li>
       </ul>
