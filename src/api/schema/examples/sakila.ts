@@ -43,22 +43,22 @@ import { SAKILA_ID } from './ids'
 const time = fromParts(2020, 1, 1)
 
 enum Id {
-  Actor = '1',
-  Address = '2',
-  Category = '3',
-  City = '4',
-  Country = '5',
-  Customer = '6',
-  Film = '7',
-  FilmActor = '8',
-  FilmCategory = '9',
-  FilmText = '10',
-  Inventory = '11',
-  Language = '12',
-  Payment = '13',
-  Rental = '14',
-  Staff = '15',
-  Store = '16',
+  Actor = 'Cj2ryEukV8eC6pxPh0ImQ',
+  Address = 'EaeyW54286H0LYMlL4yNC',
+  Category = 'ghwqmtb04vVN1XjMCSfaC',
+  City = '7Ivmj8L0CLivaaO38kX6n',
+  Country = 'j2qp_eMyS6_RdOlCn4LHU',
+  Customer = 'PrbEOUTwohzjx858CKLyh',
+  Film = '6isxvTSCeLG7Xh4hPebzK',
+  FilmActor = 'Q3OuSWRTbaYlshJmIFrSi',
+  FilmCategory = 'QMhycXXUZ9FCxWZOAsoU7',
+  FilmText = '_vnTgQDJsBWwhcFK-7p5l',
+  Inventory = '1ERjkC0_vMeY0uXOacpZl',
+  Language = 'sFHhBnBPK-b99Y9nNZPCn',
+  Payment = 'ZD1pRxLzifUyspw9FQlTQ',
+  Rental = '1Kgr9IcDpWlcwFPFoILLf',
+  Staff = 'v4gwi6U0RXca9Fi2PLyqO',
+  Store = 'SKfg8yJLz5XTlCWRuQgMo',
 }
 
 const actor: Model = {
@@ -67,14 +67,6 @@ const actor: Model = {
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
-      name: 'actor_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
     {
       id: uniqueId(),
       name: 'first_name',
@@ -110,14 +102,6 @@ const film: Model = {
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
-      name: 'film_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
     {
       id: uniqueId(),
       name: 'title',
@@ -255,14 +239,6 @@ const language: Model = {
   fields: [
     {
       id: uniqueId(),
-      name: 'language_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
       name: 'name',
       type: stringDataType(),
       primaryKey: false,
@@ -295,16 +271,7 @@ const category: Model = {
   name: 'category',
   createdAt: time,
   updatedAt: time,
-  fields: [
-    {
-      id: uniqueId(),
-      name: 'category_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
-  ],
+  fields: [],
   associations: [
     {
       id: uniqueId(),
@@ -322,16 +289,7 @@ const inventory: Model = {
   name: 'inventory',
   createdAt: time,
   updatedAt: time,
-  fields: [
-    {
-      id: uniqueId(),
-      name: 'inventory_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
-  ],
+  fields: [],
   associations: [
     {
       id: uniqueId(),
@@ -357,16 +315,7 @@ const store: Model = {
   name: 'store',
   createdAt: time,
   updatedAt: time,
-  fields: [
-    {
-      id: uniqueId(),
-      name: 'store_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
-  ],
+  fields: [],
   associations: [
     {
       id: uniqueId(),
@@ -417,14 +366,6 @@ const staff: Model = {
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
-      name: 'staff_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
     {
       id: uniqueId(),
       name: 'first_name',
@@ -534,14 +475,6 @@ const customer: Model = {
   fields: [
     {
       id: uniqueId(),
-      name: 'customer_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
       name: 'first_name',
       type: stringDataType(),
       primaryKey: false,
@@ -615,14 +548,6 @@ const address: Model = {
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
-      name: 'address_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
     {
       id: uniqueId(),
       name: 'address',
@@ -700,14 +625,6 @@ const rental: Model = {
   fields: [
     {
       id: uniqueId(),
-      name: 'rental_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
       name: 'rental_date',
       type: dateDataType(),
       primaryKey: false,
@@ -767,14 +684,6 @@ const payment: Model = {
   fields: [
     {
       id: uniqueId(),
-      name: 'payment_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
       name: 'amount',
       type: decimalDataType(),
       primaryKey: false,
@@ -826,14 +735,6 @@ const city: Model = {
   fields: [
     {
       id: uniqueId(),
-      name: 'city_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
       name: 'city',
       type: stringDataType(),
       primaryKey: false,
@@ -869,14 +770,6 @@ const country: Model = {
   fields: [
     {
       id: uniqueId(),
-      name: 'country_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
       name: 'country',
       type: stringDataType(),
       primaryKey: false,
@@ -901,16 +794,7 @@ const film_actor: Model = {
   name: 'film_actor',
   createdAt: time,
   updatedAt: time,
-  fields: [
-    {
-      id: uniqueId(),
-      name: 'film_actor_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
-  ],
+  fields: [],
   associations: [
     {
       id: uniqueId(),
@@ -936,16 +820,7 @@ const film_category: Model = {
   name: 'film_category',
   createdAt: time,
   updatedAt: time,
-  fields: [
-    {
-      id: uniqueId(),
-      name: 'film_category_id',
-      type: integerDataType({ autoincrement: true }),
-      primaryKey: true,
-      required: true,
-      unique: false,
-    },
-  ],
+  fields: [],
   associations: [
     {
       id: uniqueId(),

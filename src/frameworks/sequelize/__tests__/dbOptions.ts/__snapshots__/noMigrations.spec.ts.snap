@@ -46,19 +46,17 @@ Object {
 import type { Film, FilmId } from './Film'
 
 export interface ActorAttributes {
-  actorId: number
   firstName: string
   lastName: string
 }
 
-export type ActorPk = 'actorId'
-export type ActorId = ActorAttributes[ActorPk]
-export type ActorCreationAttributes = Optional<ActorAttributes, ActorPk>
+export type ActorId = number
+export type ActorCreationAttributes = ActorAttributes & { id?: number }
 
 export class Actor
   extends Model<ActorAttributes, ActorCreationAttributes>
   implements ActorAttributes {
-  public readonly actorId!: number
+  public readonly id?: number
   public firstName!: string
   public lastName!: string
 
@@ -81,12 +79,6 @@ export class Actor
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Actor {
     Actor.init({
-      actorId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false
@@ -114,21 +106,19 @@ import type { Staff, StaffId } from './Staff'
 import type { Store, StoreId } from './Store'
 
 export interface AddressAttributes {
-  addressId: number
   address: string
   address2: string
   postalCode?: string
   phone: string
 }
 
-export type AddressPk = 'addressId'
-export type AddressId = AddressAttributes[AddressPk]
-export type AddressCreationAttributes = Optional<AddressAttributes, AddressPk>
+export type AddressId = number
+export type AddressCreationAttributes = AddressAttributes & { id?: number }
 
 export class Address
   extends Model<AddressAttributes, AddressCreationAttributes>
   implements AddressAttributes {
-  public readonly addressId!: number
+  public readonly id?: number
   public address!: string
   public address2!: string
   public postalCode?: string
@@ -167,12 +157,6 @@ export class Address
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Address {
     Address.init({
-      addressId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
       address: {
         type: DataTypes.STRING,
         allowNull: false
@@ -204,17 +188,16 @@ export class Address
 import type { Film, FilmId } from './Film'
 
 export interface CategoryAttributes {
-  categoryId: number
+  
 }
 
-export type CategoryPk = 'categoryId'
-export type CategoryId = CategoryAttributes[CategoryPk]
-export type CategoryCreationAttributes = Optional<CategoryAttributes, CategoryPk>
+export type CategoryId = number
+export type CategoryCreationAttributes = CategoryAttributes & { id?: number }
 
 export class Category
   extends Model<CategoryAttributes, CategoryCreationAttributes>
   implements CategoryAttributes {
-  public readonly categoryId!: number
+  public readonly id?: number
 
   // Category belongsToMany Film
   public readonly Films?: Film[]
@@ -235,12 +218,7 @@ export class Category
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Category {
     Category.init({
-      categoryId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      }
+      
     }, {
       sequelize
     })
@@ -258,18 +236,16 @@ import type { Address, AddressId } from './Address'
 import type { Country, CountryId } from './Country'
 
 export interface CityAttributes {
-  cityId: number
   city: string
 }
 
-export type CityPk = 'cityId'
-export type CityId = CityAttributes[CityPk]
-export type CityCreationAttributes = Optional<CityAttributes, CityPk>
+export type CityId = number
+export type CityCreationAttributes = CityAttributes & { id?: number }
 
 export class City
   extends Model<CityAttributes, CityCreationAttributes>
   implements CityAttributes {
-  public readonly cityId!: number
+  public readonly id?: number
   public city!: string
 
   // City belongsTo Country
@@ -298,12 +274,6 @@ export class City
 
   static initModel(sequelize: Sequelize.Sequelize): typeof City {
     City.init({
-      cityId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
       city: {
         type: DataTypes.STRING,
         allowNull: false
@@ -324,18 +294,16 @@ export class City
 import type { City, CityId } from './City'
 
 export interface CountryAttributes {
-  countryId: number
   country: string
 }
 
-export type CountryPk = 'countryId'
-export type CountryId = CountryAttributes[CountryPk]
-export type CountryCreationAttributes = Optional<CountryAttributes, CountryPk>
+export type CountryId = number
+export type CountryCreationAttributes = CountryAttributes & { id?: number }
 
 export class Country
   extends Model<CountryAttributes, CountryCreationAttributes>
   implements CountryAttributes {
-  public readonly countryId!: number
+  public readonly id?: number
   public country!: string
 
   // Country hasMany City
@@ -357,12 +325,6 @@ export class Country
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Country {
     Country.init({
-      countryId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
       country: {
         type: DataTypes.STRING,
         allowNull: false
@@ -386,21 +348,19 @@ import type { Rental, RentalId } from './Rental'
 import type { Store, StoreId } from './Store'
 
 export interface CustomerAttributes {
-  customerId: number
   firstName: string
   lastName: string
   email?: string
   active: boolean
 }
 
-export type CustomerPk = 'customerId'
-export type CustomerId = CustomerAttributes[CustomerPk]
-export type CustomerCreationAttributes = Optional<CustomerAttributes, CustomerPk>
+export type CustomerId = number
+export type CustomerCreationAttributes = CustomerAttributes & { id?: number }
 
 export class Customer
   extends Model<CustomerAttributes, CustomerCreationAttributes>
   implements CustomerAttributes {
-  public readonly customerId!: number
+  public readonly id?: number
   public firstName!: string
   public lastName!: string
   public email?: string
@@ -453,12 +413,6 @@ export class Customer
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Customer {
     Customer.init({
-      customerId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false
@@ -493,7 +447,6 @@ import type { Inventory, InventoryId } from './Inventory'
 import type { Language, LanguageId } from './Language'
 
 export interface FilmAttributes {
-  filmId: number
   title: string
   description?: string
   releaseYear?: number
@@ -506,14 +459,13 @@ export interface FilmAttributes {
   specialFeature: Array<'Trailers' | 'Commentaries' | 'Deleted Scenes' | 'Behind the Scenes'>
 }
 
-export type FilmPk = 'filmId'
-export type FilmId = FilmAttributes[FilmPk]
-export type FilmCreationAttributes = Optional<FilmAttributes, FilmPk>
+export type FilmId = number
+export type FilmCreationAttributes = FilmAttributes & { id?: number }
 
 export class Film
   extends Model<FilmAttributes, FilmCreationAttributes>
   implements FilmAttributes {
-  public readonly filmId!: number
+  public readonly id?: number
   public title!: string
   public description?: string
   public releaseYear?: number
@@ -586,12 +538,6 @@ export class Film
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Film {
     Film.init({
-      filmId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
       title: {
         type: DataTypes.STRING,
         allowNull: false
@@ -645,17 +591,16 @@ import type { Actor, ActorId } from './Actor'
 import type { Film, FilmId } from './Film'
 
 export interface FilmActorAttributes {
-  filmActorId: number
+  
 }
 
-export type FilmActorPk = 'filmActorId'
-export type FilmActorId = FilmActorAttributes[FilmActorPk]
-export type FilmActorCreationAttributes = Optional<FilmActorAttributes, FilmActorPk>
+export type FilmActorId = number
+export type FilmActorCreationAttributes = FilmActorAttributes & { id?: number }
 
 export class FilmActor
   extends Model<FilmActorAttributes, FilmActorCreationAttributes>
   implements FilmActorAttributes {
-  public readonly filmActorId!: number
+  public readonly id?: number
 
   // FilmActor belongsTo Film
   public readonly Film?: Film
@@ -676,12 +621,7 @@ export class FilmActor
 
   static initModel(sequelize: Sequelize.Sequelize): typeof FilmActor {
     FilmActor.init({
-      filmActorId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      }
+      
     }, {
       sequelize
     })
@@ -699,17 +639,16 @@ import type { Category, CategoryId } from './Category'
 import type { Film, FilmId } from './Film'
 
 export interface FilmCategoryAttributes {
-  filmCategoryId: number
+  
 }
 
-export type FilmCategoryPk = 'filmCategoryId'
-export type FilmCategoryId = FilmCategoryAttributes[FilmCategoryPk]
-export type FilmCategoryCreationAttributes = Optional<FilmCategoryAttributes, FilmCategoryPk>
+export type FilmCategoryId = number
+export type FilmCategoryCreationAttributes = FilmCategoryAttributes & { id?: number }
 
 export class FilmCategory
   extends Model<FilmCategoryAttributes, FilmCategoryCreationAttributes>
   implements FilmCategoryAttributes {
-  public readonly filmCategoryId!: number
+  public readonly id?: number
 
   // FilmCategory belongsTo Film
   public readonly Film?: Film
@@ -730,12 +669,7 @@ export class FilmCategory
 
   static initModel(sequelize: Sequelize.Sequelize): typeof FilmCategory {
     FilmCategory.init({
-      filmCategoryId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      }
+      
     }, {
       sequelize
     })
@@ -1026,17 +960,16 @@ import type { Film, FilmId } from './Film'
 import type { Store, StoreId } from './Store'
 
 export interface InventoryAttributes {
-  inventoryId: number
+  
 }
 
-export type InventoryPk = 'inventoryId'
-export type InventoryId = InventoryAttributes[InventoryPk]
-export type InventoryCreationAttributes = Optional<InventoryAttributes, InventoryPk>
+export type InventoryId = number
+export type InventoryCreationAttributes = InventoryAttributes & { id?: number }
 
 export class Inventory
   extends Model<InventoryAttributes, InventoryCreationAttributes>
   implements InventoryAttributes {
-  public readonly inventoryId!: number
+  public readonly id?: number
 
   // Inventory belongsTo Film
   public readonly Film?: Film
@@ -1057,12 +990,7 @@ export class Inventory
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Inventory {
     Inventory.init({
-      inventoryId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      }
+      
     }, {
       sequelize
     })
@@ -1079,18 +1007,16 @@ export class Inventory
 import type { Film, FilmId } from './Film'
 
 export interface LanguageAttributes {
-  languageId: number
   name: string
 }
 
-export type LanguagePk = 'languageId'
-export type LanguageId = LanguageAttributes[LanguagePk]
-export type LanguageCreationAttributes = Optional<LanguageAttributes, LanguagePk>
+export type LanguageId = number
+export type LanguageCreationAttributes = LanguageAttributes & { id?: number }
 
 export class Language
   extends Model<LanguageAttributes, LanguageCreationAttributes>
   implements LanguageAttributes {
-  public readonly languageId!: number
+  public readonly id?: number
   public name!: string
 
   // Language hasMany Film
@@ -1126,12 +1052,6 @@ export class Language
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Language {
     Language.init({
-      languageId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
       name: {
         type: DataTypes.STRING,
         allowNull: false
@@ -1154,19 +1074,17 @@ import type { Rental, RentalId } from './Rental'
 import type { Staff, StaffId } from './Staff'
 
 export interface PaymentAttributes {
-  paymentId: number
   amount: number
   paymentDate: string
 }
 
-export type PaymentPk = 'paymentId'
-export type PaymentId = PaymentAttributes[PaymentPk]
-export type PaymentCreationAttributes = Optional<PaymentAttributes, PaymentPk>
+export type PaymentId = number
+export type PaymentCreationAttributes = PaymentAttributes & { id?: number }
 
 export class Payment
   extends Model<PaymentAttributes, PaymentCreationAttributes>
   implements PaymentAttributes {
-  public readonly paymentId!: number
+  public readonly id?: number
   public amount!: number
   public paymentDate!: string
 
@@ -1196,12 +1114,6 @@ export class Payment
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Payment {
     Payment.init({
-      paymentId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
       amount: {
         type: DataTypes.DECIMAL,
         allowNull: false
@@ -1229,19 +1141,17 @@ import type { Payment, PaymentId } from './Payment'
 import type { Staff, StaffId } from './Staff'
 
 export interface RentalAttributes {
-  rentalId: number
   rentalDate: string
   returnDate?: string
 }
 
-export type RentalPk = 'rentalId'
-export type RentalId = RentalAttributes[RentalPk]
-export type RentalCreationAttributes = Optional<RentalAttributes, RentalPk>
+export type RentalId = number
+export type RentalCreationAttributes = RentalAttributes & { id?: number }
 
 export class Rental
   extends Model<RentalAttributes, RentalCreationAttributes>
   implements RentalAttributes {
-  public readonly rentalId!: number
+  public readonly id?: number
   public rentalDate!: string
   public returnDate?: string
 
@@ -1285,12 +1195,6 @@ export class Rental
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Rental {
     Rental.init({
-      rentalId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
       rentalDate: {
         type: DataTypes.DATEONLY,
         allowNull: false
@@ -1317,7 +1221,6 @@ import type { Rental, RentalId } from './Rental'
 import type { Store, StoreId } from './Store'
 
 export interface StaffAttributes {
-  staffId: number
   firstName: string
   lastName: string
   picture?: Buffer
@@ -1327,14 +1230,13 @@ export interface StaffAttributes {
   password?: string
 }
 
-export type StaffPk = 'staffId'
-export type StaffId = StaffAttributes[StaffPk]
-export type StaffCreationAttributes = Optional<StaffAttributes, StaffPk>
+export type StaffId = number
+export type StaffCreationAttributes = StaffAttributes & { id?: number }
 
 export class Staff
   extends Model<StaffAttributes, StaffCreationAttributes>
   implements StaffAttributes {
-  public readonly staffId!: number
+  public readonly id?: number
   public firstName!: string
   public lastName!: string
   public picture?: Buffer
@@ -1404,12 +1306,6 @@ export class Staff
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Staff {
     Staff.init({
-      staffId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false
@@ -1454,17 +1350,16 @@ import type { Inventory, InventoryId } from './Inventory'
 import type { Staff, StaffId } from './Staff'
 
 export interface StoreAttributes {
-  storeId: number
+  
 }
 
-export type StorePk = 'storeId'
-export type StoreId = StoreAttributes[StorePk]
-export type StoreCreationAttributes = Optional<StoreAttributes, StorePk>
+export type StoreId = number
+export type StoreCreationAttributes = StoreAttributes & { id?: number }
 
 export class Store
   extends Model<StoreAttributes, StoreCreationAttributes>
   implements StoreAttributes {
-  public readonly storeId!: number
+  public readonly id?: number
 
   // Store hasMany Inventory
   public readonly Inventories?: Inventory[]
@@ -1527,12 +1422,7 @@ export class Store
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Store {
     Store.init({
-      storeId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      }
+      
     }, {
       sequelize
     })
