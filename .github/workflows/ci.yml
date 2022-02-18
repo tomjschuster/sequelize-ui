@@ -3,7 +3,6 @@ name: CI
 on:
   push:
     branches:
-      - master
       - main
       - js
   pull_request:
@@ -94,7 +93,7 @@ jobs:
 
 
   deploy-preview:
-    if: ${{ github.event_name == 'pull_request' }}
+    if: ${{ !contains(fromJson('["refs/heads/js", "refs/heads/main"]'), github.ref) && github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     needs: []
     steps:
@@ -110,11 +109,12 @@ jobs:
 
 
   deploy-production:
-    if: ${{ contains(fromJson('["refs/heads/js", "refs/heads/main"]'), github.ref) && github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     needs: [lint, test]
     steps:
-      - name: Deploy branch
+      - name: Deploy legacy
+        if: ${{ github.ref == 'refs/heads/js' }}
         uses: tomjschuster/cloudflare-pages-deploy-action@v0
         with:
           account-id: '${{ env.CF_ACCOUNT_ID }}'
@@ -125,7 +125,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy production
-        if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: tomjschuster/cloudflare-pages-deploy-action@v0
         with:
           account-id: '${{ env.CF_ACCOUNT_ID }}'
