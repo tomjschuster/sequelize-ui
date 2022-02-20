@@ -49,8 +49,6 @@ const defineField = (dbOptions: DbOptions): string | null =>
             freezeTableNameField(dbOptions),
             underscoredField(dbOptions.caseStyle === DbCaseStyle.Snake),
             timestampsField(dbOptions.timestamps),
-            // createdAtField(dbOptions),
-            // updatedAtField(dbOptions),
           ],
           { separator: ',', depth: 2 },
         ),
