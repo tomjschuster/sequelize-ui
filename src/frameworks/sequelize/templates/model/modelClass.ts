@@ -24,7 +24,9 @@ export function modelClassTemplate({
   const name = modelName(model)
 
   return lines([
-    `export class ${name} extends  Model<InferAttributes<${name}>, InferCreationAttributes<${name}>> {`,
+    `export class ${name} extends Model<`,
+    lines([`InferAttributes<${name}>,`, `InferCreationAttributes<${name}>`], { depth: 2 }),
+    `> {`,
     lines([...model.fields.map((field) => classFieldType(field, dbOptions, field.primaryKey))], {
       depth: 2,
     }),
@@ -57,7 +59,7 @@ export function modelClassTemplate({
     associations.length ? blank() : null,
     lines(
       [
-        `static initModel(sequelize: Sequelize.Sequelize): typeof ${name} {`,
+        `static initModel(sequelize: Sequelize): typeof ${name} {`,
         lines(
           [
             `${name}.init({`,
@@ -146,9 +148,9 @@ function associationType({
       return [
         `// ${sourceName} belongsTo ${targetName}${aliasLabel(association)}`,
         `declare ${name}: NonAttribute<${targetName}>`,
-        `declare get${singularMethodPostfix}: Sequelize.BelongsToGetAssociationMixin<${targetName}>`,
-        `declare set${singularMethodPostfix}: Sequelize.BelongsToSetAssociationMixin<${targetName}, ${targetPkType}>`,
-        `declare create${singularMethodPostfix}: Sequelize.BelongsToCreateAssociationMixin<${targetName}>`,
+        `declare get${singularMethodPostfix}: BelongsToGetAssociationMixin<${targetName}>`,
+        `declare set${singularMethodPostfix}: BelongsToSetAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare create${singularMethodPostfix}: BelongsToCreateAssociationMixin<${targetName}>`,
         blank(),
       ].join('\n')
     }
@@ -164,16 +166,16 @@ function associationType({
       return [
         `// ${sourceName} hasMany ${targetName}${aliasLabel(association)}`,
         `declare ${name}: NonAttribute<${targetName}[]>`,
-        `declare get${pluralMethodPostfix}: Sequelize.HasManyGetAssociationsMixin<${targetName}>`,
-        `declare set${pluralMethodPostfix}: Sequelize.HasManySetAssociationsMixin<${targetName}, ${targetPkType}>`,
-        `declare add${singularMethodPostfix}: Sequelize.HasManyAddAssociationMixin<${targetName}, ${targetPkType}>`,
-        `declare add${pluralMethodPostfix}: Sequelize.HasManyAddAssociationsMixin<${targetName}, ${targetPkType}>`,
-        `declare create${singularMethodPostfix}: Sequelize.HasManyCreateAssociationMixin<${targetName}${createHasManyOmitFk}>`,
-        `declare remove${singularMethodPostfix}: Sequelize.HasManyRemoveAssociationMixin<${targetName}, ${targetPkType}>`,
-        `declare remove${pluralMethodPostfix}: Sequelize.HasManyRemoveAssociationsMixin<${targetName}, ${targetPkType}>`,
-        `declare has${singularMethodPostfix}: Sequelize.HasManyHasAssociationMixin<${targetName}, ${targetPkType}>`,
-        `declare has${pluralMethodPostfix}: Sequelize.HasManyHasAssociationsMixin<${targetName}, ${targetPkType}>`,
-        `declare count${pluralMethodPostfix}: Sequelize.HasManyCountAssociationsMixin`,
+        `declare get${pluralMethodPostfix}: HasManyGetAssociationsMixin<${targetName}>`,
+        `declare set${pluralMethodPostfix}: HasManySetAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare add${singularMethodPostfix}: HasManyAddAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare add${pluralMethodPostfix}: HasManyAddAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare create${singularMethodPostfix}: HasManyCreateAssociationMixin<${targetName}${createHasManyOmitFk}>`,
+        `declare remove${singularMethodPostfix}: HasManyRemoveAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare remove${pluralMethodPostfix}: HasManyRemoveAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare has${singularMethodPostfix}: HasManyHasAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare has${pluralMethodPostfix}: HasManyHasAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare count${pluralMethodPostfix}: HasManyCountAssociationsMixin`,
         blank(),
       ].join('\n')
     }
@@ -181,9 +183,9 @@ function associationType({
       return [
         `// ${sourceName} hasOne ${targetName}${aliasLabel(association)}`,
         `declare ${name}: NonAttribute<${targetName}>`,
-        `declare get${singularMethodPostfix}: Sequelize.HasOneGetAssociationMixin<${targetName}>`,
-        `declare set${singularMethodPostfix}: Sequelize.HasOneSetAssociationMixin<${targetName}, ${targetPkType}>`,
-        `declare create${singularMethodPostfix}: Sequelize.HasOneCreateAssociationMixin<${targetName}>`,
+        `declare get${singularMethodPostfix}: HasOneGetAssociationMixin<${targetName}>`,
+        `declare set${singularMethodPostfix}: HasOneSetAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare create${singularMethodPostfix}: HasOneCreateAssociationMixin<${targetName}>`,
         blank(),
       ].join('\n')
     }
@@ -191,16 +193,16 @@ function associationType({
       return [
         `// ${sourceName} belongsToMany ${targetName}${aliasLabel(association)}`,
         `declare ${name}: NonAttribute<${targetName}[]>`,
-        `declare get${pluralMethodPostfix}: Sequelize.BelongsToManyGetAssociationsMixin<${targetName}>`,
-        `declare set${pluralMethodPostfix}: Sequelize.BelongsToManySetAssociationsMixin<${targetName}, ${targetPkType}>`,
-        `declare add${singularMethodPostfix}: Sequelize.BelongsToManyAddAssociationMixin<${targetName}, ${targetPkType}>`,
-        `declare add${pluralMethodPostfix}: Sequelize.BelongsToManyAddAssociationsMixin<${targetName}, ${targetPkType}>`,
-        `declare create${singularMethodPostfix}: Sequelize.BelongsToManyCreateAssociationMixin<${targetName}>`,
-        `declare remove${singularMethodPostfix}: Sequelize.BelongsToManyRemoveAssociationMixin<${targetName}, ${targetPkType}>`,
-        `declare remove${pluralMethodPostfix}: Sequelize.BelongsToManyRemoveAssociationsMixin<${targetName}, ${targetPkType}>`,
-        `declare has${singularMethodPostfix}: Sequelize.BelongsToManyHasAssociationMixin<${targetName}, ${targetPkType}>`,
-        `declare has${pluralMethodPostfix}: Sequelize.BelongsToManyHasAssociationsMixin<${targetName}, ${targetPkType}>`,
-        `declare count${pluralMethodPostfix}: Sequelize.BelongsToManyCountAssociationsMixin`,
+        `declare get${pluralMethodPostfix}: BelongsToManyGetAssociationsMixin<${targetName}>`,
+        `declare set${pluralMethodPostfix}: BelongsToManySetAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare add${singularMethodPostfix}: BelongsToManyAddAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare add${pluralMethodPostfix}: BelongsToManyAddAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare create${singularMethodPostfix}: BelongsToManyCreateAssociationMixin<${targetName}>`,
+        `declare remove${singularMethodPostfix}: BelongsToManyRemoveAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare remove${pluralMethodPostfix}: BelongsToManyRemoveAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare has${singularMethodPostfix}: BelongsToManyHasAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare has${pluralMethodPostfix}: BelongsToManyHasAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare count${pluralMethodPostfix}: BelongsToManyCountAssociationsMixin`,
         blank(),
       ].join('\n')
     }

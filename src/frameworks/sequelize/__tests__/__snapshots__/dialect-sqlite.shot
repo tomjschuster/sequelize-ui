@@ -28,9 +28,7 @@ const config = (configs as {[key: string]: Options})[env]
 const db: Sequelize = new Sequelize({
   ...config,
   define: {
-    underscored: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
+    underscored: true
   }
 })
 
@@ -58,12 +56,12 @@ export default db
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "sequelize": "^6.14.1",
+    "sequelize": "^6.16.2",
     "sqlite3": "^5.0.2"
   },
   "devDependencies": {
     "@types/node": "^16.11.7",
-    "@types/sqlite3": "^3.1.7",
+    "@types/sqlite3": "^3.1.8",
     "@types/validator": "^13.7.1",
     "sequelize-cli": "^6.4.1",
     "tsc-watch": "^4.6.0",
@@ -174,9 +172,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('actors', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       firstName: {
         type: DataTypes.STRING,
@@ -213,9 +213,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('films', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       title: {
         type: DataTypes.STRING,
@@ -289,9 +291,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('languages', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       name: {
         type: DataTypes.STRING,
@@ -323,9 +327,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('categories', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -352,9 +358,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('inventories', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -365,11 +373,11 @@ module.exports = {
         field: 'updated_at'
       },
       filmId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'film_id'
       },
       storeId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'store_id'
       }
     })
@@ -389,9 +397,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('stores', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -402,11 +412,11 @@ module.exports = {
         field: 'updated_at'
       },
       managerStaffId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'manager_staff_id'
       },
       addressId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'address_id'
       }
     })
@@ -426,9 +436,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('staffs', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       firstName: {
         type: DataTypes.STRING,
@@ -471,11 +483,11 @@ module.exports = {
         field: 'updated_at'
       },
       storeId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'store_id'
       },
       addressId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'address_id'
       }
     })
@@ -495,9 +507,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('customers', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       firstName: {
         type: DataTypes.STRING,
@@ -527,11 +541,11 @@ module.exports = {
         field: 'updated_at'
       },
       storeId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'store_id'
       },
       addressId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'address_id'
       }
     })
@@ -551,9 +565,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('addresses', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       address: {
         type: DataTypes.STRING,
@@ -583,7 +599,7 @@ module.exports = {
         field: 'updated_at'
       },
       cityId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'city_id'
       }
     })
@@ -603,9 +619,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('rentals', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       rentalDate: {
         type: DataTypes.DATEONLY,
@@ -625,15 +643,15 @@ module.exports = {
         field: 'updated_at'
       },
       inventoryId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'inventory_id'
       },
       customerId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'customer_id'
       },
       staffId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'staff_id'
       }
     })
@@ -653,9 +671,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('payments', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       amount: {
         type: DataTypes.DECIMAL,
@@ -676,15 +696,15 @@ module.exports = {
         field: 'updated_at'
       },
       customerId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'customer_id'
       },
       staffId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'staff_id'
       },
       rentalId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'rental_id'
       }
     })
@@ -704,9 +724,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('cities', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       city: {
         type: DataTypes.STRING,
@@ -722,7 +744,7 @@ module.exports = {
         field: 'updated_at'
       },
       countryId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'country_id'
       }
     })
@@ -742,9 +764,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('countries', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       country: {
         type: DataTypes.STRING,
@@ -776,9 +800,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('film_actors', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -789,11 +815,11 @@ module.exports = {
         field: 'updated_at'
       },
       filmId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'film_id'
       },
       actorId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'actor_id'
       }
     })
@@ -813,9 +839,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('film_categories', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -826,11 +854,11 @@ module.exports = {
         field: 'updated_at'
       },
       filmId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'film_id'
       },
       categoryId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'category_id'
       }
     })
@@ -1098,43 +1126,63 @@ module.exports = {
  *                          /sakila/models/Actor.ts                           *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Film, FilmId } from './Film'
+import {
+  Association,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManySetAssociationsMixin,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyAddAssociationsMixin,
+  BelongsToManyCreateAssociationMixin,
+  BelongsToManyRemoveAssociationMixin,
+  BelongsToManyRemoveAssociationsMixin,
+  BelongsToManyHasAssociationMixin,
+  BelongsToManyHasAssociationsMixin,
+  BelongsToManyCountAssociationsMixin,
+  CreationOptional,
+  DataTypes,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Film } from './Film'
 
-export interface ActorAttributes {
-  firstName: string
-  lastName: string
-}
-
-export type ActorId = number
-export type ActorCreationAttributes = ActorAttributes & { id?: number }
-
-export class Actor
-  extends Model<ActorAttributes, ActorCreationAttributes>
-  implements ActorAttributes {
-  public readonly id?: number
-  public firstName!: string
-  public lastName!: string
+export class Actor extends Model<
+  InferAttributes<Actor>,
+  InferCreationAttributes<Actor>
+> {
+  declare id: CreationOptional<number>
+  declare firstName: string
+  declare lastName: string
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Actor belongsToMany Film
-  public readonly Films?: Film[]
-  public getFilms!: Sequelize.BelongsToManyGetAssociationsMixin<Film>
-  public setFilms!: Sequelize.BelongsToManySetAssociationsMixin<Film, FilmId>
-  public addFilm!: Sequelize.BelongsToManyAddAssociationMixin<Film, FilmId>
-  public addFilms!: Sequelize.BelongsToManyAddAssociationsMixin<Film, FilmId>
-  public createFilm!: Sequelize.BelongsToManyCreateAssociationMixin<Film>
-  public removeFilm!: Sequelize.BelongsToManyRemoveAssociationMixin<Film, FilmId>
-  public removeFilms!: Sequelize.BelongsToManyRemoveAssociationsMixin<Film, FilmId>
-  public hasFilm!: Sequelize.BelongsToManyHasAssociationMixin<Film, FilmId>
-  public hasFilms!: Sequelize.BelongsToManyHasAssociationsMixin<Film, FilmId>
-  public countFilms!: Sequelize.BelongsToManyCountAssociationsMixin
+  declare Films: NonAttribute<Film[]>
+  declare getFilms: BelongsToManyGetAssociationsMixin<Film>
+  declare setFilms: BelongsToManySetAssociationsMixin<Film, number>
+  declare addFilm: BelongsToManyAddAssociationMixin<Film, number>
+  declare addFilms: BelongsToManyAddAssociationsMixin<Film, number>
+  declare createFilm: BelongsToManyCreateAssociationMixin<Film>
+  declare removeFilm: BelongsToManyRemoveAssociationMixin<Film, number>
+  declare removeFilms: BelongsToManyRemoveAssociationsMixin<Film, number>
+  declare hasFilm: BelongsToManyHasAssociationMixin<Film, number>
+  declare hasFilms: BelongsToManyHasAssociationsMixin<Film, number>
+  declare countFilms: BelongsToManyCountAssociationsMixin
   
-  public static associations: {
+  declare static associations: {
     Films: Association<Actor, Film>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Actor {
+  static initModel(sequelize: Sequelize): typeof Actor {
     Actor.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false
@@ -1142,6 +1190,12 @@ export class Actor
       lastName: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -1156,64 +1210,78 @@ export class Actor
  *                         /sakila/models/Address.ts                          *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { City, CityId } from './City'
-import type { Customer, CustomerId } from './Customer'
-import type { Staff, StaffId } from './Staff'
-import type { Store, StoreId } from './Store'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  HasOneGetAssociationMixin,
+  HasOneSetAssociationMixin,
+  HasOneCreateAssociationMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { City } from './City'
+import type { Customer } from './Customer'
+import type { Staff } from './Staff'
+import type { Store } from './Store'
 
-export interface AddressAttributes {
-  address: string
-  address2: string
-  postalCode?: string
-  phone: string
-}
-
-export type AddressId = number
-export type AddressCreationAttributes = AddressAttributes & { id?: number }
-
-export class Address
-  extends Model<AddressAttributes, AddressCreationAttributes>
-  implements AddressAttributes {
-  public readonly id?: number
-  public address!: string
-  public address2!: string
-  public postalCode?: string
-  public phone!: string
+export class Address extends Model<
+  InferAttributes<Address>,
+  InferCreationAttributes<Address>
+> {
+  declare id: CreationOptional<number>
+  declare address: string
+  declare address2: string
+  declare postalCode: string | null
+  declare phone: string
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Address belongsTo City
-  public readonly City?: City
-  public getCity!: Sequelize.BelongsToGetAssociationMixin<City>
-  public setCity!: Sequelize.BelongsToSetAssociationMixin<City, CityId>
-  public createCity!: Sequelize.BelongsToCreateAssociationMixin<City>
+  declare City: NonAttribute<City>
+  declare getCity: BelongsToGetAssociationMixin<City>
+  declare setCity: BelongsToSetAssociationMixin<City, number>
+  declare createCity: BelongsToCreateAssociationMixin<City>
   
   // Address hasOne Customer
-  public readonly Customer?: Customer
-  public getCustomer!: Sequelize.HasOneGetAssociationMixin<Customer>
-  public setCustomer!: Sequelize.HasOneSetAssociationMixin<Customer, CustomerId>
-  public createCustomer!: Sequelize.HasOneCreateAssociationMixin<Customer>
+  declare Customer: NonAttribute<Customer>
+  declare getCustomer: HasOneGetAssociationMixin<Customer>
+  declare setCustomer: HasOneSetAssociationMixin<Customer, number>
+  declare createCustomer: HasOneCreateAssociationMixin<Customer>
   
   // Address hasOne Staff
-  public readonly Staff?: Staff
-  public getStaff!: Sequelize.HasOneGetAssociationMixin<Staff>
-  public setStaff!: Sequelize.HasOneSetAssociationMixin<Staff, StaffId>
-  public createStaff!: Sequelize.HasOneCreateAssociationMixin<Staff>
+  declare Staff: NonAttribute<Staff>
+  declare getStaff: HasOneGetAssociationMixin<Staff>
+  declare setStaff: HasOneSetAssociationMixin<Staff, number>
+  declare createStaff: HasOneCreateAssociationMixin<Staff>
   
   // Address hasOne Store
-  public readonly Store?: Store
-  public getStore!: Sequelize.HasOneGetAssociationMixin<Store>
-  public setStore!: Sequelize.HasOneSetAssociationMixin<Store, StoreId>
-  public createStore!: Sequelize.HasOneCreateAssociationMixin<Store>
+  declare Store: NonAttribute<Store>
+  declare getStore: HasOneGetAssociationMixin<Store>
+  declare setStore: HasOneSetAssociationMixin<Store, number>
+  declare createStore: HasOneCreateAssociationMixin<Store>
   
-  public static associations: {
+  declare static associations: {
     City: Association<Address, City>,
     Customer: Association<Address, Customer>,
     Staff: Association<Address, Staff>,
     Store: Association<Address, Store>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Address {
+  static initModel(sequelize: Sequelize): typeof Address {
     Address.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       address: {
         type: DataTypes.STRING,
         allowNull: false
@@ -1228,6 +1296,12 @@ export class Address
       phone: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -1242,41 +1316,67 @@ export class Address
  *                         /sakila/models/Category.ts                         *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Film, FilmId } from './Film'
+import {
+  Association,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManySetAssociationsMixin,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyAddAssociationsMixin,
+  BelongsToManyCreateAssociationMixin,
+  BelongsToManyRemoveAssociationMixin,
+  BelongsToManyRemoveAssociationsMixin,
+  BelongsToManyHasAssociationMixin,
+  BelongsToManyHasAssociationsMixin,
+  BelongsToManyCountAssociationsMixin,
+  CreationOptional,
+  DataTypes,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Film } from './Film'
 
-export interface CategoryAttributes {
-  
-}
-
-export type CategoryId = number
-export type CategoryCreationAttributes = CategoryAttributes & { id?: number }
-
-export class Category
-  extends Model<CategoryAttributes, CategoryCreationAttributes>
-  implements CategoryAttributes {
-  public readonly id?: number
+export class Category extends Model<
+  InferAttributes<Category>,
+  InferCreationAttributes<Category>
+> {
+  declare id: CreationOptional<number>
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Category belongsToMany Film
-  public readonly Films?: Film[]
-  public getFilms!: Sequelize.BelongsToManyGetAssociationsMixin<Film>
-  public setFilms!: Sequelize.BelongsToManySetAssociationsMixin<Film, FilmId>
-  public addFilm!: Sequelize.BelongsToManyAddAssociationMixin<Film, FilmId>
-  public addFilms!: Sequelize.BelongsToManyAddAssociationsMixin<Film, FilmId>
-  public createFilm!: Sequelize.BelongsToManyCreateAssociationMixin<Film>
-  public removeFilm!: Sequelize.BelongsToManyRemoveAssociationMixin<Film, FilmId>
-  public removeFilms!: Sequelize.BelongsToManyRemoveAssociationsMixin<Film, FilmId>
-  public hasFilm!: Sequelize.BelongsToManyHasAssociationMixin<Film, FilmId>
-  public hasFilms!: Sequelize.BelongsToManyHasAssociationsMixin<Film, FilmId>
-  public countFilms!: Sequelize.BelongsToManyCountAssociationsMixin
+  declare Films: NonAttribute<Film[]>
+  declare getFilms: BelongsToManyGetAssociationsMixin<Film>
+  declare setFilms: BelongsToManySetAssociationsMixin<Film, number>
+  declare addFilm: BelongsToManyAddAssociationMixin<Film, number>
+  declare addFilms: BelongsToManyAddAssociationsMixin<Film, number>
+  declare createFilm: BelongsToManyCreateAssociationMixin<Film>
+  declare removeFilm: BelongsToManyRemoveAssociationMixin<Film, number>
+  declare removeFilms: BelongsToManyRemoveAssociationsMixin<Film, number>
+  declare hasFilm: BelongsToManyHasAssociationMixin<Film, number>
+  declare hasFilms: BelongsToManyHasAssociationsMixin<Film, number>
+  declare countFilms: BelongsToManyCountAssociationsMixin
   
-  public static associations: {
+  declare static associations: {
     Films: Association<Category, Film>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Category {
+  static initModel(sequelize: Sequelize): typeof Category {
     Category.init({
-      
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
+      }
     }, {
       sequelize
     })
@@ -1290,52 +1390,82 @@ export class Category
  *                           /sakila/models/City.ts                           *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Address, AddressId } from './Address'
-import type { Country, CountryId } from './Country'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Address } from './Address'
+import type { Country } from './Country'
 
-export interface CityAttributes {
-  city: string
-}
-
-export type CityId = number
-export type CityCreationAttributes = CityAttributes & { id?: number }
-
-export class City
-  extends Model<CityAttributes, CityCreationAttributes>
-  implements CityAttributes {
-  public readonly id?: number
-  public city!: string
+export class City extends Model<
+  InferAttributes<City>,
+  InferCreationAttributes<City>
+> {
+  declare id: CreationOptional<number>
+  declare city: string
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // City belongsTo Country
-  public readonly Country?: Country
-  public getCountry!: Sequelize.BelongsToGetAssociationMixin<Country>
-  public setCountry!: Sequelize.BelongsToSetAssociationMixin<Country, CountryId>
-  public createCountry!: Sequelize.BelongsToCreateAssociationMixin<Country>
+  declare Country: NonAttribute<Country>
+  declare getCountry: BelongsToGetAssociationMixin<Country>
+  declare setCountry: BelongsToSetAssociationMixin<Country, number>
+  declare createCountry: BelongsToCreateAssociationMixin<Country>
   
   // City hasMany Address
-  public readonly Addresses?: Address[]
-  public getAddresses!: Sequelize.HasManyGetAssociationsMixin<Address>
-  public setAddresses!: Sequelize.HasManySetAssociationsMixin<Address, AddressId>
-  public addAddress!: Sequelize.HasManyAddAssociationMixin<Address, AddressId>
-  public addAddresses!: Sequelize.HasManyAddAssociationsMixin<Address, AddressId>
-  public createAddress!: Sequelize.HasManyCreateAssociationMixin<Address>
-  public removeAddress!: Sequelize.HasManyRemoveAssociationMixin<Address, AddressId>
-  public removeAddresses!: Sequelize.HasManyRemoveAssociationsMixin<Address, AddressId>
-  public hasAddress!: Sequelize.HasManyHasAssociationMixin<Address, AddressId>
-  public hasAddresses!: Sequelize.HasManyHasAssociationsMixin<Address, AddressId>
-  public countAddresses!: Sequelize.HasManyCountAssociationsMixin
+  declare Addresses: NonAttribute<Address[]>
+  declare getAddresses: HasManyGetAssociationsMixin<Address>
+  declare setAddresses: HasManySetAssociationsMixin<Address, number>
+  declare addAddress: HasManyAddAssociationMixin<Address, number>
+  declare addAddresses: HasManyAddAssociationsMixin<Address, number>
+  declare createAddress: HasManyCreateAssociationMixin<Address>
+  declare removeAddress: HasManyRemoveAssociationMixin<Address, number>
+  declare removeAddresses: HasManyRemoveAssociationsMixin<Address, number>
+  declare hasAddress: HasManyHasAssociationMixin<Address, number>
+  declare hasAddresses: HasManyHasAssociationsMixin<Address, number>
+  declare countAddresses: HasManyCountAssociationsMixin
   
-  public static associations: {
+  declare static associations: {
     Country: Association<City, Country>,
     Addresses: Association<City, Address>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof City {
+  static initModel(sequelize: Sequelize): typeof City {
     City.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       city: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -1350,44 +1480,71 @@ export class City
  *                         /sakila/models/Country.ts                          *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { City, CityId } from './City'
+import {
+  Association,
+  CreationOptional,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { City } from './City'
 
-export interface CountryAttributes {
-  country: string
-}
-
-export type CountryId = number
-export type CountryCreationAttributes = CountryAttributes & { id?: number }
-
-export class Country
-  extends Model<CountryAttributes, CountryCreationAttributes>
-  implements CountryAttributes {
-  public readonly id?: number
-  public country!: string
+export class Country extends Model<
+  InferAttributes<Country>,
+  InferCreationAttributes<Country>
+> {
+  declare id: CreationOptional<number>
+  declare country: string
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Country hasMany City
-  public readonly Cities?: City[]
-  public getCities!: Sequelize.HasManyGetAssociationsMixin<City>
-  public setCities!: Sequelize.HasManySetAssociationsMixin<City, CityId>
-  public addCity!: Sequelize.HasManyAddAssociationMixin<City, CityId>
-  public addCities!: Sequelize.HasManyAddAssociationsMixin<City, CityId>
-  public createCity!: Sequelize.HasManyCreateAssociationMixin<City>
-  public removeCity!: Sequelize.HasManyRemoveAssociationMixin<City, CityId>
-  public removeCities!: Sequelize.HasManyRemoveAssociationsMixin<City, CityId>
-  public hasCity!: Sequelize.HasManyHasAssociationMixin<City, CityId>
-  public hasCities!: Sequelize.HasManyHasAssociationsMixin<City, CityId>
-  public countCities!: Sequelize.HasManyCountAssociationsMixin
+  declare Cities: NonAttribute<City[]>
+  declare getCities: HasManyGetAssociationsMixin<City>
+  declare setCities: HasManySetAssociationsMixin<City, number>
+  declare addCity: HasManyAddAssociationMixin<City, number>
+  declare addCities: HasManyAddAssociationsMixin<City, number>
+  declare createCity: HasManyCreateAssociationMixin<City>
+  declare removeCity: HasManyRemoveAssociationMixin<City, number>
+  declare removeCities: HasManyRemoveAssociationsMixin<City, number>
+  declare hasCity: HasManyHasAssociationMixin<City, number>
+  declare hasCities: HasManyHasAssociationsMixin<City, number>
+  declare countCities: HasManyCountAssociationsMixin
   
-  public static associations: {
+  declare static associations: {
     Cities: Association<Country, City>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Country {
+  static initModel(sequelize: Sequelize): typeof Country {
     Country.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       country: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -1402,78 +1559,99 @@ export class Country
  *                         /sakila/models/Customer.ts                         *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Address, AddressId } from './Address'
-import type { Payment, PaymentId } from './Payment'
-import type { Rental, RentalId } from './Rental'
-import type { Store, StoreId } from './Store'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Address } from './Address'
+import type { Payment } from './Payment'
+import type { Rental } from './Rental'
+import type { Store } from './Store'
 
-export interface CustomerAttributes {
-  firstName: string
-  lastName: string
-  email?: string
-  active: boolean
-}
-
-export type CustomerId = number
-export type CustomerCreationAttributes = CustomerAttributes & { id?: number }
-
-export class Customer
-  extends Model<CustomerAttributes, CustomerCreationAttributes>
-  implements CustomerAttributes {
-  public readonly id?: number
-  public firstName!: string
-  public lastName!: string
-  public email?: string
-  public active!: boolean
+export class Customer extends Model<
+  InferAttributes<Customer>,
+  InferCreationAttributes<Customer>
+> {
+  declare id: CreationOptional<number>
+  declare firstName: string
+  declare lastName: string
+  declare email: string | null
+  declare active: boolean
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Customer belongsTo Store
-  public readonly Store?: Store
-  public getStore!: Sequelize.BelongsToGetAssociationMixin<Store>
-  public setStore!: Sequelize.BelongsToSetAssociationMixin<Store, StoreId>
-  public createStore!: Sequelize.BelongsToCreateAssociationMixin<Store>
+  declare Store: NonAttribute<Store>
+  declare getStore: BelongsToGetAssociationMixin<Store>
+  declare setStore: BelongsToSetAssociationMixin<Store, number>
+  declare createStore: BelongsToCreateAssociationMixin<Store>
   
   // Customer belongsTo Address
-  public readonly Address?: Address
-  public getAddress!: Sequelize.BelongsToGetAssociationMixin<Address>
-  public setAddress!: Sequelize.BelongsToSetAssociationMixin<Address, AddressId>
-  public createAddress!: Sequelize.BelongsToCreateAssociationMixin<Address>
+  declare Address: NonAttribute<Address>
+  declare getAddress: BelongsToGetAssociationMixin<Address>
+  declare setAddress: BelongsToSetAssociationMixin<Address, number>
+  declare createAddress: BelongsToCreateAssociationMixin<Address>
   
   // Customer hasMany Rental
-  public readonly Rentals?: Rental[]
-  public getRentals!: Sequelize.HasManyGetAssociationsMixin<Rental>
-  public setRentals!: Sequelize.HasManySetAssociationsMixin<Rental, RentalId>
-  public addRental!: Sequelize.HasManyAddAssociationMixin<Rental, RentalId>
-  public addRentals!: Sequelize.HasManyAddAssociationsMixin<Rental, RentalId>
-  public createRental!: Sequelize.HasManyCreateAssociationMixin<Rental>
-  public removeRental!: Sequelize.HasManyRemoveAssociationMixin<Rental, RentalId>
-  public removeRentals!: Sequelize.HasManyRemoveAssociationsMixin<Rental, RentalId>
-  public hasRental!: Sequelize.HasManyHasAssociationMixin<Rental, RentalId>
-  public hasRentals!: Sequelize.HasManyHasAssociationsMixin<Rental, RentalId>
-  public countRentals!: Sequelize.HasManyCountAssociationsMixin
+  declare Rentals: NonAttribute<Rental[]>
+  declare getRentals: HasManyGetAssociationsMixin<Rental>
+  declare setRentals: HasManySetAssociationsMixin<Rental, number>
+  declare addRental: HasManyAddAssociationMixin<Rental, number>
+  declare addRentals: HasManyAddAssociationsMixin<Rental, number>
+  declare createRental: HasManyCreateAssociationMixin<Rental>
+  declare removeRental: HasManyRemoveAssociationMixin<Rental, number>
+  declare removeRentals: HasManyRemoveAssociationsMixin<Rental, number>
+  declare hasRental: HasManyHasAssociationMixin<Rental, number>
+  declare hasRentals: HasManyHasAssociationsMixin<Rental, number>
+  declare countRentals: HasManyCountAssociationsMixin
   
   // Customer hasMany Payment
-  public readonly Payments?: Payment[]
-  public getPayments!: Sequelize.HasManyGetAssociationsMixin<Payment>
-  public setPayments!: Sequelize.HasManySetAssociationsMixin<Payment, PaymentId>
-  public addPayment!: Sequelize.HasManyAddAssociationMixin<Payment, PaymentId>
-  public addPayments!: Sequelize.HasManyAddAssociationsMixin<Payment, PaymentId>
-  public createPayment!: Sequelize.HasManyCreateAssociationMixin<Payment>
-  public removePayment!: Sequelize.HasManyRemoveAssociationMixin<Payment, PaymentId>
-  public removePayments!: Sequelize.HasManyRemoveAssociationsMixin<Payment, PaymentId>
-  public hasPayment!: Sequelize.HasManyHasAssociationMixin<Payment, PaymentId>
-  public hasPayments!: Sequelize.HasManyHasAssociationsMixin<Payment, PaymentId>
-  public countPayments!: Sequelize.HasManyCountAssociationsMixin
+  declare Payments: NonAttribute<Payment[]>
+  declare getPayments: HasManyGetAssociationsMixin<Payment>
+  declare setPayments: HasManySetAssociationsMixin<Payment, number>
+  declare addPayment: HasManyAddAssociationMixin<Payment, number>
+  declare addPayments: HasManyAddAssociationsMixin<Payment, number>
+  declare createPayment: HasManyCreateAssociationMixin<Payment>
+  declare removePayment: HasManyRemoveAssociationMixin<Payment, number>
+  declare removePayments: HasManyRemoveAssociationsMixin<Payment, number>
+  declare hasPayment: HasManyHasAssociationMixin<Payment, number>
+  declare hasPayments: HasManyHasAssociationsMixin<Payment, number>
+  declare countPayments: HasManyCountAssociationsMixin
   
-  public static associations: {
+  declare static associations: {
     Store: Association<Customer, Store>,
     Address: Association<Customer, Address>,
     Rentals: Association<Customer, Rental>,
     Payments: Association<Customer, Payment>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Customer {
+  static initModel(sequelize: Sequelize): typeof Customer {
     Customer.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false
@@ -1488,6 +1666,12 @@ export class Customer
       active: {
         type: DataTypes.BOOLEAN,
         allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -1502,97 +1686,115 @@ export class Customer
  *                           /sakila/models/Film.ts                           *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Actor, ActorId } from './Actor'
-import type { Category, CategoryId } from './Category'
-import type { Inventory, InventoryId } from './Inventory'
-import type { Language, LanguageId } from './Language'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManySetAssociationsMixin,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyAddAssociationsMixin,
+  BelongsToManyCreateAssociationMixin,
+  BelongsToManyRemoveAssociationMixin,
+  BelongsToManyRemoveAssociationsMixin,
+  BelongsToManyHasAssociationMixin,
+  BelongsToManyHasAssociationsMixin,
+  BelongsToManyCountAssociationsMixin,
+  CreationOptional,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Actor } from './Actor'
+import type { Category } from './Category'
+import type { Inventory } from './Inventory'
+import type { Language } from './Language'
 
-export interface FilmAttributes {
-  title: string
-  description?: string
-  releaseYear?: number
-  languageId: number
-  originalLanguageId?: number
-  rentalDuration: number
-  rentalRate: number
-  length?: number
-  rating: 'G' | 'PG' | 'PG-13' | 'R' | 'NC-17'
+export class Film extends Model<
+  InferAttributes<Film>,
+  InferCreationAttributes<Film>
+> {
+  declare id: CreationOptional<number>
+  declare title: string
+  declare description: string | null
+  declare releaseYear: number | null
+  declare languageId: number
+  declare originalLanguageId: number | null
+  declare rentalDuration: number
+  declare rentalRate: number
+  declare length: number | null
+  declare rating: 'G' | 'PG' | 'PG-13' | 'R' | 'NC-17'
   //// DataTypes.ARRAY(DataTypes.ENUM('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes')) not supported for SQLite
-  // specialFeature: Array<'Trailers' | 'Commentaries' | 'Deleted Scenes' | 'Behind the Scenes'>
-}
-
-export type FilmId = number
-export type FilmCreationAttributes = FilmAttributes & { id?: number }
-
-export class Film
-  extends Model<FilmAttributes, FilmCreationAttributes>
-  implements FilmAttributes {
-  public readonly id?: number
-  public title!: string
-  public description?: string
-  public releaseYear?: number
-  public languageId!: number
-  public originalLanguageId?: number
-  public rentalDuration!: number
-  public rentalRate!: number
-  public length?: number
-  public rating!: 'G' | 'PG' | 'PG-13' | 'R' | 'NC-17'
-  //// DataTypes.ARRAY(DataTypes.ENUM('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes')) not supported for SQLite
-  // public specialFeature!: Array<'Trailers' | 'Commentaries' | 'Deleted Scenes' | 'Behind the Scenes'>
+  // declare specialFeature: Array<'Trailers' | 'Commentaries' | 'Deleted Scenes' | 'Behind the Scenes'>
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Film belongsTo Language
-  public readonly Language?: Language
-  public getLanguage!: Sequelize.BelongsToGetAssociationMixin<Language>
-  public setLanguage!: Sequelize.BelongsToSetAssociationMixin<Language, LanguageId>
-  public createLanguage!: Sequelize.BelongsToCreateAssociationMixin<Language>
+  declare Language: NonAttribute<Language>
+  declare getLanguage: BelongsToGetAssociationMixin<Language>
+  declare setLanguage: BelongsToSetAssociationMixin<Language, number>
+  declare createLanguage: BelongsToCreateAssociationMixin<Language>
   
   // Film belongsTo Language (as OriginalLanguage)
-  public readonly originalLanguage?: Language
-  public getOriginalLanguage!: Sequelize.BelongsToGetAssociationMixin<Language>
-  public setOriginalLanguage!: Sequelize.BelongsToSetAssociationMixin<Language, LanguageId>
-  public createOriginalLanguage!: Sequelize.BelongsToCreateAssociationMixin<Language>
+  declare originalLanguage: NonAttribute<Language>
+  declare getOriginalLanguage: BelongsToGetAssociationMixin<Language>
+  declare setOriginalLanguage: BelongsToSetAssociationMixin<Language, number>
+  declare createOriginalLanguage: BelongsToCreateAssociationMixin<Language>
   
   // Film hasMany Inventory
-  public readonly Inventories?: Inventory[]
-  public getInventories!: Sequelize.HasManyGetAssociationsMixin<Inventory>
-  public setInventories!: Sequelize.HasManySetAssociationsMixin<Inventory, InventoryId>
-  public addInventory!: Sequelize.HasManyAddAssociationMixin<Inventory, InventoryId>
-  public addInventories!: Sequelize.HasManyAddAssociationsMixin<Inventory, InventoryId>
-  public createInventory!: Sequelize.HasManyCreateAssociationMixin<Inventory>
-  public removeInventory!: Sequelize.HasManyRemoveAssociationMixin<Inventory, InventoryId>
-  public removeInventories!: Sequelize.HasManyRemoveAssociationsMixin<Inventory, InventoryId>
-  public hasInventory!: Sequelize.HasManyHasAssociationMixin<Inventory, InventoryId>
-  public hasInventories!: Sequelize.HasManyHasAssociationsMixin<Inventory, InventoryId>
-  public countInventories!: Sequelize.HasManyCountAssociationsMixin
+  declare Inventories: NonAttribute<Inventory[]>
+  declare getInventories: HasManyGetAssociationsMixin<Inventory>
+  declare setInventories: HasManySetAssociationsMixin<Inventory, number>
+  declare addInventory: HasManyAddAssociationMixin<Inventory, number>
+  declare addInventories: HasManyAddAssociationsMixin<Inventory, number>
+  declare createInventory: HasManyCreateAssociationMixin<Inventory>
+  declare removeInventory: HasManyRemoveAssociationMixin<Inventory, number>
+  declare removeInventories: HasManyRemoveAssociationsMixin<Inventory, number>
+  declare hasInventory: HasManyHasAssociationMixin<Inventory, number>
+  declare hasInventories: HasManyHasAssociationsMixin<Inventory, number>
+  declare countInventories: HasManyCountAssociationsMixin
   
   // Film belongsToMany Actor
-  public readonly Actors?: Actor[]
-  public getActors!: Sequelize.BelongsToManyGetAssociationsMixin<Actor>
-  public setActors!: Sequelize.BelongsToManySetAssociationsMixin<Actor, ActorId>
-  public addActor!: Sequelize.BelongsToManyAddAssociationMixin<Actor, ActorId>
-  public addActors!: Sequelize.BelongsToManyAddAssociationsMixin<Actor, ActorId>
-  public createActor!: Sequelize.BelongsToManyCreateAssociationMixin<Actor>
-  public removeActor!: Sequelize.BelongsToManyRemoveAssociationMixin<Actor, ActorId>
-  public removeActors!: Sequelize.BelongsToManyRemoveAssociationsMixin<Actor, ActorId>
-  public hasActor!: Sequelize.BelongsToManyHasAssociationMixin<Actor, ActorId>
-  public hasActors!: Sequelize.BelongsToManyHasAssociationsMixin<Actor, ActorId>
-  public countActors!: Sequelize.BelongsToManyCountAssociationsMixin
+  declare Actors: NonAttribute<Actor[]>
+  declare getActors: BelongsToManyGetAssociationsMixin<Actor>
+  declare setActors: BelongsToManySetAssociationsMixin<Actor, number>
+  declare addActor: BelongsToManyAddAssociationMixin<Actor, number>
+  declare addActors: BelongsToManyAddAssociationsMixin<Actor, number>
+  declare createActor: BelongsToManyCreateAssociationMixin<Actor>
+  declare removeActor: BelongsToManyRemoveAssociationMixin<Actor, number>
+  declare removeActors: BelongsToManyRemoveAssociationsMixin<Actor, number>
+  declare hasActor: BelongsToManyHasAssociationMixin<Actor, number>
+  declare hasActors: BelongsToManyHasAssociationsMixin<Actor, number>
+  declare countActors: BelongsToManyCountAssociationsMixin
   
   // Film belongsToMany Category
-  public readonly Categories?: Category[]
-  public getCategories!: Sequelize.BelongsToManyGetAssociationsMixin<Category>
-  public setCategories!: Sequelize.BelongsToManySetAssociationsMixin<Category, CategoryId>
-  public addCategory!: Sequelize.BelongsToManyAddAssociationMixin<Category, CategoryId>
-  public addCategories!: Sequelize.BelongsToManyAddAssociationsMixin<Category, CategoryId>
-  public createCategory!: Sequelize.BelongsToManyCreateAssociationMixin<Category>
-  public removeCategory!: Sequelize.BelongsToManyRemoveAssociationMixin<Category, CategoryId>
-  public removeCategories!: Sequelize.BelongsToManyRemoveAssociationsMixin<Category, CategoryId>
-  public hasCategory!: Sequelize.BelongsToManyHasAssociationMixin<Category, CategoryId>
-  public hasCategories!: Sequelize.BelongsToManyHasAssociationsMixin<Category, CategoryId>
-  public countCategories!: Sequelize.BelongsToManyCountAssociationsMixin
+  declare Categories: NonAttribute<Category[]>
+  declare getCategories: BelongsToManyGetAssociationsMixin<Category>
+  declare setCategories: BelongsToManySetAssociationsMixin<Category, number>
+  declare addCategory: BelongsToManyAddAssociationMixin<Category, number>
+  declare addCategories: BelongsToManyAddAssociationsMixin<Category, number>
+  declare createCategory: BelongsToManyCreateAssociationMixin<Category>
+  declare removeCategory: BelongsToManyRemoveAssociationMixin<Category, number>
+  declare removeCategories: BelongsToManyRemoveAssociationsMixin<Category, number>
+  declare hasCategory: BelongsToManyHasAssociationMixin<Category, number>
+  declare hasCategories: BelongsToManyHasAssociationsMixin<Category, number>
+  declare countCategories: BelongsToManyCountAssociationsMixin
   
-  public static associations: {
+  declare static associations: {
     Language: Association<Film, Language>,
     originalLanguage: Association<Film, Language>,
     Inventories: Association<Film, Inventory>,
@@ -1600,8 +1802,14 @@ export class Film
     Categories: Association<Film, Category>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Film {
+  static initModel(sequelize: Sequelize): typeof Film {
     Film.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       title: {
         type: DataTypes.STRING,
         allowNull: false
@@ -1638,7 +1846,13 @@ export class Film
       // specialFeature: {
       //   type: DataTypes.ARRAY(DataTypes.ENUM('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes')),
       //   allowNull: false
-      // }
+      // },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
+      }
     }, {
       sequelize
     })
@@ -1652,42 +1866,61 @@ export class Film
  *                        /sakila/models/FilmActor.ts                         *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Actor, ActorId } from './Actor'
-import type { Film, FilmId } from './Film'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Actor } from './Actor'
+import type { Film } from './Film'
 
-export interface FilmActorAttributes {
-  
-}
-
-export type FilmActorId = number
-export type FilmActorCreationAttributes = FilmActorAttributes & { id?: number }
-
-export class FilmActor
-  extends Model<FilmActorAttributes, FilmActorCreationAttributes>
-  implements FilmActorAttributes {
-  public readonly id?: number
+export class FilmActor extends Model<
+  InferAttributes<FilmActor>,
+  InferCreationAttributes<FilmActor>
+> {
+  declare id: CreationOptional<number>
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // FilmActor belongsTo Film
-  public readonly Film?: Film
-  public getFilm!: Sequelize.BelongsToGetAssociationMixin<Film>
-  public setFilm!: Sequelize.BelongsToSetAssociationMixin<Film, FilmId>
-  public createFilm!: Sequelize.BelongsToCreateAssociationMixin<Film>
+  declare Film: NonAttribute<Film>
+  declare getFilm: BelongsToGetAssociationMixin<Film>
+  declare setFilm: BelongsToSetAssociationMixin<Film, number>
+  declare createFilm: BelongsToCreateAssociationMixin<Film>
   
   // FilmActor belongsTo Actor
-  public readonly Actor?: Actor
-  public getActor!: Sequelize.BelongsToGetAssociationMixin<Actor>
-  public setActor!: Sequelize.BelongsToSetAssociationMixin<Actor, ActorId>
-  public createActor!: Sequelize.BelongsToCreateAssociationMixin<Actor>
+  declare Actor: NonAttribute<Actor>
+  declare getActor: BelongsToGetAssociationMixin<Actor>
+  declare setActor: BelongsToSetAssociationMixin<Actor, number>
+  declare createActor: BelongsToCreateAssociationMixin<Actor>
   
-  public static associations: {
+  declare static associations: {
     Film: Association<FilmActor, Film>,
     Actor: Association<FilmActor, Actor>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof FilmActor {
+  static initModel(sequelize: Sequelize): typeof FilmActor {
     FilmActor.init({
-      
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
+      }
     }, {
       sequelize
     })
@@ -1701,42 +1934,61 @@ export class FilmActor
  *                       /sakila/models/FilmCategory.ts                       *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Category, CategoryId } from './Category'
-import type { Film, FilmId } from './Film'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Category } from './Category'
+import type { Film } from './Film'
 
-export interface FilmCategoryAttributes {
-  
-}
-
-export type FilmCategoryId = number
-export type FilmCategoryCreationAttributes = FilmCategoryAttributes & { id?: number }
-
-export class FilmCategory
-  extends Model<FilmCategoryAttributes, FilmCategoryCreationAttributes>
-  implements FilmCategoryAttributes {
-  public readonly id?: number
+export class FilmCategory extends Model<
+  InferAttributes<FilmCategory>,
+  InferCreationAttributes<FilmCategory>
+> {
+  declare id: CreationOptional<number>
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // FilmCategory belongsTo Film
-  public readonly Film?: Film
-  public getFilm!: Sequelize.BelongsToGetAssociationMixin<Film>
-  public setFilm!: Sequelize.BelongsToSetAssociationMixin<Film, FilmId>
-  public createFilm!: Sequelize.BelongsToCreateAssociationMixin<Film>
+  declare Film: NonAttribute<Film>
+  declare getFilm: BelongsToGetAssociationMixin<Film>
+  declare setFilm: BelongsToSetAssociationMixin<Film, number>
+  declare createFilm: BelongsToCreateAssociationMixin<Film>
   
   // FilmCategory belongsTo Category
-  public readonly Category?: Category
-  public getCategory!: Sequelize.BelongsToGetAssociationMixin<Category>
-  public setCategory!: Sequelize.BelongsToSetAssociationMixin<Category, CategoryId>
-  public createCategory!: Sequelize.BelongsToCreateAssociationMixin<Category>
+  declare Category: NonAttribute<Category>
+  declare getCategory: BelongsToGetAssociationMixin<Category>
+  declare setCategory: BelongsToSetAssociationMixin<Category, number>
+  declare createCategory: BelongsToCreateAssociationMixin<Category>
   
-  public static associations: {
+  declare static associations: {
     Film: Association<FilmCategory, Film>,
     Category: Association<FilmCategory, Category>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof FilmCategory {
+  static initModel(sequelize: Sequelize): typeof FilmCategory {
     FilmCategory.init({
-      
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
+      }
     }, {
       sequelize
     })
@@ -1752,35 +2004,20 @@ export class FilmCategory
 
 import type { Sequelize, Model } from 'sequelize'
 import { Actor } from './Actor'
-import type { ActorAttributes, ActorCreationAttributes } from './Actor'
 import { Film } from './Film'
-import type { FilmAttributes, FilmCreationAttributes } from './Film'
 import { Language } from './Language'
-import type { LanguageAttributes, LanguageCreationAttributes } from './Language'
 import { Category } from './Category'
-import type { CategoryAttributes, CategoryCreationAttributes } from './Category'
 import { Inventory } from './Inventory'
-import type { InventoryAttributes, InventoryCreationAttributes } from './Inventory'
 import { Store } from './Store'
-import type { StoreAttributes, StoreCreationAttributes } from './Store'
 import { Staff } from './Staff'
-import type { StaffAttributes, StaffCreationAttributes } from './Staff'
 import { Customer } from './Customer'
-import type { CustomerAttributes, CustomerCreationAttributes } from './Customer'
 import { Address } from './Address'
-import type { AddressAttributes, AddressCreationAttributes } from './Address'
 import { Rental } from './Rental'
-import type { RentalAttributes, RentalCreationAttributes } from './Rental'
 import { Payment } from './Payment'
-import type { PaymentAttributes, PaymentCreationAttributes } from './Payment'
 import { City } from './City'
-import type { CityAttributes, CityCreationAttributes } from './City'
 import { Country } from './Country'
-import type { CountryAttributes, CountryCreationAttributes } from './Country'
 import { FilmActor } from './FilmActor'
-import type { FilmActorAttributes, FilmActorCreationAttributes } from './FilmActor'
 import { FilmCategory } from './FilmCategory'
-import type { FilmCategoryAttributes, FilmCategoryCreationAttributes } from './FilmCategory'
 
 export {
   Actor,
@@ -1798,39 +2035,6 @@ export {
   Country,
   FilmActor,
   FilmCategory
-}
-
-export type {
-  ActorAttributes,
-  ActorCreationAttributes,
-  FilmAttributes,
-  FilmCreationAttributes,
-  LanguageAttributes,
-  LanguageCreationAttributes,
-  CategoryAttributes,
-  CategoryCreationAttributes,
-  InventoryAttributes,
-  InventoryCreationAttributes,
-  StoreAttributes,
-  StoreCreationAttributes,
-  StaffAttributes,
-  StaffCreationAttributes,
-  CustomerAttributes,
-  CustomerCreationAttributes,
-  AddressAttributes,
-  AddressCreationAttributes,
-  RentalAttributes,
-  RentalCreationAttributes,
-  PaymentAttributes,
-  PaymentCreationAttributes,
-  CityAttributes,
-  CityCreationAttributes,
-  CountryAttributes,
-  CountryCreationAttributes,
-  FilmActorAttributes,
-  FilmActorCreationAttributes,
-  FilmCategoryAttributes,
-  FilmCategoryCreationAttributes
 }
 
 export function initModels(sequelize: Sequelize) {
@@ -2024,42 +2228,61 @@ export function initModels(sequelize: Sequelize) {
  *                        /sakila/models/Inventory.ts                         *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Film, FilmId } from './Film'
-import type { Store, StoreId } from './Store'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Film } from './Film'
+import type { Store } from './Store'
 
-export interface InventoryAttributes {
-  
-}
-
-export type InventoryId = number
-export type InventoryCreationAttributes = InventoryAttributes & { id?: number }
-
-export class Inventory
-  extends Model<InventoryAttributes, InventoryCreationAttributes>
-  implements InventoryAttributes {
-  public readonly id?: number
+export class Inventory extends Model<
+  InferAttributes<Inventory>,
+  InferCreationAttributes<Inventory>
+> {
+  declare id: CreationOptional<number>
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Inventory belongsTo Film
-  public readonly Film?: Film
-  public getFilm!: Sequelize.BelongsToGetAssociationMixin<Film>
-  public setFilm!: Sequelize.BelongsToSetAssociationMixin<Film, FilmId>
-  public createFilm!: Sequelize.BelongsToCreateAssociationMixin<Film>
+  declare Film: NonAttribute<Film>
+  declare getFilm: BelongsToGetAssociationMixin<Film>
+  declare setFilm: BelongsToSetAssociationMixin<Film, number>
+  declare createFilm: BelongsToCreateAssociationMixin<Film>
   
   // Inventory belongsTo Store
-  public readonly Store?: Store
-  public getStore!: Sequelize.BelongsToGetAssociationMixin<Store>
-  public setStore!: Sequelize.BelongsToSetAssociationMixin<Store, StoreId>
-  public createStore!: Sequelize.BelongsToCreateAssociationMixin<Store>
+  declare Store: NonAttribute<Store>
+  declare getStore: BelongsToGetAssociationMixin<Store>
+  declare setStore: BelongsToSetAssociationMixin<Store, number>
+  declare createStore: BelongsToCreateAssociationMixin<Store>
   
-  public static associations: {
+  declare static associations: {
     Film: Association<Inventory, Film>,
     Store: Association<Inventory, Store>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Inventory {
+  static initModel(sequelize: Sequelize): typeof Inventory {
     Inventory.init({
-      
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
+      }
     }, {
       sequelize
     })
@@ -2073,58 +2296,85 @@ export class Inventory
  *                         /sakila/models/Language.ts                         *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Film, FilmId } from './Film'
+import {
+  Association,
+  CreationOptional,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Film } from './Film'
 
-export interface LanguageAttributes {
-  name: string
-}
-
-export type LanguageId = number
-export type LanguageCreationAttributes = LanguageAttributes & { id?: number }
-
-export class Language
-  extends Model<LanguageAttributes, LanguageCreationAttributes>
-  implements LanguageAttributes {
-  public readonly id?: number
-  public name!: string
+export class Language extends Model<
+  InferAttributes<Language>,
+  InferCreationAttributes<Language>
+> {
+  declare id: CreationOptional<number>
+  declare name: string
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Language hasMany Film
-  public readonly Films?: Film[]
-  public getFilms!: Sequelize.HasManyGetAssociationsMixin<Film>
-  public setFilms!: Sequelize.HasManySetAssociationsMixin<Film, FilmId>
-  public addFilm!: Sequelize.HasManyAddAssociationMixin<Film, FilmId>
-  public addFilms!: Sequelize.HasManyAddAssociationsMixin<Film, FilmId>
-  public createFilm!: Sequelize.HasManyCreateAssociationMixin<Film>
-  public removeFilm!: Sequelize.HasManyRemoveAssociationMixin<Film, FilmId>
-  public removeFilms!: Sequelize.HasManyRemoveAssociationsMixin<Film, FilmId>
-  public hasFilm!: Sequelize.HasManyHasAssociationMixin<Film, FilmId>
-  public hasFilms!: Sequelize.HasManyHasAssociationsMixin<Film, FilmId>
-  public countFilms!: Sequelize.HasManyCountAssociationsMixin
+  declare Films: NonAttribute<Film[]>
+  declare getFilms: HasManyGetAssociationsMixin<Film>
+  declare setFilms: HasManySetAssociationsMixin<Film, number>
+  declare addFilm: HasManyAddAssociationMixin<Film, number>
+  declare addFilms: HasManyAddAssociationsMixin<Film, number>
+  declare createFilm: HasManyCreateAssociationMixin<Film, 'languageId'>
+  declare removeFilm: HasManyRemoveAssociationMixin<Film, number>
+  declare removeFilms: HasManyRemoveAssociationsMixin<Film, number>
+  declare hasFilm: HasManyHasAssociationMixin<Film, number>
+  declare hasFilms: HasManyHasAssociationsMixin<Film, number>
+  declare countFilms: HasManyCountAssociationsMixin
   
   // Language hasMany Film (as OriginalLanguageFilm)
-  public readonly originalLanguageFilms?: Film[]
-  public getOriginalLanguageFilms!: Sequelize.HasManyGetAssociationsMixin<Film>
-  public setOriginalLanguageFilms!: Sequelize.HasManySetAssociationsMixin<Film, FilmId>
-  public addOriginalLanguageFilm!: Sequelize.HasManyAddAssociationMixin<Film, FilmId>
-  public addOriginalLanguageFilms!: Sequelize.HasManyAddAssociationsMixin<Film, FilmId>
-  public createOriginalLanguageFilm!: Sequelize.HasManyCreateAssociationMixin<Film>
-  public removeOriginalLanguageFilm!: Sequelize.HasManyRemoveAssociationMixin<Film, FilmId>
-  public removeOriginalLanguageFilms!: Sequelize.HasManyRemoveAssociationsMixin<Film, FilmId>
-  public hasOriginalLanguageFilm!: Sequelize.HasManyHasAssociationMixin<Film, FilmId>
-  public hasOriginalLanguageFilms!: Sequelize.HasManyHasAssociationsMixin<Film, FilmId>
-  public countOriginalLanguageFilms!: Sequelize.HasManyCountAssociationsMixin
+  declare originalLanguageFilms: NonAttribute<Film[]>
+  declare getOriginalLanguageFilms: HasManyGetAssociationsMixin<Film>
+  declare setOriginalLanguageFilms: HasManySetAssociationsMixin<Film, number>
+  declare addOriginalLanguageFilm: HasManyAddAssociationMixin<Film, number>
+  declare addOriginalLanguageFilms: HasManyAddAssociationsMixin<Film, number>
+  declare createOriginalLanguageFilm: HasManyCreateAssociationMixin<Film>
+  declare removeOriginalLanguageFilm: HasManyRemoveAssociationMixin<Film, number>
+  declare removeOriginalLanguageFilms: HasManyRemoveAssociationsMixin<Film, number>
+  declare hasOriginalLanguageFilm: HasManyHasAssociationMixin<Film, number>
+  declare hasOriginalLanguageFilms: HasManyHasAssociationsMixin<Film, number>
+  declare countOriginalLanguageFilms: HasManyCountAssociationsMixin
   
-  public static associations: {
+  declare static associations: {
     Films: Association<Language, Film>,
     originalLanguageFilms: Association<Language, Film>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Language {
+  static initModel(sequelize: Sequelize): typeof Language {
     Language.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -2139,52 +2389,65 @@ export class Language
  *                         /sakila/models/Payment.ts                          *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Customer, CustomerId } from './Customer'
-import type { Rental, RentalId } from './Rental'
-import type { Staff, StaffId } from './Staff'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Customer } from './Customer'
+import type { Rental } from './Rental'
+import type { Staff } from './Staff'
 
-export interface PaymentAttributes {
-  amount: number
-  paymentDate: string
-}
-
-export type PaymentId = number
-export type PaymentCreationAttributes = PaymentAttributes & { id?: number }
-
-export class Payment
-  extends Model<PaymentAttributes, PaymentCreationAttributes>
-  implements PaymentAttributes {
-  public readonly id?: number
-  public amount!: number
-  public paymentDate!: string
+export class Payment extends Model<
+  InferAttributes<Payment>,
+  InferCreationAttributes<Payment>
+> {
+  declare id: CreationOptional<number>
+  declare amount: number
+  declare paymentDate: Date
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Payment belongsTo Customer
-  public readonly Customer?: Customer
-  public getCustomer!: Sequelize.BelongsToGetAssociationMixin<Customer>
-  public setCustomer!: Sequelize.BelongsToSetAssociationMixin<Customer, CustomerId>
-  public createCustomer!: Sequelize.BelongsToCreateAssociationMixin<Customer>
+  declare Customer: NonAttribute<Customer>
+  declare getCustomer: BelongsToGetAssociationMixin<Customer>
+  declare setCustomer: BelongsToSetAssociationMixin<Customer, number>
+  declare createCustomer: BelongsToCreateAssociationMixin<Customer>
   
   // Payment belongsTo Staff
-  public readonly Staff?: Staff
-  public getStaff!: Sequelize.BelongsToGetAssociationMixin<Staff>
-  public setStaff!: Sequelize.BelongsToSetAssociationMixin<Staff, StaffId>
-  public createStaff!: Sequelize.BelongsToCreateAssociationMixin<Staff>
+  declare Staff: NonAttribute<Staff>
+  declare getStaff: BelongsToGetAssociationMixin<Staff>
+  declare setStaff: BelongsToSetAssociationMixin<Staff, number>
+  declare createStaff: BelongsToCreateAssociationMixin<Staff>
   
   // Payment belongsTo Rental
-  public readonly Rental?: Rental
-  public getRental!: Sequelize.BelongsToGetAssociationMixin<Rental>
-  public setRental!: Sequelize.BelongsToSetAssociationMixin<Rental, RentalId>
-  public createRental!: Sequelize.BelongsToCreateAssociationMixin<Rental>
+  declare Rental: NonAttribute<Rental>
+  declare getRental: BelongsToGetAssociationMixin<Rental>
+  declare setRental: BelongsToSetAssociationMixin<Rental, number>
+  declare createRental: BelongsToCreateAssociationMixin<Rental>
   
-  public static associations: {
+  declare static associations: {
     Customer: Association<Payment, Customer>,
     Staff: Association<Payment, Staff>,
     Rental: Association<Payment, Rental>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Payment {
+  static initModel(sequelize: Sequelize): typeof Payment {
     Payment.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       amount: {
         type: DataTypes.DECIMAL,
         allowNull: false
@@ -2192,6 +2455,12 @@ export class Payment
       paymentDate: {
         type: DataTypes.DATE,
         allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -2206,73 +2475,102 @@ export class Payment
  *                          /sakila/models/Rental.ts                          *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Customer, CustomerId } from './Customer'
-import type { Inventory, InventoryId } from './Inventory'
-import type { Payment, PaymentId } from './Payment'
-import type { Staff, StaffId } from './Staff'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Customer } from './Customer'
+import type { Inventory } from './Inventory'
+import type { Payment } from './Payment'
+import type { Staff } from './Staff'
 
-export interface RentalAttributes {
-  rentalDate: string
-  returnDate?: string
-}
-
-export type RentalId = number
-export type RentalCreationAttributes = RentalAttributes & { id?: number }
-
-export class Rental
-  extends Model<RentalAttributes, RentalCreationAttributes>
-  implements RentalAttributes {
-  public readonly id?: number
-  public rentalDate!: string
-  public returnDate?: string
+export class Rental extends Model<
+  InferAttributes<Rental>,
+  InferCreationAttributes<Rental>
+> {
+  declare id: CreationOptional<number>
+  declare rentalDate: string
+  declare returnDate: string | null
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Rental belongsTo Inventory
-  public readonly Inventory?: Inventory
-  public getInventory!: Sequelize.BelongsToGetAssociationMixin<Inventory>
-  public setInventory!: Sequelize.BelongsToSetAssociationMixin<Inventory, InventoryId>
-  public createInventory!: Sequelize.BelongsToCreateAssociationMixin<Inventory>
+  declare Inventory: NonAttribute<Inventory>
+  declare getInventory: BelongsToGetAssociationMixin<Inventory>
+  declare setInventory: BelongsToSetAssociationMixin<Inventory, number>
+  declare createInventory: BelongsToCreateAssociationMixin<Inventory>
   
   // Rental belongsTo Customer
-  public readonly Customer?: Customer
-  public getCustomer!: Sequelize.BelongsToGetAssociationMixin<Customer>
-  public setCustomer!: Sequelize.BelongsToSetAssociationMixin<Customer, CustomerId>
-  public createCustomer!: Sequelize.BelongsToCreateAssociationMixin<Customer>
+  declare Customer: NonAttribute<Customer>
+  declare getCustomer: BelongsToGetAssociationMixin<Customer>
+  declare setCustomer: BelongsToSetAssociationMixin<Customer, number>
+  declare createCustomer: BelongsToCreateAssociationMixin<Customer>
   
   // Rental belongsTo Staff
-  public readonly Staff?: Staff
-  public getStaff!: Sequelize.BelongsToGetAssociationMixin<Staff>
-  public setStaff!: Sequelize.BelongsToSetAssociationMixin<Staff, StaffId>
-  public createStaff!: Sequelize.BelongsToCreateAssociationMixin<Staff>
+  declare Staff: NonAttribute<Staff>
+  declare getStaff: BelongsToGetAssociationMixin<Staff>
+  declare setStaff: BelongsToSetAssociationMixin<Staff, number>
+  declare createStaff: BelongsToCreateAssociationMixin<Staff>
   
   // Rental hasMany Payment
-  public readonly Payments?: Payment[]
-  public getPayments!: Sequelize.HasManyGetAssociationsMixin<Payment>
-  public setPayments!: Sequelize.HasManySetAssociationsMixin<Payment, PaymentId>
-  public addPayment!: Sequelize.HasManyAddAssociationMixin<Payment, PaymentId>
-  public addPayments!: Sequelize.HasManyAddAssociationsMixin<Payment, PaymentId>
-  public createPayment!: Sequelize.HasManyCreateAssociationMixin<Payment>
-  public removePayment!: Sequelize.HasManyRemoveAssociationMixin<Payment, PaymentId>
-  public removePayments!: Sequelize.HasManyRemoveAssociationsMixin<Payment, PaymentId>
-  public hasPayment!: Sequelize.HasManyHasAssociationMixin<Payment, PaymentId>
-  public hasPayments!: Sequelize.HasManyHasAssociationsMixin<Payment, PaymentId>
-  public countPayments!: Sequelize.HasManyCountAssociationsMixin
+  declare Payments: NonAttribute<Payment[]>
+  declare getPayments: HasManyGetAssociationsMixin<Payment>
+  declare setPayments: HasManySetAssociationsMixin<Payment, number>
+  declare addPayment: HasManyAddAssociationMixin<Payment, number>
+  declare addPayments: HasManyAddAssociationsMixin<Payment, number>
+  declare createPayment: HasManyCreateAssociationMixin<Payment>
+  declare removePayment: HasManyRemoveAssociationMixin<Payment, number>
+  declare removePayments: HasManyRemoveAssociationsMixin<Payment, number>
+  declare hasPayment: HasManyHasAssociationMixin<Payment, number>
+  declare hasPayments: HasManyHasAssociationsMixin<Payment, number>
+  declare countPayments: HasManyCountAssociationsMixin
   
-  public static associations: {
+  declare static associations: {
     Inventory: Association<Rental, Inventory>,
     Customer: Association<Rental, Customer>,
     Staff: Association<Rental, Staff>,
     Payments: Association<Rental, Payment>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Rental {
+  static initModel(sequelize: Sequelize): typeof Rental {
     Rental.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       rentalDate: {
         type: DataTypes.DATEONLY,
         allowNull: false
       },
       returnDate: {
         type: DataTypes.STRING
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -2287,89 +2585,101 @@ export class Rental
  *                          /sakila/models/Staff.ts                           *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Address, AddressId } from './Address'
-import type { Payment, PaymentId } from './Payment'
-import type { Rental, RentalId } from './Rental'
-import type { Store, StoreId } from './Store'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Address } from './Address'
+import type { Payment } from './Payment'
+import type { Rental } from './Rental'
+import type { Store } from './Store'
 
-export interface StaffAttributes {
-  firstName: string
-  lastName: string
-  picture?: Buffer
-  email?: string
-  active: boolean
-  username: string
-  password?: string
-}
-
-export type StaffId = number
-export type StaffCreationAttributes = StaffAttributes & { id?: number }
-
-export class Staff
-  extends Model<StaffAttributes, StaffCreationAttributes>
-  implements StaffAttributes {
-  public readonly id?: number
-  public firstName!: string
-  public lastName!: string
-  public picture?: Buffer
-  public email?: string
-  public active!: boolean
-  public username!: string
-  public password?: string
+export class Staff extends Model<
+  InferAttributes<Staff>,
+  InferCreationAttributes<Staff>
+> {
+  declare id: CreationOptional<number>
+  declare firstName: string
+  declare lastName: string
+  declare picture: Buffer | null
+  declare email: string | null
+  declare active: boolean
+  declare username: string
+  declare password: string | null
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Staff belongsTo Store
-  public readonly Store?: Store
-  public getStore!: Sequelize.BelongsToGetAssociationMixin<Store>
-  public setStore!: Sequelize.BelongsToSetAssociationMixin<Store, StoreId>
-  public createStore!: Sequelize.BelongsToCreateAssociationMixin<Store>
+  declare Store: NonAttribute<Store>
+  declare getStore: BelongsToGetAssociationMixin<Store>
+  declare setStore: BelongsToSetAssociationMixin<Store, number>
+  declare createStore: BelongsToCreateAssociationMixin<Store>
   
   // Staff hasMany Store (as ManagedStore)
-  public readonly managedStores?: Store[]
-  public getManagedStores!: Sequelize.HasManyGetAssociationsMixin<Store>
-  public setManagedStores!: Sequelize.HasManySetAssociationsMixin<Store, StoreId>
-  public addManagedStore!: Sequelize.HasManyAddAssociationMixin<Store, StoreId>
-  public addManagedStores!: Sequelize.HasManyAddAssociationsMixin<Store, StoreId>
-  public createManagedStore!: Sequelize.HasManyCreateAssociationMixin<Store>
-  public removeManagedStore!: Sequelize.HasManyRemoveAssociationMixin<Store, StoreId>
-  public removeManagedStores!: Sequelize.HasManyRemoveAssociationsMixin<Store, StoreId>
-  public hasManagedStore!: Sequelize.HasManyHasAssociationMixin<Store, StoreId>
-  public hasManagedStores!: Sequelize.HasManyHasAssociationsMixin<Store, StoreId>
-  public countManagedStores!: Sequelize.HasManyCountAssociationsMixin
+  declare managedStores: NonAttribute<Store[]>
+  declare getManagedStores: HasManyGetAssociationsMixin<Store>
+  declare setManagedStores: HasManySetAssociationsMixin<Store, number>
+  declare addManagedStore: HasManyAddAssociationMixin<Store, number>
+  declare addManagedStores: HasManyAddAssociationsMixin<Store, number>
+  declare createManagedStore: HasManyCreateAssociationMixin<Store>
+  declare removeManagedStore: HasManyRemoveAssociationMixin<Store, number>
+  declare removeManagedStores: HasManyRemoveAssociationsMixin<Store, number>
+  declare hasManagedStore: HasManyHasAssociationMixin<Store, number>
+  declare hasManagedStores: HasManyHasAssociationsMixin<Store, number>
+  declare countManagedStores: HasManyCountAssociationsMixin
   
   // Staff belongsTo Address
-  public readonly Address?: Address
-  public getAddress!: Sequelize.BelongsToGetAssociationMixin<Address>
-  public setAddress!: Sequelize.BelongsToSetAssociationMixin<Address, AddressId>
-  public createAddress!: Sequelize.BelongsToCreateAssociationMixin<Address>
+  declare Address: NonAttribute<Address>
+  declare getAddress: BelongsToGetAssociationMixin<Address>
+  declare setAddress: BelongsToSetAssociationMixin<Address, number>
+  declare createAddress: BelongsToCreateAssociationMixin<Address>
   
   // Staff hasMany Rental
-  public readonly Rentals?: Rental[]
-  public getRentals!: Sequelize.HasManyGetAssociationsMixin<Rental>
-  public setRentals!: Sequelize.HasManySetAssociationsMixin<Rental, RentalId>
-  public addRental!: Sequelize.HasManyAddAssociationMixin<Rental, RentalId>
-  public addRentals!: Sequelize.HasManyAddAssociationsMixin<Rental, RentalId>
-  public createRental!: Sequelize.HasManyCreateAssociationMixin<Rental>
-  public removeRental!: Sequelize.HasManyRemoveAssociationMixin<Rental, RentalId>
-  public removeRentals!: Sequelize.HasManyRemoveAssociationsMixin<Rental, RentalId>
-  public hasRental!: Sequelize.HasManyHasAssociationMixin<Rental, RentalId>
-  public hasRentals!: Sequelize.HasManyHasAssociationsMixin<Rental, RentalId>
-  public countRentals!: Sequelize.HasManyCountAssociationsMixin
+  declare Rentals: NonAttribute<Rental[]>
+  declare getRentals: HasManyGetAssociationsMixin<Rental>
+  declare setRentals: HasManySetAssociationsMixin<Rental, number>
+  declare addRental: HasManyAddAssociationMixin<Rental, number>
+  declare addRentals: HasManyAddAssociationsMixin<Rental, number>
+  declare createRental: HasManyCreateAssociationMixin<Rental>
+  declare removeRental: HasManyRemoveAssociationMixin<Rental, number>
+  declare removeRentals: HasManyRemoveAssociationsMixin<Rental, number>
+  declare hasRental: HasManyHasAssociationMixin<Rental, number>
+  declare hasRentals: HasManyHasAssociationsMixin<Rental, number>
+  declare countRentals: HasManyCountAssociationsMixin
   
   // Staff hasMany Payment
-  public readonly Payments?: Payment[]
-  public getPayments!: Sequelize.HasManyGetAssociationsMixin<Payment>
-  public setPayments!: Sequelize.HasManySetAssociationsMixin<Payment, PaymentId>
-  public addPayment!: Sequelize.HasManyAddAssociationMixin<Payment, PaymentId>
-  public addPayments!: Sequelize.HasManyAddAssociationsMixin<Payment, PaymentId>
-  public createPayment!: Sequelize.HasManyCreateAssociationMixin<Payment>
-  public removePayment!: Sequelize.HasManyRemoveAssociationMixin<Payment, PaymentId>
-  public removePayments!: Sequelize.HasManyRemoveAssociationsMixin<Payment, PaymentId>
-  public hasPayment!: Sequelize.HasManyHasAssociationMixin<Payment, PaymentId>
-  public hasPayments!: Sequelize.HasManyHasAssociationsMixin<Payment, PaymentId>
-  public countPayments!: Sequelize.HasManyCountAssociationsMixin
+  declare Payments: NonAttribute<Payment[]>
+  declare getPayments: HasManyGetAssociationsMixin<Payment>
+  declare setPayments: HasManySetAssociationsMixin<Payment, number>
+  declare addPayment: HasManyAddAssociationMixin<Payment, number>
+  declare addPayments: HasManyAddAssociationsMixin<Payment, number>
+  declare createPayment: HasManyCreateAssociationMixin<Payment>
+  declare removePayment: HasManyRemoveAssociationMixin<Payment, number>
+  declare removePayments: HasManyRemoveAssociationsMixin<Payment, number>
+  declare hasPayment: HasManyHasAssociationMixin<Payment, number>
+  declare hasPayments: HasManyHasAssociationsMixin<Payment, number>
+  declare countPayments: HasManyCountAssociationsMixin
   
-  public static associations: {
+  declare static associations: {
     Store: Association<Staff, Store>,
     managedStores: Association<Staff, Store>,
     Address: Association<Staff, Address>,
@@ -2377,8 +2687,14 @@ export class Staff
     Payments: Association<Staff, Payment>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Staff {
+  static initModel(sequelize: Sequelize): typeof Staff {
     Staff.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false
@@ -2403,6 +2719,12 @@ export class Staff
       },
       password: {
         type: DataTypes.STRING
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -2417,76 +2739,94 @@ export class Staff
  *                          /sakila/models/Store.ts                           *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Address, AddressId } from './Address'
-import type { Customer, CustomerId } from './Customer'
-import type { Inventory, InventoryId } from './Inventory'
-import type { Staff, StaffId } from './Staff'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Address } from './Address'
+import type { Customer } from './Customer'
+import type { Inventory } from './Inventory'
+import type { Staff } from './Staff'
 
-export interface StoreAttributes {
-  
-}
-
-export type StoreId = number
-export type StoreCreationAttributes = StoreAttributes & { id?: number }
-
-export class Store
-  extends Model<StoreAttributes, StoreCreationAttributes>
-  implements StoreAttributes {
-  public readonly id?: number
+export class Store extends Model<
+  InferAttributes<Store>,
+  InferCreationAttributes<Store>
+> {
+  declare id: CreationOptional<number>
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Store hasMany Inventory
-  public readonly Inventories?: Inventory[]
-  public getInventories!: Sequelize.HasManyGetAssociationsMixin<Inventory>
-  public setInventories!: Sequelize.HasManySetAssociationsMixin<Inventory, InventoryId>
-  public addInventory!: Sequelize.HasManyAddAssociationMixin<Inventory, InventoryId>
-  public addInventories!: Sequelize.HasManyAddAssociationsMixin<Inventory, InventoryId>
-  public createInventory!: Sequelize.HasManyCreateAssociationMixin<Inventory>
-  public removeInventory!: Sequelize.HasManyRemoveAssociationMixin<Inventory, InventoryId>
-  public removeInventories!: Sequelize.HasManyRemoveAssociationsMixin<Inventory, InventoryId>
-  public hasInventory!: Sequelize.HasManyHasAssociationMixin<Inventory, InventoryId>
-  public hasInventories!: Sequelize.HasManyHasAssociationsMixin<Inventory, InventoryId>
-  public countInventories!: Sequelize.HasManyCountAssociationsMixin
+  declare Inventories: NonAttribute<Inventory[]>
+  declare getInventories: HasManyGetAssociationsMixin<Inventory>
+  declare setInventories: HasManySetAssociationsMixin<Inventory, number>
+  declare addInventory: HasManyAddAssociationMixin<Inventory, number>
+  declare addInventories: HasManyAddAssociationsMixin<Inventory, number>
+  declare createInventory: HasManyCreateAssociationMixin<Inventory>
+  declare removeInventory: HasManyRemoveAssociationMixin<Inventory, number>
+  declare removeInventories: HasManyRemoveAssociationsMixin<Inventory, number>
+  declare hasInventory: HasManyHasAssociationMixin<Inventory, number>
+  declare hasInventories: HasManyHasAssociationsMixin<Inventory, number>
+  declare countInventories: HasManyCountAssociationsMixin
   
   // Store hasMany Staff
-  public readonly Staffs?: Staff[]
-  public getStaffs!: Sequelize.HasManyGetAssociationsMixin<Staff>
-  public setStaffs!: Sequelize.HasManySetAssociationsMixin<Staff, StaffId>
-  public addStaff!: Sequelize.HasManyAddAssociationMixin<Staff, StaffId>
-  public addStaffs!: Sequelize.HasManyAddAssociationsMixin<Staff, StaffId>
-  public createStaff!: Sequelize.HasManyCreateAssociationMixin<Staff>
-  public removeStaff!: Sequelize.HasManyRemoveAssociationMixin<Staff, StaffId>
-  public removeStaffs!: Sequelize.HasManyRemoveAssociationsMixin<Staff, StaffId>
-  public hasStaff!: Sequelize.HasManyHasAssociationMixin<Staff, StaffId>
-  public hasStaffs!: Sequelize.HasManyHasAssociationsMixin<Staff, StaffId>
-  public countStaffs!: Sequelize.HasManyCountAssociationsMixin
+  declare Staffs: NonAttribute<Staff[]>
+  declare getStaffs: HasManyGetAssociationsMixin<Staff>
+  declare setStaffs: HasManySetAssociationsMixin<Staff, number>
+  declare addStaff: HasManyAddAssociationMixin<Staff, number>
+  declare addStaffs: HasManyAddAssociationsMixin<Staff, number>
+  declare createStaff: HasManyCreateAssociationMixin<Staff>
+  declare removeStaff: HasManyRemoveAssociationMixin<Staff, number>
+  declare removeStaffs: HasManyRemoveAssociationsMixin<Staff, number>
+  declare hasStaff: HasManyHasAssociationMixin<Staff, number>
+  declare hasStaffs: HasManyHasAssociationsMixin<Staff, number>
+  declare countStaffs: HasManyCountAssociationsMixin
   
   // Store hasMany Customer
-  public readonly Customers?: Customer[]
-  public getCustomers!: Sequelize.HasManyGetAssociationsMixin<Customer>
-  public setCustomers!: Sequelize.HasManySetAssociationsMixin<Customer, CustomerId>
-  public addCustomer!: Sequelize.HasManyAddAssociationMixin<Customer, CustomerId>
-  public addCustomers!: Sequelize.HasManyAddAssociationsMixin<Customer, CustomerId>
-  public createCustomer!: Sequelize.HasManyCreateAssociationMixin<Customer>
-  public removeCustomer!: Sequelize.HasManyRemoveAssociationMixin<Customer, CustomerId>
-  public removeCustomers!: Sequelize.HasManyRemoveAssociationsMixin<Customer, CustomerId>
-  public hasCustomer!: Sequelize.HasManyHasAssociationMixin<Customer, CustomerId>
-  public hasCustomers!: Sequelize.HasManyHasAssociationsMixin<Customer, CustomerId>
-  public countCustomers!: Sequelize.HasManyCountAssociationsMixin
+  declare Customers: NonAttribute<Customer[]>
+  declare getCustomers: HasManyGetAssociationsMixin<Customer>
+  declare setCustomers: HasManySetAssociationsMixin<Customer, number>
+  declare addCustomer: HasManyAddAssociationMixin<Customer, number>
+  declare addCustomers: HasManyAddAssociationsMixin<Customer, number>
+  declare createCustomer: HasManyCreateAssociationMixin<Customer>
+  declare removeCustomer: HasManyRemoveAssociationMixin<Customer, number>
+  declare removeCustomers: HasManyRemoveAssociationsMixin<Customer, number>
+  declare hasCustomer: HasManyHasAssociationMixin<Customer, number>
+  declare hasCustomers: HasManyHasAssociationsMixin<Customer, number>
+  declare countCustomers: HasManyCountAssociationsMixin
   
   // Store belongsTo Staff (as Manager)
-  public readonly manager?: Staff
-  public getManager!: Sequelize.BelongsToGetAssociationMixin<Staff>
-  public setManager!: Sequelize.BelongsToSetAssociationMixin<Staff, StaffId>
-  public createManager!: Sequelize.BelongsToCreateAssociationMixin<Staff>
+  declare manager: NonAttribute<Staff>
+  declare getManager: BelongsToGetAssociationMixin<Staff>
+  declare setManager: BelongsToSetAssociationMixin<Staff, number>
+  declare createManager: BelongsToCreateAssociationMixin<Staff>
   
   // Store belongsTo Address
-  public readonly Address?: Address
-  public getAddress!: Sequelize.BelongsToGetAssociationMixin<Address>
-  public setAddress!: Sequelize.BelongsToSetAssociationMixin<Address, AddressId>
-  public createAddress!: Sequelize.BelongsToCreateAssociationMixin<Address>
+  declare Address: NonAttribute<Address>
+  declare getAddress: BelongsToGetAssociationMixin<Address>
+  declare setAddress: BelongsToSetAssociationMixin<Address, number>
+  declare createAddress: BelongsToCreateAssociationMixin<Address>
   
-  public static associations: {
+  declare static associations: {
     Inventories: Association<Store, Inventory>,
     Staffs: Association<Store, Staff>,
     Customers: Association<Store, Customer>,
@@ -2494,9 +2834,20 @@ export class Store
     Address: Association<Store, Address>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Store {
+  static initModel(sequelize: Sequelize): typeof Store {
     Store.init({
-      
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
+      }
     }, {
       sequelize
     })
