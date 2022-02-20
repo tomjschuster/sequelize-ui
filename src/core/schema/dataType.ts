@@ -181,7 +181,7 @@ export function resetType(dataType: DataType): DataType {
     case DataTypeType.Integer:
     case DataTypeType.BigInt:
     case DataTypeType.SmallInt: {
-      return { type: dataType.type, ...defaultIntegerOptions }
+      return { ...dataType, autoincrement: false }
     }
   }
 }

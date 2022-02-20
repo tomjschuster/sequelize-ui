@@ -28,9 +28,7 @@ const config = (configs as {[key: string]: Options})[env]
 const db: Sequelize = new Sequelize({
   ...config,
   define: {
-    underscored: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
+    underscored: true
   }
 })
 
@@ -62,9 +60,9 @@ export default db
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "pg": "^8.7.1",
+    "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.14.1"
+    "sequelize": "^6.16.2"
   },
   "devDependencies": {
     "@types/node": "^16.11.7",
@@ -190,9 +188,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('categories', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       title: {
         type: DataTypes.STRING(75),
@@ -222,11 +222,11 @@ module.exports = {
         field: 'updated_at'
       },
       parentId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'parent_id'
       },
       categoryId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'category_id'
       }
     })
@@ -246,9 +246,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('posts', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       title: {
         type: DataTypes.STRING(75),
@@ -291,15 +293,15 @@ module.exports = {
         field: 'updated_at'
       },
       authorId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'author_id'
       },
       parentId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'parent_id'
       },
       postId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'post_id'
       }
     })
@@ -332,7 +334,7 @@ module.exports = {
         field: 'updated_at'
       },
       postId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'post_id'
       }
     })
@@ -352,9 +354,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('post_comments', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       title: {
         type: DataTypes.STRING(75),
@@ -383,15 +387,15 @@ module.exports = {
         field: 'updated_at'
       },
       postId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'post_id'
       },
       parentId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'parent_id'
       },
       postCommentId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'post_comment_id'
       }
     })
@@ -411,9 +415,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('post_metas', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       key: {
         type: DataTypes.STRING(50),
@@ -434,7 +440,7 @@ module.exports = {
         field: 'updated_at'
       },
       postId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'post_id'
       }
     })
@@ -467,7 +473,7 @@ module.exports = {
         field: 'updated_at'
       },
       postId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'post_id'
       }
     })
@@ -487,9 +493,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('tags', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       title: {
         type: DataTypes.STRING(75),
@@ -535,9 +543,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('users', {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       firstName: {
         type: DataTypes.STRING(50),
@@ -755,83 +765,114 @@ module.exports = {
  *                          /blog/models/Category.ts                          *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Post, PostId } from './Post'
-import type { PostCategory, PostCategoryId } from './PostCategory'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManySetAssociationsMixin,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyAddAssociationsMixin,
+  BelongsToManyCreateAssociationMixin,
+  BelongsToManyRemoveAssociationMixin,
+  BelongsToManyRemoveAssociationsMixin,
+  BelongsToManyHasAssociationMixin,
+  BelongsToManyHasAssociationsMixin,
+  BelongsToManyCountAssociationsMixin,
+  CreationOptional,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Post } from './Post'
+import type { PostCategory } from './PostCategory'
 
-export interface CategoryAttributes {
-  title: string
-  metaTitle?: string
-  slug: string
-  content?: string
-}
-
-export type CategoryId = number
-export type CategoryCreationAttributes = CategoryAttributes & { id?: number }
-
-export class Category
-  extends Model<CategoryAttributes, CategoryCreationAttributes>
-  implements CategoryAttributes {
-  public readonly id?: number
-  public title!: string
-  public metaTitle?: string
-  public slug!: string
-  public content?: string
+export class Category extends Model<
+  InferAttributes<Category>,
+  InferCreationAttributes<Category>
+> {
+  declare id: CreationOptional<number>
+  declare title: string
+  declare metaTitle: string | null
+  declare slug: string
+  declare content: string | null
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Category belongsTo Category (as Parent)
-  public readonly parent?: Category
-  public getParent!: Sequelize.BelongsToGetAssociationMixin<Category>
-  public setParent!: Sequelize.BelongsToSetAssociationMixin<Category, CategoryId>
-  public createParent!: Sequelize.BelongsToCreateAssociationMixin<Category>
+  declare parent: NonAttribute<Category>
+  declare getParent: BelongsToGetAssociationMixin<Category>
+  declare setParent: BelongsToSetAssociationMixin<Category, number>
+  declare createParent: BelongsToCreateAssociationMixin<Category>
   
   // Category hasMany Category (as Children)
-  public readonly children?: Category[]
-  public getChildren!: Sequelize.HasManyGetAssociationsMixin<Category>
-  public setChildren!: Sequelize.HasManySetAssociationsMixin<Category, CategoryId>
-  public addChild!: Sequelize.HasManyAddAssociationMixin<Category, CategoryId>
-  public addChildren!: Sequelize.HasManyAddAssociationsMixin<Category, CategoryId>
-  public createChild!: Sequelize.HasManyCreateAssociationMixin<Category>
-  public removeChild!: Sequelize.HasManyRemoveAssociationMixin<Category, CategoryId>
-  public removeChildren!: Sequelize.HasManyRemoveAssociationsMixin<Category, CategoryId>
-  public hasChild!: Sequelize.HasManyHasAssociationMixin<Category, CategoryId>
-  public hasChildren!: Sequelize.HasManyHasAssociationsMixin<Category, CategoryId>
-  public countChildren!: Sequelize.HasManyCountAssociationsMixin
+  declare children: NonAttribute<Category[]>
+  declare getChildren: HasManyGetAssociationsMixin<Category>
+  declare setChildren: HasManySetAssociationsMixin<Category, number>
+  declare addChild: HasManyAddAssociationMixin<Category, number>
+  declare addChildren: HasManyAddAssociationsMixin<Category, number>
+  declare createChild: HasManyCreateAssociationMixin<Category>
+  declare removeChild: HasManyRemoveAssociationMixin<Category, number>
+  declare removeChildren: HasManyRemoveAssociationsMixin<Category, number>
+  declare hasChild: HasManyHasAssociationMixin<Category, number>
+  declare hasChildren: HasManyHasAssociationsMixin<Category, number>
+  declare countChildren: HasManyCountAssociationsMixin
   
   // Category hasMany PostCategory
-  public readonly PostCategories?: PostCategory[]
-  public getPostCategories!: Sequelize.HasManyGetAssociationsMixin<PostCategory>
-  public setPostCategories!: Sequelize.HasManySetAssociationsMixin<PostCategory, PostCategoryId>
-  public addPostCategory!: Sequelize.HasManyAddAssociationMixin<PostCategory, PostCategoryId>
-  public addPostCategories!: Sequelize.HasManyAddAssociationsMixin<PostCategory, PostCategoryId>
-  public createPostCategory!: Sequelize.HasManyCreateAssociationMixin<PostCategory>
-  public removePostCategory!: Sequelize.HasManyRemoveAssociationMixin<PostCategory, PostCategoryId>
-  public removePostCategories!: Sequelize.HasManyRemoveAssociationsMixin<PostCategory, PostCategoryId>
-  public hasPostCategory!: Sequelize.HasManyHasAssociationMixin<PostCategory, PostCategoryId>
-  public hasPostCategories!: Sequelize.HasManyHasAssociationsMixin<PostCategory, PostCategoryId>
-  public countPostCategories!: Sequelize.HasManyCountAssociationsMixin
+  declare PostCategories: NonAttribute<PostCategory[]>
+  declare getPostCategories: HasManyGetAssociationsMixin<PostCategory>
+  declare setPostCategories: HasManySetAssociationsMixin<PostCategory, number>
+  declare addPostCategory: HasManyAddAssociationMixin<PostCategory, number>
+  declare addPostCategories: HasManyAddAssociationsMixin<PostCategory, number>
+  declare createPostCategory: HasManyCreateAssociationMixin<PostCategory, 'categoryId'>
+  declare removePostCategory: HasManyRemoveAssociationMixin<PostCategory, number>
+  declare removePostCategories: HasManyRemoveAssociationsMixin<PostCategory, number>
+  declare hasPostCategory: HasManyHasAssociationMixin<PostCategory, number>
+  declare hasPostCategories: HasManyHasAssociationsMixin<PostCategory, number>
+  declare countPostCategories: HasManyCountAssociationsMixin
   
   // Category belongsToMany Post
-  public readonly Posts?: Post[]
-  public getPosts!: Sequelize.BelongsToManyGetAssociationsMixin<Post>
-  public setPosts!: Sequelize.BelongsToManySetAssociationsMixin<Post, PostId>
-  public addPost!: Sequelize.BelongsToManyAddAssociationMixin<Post, PostId>
-  public addPosts!: Sequelize.BelongsToManyAddAssociationsMixin<Post, PostId>
-  public createPost!: Sequelize.BelongsToManyCreateAssociationMixin<Post>
-  public removePost!: Sequelize.BelongsToManyRemoveAssociationMixin<Post, PostId>
-  public removePosts!: Sequelize.BelongsToManyRemoveAssociationsMixin<Post, PostId>
-  public hasPost!: Sequelize.BelongsToManyHasAssociationMixin<Post, PostId>
-  public hasPosts!: Sequelize.BelongsToManyHasAssociationsMixin<Post, PostId>
-  public countPosts!: Sequelize.BelongsToManyCountAssociationsMixin
+  declare Posts: NonAttribute<Post[]>
+  declare getPosts: BelongsToManyGetAssociationsMixin<Post>
+  declare setPosts: BelongsToManySetAssociationsMixin<Post, number>
+  declare addPost: BelongsToManyAddAssociationMixin<Post, number>
+  declare addPosts: BelongsToManyAddAssociationsMixin<Post, number>
+  declare createPost: BelongsToManyCreateAssociationMixin<Post>
+  declare removePost: BelongsToManyRemoveAssociationMixin<Post, number>
+  declare removePosts: BelongsToManyRemoveAssociationsMixin<Post, number>
+  declare hasPost: BelongsToManyHasAssociationMixin<Post, number>
+  declare hasPosts: BelongsToManyHasAssociationsMixin<Post, number>
+  declare countPosts: BelongsToManyCountAssociationsMixin
   
-  public static associations: {
+  declare static associations: {
     parent: Association<Category, Category>,
     children: Association<Category, Category>,
     PostCategories: Association<Category, PostCategory>,
     Posts: Association<Category, Post>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Category {
+  static initModel(sequelize: Sequelize): typeof Category {
     Category.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       title: {
         type: DataTypes.STRING(75),
         allowNull: false
@@ -846,6 +887,12 @@ export class Category
       },
       content: {
         type: DataTypes.TEXT
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -862,21 +909,13 @@ export class Category
 
 import type { Sequelize, Model } from 'sequelize'
 import { Category } from './Category'
-import type { CategoryAttributes, CategoryCreationAttributes } from './Category'
 import { Post } from './Post'
-import type { PostAttributes, PostCreationAttributes } from './Post'
 import { PostCategory } from './PostCategory'
-import type { PostCategoryAttributes, PostCategoryCreationAttributes } from './PostCategory'
 import { PostComment } from './PostComment'
-import type { PostCommentAttributes, PostCommentCreationAttributes } from './PostComment'
 import { PostMeta } from './PostMeta'
-import type { PostMetaAttributes, PostMetaCreationAttributes } from './PostMeta'
 import { PostTag } from './PostTag'
-import type { PostTagAttributes, PostTagCreationAttributes } from './PostTag'
 import { Tag } from './Tag'
-import type { TagAttributes, TagCreationAttributes } from './Tag'
 import { User } from './User'
-import type { UserAttributes, UserCreationAttributes } from './User'
 
 export {
   Category,
@@ -887,25 +926,6 @@ export {
   PostTag,
   Tag,
   User
-}
-
-export type {
-  CategoryAttributes,
-  CategoryCreationAttributes,
-  PostAttributes,
-  PostCreationAttributes,
-  PostCategoryAttributes,
-  PostCategoryCreationAttributes,
-  PostCommentAttributes,
-  PostCommentCreationAttributes,
-  PostMetaAttributes,
-  PostMetaCreationAttributes,
-  PostTagAttributes,
-  PostTagCreationAttributes,
-  TagAttributes,
-  TagCreationAttributes,
-  UserAttributes,
-  UserCreationAttributes
 }
 
 export function initModels(sequelize: Sequelize) {
@@ -1029,144 +1049,166 @@ export function initModels(sequelize: Sequelize) {
  *                            /blog/models/Post.ts                            *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Category, CategoryId } from './Category'
-import type { PostCategory, PostCategoryId } from './PostCategory'
-import type { PostComment, PostCommentId } from './PostComment'
-import type { PostMeta, PostMetaId } from './PostMeta'
-import type { PostTag, PostTagId } from './PostTag'
-import type { Tag, TagId } from './Tag'
-import type { User, UserId } from './User'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManySetAssociationsMixin,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyAddAssociationsMixin,
+  BelongsToManyCreateAssociationMixin,
+  BelongsToManyRemoveAssociationMixin,
+  BelongsToManyRemoveAssociationsMixin,
+  BelongsToManyHasAssociationMixin,
+  BelongsToManyHasAssociationsMixin,
+  BelongsToManyCountAssociationsMixin,
+  CreationOptional,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Category } from './Category'
+import type { PostCategory } from './PostCategory'
+import type { PostComment } from './PostComment'
+import type { PostMeta } from './PostMeta'
+import type { PostTag } from './PostTag'
+import type { Tag } from './Tag'
+import type { User } from './User'
 
-export interface PostAttributes {
-  title: string
-  metaTitle?: string
-  slug: string
-  summary?: string
-  published: boolean
-  publishedAt?: string
-  content?: string
-}
-
-export type PostId = number
-export type PostCreationAttributes = PostAttributes & { id?: number }
-
-export class Post
-  extends Model<PostAttributes, PostCreationAttributes>
-  implements PostAttributes {
-  public readonly id?: number
-  public title!: string
-  public metaTitle?: string
-  public slug!: string
-  public summary?: string
-  public published!: boolean
-  public publishedAt?: string
-  public content?: string
+export class Post extends Model<
+  InferAttributes<Post>,
+  InferCreationAttributes<Post>
+> {
+  declare id: CreationOptional<number>
+  declare title: string
+  declare metaTitle: string | null
+  declare slug: string
+  declare summary: string | null
+  declare published: boolean
+  declare publishedAt: Date | null
+  declare content: string | null
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Post belongsTo User (as Author)
-  public readonly author?: User
-  public getAuthor!: Sequelize.BelongsToGetAssociationMixin<User>
-  public setAuthor!: Sequelize.BelongsToSetAssociationMixin<User, UserId>
-  public createAuthor!: Sequelize.BelongsToCreateAssociationMixin<User>
+  declare author: NonAttribute<User>
+  declare getAuthor: BelongsToGetAssociationMixin<User>
+  declare setAuthor: BelongsToSetAssociationMixin<User, number>
+  declare createAuthor: BelongsToCreateAssociationMixin<User>
   
   // Post belongsTo Post (as Parent)
-  public readonly parent?: Post
-  public getParent!: Sequelize.BelongsToGetAssociationMixin<Post>
-  public setParent!: Sequelize.BelongsToSetAssociationMixin<Post, PostId>
-  public createParent!: Sequelize.BelongsToCreateAssociationMixin<Post>
+  declare parent: NonAttribute<Post>
+  declare getParent: BelongsToGetAssociationMixin<Post>
+  declare setParent: BelongsToSetAssociationMixin<Post, number>
+  declare createParent: BelongsToCreateAssociationMixin<Post>
   
   // Post hasMany Post (as Children)
-  public readonly children?: Post[]
-  public getChildren!: Sequelize.HasManyGetAssociationsMixin<Post>
-  public setChildren!: Sequelize.HasManySetAssociationsMixin<Post, PostId>
-  public addChild!: Sequelize.HasManyAddAssociationMixin<Post, PostId>
-  public addChildren!: Sequelize.HasManyAddAssociationsMixin<Post, PostId>
-  public createChild!: Sequelize.HasManyCreateAssociationMixin<Post>
-  public removeChild!: Sequelize.HasManyRemoveAssociationMixin<Post, PostId>
-  public removeChildren!: Sequelize.HasManyRemoveAssociationsMixin<Post, PostId>
-  public hasChild!: Sequelize.HasManyHasAssociationMixin<Post, PostId>
-  public hasChildren!: Sequelize.HasManyHasAssociationsMixin<Post, PostId>
-  public countChildren!: Sequelize.HasManyCountAssociationsMixin
+  declare children: NonAttribute<Post[]>
+  declare getChildren: HasManyGetAssociationsMixin<Post>
+  declare setChildren: HasManySetAssociationsMixin<Post, number>
+  declare addChild: HasManyAddAssociationMixin<Post, number>
+  declare addChildren: HasManyAddAssociationsMixin<Post, number>
+  declare createChild: HasManyCreateAssociationMixin<Post>
+  declare removeChild: HasManyRemoveAssociationMixin<Post, number>
+  declare removeChildren: HasManyRemoveAssociationsMixin<Post, number>
+  declare hasChild: HasManyHasAssociationMixin<Post, number>
+  declare hasChildren: HasManyHasAssociationsMixin<Post, number>
+  declare countChildren: HasManyCountAssociationsMixin
   
   // Post hasMany PostCategory
-  public readonly PostCategories?: PostCategory[]
-  public getPostCategories!: Sequelize.HasManyGetAssociationsMixin<PostCategory>
-  public setPostCategories!: Sequelize.HasManySetAssociationsMixin<PostCategory, PostCategoryId>
-  public addPostCategory!: Sequelize.HasManyAddAssociationMixin<PostCategory, PostCategoryId>
-  public addPostCategories!: Sequelize.HasManyAddAssociationsMixin<PostCategory, PostCategoryId>
-  public createPostCategory!: Sequelize.HasManyCreateAssociationMixin<PostCategory>
-  public removePostCategory!: Sequelize.HasManyRemoveAssociationMixin<PostCategory, PostCategoryId>
-  public removePostCategories!: Sequelize.HasManyRemoveAssociationsMixin<PostCategory, PostCategoryId>
-  public hasPostCategory!: Sequelize.HasManyHasAssociationMixin<PostCategory, PostCategoryId>
-  public hasPostCategories!: Sequelize.HasManyHasAssociationsMixin<PostCategory, PostCategoryId>
-  public countPostCategories!: Sequelize.HasManyCountAssociationsMixin
+  declare PostCategories: NonAttribute<PostCategory[]>
+  declare getPostCategories: HasManyGetAssociationsMixin<PostCategory>
+  declare setPostCategories: HasManySetAssociationsMixin<PostCategory, number>
+  declare addPostCategory: HasManyAddAssociationMixin<PostCategory, number>
+  declare addPostCategories: HasManyAddAssociationsMixin<PostCategory, number>
+  declare createPostCategory: HasManyCreateAssociationMixin<PostCategory>
+  declare removePostCategory: HasManyRemoveAssociationMixin<PostCategory, number>
+  declare removePostCategories: HasManyRemoveAssociationsMixin<PostCategory, number>
+  declare hasPostCategory: HasManyHasAssociationMixin<PostCategory, number>
+  declare hasPostCategories: HasManyHasAssociationsMixin<PostCategory, number>
+  declare countPostCategories: HasManyCountAssociationsMixin
   
   // Post belongsToMany Category
-  public readonly Categories?: Category[]
-  public getCategories!: Sequelize.BelongsToManyGetAssociationsMixin<Category>
-  public setCategories!: Sequelize.BelongsToManySetAssociationsMixin<Category, CategoryId>
-  public addCategory!: Sequelize.BelongsToManyAddAssociationMixin<Category, CategoryId>
-  public addCategories!: Sequelize.BelongsToManyAddAssociationsMixin<Category, CategoryId>
-  public createCategory!: Sequelize.BelongsToManyCreateAssociationMixin<Category>
-  public removeCategory!: Sequelize.BelongsToManyRemoveAssociationMixin<Category, CategoryId>
-  public removeCategories!: Sequelize.BelongsToManyRemoveAssociationsMixin<Category, CategoryId>
-  public hasCategory!: Sequelize.BelongsToManyHasAssociationMixin<Category, CategoryId>
-  public hasCategories!: Sequelize.BelongsToManyHasAssociationsMixin<Category, CategoryId>
-  public countCategories!: Sequelize.BelongsToManyCountAssociationsMixin
+  declare Categories: NonAttribute<Category[]>
+  declare getCategories: BelongsToManyGetAssociationsMixin<Category>
+  declare setCategories: BelongsToManySetAssociationsMixin<Category, number>
+  declare addCategory: BelongsToManyAddAssociationMixin<Category, number>
+  declare addCategories: BelongsToManyAddAssociationsMixin<Category, number>
+  declare createCategory: BelongsToManyCreateAssociationMixin<Category>
+  declare removeCategory: BelongsToManyRemoveAssociationMixin<Category, number>
+  declare removeCategories: BelongsToManyRemoveAssociationsMixin<Category, number>
+  declare hasCategory: BelongsToManyHasAssociationMixin<Category, number>
+  declare hasCategories: BelongsToManyHasAssociationsMixin<Category, number>
+  declare countCategories: BelongsToManyCountAssociationsMixin
   
   // Post hasMany PostComment (as Comments)
-  public readonly comments?: PostComment[]
-  public getComments!: Sequelize.HasManyGetAssociationsMixin<PostComment>
-  public setComments!: Sequelize.HasManySetAssociationsMixin<PostComment, PostCommentId>
-  public addComment!: Sequelize.HasManyAddAssociationMixin<PostComment, PostCommentId>
-  public addComments!: Sequelize.HasManyAddAssociationsMixin<PostComment, PostCommentId>
-  public createComment!: Sequelize.HasManyCreateAssociationMixin<PostComment>
-  public removeComment!: Sequelize.HasManyRemoveAssociationMixin<PostComment, PostCommentId>
-  public removeComments!: Sequelize.HasManyRemoveAssociationsMixin<PostComment, PostCommentId>
-  public hasComment!: Sequelize.HasManyHasAssociationMixin<PostComment, PostCommentId>
-  public hasComments!: Sequelize.HasManyHasAssociationsMixin<PostComment, PostCommentId>
-  public countComments!: Sequelize.HasManyCountAssociationsMixin
+  declare comments: NonAttribute<PostComment[]>
+  declare getComments: HasManyGetAssociationsMixin<PostComment>
+  declare setComments: HasManySetAssociationsMixin<PostComment, number>
+  declare addComment: HasManyAddAssociationMixin<PostComment, number>
+  declare addComments: HasManyAddAssociationsMixin<PostComment, number>
+  declare createComment: HasManyCreateAssociationMixin<PostComment>
+  declare removeComment: HasManyRemoveAssociationMixin<PostComment, number>
+  declare removeComments: HasManyRemoveAssociationsMixin<PostComment, number>
+  declare hasComment: HasManyHasAssociationMixin<PostComment, number>
+  declare hasComments: HasManyHasAssociationsMixin<PostComment, number>
+  declare countComments: HasManyCountAssociationsMixin
   
   // Post hasMany PostMeta (as Meta)
-  public readonly metas?: PostMeta[]
-  public getMetas!: Sequelize.HasManyGetAssociationsMixin<PostMeta>
-  public setMetas!: Sequelize.HasManySetAssociationsMixin<PostMeta, PostMetaId>
-  public addMeta!: Sequelize.HasManyAddAssociationMixin<PostMeta, PostMetaId>
-  public addMetas!: Sequelize.HasManyAddAssociationsMixin<PostMeta, PostMetaId>
-  public createMeta!: Sequelize.HasManyCreateAssociationMixin<PostMeta>
-  public removeMeta!: Sequelize.HasManyRemoveAssociationMixin<PostMeta, PostMetaId>
-  public removeMetas!: Sequelize.HasManyRemoveAssociationsMixin<PostMeta, PostMetaId>
-  public hasMeta!: Sequelize.HasManyHasAssociationMixin<PostMeta, PostMetaId>
-  public hasMetas!: Sequelize.HasManyHasAssociationsMixin<PostMeta, PostMetaId>
-  public countMetas!: Sequelize.HasManyCountAssociationsMixin
+  declare metas: NonAttribute<PostMeta[]>
+  declare getMetas: HasManyGetAssociationsMixin<PostMeta>
+  declare setMetas: HasManySetAssociationsMixin<PostMeta, number>
+  declare addMeta: HasManyAddAssociationMixin<PostMeta, number>
+  declare addMetas: HasManyAddAssociationsMixin<PostMeta, number>
+  declare createMeta: HasManyCreateAssociationMixin<PostMeta>
+  declare removeMeta: HasManyRemoveAssociationMixin<PostMeta, number>
+  declare removeMetas: HasManyRemoveAssociationsMixin<PostMeta, number>
+  declare hasMeta: HasManyHasAssociationMixin<PostMeta, number>
+  declare hasMetas: HasManyHasAssociationsMixin<PostMeta, number>
+  declare countMetas: HasManyCountAssociationsMixin
   
   // Post hasMany PostTag
-  public readonly PostTags?: PostTag[]
-  public getPostTags!: Sequelize.HasManyGetAssociationsMixin<PostTag>
-  public setPostTags!: Sequelize.HasManySetAssociationsMixin<PostTag, PostTagId>
-  public addPostTag!: Sequelize.HasManyAddAssociationMixin<PostTag, PostTagId>
-  public addPostTags!: Sequelize.HasManyAddAssociationsMixin<PostTag, PostTagId>
-  public createPostTag!: Sequelize.HasManyCreateAssociationMixin<PostTag>
-  public removePostTag!: Sequelize.HasManyRemoveAssociationMixin<PostTag, PostTagId>
-  public removePostTags!: Sequelize.HasManyRemoveAssociationsMixin<PostTag, PostTagId>
-  public hasPostTag!: Sequelize.HasManyHasAssociationMixin<PostTag, PostTagId>
-  public hasPostTags!: Sequelize.HasManyHasAssociationsMixin<PostTag, PostTagId>
-  public countPostTags!: Sequelize.HasManyCountAssociationsMixin
+  declare PostTags: NonAttribute<PostTag[]>
+  declare getPostTags: HasManyGetAssociationsMixin<PostTag>
+  declare setPostTags: HasManySetAssociationsMixin<PostTag, number>
+  declare addPostTag: HasManyAddAssociationMixin<PostTag, number>
+  declare addPostTags: HasManyAddAssociationsMixin<PostTag, number>
+  declare createPostTag: HasManyCreateAssociationMixin<PostTag>
+  declare removePostTag: HasManyRemoveAssociationMixin<PostTag, number>
+  declare removePostTags: HasManyRemoveAssociationsMixin<PostTag, number>
+  declare hasPostTag: HasManyHasAssociationMixin<PostTag, number>
+  declare hasPostTags: HasManyHasAssociationsMixin<PostTag, number>
+  declare countPostTags: HasManyCountAssociationsMixin
   
   // Post belongsToMany Tag
-  public readonly Tags?: Tag[]
-  public getTags!: Sequelize.BelongsToManyGetAssociationsMixin<Tag>
-  public setTags!: Sequelize.BelongsToManySetAssociationsMixin<Tag, TagId>
-  public addTag!: Sequelize.BelongsToManyAddAssociationMixin<Tag, TagId>
-  public addTags!: Sequelize.BelongsToManyAddAssociationsMixin<Tag, TagId>
-  public createTag!: Sequelize.BelongsToManyCreateAssociationMixin<Tag>
-  public removeTag!: Sequelize.BelongsToManyRemoveAssociationMixin<Tag, TagId>
-  public removeTags!: Sequelize.BelongsToManyRemoveAssociationsMixin<Tag, TagId>
-  public hasTag!: Sequelize.BelongsToManyHasAssociationMixin<Tag, TagId>
-  public hasTags!: Sequelize.BelongsToManyHasAssociationsMixin<Tag, TagId>
-  public countTags!: Sequelize.BelongsToManyCountAssociationsMixin
+  declare Tags: NonAttribute<Tag[]>
+  declare getTags: BelongsToManyGetAssociationsMixin<Tag>
+  declare setTags: BelongsToManySetAssociationsMixin<Tag, number>
+  declare addTag: BelongsToManyAddAssociationMixin<Tag, number>
+  declare addTags: BelongsToManyAddAssociationsMixin<Tag, number>
+  declare createTag: BelongsToManyCreateAssociationMixin<Tag>
+  declare removeTag: BelongsToManyRemoveAssociationMixin<Tag, number>
+  declare removeTags: BelongsToManyRemoveAssociationsMixin<Tag, number>
+  declare hasTag: BelongsToManyHasAssociationMixin<Tag, number>
+  declare hasTags: BelongsToManyHasAssociationsMixin<Tag, number>
+  declare countTags: BelongsToManyCountAssociationsMixin
   
-  public static associations: {
+  declare static associations: {
     author: Association<Post, User>,
     parent: Association<Post, Post>,
     children: Association<Post, Post>,
@@ -1178,8 +1220,14 @@ export class Post
     Tags: Association<Post, Tag>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Post {
+  static initModel(sequelize: Sequelize): typeof Post {
     Post.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       title: {
         type: DataTypes.STRING(75),
         allowNull: false
@@ -1204,6 +1252,12 @@ export class Post
       },
       content: {
         type: DataTypes.TEXT
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -1218,45 +1272,58 @@ export class Post
  *                        /blog/models/PostCategory.ts                        *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Category, CategoryId } from './Category'
-import type { Post, PostId } from './Post'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Category } from './Category'
+import type { Post } from './Post'
 
-export interface PostCategoryAttributes {
-  categoryId?: number
-}
-
-export type PostCategoryPk = 'categoryId'
-export type PostCategoryId = PostCategoryAttributes[PostCategoryPk]
-export type PostCategoryCreationAttributes = Optional<PostCategoryAttributes, PostCategoryPk>
-
-export class PostCategory
-  extends Model<PostCategoryAttributes, PostCategoryCreationAttributes>
-  implements PostCategoryAttributes {
-  public readonly categoryId?: number
+export class PostCategory extends Model<
+  InferAttributes<PostCategory>,
+  InferCreationAttributes<PostCategory>
+> {
+  declare categoryId: CreationOptional<number>
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // PostCategory belongsTo Post
-  public readonly Post?: Post
-  public getPost!: Sequelize.BelongsToGetAssociationMixin<Post>
-  public setPost!: Sequelize.BelongsToSetAssociationMixin<Post, PostId>
-  public createPost!: Sequelize.BelongsToCreateAssociationMixin<Post>
+  declare Post: NonAttribute<Post>
+  declare getPost: BelongsToGetAssociationMixin<Post>
+  declare setPost: BelongsToSetAssociationMixin<Post, number>
+  declare createPost: BelongsToCreateAssociationMixin<Post>
   
   // PostCategory belongsTo Category
-  public readonly Category?: Category
-  public getCategory!: Sequelize.BelongsToGetAssociationMixin<Category>
-  public setCategory!: Sequelize.BelongsToSetAssociationMixin<Category, CategoryId>
-  public createCategory!: Sequelize.BelongsToCreateAssociationMixin<Category>
+  declare Category: NonAttribute<Category>
+  declare getCategory: BelongsToGetAssociationMixin<Category>
+  declare setCategory: BelongsToSetAssociationMixin<Category, number>
+  declare createCategory: BelongsToCreateAssociationMixin<Category>
   
-  public static associations: {
+  declare static associations: {
     Post: Association<PostCategory, Post>,
     Category: Association<PostCategory, Category>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof PostCategory {
+  static initModel(sequelize: Sequelize): typeof PostCategory {
     PostCategory.init({
       categoryId: {
         type: DataTypes.BIGINT,
         primaryKey: true
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -1271,61 +1338,82 @@ export class PostCategory
  *                        /blog/models/PostComment.ts                         *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Post, PostId } from './Post'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Post } from './Post'
 
-export interface PostCommentAttributes {
-  title: string
-  published: boolean
-  publishedAt?: string
-  content?: string
-}
-
-export type PostCommentId = number
-export type PostCommentCreationAttributes = PostCommentAttributes & { id?: number }
-
-export class PostComment
-  extends Model<PostCommentAttributes, PostCommentCreationAttributes>
-  implements PostCommentAttributes {
-  public readonly id?: number
-  public title!: string
-  public published!: boolean
-  public publishedAt?: string
-  public content?: string
+export class PostComment extends Model<
+  InferAttributes<PostComment>,
+  InferCreationAttributes<PostComment>
+> {
+  declare id: CreationOptional<number>
+  declare title: string
+  declare published: boolean
+  declare publishedAt: Date | null
+  declare content: string | null
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // PostComment belongsTo Post
-  public readonly Post?: Post
-  public getPost!: Sequelize.BelongsToGetAssociationMixin<Post>
-  public setPost!: Sequelize.BelongsToSetAssociationMixin<Post, PostId>
-  public createPost!: Sequelize.BelongsToCreateAssociationMixin<Post>
+  declare Post: NonAttribute<Post>
+  declare getPost: BelongsToGetAssociationMixin<Post>
+  declare setPost: BelongsToSetAssociationMixin<Post, number>
+  declare createPost: BelongsToCreateAssociationMixin<Post>
   
   // PostComment belongsTo PostComment (as Parent)
-  public readonly parent?: PostComment
-  public getParent!: Sequelize.BelongsToGetAssociationMixin<PostComment>
-  public setParent!: Sequelize.BelongsToSetAssociationMixin<PostComment, PostCommentId>
-  public createParent!: Sequelize.BelongsToCreateAssociationMixin<PostComment>
+  declare parent: NonAttribute<PostComment>
+  declare getParent: BelongsToGetAssociationMixin<PostComment>
+  declare setParent: BelongsToSetAssociationMixin<PostComment, number>
+  declare createParent: BelongsToCreateAssociationMixin<PostComment>
   
   // PostComment hasMany PostComment (as Children)
-  public readonly children?: PostComment[]
-  public getChildren!: Sequelize.HasManyGetAssociationsMixin<PostComment>
-  public setChildren!: Sequelize.HasManySetAssociationsMixin<PostComment, PostCommentId>
-  public addChild!: Sequelize.HasManyAddAssociationMixin<PostComment, PostCommentId>
-  public addChildren!: Sequelize.HasManyAddAssociationsMixin<PostComment, PostCommentId>
-  public createChild!: Sequelize.HasManyCreateAssociationMixin<PostComment>
-  public removeChild!: Sequelize.HasManyRemoveAssociationMixin<PostComment, PostCommentId>
-  public removeChildren!: Sequelize.HasManyRemoveAssociationsMixin<PostComment, PostCommentId>
-  public hasChild!: Sequelize.HasManyHasAssociationMixin<PostComment, PostCommentId>
-  public hasChildren!: Sequelize.HasManyHasAssociationsMixin<PostComment, PostCommentId>
-  public countChildren!: Sequelize.HasManyCountAssociationsMixin
+  declare children: NonAttribute<PostComment[]>
+  declare getChildren: HasManyGetAssociationsMixin<PostComment>
+  declare setChildren: HasManySetAssociationsMixin<PostComment, number>
+  declare addChild: HasManyAddAssociationMixin<PostComment, number>
+  declare addChildren: HasManyAddAssociationsMixin<PostComment, number>
+  declare createChild: HasManyCreateAssociationMixin<PostComment>
+  declare removeChild: HasManyRemoveAssociationMixin<PostComment, number>
+  declare removeChildren: HasManyRemoveAssociationsMixin<PostComment, number>
+  declare hasChild: HasManyHasAssociationMixin<PostComment, number>
+  declare hasChildren: HasManyHasAssociationsMixin<PostComment, number>
+  declare countChildren: HasManyCountAssociationsMixin
   
-  public static associations: {
+  declare static associations: {
     Post: Association<PostComment, Post>,
     parent: Association<PostComment, PostComment>,
     children: Association<PostComment, PostComment>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof PostComment {
+  static initModel(sequelize: Sequelize): typeof PostComment {
     PostComment.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       title: {
         type: DataTypes.STRING(75),
         allowNull: false
@@ -1339,6 +1427,12 @@ export class PostComment
       },
       content: {
         type: DataTypes.TEXT
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -1353,36 +1447,49 @@ export class PostComment
  *                          /blog/models/PostMeta.ts                          *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Post, PostId } from './Post'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Post } from './Post'
 
-export interface PostMetaAttributes {
-  key: string
-  content?: string
-}
-
-export type PostMetaId = number
-export type PostMetaCreationAttributes = PostMetaAttributes & { id?: number }
-
-export class PostMeta
-  extends Model<PostMetaAttributes, PostMetaCreationAttributes>
-  implements PostMetaAttributes {
-  public readonly id?: number
-  public key!: string
-  public content?: string
+export class PostMeta extends Model<
+  InferAttributes<PostMeta>,
+  InferCreationAttributes<PostMeta>
+> {
+  declare id: CreationOptional<number>
+  declare key: string
+  declare content: string | null
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // PostMeta belongsTo Post
-  public readonly Post?: Post
-  public getPost!: Sequelize.BelongsToGetAssociationMixin<Post>
-  public setPost!: Sequelize.BelongsToSetAssociationMixin<Post, PostId>
-  public createPost!: Sequelize.BelongsToCreateAssociationMixin<Post>
+  declare Post: NonAttribute<Post>
+  declare getPost: BelongsToGetAssociationMixin<Post>
+  declare setPost: BelongsToSetAssociationMixin<Post, number>
+  declare createPost: BelongsToCreateAssociationMixin<Post>
   
-  public static associations: {
+  declare static associations: {
     Post: Association<PostMeta, Post>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof PostMeta {
+  static initModel(sequelize: Sequelize): typeof PostMeta {
     PostMeta.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       key: {
         type: DataTypes.STRING(50),
         allowNull: false,
@@ -1390,6 +1497,12 @@ export class PostMeta
       },
       content: {
         type: DataTypes.TEXT
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -1404,45 +1517,58 @@ export class PostMeta
  *                          /blog/models/PostTag.ts                           *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Post, PostId } from './Post'
-import type { Tag, TagId } from './Tag'
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Post } from './Post'
+import type { Tag } from './Tag'
 
-export interface PostTagAttributes {
-  tagId?: number
-}
-
-export type PostTagPk = 'tagId'
-export type PostTagId = PostTagAttributes[PostTagPk]
-export type PostTagCreationAttributes = Optional<PostTagAttributes, PostTagPk>
-
-export class PostTag
-  extends Model<PostTagAttributes, PostTagCreationAttributes>
-  implements PostTagAttributes {
-  public readonly tagId?: number
+export class PostTag extends Model<
+  InferAttributes<PostTag>,
+  InferCreationAttributes<PostTag>
+> {
+  declare tagId: CreationOptional<number>
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // PostTag belongsTo Post
-  public readonly Post?: Post
-  public getPost!: Sequelize.BelongsToGetAssociationMixin<Post>
-  public setPost!: Sequelize.BelongsToSetAssociationMixin<Post, PostId>
-  public createPost!: Sequelize.BelongsToCreateAssociationMixin<Post>
+  declare Post: NonAttribute<Post>
+  declare getPost: BelongsToGetAssociationMixin<Post>
+  declare setPost: BelongsToSetAssociationMixin<Post, number>
+  declare createPost: BelongsToCreateAssociationMixin<Post>
   
   // PostTag belongsTo Tag
-  public readonly Tag?: Tag
-  public getTag!: Sequelize.BelongsToGetAssociationMixin<Tag>
-  public setTag!: Sequelize.BelongsToSetAssociationMixin<Tag, TagId>
-  public createTag!: Sequelize.BelongsToCreateAssociationMixin<Tag>
+  declare Tag: NonAttribute<Tag>
+  declare getTag: BelongsToGetAssociationMixin<Tag>
+  declare setTag: BelongsToSetAssociationMixin<Tag, number>
+  declare createTag: BelongsToCreateAssociationMixin<Tag>
   
-  public static associations: {
+  declare static associations: {
     Post: Association<PostTag, Post>,
     Tag: Association<PostTag, Tag>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof PostTag {
+  static initModel(sequelize: Sequelize): typeof PostTag {
     PostTag.init({
       tagId: {
         type: DataTypes.BIGINT,
         primaryKey: true
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -1457,62 +1583,90 @@ export class PostTag
  *                            /blog/models/Tag.ts                             *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Post, PostId } from './Post'
-import type { PostTag, PostTagId } from './PostTag'
+import {
+  Association,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManySetAssociationsMixin,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyAddAssociationsMixin,
+  BelongsToManyCreateAssociationMixin,
+  BelongsToManyRemoveAssociationMixin,
+  BelongsToManyRemoveAssociationsMixin,
+  BelongsToManyHasAssociationMixin,
+  BelongsToManyHasAssociationsMixin,
+  BelongsToManyCountAssociationsMixin,
+  CreationOptional,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Post } from './Post'
+import type { PostTag } from './PostTag'
 
-export interface TagAttributes {
-  title: string
-  metaTitle?: string
-  slug: string
-  content?: string
-}
-
-export type TagId = number
-export type TagCreationAttributes = TagAttributes & { id?: number }
-
-export class Tag
-  extends Model<TagAttributes, TagCreationAttributes>
-  implements TagAttributes {
-  public readonly id?: number
-  public title!: string
-  public metaTitle?: string
-  public slug!: string
-  public content?: string
+export class Tag extends Model<
+  InferAttributes<Tag>,
+  InferCreationAttributes<Tag>
+> {
+  declare id: CreationOptional<number>
+  declare title: string
+  declare metaTitle: string | null
+  declare slug: string
+  declare content: string | null
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // Tag hasMany PostTag
-  public readonly PostTags?: PostTag[]
-  public getPostTags!: Sequelize.HasManyGetAssociationsMixin<PostTag>
-  public setPostTags!: Sequelize.HasManySetAssociationsMixin<PostTag, PostTagId>
-  public addPostTag!: Sequelize.HasManyAddAssociationMixin<PostTag, PostTagId>
-  public addPostTags!: Sequelize.HasManyAddAssociationsMixin<PostTag, PostTagId>
-  public createPostTag!: Sequelize.HasManyCreateAssociationMixin<PostTag>
-  public removePostTag!: Sequelize.HasManyRemoveAssociationMixin<PostTag, PostTagId>
-  public removePostTags!: Sequelize.HasManyRemoveAssociationsMixin<PostTag, PostTagId>
-  public hasPostTag!: Sequelize.HasManyHasAssociationMixin<PostTag, PostTagId>
-  public hasPostTags!: Sequelize.HasManyHasAssociationsMixin<PostTag, PostTagId>
-  public countPostTags!: Sequelize.HasManyCountAssociationsMixin
+  declare PostTags: NonAttribute<PostTag[]>
+  declare getPostTags: HasManyGetAssociationsMixin<PostTag>
+  declare setPostTags: HasManySetAssociationsMixin<PostTag, number>
+  declare addPostTag: HasManyAddAssociationMixin<PostTag, number>
+  declare addPostTags: HasManyAddAssociationsMixin<PostTag, number>
+  declare createPostTag: HasManyCreateAssociationMixin<PostTag, 'tagId'>
+  declare removePostTag: HasManyRemoveAssociationMixin<PostTag, number>
+  declare removePostTags: HasManyRemoveAssociationsMixin<PostTag, number>
+  declare hasPostTag: HasManyHasAssociationMixin<PostTag, number>
+  declare hasPostTags: HasManyHasAssociationsMixin<PostTag, number>
+  declare countPostTags: HasManyCountAssociationsMixin
   
   // Tag belongsToMany Post
-  public readonly Posts?: Post[]
-  public getPosts!: Sequelize.BelongsToManyGetAssociationsMixin<Post>
-  public setPosts!: Sequelize.BelongsToManySetAssociationsMixin<Post, PostId>
-  public addPost!: Sequelize.BelongsToManyAddAssociationMixin<Post, PostId>
-  public addPosts!: Sequelize.BelongsToManyAddAssociationsMixin<Post, PostId>
-  public createPost!: Sequelize.BelongsToManyCreateAssociationMixin<Post>
-  public removePost!: Sequelize.BelongsToManyRemoveAssociationMixin<Post, PostId>
-  public removePosts!: Sequelize.BelongsToManyRemoveAssociationsMixin<Post, PostId>
-  public hasPost!: Sequelize.BelongsToManyHasAssociationMixin<Post, PostId>
-  public hasPosts!: Sequelize.BelongsToManyHasAssociationsMixin<Post, PostId>
-  public countPosts!: Sequelize.BelongsToManyCountAssociationsMixin
+  declare Posts: NonAttribute<Post[]>
+  declare getPosts: BelongsToManyGetAssociationsMixin<Post>
+  declare setPosts: BelongsToManySetAssociationsMixin<Post, number>
+  declare addPost: BelongsToManyAddAssociationMixin<Post, number>
+  declare addPosts: BelongsToManyAddAssociationsMixin<Post, number>
+  declare createPost: BelongsToManyCreateAssociationMixin<Post>
+  declare removePost: BelongsToManyRemoveAssociationMixin<Post, number>
+  declare removePosts: BelongsToManyRemoveAssociationsMixin<Post, number>
+  declare hasPost: BelongsToManyHasAssociationMixin<Post, number>
+  declare hasPosts: BelongsToManyHasAssociationsMixin<Post, number>
+  declare countPosts: BelongsToManyCountAssociationsMixin
   
-  public static associations: {
+  declare static associations: {
     PostTags: Association<Tag, PostTag>,
     Posts: Association<Tag, Post>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof Tag {
+  static initModel(sequelize: Sequelize): typeof Tag {
     Tag.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       title: {
         type: DataTypes.STRING(75),
         allowNull: false
@@ -1527,6 +1681,12 @@ export class Tag
       },
       content: {
         type: DataTypes.TEXT
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize
@@ -1541,59 +1701,71 @@ export class Tag
  *                            /blog/models/User.ts                            *
  ******************************************************************************/
 
-import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
-import type { Post, PostId } from './Post'
+import {
+  Association,
+  CreationOptional,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Post } from './Post'
 
-export interface UserAttributes {
-  firstName?: string
-  middleName?: string
-  lastName?: string
-  mobile?: string
-  email?: string
-  passwordHash?: string
-  registeredAt?: string
-  lastLogin?: string
-  intro?: string
-  profile?: string
-}
-
-export type UserId = number
-export type UserCreationAttributes = UserAttributes & { id?: number }
-
-export class User
-  extends Model<UserAttributes, UserCreationAttributes>
-  implements UserAttributes {
-  public readonly id?: number
-  public firstName?: string
-  public middleName?: string
-  public lastName?: string
-  public mobile?: string
-  public email?: string
-  public passwordHash?: string
-  public registeredAt!: string
-  public lastLogin?: string
-  public intro?: string
-  public profile?: string
+export class User extends Model<
+  InferAttributes<User>,
+  InferCreationAttributes<User>
+> {
+  declare id: CreationOptional<number>
+  declare firstName: string | null
+  declare middleName: string | null
+  declare lastName: string | null
+  declare mobile: string | null
+  declare email: string | null
+  declare passwordHash: string | null
+  declare registeredAt: Date
+  declare lastLogin: Date | null
+  declare intro: string | null
+  declare profile: string | null
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 
   // User hasMany Post
-  public readonly Posts?: Post[]
-  public getPosts!: Sequelize.HasManyGetAssociationsMixin<Post>
-  public setPosts!: Sequelize.HasManySetAssociationsMixin<Post, PostId>
-  public addPost!: Sequelize.HasManyAddAssociationMixin<Post, PostId>
-  public addPosts!: Sequelize.HasManyAddAssociationsMixin<Post, PostId>
-  public createPost!: Sequelize.HasManyCreateAssociationMixin<Post>
-  public removePost!: Sequelize.HasManyRemoveAssociationMixin<Post, PostId>
-  public removePosts!: Sequelize.HasManyRemoveAssociationsMixin<Post, PostId>
-  public hasPost!: Sequelize.HasManyHasAssociationMixin<Post, PostId>
-  public hasPosts!: Sequelize.HasManyHasAssociationsMixin<Post, PostId>
-  public countPosts!: Sequelize.HasManyCountAssociationsMixin
+  declare Posts: NonAttribute<Post[]>
+  declare getPosts: HasManyGetAssociationsMixin<Post>
+  declare setPosts: HasManySetAssociationsMixin<Post, number>
+  declare addPost: HasManyAddAssociationMixin<Post, number>
+  declare addPosts: HasManyAddAssociationsMixin<Post, number>
+  declare createPost: HasManyCreateAssociationMixin<Post>
+  declare removePost: HasManyRemoveAssociationMixin<Post, number>
+  declare removePosts: HasManyRemoveAssociationsMixin<Post, number>
+  declare hasPost: HasManyHasAssociationMixin<Post, number>
+  declare hasPosts: HasManyHasAssociationsMixin<Post, number>
+  declare countPosts: HasManyCountAssociationsMixin
   
-  public static associations: {
+  declare static associations: {
     Posts: Association<User, Post>
   }
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof User {
+  static initModel(sequelize: Sequelize): typeof User {
     User.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
       firstName: {
         type: DataTypes.STRING(50)
       },
@@ -1625,6 +1797,12 @@ export class User
       },
       profile: {
         type: DataTypes.TEXT
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
       }
     }, {
       sequelize

@@ -1,6 +1,6 @@
 import { blank, lines } from '@src/core/codegen'
 import { DbCaseStyle, DbNounForm, DbOptions } from '@src/core/database'
-import { Association, AssociationTypeType, Field, Model } from '@src/core/schema'
+import { Association, AssociationTypeType, Field, integerDataType, Model } from '@src/core/schema'
 import { camelCase, pascalCase, plural, singular, snakeCase } from '@src/utils/string'
 import { associationName } from '../../utils/associations'
 import {
@@ -8,7 +8,7 @@ import {
   noSupportedDetails,
   notSupportedComment,
 } from '../../utils/dataTypes'
-import { fieldTemplate, pkIsDefault } from '../../utils/field'
+import { fieldTemplate, getTimestampFields } from '../../utils/field'
 import { ModelAssociation, modelName } from '../../utils/model'
 
 export type ModelClassTempalteArgs = {
@@ -24,13 +24,14 @@ export function modelClassTemplate({
   const name = modelName(model)
 
   return lines([
-    `export class ${name}`,
+    `export class ${name} extends Model<`,
+    lines([`InferAttributes<${name}>,`, `InferCreationAttributes<${name}>`], { depth: 2 }),
+    `> {`,
+    lines([...model.fields.map((field) => classFieldType(field, dbOptions, field.primaryKey))], {
+      depth: 2,
+    }),
     lines(
-      [
-        `extends Model<${name}Attributes, ${name}CreationAttributes>`,
-        `implements ${name}Attributes {`,
-        ...model.fields.map((field) => classFieldType(field, dbOptions)),
-      ],
+      getTimestampFields({ dbOptions }).map((field) => classFieldType(field, dbOptions, true)),
       { depth: 2 },
     ),
     associations.length ? blank() : null,
@@ -41,7 +42,7 @@ export function modelClassTemplate({
     associations.length
       ? lines(
           [
-            'public static associations: {',
+            'declare static associations: {',
             lines(
               associations.map((association) =>
                 staticAssociation({ sourceModel: model, association }),
@@ -58,13 +59,13 @@ export function modelClassTemplate({
     associations.length ? blank() : null,
     lines(
       [
-        `static initModel(sequelize: Sequelize.Sequelize): typeof ${name} {`,
+        `static initModel(sequelize: Sequelize): typeof ${name} {`,
         lines(
           [
             `${name}.init({`,
             lines(
               model.fields
-                .filter((field) => !pkIsDefault(field))
+                .concat(getTimestampFields({ dbOptions }))
                 .map((field) => fieldTemplate({ field, dbOptions })),
               { depth: 2, separator: ',' },
             ),
@@ -89,16 +90,22 @@ export function modelClassTemplate({
 }
 
 const classFieldType = (
-  { name, type, required, primaryKey }: Field,
+  { name, type, required }: Field,
   dbOptions: DbOptions,
+  creationOptional: boolean,
 ): Array<string | null> => {
   const comment = notSupportedComment(type, dbOptions.sqlDialect)
-  const readonly = primaryKey ? 'readonly ' : ''
-  const optional = required ? '!' : '?'
+  const tsType = dataTypeToTypeScript(type)
+
+  const fieldType = creationOptional
+    ? `CreationOptional<${tsType}>`
+    : required
+    ? tsType
+    : `${tsType} | null`
 
   return [
     noSupportedDetails(type, dbOptions.sqlDialect),
-    `${comment}public ${readonly}${camelCase(name)}${optional}: ${dataTypeToTypeScript(type)}`,
+    `${comment}declare ${camelCase(name)}: ${fieldType}`,
   ]
 }
 
@@ -128,58 +135,77 @@ function associationType({
   const name = associationName({ association, targetModel })
   const singularMethodPostfix = singular(pascalCase(name))
   const pluralMethodPostfix = plural(pascalCase(name))
+  const targetPks = targetModel.fields.filter((f) => f.primaryKey)
+  const targetPkType =
+    targetPks.length > 1
+      ? 'never'
+      : targetPks.length === 1
+      ? dataTypeToTypeScript(targetPks[0].type)
+      : dataTypeToTypeScript(integerDataType())
 
   switch (association.type.type) {
-    case AssociationTypeType.BelongsTo:
+    case AssociationTypeType.BelongsTo: {
       return [
         `// ${sourceName} belongsTo ${targetName}${aliasLabel(association)}`,
-        `public readonly ${name}?: ${targetName}`,
-        `public get${singularMethodPostfix}!: Sequelize.BelongsToGetAssociationMixin<${targetName}>`,
-        `public set${singularMethodPostfix}!: Sequelize.BelongsToSetAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public create${singularMethodPostfix}!: Sequelize.BelongsToCreateAssociationMixin<${targetName}>`,
+        `declare ${name}: NonAttribute<${targetName}>`,
+        `declare get${singularMethodPostfix}: BelongsToGetAssociationMixin<${targetName}>`,
+        `declare set${singularMethodPostfix}: BelongsToSetAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare create${singularMethodPostfix}: BelongsToCreateAssociationMixin<${targetName}>`,
         blank(),
       ].join('\n')
-    case AssociationTypeType.HasMany:
+    }
+    case AssociationTypeType.HasMany: {
+      const fk =
+        association.foreignKey ||
+        singular(camelCase(associationName({ association, targetModel: sourceModel }))) + 'Id'
+
+      const createHasManyOmitFk = targetModel.fields.some((field) => camelCase(field.name) === fk)
+        ? `, '${fk}'`
+        : ''
+
       return [
         `// ${sourceName} hasMany ${targetName}${aliasLabel(association)}`,
-        `public readonly ${name}?: ${targetName}[]`,
-        `public get${pluralMethodPostfix}!: Sequelize.HasManyGetAssociationsMixin<${targetName}>`,
-        `public set${pluralMethodPostfix}!: Sequelize.HasManySetAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public add${singularMethodPostfix}!: Sequelize.HasManyAddAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public add${pluralMethodPostfix}!: Sequelize.HasManyAddAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public create${singularMethodPostfix}!: Sequelize.HasManyCreateAssociationMixin<${targetName}>`,
-        `public remove${singularMethodPostfix}!: Sequelize.HasManyRemoveAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public remove${pluralMethodPostfix}!: Sequelize.HasManyRemoveAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public has${singularMethodPostfix}!: Sequelize.HasManyHasAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public has${pluralMethodPostfix}!: Sequelize.HasManyHasAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public count${pluralMethodPostfix}!: Sequelize.HasManyCountAssociationsMixin`,
+        `declare ${name}: NonAttribute<${targetName}[]>`,
+        `declare get${pluralMethodPostfix}: HasManyGetAssociationsMixin<${targetName}>`,
+        `declare set${pluralMethodPostfix}: HasManySetAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare add${singularMethodPostfix}: HasManyAddAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare add${pluralMethodPostfix}: HasManyAddAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare create${singularMethodPostfix}: HasManyCreateAssociationMixin<${targetName}${createHasManyOmitFk}>`,
+        `declare remove${singularMethodPostfix}: HasManyRemoveAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare remove${pluralMethodPostfix}: HasManyRemoveAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare has${singularMethodPostfix}: HasManyHasAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare has${pluralMethodPostfix}: HasManyHasAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare count${pluralMethodPostfix}: HasManyCountAssociationsMixin`,
         blank(),
       ].join('\n')
-    case AssociationTypeType.HasOne:
+    }
+    case AssociationTypeType.HasOne: {
       return [
         `// ${sourceName} hasOne ${targetName}${aliasLabel(association)}`,
-        `public readonly ${name}?: ${targetName}`,
-        `public get${singularMethodPostfix}!: Sequelize.HasOneGetAssociationMixin<${targetName}>`,
-        `public set${singularMethodPostfix}!: Sequelize.HasOneSetAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public create${singularMethodPostfix}!: Sequelize.HasOneCreateAssociationMixin<${targetName}>`,
+        `declare ${name}: NonAttribute<${targetName}>`,
+        `declare get${singularMethodPostfix}: HasOneGetAssociationMixin<${targetName}>`,
+        `declare set${singularMethodPostfix}: HasOneSetAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare create${singularMethodPostfix}: HasOneCreateAssociationMixin<${targetName}>`,
         blank(),
       ].join('\n')
-    case AssociationTypeType.ManyToMany:
+    }
+    case AssociationTypeType.ManyToMany: {
       return [
         `// ${sourceName} belongsToMany ${targetName}${aliasLabel(association)}`,
-        `public readonly ${name}?: ${targetName}[]`,
-        `public get${pluralMethodPostfix}!: Sequelize.BelongsToManyGetAssociationsMixin<${targetName}>`,
-        `public set${pluralMethodPostfix}!: Sequelize.BelongsToManySetAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public add${singularMethodPostfix}!: Sequelize.BelongsToManyAddAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public add${pluralMethodPostfix}!: Sequelize.BelongsToManyAddAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public create${singularMethodPostfix}!: Sequelize.BelongsToManyCreateAssociationMixin<${targetName}>`,
-        `public remove${singularMethodPostfix}!: Sequelize.BelongsToManyRemoveAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public remove${pluralMethodPostfix}!: Sequelize.BelongsToManyRemoveAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public has${singularMethodPostfix}!: Sequelize.BelongsToManyHasAssociationMixin<${targetName}, ${targetName}Id>`,
-        `public has${pluralMethodPostfix}!: Sequelize.BelongsToManyHasAssociationsMixin<${targetName}, ${targetName}Id>`,
-        `public count${pluralMethodPostfix}!: Sequelize.BelongsToManyCountAssociationsMixin`,
+        `declare ${name}: NonAttribute<${targetName}[]>`,
+        `declare get${pluralMethodPostfix}: BelongsToManyGetAssociationsMixin<${targetName}>`,
+        `declare set${pluralMethodPostfix}: BelongsToManySetAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare add${singularMethodPostfix}: BelongsToManyAddAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare add${pluralMethodPostfix}: BelongsToManyAddAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare create${singularMethodPostfix}: BelongsToManyCreateAssociationMixin<${targetName}>`,
+        `declare remove${singularMethodPostfix}: BelongsToManyRemoveAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare remove${pluralMethodPostfix}: BelongsToManyRemoveAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare has${singularMethodPostfix}: BelongsToManyHasAssociationMixin<${targetName}, ${targetPkType}>`,
+        `declare has${pluralMethodPostfix}: BelongsToManyHasAssociationsMixin<${targetName}, ${targetPkType}>`,
+        `declare count${pluralMethodPostfix}: BelongsToManyCountAssociationsMixin`,
         blank(),
       ].join('\n')
+    }
   }
 }
 

@@ -26,8 +26,6 @@ export function initModelsTemplate({ schema, dbOptions }: InitModelsTemplateArgs
     blank(),
     exportModels(schema),
     blank(),
-    exportTypes(schema),
-    blank(),
     initModels({ schema, dbOptions }),
     blank(),
   ])
@@ -51,11 +49,7 @@ function importModels({ models }: Schema): string | null {
 
 function importModel(model: Model): string {
   const name = modelName(model)
-
-  return lines([
-    `import { ${name} } from './${name}'`,
-    `import type { ${name}Attributes, ${name}CreationAttributes } from './${name}'`,
-  ])
+  return `import { ${name} } from './${name}'`
 }
 
 function exportModels({ models }: Schema): string | null {
@@ -64,26 +58,6 @@ function exportModels({ models }: Schema): string | null {
   }
 
   return lines(['export {', lines(models.map(modelName), { separator: ',', depth: 2 }), '}'])
-}
-
-function exportTypes({ models }: Schema): string | null {
-  if (models.length === 0) {
-    return null
-  }
-
-  return lines([
-    'export type {',
-    lines(models.map(modelTypeExport), { depth: 2, separator: ',' }),
-    '}',
-  ])
-}
-
-function modelTypeExport(model: Model) {
-  const name = modelName(model)
-
-  return lines([`${name}Attributes`, `${name}CreationAttributes`], {
-    separator: ',',
-  })
 }
 
 type ModelById = Map<string, Model>
