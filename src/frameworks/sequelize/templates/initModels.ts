@@ -177,12 +177,14 @@ function associationOptions({
 function asField(association: Association, modelById: ModelById): string | null {
   const targetModel = modelById.get(association.targetModelId)
 
-  return targetModel
-    ? `as: '${aliasValue({
-        alias: associationName({ association, targetModel }),
-        type: association.type.type,
-      })}'`
-    : null
+  const alias =
+    targetModel &&
+    aliasValue({
+      alias: associationName({ association, targetModel }),
+      type: association.type.type,
+    })
+
+  return alias ? `as: '${alias}'` : null
 }
 
 function throughField(association: Association, modelById: ModelById): string | null {
