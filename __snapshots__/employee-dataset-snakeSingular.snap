@@ -1,0 +1,1231 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sequelize Framework generates the correct code for employee-dataset-snakeSingular 1`] = `
+
+/****************************************
+ * employee-dataset/.gitignore
+ ****************************************/
+
+node_modules/
+dist
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.tmp
+
+
+/****************************************
+ * employee-dataset/db.ts
+ ****************************************/
+
+import { Sequelize, Options } from 'sequelize'
+import configs from './config/config.js'
+
+const env = process.env.NODE_ENV || 'development'
+const config = (configs as {[key: string]: Options})[env]
+
+const db: Sequelize = new Sequelize({
+  ...config,
+  define: {
+    underscored: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
+})
+
+export default db
+
+
+/****************************************
+ * employee-dataset/package.json
+ ****************************************/
+
+{
+  "name": "employee-dataset",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.ts",
+  "scripts": {
+    "test": "echo \\"Error: no test specified\\" && exit 1",
+    "db:up": "echo creating && npm run db:create && echo created && npm run db:migrate && echo migrated",
+    "db:reset": "npm run db:drop && npm run db:up",
+    "db:create": "sequelize db:create",
+    "db:drop": "[[ $NODE_ENV == production ]] && exit 1 || sequelize db:drop",
+    "db:migrate": "sequelize db:migrate",
+    "db:rollback": "sequelize db:migrate:undo",
+    "db:rollback:all": "sequelize db:migrate:undo:all",
+    "build": "tsc",
+    "start": "node ./dist/server.js",
+    "dev": "tsc-watch --onSuccess \\"node ./dist/server.js\\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.7",
+    "@types/validator": "^13.7.1",
+    "sequelize-cli": "^6.4.1",
+    "tsc-watch": "^4.6.0",
+    "typescript": "^4.5.5"
+  }
+}
+
+
+
+/****************************************
+ * employee-dataset/README.md
+ ****************************************/
+
+# employee dataset
+This project was generated with [Sequelize UI](https://github.com/tomjschuster/sequelize-ui). The project is a simple [Node.js](https://nodejs.dev/) server with [Sequelize ORM](https://sequelize.org/).
+
+Be sure to test all code for correctness and to test database migrations in a test environment before deploying to production.
+
+## Running Project
+
+### Prerequesites
+- [Node.js](https://nodejs.dev/)
+- [PostgreSQL](https://www.postgresql.org/)
+
+### Setup
+1. Install dependencies: \`npm install\`
+2. Setup database: \`npm run db:up\`
+
+### Run
+- Local development: \`npm run dev\`
+- Production build: \`npm run build && npm start\`
+
+## Bug Reports
+Please report any bugs with generated code at [Sequelize UI Issues](https://github.com/tomjschuster/sequelize-ui/issues).
+
+
+/****************************************
+ * employee-dataset/server.ts
+ ****************************************/
+
+import http from 'http'
+import db from './db'
+import { initModels } from './models'
+
+async function run() {
+  initModels(db)
+  const hostname = process.env.HOSTNAME || '127.0.0.1'
+  const port = parseInt(process.env.PORT || '3000')
+  
+  const server = http.createServer((req, res) => {
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'text/plain')
+    res.end('Hello World')
+  })
+  
+  server.listen(port, hostname, () => {
+    console.log(\`Server running at http://\${hostname}:\${port}/\`)
+  })
+}
+
+run()
+
+/****************************************
+ * employee-dataset/tsconfig.json
+ ****************************************/
+
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "outDir": "dist",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
+
+
+/****************************************
+ * employee-dataset/config/config.js
+ ****************************************/
+
+module.exports = {
+  development: {
+    dialect: 'postgres',
+    database: process.env.POSTGRES_DB_NAME || 'employee_dataset',
+    username: process.env.POSTGRES_DB_USERNAME || 'postgres',
+    password: process.env.POSTGRES_DB_PASSWORD || 'postgres',
+    host: process.env.POSTGRES_DB_HOST || 'localhost',
+    port: parseInt(process.env.POSTGRES_DB_PORT || '5432')
+  },
+  test: {
+    dialect: 'postgres',
+    database: process.env.POSTGRES_DB_NAME || 'employee_dataset',
+    username: process.env.POSTGRES_DB_USERNAME || 'postgres',
+    password: process.env.POSTGRES_DB_PASSWORD || 'postgres',
+    host: process.env.POSTGRES_DB_HOST || 'localhost',
+    port: parseInt(process.env.POSTGRES_DB_PORT || '5432')
+  },
+  production: {
+    dialect: 'postgres',
+    database: process.env.POSTGRES_DB_NAME,
+    username: process.env.POSTGRES_DB_USERNAME,
+    password: process.env.POSTGRES_DB_PASSWORD,
+    host: process.env.POSTGRES_DB_HOST,
+    port: parseInt(process.env.POSTGRES_DB_PORT)
+  }
+}
+
+/****************************************
+ * employee-dataset/migrations/20201001000000-create-employee.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('employee', {
+      empNo: {
+        type: DataTypes.INTEGER,
+        field: 'emp_no',
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      birthDate: {
+        type: DataTypes.DATEONLY,
+        field: 'birth_date',
+        allowNull: false
+      },
+      firstName: {
+        type: DataTypes.STRING,
+        field: 'first_name',
+        allowNull: false
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        field: 'last_name',
+        allowNull: false
+      },
+      gender: {
+        type: DataTypes.ENUM('M', 'F', 'O'),
+        field: 'gender',
+        allowNull: false
+      },
+      hireDate: {
+        type: DataTypes.DATEONLY,
+        field: 'hire_date',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('employee');
+  },
+};
+
+/****************************************
+ * employee-dataset/migrations/20201001000010-create-department.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('department', {
+      deptNo: {
+        type: DataTypes.STRING,
+        field: 'dept_no',
+        primaryKey: true,
+        allowNull: false
+      },
+      deptName: {
+        type: DataTypes.STRING,
+        field: 'dept_name',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('department');
+  },
+};
+
+/****************************************
+ * employee-dataset/migrations/20201001000020-create-dept_emp.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('dept_emp', {
+      empNo: {
+        type: DataTypes.INTEGER,
+        field: 'emp_no',
+        primaryKey: true,
+        allowNull: false
+      },
+      deptNo: {
+        type: DataTypes.STRING,
+        field: 'dept_no',
+        primaryKey: true,
+        allowNull: false
+      },
+      fromDate: {
+        type: DataTypes.DATEONLY,
+        field: 'from_date',
+        allowNull: false
+      },
+      toDate: {
+        type: DataTypes.DATEONLY,
+        field: 'to_date',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      departmentsId: {
+        type: DataTypes.STRING,
+        field: 'departments_id'
+      },
+      employeeId: {
+        type: DataTypes.INTEGER,
+        field: 'employee_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('dept_emp');
+  },
+};
+
+/****************************************
+ * employee-dataset/migrations/20201001000030-create-dept_manager.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('dept_manager', {
+      empNo: {
+        type: DataTypes.INTEGER,
+        field: 'emp_no',
+        primaryKey: true,
+        allowNull: false
+      },
+      deptNo: {
+        type: DataTypes.STRING,
+        field: 'dept_no',
+        primaryKey: true,
+        allowNull: false
+      },
+      fromDate: {
+        type: DataTypes.DATEONLY,
+        field: 'from_date',
+        allowNull: false
+      },
+      toDate: {
+        type: DataTypes.DATEONLY,
+        field: 'to_date',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      departmentsId: {
+        type: DataTypes.STRING,
+        field: 'departments_id'
+      },
+      managerId: {
+        type: DataTypes.INTEGER,
+        field: 'manager_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('dept_manager');
+  },
+};
+
+/****************************************
+ * employee-dataset/migrations/20201001000040-create-title.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('title', {
+      empNo: {
+        type: DataTypes.INTEGER,
+        field: 'emp_no',
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      title: {
+        type: DataTypes.STRING,
+        field: 'title',
+        allowNull: false
+      },
+      fromDate: {
+        type: DataTypes.DATEONLY,
+        field: 'from_date',
+        primaryKey: true,
+        allowNull: false
+      },
+      toDate: {
+        type: DataTypes.DATEONLY,
+        field: 'to_date',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('title');
+  },
+};
+
+/****************************************
+ * employee-dataset/migrations/20201001000050-create-salary.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('salary', {
+      empNo: {
+        type: DataTypes.INTEGER,
+        field: 'emp_no',
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      salary: {
+        type: DataTypes.INTEGER,
+        field: 'salary',
+        allowNull: false
+      },
+      fromDate: {
+        type: DataTypes.DATEONLY,
+        field: 'from_date',
+        primaryKey: true,
+        allowNull: false
+      },
+      toDate: {
+        type: DataTypes.DATEONLY,
+        field: 'to_date'
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('salary');
+  },
+};
+
+/****************************************
+ * employee-dataset/migrations/20201001000060-add-foreign-keys.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.addConstraint('dept_emp', {
+      fields: ['emp_no'],
+      type: 'foreign key',
+      name: 'dept_emp_emp_no_fkey',
+      references: {
+        table: 'employee',
+        field: 'emp_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('dept_emp', {
+      fields: ['dept_no'],
+      type: 'foreign key',
+      name: 'dept_emp_dept_no_fkey',
+      references: {
+        table: 'department',
+        field: 'dept_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('dept_emp', {
+      fields: ['departments_id'],
+      type: 'foreign key',
+      name: 'dept_emp_departments_id_fkey',
+      references: {
+        table: 'department',
+        field: 'dept_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('dept_emp', {
+      fields: ['employee_id'],
+      type: 'foreign key',
+      name: 'dept_emp_employee_id_fkey',
+      references: {
+        table: 'employee',
+        field: 'emp_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('dept_manager', {
+      fields: ['emp_no'],
+      type: 'foreign key',
+      name: 'dept_manager_emp_no_fkey',
+      references: {
+        table: 'employee',
+        field: 'emp_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('dept_manager', {
+      fields: ['dept_no'],
+      type: 'foreign key',
+      name: 'dept_manager_dept_no_fkey',
+      references: {
+        table: 'department',
+        field: 'dept_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('dept_manager', {
+      fields: ['departments_id'],
+      type: 'foreign key',
+      name: 'dept_manager_departments_id_fkey',
+      references: {
+        table: 'department',
+        field: 'dept_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('dept_manager', {
+      fields: ['manager_id'],
+      type: 'foreign key',
+      name: 'dept_manager_manager_id_fkey',
+      references: {
+        table: 'employee',
+        field: 'emp_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('title', {
+      fields: ['emp_no'],
+      type: 'foreign key',
+      name: 'title_emp_no_fkey',
+      references: {
+        table: 'employee',
+        field: 'emp_no'
+      }
+    })
+    
+    await queryInterface.addConstraint('salary', {
+      fields: ['emp_no'],
+      type: 'foreign key',
+      name: 'salary_emp_no_fkey',
+      references: {
+        table: 'employee',
+        field: 'emp_no'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.removeConstraint('dept_emp', 'dept_emp_emp_no_fkey')
+    await queryInterface.removeConstraint('dept_emp', 'dept_emp_dept_no_fkey')
+    await queryInterface.removeConstraint('dept_emp', 'dept_emp_departments_id_fkey')
+    await queryInterface.removeConstraint('dept_emp', 'dept_emp_employee_id_fkey')
+    await queryInterface.removeConstraint('dept_manager', 'dept_manager_emp_no_fkey')
+    await queryInterface.removeConstraint('dept_manager', 'dept_manager_dept_no_fkey')
+    await queryInterface.removeConstraint('dept_manager', 'dept_manager_departments_id_fkey')
+    await queryInterface.removeConstraint('dept_manager', 'dept_manager_manager_id_fkey')
+    await queryInterface.removeConstraint('title', 'title_emp_no_fkey')
+    await queryInterface.removeConstraint('salary', 'salary_emp_no_fkey')
+  }
+};
+
+/****************************************
+ * employee-dataset/models/Department.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { DeptEmp, DeptEmpId } from './DeptEmp'
+import type { DeptManager, DeptManagerId } from './DeptManager'
+import type { Employee, EmployeeId } from './Employee'
+
+export interface DepartmentAttributes {
+  deptNo: string
+  deptName: string
+}
+
+export type DepartmentPk = 'deptNo'
+export type DepartmentId = DepartmentAttributes[DepartmentPk]
+export type DepartmentCreationAttributes = Optional<DepartmentAttributes, DepartmentPk>
+
+export class Department
+  extends Model<DepartmentAttributes, DepartmentCreationAttributes>
+  implements DepartmentAttributes {
+  public readonly deptNo!: string
+  public deptName!: string
+
+  // Department belongsToMany Employee (as Employee)
+  public readonly employees?: Employee[]
+  public getEmployees!: Sequelize.BelongsToManyGetAssociationsMixin<Employee>
+  public setEmployees!: Sequelize.BelongsToManySetAssociationsMixin<Employee, EmployeeId>
+  public addEmployee!: Sequelize.BelongsToManyAddAssociationMixin<Employee, EmployeeId>
+  public addEmployees!: Sequelize.BelongsToManyAddAssociationsMixin<Employee, EmployeeId>
+  public createEmployee!: Sequelize.BelongsToManyCreateAssociationMixin<Employee>
+  public removeEmployee!: Sequelize.BelongsToManyRemoveAssociationMixin<Employee, EmployeeId>
+  public removeEmployees!: Sequelize.BelongsToManyRemoveAssociationsMixin<Employee, EmployeeId>
+  public hasEmployee!: Sequelize.BelongsToManyHasAssociationMixin<Employee, EmployeeId>
+  public hasEmployees!: Sequelize.BelongsToManyHasAssociationsMixin<Employee, EmployeeId>
+  public countEmployees!: Sequelize.BelongsToManyCountAssociationsMixin
+  
+  // Department belongsToMany Employee (as Manager)
+  public readonly managers?: Employee[]
+  public getManagers!: Sequelize.BelongsToManyGetAssociationsMixin<Employee>
+  public setManagers!: Sequelize.BelongsToManySetAssociationsMixin<Employee, EmployeeId>
+  public addManager!: Sequelize.BelongsToManyAddAssociationMixin<Employee, EmployeeId>
+  public addManagers!: Sequelize.BelongsToManyAddAssociationsMixin<Employee, EmployeeId>
+  public createManager!: Sequelize.BelongsToManyCreateAssociationMixin<Employee>
+  public removeManager!: Sequelize.BelongsToManyRemoveAssociationMixin<Employee, EmployeeId>
+  public removeManagers!: Sequelize.BelongsToManyRemoveAssociationsMixin<Employee, EmployeeId>
+  public hasManager!: Sequelize.BelongsToManyHasAssociationMixin<Employee, EmployeeId>
+  public hasManagers!: Sequelize.BelongsToManyHasAssociationsMixin<Employee, EmployeeId>
+  public countManagers!: Sequelize.BelongsToManyCountAssociationsMixin
+  
+  // Department hasMany DeptEmp
+  public readonly DeptEmps?: DeptEmp[]
+  public getDeptEmps!: Sequelize.HasManyGetAssociationsMixin<DeptEmp>
+  public setDeptEmps!: Sequelize.HasManySetAssociationsMixin<DeptEmp, DeptEmpId>
+  public addDeptEmp!: Sequelize.HasManyAddAssociationMixin<DeptEmp, DeptEmpId>
+  public addDeptEmps!: Sequelize.HasManyAddAssociationsMixin<DeptEmp, DeptEmpId>
+  public createDeptEmp!: Sequelize.HasManyCreateAssociationMixin<DeptEmp>
+  public removeDeptEmp!: Sequelize.HasManyRemoveAssociationMixin<DeptEmp, DeptEmpId>
+  public removeDeptEmps!: Sequelize.HasManyRemoveAssociationsMixin<DeptEmp, DeptEmpId>
+  public hasDeptEmp!: Sequelize.HasManyHasAssociationMixin<DeptEmp, DeptEmpId>
+  public hasDeptEmps!: Sequelize.HasManyHasAssociationsMixin<DeptEmp, DeptEmpId>
+  public countDeptEmps!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Department hasMany DeptManager
+  public readonly DeptManagers?: DeptManager[]
+  public getDeptManagers!: Sequelize.HasManyGetAssociationsMixin<DeptManager>
+  public setDeptManagers!: Sequelize.HasManySetAssociationsMixin<DeptManager, DeptManagerId>
+  public addDeptManager!: Sequelize.HasManyAddAssociationMixin<DeptManager, DeptManagerId>
+  public addDeptManagers!: Sequelize.HasManyAddAssociationsMixin<DeptManager, DeptManagerId>
+  public createDeptManager!: Sequelize.HasManyCreateAssociationMixin<DeptManager>
+  public removeDeptManager!: Sequelize.HasManyRemoveAssociationMixin<DeptManager, DeptManagerId>
+  public removeDeptManagers!: Sequelize.HasManyRemoveAssociationsMixin<DeptManager, DeptManagerId>
+  public hasDeptManager!: Sequelize.HasManyHasAssociationMixin<DeptManager, DeptManagerId>
+  public hasDeptManagers!: Sequelize.HasManyHasAssociationsMixin<DeptManager, DeptManagerId>
+  public countDeptManagers!: Sequelize.HasManyCountAssociationsMixin
+  
+  public static associations: {
+    employees: Association<Department, Employee>,
+    managers: Association<Department, Employee>,
+    DeptEmps: Association<Department, DeptEmp>,
+    DeptManagers: Association<Department, DeptManager>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Department {
+    Department.init({
+      deptNo: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false
+      },
+      deptName: {
+        type: DataTypes.STRING,
+        allowNull: false
+      }
+    }, {
+      sequelize,
+      tableName: 'department'
+    })
+    
+    return Department
+  }
+}
+
+
+/****************************************
+ * employee-dataset/models/DeptEmp.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Department, DepartmentId } from './Department'
+import type { Employee, EmployeeId } from './Employee'
+
+export interface DeptEmpAttributes {
+  empNo: number
+  deptNo: string
+  fromDate: string
+  toDate: string
+}
+
+export type DeptEmpPk = 'empNo' | 'deptNo'
+export type DeptEmpId = DeptEmpAttributes[DeptEmpPk]
+export type DeptEmpCreationAttributes = Optional<DeptEmpAttributes, DeptEmpPk>
+
+export class DeptEmp
+  extends Model<DeptEmpAttributes, DeptEmpCreationAttributes>
+  implements DeptEmpAttributes {
+  public readonly empNo!: number
+  public readonly deptNo!: string
+  public fromDate!: string
+  public toDate!: string
+
+  // DeptEmp belongsTo Employee
+  public readonly Employee?: Employee
+  public getEmployee!: Sequelize.BelongsToGetAssociationMixin<Employee>
+  public setEmployee!: Sequelize.BelongsToSetAssociationMixin<Employee, EmployeeId>
+  public createEmployee!: Sequelize.BelongsToCreateAssociationMixin<Employee>
+  
+  // DeptEmp belongsTo Department
+  public readonly Department?: Department
+  public getDepartment!: Sequelize.BelongsToGetAssociationMixin<Department>
+  public setDepartment!: Sequelize.BelongsToSetAssociationMixin<Department, DepartmentId>
+  public createDepartment!: Sequelize.BelongsToCreateAssociationMixin<Department>
+  
+  public static associations: {
+    Employee: Association<DeptEmp, Employee>,
+    Department: Association<DeptEmp, Department>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof DeptEmp {
+    DeptEmp.init({
+      empNo: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false
+      },
+      deptNo: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false
+      },
+      fromDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+      },
+      toDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+      }
+    }, {
+      sequelize,
+      tableName: 'dept_emp'
+    })
+    
+    return DeptEmp
+  }
+}
+
+
+/****************************************
+ * employee-dataset/models/DeptManager.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Department, DepartmentId } from './Department'
+import type { Employee, EmployeeId } from './Employee'
+
+export interface DeptManagerAttributes {
+  empNo: number
+  deptNo: string
+  fromDate: string
+  toDate: string
+}
+
+export type DeptManagerPk = 'empNo' | 'deptNo'
+export type DeptManagerId = DeptManagerAttributes[DeptManagerPk]
+export type DeptManagerCreationAttributes = Optional<DeptManagerAttributes, DeptManagerPk>
+
+export class DeptManager
+  extends Model<DeptManagerAttributes, DeptManagerCreationAttributes>
+  implements DeptManagerAttributes {
+  public readonly empNo!: number
+  public readonly deptNo!: string
+  public fromDate!: string
+  public toDate!: string
+
+  // DeptManager belongsTo Employee
+  public readonly Employee?: Employee
+  public getEmployee!: Sequelize.BelongsToGetAssociationMixin<Employee>
+  public setEmployee!: Sequelize.BelongsToSetAssociationMixin<Employee, EmployeeId>
+  public createEmployee!: Sequelize.BelongsToCreateAssociationMixin<Employee>
+  
+  // DeptManager belongsTo Department
+  public readonly Department?: Department
+  public getDepartment!: Sequelize.BelongsToGetAssociationMixin<Department>
+  public setDepartment!: Sequelize.BelongsToSetAssociationMixin<Department, DepartmentId>
+  public createDepartment!: Sequelize.BelongsToCreateAssociationMixin<Department>
+  
+  public static associations: {
+    Employee: Association<DeptManager, Employee>,
+    Department: Association<DeptManager, Department>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof DeptManager {
+    DeptManager.init({
+      empNo: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false
+      },
+      deptNo: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false
+      },
+      fromDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+      },
+      toDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+      }
+    }, {
+      sequelize,
+      tableName: 'dept_manager'
+    })
+    
+    return DeptManager
+  }
+}
+
+
+/****************************************
+ * employee-dataset/models/Employee.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Department, DepartmentId } from './Department'
+import type { Salary, SalaryId } from './Salary'
+import type { Title, TitleId } from './Title'
+
+export interface EmployeeAttributes {
+  empNo: number
+  birthDate: string
+  firstName: string
+  lastName: string
+  gender: 'M' | 'F' | 'O'
+  hireDate: string
+}
+
+export type EmployeePk = 'empNo'
+export type EmployeeId = EmployeeAttributes[EmployeePk]
+export type EmployeeCreationAttributes = Optional<EmployeeAttributes, EmployeePk>
+
+export class Employee
+  extends Model<EmployeeAttributes, EmployeeCreationAttributes>
+  implements EmployeeAttributes {
+  public readonly empNo!: number
+  public birthDate!: string
+  public firstName!: string
+  public lastName!: string
+  public gender!: 'M' | 'F' | 'O'
+  public hireDate!: string
+
+  // Employee hasMany Salary
+  public readonly Salaries?: Salary[]
+  public getSalaries!: Sequelize.HasManyGetAssociationsMixin<Salary>
+  public setSalaries!: Sequelize.HasManySetAssociationsMixin<Salary, SalaryId>
+  public addSalary!: Sequelize.HasManyAddAssociationMixin<Salary, SalaryId>
+  public addSalaries!: Sequelize.HasManyAddAssociationsMixin<Salary, SalaryId>
+  public createSalary!: Sequelize.HasManyCreateAssociationMixin<Salary>
+  public removeSalary!: Sequelize.HasManyRemoveAssociationMixin<Salary, SalaryId>
+  public removeSalaries!: Sequelize.HasManyRemoveAssociationsMixin<Salary, SalaryId>
+  public hasSalary!: Sequelize.HasManyHasAssociationMixin<Salary, SalaryId>
+  public hasSalaries!: Sequelize.HasManyHasAssociationsMixin<Salary, SalaryId>
+  public countSalaries!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Employee hasMany Title
+  public readonly Titles?: Title[]
+  public getTitles!: Sequelize.HasManyGetAssociationsMixin<Title>
+  public setTitles!: Sequelize.HasManySetAssociationsMixin<Title, TitleId>
+  public addTitle!: Sequelize.HasManyAddAssociationMixin<Title, TitleId>
+  public addTitles!: Sequelize.HasManyAddAssociationsMixin<Title, TitleId>
+  public createTitle!: Sequelize.HasManyCreateAssociationMixin<Title>
+  public removeTitle!: Sequelize.HasManyRemoveAssociationMixin<Title, TitleId>
+  public removeTitles!: Sequelize.HasManyRemoveAssociationsMixin<Title, TitleId>
+  public hasTitle!: Sequelize.HasManyHasAssociationMixin<Title, TitleId>
+  public hasTitles!: Sequelize.HasManyHasAssociationsMixin<Title, TitleId>
+  public countTitles!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Employee belongsToMany Department (as EmployingDepartment)
+  public readonly employingDepartments?: Department[]
+  public getEmployingDepartments!: Sequelize.BelongsToManyGetAssociationsMixin<Department>
+  public setEmployingDepartments!: Sequelize.BelongsToManySetAssociationsMixin<Department, DepartmentId>
+  public addEmployingDepartment!: Sequelize.BelongsToManyAddAssociationMixin<Department, DepartmentId>
+  public addEmployingDepartments!: Sequelize.BelongsToManyAddAssociationsMixin<Department, DepartmentId>
+  public createEmployingDepartment!: Sequelize.BelongsToManyCreateAssociationMixin<Department>
+  public removeEmployingDepartment!: Sequelize.BelongsToManyRemoveAssociationMixin<Department, DepartmentId>
+  public removeEmployingDepartments!: Sequelize.BelongsToManyRemoveAssociationsMixin<Department, DepartmentId>
+  public hasEmployingDepartment!: Sequelize.BelongsToManyHasAssociationMixin<Department, DepartmentId>
+  public hasEmployingDepartments!: Sequelize.BelongsToManyHasAssociationsMixin<Department, DepartmentId>
+  public countEmployingDepartments!: Sequelize.BelongsToManyCountAssociationsMixin
+  
+  // Employee belongsToMany Department (as ManagedDepartment)
+  public readonly managedDepartments?: Department[]
+  public getManagedDepartments!: Sequelize.BelongsToManyGetAssociationsMixin<Department>
+  public setManagedDepartments!: Sequelize.BelongsToManySetAssociationsMixin<Department, DepartmentId>
+  public addManagedDepartment!: Sequelize.BelongsToManyAddAssociationMixin<Department, DepartmentId>
+  public addManagedDepartments!: Sequelize.BelongsToManyAddAssociationsMixin<Department, DepartmentId>
+  public createManagedDepartment!: Sequelize.BelongsToManyCreateAssociationMixin<Department>
+  public removeManagedDepartment!: Sequelize.BelongsToManyRemoveAssociationMixin<Department, DepartmentId>
+  public removeManagedDepartments!: Sequelize.BelongsToManyRemoveAssociationsMixin<Department, DepartmentId>
+  public hasManagedDepartment!: Sequelize.BelongsToManyHasAssociationMixin<Department, DepartmentId>
+  public hasManagedDepartments!: Sequelize.BelongsToManyHasAssociationsMixin<Department, DepartmentId>
+  public countManagedDepartments!: Sequelize.BelongsToManyCountAssociationsMixin
+  
+  public static associations: {
+    Salaries: Association<Employee, Salary>,
+    Titles: Association<Employee, Title>,
+    employingDepartments: Association<Employee, Department>,
+    managedDepartments: Association<Employee, Department>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Employee {
+    Employee.init({
+      empNo: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      birthDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+      },
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      gender: {
+        type: DataTypes.ENUM('M', 'F', 'O'),
+        allowNull: false
+      },
+      hireDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+      }
+    }, {
+      sequelize,
+      tableName: 'employee'
+    })
+    
+    return Employee
+  }
+}
+
+
+/****************************************
+ * employee-dataset/models/index.ts
+ ****************************************/
+
+import type { Sequelize, Model } from 'sequelize'
+import { Employee } from './Employee'
+import type { EmployeeAttributes, EmployeeCreationAttributes } from './Employee'
+import { Department } from './Department'
+import type { DepartmentAttributes, DepartmentCreationAttributes } from './Department'
+import { DeptEmp } from './DeptEmp'
+import type { DeptEmpAttributes, DeptEmpCreationAttributes } from './DeptEmp'
+import { DeptManager } from './DeptManager'
+import type { DeptManagerAttributes, DeptManagerCreationAttributes } from './DeptManager'
+import { Title } from './Title'
+import type { TitleAttributes, TitleCreationAttributes } from './Title'
+import { Salary } from './Salary'
+import type { SalaryAttributes, SalaryCreationAttributes } from './Salary'
+
+export {
+  Employee,
+  Department,
+  DeptEmp,
+  DeptManager,
+  Title,
+  Salary
+}
+
+export type {
+  EmployeeAttributes,
+  EmployeeCreationAttributes,
+  DepartmentAttributes,
+  DepartmentCreationAttributes,
+  DeptEmpAttributes,
+  DeptEmpCreationAttributes,
+  DeptManagerAttributes,
+  DeptManagerCreationAttributes,
+  TitleAttributes,
+  TitleCreationAttributes,
+  SalaryAttributes,
+  SalaryCreationAttributes
+}
+
+export function initModels(sequelize: Sequelize) {
+  Employee.initModel(sequelize)
+  Department.initModel(sequelize)
+  DeptEmp.initModel(sequelize)
+  DeptManager.initModel(sequelize)
+  Title.initModel(sequelize)
+  Salary.initModel(sequelize)
+
+  Employee.hasMany(Salary, {
+    foreignKey: 'emp_no'
+  })
+  Employee.hasMany(Title, {
+    foreignKey: 'emp_no'
+  })
+  Employee.belongsToMany(Department, {
+    as: 'employingDepartments',
+    through: DeptEmp,
+    foreignKey: 'emp_no',
+    otherKey: 'dept_no',
+    onDelete: 'CASCADE'
+  })
+  Employee.belongsToMany(Department, {
+    as: 'managedDepartments',
+    through: DeptManager,
+    foreignKey: 'emp_no',
+    otherKey: 'dept_no',
+    onDelete: 'CASCADE'
+  })
+  Department.belongsToMany(Employee, {
+    as: 'employees',
+    through: DeptEmp,
+    foreignKey: 'departments_id',
+    otherKey: 'employee_id',
+    onDelete: 'CASCADE'
+  })
+  Department.belongsToMany(Employee, {
+    as: 'managers',
+    through: DeptManager,
+    foreignKey: 'departments_id',
+    otherKey: 'manager_id',
+    onDelete: 'CASCADE'
+  })
+  Department.hasMany(DeptEmp, {
+    foreignKey: 'dept_no'
+  })
+  Department.hasMany(DeptManager, {
+    foreignKey: 'dept_no'
+  })
+  DeptEmp.belongsTo(Employee, {
+    foreignKey: 'emp_no'
+  })
+  DeptEmp.belongsTo(Department, {
+    foreignKey: 'dept_no'
+  })
+  DeptManager.belongsTo(Employee, {
+    foreignKey: 'emp_no'
+  })
+  DeptManager.belongsTo(Department, {
+    foreignKey: 'dept_no'
+  })
+  Title.belongsTo(Employee, {
+    foreignKey: 'emp_no'
+  })
+  Salary.belongsTo(Employee, {
+    foreignKey: 'emp_no'
+  })
+
+  return {
+    Employee,
+    Department,
+    DeptEmp,
+    DeptManager,
+    Title,
+    Salary
+  }
+}
+
+
+/****************************************
+ * employee-dataset/models/Salary.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Employee, EmployeeId } from './Employee'
+
+export interface SalaryAttributes {
+  empNo: number
+  salary: number
+  fromDate: string
+  toDate?: string
+}
+
+export type SalaryPk = 'empNo' | 'fromDate'
+export type SalaryId = SalaryAttributes[SalaryPk]
+export type SalaryCreationAttributes = Optional<SalaryAttributes, SalaryPk>
+
+export class Salary
+  extends Model<SalaryAttributes, SalaryCreationAttributes>
+  implements SalaryAttributes {
+  public readonly empNo!: number
+  public salary!: number
+  public readonly fromDate!: string
+  public toDate?: string
+
+  // Salary belongsTo Employee
+  public readonly Employee?: Employee
+  public getEmployee!: Sequelize.BelongsToGetAssociationMixin<Employee>
+  public setEmployee!: Sequelize.BelongsToSetAssociationMixin<Employee, EmployeeId>
+  public createEmployee!: Sequelize.BelongsToCreateAssociationMixin<Employee>
+  
+  public static associations: {
+    Employee: Association<Salary, Employee>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Salary {
+    Salary.init({
+      empNo: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      salary: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      fromDate: {
+        type: DataTypes.DATEONLY,
+        primaryKey: true,
+        allowNull: false
+      },
+      toDate: {
+        type: DataTypes.DATEONLY
+      }
+    }, {
+      sequelize,
+      tableName: 'salary'
+    })
+    
+    return Salary
+  }
+}
+
+
+/****************************************
+ * employee-dataset/models/Title.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Employee, EmployeeId } from './Employee'
+
+export interface TitleAttributes {
+  empNo: number
+  title: string
+  fromDate: string
+  toDate: string
+}
+
+export type TitlePk = 'empNo' | 'fromDate'
+export type TitleId = TitleAttributes[TitlePk]
+export type TitleCreationAttributes = Optional<TitleAttributes, TitlePk>
+
+export class Title
+  extends Model<TitleAttributes, TitleCreationAttributes>
+  implements TitleAttributes {
+  public readonly empNo!: number
+  public title!: string
+  public readonly fromDate!: string
+  public toDate!: string
+
+  // Title belongsTo Employee
+  public readonly Employee?: Employee
+  public getEmployee!: Sequelize.BelongsToGetAssociationMixin<Employee>
+  public setEmployee!: Sequelize.BelongsToSetAssociationMixin<Employee, EmployeeId>
+  public createEmployee!: Sequelize.BelongsToCreateAssociationMixin<Employee>
+  
+  public static associations: {
+    Employee: Association<Title, Employee>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Title {
+    Title.init({
+      empNo: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      fromDate: {
+        type: DataTypes.DATEONLY,
+        primaryKey: true,
+        allowNull: false
+      },
+      toDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+      }
+    }, {
+      sequelize,
+      tableName: 'title'
+    })
+    
+    return Title
+  }
+}
+
+
+`;

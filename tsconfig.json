@@ -31,5 +31,10 @@
     "incremental": true
   },
   "exclude": ["node_modules"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/frameworks/sequelize/__tests__/__snapshots__/generate.ts.snap"
+  ]
 }

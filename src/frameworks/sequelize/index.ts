@@ -1,7 +1,7 @@
 import { DirectoryItem, isDirectory, pathFilename } from '@src/core/files/fileSystem'
 import { Framework, ProjectType } from '@src/core/framework'
 import { Model, Schema } from '@src/core/schema'
-import { generateSequelizeProject } from './project'
+import { generateSequelizeProject } from './generate'
 import { modelFileName } from './utils/model'
 
 export const SequelizeFramework: Framework = {

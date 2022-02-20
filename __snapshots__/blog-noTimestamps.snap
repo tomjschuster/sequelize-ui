@@ -1,0 +1,1573 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sequelize Framework generates the correct code for blog-noTimestamps 1`] = `
+
+/****************************************
+ * blog/.gitignore
+ ****************************************/
+
+node_modules/
+dist
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.tmp
+
+
+/****************************************
+ * blog/db.ts
+ ****************************************/
+
+import { Sequelize, Options } from 'sequelize'
+import configs from './config/config.js'
+
+const env = process.env.NODE_ENV || 'development'
+const config = (configs as {[key: string]: Options})[env]
+
+const db: Sequelize = new Sequelize({
+  ...config,
+  define: {
+    underscored: true,
+    timestamps: false
+  }
+})
+
+export default db
+
+
+/****************************************
+ * blog/package.json
+ ****************************************/
+
+{
+  "name": "blog",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.ts",
+  "scripts": {
+    "test": "echo \\"Error: no test specified\\" && exit 1",
+    "db:up": "echo creating && npm run db:create && echo created && npm run db:migrate && echo migrated",
+    "db:reset": "npm run db:drop && npm run db:up",
+    "db:create": "sequelize db:create",
+    "db:drop": "[[ $NODE_ENV == production ]] && exit 1 || sequelize db:drop",
+    "db:migrate": "sequelize db:migrate",
+    "db:rollback": "sequelize db:migrate:undo",
+    "db:rollback:all": "sequelize db:migrate:undo:all",
+    "build": "tsc",
+    "start": "node ./dist/server.js",
+    "dev": "tsc-watch --onSuccess \\"node ./dist/server.js\\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.7",
+    "@types/validator": "^13.7.1",
+    "sequelize-cli": "^6.4.1",
+    "tsc-watch": "^4.6.0",
+    "typescript": "^4.5.5"
+  }
+}
+
+
+
+/****************************************
+ * blog/README.md
+ ****************************************/
+
+# blog
+This project was generated with [Sequelize UI](https://github.com/tomjschuster/sequelize-ui). The project is a simple [Node.js](https://nodejs.dev/) server with [Sequelize ORM](https://sequelize.org/).
+
+Be sure to test all code for correctness and to test database migrations in a test environment before deploying to production.
+
+## Running Project
+
+### Prerequesites
+- [Node.js](https://nodejs.dev/)
+- [PostgreSQL](https://www.postgresql.org/)
+
+### Setup
+1. Install dependencies: \`npm install\`
+2. Setup database: \`npm run db:up\`
+
+### Run
+- Local development: \`npm run dev\`
+- Production build: \`npm run build && npm start\`
+
+## Bug Reports
+Please report any bugs with generated code at [Sequelize UI Issues](https://github.com/tomjschuster/sequelize-ui/issues).
+
+
+/****************************************
+ * blog/server.ts
+ ****************************************/
+
+import http from 'http'
+import db from './db'
+import { initModels } from './models'
+
+async function run() {
+  initModels(db)
+  const hostname = process.env.HOSTNAME || '127.0.0.1'
+  const port = parseInt(process.env.PORT || '3000')
+  
+  const server = http.createServer((req, res) => {
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'text/plain')
+    res.end('Hello World')
+  })
+  
+  server.listen(port, hostname, () => {
+    console.log(\`Server running at http://\${hostname}:\${port}/\`)
+  })
+}
+
+run()
+
+/****************************************
+ * blog/tsconfig.json
+ ****************************************/
+
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "outDir": "dist",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
+
+
+/****************************************
+ * blog/config/config.js
+ ****************************************/
+
+module.exports = {
+  development: {
+    dialect: 'postgres',
+    database: process.env.POSTGRES_DB_NAME || 'blog',
+    username: process.env.POSTGRES_DB_USERNAME || 'postgres',
+    password: process.env.POSTGRES_DB_PASSWORD || 'postgres',
+    host: process.env.POSTGRES_DB_HOST || 'localhost',
+    port: parseInt(process.env.POSTGRES_DB_PORT || '5432')
+  },
+  test: {
+    dialect: 'postgres',
+    database: process.env.POSTGRES_DB_NAME || 'blog',
+    username: process.env.POSTGRES_DB_USERNAME || 'postgres',
+    password: process.env.POSTGRES_DB_PASSWORD || 'postgres',
+    host: process.env.POSTGRES_DB_HOST || 'localhost',
+    port: parseInt(process.env.POSTGRES_DB_PORT || '5432')
+  },
+  production: {
+    dialect: 'postgres',
+    database: process.env.POSTGRES_DB_NAME,
+    username: process.env.POSTGRES_DB_USERNAME,
+    password: process.env.POSTGRES_DB_PASSWORD,
+    host: process.env.POSTGRES_DB_HOST,
+    port: parseInt(process.env.POSTGRES_DB_PORT)
+  }
+}
+
+/****************************************
+ * blog/migrations/20210401000000-create-categories.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('categories', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      title: {
+        type: DataTypes.STRING(75),
+        field: 'title',
+        allowNull: false
+      },
+      metaTitle: {
+        type: DataTypes.STRING(100),
+        field: 'meta_title'
+      },
+      slug: {
+        type: DataTypes.STRING(100),
+        field: 'slug',
+        allowNull: false,
+        unique: true
+      },
+      content: {
+        type: DataTypes.TEXT,
+        field: 'content'
+      },
+      parentId: {
+        type: DataTypes.INTEGER,
+        field: 'parent_id'
+      },
+      categoryId: {
+        type: DataTypes.INTEGER,
+        field: 'category_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('categories');
+  },
+};
+
+/****************************************
+ * blog/migrations/20210401000010-create-posts.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('posts', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      title: {
+        type: DataTypes.STRING(75),
+        field: 'title',
+        allowNull: false
+      },
+      metaTitle: {
+        type: DataTypes.STRING(100),
+        field: 'meta_title'
+      },
+      slug: {
+        type: DataTypes.STRING(100),
+        field: 'slug',
+        allowNull: false,
+        unique: true
+      },
+      summary: {
+        type: DataTypes.TEXT,
+        field: 'summary'
+      },
+      published: {
+        type: DataTypes.BOOLEAN,
+        field: 'published',
+        allowNull: false
+      },
+      publishedAt: {
+        type: DataTypes.DATE,
+        field: 'published_at'
+      },
+      content: {
+        type: DataTypes.TEXT,
+        field: 'content'
+      },
+      authorId: {
+        type: DataTypes.INTEGER,
+        field: 'author_id'
+      },
+      parentId: {
+        type: DataTypes.INTEGER,
+        field: 'parent_id'
+      },
+      postId: {
+        type: DataTypes.INTEGER,
+        field: 'post_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('posts');
+  },
+};
+
+/****************************************
+ * blog/migrations/20210401000020-create-post_categories.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('post_categories', {
+      categoryId: {
+        type: DataTypes.BIGINT,
+        field: 'category_id',
+        primaryKey: true
+      },
+      postId: {
+        type: DataTypes.INTEGER,
+        field: 'post_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('post_categories');
+  },
+};
+
+/****************************************
+ * blog/migrations/20210401000030-create-post_comments.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('post_comments', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      title: {
+        type: DataTypes.STRING(75),
+        field: 'title',
+        allowNull: false
+      },
+      published: {
+        type: DataTypes.BOOLEAN,
+        field: 'published',
+        allowNull: false
+      },
+      publishedAt: {
+        type: DataTypes.DATE,
+        field: 'published_at'
+      },
+      content: {
+        type: DataTypes.TEXT,
+        field: 'content'
+      },
+      postId: {
+        type: DataTypes.INTEGER,
+        field: 'post_id'
+      },
+      parentId: {
+        type: DataTypes.INTEGER,
+        field: 'parent_id'
+      },
+      postCommentId: {
+        type: DataTypes.INTEGER,
+        field: 'post_comment_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('post_comments');
+  },
+};
+
+/****************************************
+ * blog/migrations/20210401000040-create-post_metas.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('post_metas', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      key: {
+        type: DataTypes.STRING(50),
+        field: 'key',
+        allowNull: false,
+        unique: true
+      },
+      content: {
+        type: DataTypes.TEXT,
+        field: 'content'
+      },
+      postId: {
+        type: DataTypes.INTEGER,
+        field: 'post_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('post_metas');
+  },
+};
+
+/****************************************
+ * blog/migrations/20210401000050-create-post_tags.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('post_tags', {
+      tagId: {
+        type: DataTypes.BIGINT,
+        field: 'tag_id',
+        primaryKey: true
+      },
+      postId: {
+        type: DataTypes.INTEGER,
+        field: 'post_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('post_tags');
+  },
+};
+
+/****************************************
+ * blog/migrations/20210401000100-create-tags.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('tags', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      title: {
+        type: DataTypes.STRING(75),
+        field: 'title',
+        allowNull: false
+      },
+      metaTitle: {
+        type: DataTypes.STRING(100),
+        field: 'meta_title'
+      },
+      slug: {
+        type: DataTypes.STRING(100),
+        field: 'slug',
+        allowNull: false,
+        unique: true
+      },
+      content: {
+        type: DataTypes.TEXT,
+        field: 'content'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('tags');
+  },
+};
+
+/****************************************
+ * blog/migrations/20210401000110-create-users.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('users', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      firstName: {
+        type: DataTypes.STRING(50),
+        field: 'first_name'
+      },
+      middleName: {
+        type: DataTypes.STRING(50),
+        field: 'middle_name'
+      },
+      lastName: {
+        type: DataTypes.STRING(50),
+        field: 'last_name'
+      },
+      mobile: {
+        type: DataTypes.STRING(15),
+        field: 'mobile'
+      },
+      email: {
+        type: DataTypes.STRING(50),
+        field: 'email'
+      },
+      passwordHash: {
+        type: DataTypes.STRING(32),
+        field: 'password_hash'
+      },
+      registeredAt: {
+        type: DataTypes.DATE,
+        field: 'registered_at',
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      lastLogin: {
+        type: DataTypes.DATE,
+        field: 'last_login'
+      },
+      intro: {
+        type: DataTypes.TEXT,
+        field: 'intro'
+      },
+      profile: {
+        type: DataTypes.TEXT,
+        field: 'profile'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('users');
+  },
+};
+
+/****************************************
+ * blog/migrations/20210401000120-add-foreign-keys.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.addConstraint('categories', {
+      fields: ['parent_id'],
+      type: 'foreign key',
+      name: 'categories_parent_id_fkey',
+      references: {
+        table: 'categories',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('categories', {
+      fields: ['category_id'],
+      type: 'foreign key',
+      name: 'categories_category_id_fkey',
+      references: {
+        table: 'categories',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('posts', {
+      fields: ['author_id'],
+      type: 'foreign key',
+      name: 'posts_author_id_fkey',
+      references: {
+        table: 'users',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('posts', {
+      fields: ['parent_id'],
+      type: 'foreign key',
+      name: 'posts_parent_id_fkey',
+      references: {
+        table: 'posts',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('posts', {
+      fields: ['post_id'],
+      type: 'foreign key',
+      name: 'posts_post_id_fkey',
+      references: {
+        table: 'posts',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_categories', {
+      fields: ['category_id'],
+      type: 'foreign key',
+      name: 'post_categories_category_id_fkey',
+      references: {
+        table: 'categories',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_categories', {
+      fields: ['post_id'],
+      type: 'foreign key',
+      name: 'post_categories_post_id_fkey',
+      references: {
+        table: 'posts',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_comments', {
+      fields: ['post_id'],
+      type: 'foreign key',
+      name: 'post_comments_post_id_fkey',
+      references: {
+        table: 'posts',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_comments', {
+      fields: ['parent_id'],
+      type: 'foreign key',
+      name: 'post_comments_parent_id_fkey',
+      references: {
+        table: 'post_comments',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_comments', {
+      fields: ['post_comment_id'],
+      type: 'foreign key',
+      name: 'post_comments_post_comment_id_fkey',
+      references: {
+        table: 'post_comments',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_metas', {
+      fields: ['post_id'],
+      type: 'foreign key',
+      name: 'post_metas_post_id_fkey',
+      references: {
+        table: 'posts',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_tags', {
+      fields: ['tag_id'],
+      type: 'foreign key',
+      name: 'post_tags_tag_id_fkey',
+      references: {
+        table: 'tags',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_tags', {
+      fields: ['post_id'],
+      type: 'foreign key',
+      name: 'post_tags_post_id_fkey',
+      references: {
+        table: 'posts',
+        field: 'id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.removeConstraint('categories', 'categories_parent_id_fkey')
+    await queryInterface.removeConstraint('categories', 'categories_category_id_fkey')
+    await queryInterface.removeConstraint('posts', 'posts_author_id_fkey')
+    await queryInterface.removeConstraint('posts', 'posts_parent_id_fkey')
+    await queryInterface.removeConstraint('posts', 'posts_post_id_fkey')
+    await queryInterface.removeConstraint('post_categories', 'post_categories_category_id_fkey')
+    await queryInterface.removeConstraint('post_categories', 'post_categories_post_id_fkey')
+    await queryInterface.removeConstraint('post_comments', 'post_comments_post_id_fkey')
+    await queryInterface.removeConstraint('post_comments', 'post_comments_parent_id_fkey')
+    await queryInterface.removeConstraint('post_comments', 'post_comments_post_comment_id_fkey')
+    await queryInterface.removeConstraint('post_metas', 'post_metas_post_id_fkey')
+    await queryInterface.removeConstraint('post_tags', 'post_tags_tag_id_fkey')
+    await queryInterface.removeConstraint('post_tags', 'post_tags_post_id_fkey')
+  }
+};
+
+/****************************************
+ * blog/models/Category.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Post, PostId } from './Post'
+import type { PostCategory, PostCategoryId } from './PostCategory'
+
+export interface CategoryAttributes {
+  title: string
+  metaTitle?: string
+  slug: string
+  content?: string
+}
+
+export type CategoryId = number
+export type CategoryCreationAttributes = CategoryAttributes & { id?: number }
+
+export class Category
+  extends Model<CategoryAttributes, CategoryCreationAttributes>
+  implements CategoryAttributes {
+  public readonly id?: number
+  public title!: string
+  public metaTitle?: string
+  public slug!: string
+  public content?: string
+
+  // Category belongsTo Category (as Parent)
+  public readonly parent?: Category
+  public getParent!: Sequelize.BelongsToGetAssociationMixin<Category>
+  public setParent!: Sequelize.BelongsToSetAssociationMixin<Category, CategoryId>
+  public createParent!: Sequelize.BelongsToCreateAssociationMixin<Category>
+  
+  // Category hasMany Category (as Children)
+  public readonly children?: Category[]
+  public getChildren!: Sequelize.HasManyGetAssociationsMixin<Category>
+  public setChildren!: Sequelize.HasManySetAssociationsMixin<Category, CategoryId>
+  public addChild!: Sequelize.HasManyAddAssociationMixin<Category, CategoryId>
+  public addChildren!: Sequelize.HasManyAddAssociationsMixin<Category, CategoryId>
+  public createChild!: Sequelize.HasManyCreateAssociationMixin<Category>
+  public removeChild!: Sequelize.HasManyRemoveAssociationMixin<Category, CategoryId>
+  public removeChildren!: Sequelize.HasManyRemoveAssociationsMixin<Category, CategoryId>
+  public hasChild!: Sequelize.HasManyHasAssociationMixin<Category, CategoryId>
+  public hasChildren!: Sequelize.HasManyHasAssociationsMixin<Category, CategoryId>
+  public countChildren!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Category hasMany PostCategory
+  public readonly PostCategories?: PostCategory[]
+  public getPostCategories!: Sequelize.HasManyGetAssociationsMixin<PostCategory>
+  public setPostCategories!: Sequelize.HasManySetAssociationsMixin<PostCategory, PostCategoryId>
+  public addPostCategory!: Sequelize.HasManyAddAssociationMixin<PostCategory, PostCategoryId>
+  public addPostCategories!: Sequelize.HasManyAddAssociationsMixin<PostCategory, PostCategoryId>
+  public createPostCategory!: Sequelize.HasManyCreateAssociationMixin<PostCategory>
+  public removePostCategory!: Sequelize.HasManyRemoveAssociationMixin<PostCategory, PostCategoryId>
+  public removePostCategories!: Sequelize.HasManyRemoveAssociationsMixin<PostCategory, PostCategoryId>
+  public hasPostCategory!: Sequelize.HasManyHasAssociationMixin<PostCategory, PostCategoryId>
+  public hasPostCategories!: Sequelize.HasManyHasAssociationsMixin<PostCategory, PostCategoryId>
+  public countPostCategories!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Category belongsToMany Post
+  public readonly Posts?: Post[]
+  public getPosts!: Sequelize.BelongsToManyGetAssociationsMixin<Post>
+  public setPosts!: Sequelize.BelongsToManySetAssociationsMixin<Post, PostId>
+  public addPost!: Sequelize.BelongsToManyAddAssociationMixin<Post, PostId>
+  public addPosts!: Sequelize.BelongsToManyAddAssociationsMixin<Post, PostId>
+  public createPost!: Sequelize.BelongsToManyCreateAssociationMixin<Post>
+  public removePost!: Sequelize.BelongsToManyRemoveAssociationMixin<Post, PostId>
+  public removePosts!: Sequelize.BelongsToManyRemoveAssociationsMixin<Post, PostId>
+  public hasPost!: Sequelize.BelongsToManyHasAssociationMixin<Post, PostId>
+  public hasPosts!: Sequelize.BelongsToManyHasAssociationsMixin<Post, PostId>
+  public countPosts!: Sequelize.BelongsToManyCountAssociationsMixin
+  
+  public static associations: {
+    parent: Association<Category, Category>,
+    children: Association<Category, Category>,
+    PostCategories: Association<Category, PostCategory>,
+    Posts: Association<Category, Post>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Category {
+    Category.init({
+      title: {
+        type: DataTypes.STRING(75),
+        allowNull: false
+      },
+      metaTitle: {
+        type: DataTypes.STRING(100)
+      },
+      slug: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        unique: true
+      },
+      content: {
+        type: DataTypes.TEXT
+      }
+    }, {
+      sequelize
+    })
+    
+    return Category
+  }
+}
+
+
+/****************************************
+ * blog/models/index.ts
+ ****************************************/
+
+import type { Sequelize, Model } from 'sequelize'
+import { Category } from './Category'
+import type { CategoryAttributes, CategoryCreationAttributes } from './Category'
+import { Post } from './Post'
+import type { PostAttributes, PostCreationAttributes } from './Post'
+import { PostCategory } from './PostCategory'
+import type { PostCategoryAttributes, PostCategoryCreationAttributes } from './PostCategory'
+import { PostComment } from './PostComment'
+import type { PostCommentAttributes, PostCommentCreationAttributes } from './PostComment'
+import { PostMeta } from './PostMeta'
+import type { PostMetaAttributes, PostMetaCreationAttributes } from './PostMeta'
+import { PostTag } from './PostTag'
+import type { PostTagAttributes, PostTagCreationAttributes } from './PostTag'
+import { Tag } from './Tag'
+import type { TagAttributes, TagCreationAttributes } from './Tag'
+import { User } from './User'
+import type { UserAttributes, UserCreationAttributes } from './User'
+
+export {
+  Category,
+  Post,
+  PostCategory,
+  PostComment,
+  PostMeta,
+  PostTag,
+  Tag,
+  User
+}
+
+export type {
+  CategoryAttributes,
+  CategoryCreationAttributes,
+  PostAttributes,
+  PostCreationAttributes,
+  PostCategoryAttributes,
+  PostCategoryCreationAttributes,
+  PostCommentAttributes,
+  PostCommentCreationAttributes,
+  PostMetaAttributes,
+  PostMetaCreationAttributes,
+  PostTagAttributes,
+  PostTagCreationAttributes,
+  TagAttributes,
+  TagCreationAttributes,
+  UserAttributes,
+  UserCreationAttributes
+}
+
+export function initModels(sequelize: Sequelize) {
+  Category.initModel(sequelize)
+  Post.initModel(sequelize)
+  PostCategory.initModel(sequelize)
+  PostComment.initModel(sequelize)
+  PostMeta.initModel(sequelize)
+  PostTag.initModel(sequelize)
+  Tag.initModel(sequelize)
+  User.initModel(sequelize)
+
+  Category.belongsTo(Category, {
+    as: 'parent',
+    foreignKey: 'parent_id'
+  })
+  Category.hasMany(Category, {
+    as: 'children',
+    foreignKey: 'category_id'
+  })
+  Category.hasMany(PostCategory, {
+    foreignKey: 'category_id'
+  })
+  Category.belongsToMany(Post, {
+    through: PostCategory,
+    foreignKey: 'category_id',
+    otherKey: 'post_id',
+    onDelete: 'CASCADE'
+  })
+  Post.belongsTo(User, {
+    as: 'author',
+    foreignKey: 'author_id'
+  })
+  Post.belongsTo(Post, {
+    as: 'parent',
+    foreignKey: 'parent_id'
+  })
+  Post.hasMany(Post, {
+    as: 'children',
+    foreignKey: 'post_id'
+  })
+  Post.hasMany(PostCategory, {
+    foreignKey: 'post_id'
+  })
+  Post.belongsToMany(Category, {
+    through: PostCategory,
+    foreignKey: 'post_id',
+    otherKey: 'category_id',
+    onDelete: 'CASCADE'
+  })
+  Post.hasMany(PostComment, {
+    as: 'comments',
+    foreignKey: 'post_id'
+  })
+  Post.hasMany(PostMeta, {
+    as: 'metas',
+    foreignKey: 'post_id'
+  })
+  Post.hasMany(PostTag, {
+    foreignKey: 'post_id'
+  })
+  Post.belongsToMany(Tag, {
+    through: PostTag,
+    foreignKey: 'post_id',
+    otherKey: 'tag_id',
+    onDelete: 'CASCADE'
+  })
+  PostCategory.belongsTo(Post, {
+    foreignKey: 'post_id'
+  })
+  PostCategory.belongsTo(Category, {
+    foreignKey: 'category_id'
+  })
+  PostComment.belongsTo(Post, {
+    foreignKey: 'post_id'
+  })
+  PostComment.belongsTo(PostComment, {
+    as: 'parent',
+    foreignKey: 'parent_id'
+  })
+  PostComment.hasMany(PostComment, {
+    as: 'children',
+    foreignKey: 'post_comment_id'
+  })
+  PostMeta.belongsTo(Post, {
+    foreignKey: 'post_id'
+  })
+  PostTag.belongsTo(Post, {
+    foreignKey: 'post_id'
+  })
+  PostTag.belongsTo(Tag, {
+    foreignKey: 'tag_id'
+  })
+  Tag.hasMany(PostTag, {
+    foreignKey: 'tag_id'
+  })
+  Tag.belongsToMany(Post, {
+    through: PostTag,
+    foreignKey: 'tag_id',
+    otherKey: 'post_id',
+    onDelete: 'CASCADE'
+  })
+  User.hasMany(Post, {
+    foreignKey: 'author_id'
+  })
+
+  return {
+    Category,
+    Post,
+    PostCategory,
+    PostComment,
+    PostMeta,
+    PostTag,
+    Tag,
+    User
+  }
+}
+
+
+/****************************************
+ * blog/models/Post.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Category, CategoryId } from './Category'
+import type { PostCategory, PostCategoryId } from './PostCategory'
+import type { PostComment, PostCommentId } from './PostComment'
+import type { PostMeta, PostMetaId } from './PostMeta'
+import type { PostTag, PostTagId } from './PostTag'
+import type { Tag, TagId } from './Tag'
+import type { User, UserId } from './User'
+
+export interface PostAttributes {
+  title: string
+  metaTitle?: string
+  slug: string
+  summary?: string
+  published: boolean
+  publishedAt?: string
+  content?: string
+}
+
+export type PostId = number
+export type PostCreationAttributes = PostAttributes & { id?: number }
+
+export class Post
+  extends Model<PostAttributes, PostCreationAttributes>
+  implements PostAttributes {
+  public readonly id?: number
+  public title!: string
+  public metaTitle?: string
+  public slug!: string
+  public summary?: string
+  public published!: boolean
+  public publishedAt?: string
+  public content?: string
+
+  // Post belongsTo User (as Author)
+  public readonly author?: User
+  public getAuthor!: Sequelize.BelongsToGetAssociationMixin<User>
+  public setAuthor!: Sequelize.BelongsToSetAssociationMixin<User, UserId>
+  public createAuthor!: Sequelize.BelongsToCreateAssociationMixin<User>
+  
+  // Post belongsTo Post (as Parent)
+  public readonly parent?: Post
+  public getParent!: Sequelize.BelongsToGetAssociationMixin<Post>
+  public setParent!: Sequelize.BelongsToSetAssociationMixin<Post, PostId>
+  public createParent!: Sequelize.BelongsToCreateAssociationMixin<Post>
+  
+  // Post hasMany Post (as Children)
+  public readonly children?: Post[]
+  public getChildren!: Sequelize.HasManyGetAssociationsMixin<Post>
+  public setChildren!: Sequelize.HasManySetAssociationsMixin<Post, PostId>
+  public addChild!: Sequelize.HasManyAddAssociationMixin<Post, PostId>
+  public addChildren!: Sequelize.HasManyAddAssociationsMixin<Post, PostId>
+  public createChild!: Sequelize.HasManyCreateAssociationMixin<Post>
+  public removeChild!: Sequelize.HasManyRemoveAssociationMixin<Post, PostId>
+  public removeChildren!: Sequelize.HasManyRemoveAssociationsMixin<Post, PostId>
+  public hasChild!: Sequelize.HasManyHasAssociationMixin<Post, PostId>
+  public hasChildren!: Sequelize.HasManyHasAssociationsMixin<Post, PostId>
+  public countChildren!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Post hasMany PostCategory
+  public readonly PostCategories?: PostCategory[]
+  public getPostCategories!: Sequelize.HasManyGetAssociationsMixin<PostCategory>
+  public setPostCategories!: Sequelize.HasManySetAssociationsMixin<PostCategory, PostCategoryId>
+  public addPostCategory!: Sequelize.HasManyAddAssociationMixin<PostCategory, PostCategoryId>
+  public addPostCategories!: Sequelize.HasManyAddAssociationsMixin<PostCategory, PostCategoryId>
+  public createPostCategory!: Sequelize.HasManyCreateAssociationMixin<PostCategory>
+  public removePostCategory!: Sequelize.HasManyRemoveAssociationMixin<PostCategory, PostCategoryId>
+  public removePostCategories!: Sequelize.HasManyRemoveAssociationsMixin<PostCategory, PostCategoryId>
+  public hasPostCategory!: Sequelize.HasManyHasAssociationMixin<PostCategory, PostCategoryId>
+  public hasPostCategories!: Sequelize.HasManyHasAssociationsMixin<PostCategory, PostCategoryId>
+  public countPostCategories!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Post belongsToMany Category
+  public readonly Categories?: Category[]
+  public getCategories!: Sequelize.BelongsToManyGetAssociationsMixin<Category>
+  public setCategories!: Sequelize.BelongsToManySetAssociationsMixin<Category, CategoryId>
+  public addCategory!: Sequelize.BelongsToManyAddAssociationMixin<Category, CategoryId>
+  public addCategories!: Sequelize.BelongsToManyAddAssociationsMixin<Category, CategoryId>
+  public createCategory!: Sequelize.BelongsToManyCreateAssociationMixin<Category>
+  public removeCategory!: Sequelize.BelongsToManyRemoveAssociationMixin<Category, CategoryId>
+  public removeCategories!: Sequelize.BelongsToManyRemoveAssociationsMixin<Category, CategoryId>
+  public hasCategory!: Sequelize.BelongsToManyHasAssociationMixin<Category, CategoryId>
+  public hasCategories!: Sequelize.BelongsToManyHasAssociationsMixin<Category, CategoryId>
+  public countCategories!: Sequelize.BelongsToManyCountAssociationsMixin
+  
+  // Post hasMany PostComment (as Comments)
+  public readonly comments?: PostComment[]
+  public getComments!: Sequelize.HasManyGetAssociationsMixin<PostComment>
+  public setComments!: Sequelize.HasManySetAssociationsMixin<PostComment, PostCommentId>
+  public addComment!: Sequelize.HasManyAddAssociationMixin<PostComment, PostCommentId>
+  public addComments!: Sequelize.HasManyAddAssociationsMixin<PostComment, PostCommentId>
+  public createComment!: Sequelize.HasManyCreateAssociationMixin<PostComment>
+  public removeComment!: Sequelize.HasManyRemoveAssociationMixin<PostComment, PostCommentId>
+  public removeComments!: Sequelize.HasManyRemoveAssociationsMixin<PostComment, PostCommentId>
+  public hasComment!: Sequelize.HasManyHasAssociationMixin<PostComment, PostCommentId>
+  public hasComments!: Sequelize.HasManyHasAssociationsMixin<PostComment, PostCommentId>
+  public countComments!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Post hasMany PostMeta (as Meta)
+  public readonly metas?: PostMeta[]
+  public getMetas!: Sequelize.HasManyGetAssociationsMixin<PostMeta>
+  public setMetas!: Sequelize.HasManySetAssociationsMixin<PostMeta, PostMetaId>
+  public addMeta!: Sequelize.HasManyAddAssociationMixin<PostMeta, PostMetaId>
+  public addMetas!: Sequelize.HasManyAddAssociationsMixin<PostMeta, PostMetaId>
+  public createMeta!: Sequelize.HasManyCreateAssociationMixin<PostMeta>
+  public removeMeta!: Sequelize.HasManyRemoveAssociationMixin<PostMeta, PostMetaId>
+  public removeMetas!: Sequelize.HasManyRemoveAssociationsMixin<PostMeta, PostMetaId>
+  public hasMeta!: Sequelize.HasManyHasAssociationMixin<PostMeta, PostMetaId>
+  public hasMetas!: Sequelize.HasManyHasAssociationsMixin<PostMeta, PostMetaId>
+  public countMetas!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Post hasMany PostTag
+  public readonly PostTags?: PostTag[]
+  public getPostTags!: Sequelize.HasManyGetAssociationsMixin<PostTag>
+  public setPostTags!: Sequelize.HasManySetAssociationsMixin<PostTag, PostTagId>
+  public addPostTag!: Sequelize.HasManyAddAssociationMixin<PostTag, PostTagId>
+  public addPostTags!: Sequelize.HasManyAddAssociationsMixin<PostTag, PostTagId>
+  public createPostTag!: Sequelize.HasManyCreateAssociationMixin<PostTag>
+  public removePostTag!: Sequelize.HasManyRemoveAssociationMixin<PostTag, PostTagId>
+  public removePostTags!: Sequelize.HasManyRemoveAssociationsMixin<PostTag, PostTagId>
+  public hasPostTag!: Sequelize.HasManyHasAssociationMixin<PostTag, PostTagId>
+  public hasPostTags!: Sequelize.HasManyHasAssociationsMixin<PostTag, PostTagId>
+  public countPostTags!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Post belongsToMany Tag
+  public readonly Tags?: Tag[]
+  public getTags!: Sequelize.BelongsToManyGetAssociationsMixin<Tag>
+  public setTags!: Sequelize.BelongsToManySetAssociationsMixin<Tag, TagId>
+  public addTag!: Sequelize.BelongsToManyAddAssociationMixin<Tag, TagId>
+  public addTags!: Sequelize.BelongsToManyAddAssociationsMixin<Tag, TagId>
+  public createTag!: Sequelize.BelongsToManyCreateAssociationMixin<Tag>
+  public removeTag!: Sequelize.BelongsToManyRemoveAssociationMixin<Tag, TagId>
+  public removeTags!: Sequelize.BelongsToManyRemoveAssociationsMixin<Tag, TagId>
+  public hasTag!: Sequelize.BelongsToManyHasAssociationMixin<Tag, TagId>
+  public hasTags!: Sequelize.BelongsToManyHasAssociationsMixin<Tag, TagId>
+  public countTags!: Sequelize.BelongsToManyCountAssociationsMixin
+  
+  public static associations: {
+    author: Association<Post, User>,
+    parent: Association<Post, Post>,
+    children: Association<Post, Post>,
+    PostCategories: Association<Post, PostCategory>,
+    Categories: Association<Post, Category>,
+    comments: Association<Post, PostComment>,
+    metas: Association<Post, PostMeta>,
+    PostTags: Association<Post, PostTag>,
+    Tags: Association<Post, Tag>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Post {
+    Post.init({
+      title: {
+        type: DataTypes.STRING(75),
+        allowNull: false
+      },
+      metaTitle: {
+        type: DataTypes.STRING(100)
+      },
+      slug: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        unique: true
+      },
+      summary: {
+        type: DataTypes.TEXT
+      },
+      published: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      publishedAt: {
+        type: DataTypes.DATE
+      },
+      content: {
+        type: DataTypes.TEXT
+      }
+    }, {
+      sequelize
+    })
+    
+    return Post
+  }
+}
+
+
+/****************************************
+ * blog/models/PostCategory.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Category, CategoryId } from './Category'
+import type { Post, PostId } from './Post'
+
+export interface PostCategoryAttributes {
+  categoryId?: number
+}
+
+export type PostCategoryPk = 'categoryId'
+export type PostCategoryId = PostCategoryAttributes[PostCategoryPk]
+export type PostCategoryCreationAttributes = Optional<PostCategoryAttributes, PostCategoryPk>
+
+export class PostCategory
+  extends Model<PostCategoryAttributes, PostCategoryCreationAttributes>
+  implements PostCategoryAttributes {
+  public readonly categoryId?: number
+
+  // PostCategory belongsTo Post
+  public readonly Post?: Post
+  public getPost!: Sequelize.BelongsToGetAssociationMixin<Post>
+  public setPost!: Sequelize.BelongsToSetAssociationMixin<Post, PostId>
+  public createPost!: Sequelize.BelongsToCreateAssociationMixin<Post>
+  
+  // PostCategory belongsTo Category
+  public readonly Category?: Category
+  public getCategory!: Sequelize.BelongsToGetAssociationMixin<Category>
+  public setCategory!: Sequelize.BelongsToSetAssociationMixin<Category, CategoryId>
+  public createCategory!: Sequelize.BelongsToCreateAssociationMixin<Category>
+  
+  public static associations: {
+    Post: Association<PostCategory, Post>,
+    Category: Association<PostCategory, Category>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof PostCategory {
+    PostCategory.init({
+      categoryId: {
+        type: DataTypes.BIGINT,
+        primaryKey: true
+      }
+    }, {
+      sequelize
+    })
+    
+    return PostCategory
+  }
+}
+
+
+/****************************************
+ * blog/models/PostComment.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Post, PostId } from './Post'
+
+export interface PostCommentAttributes {
+  title: string
+  published: boolean
+  publishedAt?: string
+  content?: string
+}
+
+export type PostCommentId = number
+export type PostCommentCreationAttributes = PostCommentAttributes & { id?: number }
+
+export class PostComment
+  extends Model<PostCommentAttributes, PostCommentCreationAttributes>
+  implements PostCommentAttributes {
+  public readonly id?: number
+  public title!: string
+  public published!: boolean
+  public publishedAt?: string
+  public content?: string
+
+  // PostComment belongsTo Post
+  public readonly Post?: Post
+  public getPost!: Sequelize.BelongsToGetAssociationMixin<Post>
+  public setPost!: Sequelize.BelongsToSetAssociationMixin<Post, PostId>
+  public createPost!: Sequelize.BelongsToCreateAssociationMixin<Post>
+  
+  // PostComment belongsTo PostComment (as Parent)
+  public readonly parent?: PostComment
+  public getParent!: Sequelize.BelongsToGetAssociationMixin<PostComment>
+  public setParent!: Sequelize.BelongsToSetAssociationMixin<PostComment, PostCommentId>
+  public createParent!: Sequelize.BelongsToCreateAssociationMixin<PostComment>
+  
+  // PostComment hasMany PostComment (as Children)
+  public readonly children?: PostComment[]
+  public getChildren!: Sequelize.HasManyGetAssociationsMixin<PostComment>
+  public setChildren!: Sequelize.HasManySetAssociationsMixin<PostComment, PostCommentId>
+  public addChild!: Sequelize.HasManyAddAssociationMixin<PostComment, PostCommentId>
+  public addChildren!: Sequelize.HasManyAddAssociationsMixin<PostComment, PostCommentId>
+  public createChild!: Sequelize.HasManyCreateAssociationMixin<PostComment>
+  public removeChild!: Sequelize.HasManyRemoveAssociationMixin<PostComment, PostCommentId>
+  public removeChildren!: Sequelize.HasManyRemoveAssociationsMixin<PostComment, PostCommentId>
+  public hasChild!: Sequelize.HasManyHasAssociationMixin<PostComment, PostCommentId>
+  public hasChildren!: Sequelize.HasManyHasAssociationsMixin<PostComment, PostCommentId>
+  public countChildren!: Sequelize.HasManyCountAssociationsMixin
+  
+  public static associations: {
+    Post: Association<PostComment, Post>,
+    parent: Association<PostComment, PostComment>,
+    children: Association<PostComment, PostComment>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof PostComment {
+    PostComment.init({
+      title: {
+        type: DataTypes.STRING(75),
+        allowNull: false
+      },
+      published: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      publishedAt: {
+        type: DataTypes.DATE
+      },
+      content: {
+        type: DataTypes.TEXT
+      }
+    }, {
+      sequelize
+    })
+    
+    return PostComment
+  }
+}
+
+
+/****************************************
+ * blog/models/PostMeta.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Post, PostId } from './Post'
+
+export interface PostMetaAttributes {
+  key: string
+  content?: string
+}
+
+export type PostMetaId = number
+export type PostMetaCreationAttributes = PostMetaAttributes & { id?: number }
+
+export class PostMeta
+  extends Model<PostMetaAttributes, PostMetaCreationAttributes>
+  implements PostMetaAttributes {
+  public readonly id?: number
+  public key!: string
+  public content?: string
+
+  // PostMeta belongsTo Post
+  public readonly Post?: Post
+  public getPost!: Sequelize.BelongsToGetAssociationMixin<Post>
+  public setPost!: Sequelize.BelongsToSetAssociationMixin<Post, PostId>
+  public createPost!: Sequelize.BelongsToCreateAssociationMixin<Post>
+  
+  public static associations: {
+    Post: Association<PostMeta, Post>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof PostMeta {
+    PostMeta.init({
+      key: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        unique: true
+      },
+      content: {
+        type: DataTypes.TEXT
+      }
+    }, {
+      sequelize
+    })
+    
+    return PostMeta
+  }
+}
+
+
+/****************************************
+ * blog/models/PostTag.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Post, PostId } from './Post'
+import type { Tag, TagId } from './Tag'
+
+export interface PostTagAttributes {
+  tagId?: number
+}
+
+export type PostTagPk = 'tagId'
+export type PostTagId = PostTagAttributes[PostTagPk]
+export type PostTagCreationAttributes = Optional<PostTagAttributes, PostTagPk>
+
+export class PostTag
+  extends Model<PostTagAttributes, PostTagCreationAttributes>
+  implements PostTagAttributes {
+  public readonly tagId?: number
+
+  // PostTag belongsTo Post
+  public readonly Post?: Post
+  public getPost!: Sequelize.BelongsToGetAssociationMixin<Post>
+  public setPost!: Sequelize.BelongsToSetAssociationMixin<Post, PostId>
+  public createPost!: Sequelize.BelongsToCreateAssociationMixin<Post>
+  
+  // PostTag belongsTo Tag
+  public readonly Tag?: Tag
+  public getTag!: Sequelize.BelongsToGetAssociationMixin<Tag>
+  public setTag!: Sequelize.BelongsToSetAssociationMixin<Tag, TagId>
+  public createTag!: Sequelize.BelongsToCreateAssociationMixin<Tag>
+  
+  public static associations: {
+    Post: Association<PostTag, Post>,
+    Tag: Association<PostTag, Tag>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof PostTag {
+    PostTag.init({
+      tagId: {
+        type: DataTypes.BIGINT,
+        primaryKey: true
+      }
+    }, {
+      sequelize
+    })
+    
+    return PostTag
+  }
+}
+
+
+/****************************************
+ * blog/models/Tag.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Post, PostId } from './Post'
+import type { PostTag, PostTagId } from './PostTag'
+
+export interface TagAttributes {
+  title: string
+  metaTitle?: string
+  slug: string
+  content?: string
+}
+
+export type TagId = number
+export type TagCreationAttributes = TagAttributes & { id?: number }
+
+export class Tag
+  extends Model<TagAttributes, TagCreationAttributes>
+  implements TagAttributes {
+  public readonly id?: number
+  public title!: string
+  public metaTitle?: string
+  public slug!: string
+  public content?: string
+
+  // Tag hasMany PostTag
+  public readonly PostTags?: PostTag[]
+  public getPostTags!: Sequelize.HasManyGetAssociationsMixin<PostTag>
+  public setPostTags!: Sequelize.HasManySetAssociationsMixin<PostTag, PostTagId>
+  public addPostTag!: Sequelize.HasManyAddAssociationMixin<PostTag, PostTagId>
+  public addPostTags!: Sequelize.HasManyAddAssociationsMixin<PostTag, PostTagId>
+  public createPostTag!: Sequelize.HasManyCreateAssociationMixin<PostTag>
+  public removePostTag!: Sequelize.HasManyRemoveAssociationMixin<PostTag, PostTagId>
+  public removePostTags!: Sequelize.HasManyRemoveAssociationsMixin<PostTag, PostTagId>
+  public hasPostTag!: Sequelize.HasManyHasAssociationMixin<PostTag, PostTagId>
+  public hasPostTags!: Sequelize.HasManyHasAssociationsMixin<PostTag, PostTagId>
+  public countPostTags!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Tag belongsToMany Post
+  public readonly Posts?: Post[]
+  public getPosts!: Sequelize.BelongsToManyGetAssociationsMixin<Post>
+  public setPosts!: Sequelize.BelongsToManySetAssociationsMixin<Post, PostId>
+  public addPost!: Sequelize.BelongsToManyAddAssociationMixin<Post, PostId>
+  public addPosts!: Sequelize.BelongsToManyAddAssociationsMixin<Post, PostId>
+  public createPost!: Sequelize.BelongsToManyCreateAssociationMixin<Post>
+  public removePost!: Sequelize.BelongsToManyRemoveAssociationMixin<Post, PostId>
+  public removePosts!: Sequelize.BelongsToManyRemoveAssociationsMixin<Post, PostId>
+  public hasPost!: Sequelize.BelongsToManyHasAssociationMixin<Post, PostId>
+  public hasPosts!: Sequelize.BelongsToManyHasAssociationsMixin<Post, PostId>
+  public countPosts!: Sequelize.BelongsToManyCountAssociationsMixin
+  
+  public static associations: {
+    PostTags: Association<Tag, PostTag>,
+    Posts: Association<Tag, Post>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Tag {
+    Tag.init({
+      title: {
+        type: DataTypes.STRING(75),
+        allowNull: false
+      },
+      metaTitle: {
+        type: DataTypes.STRING(100)
+      },
+      slug: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        unique: true
+      },
+      content: {
+        type: DataTypes.TEXT
+      }
+    }, {
+      sequelize
+    })
+    
+    return Tag
+  }
+}
+
+
+/****************************************
+ * blog/models/User.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Post, PostId } from './Post'
+
+export interface UserAttributes {
+  firstName?: string
+  middleName?: string
+  lastName?: string
+  mobile?: string
+  email?: string
+  passwordHash?: string
+  registeredAt?: string
+  lastLogin?: string
+  intro?: string
+  profile?: string
+}
+
+export type UserId = number
+export type UserCreationAttributes = UserAttributes & { id?: number }
+
+export class User
+  extends Model<UserAttributes, UserCreationAttributes>
+  implements UserAttributes {
+  public readonly id?: number
+  public firstName?: string
+  public middleName?: string
+  public lastName?: string
+  public mobile?: string
+  public email?: string
+  public passwordHash?: string
+  public registeredAt!: string
+  public lastLogin?: string
+  public intro?: string
+  public profile?: string
+
+  // User hasMany Post
+  public readonly Posts?: Post[]
+  public getPosts!: Sequelize.HasManyGetAssociationsMixin<Post>
+  public setPosts!: Sequelize.HasManySetAssociationsMixin<Post, PostId>
+  public addPost!: Sequelize.HasManyAddAssociationMixin<Post, PostId>
+  public addPosts!: Sequelize.HasManyAddAssociationsMixin<Post, PostId>
+  public createPost!: Sequelize.HasManyCreateAssociationMixin<Post>
+  public removePost!: Sequelize.HasManyRemoveAssociationMixin<Post, PostId>
+  public removePosts!: Sequelize.HasManyRemoveAssociationsMixin<Post, PostId>
+  public hasPost!: Sequelize.HasManyHasAssociationMixin<Post, PostId>
+  public hasPosts!: Sequelize.HasManyHasAssociationsMixin<Post, PostId>
+  public countPosts!: Sequelize.HasManyCountAssociationsMixin
+  
+  public static associations: {
+    Posts: Association<User, Post>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof User {
+    User.init({
+      firstName: {
+        type: DataTypes.STRING(50)
+      },
+      middleName: {
+        type: DataTypes.STRING(50)
+      },
+      lastName: {
+        type: DataTypes.STRING(50)
+      },
+      mobile: {
+        type: DataTypes.STRING(15)
+      },
+      email: {
+        type: DataTypes.STRING(50)
+      },
+      passwordHash: {
+        type: DataTypes.STRING(32)
+      },
+      registeredAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      lastLogin: {
+        type: DataTypes.DATE
+      },
+      intro: {
+        type: DataTypes.TEXT
+      },
+      profile: {
+        type: DataTypes.TEXT
+      }
+    }, {
+      sequelize
+    })
+    
+    return User
+  }
+}
+
+
+`;

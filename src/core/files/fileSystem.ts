@@ -76,7 +76,7 @@ export function findDirectory(
   return directory && isDirectory(directory) ? directory : undefined
 }
 
-export function withPaths(item: FileSystemItem): [string, FileSystemItem][] {
+export function withPaths(item: FileSystemItem, breadthFirst = false): [string, FileSystemItem][] {
   const name = itemName(item)
 
   const tuple: [string, FileSystemItem] = [name, item]
@@ -84,7 +84,30 @@ export function withPaths(item: FileSystemItem): [string, FileSystemItem][] {
     return [tuple]
   }
 
-  return [tuple].concat(item.files.flatMap(withPaths).map(([path, i]) => [`${name}/${path}`, i]))
+  return [tuple].concat(
+    item.files
+      .flatMap((file) => withPaths(file, breadthFirst))
+      .map(([path, i]) => [`${name}/${path}`, i]),
+  )
+}
+
+export function withPathsBreadthFirst(item: FileSystemItem): [string, FileSystemItem][] {
+  const name = itemName(item)
+
+  const tuple: [string, FileSystemItem] = [name, item]
+  if (isFile(item) || item.files.length === 0) {
+    return [tuple]
+  }
+
+  return item.files
+    .filter(isFile)
+    .map<[string, FileSystemItem]>((file) => [`${name}/${file.name}`, file])
+    .concat(
+      item.files
+        .filter(isDirectory)
+        .flatMap((file) => withPathsBreadthFirst(file))
+        .map<[string, FileSystemItem]>(([path, i]) => [`${name}/${path}`, i]),
+    )
 }
 
 export function listPaths(item: FileSystemItem): string[] {

@@ -1,0 +1,2521 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sequelize Framework generates the correct code for sakila-noPrefixPks 1`] = `
+
+/****************************************
+ * sakila/.gitignore
+ ****************************************/
+
+node_modules/
+dist
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.tmp
+
+
+/****************************************
+ * sakila/db.ts
+ ****************************************/
+
+import { Sequelize, Options } from 'sequelize'
+import configs from './config/config.js'
+
+const env = process.env.NODE_ENV || 'development'
+const config = (configs as {[key: string]: Options})[env]
+
+const db: Sequelize = new Sequelize({
+  ...config,
+  define: {
+    underscored: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
+})
+
+export default db
+
+
+/****************************************
+ * sakila/package.json
+ ****************************************/
+
+{
+  "name": "sakila",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.ts",
+  "scripts": {
+    "test": "echo \\"Error: no test specified\\" && exit 1",
+    "db:up": "echo creating && npm run db:create && echo created && npm run db:migrate && echo migrated",
+    "db:reset": "npm run db:drop && npm run db:up",
+    "db:create": "sequelize db:create",
+    "db:drop": "[[ $NODE_ENV == production ]] && exit 1 || sequelize db:drop",
+    "db:migrate": "sequelize db:migrate",
+    "db:rollback": "sequelize db:migrate:undo",
+    "db:rollback:all": "sequelize db:migrate:undo:all",
+    "build": "tsc",
+    "start": "node ./dist/server.js",
+    "dev": "tsc-watch --onSuccess \\"node ./dist/server.js\\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.7",
+    "@types/validator": "^13.7.1",
+    "sequelize-cli": "^6.4.1",
+    "tsc-watch": "^4.6.0",
+    "typescript": "^4.5.5"
+  }
+}
+
+
+
+/****************************************
+ * sakila/README.md
+ ****************************************/
+
+# sakila
+This project was generated with [Sequelize UI](https://github.com/tomjschuster/sequelize-ui). The project is a simple [Node.js](https://nodejs.dev/) server with [Sequelize ORM](https://sequelize.org/).
+
+Be sure to test all code for correctness and to test database migrations in a test environment before deploying to production.
+
+## Running Project
+
+### Prerequesites
+- [Node.js](https://nodejs.dev/)
+- [PostgreSQL](https://www.postgresql.org/)
+
+### Setup
+1. Install dependencies: \`npm install\`
+2. Setup database: \`npm run db:up\`
+
+### Run
+- Local development: \`npm run dev\`
+- Production build: \`npm run build && npm start\`
+
+## Bug Reports
+Please report any bugs with generated code at [Sequelize UI Issues](https://github.com/tomjschuster/sequelize-ui/issues).
+
+
+/****************************************
+ * sakila/server.ts
+ ****************************************/
+
+import http from 'http'
+import db from './db'
+import { initModels } from './models'
+
+async function run() {
+  initModels(db)
+  const hostname = process.env.HOSTNAME || '127.0.0.1'
+  const port = parseInt(process.env.PORT || '3000')
+  
+  const server = http.createServer((req, res) => {
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'text/plain')
+    res.end('Hello World')
+  })
+  
+  server.listen(port, hostname, () => {
+    console.log(\`Server running at http://\${hostname}:\${port}/\`)
+  })
+}
+
+run()
+
+/****************************************
+ * sakila/tsconfig.json
+ ****************************************/
+
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "outDir": "dist",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
+
+
+/****************************************
+ * sakila/config/config.js
+ ****************************************/
+
+module.exports = {
+  development: {
+    dialect: 'postgres',
+    database: process.env.POSTGRES_DB_NAME || 'sakila',
+    username: process.env.POSTGRES_DB_USERNAME || 'postgres',
+    password: process.env.POSTGRES_DB_PASSWORD || 'postgres',
+    host: process.env.POSTGRES_DB_HOST || 'localhost',
+    port: parseInt(process.env.POSTGRES_DB_PORT || '5432')
+  },
+  test: {
+    dialect: 'postgres',
+    database: process.env.POSTGRES_DB_NAME || 'sakila',
+    username: process.env.POSTGRES_DB_USERNAME || 'postgres',
+    password: process.env.POSTGRES_DB_PASSWORD || 'postgres',
+    host: process.env.POSTGRES_DB_HOST || 'localhost',
+    port: parseInt(process.env.POSTGRES_DB_PORT || '5432')
+  },
+  production: {
+    dialect: 'postgres',
+    database: process.env.POSTGRES_DB_NAME,
+    username: process.env.POSTGRES_DB_USERNAME,
+    password: process.env.POSTGRES_DB_PASSWORD,
+    host: process.env.POSTGRES_DB_HOST,
+    port: parseInt(process.env.POSTGRES_DB_PORT)
+  }
+}
+
+/****************************************
+ * sakila/migrations/20200101000000-create-actors.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('actors', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      firstName: {
+        type: DataTypes.STRING,
+        field: 'first_name',
+        allowNull: false
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        field: 'last_name',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('actors');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000010-create-films.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('films', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      title: {
+        type: DataTypes.STRING,
+        field: 'title',
+        allowNull: false
+      },
+      description: {
+        type: DataTypes.STRING,
+        field: 'description'
+      },
+      releaseYear: {
+        type: DataTypes.INTEGER,
+        field: 'release_year'
+      },
+      languageId: {
+        type: DataTypes.INTEGER,
+        field: 'language_id',
+        allowNull: false
+      },
+      originalLanguageId: {
+        type: DataTypes.INTEGER,
+        field: 'original_language_id'
+      },
+      rentalDuration: {
+        type: DataTypes.INTEGER,
+        field: 'rental_duration',
+        allowNull: false
+      },
+      rentalRate: {
+        type: DataTypes.DECIMAL,
+        field: 'rental_rate',
+        allowNull: false
+      },
+      length: {
+        type: DataTypes.INTEGER,
+        field: 'length'
+      },
+      rating: {
+        type: DataTypes.ENUM('G', 'PG', 'PG-13', 'R', 'NC-17'),
+        field: 'rating',
+        allowNull: false
+      },
+      specialFeature: {
+        type: DataTypes.ARRAY(DataTypes.ENUM('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes')),
+        field: 'special_feature',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('films');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000020-create-languages.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('languages', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      name: {
+        type: DataTypes.STRING,
+        field: 'name',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('languages');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000030-create-categories.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('categories', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('categories');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000040-create-inventories.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('inventories', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      filmId: {
+        type: DataTypes.INTEGER,
+        field: 'film_id'
+      },
+      storeId: {
+        type: DataTypes.INTEGER,
+        field: 'store_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('inventories');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000050-create-stores.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('stores', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      managerStaffId: {
+        type: DataTypes.INTEGER,
+        field: 'manager_staff_id'
+      },
+      addressId: {
+        type: DataTypes.INTEGER,
+        field: 'address_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('stores');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000100-create-staffs.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('staffs', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      firstName: {
+        type: DataTypes.STRING,
+        field: 'first_name',
+        allowNull: false
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        field: 'last_name',
+        allowNull: false
+      },
+      picture: {
+        type: DataTypes.BLOB,
+        field: 'picture'
+      },
+      email: {
+        type: DataTypes.STRING,
+        field: 'email'
+      },
+      active: {
+        type: DataTypes.BOOLEAN,
+        field: 'active',
+        allowNull: false
+      },
+      username: {
+        type: DataTypes.STRING,
+        field: 'username',
+        allowNull: false
+      },
+      password: {
+        type: DataTypes.STRING,
+        field: 'password'
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      storeId: {
+        type: DataTypes.INTEGER,
+        field: 'store_id'
+      },
+      addressId: {
+        type: DataTypes.INTEGER,
+        field: 'address_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('staffs');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000110-create-customers.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('customers', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      firstName: {
+        type: DataTypes.STRING,
+        field: 'first_name',
+        allowNull: false
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        field: 'last_name',
+        allowNull: false
+      },
+      email: {
+        type: DataTypes.STRING,
+        field: 'email'
+      },
+      active: {
+        type: DataTypes.BOOLEAN,
+        field: 'active',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      storeId: {
+        type: DataTypes.INTEGER,
+        field: 'store_id'
+      },
+      addressId: {
+        type: DataTypes.INTEGER,
+        field: 'address_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('customers');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000120-create-addresses.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('addresses', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      address: {
+        type: DataTypes.STRING,
+        field: 'address',
+        allowNull: false
+      },
+      address2: {
+        type: DataTypes.STRING,
+        field: 'address2',
+        allowNull: false
+      },
+      postalCode: {
+        type: DataTypes.STRING,
+        field: 'postal_code'
+      },
+      phone: {
+        type: DataTypes.STRING,
+        field: 'phone',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      cityId: {
+        type: DataTypes.INTEGER,
+        field: 'city_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('addresses');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000130-create-rentals.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('rentals', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      rentalDate: {
+        type: DataTypes.DATEONLY,
+        field: 'rental_date',
+        allowNull: false
+      },
+      returnDate: {
+        type: DataTypes.STRING,
+        field: 'return_date'
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      inventoryId: {
+        type: DataTypes.INTEGER,
+        field: 'inventory_id'
+      },
+      customerId: {
+        type: DataTypes.INTEGER,
+        field: 'customer_id'
+      },
+      staffId: {
+        type: DataTypes.INTEGER,
+        field: 'staff_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('rentals');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000140-create-payments.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('payments', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      amount: {
+        type: DataTypes.DECIMAL,
+        field: 'amount',
+        allowNull: false
+      },
+      paymentDate: {
+        type: DataTypes.DATE,
+        field: 'payment_date',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      customerId: {
+        type: DataTypes.INTEGER,
+        field: 'customer_id'
+      },
+      staffId: {
+        type: DataTypes.INTEGER,
+        field: 'staff_id'
+      },
+      rentalId: {
+        type: DataTypes.INTEGER,
+        field: 'rental_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('payments');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000150-create-cities.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('cities', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      city: {
+        type: DataTypes.STRING,
+        field: 'city',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      countryId: {
+        type: DataTypes.INTEGER,
+        field: 'country_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('cities');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000200-create-countries.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('countries', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      country: {
+        type: DataTypes.STRING,
+        field: 'country',
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('countries');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000210-create-film_actors.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('film_actors', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      filmId: {
+        type: DataTypes.INTEGER,
+        field: 'film_id'
+      },
+      actorId: {
+        type: DataTypes.INTEGER,
+        field: 'actor_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('film_actors');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000220-create-film_categories.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('film_categories', {
+      id: {
+        type: DataTypes.INTEGER,
+        field: 'id',
+        primaryKey: true
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at'
+      },
+      filmId: {
+        type: DataTypes.INTEGER,
+        field: 'film_id'
+      },
+      categoryId: {
+        type: DataTypes.INTEGER,
+        field: 'category_id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('film_categories');
+  },
+};
+
+/****************************************
+ * sakila/migrations/20200101000230-add-foreign-keys.js
+ ****************************************/
+
+const DataTypes = require('sequelize').DataTypes
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.addConstraint('films', {
+      fields: ['language_id'],
+      type: 'foreign key',
+      name: 'films_language_id_fkey',
+      references: {
+        table: 'languages',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('films', {
+      fields: ['original_language_id'],
+      type: 'foreign key',
+      name: 'films_original_language_id_fkey',
+      references: {
+        table: 'languages',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('inventories', {
+      fields: ['film_id'],
+      type: 'foreign key',
+      name: 'inventories_film_id_fkey',
+      references: {
+        table: 'films',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('inventories', {
+      fields: ['store_id'],
+      type: 'foreign key',
+      name: 'inventories_store_id_fkey',
+      references: {
+        table: 'stores',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('stores', {
+      fields: ['manager_staff_id'],
+      type: 'foreign key',
+      name: 'stores_manager_staff_id_fkey',
+      references: {
+        table: 'staffs',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('stores', {
+      fields: ['address_id'],
+      type: 'foreign key',
+      name: 'stores_address_id_fkey',
+      references: {
+        table: 'addresses',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('staffs', {
+      fields: ['store_id'],
+      type: 'foreign key',
+      name: 'staffs_store_id_fkey',
+      references: {
+        table: 'stores',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('staffs', {
+      fields: ['address_id'],
+      type: 'foreign key',
+      name: 'staffs_address_id_fkey',
+      references: {
+        table: 'addresses',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('customers', {
+      fields: ['store_id'],
+      type: 'foreign key',
+      name: 'customers_store_id_fkey',
+      references: {
+        table: 'stores',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('customers', {
+      fields: ['address_id'],
+      type: 'foreign key',
+      name: 'customers_address_id_fkey',
+      references: {
+        table: 'addresses',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('addresses', {
+      fields: ['city_id'],
+      type: 'foreign key',
+      name: 'addresses_city_id_fkey',
+      references: {
+        table: 'cities',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('rentals', {
+      fields: ['inventory_id'],
+      type: 'foreign key',
+      name: 'rentals_inventory_id_fkey',
+      references: {
+        table: 'inventories',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('rentals', {
+      fields: ['customer_id'],
+      type: 'foreign key',
+      name: 'rentals_customer_id_fkey',
+      references: {
+        table: 'customers',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('rentals', {
+      fields: ['staff_id'],
+      type: 'foreign key',
+      name: 'rentals_staff_id_fkey',
+      references: {
+        table: 'staffs',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('payments', {
+      fields: ['customer_id'],
+      type: 'foreign key',
+      name: 'payments_customer_id_fkey',
+      references: {
+        table: 'customers',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('payments', {
+      fields: ['staff_id'],
+      type: 'foreign key',
+      name: 'payments_staff_id_fkey',
+      references: {
+        table: 'staffs',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('payments', {
+      fields: ['rental_id'],
+      type: 'foreign key',
+      name: 'payments_rental_id_fkey',
+      references: {
+        table: 'rentals',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('cities', {
+      fields: ['country_id'],
+      type: 'foreign key',
+      name: 'cities_country_id_fkey',
+      references: {
+        table: 'countries',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('film_actors', {
+      fields: ['film_id'],
+      type: 'foreign key',
+      name: 'film_actors_film_id_fkey',
+      references: {
+        table: 'films',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('film_actors', {
+      fields: ['actor_id'],
+      type: 'foreign key',
+      name: 'film_actors_actor_id_fkey',
+      references: {
+        table: 'actors',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('film_categories', {
+      fields: ['film_id'],
+      type: 'foreign key',
+      name: 'film_categories_film_id_fkey',
+      references: {
+        table: 'films',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('film_categories', {
+      fields: ['category_id'],
+      type: 'foreign key',
+      name: 'film_categories_category_id_fkey',
+      references: {
+        table: 'categories',
+        field: 'id'
+      }
+    })
+  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.removeConstraint('films', 'films_language_id_fkey')
+    await queryInterface.removeConstraint('films', 'films_original_language_id_fkey')
+    await queryInterface.removeConstraint('inventories', 'inventories_film_id_fkey')
+    await queryInterface.removeConstraint('inventories', 'inventories_store_id_fkey')
+    await queryInterface.removeConstraint('stores', 'stores_manager_staff_id_fkey')
+    await queryInterface.removeConstraint('stores', 'stores_address_id_fkey')
+    await queryInterface.removeConstraint('staffs', 'staffs_store_id_fkey')
+    await queryInterface.removeConstraint('staffs', 'staffs_address_id_fkey')
+    await queryInterface.removeConstraint('customers', 'customers_store_id_fkey')
+    await queryInterface.removeConstraint('customers', 'customers_address_id_fkey')
+    await queryInterface.removeConstraint('addresses', 'addresses_city_id_fkey')
+    await queryInterface.removeConstraint('rentals', 'rentals_inventory_id_fkey')
+    await queryInterface.removeConstraint('rentals', 'rentals_customer_id_fkey')
+    await queryInterface.removeConstraint('rentals', 'rentals_staff_id_fkey')
+    await queryInterface.removeConstraint('payments', 'payments_customer_id_fkey')
+    await queryInterface.removeConstraint('payments', 'payments_staff_id_fkey')
+    await queryInterface.removeConstraint('payments', 'payments_rental_id_fkey')
+    await queryInterface.removeConstraint('cities', 'cities_country_id_fkey')
+    await queryInterface.removeConstraint('film_actors', 'film_actors_film_id_fkey')
+    await queryInterface.removeConstraint('film_actors', 'film_actors_actor_id_fkey')
+    await queryInterface.removeConstraint('film_categories', 'film_categories_film_id_fkey')
+    await queryInterface.removeConstraint('film_categories', 'film_categories_category_id_fkey')
+  }
+};
+
+/****************************************
+ * sakila/models/Actor.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Film, FilmId } from './Film'
+
+export interface ActorAttributes {
+  firstName: string
+  lastName: string
+}
+
+export type ActorId = number
+export type ActorCreationAttributes = ActorAttributes & { id?: number }
+
+export class Actor
+  extends Model<ActorAttributes, ActorCreationAttributes>
+  implements ActorAttributes {
+  public readonly id?: number
+  public firstName!: string
+  public lastName!: string
+
+  // Actor belongsToMany Film
+  public readonly Films?: Film[]
+  public getFilms!: Sequelize.BelongsToManyGetAssociationsMixin<Film>
+  public setFilms!: Sequelize.BelongsToManySetAssociationsMixin<Film, FilmId>
+  public addFilm!: Sequelize.BelongsToManyAddAssociationMixin<Film, FilmId>
+  public addFilms!: Sequelize.BelongsToManyAddAssociationsMixin<Film, FilmId>
+  public createFilm!: Sequelize.BelongsToManyCreateAssociationMixin<Film>
+  public removeFilm!: Sequelize.BelongsToManyRemoveAssociationMixin<Film, FilmId>
+  public removeFilms!: Sequelize.BelongsToManyRemoveAssociationsMixin<Film, FilmId>
+  public hasFilm!: Sequelize.BelongsToManyHasAssociationMixin<Film, FilmId>
+  public hasFilms!: Sequelize.BelongsToManyHasAssociationsMixin<Film, FilmId>
+  public countFilms!: Sequelize.BelongsToManyCountAssociationsMixin
+  
+  public static associations: {
+    Films: Association<Actor, Film>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Actor {
+    Actor.init({
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false
+      }
+    }, {
+      sequelize
+    })
+    
+    return Actor
+  }
+}
+
+
+/****************************************
+ * sakila/models/Address.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { City, CityId } from './City'
+import type { Customer, CustomerId } from './Customer'
+import type { Staff, StaffId } from './Staff'
+import type { Store, StoreId } from './Store'
+
+export interface AddressAttributes {
+  address: string
+  address2: string
+  postalCode?: string
+  phone: string
+}
+
+export type AddressId = number
+export type AddressCreationAttributes = AddressAttributes & { id?: number }
+
+export class Address
+  extends Model<AddressAttributes, AddressCreationAttributes>
+  implements AddressAttributes {
+  public readonly id?: number
+  public address!: string
+  public address2!: string
+  public postalCode?: string
+  public phone!: string
+
+  // Address belongsTo City
+  public readonly City?: City
+  public getCity!: Sequelize.BelongsToGetAssociationMixin<City>
+  public setCity!: Sequelize.BelongsToSetAssociationMixin<City, CityId>
+  public createCity!: Sequelize.BelongsToCreateAssociationMixin<City>
+  
+  // Address hasOne Customer
+  public readonly Customer?: Customer
+  public getCustomer!: Sequelize.HasOneGetAssociationMixin<Customer>
+  public setCustomer!: Sequelize.HasOneSetAssociationMixin<Customer, CustomerId>
+  public createCustomer!: Sequelize.HasOneCreateAssociationMixin<Customer>
+  
+  // Address hasOne Staff
+  public readonly Staff?: Staff
+  public getStaff!: Sequelize.HasOneGetAssociationMixin<Staff>
+  public setStaff!: Sequelize.HasOneSetAssociationMixin<Staff, StaffId>
+  public createStaff!: Sequelize.HasOneCreateAssociationMixin<Staff>
+  
+  // Address hasOne Store
+  public readonly Store?: Store
+  public getStore!: Sequelize.HasOneGetAssociationMixin<Store>
+  public setStore!: Sequelize.HasOneSetAssociationMixin<Store, StoreId>
+  public createStore!: Sequelize.HasOneCreateAssociationMixin<Store>
+  
+  public static associations: {
+    City: Association<Address, City>,
+    Customer: Association<Address, Customer>,
+    Staff: Association<Address, Staff>,
+    Store: Association<Address, Store>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Address {
+    Address.init({
+      address: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      address2: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      postalCode: {
+        type: DataTypes.STRING
+      },
+      phone: {
+        type: DataTypes.STRING,
+        allowNull: false
+      }
+    }, {
+      sequelize
+    })
+    
+    return Address
+  }
+}
+
+
+/****************************************
+ * sakila/models/Category.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Film, FilmId } from './Film'
+
+export interface CategoryAttributes {
+  
+}
+
+export type CategoryId = number
+export type CategoryCreationAttributes = CategoryAttributes & { id?: number }
+
+export class Category
+  extends Model<CategoryAttributes, CategoryCreationAttributes>
+  implements CategoryAttributes {
+  public readonly id?: number
+
+  // Category belongsToMany Film
+  public readonly Films?: Film[]
+  public getFilms!: Sequelize.BelongsToManyGetAssociationsMixin<Film>
+  public setFilms!: Sequelize.BelongsToManySetAssociationsMixin<Film, FilmId>
+  public addFilm!: Sequelize.BelongsToManyAddAssociationMixin<Film, FilmId>
+  public addFilms!: Sequelize.BelongsToManyAddAssociationsMixin<Film, FilmId>
+  public createFilm!: Sequelize.BelongsToManyCreateAssociationMixin<Film>
+  public removeFilm!: Sequelize.BelongsToManyRemoveAssociationMixin<Film, FilmId>
+  public removeFilms!: Sequelize.BelongsToManyRemoveAssociationsMixin<Film, FilmId>
+  public hasFilm!: Sequelize.BelongsToManyHasAssociationMixin<Film, FilmId>
+  public hasFilms!: Sequelize.BelongsToManyHasAssociationsMixin<Film, FilmId>
+  public countFilms!: Sequelize.BelongsToManyCountAssociationsMixin
+  
+  public static associations: {
+    Films: Association<Category, Film>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Category {
+    Category.init({
+      
+    }, {
+      sequelize
+    })
+    
+    return Category
+  }
+}
+
+
+/****************************************
+ * sakila/models/City.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Address, AddressId } from './Address'
+import type { Country, CountryId } from './Country'
+
+export interface CityAttributes {
+  city: string
+}
+
+export type CityId = number
+export type CityCreationAttributes = CityAttributes & { id?: number }
+
+export class City
+  extends Model<CityAttributes, CityCreationAttributes>
+  implements CityAttributes {
+  public readonly id?: number
+  public city!: string
+
+  // City belongsTo Country
+  public readonly Country?: Country
+  public getCountry!: Sequelize.BelongsToGetAssociationMixin<Country>
+  public setCountry!: Sequelize.BelongsToSetAssociationMixin<Country, CountryId>
+  public createCountry!: Sequelize.BelongsToCreateAssociationMixin<Country>
+  
+  // City hasMany Address
+  public readonly Addresses?: Address[]
+  public getAddresses!: Sequelize.HasManyGetAssociationsMixin<Address>
+  public setAddresses!: Sequelize.HasManySetAssociationsMixin<Address, AddressId>
+  public addAddress!: Sequelize.HasManyAddAssociationMixin<Address, AddressId>
+  public addAddresses!: Sequelize.HasManyAddAssociationsMixin<Address, AddressId>
+  public createAddress!: Sequelize.HasManyCreateAssociationMixin<Address>
+  public removeAddress!: Sequelize.HasManyRemoveAssociationMixin<Address, AddressId>
+  public removeAddresses!: Sequelize.HasManyRemoveAssociationsMixin<Address, AddressId>
+  public hasAddress!: Sequelize.HasManyHasAssociationMixin<Address, AddressId>
+  public hasAddresses!: Sequelize.HasManyHasAssociationsMixin<Address, AddressId>
+  public countAddresses!: Sequelize.HasManyCountAssociationsMixin
+  
+  public static associations: {
+    Country: Association<City, Country>,
+    Addresses: Association<City, Address>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof City {
+    City.init({
+      city: {
+        type: DataTypes.STRING,
+        allowNull: false
+      }
+    }, {
+      sequelize
+    })
+    
+    return City
+  }
+}
+
+
+/****************************************
+ * sakila/models/Country.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { City, CityId } from './City'
+
+export interface CountryAttributes {
+  country: string
+}
+
+export type CountryId = number
+export type CountryCreationAttributes = CountryAttributes & { id?: number }
+
+export class Country
+  extends Model<CountryAttributes, CountryCreationAttributes>
+  implements CountryAttributes {
+  public readonly id?: number
+  public country!: string
+
+  // Country hasMany City
+  public readonly Cities?: City[]
+  public getCities!: Sequelize.HasManyGetAssociationsMixin<City>
+  public setCities!: Sequelize.HasManySetAssociationsMixin<City, CityId>
+  public addCity!: Sequelize.HasManyAddAssociationMixin<City, CityId>
+  public addCities!: Sequelize.HasManyAddAssociationsMixin<City, CityId>
+  public createCity!: Sequelize.HasManyCreateAssociationMixin<City>
+  public removeCity!: Sequelize.HasManyRemoveAssociationMixin<City, CityId>
+  public removeCities!: Sequelize.HasManyRemoveAssociationsMixin<City, CityId>
+  public hasCity!: Sequelize.HasManyHasAssociationMixin<City, CityId>
+  public hasCities!: Sequelize.HasManyHasAssociationsMixin<City, CityId>
+  public countCities!: Sequelize.HasManyCountAssociationsMixin
+  
+  public static associations: {
+    Cities: Association<Country, City>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Country {
+    Country.init({
+      country: {
+        type: DataTypes.STRING,
+        allowNull: false
+      }
+    }, {
+      sequelize
+    })
+    
+    return Country
+  }
+}
+
+
+/****************************************
+ * sakila/models/Customer.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Address, AddressId } from './Address'
+import type { Payment, PaymentId } from './Payment'
+import type { Rental, RentalId } from './Rental'
+import type { Store, StoreId } from './Store'
+
+export interface CustomerAttributes {
+  firstName: string
+  lastName: string
+  email?: string
+  active: boolean
+}
+
+export type CustomerId = number
+export type CustomerCreationAttributes = CustomerAttributes & { id?: number }
+
+export class Customer
+  extends Model<CustomerAttributes, CustomerCreationAttributes>
+  implements CustomerAttributes {
+  public readonly id?: number
+  public firstName!: string
+  public lastName!: string
+  public email?: string
+  public active!: boolean
+
+  // Customer belongsTo Store
+  public readonly Store?: Store
+  public getStore!: Sequelize.BelongsToGetAssociationMixin<Store>
+  public setStore!: Sequelize.BelongsToSetAssociationMixin<Store, StoreId>
+  public createStore!: Sequelize.BelongsToCreateAssociationMixin<Store>
+  
+  // Customer belongsTo Address
+  public readonly Address?: Address
+  public getAddress!: Sequelize.BelongsToGetAssociationMixin<Address>
+  public setAddress!: Sequelize.BelongsToSetAssociationMixin<Address, AddressId>
+  public createAddress!: Sequelize.BelongsToCreateAssociationMixin<Address>
+  
+  // Customer hasMany Rental
+  public readonly Rentals?: Rental[]
+  public getRentals!: Sequelize.HasManyGetAssociationsMixin<Rental>
+  public setRentals!: Sequelize.HasManySetAssociationsMixin<Rental, RentalId>
+  public addRental!: Sequelize.HasManyAddAssociationMixin<Rental, RentalId>
+  public addRentals!: Sequelize.HasManyAddAssociationsMixin<Rental, RentalId>
+  public createRental!: Sequelize.HasManyCreateAssociationMixin<Rental>
+  public removeRental!: Sequelize.HasManyRemoveAssociationMixin<Rental, RentalId>
+  public removeRentals!: Sequelize.HasManyRemoveAssociationsMixin<Rental, RentalId>
+  public hasRental!: Sequelize.HasManyHasAssociationMixin<Rental, RentalId>
+  public hasRentals!: Sequelize.HasManyHasAssociationsMixin<Rental, RentalId>
+  public countRentals!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Customer hasMany Payment
+  public readonly Payments?: Payment[]
+  public getPayments!: Sequelize.HasManyGetAssociationsMixin<Payment>
+  public setPayments!: Sequelize.HasManySetAssociationsMixin<Payment, PaymentId>
+  public addPayment!: Sequelize.HasManyAddAssociationMixin<Payment, PaymentId>
+  public addPayments!: Sequelize.HasManyAddAssociationsMixin<Payment, PaymentId>
+  public createPayment!: Sequelize.HasManyCreateAssociationMixin<Payment>
+  public removePayment!: Sequelize.HasManyRemoveAssociationMixin<Payment, PaymentId>
+  public removePayments!: Sequelize.HasManyRemoveAssociationsMixin<Payment, PaymentId>
+  public hasPayment!: Sequelize.HasManyHasAssociationMixin<Payment, PaymentId>
+  public hasPayments!: Sequelize.HasManyHasAssociationsMixin<Payment, PaymentId>
+  public countPayments!: Sequelize.HasManyCountAssociationsMixin
+  
+  public static associations: {
+    Store: Association<Customer, Store>,
+    Address: Association<Customer, Address>,
+    Rentals: Association<Customer, Rental>,
+    Payments: Association<Customer, Payment>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Customer {
+    Customer.init({
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      email: {
+        type: DataTypes.STRING
+      },
+      active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      }
+    }, {
+      sequelize
+    })
+    
+    return Customer
+  }
+}
+
+
+/****************************************
+ * sakila/models/Film.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Actor, ActorId } from './Actor'
+import type { Category, CategoryId } from './Category'
+import type { Inventory, InventoryId } from './Inventory'
+import type { Language, LanguageId } from './Language'
+
+export interface FilmAttributes {
+  title: string
+  description?: string
+  releaseYear?: number
+  languageId: number
+  originalLanguageId?: number
+  rentalDuration: number
+  rentalRate: number
+  length?: number
+  rating: 'G' | 'PG' | 'PG-13' | 'R' | 'NC-17'
+  specialFeature: Array<'Trailers' | 'Commentaries' | 'Deleted Scenes' | 'Behind the Scenes'>
+}
+
+export type FilmId = number
+export type FilmCreationAttributes = FilmAttributes & { id?: number }
+
+export class Film
+  extends Model<FilmAttributes, FilmCreationAttributes>
+  implements FilmAttributes {
+  public readonly id?: number
+  public title!: string
+  public description?: string
+  public releaseYear?: number
+  public languageId!: number
+  public originalLanguageId?: number
+  public rentalDuration!: number
+  public rentalRate!: number
+  public length?: number
+  public rating!: 'G' | 'PG' | 'PG-13' | 'R' | 'NC-17'
+  public specialFeature!: Array<'Trailers' | 'Commentaries' | 'Deleted Scenes' | 'Behind the Scenes'>
+
+  // Film belongsTo Language
+  public readonly Language?: Language
+  public getLanguage!: Sequelize.BelongsToGetAssociationMixin<Language>
+  public setLanguage!: Sequelize.BelongsToSetAssociationMixin<Language, LanguageId>
+  public createLanguage!: Sequelize.BelongsToCreateAssociationMixin<Language>
+  
+  // Film belongsTo Language (as OriginalLanguage)
+  public readonly originalLanguage?: Language
+  public getOriginalLanguage!: Sequelize.BelongsToGetAssociationMixin<Language>
+  public setOriginalLanguage!: Sequelize.BelongsToSetAssociationMixin<Language, LanguageId>
+  public createOriginalLanguage!: Sequelize.BelongsToCreateAssociationMixin<Language>
+  
+  // Film hasMany Inventory
+  public readonly Inventories?: Inventory[]
+  public getInventories!: Sequelize.HasManyGetAssociationsMixin<Inventory>
+  public setInventories!: Sequelize.HasManySetAssociationsMixin<Inventory, InventoryId>
+  public addInventory!: Sequelize.HasManyAddAssociationMixin<Inventory, InventoryId>
+  public addInventories!: Sequelize.HasManyAddAssociationsMixin<Inventory, InventoryId>
+  public createInventory!: Sequelize.HasManyCreateAssociationMixin<Inventory>
+  public removeInventory!: Sequelize.HasManyRemoveAssociationMixin<Inventory, InventoryId>
+  public removeInventories!: Sequelize.HasManyRemoveAssociationsMixin<Inventory, InventoryId>
+  public hasInventory!: Sequelize.HasManyHasAssociationMixin<Inventory, InventoryId>
+  public hasInventories!: Sequelize.HasManyHasAssociationsMixin<Inventory, InventoryId>
+  public countInventories!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Film belongsToMany Actor
+  public readonly Actors?: Actor[]
+  public getActors!: Sequelize.BelongsToManyGetAssociationsMixin<Actor>
+  public setActors!: Sequelize.BelongsToManySetAssociationsMixin<Actor, ActorId>
+  public addActor!: Sequelize.BelongsToManyAddAssociationMixin<Actor, ActorId>
+  public addActors!: Sequelize.BelongsToManyAddAssociationsMixin<Actor, ActorId>
+  public createActor!: Sequelize.BelongsToManyCreateAssociationMixin<Actor>
+  public removeActor!: Sequelize.BelongsToManyRemoveAssociationMixin<Actor, ActorId>
+  public removeActors!: Sequelize.BelongsToManyRemoveAssociationsMixin<Actor, ActorId>
+  public hasActor!: Sequelize.BelongsToManyHasAssociationMixin<Actor, ActorId>
+  public hasActors!: Sequelize.BelongsToManyHasAssociationsMixin<Actor, ActorId>
+  public countActors!: Sequelize.BelongsToManyCountAssociationsMixin
+  
+  // Film belongsToMany Category
+  public readonly Categories?: Category[]
+  public getCategories!: Sequelize.BelongsToManyGetAssociationsMixin<Category>
+  public setCategories!: Sequelize.BelongsToManySetAssociationsMixin<Category, CategoryId>
+  public addCategory!: Sequelize.BelongsToManyAddAssociationMixin<Category, CategoryId>
+  public addCategories!: Sequelize.BelongsToManyAddAssociationsMixin<Category, CategoryId>
+  public createCategory!: Sequelize.BelongsToManyCreateAssociationMixin<Category>
+  public removeCategory!: Sequelize.BelongsToManyRemoveAssociationMixin<Category, CategoryId>
+  public removeCategories!: Sequelize.BelongsToManyRemoveAssociationsMixin<Category, CategoryId>
+  public hasCategory!: Sequelize.BelongsToManyHasAssociationMixin<Category, CategoryId>
+  public hasCategories!: Sequelize.BelongsToManyHasAssociationsMixin<Category, CategoryId>
+  public countCategories!: Sequelize.BelongsToManyCountAssociationsMixin
+  
+  public static associations: {
+    Language: Association<Film, Language>,
+    originalLanguage: Association<Film, Language>,
+    Inventories: Association<Film, Inventory>,
+    Actors: Association<Film, Actor>,
+    Categories: Association<Film, Category>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Film {
+    Film.init({
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      description: {
+        type: DataTypes.STRING
+      },
+      releaseYear: {
+        type: DataTypes.INTEGER
+      },
+      languageId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      originalLanguageId: {
+        type: DataTypes.INTEGER
+      },
+      rentalDuration: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      rentalRate: {
+        type: DataTypes.DECIMAL,
+        allowNull: false
+      },
+      length: {
+        type: DataTypes.INTEGER
+      },
+      rating: {
+        type: DataTypes.ENUM('G', 'PG', 'PG-13', 'R', 'NC-17'),
+        allowNull: false
+      },
+      specialFeature: {
+        type: DataTypes.ARRAY(DataTypes.ENUM('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes')),
+        allowNull: false
+      }
+    }, {
+      sequelize
+    })
+    
+    return Film
+  }
+}
+
+
+/****************************************
+ * sakila/models/FilmActor.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Actor, ActorId } from './Actor'
+import type { Film, FilmId } from './Film'
+
+export interface FilmActorAttributes {
+  
+}
+
+export type FilmActorId = number
+export type FilmActorCreationAttributes = FilmActorAttributes & { id?: number }
+
+export class FilmActor
+  extends Model<FilmActorAttributes, FilmActorCreationAttributes>
+  implements FilmActorAttributes {
+  public readonly id?: number
+
+  // FilmActor belongsTo Film
+  public readonly Film?: Film
+  public getFilm!: Sequelize.BelongsToGetAssociationMixin<Film>
+  public setFilm!: Sequelize.BelongsToSetAssociationMixin<Film, FilmId>
+  public createFilm!: Sequelize.BelongsToCreateAssociationMixin<Film>
+  
+  // FilmActor belongsTo Actor
+  public readonly Actor?: Actor
+  public getActor!: Sequelize.BelongsToGetAssociationMixin<Actor>
+  public setActor!: Sequelize.BelongsToSetAssociationMixin<Actor, ActorId>
+  public createActor!: Sequelize.BelongsToCreateAssociationMixin<Actor>
+  
+  public static associations: {
+    Film: Association<FilmActor, Film>,
+    Actor: Association<FilmActor, Actor>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof FilmActor {
+    FilmActor.init({
+      
+    }, {
+      sequelize
+    })
+    
+    return FilmActor
+  }
+}
+
+
+/****************************************
+ * sakila/models/FilmCategory.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Category, CategoryId } from './Category'
+import type { Film, FilmId } from './Film'
+
+export interface FilmCategoryAttributes {
+  
+}
+
+export type FilmCategoryId = number
+export type FilmCategoryCreationAttributes = FilmCategoryAttributes & { id?: number }
+
+export class FilmCategory
+  extends Model<FilmCategoryAttributes, FilmCategoryCreationAttributes>
+  implements FilmCategoryAttributes {
+  public readonly id?: number
+
+  // FilmCategory belongsTo Film
+  public readonly Film?: Film
+  public getFilm!: Sequelize.BelongsToGetAssociationMixin<Film>
+  public setFilm!: Sequelize.BelongsToSetAssociationMixin<Film, FilmId>
+  public createFilm!: Sequelize.BelongsToCreateAssociationMixin<Film>
+  
+  // FilmCategory belongsTo Category
+  public readonly Category?: Category
+  public getCategory!: Sequelize.BelongsToGetAssociationMixin<Category>
+  public setCategory!: Sequelize.BelongsToSetAssociationMixin<Category, CategoryId>
+  public createCategory!: Sequelize.BelongsToCreateAssociationMixin<Category>
+  
+  public static associations: {
+    Film: Association<FilmCategory, Film>,
+    Category: Association<FilmCategory, Category>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof FilmCategory {
+    FilmCategory.init({
+      
+    }, {
+      sequelize
+    })
+    
+    return FilmCategory
+  }
+}
+
+
+/****************************************
+ * sakila/models/index.ts
+ ****************************************/
+
+import type { Sequelize, Model } from 'sequelize'
+import { Actor } from './Actor'
+import type { ActorAttributes, ActorCreationAttributes } from './Actor'
+import { Film } from './Film'
+import type { FilmAttributes, FilmCreationAttributes } from './Film'
+import { Language } from './Language'
+import type { LanguageAttributes, LanguageCreationAttributes } from './Language'
+import { Category } from './Category'
+import type { CategoryAttributes, CategoryCreationAttributes } from './Category'
+import { Inventory } from './Inventory'
+import type { InventoryAttributes, InventoryCreationAttributes } from './Inventory'
+import { Store } from './Store'
+import type { StoreAttributes, StoreCreationAttributes } from './Store'
+import { Staff } from './Staff'
+import type { StaffAttributes, StaffCreationAttributes } from './Staff'
+import { Customer } from './Customer'
+import type { CustomerAttributes, CustomerCreationAttributes } from './Customer'
+import { Address } from './Address'
+import type { AddressAttributes, AddressCreationAttributes } from './Address'
+import { Rental } from './Rental'
+import type { RentalAttributes, RentalCreationAttributes } from './Rental'
+import { Payment } from './Payment'
+import type { PaymentAttributes, PaymentCreationAttributes } from './Payment'
+import { City } from './City'
+import type { CityAttributes, CityCreationAttributes } from './City'
+import { Country } from './Country'
+import type { CountryAttributes, CountryCreationAttributes } from './Country'
+import { FilmActor } from './FilmActor'
+import type { FilmActorAttributes, FilmActorCreationAttributes } from './FilmActor'
+import { FilmCategory } from './FilmCategory'
+import type { FilmCategoryAttributes, FilmCategoryCreationAttributes } from './FilmCategory'
+
+export {
+  Actor,
+  Film,
+  Language,
+  Category,
+  Inventory,
+  Store,
+  Staff,
+  Customer,
+  Address,
+  Rental,
+  Payment,
+  City,
+  Country,
+  FilmActor,
+  FilmCategory
+}
+
+export type {
+  ActorAttributes,
+  ActorCreationAttributes,
+  FilmAttributes,
+  FilmCreationAttributes,
+  LanguageAttributes,
+  LanguageCreationAttributes,
+  CategoryAttributes,
+  CategoryCreationAttributes,
+  InventoryAttributes,
+  InventoryCreationAttributes,
+  StoreAttributes,
+  StoreCreationAttributes,
+  StaffAttributes,
+  StaffCreationAttributes,
+  CustomerAttributes,
+  CustomerCreationAttributes,
+  AddressAttributes,
+  AddressCreationAttributes,
+  RentalAttributes,
+  RentalCreationAttributes,
+  PaymentAttributes,
+  PaymentCreationAttributes,
+  CityAttributes,
+  CityCreationAttributes,
+  CountryAttributes,
+  CountryCreationAttributes,
+  FilmActorAttributes,
+  FilmActorCreationAttributes,
+  FilmCategoryAttributes,
+  FilmCategoryCreationAttributes
+}
+
+export function initModels(sequelize: Sequelize) {
+  Actor.initModel(sequelize)
+  Film.initModel(sequelize)
+  Language.initModel(sequelize)
+  Category.initModel(sequelize)
+  Inventory.initModel(sequelize)
+  Store.initModel(sequelize)
+  Staff.initModel(sequelize)
+  Customer.initModel(sequelize)
+  Address.initModel(sequelize)
+  Rental.initModel(sequelize)
+  Payment.initModel(sequelize)
+  City.initModel(sequelize)
+  Country.initModel(sequelize)
+  FilmActor.initModel(sequelize)
+  FilmCategory.initModel(sequelize)
+
+  Actor.belongsToMany(Film, {
+    through: FilmActor,
+    foreignKey: 'actor_id',
+    otherKey: 'film_id',
+    onDelete: 'CASCADE'
+  })
+  Film.belongsTo(Language, {
+    foreignKey: 'language_id'
+  })
+  Film.belongsTo(Language, {
+    as: 'originalLanguage',
+    foreignKey: 'original_language_id'
+  })
+  Film.hasMany(Inventory, {
+    foreignKey: 'film_id'
+  })
+  Film.belongsToMany(Actor, {
+    through: FilmActor,
+    foreignKey: 'film_id',
+    otherKey: 'actor_id',
+    onDelete: 'CASCADE'
+  })
+  Film.belongsToMany(Category, {
+    through: FilmCategory,
+    foreignKey: 'film_id',
+    otherKey: 'category_id',
+    onDelete: 'CASCADE'
+  })
+  Language.hasMany(Film, {
+    foreignKey: 'language_id'
+  })
+  Language.hasMany(Film, {
+    as: 'originalLanguageFilms',
+    foreignKey: 'original_language_id'
+  })
+  Category.belongsToMany(Film, {
+    through: FilmCategory,
+    foreignKey: 'category_id',
+    otherKey: 'film_id',
+    onDelete: 'CASCADE'
+  })
+  Inventory.belongsTo(Film, {
+    foreignKey: 'film_id'
+  })
+  Inventory.belongsTo(Store, {
+    foreignKey: 'store_id'
+  })
+  Store.hasMany(Inventory, {
+    foreignKey: 'store_id'
+  })
+  Store.hasMany(Staff, {
+    foreignKey: 'store_id',
+    constraints: false
+  })
+  Store.hasMany(Customer, {
+    foreignKey: 'store_id'
+  })
+  Store.belongsTo(Staff, {
+    as: 'manager',
+    foreignKey: 'manager_staff_id',
+    constraints: false
+  })
+  Store.belongsTo(Address, {
+    foreignKey: 'address_id'
+  })
+  Staff.belongsTo(Store, {
+    foreignKey: 'store_id',
+    constraints: false
+  })
+  Staff.hasMany(Store, {
+    as: 'managedStores',
+    foreignKey: 'manager_staff_id',
+    constraints: false
+  })
+  Staff.belongsTo(Address, {
+    foreignKey: 'address_id'
+  })
+  Staff.hasMany(Rental, {
+    foreignKey: 'staff_id'
+  })
+  Staff.hasMany(Payment, {
+    foreignKey: 'staff_id'
+  })
+  Customer.belongsTo(Store, {
+    foreignKey: 'store_id'
+  })
+  Customer.belongsTo(Address, {
+    foreignKey: 'address_id'
+  })
+  Customer.hasMany(Rental, {
+    foreignKey: 'customer_id'
+  })
+  Customer.hasMany(Payment, {
+    foreignKey: 'customer_id'
+  })
+  Address.belongsTo(City, {
+    foreignKey: 'city_id'
+  })
+  Address.hasOne(Customer, {
+    foreignKey: 'address_id'
+  })
+  Address.hasOne(Staff, {
+    foreignKey: 'address_id'
+  })
+  Address.hasOne(Store, {
+    foreignKey: 'address_id'
+  })
+  Rental.belongsTo(Inventory, {
+    foreignKey: 'inventory_id'
+  })
+  Rental.belongsTo(Customer, {
+    foreignKey: 'customer_id'
+  })
+  Rental.belongsTo(Staff, {
+    foreignKey: 'staff_id'
+  })
+  Rental.hasMany(Payment, {
+    foreignKey: 'rental_id'
+  })
+  Payment.belongsTo(Customer, {
+    foreignKey: 'customer_id'
+  })
+  Payment.belongsTo(Staff, {
+    foreignKey: 'staff_id'
+  })
+  Payment.belongsTo(Rental, {
+    foreignKey: 'rental_id'
+  })
+  City.belongsTo(Country, {
+    foreignKey: 'country_id'
+  })
+  City.hasMany(Address, {
+    foreignKey: 'city_id'
+  })
+  Country.hasMany(City, {
+    foreignKey: 'country_id'
+  })
+  FilmActor.belongsTo(Film, {
+    foreignKey: 'film_id'
+  })
+  FilmActor.belongsTo(Actor, {
+    foreignKey: 'actor_id'
+  })
+  FilmCategory.belongsTo(Film, {
+    foreignKey: 'film_id'
+  })
+  FilmCategory.belongsTo(Category, {
+    foreignKey: 'category_id'
+  })
+
+  return {
+    Actor,
+    Film,
+    Language,
+    Category,
+    Inventory,
+    Store,
+    Staff,
+    Customer,
+    Address,
+    Rental,
+    Payment,
+    City,
+    Country,
+    FilmActor,
+    FilmCategory
+  }
+}
+
+
+/****************************************
+ * sakila/models/Inventory.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Film, FilmId } from './Film'
+import type { Store, StoreId } from './Store'
+
+export interface InventoryAttributes {
+  
+}
+
+export type InventoryId = number
+export type InventoryCreationAttributes = InventoryAttributes & { id?: number }
+
+export class Inventory
+  extends Model<InventoryAttributes, InventoryCreationAttributes>
+  implements InventoryAttributes {
+  public readonly id?: number
+
+  // Inventory belongsTo Film
+  public readonly Film?: Film
+  public getFilm!: Sequelize.BelongsToGetAssociationMixin<Film>
+  public setFilm!: Sequelize.BelongsToSetAssociationMixin<Film, FilmId>
+  public createFilm!: Sequelize.BelongsToCreateAssociationMixin<Film>
+  
+  // Inventory belongsTo Store
+  public readonly Store?: Store
+  public getStore!: Sequelize.BelongsToGetAssociationMixin<Store>
+  public setStore!: Sequelize.BelongsToSetAssociationMixin<Store, StoreId>
+  public createStore!: Sequelize.BelongsToCreateAssociationMixin<Store>
+  
+  public static associations: {
+    Film: Association<Inventory, Film>,
+    Store: Association<Inventory, Store>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Inventory {
+    Inventory.init({
+      
+    }, {
+      sequelize
+    })
+    
+    return Inventory
+  }
+}
+
+
+/****************************************
+ * sakila/models/Language.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Film, FilmId } from './Film'
+
+export interface LanguageAttributes {
+  name: string
+}
+
+export type LanguageId = number
+export type LanguageCreationAttributes = LanguageAttributes & { id?: number }
+
+export class Language
+  extends Model<LanguageAttributes, LanguageCreationAttributes>
+  implements LanguageAttributes {
+  public readonly id?: number
+  public name!: string
+
+  // Language hasMany Film
+  public readonly Films?: Film[]
+  public getFilms!: Sequelize.HasManyGetAssociationsMixin<Film>
+  public setFilms!: Sequelize.HasManySetAssociationsMixin<Film, FilmId>
+  public addFilm!: Sequelize.HasManyAddAssociationMixin<Film, FilmId>
+  public addFilms!: Sequelize.HasManyAddAssociationsMixin<Film, FilmId>
+  public createFilm!: Sequelize.HasManyCreateAssociationMixin<Film>
+  public removeFilm!: Sequelize.HasManyRemoveAssociationMixin<Film, FilmId>
+  public removeFilms!: Sequelize.HasManyRemoveAssociationsMixin<Film, FilmId>
+  public hasFilm!: Sequelize.HasManyHasAssociationMixin<Film, FilmId>
+  public hasFilms!: Sequelize.HasManyHasAssociationsMixin<Film, FilmId>
+  public countFilms!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Language hasMany Film (as OriginalLanguageFilm)
+  public readonly originalLanguageFilms?: Film[]
+  public getOriginalLanguageFilms!: Sequelize.HasManyGetAssociationsMixin<Film>
+  public setOriginalLanguageFilms!: Sequelize.HasManySetAssociationsMixin<Film, FilmId>
+  public addOriginalLanguageFilm!: Sequelize.HasManyAddAssociationMixin<Film, FilmId>
+  public addOriginalLanguageFilms!: Sequelize.HasManyAddAssociationsMixin<Film, FilmId>
+  public createOriginalLanguageFilm!: Sequelize.HasManyCreateAssociationMixin<Film>
+  public removeOriginalLanguageFilm!: Sequelize.HasManyRemoveAssociationMixin<Film, FilmId>
+  public removeOriginalLanguageFilms!: Sequelize.HasManyRemoveAssociationsMixin<Film, FilmId>
+  public hasOriginalLanguageFilm!: Sequelize.HasManyHasAssociationMixin<Film, FilmId>
+  public hasOriginalLanguageFilms!: Sequelize.HasManyHasAssociationsMixin<Film, FilmId>
+  public countOriginalLanguageFilms!: Sequelize.HasManyCountAssociationsMixin
+  
+  public static associations: {
+    Films: Association<Language, Film>,
+    originalLanguageFilms: Association<Language, Film>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Language {
+    Language.init({
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false
+      }
+    }, {
+      sequelize
+    })
+    
+    return Language
+  }
+}
+
+
+/****************************************
+ * sakila/models/Payment.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Customer, CustomerId } from './Customer'
+import type { Rental, RentalId } from './Rental'
+import type { Staff, StaffId } from './Staff'
+
+export interface PaymentAttributes {
+  amount: number
+  paymentDate: string
+}
+
+export type PaymentId = number
+export type PaymentCreationAttributes = PaymentAttributes & { id?: number }
+
+export class Payment
+  extends Model<PaymentAttributes, PaymentCreationAttributes>
+  implements PaymentAttributes {
+  public readonly id?: number
+  public amount!: number
+  public paymentDate!: string
+
+  // Payment belongsTo Customer
+  public readonly Customer?: Customer
+  public getCustomer!: Sequelize.BelongsToGetAssociationMixin<Customer>
+  public setCustomer!: Sequelize.BelongsToSetAssociationMixin<Customer, CustomerId>
+  public createCustomer!: Sequelize.BelongsToCreateAssociationMixin<Customer>
+  
+  // Payment belongsTo Staff
+  public readonly Staff?: Staff
+  public getStaff!: Sequelize.BelongsToGetAssociationMixin<Staff>
+  public setStaff!: Sequelize.BelongsToSetAssociationMixin<Staff, StaffId>
+  public createStaff!: Sequelize.BelongsToCreateAssociationMixin<Staff>
+  
+  // Payment belongsTo Rental
+  public readonly Rental?: Rental
+  public getRental!: Sequelize.BelongsToGetAssociationMixin<Rental>
+  public setRental!: Sequelize.BelongsToSetAssociationMixin<Rental, RentalId>
+  public createRental!: Sequelize.BelongsToCreateAssociationMixin<Rental>
+  
+  public static associations: {
+    Customer: Association<Payment, Customer>,
+    Staff: Association<Payment, Staff>,
+    Rental: Association<Payment, Rental>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Payment {
+    Payment.init({
+      amount: {
+        type: DataTypes.DECIMAL,
+        allowNull: false
+      },
+      paymentDate: {
+        type: DataTypes.DATE,
+        allowNull: false
+      }
+    }, {
+      sequelize
+    })
+    
+    return Payment
+  }
+}
+
+
+/****************************************
+ * sakila/models/Rental.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Customer, CustomerId } from './Customer'
+import type { Inventory, InventoryId } from './Inventory'
+import type { Payment, PaymentId } from './Payment'
+import type { Staff, StaffId } from './Staff'
+
+export interface RentalAttributes {
+  rentalDate: string
+  returnDate?: string
+}
+
+export type RentalId = number
+export type RentalCreationAttributes = RentalAttributes & { id?: number }
+
+export class Rental
+  extends Model<RentalAttributes, RentalCreationAttributes>
+  implements RentalAttributes {
+  public readonly id?: number
+  public rentalDate!: string
+  public returnDate?: string
+
+  // Rental belongsTo Inventory
+  public readonly Inventory?: Inventory
+  public getInventory!: Sequelize.BelongsToGetAssociationMixin<Inventory>
+  public setInventory!: Sequelize.BelongsToSetAssociationMixin<Inventory, InventoryId>
+  public createInventory!: Sequelize.BelongsToCreateAssociationMixin<Inventory>
+  
+  // Rental belongsTo Customer
+  public readonly Customer?: Customer
+  public getCustomer!: Sequelize.BelongsToGetAssociationMixin<Customer>
+  public setCustomer!: Sequelize.BelongsToSetAssociationMixin<Customer, CustomerId>
+  public createCustomer!: Sequelize.BelongsToCreateAssociationMixin<Customer>
+  
+  // Rental belongsTo Staff
+  public readonly Staff?: Staff
+  public getStaff!: Sequelize.BelongsToGetAssociationMixin<Staff>
+  public setStaff!: Sequelize.BelongsToSetAssociationMixin<Staff, StaffId>
+  public createStaff!: Sequelize.BelongsToCreateAssociationMixin<Staff>
+  
+  // Rental hasMany Payment
+  public readonly Payments?: Payment[]
+  public getPayments!: Sequelize.HasManyGetAssociationsMixin<Payment>
+  public setPayments!: Sequelize.HasManySetAssociationsMixin<Payment, PaymentId>
+  public addPayment!: Sequelize.HasManyAddAssociationMixin<Payment, PaymentId>
+  public addPayments!: Sequelize.HasManyAddAssociationsMixin<Payment, PaymentId>
+  public createPayment!: Sequelize.HasManyCreateAssociationMixin<Payment>
+  public removePayment!: Sequelize.HasManyRemoveAssociationMixin<Payment, PaymentId>
+  public removePayments!: Sequelize.HasManyRemoveAssociationsMixin<Payment, PaymentId>
+  public hasPayment!: Sequelize.HasManyHasAssociationMixin<Payment, PaymentId>
+  public hasPayments!: Sequelize.HasManyHasAssociationsMixin<Payment, PaymentId>
+  public countPayments!: Sequelize.HasManyCountAssociationsMixin
+  
+  public static associations: {
+    Inventory: Association<Rental, Inventory>,
+    Customer: Association<Rental, Customer>,
+    Staff: Association<Rental, Staff>,
+    Payments: Association<Rental, Payment>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Rental {
+    Rental.init({
+      rentalDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+      },
+      returnDate: {
+        type: DataTypes.STRING
+      }
+    }, {
+      sequelize
+    })
+    
+    return Rental
+  }
+}
+
+
+/****************************************
+ * sakila/models/Staff.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Address, AddressId } from './Address'
+import type { Payment, PaymentId } from './Payment'
+import type { Rental, RentalId } from './Rental'
+import type { Store, StoreId } from './Store'
+
+export interface StaffAttributes {
+  firstName: string
+  lastName: string
+  picture?: Buffer
+  email?: string
+  active: boolean
+  username: string
+  password?: string
+}
+
+export type StaffId = number
+export type StaffCreationAttributes = StaffAttributes & { id?: number }
+
+export class Staff
+  extends Model<StaffAttributes, StaffCreationAttributes>
+  implements StaffAttributes {
+  public readonly id?: number
+  public firstName!: string
+  public lastName!: string
+  public picture?: Buffer
+  public email?: string
+  public active!: boolean
+  public username!: string
+  public password?: string
+
+  // Staff belongsTo Store
+  public readonly Store?: Store
+  public getStore!: Sequelize.BelongsToGetAssociationMixin<Store>
+  public setStore!: Sequelize.BelongsToSetAssociationMixin<Store, StoreId>
+  public createStore!: Sequelize.BelongsToCreateAssociationMixin<Store>
+  
+  // Staff hasMany Store (as ManagedStore)
+  public readonly managedStores?: Store[]
+  public getManagedStores!: Sequelize.HasManyGetAssociationsMixin<Store>
+  public setManagedStores!: Sequelize.HasManySetAssociationsMixin<Store, StoreId>
+  public addManagedStore!: Sequelize.HasManyAddAssociationMixin<Store, StoreId>
+  public addManagedStores!: Sequelize.HasManyAddAssociationsMixin<Store, StoreId>
+  public createManagedStore!: Sequelize.HasManyCreateAssociationMixin<Store>
+  public removeManagedStore!: Sequelize.HasManyRemoveAssociationMixin<Store, StoreId>
+  public removeManagedStores!: Sequelize.HasManyRemoveAssociationsMixin<Store, StoreId>
+  public hasManagedStore!: Sequelize.HasManyHasAssociationMixin<Store, StoreId>
+  public hasManagedStores!: Sequelize.HasManyHasAssociationsMixin<Store, StoreId>
+  public countManagedStores!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Staff belongsTo Address
+  public readonly Address?: Address
+  public getAddress!: Sequelize.BelongsToGetAssociationMixin<Address>
+  public setAddress!: Sequelize.BelongsToSetAssociationMixin<Address, AddressId>
+  public createAddress!: Sequelize.BelongsToCreateAssociationMixin<Address>
+  
+  // Staff hasMany Rental
+  public readonly Rentals?: Rental[]
+  public getRentals!: Sequelize.HasManyGetAssociationsMixin<Rental>
+  public setRentals!: Sequelize.HasManySetAssociationsMixin<Rental, RentalId>
+  public addRental!: Sequelize.HasManyAddAssociationMixin<Rental, RentalId>
+  public addRentals!: Sequelize.HasManyAddAssociationsMixin<Rental, RentalId>
+  public createRental!: Sequelize.HasManyCreateAssociationMixin<Rental>
+  public removeRental!: Sequelize.HasManyRemoveAssociationMixin<Rental, RentalId>
+  public removeRentals!: Sequelize.HasManyRemoveAssociationsMixin<Rental, RentalId>
+  public hasRental!: Sequelize.HasManyHasAssociationMixin<Rental, RentalId>
+  public hasRentals!: Sequelize.HasManyHasAssociationsMixin<Rental, RentalId>
+  public countRentals!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Staff hasMany Payment
+  public readonly Payments?: Payment[]
+  public getPayments!: Sequelize.HasManyGetAssociationsMixin<Payment>
+  public setPayments!: Sequelize.HasManySetAssociationsMixin<Payment, PaymentId>
+  public addPayment!: Sequelize.HasManyAddAssociationMixin<Payment, PaymentId>
+  public addPayments!: Sequelize.HasManyAddAssociationsMixin<Payment, PaymentId>
+  public createPayment!: Sequelize.HasManyCreateAssociationMixin<Payment>
+  public removePayment!: Sequelize.HasManyRemoveAssociationMixin<Payment, PaymentId>
+  public removePayments!: Sequelize.HasManyRemoveAssociationsMixin<Payment, PaymentId>
+  public hasPayment!: Sequelize.HasManyHasAssociationMixin<Payment, PaymentId>
+  public hasPayments!: Sequelize.HasManyHasAssociationsMixin<Payment, PaymentId>
+  public countPayments!: Sequelize.HasManyCountAssociationsMixin
+  
+  public static associations: {
+    Store: Association<Staff, Store>,
+    managedStores: Association<Staff, Store>,
+    Address: Association<Staff, Address>,
+    Rentals: Association<Staff, Rental>,
+    Payments: Association<Staff, Payment>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Staff {
+    Staff.init({
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      picture: {
+        type: DataTypes.BLOB
+      },
+      email: {
+        type: DataTypes.STRING
+      },
+      active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+      },
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      password: {
+        type: DataTypes.STRING
+      }
+    }, {
+      sequelize
+    })
+    
+    return Staff
+  }
+}
+
+
+/****************************************
+ * sakila/models/Store.ts
+ ****************************************/
+
+import Sequelize, { Association, DataTypes, Model, Optional } from 'sequelize'
+import type { Address, AddressId } from './Address'
+import type { Customer, CustomerId } from './Customer'
+import type { Inventory, InventoryId } from './Inventory'
+import type { Staff, StaffId } from './Staff'
+
+export interface StoreAttributes {
+  
+}
+
+export type StoreId = number
+export type StoreCreationAttributes = StoreAttributes & { id?: number }
+
+export class Store
+  extends Model<StoreAttributes, StoreCreationAttributes>
+  implements StoreAttributes {
+  public readonly id?: number
+
+  // Store hasMany Inventory
+  public readonly Inventories?: Inventory[]
+  public getInventories!: Sequelize.HasManyGetAssociationsMixin<Inventory>
+  public setInventories!: Sequelize.HasManySetAssociationsMixin<Inventory, InventoryId>
+  public addInventory!: Sequelize.HasManyAddAssociationMixin<Inventory, InventoryId>
+  public addInventories!: Sequelize.HasManyAddAssociationsMixin<Inventory, InventoryId>
+  public createInventory!: Sequelize.HasManyCreateAssociationMixin<Inventory>
+  public removeInventory!: Sequelize.HasManyRemoveAssociationMixin<Inventory, InventoryId>
+  public removeInventories!: Sequelize.HasManyRemoveAssociationsMixin<Inventory, InventoryId>
+  public hasInventory!: Sequelize.HasManyHasAssociationMixin<Inventory, InventoryId>
+  public hasInventories!: Sequelize.HasManyHasAssociationsMixin<Inventory, InventoryId>
+  public countInventories!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Store hasMany Staff
+  public readonly Staffs?: Staff[]
+  public getStaffs!: Sequelize.HasManyGetAssociationsMixin<Staff>
+  public setStaffs!: Sequelize.HasManySetAssociationsMixin<Staff, StaffId>
+  public addStaff!: Sequelize.HasManyAddAssociationMixin<Staff, StaffId>
+  public addStaffs!: Sequelize.HasManyAddAssociationsMixin<Staff, StaffId>
+  public createStaff!: Sequelize.HasManyCreateAssociationMixin<Staff>
+  public removeStaff!: Sequelize.HasManyRemoveAssociationMixin<Staff, StaffId>
+  public removeStaffs!: Sequelize.HasManyRemoveAssociationsMixin<Staff, StaffId>
+  public hasStaff!: Sequelize.HasManyHasAssociationMixin<Staff, StaffId>
+  public hasStaffs!: Sequelize.HasManyHasAssociationsMixin<Staff, StaffId>
+  public countStaffs!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Store hasMany Customer
+  public readonly Customers?: Customer[]
+  public getCustomers!: Sequelize.HasManyGetAssociationsMixin<Customer>
+  public setCustomers!: Sequelize.HasManySetAssociationsMixin<Customer, CustomerId>
+  public addCustomer!: Sequelize.HasManyAddAssociationMixin<Customer, CustomerId>
+  public addCustomers!: Sequelize.HasManyAddAssociationsMixin<Customer, CustomerId>
+  public createCustomer!: Sequelize.HasManyCreateAssociationMixin<Customer>
+  public removeCustomer!: Sequelize.HasManyRemoveAssociationMixin<Customer, CustomerId>
+  public removeCustomers!: Sequelize.HasManyRemoveAssociationsMixin<Customer, CustomerId>
+  public hasCustomer!: Sequelize.HasManyHasAssociationMixin<Customer, CustomerId>
+  public hasCustomers!: Sequelize.HasManyHasAssociationsMixin<Customer, CustomerId>
+  public countCustomers!: Sequelize.HasManyCountAssociationsMixin
+  
+  // Store belongsTo Staff (as Manager)
+  public readonly manager?: Staff
+  public getManager!: Sequelize.BelongsToGetAssociationMixin<Staff>
+  public setManager!: Sequelize.BelongsToSetAssociationMixin<Staff, StaffId>
+  public createManager!: Sequelize.BelongsToCreateAssociationMixin<Staff>
+  
+  // Store belongsTo Address
+  public readonly Address?: Address
+  public getAddress!: Sequelize.BelongsToGetAssociationMixin<Address>
+  public setAddress!: Sequelize.BelongsToSetAssociationMixin<Address, AddressId>
+  public createAddress!: Sequelize.BelongsToCreateAssociationMixin<Address>
+  
+  public static associations: {
+    Inventories: Association<Store, Inventory>,
+    Staffs: Association<Store, Staff>,
+    Customers: Association<Store, Customer>,
+    manager: Association<Store, Staff>,
+    Address: Association<Store, Address>
+  }
+
+  static initModel(sequelize: Sequelize.Sequelize): typeof Store {
+    Store.init({
+      
+    }, {
+      sequelize
+    })
+    
+    return Store
+  }
+}
+
+
+`;
