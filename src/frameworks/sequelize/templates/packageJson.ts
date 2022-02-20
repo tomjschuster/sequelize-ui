@@ -55,19 +55,19 @@ function scripts({ sqlDialect, migrations }: DbOptions): string {
 
 type Dependency = [name: string, version: string]
 
-const commonDeps = (): Dependency[] => [['sequelize', '^6.14.1']]
+const commonDeps = (): Dependency[] => [['sequelize', '^6.16.2']]
 
 function dialectDeps({ sqlDialect }: DbOptions): Dependency[] {
   switch (sqlDialect) {
     case SqlDialect.MariaDb:
       return [['mariadb', '^2.5.5']]
     case SqlDialect.MsSql:
-      return [['tedious', '^14.1.0']]
+      return [['tedious', '^14.3.0']]
     case SqlDialect.MySql:
       return [['mysql2', '^2.3.3']]
     case SqlDialect.Postgres:
       return [
-        ['pg', '^8.7.1'],
+        ['pg', '^8.7.3'],
         ['pg-hstore', '^2.3.4'],
       ]
     case SqlDialect.Sqlite:
@@ -96,7 +96,7 @@ function dialectDevDeps({ sqlDialect }: DbOptions): Dependency[] {
     case SqlDialect.Postgres:
       return []
     case SqlDialect.Sqlite:
-      return [['@types/sqlite3', '^3.1.7']]
+      return [['@types/sqlite3', '^3.1.8']]
   }
 }
 

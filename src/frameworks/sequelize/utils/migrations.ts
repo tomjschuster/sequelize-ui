@@ -8,7 +8,6 @@ import {
   Association,
   AssociationTypeType,
   belongsToType,
-  dateTimeDataType,
   Field,
   ManyToManyAssociation,
   Model,
@@ -20,7 +19,7 @@ import { arrayToLookup, dedupBy } from '@src/utils/array'
 import { addSeconds, now, toNumericTimestamp } from '@src/utils/dateTime'
 import { namesEq, normalize, normalizeSingular, uniqueId } from '@src/utils/string'
 import { getForeignKey, getOtherKey } from './associations'
-import { idField, prefixPk } from './field'
+import { getTimestampFields, idField, prefixPk } from './field'
 import { dedupModels } from './model'
 
 export type ModelWithReferences = Omit<Model, 'fields'> & { fields: FieldWithReference[] }
@@ -72,32 +71,6 @@ type AddTimestampFieldsArgs = {
 function addTimestampFields({ model, dbOptions }: AddTimestampFieldsArgs): Model {
   const fields = model.fields.concat(getTimestampFields({ dbOptions }))
   return { ...model, fields: dedupBy(fields, (f) => normalizeSingular(f.name)) }
-}
-
-type GetTimestampFieldsTemplateArgs = {
-  dbOptions: DbOptions
-}
-function getTimestampFields({ dbOptions }: GetTimestampFieldsTemplateArgs): Field[] {
-  if (!dbOptions.timestamps) return []
-  const createdAt: Field = {
-    id: uniqueId(),
-    name: caseByDbCaseStyle('created at', dbOptions.caseStyle),
-    type: dateTimeDataType(),
-    primaryKey: false,
-    required: false,
-    unique: false,
-  }
-
-  const updatedAt: Field = {
-    id: uniqueId(),
-    name: caseByDbCaseStyle('updated at', dbOptions.caseStyle),
-    type: dateTimeDataType(),
-    primaryKey: false,
-    required: false,
-    unique: false,
-  }
-
-  return [createdAt, updatedAt]
 }
 
 type AddReferencesArgs = {

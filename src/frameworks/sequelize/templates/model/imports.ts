@@ -26,7 +26,7 @@ type SequelizeImportsArgs = {
 }
 function sequelizeImports({ associations }: SequelizeImportsArgs): string {
   const associationImport = associations.length ? 'Association, ' : ''
-  return `import Sequelize, { ${associationImport}DataTypes, Model, Optional } from 'sequelize'`
+  return `import Sequelize, { ${associationImport}DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOptional, NonAttribute } from 'sequelize'`
 }
 
 type TypeImportArgs = [filename: string, types: string[]]
@@ -86,5 +86,5 @@ function getAssociationTypes({
 }
 
 function associationTypes({ model }: ModelAssociation): string[] {
-  return [modelName(model), `${modelName(model)}Id`].filter((x): x is string => !!x)
+  return [modelName(model)].filter((x): x is string => !!x)
 }

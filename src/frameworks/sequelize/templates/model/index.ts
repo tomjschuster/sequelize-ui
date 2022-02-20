@@ -4,7 +4,6 @@ import { Association, Model, Schema } from '@src/core/schema'
 import { ModelAssociation } from '../../utils/model'
 import { modelImportsTemplate } from './imports'
 import { modelClassTemplate } from './modelClass'
-import { modelTypesTemplate } from './types'
 
 export type ModelTemplateArgs = {
   model: Model
@@ -48,8 +47,6 @@ type ModelTemplateArgs_ = {
 function modelTemplate_({ model, associations, dbOptions }: ModelTemplateArgs_): string {
   return lines([
     modelImportsTemplate({ model, associations, dbOptions }),
-    blank(),
-    modelTypesTemplate({ model, dbOptions }),
     blank(),
     modelClassTemplate({ model, associations, dbOptions }),
     blank(),

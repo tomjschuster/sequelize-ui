@@ -20,10 +20,11 @@ export function dataTypeToTypeScript(dataType: DataType): string {
     case DataTypeType.Text:
     case DataTypeType.CiText:
     case DataTypeType.Uuid:
-    case DataTypeType.DateTime:
     case DataTypeType.Time:
     case DataTypeType.Date:
       return 'string'
+    case DataTypeType.DateTime:
+      return 'Date'
     case DataTypeType.Integer:
     case DataTypeType.BigInt:
     case DataTypeType.SmallInt:

@@ -3,6 +3,7 @@ import { caseByDbCaseStyle, DbCaseStyle, DbOptions } from '@src/core/database'
 import {
   DataType,
   DataTypeType,
+  dateTimeDataType,
   Field,
   integerDataType,
   isDateTimeType,
@@ -126,9 +127,9 @@ export function idField({ model, dbOptions }: IdFieldArgs): SequelizeField {
   return {
     id: uniqueId(),
     name: getPkName({ model, dbOptions }),
-    type: integerDataType(),
+    type: integerDataType({ autoincrement: true, unsigned: true }),
     primaryKey: true,
-    required: false,
+    required: true,
     unique: false,
     generated: true,
   }
@@ -141,4 +142,30 @@ type GetPkNameArgs = {
 export function getPkName({ model, dbOptions }: GetPkNameArgs): string {
   if (!dbOptions.prefixPks) return 'id'
   return caseByDbCaseStyle(`${model.name} id`, dbOptions.caseStyle)
+}
+
+type GetTimestampFieldsTemplateArgs = {
+  dbOptions: DbOptions
+}
+export function getTimestampFields({ dbOptions }: GetTimestampFieldsTemplateArgs): Field[] {
+  if (!dbOptions.timestamps) return []
+  const createdAt: Field = {
+    id: uniqueId(),
+    name: caseByDbCaseStyle('created at', dbOptions.caseStyle),
+    type: dateTimeDataType(),
+    primaryKey: false,
+    required: false,
+    unique: false,
+  }
+
+  const updatedAt: Field = {
+    id: uniqueId(),
+    name: caseByDbCaseStyle('updated at', dbOptions.caseStyle),
+    type: dateTimeDataType(),
+    primaryKey: false,
+    required: false,
+    unique: false,
+  }
+
+  return [createdAt, updatedAt]
 }
