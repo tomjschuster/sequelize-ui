@@ -833,7 +833,7 @@ export class Category extends Model<
   declare countChildren: HasManyCountAssociationsMixin
   
   // Category hasMany PostCategory
-  declare PostCategories: NonAttribute<PostCategory[]>
+  declare postCategories: NonAttribute<PostCategory[]>
   declare getPostCategories: HasManyGetAssociationsMixin<PostCategory>
   declare setPostCategories: HasManySetAssociationsMixin<PostCategory, number>
   declare addPostCategory: HasManyAddAssociationMixin<PostCategory, number>
@@ -846,7 +846,7 @@ export class Category extends Model<
   declare countPostCategories: HasManyCountAssociationsMixin
   
   // Category belongsToMany Post
-  declare Posts: NonAttribute<Post[]>
+  declare posts: NonAttribute<Post[]>
   declare getPosts: BelongsToManyGetAssociationsMixin<Post>
   declare setPosts: BelongsToManySetAssociationsMixin<Post, number>
   declare addPost: BelongsToManyAddAssociationMixin<Post, number>
@@ -861,8 +861,8 @@ export class Category extends Model<
   declare static associations: {
     parent: Association<Category, Category>,
     children: Association<Category, Category>,
-    PostCategories: Association<Category, PostCategory>,
-    Posts: Association<Category, Post>
+    postCategories: Association<Category, PostCategory>,
+    posts: Association<Category, Post>
   }
 
   static initModel(sequelize: Sequelize): typeof Category {
@@ -947,9 +947,11 @@ export function initModels(sequelize: Sequelize) {
     foreignKey: 'category_id'
   })
   Category.hasMany(PostCategory, {
+    as: 'postCategories',
     foreignKey: 'category_id'
   })
   Category.belongsToMany(Post, {
+    as: 'posts',
     through: PostCategory,
     foreignKey: 'category_id',
     otherKey: 'post_id',
@@ -968,9 +970,11 @@ export function initModels(sequelize: Sequelize) {
     foreignKey: 'post_id'
   })
   Post.hasMany(PostCategory, {
+    as: 'postCategories',
     foreignKey: 'post_id'
   })
   Post.belongsToMany(Category, {
+    as: 'categories',
     through: PostCategory,
     foreignKey: 'post_id',
     otherKey: 'category_id',
@@ -985,21 +989,26 @@ export function initModels(sequelize: Sequelize) {
     foreignKey: 'post_id'
   })
   Post.hasMany(PostTag, {
+    as: 'postTags',
     foreignKey: 'post_id'
   })
   Post.belongsToMany(Tag, {
+    as: 'tags',
     through: PostTag,
     foreignKey: 'post_id',
     otherKey: 'tag_id',
     onDelete: 'CASCADE'
   })
   PostCategory.belongsTo(Post, {
+    as: 'post',
     foreignKey: 'post_id'
   })
   PostCategory.belongsTo(Category, {
+    as: 'category',
     foreignKey: 'category_id'
   })
   PostComment.belongsTo(Post, {
+    as: 'post',
     foreignKey: 'post_id'
   })
   PostComment.belongsTo(PostComment, {
@@ -1011,24 +1020,30 @@ export function initModels(sequelize: Sequelize) {
     foreignKey: 'post_comment_id'
   })
   PostMeta.belongsTo(Post, {
+    as: 'post',
     foreignKey: 'post_id'
   })
   PostTag.belongsTo(Post, {
+    as: 'post',
     foreignKey: 'post_id'
   })
   PostTag.belongsTo(Tag, {
+    as: 'tag',
     foreignKey: 'tag_id'
   })
   Tag.hasMany(PostTag, {
+    as: 'postTags',
     foreignKey: 'tag_id'
   })
   Tag.belongsToMany(Post, {
+    as: 'posts',
     through: PostTag,
     foreignKey: 'tag_id',
     otherKey: 'post_id',
     onDelete: 'CASCADE'
   })
   User.hasMany(Post, {
+    as: 'posts',
     foreignKey: 'author_id'
   })
 
@@ -1131,7 +1146,7 @@ export class Post extends Model<
   declare countChildren: HasManyCountAssociationsMixin
   
   // Post hasMany PostCategory
-  declare PostCategories: NonAttribute<PostCategory[]>
+  declare postCategories: NonAttribute<PostCategory[]>
   declare getPostCategories: HasManyGetAssociationsMixin<PostCategory>
   declare setPostCategories: HasManySetAssociationsMixin<PostCategory, number>
   declare addPostCategory: HasManyAddAssociationMixin<PostCategory, number>
@@ -1144,7 +1159,7 @@ export class Post extends Model<
   declare countPostCategories: HasManyCountAssociationsMixin
   
   // Post belongsToMany Category
-  declare Categories: NonAttribute<Category[]>
+  declare categories: NonAttribute<Category[]>
   declare getCategories: BelongsToManyGetAssociationsMixin<Category>
   declare setCategories: BelongsToManySetAssociationsMixin<Category, number>
   declare addCategory: BelongsToManyAddAssociationMixin<Category, number>
@@ -1183,7 +1198,7 @@ export class Post extends Model<
   declare countMetas: HasManyCountAssociationsMixin
   
   // Post hasMany PostTag
-  declare PostTags: NonAttribute<PostTag[]>
+  declare postTags: NonAttribute<PostTag[]>
   declare getPostTags: HasManyGetAssociationsMixin<PostTag>
   declare setPostTags: HasManySetAssociationsMixin<PostTag, number>
   declare addPostTag: HasManyAddAssociationMixin<PostTag, number>
@@ -1196,7 +1211,7 @@ export class Post extends Model<
   declare countPostTags: HasManyCountAssociationsMixin
   
   // Post belongsToMany Tag
-  declare Tags: NonAttribute<Tag[]>
+  declare tags: NonAttribute<Tag[]>
   declare getTags: BelongsToManyGetAssociationsMixin<Tag>
   declare setTags: BelongsToManySetAssociationsMixin<Tag, number>
   declare addTag: BelongsToManyAddAssociationMixin<Tag, number>
@@ -1212,12 +1227,12 @@ export class Post extends Model<
     author: Association<Post, User>,
     parent: Association<Post, Post>,
     children: Association<Post, Post>,
-    PostCategories: Association<Post, PostCategory>,
-    Categories: Association<Post, Category>,
+    postCategories: Association<Post, PostCategory>,
+    categories: Association<Post, Category>,
     comments: Association<Post, PostComment>,
     metas: Association<Post, PostMeta>,
-    PostTags: Association<Post, PostTag>,
-    Tags: Association<Post, Tag>
+    postTags: Association<Post, PostTag>,
+    tags: Association<Post, Tag>
   }
 
   static initModel(sequelize: Sequelize): typeof Post {
@@ -1297,20 +1312,20 @@ export class PostCategory extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // PostCategory belongsTo Post
-  declare Post: NonAttribute<Post>
+  declare post: NonAttribute<Post>
   declare getPost: BelongsToGetAssociationMixin<Post>
   declare setPost: BelongsToSetAssociationMixin<Post, number>
   declare createPost: BelongsToCreateAssociationMixin<Post>
   
   // PostCategory belongsTo Category
-  declare Category: NonAttribute<Category>
+  declare category: NonAttribute<Category>
   declare getCategory: BelongsToGetAssociationMixin<Category>
   declare setCategory: BelongsToSetAssociationMixin<Category, number>
   declare createCategory: BelongsToCreateAssociationMixin<Category>
   
   declare static associations: {
-    Post: Association<PostCategory, Post>,
-    Category: Association<PostCategory, Category>
+    post: Association<PostCategory, Post>,
+    category: Association<PostCategory, Category>
   }
 
   static initModel(sequelize: Sequelize): typeof PostCategory {
@@ -1376,7 +1391,7 @@ export class PostComment extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // PostComment belongsTo Post
-  declare Post: NonAttribute<Post>
+  declare post: NonAttribute<Post>
   declare getPost: BelongsToGetAssociationMixin<Post>
   declare setPost: BelongsToSetAssociationMixin<Post, number>
   declare createPost: BelongsToCreateAssociationMixin<Post>
@@ -1401,7 +1416,7 @@ export class PostComment extends Model<
   declare countChildren: HasManyCountAssociationsMixin
   
   declare static associations: {
-    Post: Association<PostComment, Post>,
+    post: Association<PostComment, Post>,
     parent: Association<PostComment, PostComment>,
     children: Association<PostComment, PostComment>
   }
@@ -1473,13 +1488,13 @@ export class PostMeta extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // PostMeta belongsTo Post
-  declare Post: NonAttribute<Post>
+  declare post: NonAttribute<Post>
   declare getPost: BelongsToGetAssociationMixin<Post>
   declare setPost: BelongsToSetAssociationMixin<Post, number>
   declare createPost: BelongsToCreateAssociationMixin<Post>
   
   declare static associations: {
-    Post: Association<PostMeta, Post>
+    post: Association<PostMeta, Post>
   }
 
   static initModel(sequelize: Sequelize): typeof PostMeta {
@@ -1542,20 +1557,20 @@ export class PostTag extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // PostTag belongsTo Post
-  declare Post: NonAttribute<Post>
+  declare post: NonAttribute<Post>
   declare getPost: BelongsToGetAssociationMixin<Post>
   declare setPost: BelongsToSetAssociationMixin<Post, number>
   declare createPost: BelongsToCreateAssociationMixin<Post>
   
   // PostTag belongsTo Tag
-  declare Tag: NonAttribute<Tag>
+  declare tag: NonAttribute<Tag>
   declare getTag: BelongsToGetAssociationMixin<Tag>
   declare setTag: BelongsToSetAssociationMixin<Tag, number>
   declare createTag: BelongsToCreateAssociationMixin<Tag>
   
   declare static associations: {
-    Post: Association<PostTag, Post>,
-    Tag: Association<PostTag, Tag>
+    post: Association<PostTag, Post>,
+    tag: Association<PostTag, Tag>
   }
 
   static initModel(sequelize: Sequelize): typeof PostTag {
@@ -1629,7 +1644,7 @@ export class Tag extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Tag hasMany PostTag
-  declare PostTags: NonAttribute<PostTag[]>
+  declare postTags: NonAttribute<PostTag[]>
   declare getPostTags: HasManyGetAssociationsMixin<PostTag>
   declare setPostTags: HasManySetAssociationsMixin<PostTag, number>
   declare addPostTag: HasManyAddAssociationMixin<PostTag, number>
@@ -1642,7 +1657,7 @@ export class Tag extends Model<
   declare countPostTags: HasManyCountAssociationsMixin
   
   // Tag belongsToMany Post
-  declare Posts: NonAttribute<Post[]>
+  declare posts: NonAttribute<Post[]>
   declare getPosts: BelongsToManyGetAssociationsMixin<Post>
   declare setPosts: BelongsToManySetAssociationsMixin<Post, number>
   declare addPost: BelongsToManyAddAssociationMixin<Post, number>
@@ -1655,8 +1670,8 @@ export class Tag extends Model<
   declare countPosts: BelongsToManyCountAssociationsMixin
   
   declare static associations: {
-    PostTags: Association<Tag, PostTag>,
-    Posts: Association<Tag, Post>
+    postTags: Association<Tag, PostTag>,
+    posts: Association<Tag, Post>
   }
 
   static initModel(sequelize: Sequelize): typeof Tag {
@@ -1742,7 +1757,7 @@ export class User extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // User hasMany Post
-  declare Posts: NonAttribute<Post[]>
+  declare posts: NonAttribute<Post[]>
   declare getPosts: HasManyGetAssociationsMixin<Post>
   declare setPosts: HasManySetAssociationsMixin<Post, number>
   declare addPost: HasManyAddAssociationMixin<Post, number>
@@ -1755,7 +1770,7 @@ export class User extends Model<
   declare countPosts: HasManyCountAssociationsMixin
   
   declare static associations: {
-    Posts: Association<User, Post>
+    posts: Association<User, Post>
   }
 
   static initModel(sequelize: Sequelize): typeof User {

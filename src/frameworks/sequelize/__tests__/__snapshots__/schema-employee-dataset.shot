@@ -666,7 +666,7 @@ export class Department extends Model<
   declare countManagers: BelongsToManyCountAssociationsMixin
   
   // Department hasMany DeptEmp
-  declare DeptEmps: NonAttribute<DeptEmp[]>
+  declare deptEmps: NonAttribute<DeptEmp[]>
   declare getDeptEmps: HasManyGetAssociationsMixin<DeptEmp>
   declare setDeptEmps: HasManySetAssociationsMixin<DeptEmp, never>
   declare addDeptEmp: HasManyAddAssociationMixin<DeptEmp, never>
@@ -679,7 +679,7 @@ export class Department extends Model<
   declare countDeptEmps: HasManyCountAssociationsMixin
   
   // Department hasMany DeptManager
-  declare DeptManagers: NonAttribute<DeptManager[]>
+  declare deptManagers: NonAttribute<DeptManager[]>
   declare getDeptManagers: HasManyGetAssociationsMixin<DeptManager>
   declare setDeptManagers: HasManySetAssociationsMixin<DeptManager, never>
   declare addDeptManager: HasManyAddAssociationMixin<DeptManager, never>
@@ -694,8 +694,8 @@ export class Department extends Model<
   declare static associations: {
     employees: Association<Department, Employee>,
     managers: Association<Department, Employee>,
-    DeptEmps: Association<Department, DeptEmp>,
-    DeptManagers: Association<Department, DeptManager>
+    deptEmps: Association<Department, DeptEmp>,
+    deptManagers: Association<Department, DeptManager>
   }
 
   static initModel(sequelize: Sequelize): typeof Department {
@@ -756,20 +756,20 @@ export class DeptEmp extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // DeptEmp belongsTo Employee
-  declare Employee: NonAttribute<Employee>
+  declare employee: NonAttribute<Employee>
   declare getEmployee: BelongsToGetAssociationMixin<Employee>
   declare setEmployee: BelongsToSetAssociationMixin<Employee, number>
   declare createEmployee: BelongsToCreateAssociationMixin<Employee>
   
   // DeptEmp belongsTo Department
-  declare Department: NonAttribute<Department>
+  declare department: NonAttribute<Department>
   declare getDepartment: BelongsToGetAssociationMixin<Department>
   declare setDepartment: BelongsToSetAssociationMixin<Department, string>
   declare createDepartment: BelongsToCreateAssociationMixin<Department>
   
   declare static associations: {
-    Employee: Association<DeptEmp, Employee>,
-    Department: Association<DeptEmp, Department>
+    employee: Association<DeptEmp, Employee>,
+    department: Association<DeptEmp, Department>
   }
 
   static initModel(sequelize: Sequelize): typeof DeptEmp {
@@ -839,20 +839,20 @@ export class DeptManager extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // DeptManager belongsTo Employee
-  declare Employee: NonAttribute<Employee>
+  declare employee: NonAttribute<Employee>
   declare getEmployee: BelongsToGetAssociationMixin<Employee>
   declare setEmployee: BelongsToSetAssociationMixin<Employee, number>
   declare createEmployee: BelongsToCreateAssociationMixin<Employee>
   
   // DeptManager belongsTo Department
-  declare Department: NonAttribute<Department>
+  declare department: NonAttribute<Department>
   declare getDepartment: BelongsToGetAssociationMixin<Department>
   declare setDepartment: BelongsToSetAssociationMixin<Department, string>
   declare createDepartment: BelongsToCreateAssociationMixin<Department>
   
   declare static associations: {
-    Employee: Association<DeptManager, Employee>,
-    Department: Association<DeptManager, Department>
+    employee: Association<DeptManager, Employee>,
+    department: Association<DeptManager, Department>
   }
 
   static initModel(sequelize: Sequelize): typeof DeptManager {
@@ -942,7 +942,7 @@ export class Employee extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Employee hasMany Salary
-  declare Salaries: NonAttribute<Salary[]>
+  declare salaries: NonAttribute<Salary[]>
   declare getSalaries: HasManyGetAssociationsMixin<Salary>
   declare setSalaries: HasManySetAssociationsMixin<Salary, never>
   declare addSalary: HasManyAddAssociationMixin<Salary, never>
@@ -955,7 +955,7 @@ export class Employee extends Model<
   declare countSalaries: HasManyCountAssociationsMixin
   
   // Employee hasMany Title
-  declare Titles: NonAttribute<Title[]>
+  declare titles: NonAttribute<Title[]>
   declare getTitles: HasManyGetAssociationsMixin<Title>
   declare setTitles: HasManySetAssociationsMixin<Title, never>
   declare addTitle: HasManyAddAssociationMixin<Title, never>
@@ -994,8 +994,8 @@ export class Employee extends Model<
   declare countManagedDepartments: BelongsToManyCountAssociationsMixin
   
   declare static associations: {
-    Salaries: Association<Employee, Salary>,
-    Titles: Association<Employee, Title>,
+    salaries: Association<Employee, Salary>,
+    titles: Association<Employee, Title>,
     employingDepartments: Association<Employee, Department>,
     managedDepartments: Association<Employee, Department>
   }
@@ -1073,9 +1073,11 @@ export function initModels(sequelize: Sequelize) {
   Salary.initModel(sequelize)
 
   Employee.hasMany(Salary, {
+    as: 'salaries',
     foreignKey: 'emp_no'
   })
   Employee.hasMany(Title, {
+    as: 'titles',
     foreignKey: 'emp_no'
   })
   Employee.belongsToMany(Department, {
@@ -1107,27 +1109,35 @@ export function initModels(sequelize: Sequelize) {
     onDelete: 'CASCADE'
   })
   Department.hasMany(DeptEmp, {
+    as: 'deptEmps',
     foreignKey: 'dept_no'
   })
   Department.hasMany(DeptManager, {
+    as: 'deptManagers',
     foreignKey: 'dept_no'
   })
   DeptEmp.belongsTo(Employee, {
+    as: 'employee',
     foreignKey: 'emp_no'
   })
   DeptEmp.belongsTo(Department, {
+    as: 'department',
     foreignKey: 'dept_no'
   })
   DeptManager.belongsTo(Employee, {
+    as: 'employee',
     foreignKey: 'emp_no'
   })
   DeptManager.belongsTo(Department, {
+    as: 'department',
     foreignKey: 'dept_no'
   })
   Title.belongsTo(Employee, {
+    as: 'employee',
     foreignKey: 'emp_no'
   })
   Salary.belongsTo(Employee, {
+    as: 'employee',
     foreignKey: 'emp_no'
   })
 
@@ -1173,13 +1183,13 @@ export class Salary extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Salary belongsTo Employee
-  declare Employee: NonAttribute<Employee>
+  declare employee: NonAttribute<Employee>
   declare getEmployee: BelongsToGetAssociationMixin<Employee>
   declare setEmployee: BelongsToSetAssociationMixin<Employee, number>
   declare createEmployee: BelongsToCreateAssociationMixin<Employee>
   
   declare static associations: {
-    Employee: Association<Salary, Employee>
+    employee: Association<Salary, Employee>
   }
 
   static initModel(sequelize: Sequelize): typeof Salary {
@@ -1248,13 +1258,13 @@ export class Title extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Title belongsTo Employee
-  declare Employee: NonAttribute<Employee>
+  declare employee: NonAttribute<Employee>
   declare getEmployee: BelongsToGetAssociationMixin<Employee>
   declare setEmployee: BelongsToSetAssociationMixin<Employee, number>
   declare createEmployee: BelongsToCreateAssociationMixin<Employee>
   
   declare static associations: {
-    Employee: Association<Title, Employee>
+    employee: Association<Title, Employee>
   }
 
   static initModel(sequelize: Sequelize): typeof Title {

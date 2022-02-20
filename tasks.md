@@ -15,6 +15,7 @@
 
 - [ ] **Documentation**: Document functions and modules
 
+- [ ] **Tests**: Make snapshot tests target specific paths
 - [ ] **Tests**: Add E2E browser tests
 - [ ] **Tests**: Run E2E SQL tests against all example schemas
 - [ ] **Tests**: Increase unit test coverage

@@ -11,7 +11,7 @@ import {
 } from '@src/core/schema'
 import { arrayToLookup } from '@src/utils/array'
 import { camelCase, pascalCase, plural, singular } from '@src/utils/string'
-import { getForeignKey, getOtherKey } from '../utils/associations'
+import { associationName, getForeignKey, getOtherKey } from '../utils/associations'
 import { modelName } from '../utils/model'
 
 export type InitModelsTemplateArgs = {
@@ -161,7 +161,7 @@ function associationOptions({
     ', {',
     lines(
       [
-        asField(association.alias, association.type.type),
+        asField(association, modelById),
         throughField(association, modelById),
         foreignKeyField({ model, association, modelById, dbOptions }),
         otherKeyField({ model, association, modelById, dbOptions }),
@@ -174,8 +174,17 @@ function associationOptions({
   ])
 }
 
-function asField(alias: string | null, type: AssociationTypeType): string | null {
-  return alias ? `as: '${aliasValue({ alias: alias, type: type })}'` : null
+function asField(association: Association, modelById: ModelById): string | null {
+  const targetModel = modelById.get(association.targetModelId)
+
+  const alias =
+    targetModel &&
+    aliasValue({
+      alias: associationName({ association, targetModel }),
+      type: association.type.type,
+    })
+
+  return alias ? `as: '${alias}'` : null
 }
 
 function throughField(association: Association, modelById: ModelById): string | null {
