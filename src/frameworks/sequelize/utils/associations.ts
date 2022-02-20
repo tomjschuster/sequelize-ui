@@ -13,8 +13,10 @@ type AssociationNameArgs = {
   targetModel: Model
 }
 export function associationName({ association, targetModel }: AssociationNameArgs): string {
-  const name = association.alias ? camelCase(association.alias) : modelName(targetModel)
-  return associationTypeIsSingular(association.type) ? singular(name) : plural(name)
+  const name = association.alias ? association.alias : modelName(targetModel)
+  return associationTypeIsSingular(association.type)
+    ? camelCase(singular(name))
+    : camelCase(plural(name))
 }
 
 type ModelById = Map<string, Model>

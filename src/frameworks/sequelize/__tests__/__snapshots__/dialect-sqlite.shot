@@ -1159,7 +1159,7 @@ export class Actor extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Actor belongsToMany Film
-  declare Films: NonAttribute<Film[]>
+  declare films: NonAttribute<Film[]>
   declare getFilms: BelongsToManyGetAssociationsMixin<Film>
   declare setFilms: BelongsToManySetAssociationsMixin<Film, number>
   declare addFilm: BelongsToManyAddAssociationMixin<Film, number>
@@ -1172,7 +1172,7 @@ export class Actor extends Model<
   declare countFilms: BelongsToManyCountAssociationsMixin
   
   declare static associations: {
-    Films: Association<Actor, Film>
+    films: Association<Actor, Film>
   }
 
   static initModel(sequelize: Sequelize): typeof Actor {
@@ -1244,34 +1244,34 @@ export class Address extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Address belongsTo City
-  declare City: NonAttribute<City>
+  declare city: NonAttribute<City>
   declare getCity: BelongsToGetAssociationMixin<City>
   declare setCity: BelongsToSetAssociationMixin<City, number>
   declare createCity: BelongsToCreateAssociationMixin<City>
   
   // Address hasOne Customer
-  declare Customer: NonAttribute<Customer>
+  declare customer: NonAttribute<Customer>
   declare getCustomer: HasOneGetAssociationMixin<Customer>
   declare setCustomer: HasOneSetAssociationMixin<Customer, number>
   declare createCustomer: HasOneCreateAssociationMixin<Customer>
   
   // Address hasOne Staff
-  declare Staff: NonAttribute<Staff>
+  declare staff: NonAttribute<Staff>
   declare getStaff: HasOneGetAssociationMixin<Staff>
   declare setStaff: HasOneSetAssociationMixin<Staff, number>
   declare createStaff: HasOneCreateAssociationMixin<Staff>
   
   // Address hasOne Store
-  declare Store: NonAttribute<Store>
+  declare store: NonAttribute<Store>
   declare getStore: HasOneGetAssociationMixin<Store>
   declare setStore: HasOneSetAssociationMixin<Store, number>
   declare createStore: HasOneCreateAssociationMixin<Store>
   
   declare static associations: {
-    City: Association<Address, City>,
-    Customer: Association<Address, Customer>,
-    Staff: Association<Address, Staff>,
-    Store: Association<Address, Store>
+    city: Association<Address, City>,
+    customer: Association<Address, Customer>,
+    staff: Association<Address, Staff>,
+    store: Association<Address, Store>
   }
 
   static initModel(sequelize: Sequelize): typeof Address {
@@ -1347,7 +1347,7 @@ export class Category extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Category belongsToMany Film
-  declare Films: NonAttribute<Film[]>
+  declare films: NonAttribute<Film[]>
   declare getFilms: BelongsToManyGetAssociationsMixin<Film>
   declare setFilms: BelongsToManySetAssociationsMixin<Film, number>
   declare addFilm: BelongsToManyAddAssociationMixin<Film, number>
@@ -1360,7 +1360,7 @@ export class Category extends Model<
   declare countFilms: BelongsToManyCountAssociationsMixin
   
   declare static associations: {
-    Films: Association<Category, Film>
+    films: Association<Category, Film>
   }
 
   static initModel(sequelize: Sequelize): typeof Category {
@@ -1426,13 +1426,13 @@ export class City extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // City belongsTo Country
-  declare Country: NonAttribute<Country>
+  declare country: NonAttribute<Country>
   declare getCountry: BelongsToGetAssociationMixin<Country>
   declare setCountry: BelongsToSetAssociationMixin<Country, number>
   declare createCountry: BelongsToCreateAssociationMixin<Country>
   
   // City hasMany Address
-  declare Addresses: NonAttribute<Address[]>
+  declare addresses: NonAttribute<Address[]>
   declare getAddresses: HasManyGetAssociationsMixin<Address>
   declare setAddresses: HasManySetAssociationsMixin<Address, number>
   declare addAddress: HasManyAddAssociationMixin<Address, number>
@@ -1445,8 +1445,8 @@ export class City extends Model<
   declare countAddresses: HasManyCountAssociationsMixin
   
   declare static associations: {
-    Country: Association<City, Country>,
-    Addresses: Association<City, Address>
+    country: Association<City, Country>,
+    addresses: Association<City, Address>
   }
 
   static initModel(sequelize: Sequelize): typeof City {
@@ -1512,7 +1512,7 @@ export class Country extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Country hasMany City
-  declare Cities: NonAttribute<City[]>
+  declare cities: NonAttribute<City[]>
   declare getCities: HasManyGetAssociationsMixin<City>
   declare setCities: HasManySetAssociationsMixin<City, number>
   declare addCity: HasManyAddAssociationMixin<City, number>
@@ -1525,7 +1525,7 @@ export class Country extends Model<
   declare countCities: HasManyCountAssociationsMixin
   
   declare static associations: {
-    Cities: Association<Country, City>
+    cities: Association<Country, City>
   }
 
   static initModel(sequelize: Sequelize): typeof Country {
@@ -1600,19 +1600,19 @@ export class Customer extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Customer belongsTo Store
-  declare Store: NonAttribute<Store>
+  declare store: NonAttribute<Store>
   declare getStore: BelongsToGetAssociationMixin<Store>
   declare setStore: BelongsToSetAssociationMixin<Store, number>
   declare createStore: BelongsToCreateAssociationMixin<Store>
   
   // Customer belongsTo Address
-  declare Address: NonAttribute<Address>
+  declare address: NonAttribute<Address>
   declare getAddress: BelongsToGetAssociationMixin<Address>
   declare setAddress: BelongsToSetAssociationMixin<Address, number>
   declare createAddress: BelongsToCreateAssociationMixin<Address>
   
   // Customer hasMany Rental
-  declare Rentals: NonAttribute<Rental[]>
+  declare rentals: NonAttribute<Rental[]>
   declare getRentals: HasManyGetAssociationsMixin<Rental>
   declare setRentals: HasManySetAssociationsMixin<Rental, number>
   declare addRental: HasManyAddAssociationMixin<Rental, number>
@@ -1625,7 +1625,7 @@ export class Customer extends Model<
   declare countRentals: HasManyCountAssociationsMixin
   
   // Customer hasMany Payment
-  declare Payments: NonAttribute<Payment[]>
+  declare payments: NonAttribute<Payment[]>
   declare getPayments: HasManyGetAssociationsMixin<Payment>
   declare setPayments: HasManySetAssociationsMixin<Payment, number>
   declare addPayment: HasManyAddAssociationMixin<Payment, number>
@@ -1638,10 +1638,10 @@ export class Customer extends Model<
   declare countPayments: HasManyCountAssociationsMixin
   
   declare static associations: {
-    Store: Association<Customer, Store>,
-    Address: Association<Customer, Address>,
-    Rentals: Association<Customer, Rental>,
-    Payments: Association<Customer, Payment>
+    store: Association<Customer, Store>,
+    address: Association<Customer, Address>,
+    rentals: Association<Customer, Rental>,
+    payments: Association<Customer, Payment>
   }
 
   static initModel(sequelize: Sequelize): typeof Customer {
@@ -1744,7 +1744,7 @@ export class Film extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Film belongsTo Language
-  declare Language: NonAttribute<Language>
+  declare language: NonAttribute<Language>
   declare getLanguage: BelongsToGetAssociationMixin<Language>
   declare setLanguage: BelongsToSetAssociationMixin<Language, number>
   declare createLanguage: BelongsToCreateAssociationMixin<Language>
@@ -1756,7 +1756,7 @@ export class Film extends Model<
   declare createOriginalLanguage: BelongsToCreateAssociationMixin<Language>
   
   // Film hasMany Inventory
-  declare Inventories: NonAttribute<Inventory[]>
+  declare inventories: NonAttribute<Inventory[]>
   declare getInventories: HasManyGetAssociationsMixin<Inventory>
   declare setInventories: HasManySetAssociationsMixin<Inventory, number>
   declare addInventory: HasManyAddAssociationMixin<Inventory, number>
@@ -1769,7 +1769,7 @@ export class Film extends Model<
   declare countInventories: HasManyCountAssociationsMixin
   
   // Film belongsToMany Actor
-  declare Actors: NonAttribute<Actor[]>
+  declare actors: NonAttribute<Actor[]>
   declare getActors: BelongsToManyGetAssociationsMixin<Actor>
   declare setActors: BelongsToManySetAssociationsMixin<Actor, number>
   declare addActor: BelongsToManyAddAssociationMixin<Actor, number>
@@ -1782,7 +1782,7 @@ export class Film extends Model<
   declare countActors: BelongsToManyCountAssociationsMixin
   
   // Film belongsToMany Category
-  declare Categories: NonAttribute<Category[]>
+  declare categories: NonAttribute<Category[]>
   declare getCategories: BelongsToManyGetAssociationsMixin<Category>
   declare setCategories: BelongsToManySetAssociationsMixin<Category, number>
   declare addCategory: BelongsToManyAddAssociationMixin<Category, number>
@@ -1795,11 +1795,11 @@ export class Film extends Model<
   declare countCategories: BelongsToManyCountAssociationsMixin
   
   declare static associations: {
-    Language: Association<Film, Language>,
+    language: Association<Film, Language>,
     originalLanguage: Association<Film, Language>,
-    Inventories: Association<Film, Inventory>,
-    Actors: Association<Film, Actor>,
-    Categories: Association<Film, Category>
+    inventories: Association<Film, Inventory>,
+    actors: Association<Film, Actor>,
+    categories: Association<Film, Category>
   }
 
   static initModel(sequelize: Sequelize): typeof Film {
@@ -1891,20 +1891,20 @@ export class FilmActor extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // FilmActor belongsTo Film
-  declare Film: NonAttribute<Film>
+  declare film: NonAttribute<Film>
   declare getFilm: BelongsToGetAssociationMixin<Film>
   declare setFilm: BelongsToSetAssociationMixin<Film, number>
   declare createFilm: BelongsToCreateAssociationMixin<Film>
   
   // FilmActor belongsTo Actor
-  declare Actor: NonAttribute<Actor>
+  declare actor: NonAttribute<Actor>
   declare getActor: BelongsToGetAssociationMixin<Actor>
   declare setActor: BelongsToSetAssociationMixin<Actor, number>
   declare createActor: BelongsToCreateAssociationMixin<Actor>
   
   declare static associations: {
-    Film: Association<FilmActor, Film>,
-    Actor: Association<FilmActor, Actor>
+    film: Association<FilmActor, Film>,
+    actor: Association<FilmActor, Actor>
   }
 
   static initModel(sequelize: Sequelize): typeof FilmActor {
@@ -1959,20 +1959,20 @@ export class FilmCategory extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // FilmCategory belongsTo Film
-  declare Film: NonAttribute<Film>
+  declare film: NonAttribute<Film>
   declare getFilm: BelongsToGetAssociationMixin<Film>
   declare setFilm: BelongsToSetAssociationMixin<Film, number>
   declare createFilm: BelongsToCreateAssociationMixin<Film>
   
   // FilmCategory belongsTo Category
-  declare Category: NonAttribute<Category>
+  declare category: NonAttribute<Category>
   declare getCategory: BelongsToGetAssociationMixin<Category>
   declare setCategory: BelongsToSetAssociationMixin<Category, number>
   declare createCategory: BelongsToCreateAssociationMixin<Category>
   
   declare static associations: {
-    Film: Association<FilmCategory, Film>,
-    Category: Association<FilmCategory, Category>
+    film: Association<FilmCategory, Film>,
+    category: Association<FilmCategory, Category>
   }
 
   static initModel(sequelize: Sequelize): typeof FilmCategory {
@@ -2055,12 +2055,14 @@ export function initModels(sequelize: Sequelize) {
   FilmCategory.initModel(sequelize)
 
   Actor.belongsToMany(Film, {
+    as: 'films',
     through: FilmActor,
     foreignKey: 'actor_id',
     otherKey: 'film_id',
     onDelete: 'CASCADE'
   })
   Film.belongsTo(Language, {
+    as: 'language',
     foreignKey: 'language_id'
   })
   Film.belongsTo(Language, {
@@ -2068,21 +2070,25 @@ export function initModels(sequelize: Sequelize) {
     foreignKey: 'original_language_id'
   })
   Film.hasMany(Inventory, {
+    as: 'inventories',
     foreignKey: 'film_id'
   })
   Film.belongsToMany(Actor, {
+    as: 'actors',
     through: FilmActor,
     foreignKey: 'film_id',
     otherKey: 'actor_id',
     onDelete: 'CASCADE'
   })
   Film.belongsToMany(Category, {
+    as: 'categories',
     through: FilmCategory,
     foreignKey: 'film_id',
     otherKey: 'category_id',
     onDelete: 'CASCADE'
   })
   Language.hasMany(Film, {
+    as: 'films',
     foreignKey: 'language_id'
   })
   Language.hasMany(Film, {
@@ -2090,25 +2096,31 @@ export function initModels(sequelize: Sequelize) {
     foreignKey: 'original_language_id'
   })
   Category.belongsToMany(Film, {
+    as: 'films',
     through: FilmCategory,
     foreignKey: 'category_id',
     otherKey: 'film_id',
     onDelete: 'CASCADE'
   })
   Inventory.belongsTo(Film, {
+    as: 'film',
     foreignKey: 'film_id'
   })
   Inventory.belongsTo(Store, {
+    as: 'store',
     foreignKey: 'store_id'
   })
   Store.hasMany(Inventory, {
+    as: 'inventories',
     foreignKey: 'store_id'
   })
   Store.hasMany(Staff, {
+    as: 'staffs',
     foreignKey: 'store_id',
     constraints: false
   })
   Store.hasMany(Customer, {
+    as: 'customers',
     foreignKey: 'store_id'
   })
   Store.belongsTo(Staff, {
@@ -2117,9 +2129,11 @@ export function initModels(sequelize: Sequelize) {
     constraints: false
   })
   Store.belongsTo(Address, {
+    as: 'address',
     foreignKey: 'address_id'
   })
   Staff.belongsTo(Store, {
+    as: 'store',
     foreignKey: 'store_id',
     constraints: false
   })
@@ -2129,78 +2143,103 @@ export function initModels(sequelize: Sequelize) {
     constraints: false
   })
   Staff.belongsTo(Address, {
+    as: 'address',
     foreignKey: 'address_id'
   })
   Staff.hasMany(Rental, {
+    as: 'rentals',
     foreignKey: 'staff_id'
   })
   Staff.hasMany(Payment, {
+    as: 'payments',
     foreignKey: 'staff_id'
   })
   Customer.belongsTo(Store, {
+    as: 'store',
     foreignKey: 'store_id'
   })
   Customer.belongsTo(Address, {
+    as: 'address',
     foreignKey: 'address_id'
   })
   Customer.hasMany(Rental, {
+    as: 'rentals',
     foreignKey: 'customer_id'
   })
   Customer.hasMany(Payment, {
+    as: 'payments',
     foreignKey: 'customer_id'
   })
   Address.belongsTo(City, {
+    as: 'city',
     foreignKey: 'city_id'
   })
   Address.hasOne(Customer, {
+    as: 'customer',
     foreignKey: 'address_id'
   })
   Address.hasOne(Staff, {
+    as: 'staff',
     foreignKey: 'address_id'
   })
   Address.hasOne(Store, {
+    as: 'store',
     foreignKey: 'address_id'
   })
   Rental.belongsTo(Inventory, {
+    as: 'inventory',
     foreignKey: 'inventory_id'
   })
   Rental.belongsTo(Customer, {
+    as: 'customer',
     foreignKey: 'customer_id'
   })
   Rental.belongsTo(Staff, {
+    as: 'staff',
     foreignKey: 'staff_id'
   })
   Rental.hasMany(Payment, {
+    as: 'payments',
     foreignKey: 'rental_id'
   })
   Payment.belongsTo(Customer, {
+    as: 'customer',
     foreignKey: 'customer_id'
   })
   Payment.belongsTo(Staff, {
+    as: 'staff',
     foreignKey: 'staff_id'
   })
   Payment.belongsTo(Rental, {
+    as: 'rental',
     foreignKey: 'rental_id'
   })
   City.belongsTo(Country, {
+    as: 'country',
     foreignKey: 'country_id'
   })
   City.hasMany(Address, {
+    as: 'addresses',
     foreignKey: 'city_id'
   })
   Country.hasMany(City, {
+    as: 'cities',
     foreignKey: 'country_id'
   })
   FilmActor.belongsTo(Film, {
+    as: 'film',
     foreignKey: 'film_id'
   })
   FilmActor.belongsTo(Actor, {
+    as: 'actor',
     foreignKey: 'actor_id'
   })
   FilmCategory.belongsTo(Film, {
+    as: 'film',
     foreignKey: 'film_id'
   })
   FilmCategory.belongsTo(Category, {
+    as: 'category',
     foreignKey: 'category_id'
   })
 
@@ -2253,20 +2292,20 @@ export class Inventory extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Inventory belongsTo Film
-  declare Film: NonAttribute<Film>
+  declare film: NonAttribute<Film>
   declare getFilm: BelongsToGetAssociationMixin<Film>
   declare setFilm: BelongsToSetAssociationMixin<Film, number>
   declare createFilm: BelongsToCreateAssociationMixin<Film>
   
   // Inventory belongsTo Store
-  declare Store: NonAttribute<Store>
+  declare store: NonAttribute<Store>
   declare getStore: BelongsToGetAssociationMixin<Store>
   declare setStore: BelongsToSetAssociationMixin<Store, number>
   declare createStore: BelongsToCreateAssociationMixin<Store>
   
   declare static associations: {
-    Film: Association<Inventory, Film>,
-    Store: Association<Inventory, Store>
+    film: Association<Inventory, Film>,
+    store: Association<Inventory, Store>
   }
 
   static initModel(sequelize: Sequelize): typeof Inventory {
@@ -2328,7 +2367,7 @@ export class Language extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Language hasMany Film
-  declare Films: NonAttribute<Film[]>
+  declare films: NonAttribute<Film[]>
   declare getFilms: HasManyGetAssociationsMixin<Film>
   declare setFilms: HasManySetAssociationsMixin<Film, number>
   declare addFilm: HasManyAddAssociationMixin<Film, number>
@@ -2354,7 +2393,7 @@ export class Language extends Model<
   declare countOriginalLanguageFilms: HasManyCountAssociationsMixin
   
   declare static associations: {
-    Films: Association<Language, Film>,
+    films: Association<Language, Film>,
     originalLanguageFilms: Association<Language, Film>
   }
 
@@ -2417,27 +2456,27 @@ export class Payment extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Payment belongsTo Customer
-  declare Customer: NonAttribute<Customer>
+  declare customer: NonAttribute<Customer>
   declare getCustomer: BelongsToGetAssociationMixin<Customer>
   declare setCustomer: BelongsToSetAssociationMixin<Customer, number>
   declare createCustomer: BelongsToCreateAssociationMixin<Customer>
   
   // Payment belongsTo Staff
-  declare Staff: NonAttribute<Staff>
+  declare staff: NonAttribute<Staff>
   declare getStaff: BelongsToGetAssociationMixin<Staff>
   declare setStaff: BelongsToSetAssociationMixin<Staff, number>
   declare createStaff: BelongsToCreateAssociationMixin<Staff>
   
   // Payment belongsTo Rental
-  declare Rental: NonAttribute<Rental>
+  declare rental: NonAttribute<Rental>
   declare getRental: BelongsToGetAssociationMixin<Rental>
   declare setRental: BelongsToSetAssociationMixin<Rental, number>
   declare createRental: BelongsToCreateAssociationMixin<Rental>
   
   declare static associations: {
-    Customer: Association<Payment, Customer>,
-    Staff: Association<Payment, Staff>,
-    Rental: Association<Payment, Rental>
+    customer: Association<Payment, Customer>,
+    staff: Association<Payment, Staff>,
+    rental: Association<Payment, Rental>
   }
 
   static initModel(sequelize: Sequelize): typeof Payment {
@@ -2514,25 +2553,25 @@ export class Rental extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Rental belongsTo Inventory
-  declare Inventory: NonAttribute<Inventory>
+  declare inventory: NonAttribute<Inventory>
   declare getInventory: BelongsToGetAssociationMixin<Inventory>
   declare setInventory: BelongsToSetAssociationMixin<Inventory, number>
   declare createInventory: BelongsToCreateAssociationMixin<Inventory>
   
   // Rental belongsTo Customer
-  declare Customer: NonAttribute<Customer>
+  declare customer: NonAttribute<Customer>
   declare getCustomer: BelongsToGetAssociationMixin<Customer>
   declare setCustomer: BelongsToSetAssociationMixin<Customer, number>
   declare createCustomer: BelongsToCreateAssociationMixin<Customer>
   
   // Rental belongsTo Staff
-  declare Staff: NonAttribute<Staff>
+  declare staff: NonAttribute<Staff>
   declare getStaff: BelongsToGetAssociationMixin<Staff>
   declare setStaff: BelongsToSetAssociationMixin<Staff, number>
   declare createStaff: BelongsToCreateAssociationMixin<Staff>
   
   // Rental hasMany Payment
-  declare Payments: NonAttribute<Payment[]>
+  declare payments: NonAttribute<Payment[]>
   declare getPayments: HasManyGetAssociationsMixin<Payment>
   declare setPayments: HasManySetAssociationsMixin<Payment, number>
   declare addPayment: HasManyAddAssociationMixin<Payment, number>
@@ -2545,10 +2584,10 @@ export class Rental extends Model<
   declare countPayments: HasManyCountAssociationsMixin
   
   declare static associations: {
-    Inventory: Association<Rental, Inventory>,
-    Customer: Association<Rental, Customer>,
-    Staff: Association<Rental, Staff>,
-    Payments: Association<Rental, Payment>
+    inventory: Association<Rental, Inventory>,
+    customer: Association<Rental, Customer>,
+    staff: Association<Rental, Staff>,
+    payments: Association<Rental, Payment>
   }
 
   static initModel(sequelize: Sequelize): typeof Rental {
@@ -2629,7 +2668,7 @@ export class Staff extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Staff belongsTo Store
-  declare Store: NonAttribute<Store>
+  declare store: NonAttribute<Store>
   declare getStore: BelongsToGetAssociationMixin<Store>
   declare setStore: BelongsToSetAssociationMixin<Store, number>
   declare createStore: BelongsToCreateAssociationMixin<Store>
@@ -2648,13 +2687,13 @@ export class Staff extends Model<
   declare countManagedStores: HasManyCountAssociationsMixin
   
   // Staff belongsTo Address
-  declare Address: NonAttribute<Address>
+  declare address: NonAttribute<Address>
   declare getAddress: BelongsToGetAssociationMixin<Address>
   declare setAddress: BelongsToSetAssociationMixin<Address, number>
   declare createAddress: BelongsToCreateAssociationMixin<Address>
   
   // Staff hasMany Rental
-  declare Rentals: NonAttribute<Rental[]>
+  declare rentals: NonAttribute<Rental[]>
   declare getRentals: HasManyGetAssociationsMixin<Rental>
   declare setRentals: HasManySetAssociationsMixin<Rental, number>
   declare addRental: HasManyAddAssociationMixin<Rental, number>
@@ -2667,7 +2706,7 @@ export class Staff extends Model<
   declare countRentals: HasManyCountAssociationsMixin
   
   // Staff hasMany Payment
-  declare Payments: NonAttribute<Payment[]>
+  declare payments: NonAttribute<Payment[]>
   declare getPayments: HasManyGetAssociationsMixin<Payment>
   declare setPayments: HasManySetAssociationsMixin<Payment, number>
   declare addPayment: HasManyAddAssociationMixin<Payment, number>
@@ -2680,11 +2719,11 @@ export class Staff extends Model<
   declare countPayments: HasManyCountAssociationsMixin
   
   declare static associations: {
-    Store: Association<Staff, Store>,
+    store: Association<Staff, Store>,
     managedStores: Association<Staff, Store>,
-    Address: Association<Staff, Address>,
-    Rentals: Association<Staff, Rental>,
-    Payments: Association<Staff, Payment>
+    address: Association<Staff, Address>,
+    rentals: Association<Staff, Rental>,
+    payments: Association<Staff, Payment>
   }
 
   static initModel(sequelize: Sequelize): typeof Staff {
@@ -2776,7 +2815,7 @@ export class Store extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Store hasMany Inventory
-  declare Inventories: NonAttribute<Inventory[]>
+  declare inventories: NonAttribute<Inventory[]>
   declare getInventories: HasManyGetAssociationsMixin<Inventory>
   declare setInventories: HasManySetAssociationsMixin<Inventory, number>
   declare addInventory: HasManyAddAssociationMixin<Inventory, number>
@@ -2789,7 +2828,7 @@ export class Store extends Model<
   declare countInventories: HasManyCountAssociationsMixin
   
   // Store hasMany Staff
-  declare Staffs: NonAttribute<Staff[]>
+  declare staffs: NonAttribute<Staff[]>
   declare getStaffs: HasManyGetAssociationsMixin<Staff>
   declare setStaffs: HasManySetAssociationsMixin<Staff, number>
   declare addStaff: HasManyAddAssociationMixin<Staff, number>
@@ -2802,7 +2841,7 @@ export class Store extends Model<
   declare countStaffs: HasManyCountAssociationsMixin
   
   // Store hasMany Customer
-  declare Customers: NonAttribute<Customer[]>
+  declare customers: NonAttribute<Customer[]>
   declare getCustomers: HasManyGetAssociationsMixin<Customer>
   declare setCustomers: HasManySetAssociationsMixin<Customer, number>
   declare addCustomer: HasManyAddAssociationMixin<Customer, number>
@@ -2821,17 +2860,17 @@ export class Store extends Model<
   declare createManager: BelongsToCreateAssociationMixin<Staff>
   
   // Store belongsTo Address
-  declare Address: NonAttribute<Address>
+  declare address: NonAttribute<Address>
   declare getAddress: BelongsToGetAssociationMixin<Address>
   declare setAddress: BelongsToSetAssociationMixin<Address, number>
   declare createAddress: BelongsToCreateAssociationMixin<Address>
   
   declare static associations: {
-    Inventories: Association<Store, Inventory>,
-    Staffs: Association<Store, Staff>,
-    Customers: Association<Store, Customer>,
+    inventories: Association<Store, Inventory>,
+    staffs: Association<Store, Staff>,
+    customers: Association<Store, Customer>,
     manager: Association<Store, Staff>,
-    Address: Association<Store, Address>
+    address: Association<Store, Address>
   }
 
   static initModel(sequelize: Sequelize): typeof Store {
