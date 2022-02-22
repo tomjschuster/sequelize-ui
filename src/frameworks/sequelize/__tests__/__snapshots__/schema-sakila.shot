@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Sequelize Framework generates the correct code for schema-sakila 1`] = `
+exports[`Sequelize Framework generates the correct code for sakila 1`] = `
 
 /******************************************************************************
  *                             /sakila/.gitignore                             *
