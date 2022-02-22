@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Sequelize Framework generates the correct code for schema-blog 1`] = `
+exports[`Sequelize Framework generates the correct code for blog 1`] = `
 
 /******************************************************************************
  *                              /blog/.gitignore                              *

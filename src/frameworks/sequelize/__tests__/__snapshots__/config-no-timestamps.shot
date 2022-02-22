@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Sequelize Framework generates the correct code for sqlite 1`] = `
+exports[`Sequelize Framework generates the correct code for noTimestamps 1`] = `
 
 /******************************************************************************
  *                               /sakila/db.ts                                *
@@ -15,67 +15,13 @@ const config = (configs as {[key: string]: Options})[env]
 const db: Sequelize = new Sequelize({
   ...config,
   define: {
-    underscored: true
+    underscored: true,
+    timestamps: false
   }
 })
 
 export default db
 
-
-/******************************************************************************
- *                            /sakila/package.json                            *
- ******************************************************************************/
-
-{
-  "name": "sakila",
-  "version": "0.0.1",
-  "description": "",
-  "main": "server.ts",
-  "scripts": {
-    "test": "echo \\"Error: no test specified\\" && exit 1",
-    "db:migrate": "sequelize db:migrate",
-    "db:rollback": "sequelize db:migrate:undo",
-    "db:rollback:all": "sequelize db:migrate:undo:all",
-    "build": "tsc",
-    "start": "node ./dist/server.js",
-    "dev": "tsc-watch --onSuccess \\"node ./dist/server.js\\""
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "sequelize": "^6.16.2",
-    "sqlite3": "^5.0.2"
-  },
-  "devDependencies": {
-    "@types/node": "^16.11.7",
-    "@types/sqlite3": "^3.1.8",
-    "@types/validator": "^13.7.1",
-    "sequelize-cli": "^6.4.1",
-    "tsc-watch": "^4.6.0",
-    "typescript": "^4.5.5"
-  }
-}
-
-
-
-/******************************************************************************
- *                          /sakila/config/config.js                          *
- ******************************************************************************/
-
-module.exports = {
-  development: {
-    dialect: 'sqlite',
-    storage: process.env.SQLITE || '.tmp/data.db'
-  },
-  test: {
-    dialect: 'sqlite',
-    storage: process.env.SQLITE || '.tmp/data.db'
-  },
-  production: {
-    dialect: 'sqlite',
-    storage: process.env.SQLITE
-  }
-}
 
 /******************************************************************************
  *                           /sakila/models/Film.ts                           *
@@ -135,11 +81,8 @@ export class Film extends Model<
   declare rentalRate: number
   declare length: number | null
   declare rating: 'G' | 'PG' | 'PG-13' | 'R' | 'NC-17'
-  //// DataTypes.ARRAY(DataTypes.ENUM('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes')) not supported for SQLite
-  // declare specialFeature: Array<'Trailers' | 'Commentaries' | 'Deleted Scenes' | 'Behind the Scenes'>
-  declare createdAt: CreationOptional<Date>
-  declare updatedAt: CreationOptional<Date>
-
+  declare specialFeature: Array<'Trailers' | 'Commentaries' | 'Deleted Scenes' | 'Behind the Scenes'>
+  
   // Film belongsTo Language
   declare language?: NonAttribute<Language>
   declare getLanguage: BelongsToGetAssociationMixin<Language>
@@ -239,16 +182,9 @@ export class Film extends Model<
         type: DataTypes.ENUM('G', 'PG', 'PG-13', 'R', 'NC-17'),
         allowNull: false
       },
-      //// DataTypes.ARRAY(DataTypes.ENUM('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes')) not supported for SQLite
-      // specialFeature: {
-      //   type: DataTypes.ARRAY(DataTypes.ENUM('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes')),
-      //   allowNull: false
-      // },
-      createdAt: {
-        type: DataTypes.DATE
-      },
-      updatedAt: {
-        type: DataTypes.DATE
+      specialFeature: {
+        type: DataTypes.ARRAY(DataTypes.ENUM('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes')),
+        allowNull: false
       }
     }, {
       sequelize
