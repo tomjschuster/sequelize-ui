@@ -1,10 +1,10 @@
 import { deepDropKeys } from '@src/utils/object'
-import { blogLegacy } from '../../../__fixtures__/blogLegacy'
-import { blogTranslatedFromLegacy } from '../../../__fixtures__/blogTranslatedFromLegacy'
-import { blogTranslatedFromV1 } from '../../../__fixtures__/blogTranslatedFromV1'
-import { blogV1 } from '../../../__fixtures__/blogV1'
 import { fromV0 } from '../v0/translate'
 import { fromV1, toV1 } from '../v1/translate'
+import { blogLegacy } from '../__fixtures__/blogLegacy'
+import { blogTranslatedFromLegacy } from '../__fixtures__/blogTranslatedFromLegacy'
+import { blogTranslatedFromV1 } from '../__fixtures__/blogTranslatedFromV1'
+import { blogV1 } from '../__fixtures__/blogV1'
 
 describe('translate (legacy)', () => {
   // time stamps are added when migrating from legacy

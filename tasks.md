@@ -2,7 +2,6 @@
 
 ### Todo
 
-- [ ] **API**: Persist db options for user
 - [ ] **API**: Import swagger/json schema
 
 - [ ] **CI**: Run E2E SQL tests for all dialects before prod deploy
@@ -26,5 +25,7 @@
 - [ ] **UI**: Animate panels on delete
 
 ### In Progress
+
+- [ ] **API**: Persist db options for user
 
 ### Done ✓
