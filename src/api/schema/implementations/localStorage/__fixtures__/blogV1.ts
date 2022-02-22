@@ -37,7 +37,7 @@ import {
   textDataType,
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import { Model, SchemaV1 } from '../implementations/localStorage/v1'
+import { Model, SchemaV1 } from '../v1'
 
 const time = fromParts(2021, 4, 1)
 

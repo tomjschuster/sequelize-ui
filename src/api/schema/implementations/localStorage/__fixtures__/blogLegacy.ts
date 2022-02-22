@@ -1,9 +1,4 @@
-import {
-  FieldType,
-  SchemaV0,
-  SequelizeStateConfigDialect,
-  SequelizeStatePageState,
-} from '../implementations/localStorage/v0'
+import { FieldType, SchemaV0, SequelizeStateConfigDialect, SequelizeStatePageState } from '../v0'
 
 export const blogLegacy: SchemaV0 = {
   config: {
