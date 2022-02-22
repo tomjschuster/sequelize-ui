@@ -630,9 +630,11 @@ import type { DeptEmp } from './DeptEmp'
 import type { DeptManager } from './DeptManager'
 import type { Employee } from './Employee'
 
+type DepartmentAssociations = 'employees' | 'managers' | 'deptEmps' | 'deptManagers'
+
 export class Department extends Model<
-  InferAttributes<Department>,
-  InferCreationAttributes<Department>
+  InferAttributes<Department, {omit: DepartmentAssociations}>,
+  InferCreationAttributes<Department, {omit: DepartmentAssociations}>
 > {
   declare deptNo: CreationOptional<string>
   declare deptName: string
@@ -640,7 +642,7 @@ export class Department extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Department belongsToMany Employee (as Employee)
-  declare employees: NonAttribute<Employee[]>
+  declare employees?: NonAttribute<Employee[]>
   declare getEmployees: BelongsToManyGetAssociationsMixin<Employee>
   declare setEmployees: BelongsToManySetAssociationsMixin<Employee, number>
   declare addEmployee: BelongsToManyAddAssociationMixin<Employee, number>
@@ -653,7 +655,7 @@ export class Department extends Model<
   declare countEmployees: BelongsToManyCountAssociationsMixin
   
   // Department belongsToMany Employee (as Manager)
-  declare managers: NonAttribute<Employee[]>
+  declare managers?: NonAttribute<Employee[]>
   declare getManagers: BelongsToManyGetAssociationsMixin<Employee>
   declare setManagers: BelongsToManySetAssociationsMixin<Employee, number>
   declare addManager: BelongsToManyAddAssociationMixin<Employee, number>
@@ -666,7 +668,7 @@ export class Department extends Model<
   declare countManagers: BelongsToManyCountAssociationsMixin
   
   // Department hasMany DeptEmp
-  declare deptEmps: NonAttribute<DeptEmp[]>
+  declare deptEmps?: NonAttribute<DeptEmp[]>
   declare getDeptEmps: HasManyGetAssociationsMixin<DeptEmp>
   declare setDeptEmps: HasManySetAssociationsMixin<DeptEmp, never>
   declare addDeptEmp: HasManyAddAssociationMixin<DeptEmp, never>
@@ -679,7 +681,7 @@ export class Department extends Model<
   declare countDeptEmps: HasManyCountAssociationsMixin
   
   // Department hasMany DeptManager
-  declare deptManagers: NonAttribute<DeptManager[]>
+  declare deptManagers?: NonAttribute<DeptManager[]>
   declare getDeptManagers: HasManyGetAssociationsMixin<DeptManager>
   declare setDeptManagers: HasManySetAssociationsMixin<DeptManager, never>
   declare addDeptManager: HasManyAddAssociationMixin<DeptManager, never>
@@ -744,9 +746,11 @@ import {
 import type { Department } from './Department'
 import type { Employee } from './Employee'
 
+type DeptEmpAssociations = 'employee' | 'department'
+
 export class DeptEmp extends Model<
-  InferAttributes<DeptEmp>,
-  InferCreationAttributes<DeptEmp>
+  InferAttributes<DeptEmp, {omit: DeptEmpAssociations}>,
+  InferCreationAttributes<DeptEmp, {omit: DeptEmpAssociations}>
 > {
   declare empNo: CreationOptional<number>
   declare deptNo: CreationOptional<string>
@@ -756,13 +760,13 @@ export class DeptEmp extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // DeptEmp belongsTo Employee
-  declare employee: NonAttribute<Employee>
+  declare employee?: NonAttribute<Employee>
   declare getEmployee: BelongsToGetAssociationMixin<Employee>
   declare setEmployee: BelongsToSetAssociationMixin<Employee, number>
   declare createEmployee: BelongsToCreateAssociationMixin<Employee>
   
   // DeptEmp belongsTo Department
-  declare department: NonAttribute<Department>
+  declare department?: NonAttribute<Department>
   declare getDepartment: BelongsToGetAssociationMixin<Department>
   declare setDepartment: BelongsToSetAssociationMixin<Department, string>
   declare createDepartment: BelongsToCreateAssociationMixin<Department>
@@ -827,9 +831,11 @@ import {
 import type { Department } from './Department'
 import type { Employee } from './Employee'
 
+type DeptManagerAssociations = 'employee' | 'department'
+
 export class DeptManager extends Model<
-  InferAttributes<DeptManager>,
-  InferCreationAttributes<DeptManager>
+  InferAttributes<DeptManager, {omit: DeptManagerAssociations}>,
+  InferCreationAttributes<DeptManager, {omit: DeptManagerAssociations}>
 > {
   declare empNo: CreationOptional<number>
   declare deptNo: CreationOptional<string>
@@ -839,13 +845,13 @@ export class DeptManager extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // DeptManager belongsTo Employee
-  declare employee: NonAttribute<Employee>
+  declare employee?: NonAttribute<Employee>
   declare getEmployee: BelongsToGetAssociationMixin<Employee>
   declare setEmployee: BelongsToSetAssociationMixin<Employee, number>
   declare createEmployee: BelongsToCreateAssociationMixin<Employee>
   
   // DeptManager belongsTo Department
-  declare department: NonAttribute<Department>
+  declare department?: NonAttribute<Department>
   declare getDepartment: BelongsToGetAssociationMixin<Department>
   declare setDepartment: BelongsToSetAssociationMixin<Department, string>
   declare createDepartment: BelongsToCreateAssociationMixin<Department>
@@ -928,9 +934,11 @@ import type { Department } from './Department'
 import type { Salary } from './Salary'
 import type { Title } from './Title'
 
+type EmployeeAssociations = 'salaries' | 'titles' | 'employingDepartments' | 'managedDepartments'
+
 export class Employee extends Model<
-  InferAttributes<Employee>,
-  InferCreationAttributes<Employee>
+  InferAttributes<Employee, {omit: EmployeeAssociations}>,
+  InferCreationAttributes<Employee, {omit: EmployeeAssociations}>
 > {
   declare empNo: CreationOptional<number>
   declare birthDate: string
@@ -942,7 +950,7 @@ export class Employee extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Employee hasMany Salary
-  declare salaries: NonAttribute<Salary[]>
+  declare salaries?: NonAttribute<Salary[]>
   declare getSalaries: HasManyGetAssociationsMixin<Salary>
   declare setSalaries: HasManySetAssociationsMixin<Salary, never>
   declare addSalary: HasManyAddAssociationMixin<Salary, never>
@@ -955,7 +963,7 @@ export class Employee extends Model<
   declare countSalaries: HasManyCountAssociationsMixin
   
   // Employee hasMany Title
-  declare titles: NonAttribute<Title[]>
+  declare titles?: NonAttribute<Title[]>
   declare getTitles: HasManyGetAssociationsMixin<Title>
   declare setTitles: HasManySetAssociationsMixin<Title, never>
   declare addTitle: HasManyAddAssociationMixin<Title, never>
@@ -968,7 +976,7 @@ export class Employee extends Model<
   declare countTitles: HasManyCountAssociationsMixin
   
   // Employee belongsToMany Department (as EmployingDepartment)
-  declare employingDepartments: NonAttribute<Department[]>
+  declare employingDepartments?: NonAttribute<Department[]>
   declare getEmployingDepartments: BelongsToManyGetAssociationsMixin<Department>
   declare setEmployingDepartments: BelongsToManySetAssociationsMixin<Department, string>
   declare addEmployingDepartment: BelongsToManyAddAssociationMixin<Department, string>
@@ -981,7 +989,7 @@ export class Employee extends Model<
   declare countEmployingDepartments: BelongsToManyCountAssociationsMixin
   
   // Employee belongsToMany Department (as ManagedDepartment)
-  declare managedDepartments: NonAttribute<Department[]>
+  declare managedDepartments?: NonAttribute<Department[]>
   declare getManagedDepartments: BelongsToManyGetAssociationsMixin<Department>
   declare setManagedDepartments: BelongsToManySetAssociationsMixin<Department, string>
   declare addManagedDepartment: BelongsToManyAddAssociationMixin<Department, string>
@@ -1171,9 +1179,11 @@ import {
 } from 'sequelize'
 import type { Employee } from './Employee'
 
+type SalaryAssociations = 'employee'
+
 export class Salary extends Model<
-  InferAttributes<Salary>,
-  InferCreationAttributes<Salary>
+  InferAttributes<Salary, {omit: SalaryAssociations}>,
+  InferCreationAttributes<Salary, {omit: SalaryAssociations}>
 > {
   declare empNo: CreationOptional<number>
   declare salary: number
@@ -1183,7 +1193,7 @@ export class Salary extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Salary belongsTo Employee
-  declare employee: NonAttribute<Employee>
+  declare employee?: NonAttribute<Employee>
   declare getEmployee: BelongsToGetAssociationMixin<Employee>
   declare setEmployee: BelongsToSetAssociationMixin<Employee, number>
   declare createEmployee: BelongsToCreateAssociationMixin<Employee>
@@ -1246,9 +1256,11 @@ import {
 } from 'sequelize'
 import type { Employee } from './Employee'
 
+type TitleAssociations = 'employee'
+
 export class Title extends Model<
-  InferAttributes<Title>,
-  InferCreationAttributes<Title>
+  InferAttributes<Title, {omit: TitleAssociations}>,
+  InferCreationAttributes<Title, {omit: TitleAssociations}>
 > {
   declare empNo: CreationOptional<number>
   declare title: string
@@ -1258,7 +1270,7 @@ export class Title extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Title belongsTo Employee
-  declare employee: NonAttribute<Employee>
+  declare employee?: NonAttribute<Employee>
   declare getEmployee: BelongsToGetAssociationMixin<Employee>
   declare setEmployee: BelongsToSetAssociationMixin<Employee, number>
   declare createEmployee: BelongsToCreateAssociationMixin<Employee>

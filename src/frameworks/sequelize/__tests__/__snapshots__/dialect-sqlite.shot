@@ -1148,9 +1148,11 @@ import {
 } from 'sequelize'
 import type { Film } from './Film'
 
+type ActorAssociations = 'films'
+
 export class Actor extends Model<
-  InferAttributes<Actor>,
-  InferCreationAttributes<Actor>
+  InferAttributes<Actor, {omit: ActorAssociations}>,
+  InferCreationAttributes<Actor, {omit: ActorAssociations}>
 > {
   declare id: CreationOptional<number>
   declare firstName: string
@@ -1159,7 +1161,7 @@ export class Actor extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Actor belongsToMany Film
-  declare films: NonAttribute<Film[]>
+  declare films?: NonAttribute<Film[]>
   declare getFilms: BelongsToManyGetAssociationsMixin<Film>
   declare setFilms: BelongsToManySetAssociationsMixin<Film, number>
   declare addFilm: BelongsToManyAddAssociationMixin<Film, number>
@@ -1231,9 +1233,11 @@ import type { Customer } from './Customer'
 import type { Staff } from './Staff'
 import type { Store } from './Store'
 
+type AddressAssociations = 'city' | 'customer' | 'staff' | 'store'
+
 export class Address extends Model<
-  InferAttributes<Address>,
-  InferCreationAttributes<Address>
+  InferAttributes<Address, {omit: AddressAssociations}>,
+  InferCreationAttributes<Address, {omit: AddressAssociations}>
 > {
   declare id: CreationOptional<number>
   declare address: string
@@ -1244,25 +1248,25 @@ export class Address extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Address belongsTo City
-  declare city: NonAttribute<City>
+  declare city?: NonAttribute<City>
   declare getCity: BelongsToGetAssociationMixin<City>
   declare setCity: BelongsToSetAssociationMixin<City, number>
   declare createCity: BelongsToCreateAssociationMixin<City>
   
   // Address hasOne Customer
-  declare customer: NonAttribute<Customer>
+  declare customer?: NonAttribute<Customer>
   declare getCustomer: HasOneGetAssociationMixin<Customer>
   declare setCustomer: HasOneSetAssociationMixin<Customer, number>
   declare createCustomer: HasOneCreateAssociationMixin<Customer>
   
   // Address hasOne Staff
-  declare staff: NonAttribute<Staff>
+  declare staff?: NonAttribute<Staff>
   declare getStaff: HasOneGetAssociationMixin<Staff>
   declare setStaff: HasOneSetAssociationMixin<Staff, number>
   declare createStaff: HasOneCreateAssociationMixin<Staff>
   
   // Address hasOne Store
-  declare store: NonAttribute<Store>
+  declare store?: NonAttribute<Store>
   declare getStore: HasOneGetAssociationMixin<Store>
   declare setStore: HasOneSetAssociationMixin<Store, number>
   declare createStore: HasOneCreateAssociationMixin<Store>
@@ -1338,16 +1342,18 @@ import {
 } from 'sequelize'
 import type { Film } from './Film'
 
+type CategoryAssociations = 'films'
+
 export class Category extends Model<
-  InferAttributes<Category>,
-  InferCreationAttributes<Category>
+  InferAttributes<Category, {omit: CategoryAssociations}>,
+  InferCreationAttributes<Category, {omit: CategoryAssociations}>
 > {
   declare id: CreationOptional<number>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
   // Category belongsToMany Film
-  declare films: NonAttribute<Film[]>
+  declare films?: NonAttribute<Film[]>
   declare getFilms: BelongsToManyGetAssociationsMixin<Film>
   declare setFilms: BelongsToManySetAssociationsMixin<Film, number>
   declare addFilm: BelongsToManyAddAssociationMixin<Film, number>
@@ -1416,9 +1422,11 @@ import {
 import type { Address } from './Address'
 import type { Country } from './Country'
 
+type CityAssociations = 'country' | 'addresses'
+
 export class City extends Model<
-  InferAttributes<City>,
-  InferCreationAttributes<City>
+  InferAttributes<City, {omit: CityAssociations}>,
+  InferCreationAttributes<City, {omit: CityAssociations}>
 > {
   declare id: CreationOptional<number>
   declare city: string
@@ -1426,13 +1434,13 @@ export class City extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // City belongsTo Country
-  declare country: NonAttribute<Country>
+  declare country?: NonAttribute<Country>
   declare getCountry: BelongsToGetAssociationMixin<Country>
   declare setCountry: BelongsToSetAssociationMixin<Country, number>
   declare createCountry: BelongsToCreateAssociationMixin<Country>
   
   // City hasMany Address
-  declare addresses: NonAttribute<Address[]>
+  declare addresses?: NonAttribute<Address[]>
   declare getAddresses: HasManyGetAssociationsMixin<Address>
   declare setAddresses: HasManySetAssociationsMixin<Address, number>
   declare addAddress: HasManyAddAssociationMixin<Address, number>
@@ -1502,9 +1510,11 @@ import {
 } from 'sequelize'
 import type { City } from './City'
 
+type CountryAssociations = 'cities'
+
 export class Country extends Model<
-  InferAttributes<Country>,
-  InferCreationAttributes<Country>
+  InferAttributes<Country, {omit: CountryAssociations}>,
+  InferCreationAttributes<Country, {omit: CountryAssociations}>
 > {
   declare id: CreationOptional<number>
   declare country: string
@@ -1512,7 +1522,7 @@ export class Country extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Country hasMany City
-  declare cities: NonAttribute<City[]>
+  declare cities?: NonAttribute<City[]>
   declare getCities: HasManyGetAssociationsMixin<City>
   declare setCities: HasManySetAssociationsMixin<City, number>
   declare addCity: HasManyAddAssociationMixin<City, number>
@@ -1587,9 +1597,11 @@ import type { Payment } from './Payment'
 import type { Rental } from './Rental'
 import type { Store } from './Store'
 
+type CustomerAssociations = 'store' | 'address' | 'rentals' | 'payments'
+
 export class Customer extends Model<
-  InferAttributes<Customer>,
-  InferCreationAttributes<Customer>
+  InferAttributes<Customer, {omit: CustomerAssociations}>,
+  InferCreationAttributes<Customer, {omit: CustomerAssociations}>
 > {
   declare id: CreationOptional<number>
   declare firstName: string
@@ -1600,19 +1612,19 @@ export class Customer extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Customer belongsTo Store
-  declare store: NonAttribute<Store>
+  declare store?: NonAttribute<Store>
   declare getStore: BelongsToGetAssociationMixin<Store>
   declare setStore: BelongsToSetAssociationMixin<Store, number>
   declare createStore: BelongsToCreateAssociationMixin<Store>
   
   // Customer belongsTo Address
-  declare address: NonAttribute<Address>
+  declare address?: NonAttribute<Address>
   declare getAddress: BelongsToGetAssociationMixin<Address>
   declare setAddress: BelongsToSetAssociationMixin<Address, number>
   declare createAddress: BelongsToCreateAssociationMixin<Address>
   
   // Customer hasMany Rental
-  declare rentals: NonAttribute<Rental[]>
+  declare rentals?: NonAttribute<Rental[]>
   declare getRentals: HasManyGetAssociationsMixin<Rental>
   declare setRentals: HasManySetAssociationsMixin<Rental, number>
   declare addRental: HasManyAddAssociationMixin<Rental, number>
@@ -1625,7 +1637,7 @@ export class Customer extends Model<
   declare countRentals: HasManyCountAssociationsMixin
   
   // Customer hasMany Payment
-  declare payments: NonAttribute<Payment[]>
+  declare payments?: NonAttribute<Payment[]>
   declare getPayments: HasManyGetAssociationsMixin<Payment>
   declare setPayments: HasManySetAssociationsMixin<Payment, number>
   declare addPayment: HasManyAddAssociationMixin<Payment, number>
@@ -1724,9 +1736,11 @@ import type { Category } from './Category'
 import type { Inventory } from './Inventory'
 import type { Language } from './Language'
 
+type FilmAssociations = 'language' | 'originalLanguage' | 'inventories' | 'actors' | 'categories'
+
 export class Film extends Model<
-  InferAttributes<Film>,
-  InferCreationAttributes<Film>
+  InferAttributes<Film, {omit: FilmAssociations}>,
+  InferCreationAttributes<Film, {omit: FilmAssociations}>
 > {
   declare id: CreationOptional<number>
   declare title: string
@@ -1744,19 +1758,19 @@ export class Film extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Film belongsTo Language
-  declare language: NonAttribute<Language>
+  declare language?: NonAttribute<Language>
   declare getLanguage: BelongsToGetAssociationMixin<Language>
   declare setLanguage: BelongsToSetAssociationMixin<Language, number>
   declare createLanguage: BelongsToCreateAssociationMixin<Language>
   
   // Film belongsTo Language (as OriginalLanguage)
-  declare originalLanguage: NonAttribute<Language>
+  declare originalLanguage?: NonAttribute<Language>
   declare getOriginalLanguage: BelongsToGetAssociationMixin<Language>
   declare setOriginalLanguage: BelongsToSetAssociationMixin<Language, number>
   declare createOriginalLanguage: BelongsToCreateAssociationMixin<Language>
   
   // Film hasMany Inventory
-  declare inventories: NonAttribute<Inventory[]>
+  declare inventories?: NonAttribute<Inventory[]>
   declare getInventories: HasManyGetAssociationsMixin<Inventory>
   declare setInventories: HasManySetAssociationsMixin<Inventory, number>
   declare addInventory: HasManyAddAssociationMixin<Inventory, number>
@@ -1769,7 +1783,7 @@ export class Film extends Model<
   declare countInventories: HasManyCountAssociationsMixin
   
   // Film belongsToMany Actor
-  declare actors: NonAttribute<Actor[]>
+  declare actors?: NonAttribute<Actor[]>
   declare getActors: BelongsToManyGetAssociationsMixin<Actor>
   declare setActors: BelongsToManySetAssociationsMixin<Actor, number>
   declare addActor: BelongsToManyAddAssociationMixin<Actor, number>
@@ -1782,7 +1796,7 @@ export class Film extends Model<
   declare countActors: BelongsToManyCountAssociationsMixin
   
   // Film belongsToMany Category
-  declare categories: NonAttribute<Category[]>
+  declare categories?: NonAttribute<Category[]>
   declare getCategories: BelongsToManyGetAssociationsMixin<Category>
   declare setCategories: BelongsToManySetAssociationsMixin<Category, number>
   declare addCategory: BelongsToManyAddAssociationMixin<Category, number>
@@ -1882,22 +1896,24 @@ import {
 import type { Actor } from './Actor'
 import type { Film } from './Film'
 
+type FilmActorAssociations = 'film' | 'actor'
+
 export class FilmActor extends Model<
-  InferAttributes<FilmActor>,
-  InferCreationAttributes<FilmActor>
+  InferAttributes<FilmActor, {omit: FilmActorAssociations}>,
+  InferCreationAttributes<FilmActor, {omit: FilmActorAssociations}>
 > {
   declare id: CreationOptional<number>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
   // FilmActor belongsTo Film
-  declare film: NonAttribute<Film>
+  declare film?: NonAttribute<Film>
   declare getFilm: BelongsToGetAssociationMixin<Film>
   declare setFilm: BelongsToSetAssociationMixin<Film, number>
   declare createFilm: BelongsToCreateAssociationMixin<Film>
   
   // FilmActor belongsTo Actor
-  declare actor: NonAttribute<Actor>
+  declare actor?: NonAttribute<Actor>
   declare getActor: BelongsToGetAssociationMixin<Actor>
   declare setActor: BelongsToSetAssociationMixin<Actor, number>
   declare createActor: BelongsToCreateAssociationMixin<Actor>
@@ -1950,22 +1966,24 @@ import {
 import type { Category } from './Category'
 import type { Film } from './Film'
 
+type FilmCategoryAssociations = 'film' | 'category'
+
 export class FilmCategory extends Model<
-  InferAttributes<FilmCategory>,
-  InferCreationAttributes<FilmCategory>
+  InferAttributes<FilmCategory, {omit: FilmCategoryAssociations}>,
+  InferCreationAttributes<FilmCategory, {omit: FilmCategoryAssociations}>
 > {
   declare id: CreationOptional<number>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
   // FilmCategory belongsTo Film
-  declare film: NonAttribute<Film>
+  declare film?: NonAttribute<Film>
   declare getFilm: BelongsToGetAssociationMixin<Film>
   declare setFilm: BelongsToSetAssociationMixin<Film, number>
   declare createFilm: BelongsToCreateAssociationMixin<Film>
   
   // FilmCategory belongsTo Category
-  declare category: NonAttribute<Category>
+  declare category?: NonAttribute<Category>
   declare getCategory: BelongsToGetAssociationMixin<Category>
   declare setCategory: BelongsToSetAssociationMixin<Category, number>
   declare createCategory: BelongsToCreateAssociationMixin<Category>
@@ -2283,22 +2301,24 @@ import {
 import type { Film } from './Film'
 import type { Store } from './Store'
 
+type InventoryAssociations = 'film' | 'store'
+
 export class Inventory extends Model<
-  InferAttributes<Inventory>,
-  InferCreationAttributes<Inventory>
+  InferAttributes<Inventory, {omit: InventoryAssociations}>,
+  InferCreationAttributes<Inventory, {omit: InventoryAssociations}>
 > {
   declare id: CreationOptional<number>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
   // Inventory belongsTo Film
-  declare film: NonAttribute<Film>
+  declare film?: NonAttribute<Film>
   declare getFilm: BelongsToGetAssociationMixin<Film>
   declare setFilm: BelongsToSetAssociationMixin<Film, number>
   declare createFilm: BelongsToCreateAssociationMixin<Film>
   
   // Inventory belongsTo Store
-  declare store: NonAttribute<Store>
+  declare store?: NonAttribute<Store>
   declare getStore: BelongsToGetAssociationMixin<Store>
   declare setStore: BelongsToSetAssociationMixin<Store, number>
   declare createStore: BelongsToCreateAssociationMixin<Store>
@@ -2357,9 +2377,11 @@ import {
 } from 'sequelize'
 import type { Film } from './Film'
 
+type LanguageAssociations = 'films' | 'originalLanguageFilms'
+
 export class Language extends Model<
-  InferAttributes<Language>,
-  InferCreationAttributes<Language>
+  InferAttributes<Language, {omit: LanguageAssociations}>,
+  InferCreationAttributes<Language, {omit: LanguageAssociations}>
 > {
   declare id: CreationOptional<number>
   declare name: string
@@ -2367,7 +2389,7 @@ export class Language extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Language hasMany Film
-  declare films: NonAttribute<Film[]>
+  declare films?: NonAttribute<Film[]>
   declare getFilms: HasManyGetAssociationsMixin<Film>
   declare setFilms: HasManySetAssociationsMixin<Film, number>
   declare addFilm: HasManyAddAssociationMixin<Film, number>
@@ -2380,7 +2402,7 @@ export class Language extends Model<
   declare countFilms: HasManyCountAssociationsMixin
   
   // Language hasMany Film (as OriginalLanguageFilm)
-  declare originalLanguageFilms: NonAttribute<Film[]>
+  declare originalLanguageFilms?: NonAttribute<Film[]>
   declare getOriginalLanguageFilms: HasManyGetAssociationsMixin<Film>
   declare setOriginalLanguageFilms: HasManySetAssociationsMixin<Film, number>
   declare addOriginalLanguageFilm: HasManyAddAssociationMixin<Film, number>
@@ -2445,9 +2467,11 @@ import type { Customer } from './Customer'
 import type { Rental } from './Rental'
 import type { Staff } from './Staff'
 
+type PaymentAssociations = 'customer' | 'staff' | 'rental'
+
 export class Payment extends Model<
-  InferAttributes<Payment>,
-  InferCreationAttributes<Payment>
+  InferAttributes<Payment, {omit: PaymentAssociations}>,
+  InferCreationAttributes<Payment, {omit: PaymentAssociations}>
 > {
   declare id: CreationOptional<number>
   declare amount: number
@@ -2456,19 +2480,19 @@ export class Payment extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Payment belongsTo Customer
-  declare customer: NonAttribute<Customer>
+  declare customer?: NonAttribute<Customer>
   declare getCustomer: BelongsToGetAssociationMixin<Customer>
   declare setCustomer: BelongsToSetAssociationMixin<Customer, number>
   declare createCustomer: BelongsToCreateAssociationMixin<Customer>
   
   // Payment belongsTo Staff
-  declare staff: NonAttribute<Staff>
+  declare staff?: NonAttribute<Staff>
   declare getStaff: BelongsToGetAssociationMixin<Staff>
   declare setStaff: BelongsToSetAssociationMixin<Staff, number>
   declare createStaff: BelongsToCreateAssociationMixin<Staff>
   
   // Payment belongsTo Rental
-  declare rental: NonAttribute<Rental>
+  declare rental?: NonAttribute<Rental>
   declare getRental: BelongsToGetAssociationMixin<Rental>
   declare setRental: BelongsToSetAssociationMixin<Rental, number>
   declare createRental: BelongsToCreateAssociationMixin<Rental>
@@ -2542,9 +2566,11 @@ import type { Inventory } from './Inventory'
 import type { Payment } from './Payment'
 import type { Staff } from './Staff'
 
+type RentalAssociations = 'inventory' | 'customer' | 'staff' | 'payments'
+
 export class Rental extends Model<
-  InferAttributes<Rental>,
-  InferCreationAttributes<Rental>
+  InferAttributes<Rental, {omit: RentalAssociations}>,
+  InferCreationAttributes<Rental, {omit: RentalAssociations}>
 > {
   declare id: CreationOptional<number>
   declare rentalDate: string
@@ -2553,25 +2579,25 @@ export class Rental extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Rental belongsTo Inventory
-  declare inventory: NonAttribute<Inventory>
+  declare inventory?: NonAttribute<Inventory>
   declare getInventory: BelongsToGetAssociationMixin<Inventory>
   declare setInventory: BelongsToSetAssociationMixin<Inventory, number>
   declare createInventory: BelongsToCreateAssociationMixin<Inventory>
   
   // Rental belongsTo Customer
-  declare customer: NonAttribute<Customer>
+  declare customer?: NonAttribute<Customer>
   declare getCustomer: BelongsToGetAssociationMixin<Customer>
   declare setCustomer: BelongsToSetAssociationMixin<Customer, number>
   declare createCustomer: BelongsToCreateAssociationMixin<Customer>
   
   // Rental belongsTo Staff
-  declare staff: NonAttribute<Staff>
+  declare staff?: NonAttribute<Staff>
   declare getStaff: BelongsToGetAssociationMixin<Staff>
   declare setStaff: BelongsToSetAssociationMixin<Staff, number>
   declare createStaff: BelongsToCreateAssociationMixin<Staff>
   
   // Rental hasMany Payment
-  declare payments: NonAttribute<Payment[]>
+  declare payments?: NonAttribute<Payment[]>
   declare getPayments: HasManyGetAssociationsMixin<Payment>
   declare setPayments: HasManySetAssociationsMixin<Payment, number>
   declare addPayment: HasManyAddAssociationMixin<Payment, number>
@@ -2652,9 +2678,11 @@ import type { Payment } from './Payment'
 import type { Rental } from './Rental'
 import type { Store } from './Store'
 
+type StaffAssociations = 'store' | 'managedStores' | 'address' | 'rentals' | 'payments'
+
 export class Staff extends Model<
-  InferAttributes<Staff>,
-  InferCreationAttributes<Staff>
+  InferAttributes<Staff, {omit: StaffAssociations}>,
+  InferCreationAttributes<Staff, {omit: StaffAssociations}>
 > {
   declare id: CreationOptional<number>
   declare firstName: string
@@ -2668,13 +2696,13 @@ export class Staff extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Staff belongsTo Store
-  declare store: NonAttribute<Store>
+  declare store?: NonAttribute<Store>
   declare getStore: BelongsToGetAssociationMixin<Store>
   declare setStore: BelongsToSetAssociationMixin<Store, number>
   declare createStore: BelongsToCreateAssociationMixin<Store>
   
   // Staff hasMany Store (as ManagedStore)
-  declare managedStores: NonAttribute<Store[]>
+  declare managedStores?: NonAttribute<Store[]>
   declare getManagedStores: HasManyGetAssociationsMixin<Store>
   declare setManagedStores: HasManySetAssociationsMixin<Store, number>
   declare addManagedStore: HasManyAddAssociationMixin<Store, number>
@@ -2687,13 +2715,13 @@ export class Staff extends Model<
   declare countManagedStores: HasManyCountAssociationsMixin
   
   // Staff belongsTo Address
-  declare address: NonAttribute<Address>
+  declare address?: NonAttribute<Address>
   declare getAddress: BelongsToGetAssociationMixin<Address>
   declare setAddress: BelongsToSetAssociationMixin<Address, number>
   declare createAddress: BelongsToCreateAssociationMixin<Address>
   
   // Staff hasMany Rental
-  declare rentals: NonAttribute<Rental[]>
+  declare rentals?: NonAttribute<Rental[]>
   declare getRentals: HasManyGetAssociationsMixin<Rental>
   declare setRentals: HasManySetAssociationsMixin<Rental, number>
   declare addRental: HasManyAddAssociationMixin<Rental, number>
@@ -2706,7 +2734,7 @@ export class Staff extends Model<
   declare countRentals: HasManyCountAssociationsMixin
   
   // Staff hasMany Payment
-  declare payments: NonAttribute<Payment[]>
+  declare payments?: NonAttribute<Payment[]>
   declare getPayments: HasManyGetAssociationsMixin<Payment>
   declare setPayments: HasManySetAssociationsMixin<Payment, number>
   declare addPayment: HasManyAddAssociationMixin<Payment, number>
@@ -2806,16 +2834,18 @@ import type { Customer } from './Customer'
 import type { Inventory } from './Inventory'
 import type { Staff } from './Staff'
 
+type StoreAssociations = 'inventories' | 'staffs' | 'customers' | 'manager' | 'address'
+
 export class Store extends Model<
-  InferAttributes<Store>,
-  InferCreationAttributes<Store>
+  InferAttributes<Store, {omit: StoreAssociations}>,
+  InferCreationAttributes<Store, {omit: StoreAssociations}>
 > {
   declare id: CreationOptional<number>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
   // Store hasMany Inventory
-  declare inventories: NonAttribute<Inventory[]>
+  declare inventories?: NonAttribute<Inventory[]>
   declare getInventories: HasManyGetAssociationsMixin<Inventory>
   declare setInventories: HasManySetAssociationsMixin<Inventory, number>
   declare addInventory: HasManyAddAssociationMixin<Inventory, number>
@@ -2828,7 +2858,7 @@ export class Store extends Model<
   declare countInventories: HasManyCountAssociationsMixin
   
   // Store hasMany Staff
-  declare staffs: NonAttribute<Staff[]>
+  declare staffs?: NonAttribute<Staff[]>
   declare getStaffs: HasManyGetAssociationsMixin<Staff>
   declare setStaffs: HasManySetAssociationsMixin<Staff, number>
   declare addStaff: HasManyAddAssociationMixin<Staff, number>
@@ -2841,7 +2871,7 @@ export class Store extends Model<
   declare countStaffs: HasManyCountAssociationsMixin
   
   // Store hasMany Customer
-  declare customers: NonAttribute<Customer[]>
+  declare customers?: NonAttribute<Customer[]>
   declare getCustomers: HasManyGetAssociationsMixin<Customer>
   declare setCustomers: HasManySetAssociationsMixin<Customer, number>
   declare addCustomer: HasManyAddAssociationMixin<Customer, number>
@@ -2854,13 +2884,13 @@ export class Store extends Model<
   declare countCustomers: HasManyCountAssociationsMixin
   
   // Store belongsTo Staff (as Manager)
-  declare manager: NonAttribute<Staff>
+  declare manager?: NonAttribute<Staff>
   declare getManager: BelongsToGetAssociationMixin<Staff>
   declare setManager: BelongsToSetAssociationMixin<Staff, number>
   declare createManager: BelongsToCreateAssociationMixin<Staff>
   
   // Store belongsTo Address
-  declare address: NonAttribute<Address>
+  declare address?: NonAttribute<Address>
   declare getAddress: BelongsToGetAssociationMixin<Address>
   declare setAddress: BelongsToSetAssociationMixin<Address, number>
   declare createAddress: BelongsToCreateAssociationMixin<Address>
