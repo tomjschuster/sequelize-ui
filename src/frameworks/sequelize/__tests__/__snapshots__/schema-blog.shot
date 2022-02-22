@@ -801,9 +801,11 @@ import {
 import type { Post } from './Post'
 import type { PostCategory } from './PostCategory'
 
+type CategoryAssociations = 'parent' | 'children' | 'postCategories' | 'posts'
+
 export class Category extends Model<
-  InferAttributes<Category>,
-  InferCreationAttributes<Category>
+  InferAttributes<Category, {omit: CategoryAssociations}>,
+  InferCreationAttributes<Category, {omit: CategoryAssociations}>
 > {
   declare id: CreationOptional<number>
   declare title: string
@@ -814,13 +816,13 @@ export class Category extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Category belongsTo Category (as Parent)
-  declare parent: NonAttribute<Category>
+  declare parent?: NonAttribute<Category>
   declare getParent: BelongsToGetAssociationMixin<Category>
   declare setParent: BelongsToSetAssociationMixin<Category, number>
   declare createParent: BelongsToCreateAssociationMixin<Category>
   
   // Category hasMany Category (as Children)
-  declare children: NonAttribute<Category[]>
+  declare children?: NonAttribute<Category[]>
   declare getChildren: HasManyGetAssociationsMixin<Category>
   declare setChildren: HasManySetAssociationsMixin<Category, number>
   declare addChild: HasManyAddAssociationMixin<Category, number>
@@ -833,7 +835,7 @@ export class Category extends Model<
   declare countChildren: HasManyCountAssociationsMixin
   
   // Category hasMany PostCategory
-  declare postCategories: NonAttribute<PostCategory[]>
+  declare postCategories?: NonAttribute<PostCategory[]>
   declare getPostCategories: HasManyGetAssociationsMixin<PostCategory>
   declare setPostCategories: HasManySetAssociationsMixin<PostCategory, number>
   declare addPostCategory: HasManyAddAssociationMixin<PostCategory, number>
@@ -846,7 +848,7 @@ export class Category extends Model<
   declare countPostCategories: HasManyCountAssociationsMixin
   
   // Category belongsToMany Post
-  declare posts: NonAttribute<Post[]>
+  declare posts?: NonAttribute<Post[]>
   declare getPosts: BelongsToManyGetAssociationsMixin<Post>
   declare setPosts: BelongsToManySetAssociationsMixin<Post, number>
   declare addPost: BelongsToManyAddAssociationMixin<Post, number>
@@ -1105,9 +1107,11 @@ import type { PostTag } from './PostTag'
 import type { Tag } from './Tag'
 import type { User } from './User'
 
+type PostAssociations = 'author' | 'parent' | 'children' | 'postCategories' | 'categories' | 'comments' | 'metas' | 'postTags' | 'tags'
+
 export class Post extends Model<
-  InferAttributes<Post>,
-  InferCreationAttributes<Post>
+  InferAttributes<Post, {omit: PostAssociations}>,
+  InferCreationAttributes<Post, {omit: PostAssociations}>
 > {
   declare id: CreationOptional<number>
   declare title: string
@@ -1121,19 +1125,19 @@ export class Post extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Post belongsTo User (as Author)
-  declare author: NonAttribute<User>
+  declare author?: NonAttribute<User>
   declare getAuthor: BelongsToGetAssociationMixin<User>
   declare setAuthor: BelongsToSetAssociationMixin<User, number>
   declare createAuthor: BelongsToCreateAssociationMixin<User>
   
   // Post belongsTo Post (as Parent)
-  declare parent: NonAttribute<Post>
+  declare parent?: NonAttribute<Post>
   declare getParent: BelongsToGetAssociationMixin<Post>
   declare setParent: BelongsToSetAssociationMixin<Post, number>
   declare createParent: BelongsToCreateAssociationMixin<Post>
   
   // Post hasMany Post (as Children)
-  declare children: NonAttribute<Post[]>
+  declare children?: NonAttribute<Post[]>
   declare getChildren: HasManyGetAssociationsMixin<Post>
   declare setChildren: HasManySetAssociationsMixin<Post, number>
   declare addChild: HasManyAddAssociationMixin<Post, number>
@@ -1146,7 +1150,7 @@ export class Post extends Model<
   declare countChildren: HasManyCountAssociationsMixin
   
   // Post hasMany PostCategory
-  declare postCategories: NonAttribute<PostCategory[]>
+  declare postCategories?: NonAttribute<PostCategory[]>
   declare getPostCategories: HasManyGetAssociationsMixin<PostCategory>
   declare setPostCategories: HasManySetAssociationsMixin<PostCategory, number>
   declare addPostCategory: HasManyAddAssociationMixin<PostCategory, number>
@@ -1159,7 +1163,7 @@ export class Post extends Model<
   declare countPostCategories: HasManyCountAssociationsMixin
   
   // Post belongsToMany Category
-  declare categories: NonAttribute<Category[]>
+  declare categories?: NonAttribute<Category[]>
   declare getCategories: BelongsToManyGetAssociationsMixin<Category>
   declare setCategories: BelongsToManySetAssociationsMixin<Category, number>
   declare addCategory: BelongsToManyAddAssociationMixin<Category, number>
@@ -1172,7 +1176,7 @@ export class Post extends Model<
   declare countCategories: BelongsToManyCountAssociationsMixin
   
   // Post hasMany PostComment (as Comments)
-  declare comments: NonAttribute<PostComment[]>
+  declare comments?: NonAttribute<PostComment[]>
   declare getComments: HasManyGetAssociationsMixin<PostComment>
   declare setComments: HasManySetAssociationsMixin<PostComment, number>
   declare addComment: HasManyAddAssociationMixin<PostComment, number>
@@ -1185,7 +1189,7 @@ export class Post extends Model<
   declare countComments: HasManyCountAssociationsMixin
   
   // Post hasMany PostMeta (as Meta)
-  declare metas: NonAttribute<PostMeta[]>
+  declare metas?: NonAttribute<PostMeta[]>
   declare getMetas: HasManyGetAssociationsMixin<PostMeta>
   declare setMetas: HasManySetAssociationsMixin<PostMeta, number>
   declare addMeta: HasManyAddAssociationMixin<PostMeta, number>
@@ -1198,7 +1202,7 @@ export class Post extends Model<
   declare countMetas: HasManyCountAssociationsMixin
   
   // Post hasMany PostTag
-  declare postTags: NonAttribute<PostTag[]>
+  declare postTags?: NonAttribute<PostTag[]>
   declare getPostTags: HasManyGetAssociationsMixin<PostTag>
   declare setPostTags: HasManySetAssociationsMixin<PostTag, number>
   declare addPostTag: HasManyAddAssociationMixin<PostTag, number>
@@ -1211,7 +1215,7 @@ export class Post extends Model<
   declare countPostTags: HasManyCountAssociationsMixin
   
   // Post belongsToMany Tag
-  declare tags: NonAttribute<Tag[]>
+  declare tags?: NonAttribute<Tag[]>
   declare getTags: BelongsToManyGetAssociationsMixin<Tag>
   declare setTags: BelongsToManySetAssociationsMixin<Tag, number>
   declare addTag: BelongsToManyAddAssociationMixin<Tag, number>
@@ -1303,22 +1307,24 @@ import {
 import type { Category } from './Category'
 import type { Post } from './Post'
 
+type PostCategoryAssociations = 'post' | 'category'
+
 export class PostCategory extends Model<
-  InferAttributes<PostCategory>,
-  InferCreationAttributes<PostCategory>
+  InferAttributes<PostCategory, {omit: PostCategoryAssociations}>,
+  InferCreationAttributes<PostCategory, {omit: PostCategoryAssociations}>
 > {
   declare categoryId: CreationOptional<number>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
   // PostCategory belongsTo Post
-  declare post: NonAttribute<Post>
+  declare post?: NonAttribute<Post>
   declare getPost: BelongsToGetAssociationMixin<Post>
   declare setPost: BelongsToSetAssociationMixin<Post, number>
   declare createPost: BelongsToCreateAssociationMixin<Post>
   
   // PostCategory belongsTo Category
-  declare category: NonAttribute<Category>
+  declare category?: NonAttribute<Category>
   declare getCategory: BelongsToGetAssociationMixin<Category>
   declare setCategory: BelongsToSetAssociationMixin<Category, number>
   declare createCategory: BelongsToCreateAssociationMixin<Category>
@@ -1378,9 +1384,11 @@ import {
 } from 'sequelize'
 import type { Post } from './Post'
 
+type PostCommentAssociations = 'post' | 'parent' | 'children'
+
 export class PostComment extends Model<
-  InferAttributes<PostComment>,
-  InferCreationAttributes<PostComment>
+  InferAttributes<PostComment, {omit: PostCommentAssociations}>,
+  InferCreationAttributes<PostComment, {omit: PostCommentAssociations}>
 > {
   declare id: CreationOptional<number>
   declare title: string
@@ -1391,19 +1399,19 @@ export class PostComment extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // PostComment belongsTo Post
-  declare post: NonAttribute<Post>
+  declare post?: NonAttribute<Post>
   declare getPost: BelongsToGetAssociationMixin<Post>
   declare setPost: BelongsToSetAssociationMixin<Post, number>
   declare createPost: BelongsToCreateAssociationMixin<Post>
   
   // PostComment belongsTo PostComment (as Parent)
-  declare parent: NonAttribute<PostComment>
+  declare parent?: NonAttribute<PostComment>
   declare getParent: BelongsToGetAssociationMixin<PostComment>
   declare setParent: BelongsToSetAssociationMixin<PostComment, number>
   declare createParent: BelongsToCreateAssociationMixin<PostComment>
   
   // PostComment hasMany PostComment (as Children)
-  declare children: NonAttribute<PostComment[]>
+  declare children?: NonAttribute<PostComment[]>
   declare getChildren: HasManyGetAssociationsMixin<PostComment>
   declare setChildren: HasManySetAssociationsMixin<PostComment, number>
   declare addChild: HasManyAddAssociationMixin<PostComment, number>
@@ -1477,9 +1485,11 @@ import {
 } from 'sequelize'
 import type { Post } from './Post'
 
+type PostMetaAssociations = 'post'
+
 export class PostMeta extends Model<
-  InferAttributes<PostMeta>,
-  InferCreationAttributes<PostMeta>
+  InferAttributes<PostMeta, {omit: PostMetaAssociations}>,
+  InferCreationAttributes<PostMeta, {omit: PostMetaAssociations}>
 > {
   declare id: CreationOptional<number>
   declare key: string
@@ -1488,7 +1498,7 @@ export class PostMeta extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // PostMeta belongsTo Post
-  declare post: NonAttribute<Post>
+  declare post?: NonAttribute<Post>
   declare getPost: BelongsToGetAssociationMixin<Post>
   declare setPost: BelongsToSetAssociationMixin<Post, number>
   declare createPost: BelongsToCreateAssociationMixin<Post>
@@ -1548,22 +1558,24 @@ import {
 import type { Post } from './Post'
 import type { Tag } from './Tag'
 
+type PostTagAssociations = 'post' | 'tag'
+
 export class PostTag extends Model<
-  InferAttributes<PostTag>,
-  InferCreationAttributes<PostTag>
+  InferAttributes<PostTag, {omit: PostTagAssociations}>,
+  InferCreationAttributes<PostTag, {omit: PostTagAssociations}>
 > {
   declare tagId: CreationOptional<number>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
   // PostTag belongsTo Post
-  declare post: NonAttribute<Post>
+  declare post?: NonAttribute<Post>
   declare getPost: BelongsToGetAssociationMixin<Post>
   declare setPost: BelongsToSetAssociationMixin<Post, number>
   declare createPost: BelongsToCreateAssociationMixin<Post>
   
   // PostTag belongsTo Tag
-  declare tag: NonAttribute<Tag>
+  declare tag?: NonAttribute<Tag>
   declare getTag: BelongsToGetAssociationMixin<Tag>
   declare setTag: BelongsToSetAssociationMixin<Tag, number>
   declare createTag: BelongsToCreateAssociationMixin<Tag>
@@ -1631,9 +1643,11 @@ import {
 import type { Post } from './Post'
 import type { PostTag } from './PostTag'
 
+type TagAssociations = 'postTags' | 'posts'
+
 export class Tag extends Model<
-  InferAttributes<Tag>,
-  InferCreationAttributes<Tag>
+  InferAttributes<Tag, {omit: TagAssociations}>,
+  InferCreationAttributes<Tag, {omit: TagAssociations}>
 > {
   declare id: CreationOptional<number>
   declare title: string
@@ -1644,7 +1658,7 @@ export class Tag extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // Tag hasMany PostTag
-  declare postTags: NonAttribute<PostTag[]>
+  declare postTags?: NonAttribute<PostTag[]>
   declare getPostTags: HasManyGetAssociationsMixin<PostTag>
   declare setPostTags: HasManySetAssociationsMixin<PostTag, number>
   declare addPostTag: HasManyAddAssociationMixin<PostTag, number>
@@ -1657,7 +1671,7 @@ export class Tag extends Model<
   declare countPostTags: HasManyCountAssociationsMixin
   
   // Tag belongsToMany Post
-  declare posts: NonAttribute<Post[]>
+  declare posts?: NonAttribute<Post[]>
   declare getPosts: BelongsToManyGetAssociationsMixin<Post>
   declare setPosts: BelongsToManySetAssociationsMixin<Post, number>
   declare addPost: BelongsToManyAddAssociationMixin<Post, number>
@@ -1738,9 +1752,11 @@ import {
 } from 'sequelize'
 import type { Post } from './Post'
 
+type UserAssociations = 'posts'
+
 export class User extends Model<
-  InferAttributes<User>,
-  InferCreationAttributes<User>
+  InferAttributes<User, {omit: UserAssociations}>,
+  InferCreationAttributes<User, {omit: UserAssociations}>
 > {
   declare id: CreationOptional<number>
   declare firstName: string | null
@@ -1757,7 +1773,7 @@ export class User extends Model<
   declare updatedAt: CreationOptional<Date>
 
   // User hasMany Post
-  declare posts: NonAttribute<Post[]>
+  declare posts?: NonAttribute<Post[]>
   declare getPosts: HasManyGetAssociationsMixin<Post>
   declare setPosts: HasManySetAssociationsMixin<Post, number>
   declare addPost: HasManyAddAssociationMixin<Post, number>

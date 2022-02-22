@@ -229,15 +229,20 @@ const frameworks: [label: string, framework: Framework][] = [['Sequelize', Seque
 
 const sqlDialects: SqlDialect[] =
   SQL_DIALECT === 'all'
-    ? Object.values(SqlDialect)
+    ? [
+        SqlDialect.Sqlite,
+        SqlDialect.Postgres,
+        SqlDialect.MySql,
+        SqlDialect.MariaDb,
+        SqlDialect.MsSql,
+      ]
     : [validateDialect(SQL_DIALECT || SqlDialect.Sqlite)]
 
-describe.each(sqlDialects)('SQL tests %s', (sqlDialect) => {
+describe.each(frameworks)('%s', (_label, framework: Framework) => {
   const projectName = alpha(12)
+  const projectType = framework.projectType()
 
-  describe.each(frameworks)('%s', (_label, framework: Framework) => {
-    const projectType = framework.projectType()
-
+  describe.each(sqlDialects)('SQL tests %s', (sqlDialect) => {
     afterAll(async () => {
       !KEEP_ASSETS && (await destroyProject(projectType, projectName))
       !KEEP_ASSETS && (await dropDatabase(projectName, sqlDialect))
@@ -262,7 +267,7 @@ describe.each(sqlDialects)('SQL tests %s', (sqlDialect) => {
           const directory = framework.generate({ schema, dbOptions })
           client = await createDatabase(projectName, sqlDialect)
           await buildProject(projectType, directory, preinstall(sqlDialect, projectType))
-        }, 30000)
+        }, 60000)
 
         afterAll(async () => {
           await client.close()

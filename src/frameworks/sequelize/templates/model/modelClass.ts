@@ -22,10 +22,23 @@ export function modelClassTemplate({
   dbOptions,
 }: ModelClassTempalteArgs): string {
   const name = modelName(model)
+  const associationAliases = associations
+    .map(({ association, model }) => `'${associationName({ association, targetModel: model })}'`)
+    .join(' | ')
+
+  const associationsType = associationAliases
+    ? `type ${name}Associations = ${associationAliases}`
+    : null
+
+  const omit = associationAliases ? `, {omit: ${name}Associations}` : ''
 
   return lines([
+    associationAliases ? associationsType : null,
+    associationAliases ? blank() : null,
     `export class ${name} extends Model<`,
-    lines([`InferAttributes<${name}>,`, `InferCreationAttributes<${name}>`], { depth: 2 }),
+    lines([`InferAttributes<${name}${omit}>,`, `InferCreationAttributes<${name}${omit}>`], {
+      depth: 2,
+    }),
     `> {`,
     lines([...model.fields.map((field) => classFieldType(field, dbOptions, field.primaryKey))], {
       depth: 2,
@@ -147,7 +160,7 @@ function associationType({
     case AssociationTypeType.BelongsTo: {
       return [
         `// ${sourceName} belongsTo ${targetName}${aliasLabel(association)}`,
-        `declare ${name}: NonAttribute<${targetName}>`,
+        `declare ${name}?: NonAttribute<${targetName}>`,
         `declare get${singularMethodPostfix}: BelongsToGetAssociationMixin<${targetName}>`,
         `declare set${singularMethodPostfix}: BelongsToSetAssociationMixin<${targetName}, ${targetPkType}>`,
         `declare create${singularMethodPostfix}: BelongsToCreateAssociationMixin<${targetName}>`,
@@ -165,7 +178,7 @@ function associationType({
 
       return [
         `// ${sourceName} hasMany ${targetName}${aliasLabel(association)}`,
-        `declare ${name}: NonAttribute<${targetName}[]>`,
+        `declare ${name}?: NonAttribute<${targetName}[]>`,
         `declare get${pluralMethodPostfix}: HasManyGetAssociationsMixin<${targetName}>`,
         `declare set${pluralMethodPostfix}: HasManySetAssociationsMixin<${targetName}, ${targetPkType}>`,
         `declare add${singularMethodPostfix}: HasManyAddAssociationMixin<${targetName}, ${targetPkType}>`,
@@ -182,7 +195,7 @@ function associationType({
     case AssociationTypeType.HasOne: {
       return [
         `// ${sourceName} hasOne ${targetName}${aliasLabel(association)}`,
-        `declare ${name}: NonAttribute<${targetName}>`,
+        `declare ${name}?: NonAttribute<${targetName}>`,
         `declare get${singularMethodPostfix}: HasOneGetAssociationMixin<${targetName}>`,
         `declare set${singularMethodPostfix}: HasOneSetAssociationMixin<${targetName}, ${targetPkType}>`,
         `declare create${singularMethodPostfix}: HasOneCreateAssociationMixin<${targetName}>`,
@@ -192,7 +205,7 @@ function associationType({
     case AssociationTypeType.ManyToMany: {
       return [
         `// ${sourceName} belongsToMany ${targetName}${aliasLabel(association)}`,
-        `declare ${name}: NonAttribute<${targetName}[]>`,
+        `declare ${name}?: NonAttribute<${targetName}[]>`,
         `declare get${pluralMethodPostfix}: BelongsToManyGetAssociationsMixin<${targetName}>`,
         `declare set${pluralMethodPostfix}: BelongsToManySetAssociationsMixin<${targetName}, ${targetPkType}>`,
         `declare add${singularMethodPostfix}: BelongsToManyAddAssociationMixin<${targetName}, ${targetPkType}>`,
