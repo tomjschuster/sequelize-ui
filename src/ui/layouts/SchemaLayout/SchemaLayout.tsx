@@ -1,4 +1,5 @@
 import { SchemaMeta } from '@src/api/meta'
+import { DbOptions } from '@src/core/database'
 import * as FileTree from '@src/core/files/fileTree'
 import { Framework } from '@src/core/framework'
 import { Model, Schema } from '@src/core/schema'
@@ -14,18 +15,22 @@ import { useSchemaLayout } from './useSchemaLayout'
 type SchemaLayoutProps = {
   schema: Schema
   meta?: SchemaMeta
+  dbOptions: DbOptions
   initialFramework?: Framework
   initiallyEditing?: boolean
-  onChange: (schema: Schema) => Promise<Schema>
+  onChangeSchema: (schema: Schema) => Promise<Schema>
+  onChangeDbOptions: (dbOptions: DbOptions) => Promise<DbOptions>
   onDelete?: () => Promise<void>
   onClickClose: () => void
 }
 export default function SchemaLayout({
   schema,
   meta,
+  dbOptions,
   initialFramework,
   initiallyEditing,
-  onChange,
+  onChangeSchema,
+  onChangeDbOptions,
   onDelete,
   onClickClose,
 }: SchemaLayoutProps): React.ReactElement | null {
@@ -33,14 +38,12 @@ export default function SchemaLayout({
     state,
     isEditing,
     fileTree,
-    dbOptions,
     selectItem,
     handleKeyDown,
     viewCode,
     viewSchema,
     edit,
     delete_,
-    updateDbOptions,
     updateModel,
     updateSchema,
     addModel,
@@ -57,10 +60,12 @@ export default function SchemaLayout({
     back,
   } = useSchemaLayout({
     schema,
+    dbOptions,
     meta,
     initialFramework,
     initiallyEditing,
-    onChange,
+    onChangeSchema,
+    onChangeDbOptions,
     onExit: onClickClose,
     onDelete,
   })
@@ -85,7 +90,7 @@ export default function SchemaLayout({
         isEditing={isEditing}
         fileTree={fileTree}
         dbOptions={dbOptions}
-        onChangeDbOptions={updateDbOptions}
+        onChangeDbOptions={onChangeDbOptions}
         onSelectCode={viewCode}
         onSelectSchema={handleViewSchema}
         onEdit={edit}

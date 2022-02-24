@@ -1,10 +1,13 @@
 import { getExampleSchemaMeta, getSchemaMetaBySlug, SchemaMeta } from '@src/api/meta'
 import schemaApi from '@src/api/schema'
+import userPreferencesApi from '@src/api/userPreferences'
+import { DbOptions, defaultDbOptions } from '@src/core/database'
 import { Schema } from '@src/core/schema'
 import { SequelizeFramework } from '@src/frameworks/sequelize'
 import { goTo } from '@src/routing/navigation'
 import { indexRoute, schemaRoute } from '@src/routing/routes'
 import withLayout from '@src/ui/hocs/withLayout'
+import useAsync from '@src/ui/hooks/useAsync'
 import SchemaLayout from '@src/ui/layouts/SchemaLayout'
 import { GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult } from 'next'
 import React from 'react'
@@ -15,7 +18,18 @@ type SchemaPageProps = {
 }
 
 export function SchemaPage({ schema, meta }: SchemaPageProps): React.ReactElement {
-  const handleChange = React.useCallback(async (schema: Schema) => {
+  const { data: dbOptions, refetch } = useAsync({ getData: userPreferencesApi.getDefaultDbOptions })
+
+  const handleChangeDbOptions = React.useCallback(
+    async (dbOptions: DbOptions) => {
+      const updated = await userPreferencesApi.updateDefaultDbOptions(dbOptions)
+      await refetch()
+      return updated
+    },
+    [refetch],
+  )
+
+  const handleChangeSchema = React.useCallback(async (schema: Schema) => {
     const created = await schemaApi.createSchema(schema, true)
     goTo(schemaRoute(created.id), { replace: true })
     return created
@@ -27,8 +41,10 @@ export function SchemaPage({ schema, meta }: SchemaPageProps): React.ReactElemen
     <SchemaLayout
       schema={schema}
       meta={meta}
+      dbOptions={dbOptions || defaultDbOptions}
       initialFramework={SequelizeFramework}
-      onChange={handleChange}
+      onChangeSchema={handleChangeSchema}
+      onChangeDbOptions={handleChangeDbOptions}
       onClickClose={handleCancel}
     />
   )

@@ -1,4 +1,5 @@
 import schemaApi from '@src/api/schema'
+import { defaultDbOptions } from '@src/core/database'
 import { emptySchema, Schema } from '@src/core/schema'
 import { goTo } from '@src/routing/navigation'
 import { indexRoute, schemaRoute } from '@src/routing/routes'
@@ -9,7 +10,7 @@ import React from 'react'
 function SchemaPage(): React.ReactElement {
   const schema = React.useMemo(emptySchema, [])
 
-  const handleChange = React.useCallback(async (schema: Schema) => {
+  const handleChangeSchema = React.useCallback(async (schema: Schema) => {
     const created = await schemaApi.createSchema(schema)
     goTo(schemaRoute(created.id), { replace: true })
     return created
@@ -21,7 +22,9 @@ function SchemaPage(): React.ReactElement {
     <SchemaLayout
       initiallyEditing
       schema={schema}
-      onChange={handleChange}
+      dbOptions={defaultDbOptions}
+      onChangeSchema={handleChangeSchema}
+      onChangeDbOptions={() => Promise.resolve(defaultDbOptions)}
       onClickClose={handleCancel}
     />
   )

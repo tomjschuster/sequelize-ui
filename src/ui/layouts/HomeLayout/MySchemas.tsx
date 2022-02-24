@@ -1,4 +1,5 @@
 import schemaApi from '@src/api/schema'
+import userPreferences from '@src/api/userPreferences'
 import { Schema } from '@src/core/schema'
 import RouteLink from '@src/routing/RouteLink'
 import { newSchemaRoute } from '@src/routing/routes'
@@ -47,7 +48,7 @@ export default function MySchemas(): React.ReactElement {
 
   const handleConfirmMySchemaInfo = async () => {
     try {
-      await schemaApi.deleteAllSchemas()
+      await Promise.all([schemaApi.deleteAllSchemas(), userPreferences.clearPreferences()])
       await refetch()
       success(CLEAER_DATA_SUCCESS_COPY)
       closeInfoModal()

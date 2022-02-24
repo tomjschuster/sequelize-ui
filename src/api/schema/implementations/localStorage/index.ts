@@ -172,7 +172,7 @@ export async function deleteSchema(id: string): Promise<void> {
 }
 
 function schemasKey(): string {
-  return lsKey('/schemas')
+  return lsKey('schemas')
 }
 
 function joinModelToTable(
@@ -235,7 +235,7 @@ async function migrateLegacy(): Promise<void> {
   return await setHasMigratedLegacy()
 }
 
-const MIGRATED_FROM_LEGACY_KEY = '/migrated-from-legacy'
+const MIGRATED_FROM_LEGACY_KEY = 'migrated-from-legacy'
 
 async function hasMigratedLegacy(): Promise<boolean> {
   return get(lsKey(MIGRATED_FROM_LEGACY_KEY)) === true

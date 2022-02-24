@@ -1,5 +1,5 @@
 import { SchemaMeta } from '@src/api/meta'
-import { DbOptions, defaultDbOptions } from '@src/core/database'
+import { DbOptions } from '@src/core/database'
 import { activeFilePath, FileTree } from '@src/core/files/fileTree'
 import { Framework } from '@src/core/framework'
 import {
@@ -27,10 +27,12 @@ import { InitialEditModelStateType, SchemaLayoutState, SchemaLayoutStateType } f
 
 type UseSchemaLayoutArgs = {
   schema: Schema
+  dbOptions: DbOptions
   meta?: SchemaMeta
   initialFramework?: Framework
   initiallyEditing?: boolean
-  onChange: (schema: Schema) => Promise<Schema>
+  onChangeSchema: (schema: Schema) => Promise<Schema>
+  onChangeDbOptions: (dbOptions: DbOptions) => Promise<DbOptions>
   onDelete?: () => Promise<void>
   onExit: () => void
 }
@@ -39,12 +41,10 @@ type UseSchemaLayoutResult = {
   state: SchemaLayoutState
   isEditing: boolean
   fileTree: FileTree
-  dbOptions: DbOptions
   selectItem: (path: string) => void
   handleKeyDown: (evt: React.KeyboardEvent) => void
   edit: () => void
   delete_: () => void
-  updateDbOptions: (dbOptions: DbOptions) => void
   viewCode: () => void
   viewSchema: (model?: Model) => void
   updateSchema: (schema: Schema) => void
@@ -64,10 +64,11 @@ type UseSchemaLayoutResult = {
 }
 export function useSchemaLayout({
   schema,
+  dbOptions,
   meta,
   initialFramework,
   initiallyEditing = false,
-  onChange,
+  onChangeSchema,
   onDelete,
   onExit,
 }: UseSchemaLayoutArgs): UseSchemaLayoutResult {
@@ -77,12 +78,11 @@ export function useSchemaLayout({
       : { type: SchemaLayoutStateType.CODE },
   )
 
-  const [dbOptions, setDbOptions] = React.useState<DbOptions>(defaultDbOptions)
   const { success, error } = useAlert()
 
   const change = React.useCallback(
     (schema: Schema, message: string | ((schema: Schema) => string)): Promise<Schema> =>
-      onChange(schema)
+      onChangeSchema(schema)
         .then((schema) => {
           const messageString = typeof message === 'string' ? message : message(schema)
           success(messageString, { ttl: 600000 })
@@ -93,7 +93,7 @@ export function useSchemaLayout({
           error(`Error saving schema "${schema.name}"`)
           return schema
         }),
-    [error, success, onChange],
+    [error, success, onChangeSchema],
   )
 
   const { root, framework, defaultPath } = useGeneratedCode({
@@ -465,12 +465,10 @@ export function useSchemaLayout({
       state.type === SchemaLayoutStateType.EDIT_MODEL ||
       state.type === SchemaLayoutStateType.EDIT_SCHEMA,
     fileTree,
-    dbOptions,
     selectItem,
     handleKeyDown,
     edit,
     delete_,
-    updateDbOptions: setDbOptions,
     updateModel,
     updateSchema,
     addModel,
