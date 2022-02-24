@@ -24,7 +24,7 @@ export function remove(key: string): void {
   localStorage.removeItem(key)
 }
 
-export function clear(prefix: string = '__SEQUELIZEUI__'): void {
+export function clear(prefix: string = NAMESPACE): void {
   if (!hasLocalStorage()) return
 
   Object.keys(localStorage)
@@ -32,7 +32,7 @@ export function clear(prefix: string = '__SEQUELIZEUI__'): void {
     .map((key) => localStorage.removeItem(key))
 }
 
-const NAMESPACE = '__SEQUELIZEUI__'
+const NAMESPACE = '__SEQUELIZEUI__/'
 export function lsKey(key: string): string {
   return NAMESPACE + key
 }

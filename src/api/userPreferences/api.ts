@@ -7,4 +7,5 @@ export type UserPreferences = {
 export interface UserPreferencesApi {
   getDefaultDbOptions: () => Promise<DbOptions>
   updateDefaultDbOptions: (dbOptions: DbOptions) => Promise<DbOptions>
+  clearPreferences: () => Promise<void>
 }

@@ -26,6 +26,6 @@
 
 ### In Progress
 
-- [ ] **API**: Persist db options for user
-
 ### Done ✓
+
+- [x] **API**: Persist db options for user

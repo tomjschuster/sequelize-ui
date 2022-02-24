@@ -11,7 +11,7 @@ export default class LocalStorageUserPreferencesApi implements UserPreferencesAp
       return userPreferences ? userPreferences.defaultDbOptions : defaultDbOptions
     } catch (e) {
       console.error(e)
-      remove(userPreferencesKey())
+      this.clearPreferences()
       return defaultDbOptions
     }
   }
@@ -19,10 +19,14 @@ export default class LocalStorageUserPreferencesApi implements UserPreferencesAp
     await setUserPreferences({ defaultDbOptions })
     return defaultDbOptions
   }
+
+  async clearPreferences(): Promise<void> {
+    remove(userPreferencesKey())
+  }
 }
 
 function userPreferencesKey(): string {
-  return lsKey('/userPreferences')
+  return lsKey('userPreferences')
 }
 
 async function setUserPreferences(userPreferences: UserPreferences): Promise<void> {
