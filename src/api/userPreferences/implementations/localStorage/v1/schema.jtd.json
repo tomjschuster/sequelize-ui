@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "version": "1.0.0"
+  },
+  "properties": {
+    "defaultDbOptions": { "ref": "dbOptions" }
+  },
+  "definitions": {
+    "dbOptions": {
+      "additionalProperties": true,
+      "properties": {
+        "sqlDialect": { "enum": ["postgres", "sqlite", "mysql", "mariadb", "mssql"] },
+        "prefixPks": { "nullable": true, "type": "boolean" },
+        "timestamps": { "type": "boolean" },
+        "caseStyle": { "enum": ["snake", "camel"] },
+        "nounForm": { "enum": ["singular", "plural"] },
+        "migrations": { "type": "boolean" }
+      }
+    }
+  }
+}

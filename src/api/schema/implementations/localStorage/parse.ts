@@ -3,11 +3,7 @@ import { Schema as JtdSchema, validate } from 'jtd'
 import { SchemaV0 } from './v0'
 import { SchemaV1 } from './v1'
 import v1JtdSchema from './v1/schema.jtd.json'
-import { fromV1, toV1 } from './v1/translate'
-
-export function serializeSchema(schema: Schema): string {
-  return JSON.stringify(toV1(schema))
-}
+import { fromV1 } from './v1/translate'
 
 type ParseSchemaResult = {
   schema: Schema

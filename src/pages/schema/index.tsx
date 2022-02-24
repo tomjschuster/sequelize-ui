@@ -1,6 +1,8 @@
 import { getSchemaMetaById } from '@src/api/meta'
 import schemaApi from '@src/api/schema'
 import { SCHEMA_NOT_FOUND_ERROR } from '@src/api/schema/api'
+import userPreferencesApi from '@src/api/userPreferences'
+import { DbOptions, defaultDbOptions } from '@src/core/database'
 import { emptySchema, isNewSchema, Schema } from '@src/core/schema'
 import { goTo } from '@src/routing/navigation'
 import { indexRoute, parseSchemaId } from '@src/routing/routes'
@@ -12,7 +14,6 @@ import { useRouter } from 'next/router'
 import React from 'react'
 
 function SchemaPage(): React.ReactElement {
-  const [schema, setSchema] = React.useState<Schema>(emptySchema)
   const { error } = useAlert()
   const router = useRouter()
   const schemaId = parseSchemaId(router.query)
@@ -41,23 +42,34 @@ function SchemaPage(): React.ReactElement {
     [schemaId, error],
   )
 
-  const { refetch } = useAsync({
+  const { data: schema, refetch: refetchSchema } = useAsync({
     getData,
     skip: !schemaId,
-    onLoad: setSchema,
     onError: handleError,
   })
 
-  const handleChange = async (schema: Schema) => {
+  const { data: dbOptions, refetch: refetchDbOptions } = useAsync({
+    getData: userPreferencesApi.getDefaultDbOptions,
+  })
+
+  const handleChangeSchema = async (schema: Schema) => {
     if (isNewSchema(schema)) return schema
     const updated = await schemaApi.updateSchema(schema)
-    setSchema(updated)
-    refetch()
+    refetchSchema()
     return updated
   }
 
+  const handleChangeDbOptions = React.useCallback(
+    async (dbOptions: DbOptions) => {
+      const updated = await userPreferencesApi.updateDefaultDbOptions(dbOptions)
+      await refetchDbOptions()
+      return updated
+    },
+    [refetchDbOptions],
+  )
+
   const handleDelete = async () => {
-    if (isNewSchema(schema)) return
+    if (!schema || isNewSchema(schema)) return
     schema && (await schemaApi.deleteSchema(schema.id))
     goTo(indexRoute())
   }
@@ -66,9 +78,11 @@ function SchemaPage(): React.ReactElement {
 
   return (
     <SchemaLayout
-      schema={schema}
+      schema={schema || emptySchema()}
       meta={meta}
-      onChange={handleChange}
+      dbOptions={dbOptions || defaultDbOptions}
+      onChangeSchema={handleChangeSchema}
+      onChangeDbOptions={handleChangeDbOptions}
       onDelete={handleDelete}
       onClickClose={handleCancel}
     />
