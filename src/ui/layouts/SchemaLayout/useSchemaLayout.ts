@@ -45,7 +45,6 @@ type UseSchemaLayoutResult = {
   handleKeyDown: (evt: React.KeyboardEvent) => void
   edit: () => void
   delete_: () => void
-  updateDbOptions: (dbOptions: DbOptions) => void
   viewCode: () => void
   viewSchema: (model?: Model) => void
   updateSchema: (schema: Schema) => void
@@ -70,7 +69,6 @@ export function useSchemaLayout({
   initialFramework,
   initiallyEditing = false,
   onChangeSchema,
-  onChangeDbOptions,
   onDelete,
   onExit,
 }: UseSchemaLayoutArgs): UseSchemaLayoutResult {
@@ -81,15 +79,6 @@ export function useSchemaLayout({
   )
 
   const { success, error } = useAlert()
-
-  const updateDbOptions = React.useCallback(
-    (dbOptions: DbOptions) =>
-      onChangeDbOptions(dbOptions).catch((e) => {
-        console.error(e)
-        return dbOptions
-      }),
-    [onChangeDbOptions],
-  )
 
   const change = React.useCallback(
     (schema: Schema, message: string | ((schema: Schema) => string)): Promise<Schema> =>
@@ -480,7 +469,6 @@ export function useSchemaLayout({
     handleKeyDown,
     edit,
     delete_,
-    updateDbOptions,
     updateModel,
     updateSchema,
     addModel,

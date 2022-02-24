@@ -44,7 +44,6 @@ export default function SchemaLayout({
     viewSchema,
     edit,
     delete_,
-    updateDbOptions,
     updateModel,
     updateSchema,
     addModel,
@@ -91,7 +90,7 @@ export default function SchemaLayout({
         isEditing={isEditing}
         fileTree={fileTree}
         dbOptions={dbOptions}
-        onChangeDbOptions={updateDbOptions}
+        onChangeDbOptions={onChangeDbOptions}
         onSelectCode={viewCode}
         onSelectSchema={handleViewSchema}
         onEdit={edit}
