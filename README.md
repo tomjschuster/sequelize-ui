@@ -5,7 +5,7 @@
 
 https://sequelizeui.app/
 
-Sequelize UI is [Sequelize ORM](https://sequelize.org/) code generator, which generates a full Node.js TypeScript project, entirely in the browser. Use the schema editor to design your database tables, fields and associations, then preview the Sequelize models and migrations in the code viewer before downloading the project as a zip file or copying code from individual files.
+Sequelize UI is a [Sequelize ORM](https://sequelize.org/) code generator, which generates a full Node.js TypeScript project, entirely in the browser. Use the schema editor to design your database tables, fields and associations, then preview the Sequelize models and migrations in the code viewer before downloading the project as a zip file or copying code from individual files.
 
 You can customize the generated Sequelize code with the following database configurations:
 
