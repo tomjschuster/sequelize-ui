@@ -7,7 +7,6 @@
 - [ ] **CI**: Run E2E SQL tests for all dialects before prod deploy
 
 - [ ] **Codegen**: Add warning when SQL dialect doesn't support data type
-- [ ] **Codegen**: JS support
 - [ ] **Codegen**: Support multiple Sequelize versions
 
 - [ ] **Documentation**: Document functions and modules
@@ -25,6 +24,8 @@
 - [ ] **UI**: Animate panels on delete
 
 ### In Progress
+
+- [ ] **Codegen**: JS support
 
 ### Done ✓
 
