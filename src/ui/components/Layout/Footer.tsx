@@ -42,13 +42,14 @@ function Footer(): React.ReactElement {
         .
       </span>
       <RouteLink
+        route={privacyRoute()}
+        prefetch={false}
         className={classnames(
           margin('mt-1.5', 'xs:mt-0'),
           textColor('hover:text-blue-700', toClassname('dark:hover:text-blue-300')),
           textDecoration('hover:underline'),
           fontSize('text-xs'),
         )}
-        route={privacyRoute()}
       >
         Privacy Policy
       </RouteLink>

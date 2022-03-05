@@ -94,6 +94,7 @@ function ZeroState({ onClickOpenInfo }: ZeroStateProps): React.ReactElement {
           To get started,{' '}
           <RouteLink
             route={newSchemaRoute()}
+            prefetch={false}
             className={classnames(
               inlineButton(),
               margin('mx-1'),

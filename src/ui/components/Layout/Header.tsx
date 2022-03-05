@@ -73,6 +73,7 @@ function Header({ compact }: HeaderProps): React.ReactElement {
     >
       <RouteLink
         route={indexRoute()}
+        prefetch={false}
         title="Go to Sequelize UI Home"
         className={classnames(display('inline-block'))}
       >
