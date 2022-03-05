@@ -121,3 +121,18 @@ jobs:
           email: '${{ secrets.CF_EMAIL }}'
           production: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Purge cache
+        uses: jakejarvis/cloudflare-purge-action@master
+        env:
+          CLOUDFLARE_EMAIL: ${{ secrets.CF_EMAIL }}
+          CLOUDFLARE_KEY: ${{ secrets.CF_GLOBAL_APIKEY }}
+          CLOUDFLARE_ZONE: ${{ secrets.CF_ZONE }}
+          PURGE_URLS: '[
+            "https://sequelizeui.app",
+            "https://sequelizeui.app/privacy",
+            "https://sequelizeui.app/schema",
+            "https://sequelizeui.app/schema/blog",
+            "https://sequelizeui.app/schema/employees",
+            "https://sequelizeui.app/schema/sakila"
+          ]'

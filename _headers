@@ -1,5 +1,5 @@
 /
-  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; require-trusted-types-for 'script'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; require-trusted-types-for 'script'; frame-ancestors 'none'
   Permissions-Policy: document-domain=()
   Referrer-Policy: origin
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
@@ -7,7 +7,7 @@
   X-Frame-Options: DENY
 
 /schemas
-  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; require-trusted-types-for 'script'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; require-trusted-types-for 'script'; frame-ancestors 'none'
   Permissions-Policy: document-domain=()
   Referrer-Policy: origin
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
@@ -16,7 +16,7 @@
 
 
 /schemas/*
-  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; require-trusted-types-for 'script'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; require-trusted-types-for 'script'; frame-ancestors 'none'
   Permissions-Policy: document-domain=()
   Referrer-Policy: origin
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
