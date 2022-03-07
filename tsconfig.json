@@ -23,11 +23,6 @@
     "paths": {
       "@src/*": ["src/*"]
     },
-    "plugins": [
-      {
-        "name": "typescript-plugin-css-modules"
-      }
-    ],
     "incremental": true
   },
   "exclude": ["node_modules"],

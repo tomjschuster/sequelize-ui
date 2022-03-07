@@ -17,11 +17,13 @@ import {
   overflow,
   padding,
   position,
+  width,
   zIndex,
 } from '@src/ui/styles/classnames'
 import { backgroundWhite, flexCenterBetween, fullscreen } from '@src/ui/styles/utils'
 import React from 'react'
 import IconButton from '../form/IconButton'
+import SequelizeUiLogo from '../SequelizeUiLogo'
 
 type FlyoutProps = React.PropsWithChildren<{
   title: string
@@ -68,13 +70,7 @@ export default function Flyout({
         )}
       >
         <div className={classnames(padding('p-1'), display('flex'), alignItems('items-center'))}>
-          <img
-            width="50px"
-            height="50px"
-            className={classnames(height('h-6'))}
-            alt="Sequelize UI logo"
-            src="https://sequelizeui.app/static/images/sequelize-ui-tiny-white.svg"
-          />
+          <SequelizeUiLogo className={classnames(display('inline'), height('h-6'), width('w-6'))} />
         </div>
         <h2>{title}</h2>
         <IconButton

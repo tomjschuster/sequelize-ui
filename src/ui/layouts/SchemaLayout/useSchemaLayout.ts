@@ -85,7 +85,7 @@ export function useSchemaLayout({
       onChangeSchema(schema)
         .then((schema) => {
           const messageString = typeof message === 'string' ? message : message(schema)
-          success(messageString, { ttl: 600000 })
+          success(messageString, { ttl: 4000 })
           return schema
         })
         .catch((e) => {

@@ -1,5 +1,5 @@
-import { indexRoute, notFoundRoute } from '@src/routing/routes'
 import { mockRouter } from '@src/test-utils/next'
+import { indexRoute, notFoundRoute } from '@src/ui/routing/routes'
 import { renderHook } from '@testing-library/react-hooks'
 import { NextRouter, useRouter } from 'next/router'
 import useRoute, { UseRouteResult } from '../useRoute'

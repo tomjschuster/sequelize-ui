@@ -1,4 +1,4 @@
-import RouteLink, { RouteLinkProps } from '@src/routing/RouteLink'
+import RouteLink, { RouteLinkProps } from '@src/ui/routing/RouteLink'
 import {
   borderColor,
   borderStyle,

@@ -30,7 +30,8 @@ export function useTrapFocus({ ref, skip, global }: UseTrapFocusArgs): void {
     } else {
       removeTrap(ref)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [skip, ref, global])
 
-  React.useEffect(() => () => removeTrap(ref), [])
+  React.useEffect(() => () => removeTrap(ref), [ref, removeTrap])
 }

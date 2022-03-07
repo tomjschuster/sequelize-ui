@@ -1,5 +1,7 @@
-import RouteLink from '@src/routing/RouteLink'
-import { indexRoute } from '@src/routing/routes'
+import useDarkMode from '@src/ui/hooks/useDarkMode'
+import useDidMount from '@src/ui/hooks/useDidMount'
+import RouteLink from '@src/ui/routing/RouteLink'
+import { indexRoute } from '@src/ui/routing/routes'
 import {
   alignItems,
   backgroundColor,
@@ -22,7 +24,6 @@ import {
 } from '@src/ui/styles/classnames'
 import { flexCenter } from '@src/ui/styles/utils'
 import React from 'react'
-import { useDarkMode } from '../DarkMode'
 import ComputerIcon from '../icons/Computer'
 import GitHubIcon from '../icons/GitHub'
 import MoonIcon from '../icons/Moon'
@@ -35,7 +36,8 @@ type HeaderProps = {
 }
 
 function Header({ compact }: HeaderProps): React.ReactElement {
-  const { darkMode, setDarkMode, isExplicit } = useDarkMode()
+  const { setDarkMode, isExplicit } = useDarkMode()
+  const mounted = useDidMount()
 
   const items = React.useMemo(
     () => [
@@ -55,7 +57,7 @@ function Header({ compact }: HeaderProps): React.ReactElement {
         onClick: () => setDarkMode(true),
       },
     ],
-    [],
+    [setDarkMode],
   )
 
   return (
@@ -121,21 +123,21 @@ function Header({ compact }: HeaderProps): React.ReactElement {
           title="Appearance"
           aria-label="appearance"
         >
-          {darkMode ? (
-            <MoonIcon
-              className={classnames(
-                textColor({ 'text-indigo-500': isExplicit, 'dark:text-indigo-300': isExplicit }),
-              )}
-              size={6}
-            />
-          ) : (
-            <SunIcon
-              className={classnames(
-                textColor({ 'text-orange-700': isExplicit, 'dark:text-indigo-800': isExplicit }),
-              )}
-              size={6}
-            />
-          )}
+          <div className={classnames(display({ hidden: mounted }), width('w-6'), height('h-6'))} />
+          <MoonIcon
+            className={classnames(
+              display('hidden', { 'dark:block': mounted }),
+              textColor({ 'text-indigo-500': isExplicit, 'dark:text-indigo-300': isExplicit }),
+            )}
+            size={6}
+          />
+          <SunIcon
+            className={classnames(
+              display('dark:hidden', { hidden: !mounted, block: mounted }),
+              textColor({ 'text-orange-700': isExplicit, 'dark:text-indigo-800': isExplicit }),
+            )}
+            size={6}
+          />
         </Menu>
       </div>
     </header>

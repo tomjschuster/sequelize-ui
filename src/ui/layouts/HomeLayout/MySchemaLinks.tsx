@@ -1,7 +1,7 @@
 import { Schema } from '@src/core/schema'
-import RouteLink from '@src/routing/RouteLink'
-import { newSchemaRoute, schemaRoute } from '@src/routing/routes'
 import { PanelLink } from '@src/ui/components/form/PanelButton'
+import RouteLink from '@src/ui/routing/RouteLink'
+import { newSchemaRoute, schemaRoute } from '@src/ui/routing/routes'
 import {
   alignItems,
   backgroundColor,

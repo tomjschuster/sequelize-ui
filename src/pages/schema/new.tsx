@@ -1,10 +1,10 @@
 import schemaApi from '@src/api/schema'
 import { defaultDbOptions } from '@src/core/database'
 import { emptySchema, Schema } from '@src/core/schema'
-import { goTo } from '@src/routing/navigation'
-import { indexRoute, schemaRoute } from '@src/routing/routes'
 import withLayout from '@src/ui/hocs/withLayout'
 import SchemaLayout from '@src/ui/layouts/SchemaLayout'
+import { goTo } from '@src/ui/routing/navigation'
+import { indexRoute, schemaRoute } from '@src/ui/routing/routes'
 import React from 'react'
 
 function SchemaPage(): React.ReactElement {

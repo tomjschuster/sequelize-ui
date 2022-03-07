@@ -1,0 +1,7 @@
+ignores: [
+    "@src/*",
+    # jest.config.js: setupFiles
+    "jest-localstorage-mock",
+    # package.json: npm run build:sitemap
+    "source-map-support"
+]

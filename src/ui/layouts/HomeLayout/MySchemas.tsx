@@ -1,14 +1,14 @@
 import schemaApi from '@src/api/schema'
 import userPreferences from '@src/api/userPreferences'
 import { Schema } from '@src/core/schema'
-import RouteLink from '@src/routing/RouteLink'
-import { newSchemaRoute } from '@src/routing/routes'
 import IconButton from '@src/ui/components/form/IconButton'
 import InfoIcon from '@src/ui/components/icons/Info'
 import Modal from '@src/ui/components/Modal'
 import useAsync from '@src/ui/hooks/useAsync'
 import useIsOpen from '@src/ui/hooks/useIsOpen'
 import { useAlert } from '@src/ui/lib/alert'
+import RouteLink from '@src/ui/routing/RouteLink'
+import { newSchemaRoute } from '@src/ui/routing/routes'
 import {
   backgroundColor,
   classnames,

@@ -1,4 +1,4 @@
-import ExternalLink from '@src/routing/ExternalLink'
+import ExternalLink from '@src/ui/routing/ExternalLink'
 import { classnames, margin } from '@src/ui/styles/classnames'
 import { list, subtitle, text, title } from '@src/ui/styles/utils'
 import React from 'react'

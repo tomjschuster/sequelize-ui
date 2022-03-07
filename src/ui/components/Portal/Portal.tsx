@@ -9,7 +9,7 @@ type PortalProps = React.PropsWithChildren<{
 
 function Portal({ id, children }: PortalProps): React.ReactPortal | null {
   const [mounted, setMounted] = useState(false)
-  const node = React.useMemo(() => isBrowser() && document.getElementById(id), [])
+  const node = React.useMemo(() => isBrowser() && document.getElementById(id), [id])
 
   useEffect(() => {
     setMounted(true)

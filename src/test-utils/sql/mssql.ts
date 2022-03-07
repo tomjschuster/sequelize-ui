@@ -9,6 +9,7 @@ export const MsSqlConnection: DbConnectionConstructor = class MsSqlConnection
     options: {
       port: parseInt(process.env.MSSQL_DB_PORT || '1433'),
       encrypt: false,
+      trustServerCertificate: true,
     },
     authentication: {
       type: 'default',

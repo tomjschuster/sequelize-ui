@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // https://github.com/ReactiveX/rxjs/blob/master/src/internal/util/pipe.ts
 function identity<T>(x: T): T {
   return x

@@ -1,5 +1,6 @@
-import { goTo } from '@src/routing/navigation'
-import { indexRoute, isOnIndex } from '@src/routing/routes'
+import ExternalLink from '@src/ui/routing/ExternalLink'
+import { goTo } from '@src/ui/routing/navigation'
+import { indexRoute, isOnIndex } from '@src/ui/routing/routes'
 import {
   backgroundColor,
   borderColor,
@@ -75,9 +76,9 @@ function ErrorView(): React.ReactElement {
         {!isHome && (
           <li>
             Return{' '}
-            <a className={link} href="/">
+            <ExternalLink className={link} href="/">
               home
-            </a>
+            </ExternalLink>
           </li>
         )}
         <li>Reload the page</li>

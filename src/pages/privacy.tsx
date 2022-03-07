@@ -1,5 +1,5 @@
-import ExternalLink from '@src/routing/ExternalLink'
 import withLayout from '@src/ui/hocs/withLayout'
+import ExternalLink from '@src/ui/routing/ExternalLink'
 import { classnames, height, margin, maxWidth, overflow, padding } from '@src/ui/styles/classnames'
 import { list, text, title } from '@src/ui/styles/utils'
 import React from 'react'

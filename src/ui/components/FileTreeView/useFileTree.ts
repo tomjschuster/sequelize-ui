@@ -48,7 +48,7 @@ function useFileTree({ root, key, defaultPath }: UseFileTreeArgs): UseFileTreeRe
       setFileTree(FileTree.updateRoot(fileTree, root))
       return
     }
-  }, [root, previousRoot, key, previousKey])
+  }, [root, previousRoot, key, previousKey, defaultPath, fileTree])
 
   // Select default path when there is no active file
   React.useEffect(() => {

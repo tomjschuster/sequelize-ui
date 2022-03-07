@@ -1,12 +1,10 @@
 import { blank, lines } from '@src/core/codegen'
 import { DbOptions } from '@src/core/database'
 
-export { serverTemplate }
-
 type ServerTemplateArgs = {
   dbOptions: DbOptions
 }
-const serverTemplate = ({ dbOptions }: ServerTemplateArgs): string =>
+export const serverTemplate = ({ dbOptions }: ServerTemplateArgs): string =>
   lines([
     `import http from 'http'`,
     `import db from './db'`,
