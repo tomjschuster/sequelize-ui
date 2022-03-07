@@ -18,9 +18,9 @@
     "test": "jest",
     "test:unit": "npm test -- src",
     "test:coverage": "npm run test:unit -- --coverage",
-    "test:all": "SQL_DIALECT=all npm test -- src e2e --coverage",
+    "test:all": "cross-env SQL_DIALECT=all npm test -- src e2e --coverage",
     "test:e2e": "jest e2e",
-    "test:e2e:all": "SQL_DIALECT=all npm run test:e2e",
+    "test:e2e:all": "cross-env SQL_DIALECT=all npm run test:e2e",
     "test:watch": "npm test -- --watch --"
   },
   "husky": {
@@ -80,6 +80,7 @@
     "@typescript-eslint/parser": "^5.13.0",
     "autoprefixer": "^10.4.2",
     "check-os": "^1.0.1",
+    "cross-env": "^7.0.3",
     "eslint": "^8.10.0",
     "eslint-config-next": "^12.1.0",
     "eslint-config-prettier": "^8.5.0",
