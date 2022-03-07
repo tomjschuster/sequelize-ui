@@ -131,7 +131,6 @@ jobs:
           PURGE_URLS: '[
             "https://sequelizeui.app",
             "https://sequelizeui.app/privacy",
-            "https://sequelizeui.app/privacy",
             "https://sequelizeui.app/schema",
             "https://sequelizeui.app/schema/blog",
             "https://sequelizeui.app/schema/employees",

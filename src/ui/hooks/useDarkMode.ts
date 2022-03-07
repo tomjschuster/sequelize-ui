@@ -58,7 +58,7 @@ export function usePrefersDarkMode(
     const handler = () => setPrefersDarkMode(mediaQueryList?.matches || false)
     mediaQueryList?.addEventListener('change', handler)
     return () => mediaQueryList?.removeEventListener('change', handler)
-  }, [])
+  }, [mediaQueryList])
 
   return prefersDarkMode
 }

@@ -1,6 +1,6 @@
-import ExternalLink from '@src/routing/ExternalLink'
-import RouteLink from '@src/routing/RouteLink'
-import { privacyRoute } from '@src/routing/routes'
+import ExternalLink from '@src/ui/routing/ExternalLink'
+import RouteLink from '@src/ui/routing/RouteLink'
+import { privacyRoute } from '@src/ui/routing/routes'
 import {
   alignItems,
   backgroundColor,

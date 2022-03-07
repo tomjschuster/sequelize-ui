@@ -1,12 +1,12 @@
 import { SchemaIconType, SchemaMeta } from '@src/api/meta'
-import { goTo } from '@src/routing/navigation'
-import RouteLink from '@src/routing/RouteLink'
-import { exampleSchemaRoute } from '@src/routing/routes'
 import IconButton from '@src/ui/components/form/IconButton'
 import InfoIcon from '@src/ui/components/icons/Info'
 import Markdown from '@src/ui/components/Markdown'
 import Modal from '@src/ui/components/Modal'
 import useIsOpen from '@src/ui/hooks/useIsOpen'
+import { goTo } from '@src/ui/routing/navigation'
+import RouteLink from '@src/ui/routing/RouteLink'
+import { exampleSchemaRoute } from '@src/ui/routing/routes'
 import {
   backgroundColor,
   borderRadius,

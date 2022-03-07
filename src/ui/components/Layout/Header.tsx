@@ -1,5 +1,5 @@
-import RouteLink from '@src/routing/RouteLink'
-import { indexRoute } from '@src/routing/routes'
+import RouteLink from '@src/ui/routing/RouteLink'
+import { indexRoute } from '@src/ui/routing/routes'
 import {
   alignItems,
   backgroundColor,
@@ -55,7 +55,7 @@ function Header({ compact }: HeaderProps): React.ReactElement {
         onClick: () => setDarkMode(true),
       },
     ],
-    [],
+    [setDarkMode],
   )
 
   return (

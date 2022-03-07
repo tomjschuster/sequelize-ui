@@ -51,7 +51,6 @@ function MenuPanel(
     <div
       ref={ref}
       role="menu"
-      aria-haspopup={true}
       className={classnames(className, overlayContainer, display({ hidden: !isOpen }))}
       style={style}
       onMouseOut={onMouseOut}

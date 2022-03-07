@@ -72,6 +72,7 @@ export default function useTrapFocusState(): UseTrapFocusStateResult {
     [traps],
   )
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => cleanup, [])
 
   return { trapFocus, removeTrap }

@@ -1,4 +1,4 @@
-import { parseRoute, Route } from '@src/routing/routes'
+import { parseRoute, Route } from '@src/ui/routing/routes'
 import { useRouter } from 'next/router'
 import React from 'react'
 

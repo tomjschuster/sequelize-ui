@@ -60,7 +60,7 @@ export default function useAsync<Data, Variables = undefined>({
 
         return undefined
       })
-  }, [cache, variables, getData, getCacheKey, onLoad])
+  }, [variables, getCacheKey, cache, getData, onLoad, onError])
 
   React.useEffect(() => {
     if (!skip) fetchData()
