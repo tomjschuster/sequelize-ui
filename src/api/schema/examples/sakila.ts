@@ -52,7 +52,6 @@ enum Id {
   Film = '6isxvTSCeLG7Xh4hPebzK',
   FilmActor = 'Q3OuSWRTbaYlshJmIFrSi',
   FilmCategory = 'QMhycXXUZ9FCxWZOAsoU7',
-  FilmText = '_vnTgQDJsBWwhcFK-7p5l',
   Inventory = '1ERjkC0_vMeY0uXOacpZl',
   Language = 'sFHhBnBPK-b99Y9nNZPCn',
   Payment = 'ZD1pRxLzifUyspw9FQlTQ',
@@ -271,7 +270,16 @@ const category: Model = {
   name: 'category',
   createdAt: time,
   updatedAt: time,
-  fields: [],
+  fields: [
+    {
+      id: uniqueId(),
+      name: 'name',
+      type: stringDataType(),
+      primaryKey: false,
+      required: true,
+      unique: false,
+    },
+  ],
   associations: [
     {
       id: uniqueId(),

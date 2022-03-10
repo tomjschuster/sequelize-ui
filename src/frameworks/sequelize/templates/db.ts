@@ -61,12 +61,6 @@ const underscoredField = (underscored: boolean): string | null =>
 const timestampsField = (timestamps: boolean): string | null =>
   timestamps ? null : 'timestamps: false'
 
-// const createdAtField = ({ caseStyle, timestamps }: DbOptions): string | null =>
-//   caseStyle === DbCaseStyle.Snake && timestamps ? `createdAt: 'created_at'` : null
-
-// const updatedAtField = ({ caseStyle, timestamps }: DbOptions): string | null =>
-//   caseStyle === DbCaseStyle.Snake && timestamps ? `updatedAt: 'updated_at'` : null
-
 const freezeTableNameField = ({ caseStyle, nounForm }: DbOptions): string | null =>
   caseStyle === DbCaseStyle.Camel && nounForm === DbNounForm.Singular
     ? `freezeTableName: true`

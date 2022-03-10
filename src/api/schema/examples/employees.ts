@@ -163,18 +163,18 @@ const department: Model = {
     {
       id: uniqueId(),
       alias: 'employee',
-      foreignKey: null,
+      foreignKey: 'emp_no',
       sourceModelId: Id.Departments,
       targetModelId: Id.Employees,
-      type: manyToManyModelType(Id.DepartmentEmployees),
+      type: manyToManyModelType(Id.DepartmentEmployees, 'dept_no'),
     },
     {
       id: uniqueId(),
       alias: 'manager',
-      foreignKey: null,
+      foreignKey: 'emp_no',
       sourceModelId: Id.Departments,
       targetModelId: Id.Employees,
-      type: manyToManyModelType(Id.DepartmentManagers),
+      type: manyToManyModelType(Id.DepartmentManagers, 'dept_no'),
     },
     {
       id: uniqueId(),
@@ -322,7 +322,7 @@ const title: Model = {
     {
       id: uniqueId(),
       name: 'emp_no',
-      type: integerDataType({ autoincrement: true }),
+      type: integerDataType({ autoincrement: false }),
       primaryKey: true,
       required: true,
       unique: false,
@@ -373,7 +373,7 @@ const salary: Model = {
     {
       id: uniqueId(),
       name: 'emp_no',
-      type: integerDataType({ autoincrement: true }),
+      type: integerDataType({ autoincrement: false }),
       primaryKey: true,
       required: true,
       unique: false,
@@ -415,7 +415,6 @@ const salary: Model = {
   ],
 }
 
-// https://github.com/datacharmer/test_db
 const employeeSchema: Schema = {
   id: EMPLOYEES_ID,
   name: 'employee dataset',

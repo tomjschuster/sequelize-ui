@@ -110,7 +110,7 @@ const category: Model = {
       sourceModelId: Id.Category,
       targetModelId: Id.Category,
       type: hasManyType(),
-      foreignKey: null,
+      foreignKey: 'parent id',
     },
     {
       id: uniqueId(),
@@ -217,7 +217,7 @@ const post: Model = {
       sourceModelId: Id.Post,
       targetModelId: Id.Post,
       type: hasManyType(),
-      foreignKey: null,
+      foreignKey: 'parent id',
     },
     {
       id: uniqueId(),
@@ -367,7 +367,7 @@ const postComment: Model = {
       sourceModelId: Id.PostComment,
       targetModelId: Id.PostComment,
       type: hasManyType(),
-      foreignKey: null,
+      foreignKey: 'parent id',
     },
   ],
 }

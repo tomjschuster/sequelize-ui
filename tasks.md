@@ -12,7 +12,6 @@
 - [ ] **Documentation**: Document functions and modules
 
 - [ ] **Tests**: Add E2E browser tests
-- [ ] **Tests**: Run E2E SQL tests against all example schemas
 - [ ] **Tests**: Increase unit test coverage
 
 - [ ] **UI**: Refactor css into theme
@@ -25,6 +24,7 @@
 
 ### In Progress
 
+- [ ] **Tests**: Run E2E SQL tests against all example schemas
 - [ ] **Codegen**: JS support
 
 ### Done ✓

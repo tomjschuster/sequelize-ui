@@ -224,10 +224,6 @@ module.exports = {
       parentId: {
         type: DataTypes.INTEGER.UNSIGNED,
         field: 'parent_id'
-      },
-      categoryId: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        field: 'category_id'
       }
     })
   },
@@ -299,10 +295,6 @@ module.exports = {
       parentId: {
         type: DataTypes.INTEGER.UNSIGNED,
         field: 'parent_id'
-      },
-      postId: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        field: 'post_id'
       }
     })
   },
@@ -393,10 +385,6 @@ module.exports = {
       parentId: {
         type: DataTypes.INTEGER.UNSIGNED,
         field: 'parent_id'
-      },
-      postCommentId: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        field: 'post_comment_id'
       }
     })
   },
@@ -624,16 +612,6 @@ module.exports = {
       }
     })
     
-    await queryInterface.addConstraint('categories', {
-      fields: ['category_id'],
-      type: 'foreign key',
-      name: 'categories_category_id_fkey',
-      references: {
-        table: 'categories',
-        field: 'id'
-      }
-    })
-    
     await queryInterface.addConstraint('posts', {
       fields: ['author_id'],
       type: 'foreign key',
@@ -648,16 +626,6 @@ module.exports = {
       fields: ['parent_id'],
       type: 'foreign key',
       name: 'posts_parent_id_fkey',
-      references: {
-        table: 'posts',
-        field: 'id'
-      }
-    })
-    
-    await queryInterface.addConstraint('posts', {
-      fields: ['post_id'],
-      type: 'foreign key',
-      name: 'posts_post_id_fkey',
       references: {
         table: 'posts',
         field: 'id'
@@ -704,16 +672,6 @@ module.exports = {
       }
     })
     
-    await queryInterface.addConstraint('post_comments', {
-      fields: ['post_comment_id'],
-      type: 'foreign key',
-      name: 'post_comments_post_comment_id_fkey',
-      references: {
-        table: 'post_comments',
-        field: 'id'
-      }
-    })
-    
     await queryInterface.addConstraint('post_metas', {
       fields: ['post_id'],
       type: 'foreign key',
@@ -746,15 +704,12 @@ module.exports = {
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeConstraint('categories', 'categories_parent_id_fkey')
-    await queryInterface.removeConstraint('categories', 'categories_category_id_fkey')
     await queryInterface.removeConstraint('posts', 'posts_author_id_fkey')
     await queryInterface.removeConstraint('posts', 'posts_parent_id_fkey')
-    await queryInterface.removeConstraint('posts', 'posts_post_id_fkey')
     await queryInterface.removeConstraint('post_categories', 'post_categories_category_id_fkey')
     await queryInterface.removeConstraint('post_categories', 'post_categories_post_id_fkey')
     await queryInterface.removeConstraint('post_comments', 'post_comments_post_id_fkey')
     await queryInterface.removeConstraint('post_comments', 'post_comments_parent_id_fkey')
-    await queryInterface.removeConstraint('post_comments', 'post_comments_post_comment_id_fkey')
     await queryInterface.removeConstraint('post_metas', 'post_metas_post_id_fkey')
     await queryInterface.removeConstraint('post_tags', 'post_tags_tag_id_fkey')
     await queryInterface.removeConstraint('post_tags', 'post_tags_post_id_fkey')
@@ -946,7 +901,7 @@ export function initModels(sequelize: Sequelize) {
   })
   Category.hasMany(Category, {
     as: 'children',
-    foreignKey: 'category_id'
+    foreignKey: 'parent_id'
   })
   Category.hasMany(PostCategory, {
     as: 'postCategories',
@@ -969,7 +924,7 @@ export function initModels(sequelize: Sequelize) {
   })
   Post.hasMany(Post, {
     as: 'children',
-    foreignKey: 'post_id'
+    foreignKey: 'parent_id'
   })
   Post.hasMany(PostCategory, {
     as: 'postCategories',
@@ -1019,7 +974,7 @@ export function initModels(sequelize: Sequelize) {
   })
   PostComment.hasMany(PostComment, {
     as: 'children',
-    foreignKey: 'post_comment_id'
+    foreignKey: 'parent_id'
   })
   PostMeta.belongsTo(Post, {
     as: 'post',

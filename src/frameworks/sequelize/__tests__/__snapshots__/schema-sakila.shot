@@ -348,6 +348,11 @@ module.exports = {
         autoIncrement: true,
         allowNull: false
       },
+      name: {
+        type: DataTypes.STRING,
+        field: 'name',
+        allowNull: false
+      },
       createdAt: {
         type: DataTypes.DATE,
         field: 'created_at'
@@ -1364,6 +1369,7 @@ export class Category extends Model<
   InferCreationAttributes<Category, {omit: CategoryAssociations}>
 > {
   declare id: CreationOptional<number>
+  declare name: string
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
@@ -1390,6 +1396,10 @@ export class Category extends Model<
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
         autoIncrement: true,
+        allowNull: false
+      },
+      name: {
+        type: DataTypes.STRING,
         allowNull: false
       },
       createdAt: {
