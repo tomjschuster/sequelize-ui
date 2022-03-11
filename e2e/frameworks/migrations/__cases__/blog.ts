@@ -30,7 +30,7 @@ const cases: ExpectedSchemaCase = {
         'title',
         'updated_at',
       ],
-      post_categories: ['category_id', 'created_at', 'post_id', 'updated_at'],
+      post_categories: ['category_id', 'created_at', 'id', 'post_id', 'updated_at'],
       post_comments: [
         'content',
         'created_at',
@@ -43,7 +43,7 @@ const cases: ExpectedSchemaCase = {
         'updated_at',
       ],
       post_metas: ['content', 'created_at', 'id', 'key', 'post_id', 'updated_at'],
-      post_tags: ['created_at', 'post_id', 'tag_id', 'updated_at'],
+      post_tags: ['created_at', 'id', 'post_id', 'tag_id', 'updated_at'],
       tags: ['content', 'created_at', 'id', 'meta_title', 'slug', 'title', 'updated_at'],
       users: [
         'created_at',
@@ -87,7 +87,7 @@ const cases: ExpectedSchemaCase = {
         'title',
         'updated_at',
       ],
-      post_category: ['category_id', 'created_at', 'post_id', 'updated_at'],
+      post_category: ['category_id', 'created_at', 'id', 'post_id', 'updated_at'],
       post_comment: [
         'content',
         'created_at',
@@ -100,7 +100,7 @@ const cases: ExpectedSchemaCase = {
         'updated_at',
       ],
       post_meta: ['content', 'created_at', 'id', 'key', 'post_id', 'updated_at'],
-      post_tag: ['created_at', 'post_id', 'tag_id', 'updated_at'],
+      post_tag: ['created_at', 'id', 'post_id', 'tag_id', 'updated_at'],
       tag: ['content', 'created_at', 'id', 'meta_title', 'slug', 'title', 'updated_at'],
       user: [
         'created_at',
@@ -144,7 +144,7 @@ const cases: ExpectedSchemaCase = {
         'title',
         'updatedAt',
       ],
-      PostCategories: ['categoryId', 'createdAt', 'postId', 'updatedAt'],
+      PostCategories: ['categoryId', 'createdAt', 'id', 'postId', 'updatedAt'],
       PostComments: [
         'content',
         'createdAt',
@@ -157,7 +157,7 @@ const cases: ExpectedSchemaCase = {
         'updatedAt',
       ],
       PostMetas: ['content', 'createdAt', 'id', 'key', 'postId', 'updatedAt'],
-      PostTags: ['createdAt', 'postId', 'tagId', 'updatedAt'],
+      PostTags: ['createdAt', 'id', 'postId', 'tagId', 'updatedAt'],
       Tags: ['content', 'createdAt', 'id', 'metaTitle', 'slug', 'title', 'updatedAt'],
       Users: [
         'createdAt',
@@ -201,7 +201,7 @@ const cases: ExpectedSchemaCase = {
         'title',
         'updatedAt',
       ],
-      PostCategory: ['categoryId', 'createdAt', 'postId', 'updatedAt'],
+      PostCategory: ['categoryId', 'createdAt', 'id', 'postId', 'updatedAt'],
       PostComment: [
         'content',
         'createdAt',
@@ -214,7 +214,7 @@ const cases: ExpectedSchemaCase = {
         'updatedAt',
       ],
       PostMeta: ['content', 'createdAt', 'id', 'key', 'postId', 'updatedAt'],
-      PostTag: ['createdAt', 'postId', 'tagId', 'updatedAt'],
+      PostTag: ['createdAt', 'id', 'postId', 'tagId', 'updatedAt'],
       Tag: ['content', 'createdAt', 'id', 'metaTitle', 'slug', 'title', 'updatedAt'],
       User: [
         'createdAt',
@@ -247,7 +247,7 @@ const cases: ExpectedSchemaCase = {
         'summary',
         'title',
       ],
-      post_categories: ['category_id', 'post_id'],
+      post_categories: ['category_id', 'id', 'post_id'],
       post_comments: [
         'content',
         'id',
@@ -258,7 +258,7 @@ const cases: ExpectedSchemaCase = {
         'title',
       ],
       post_metas: ['content', 'id', 'key', 'post_id'],
-      post_tags: ['post_id', 'tag_id'],
+      post_tags: ['id', 'post_id', 'tag_id'],
       tags: ['content', 'id', 'meta_title', 'slug', 'title'],
       users: [
         'email',
@@ -300,7 +300,7 @@ const cases: ExpectedSchemaCase = {
         'title',
         'updated_at',
       ],
-      post_categories: ['category_id', 'created_at', 'post_id', 'updated_at'],
+      post_categories: ['category_id', 'created_at', 'post_category_id', 'post_id', 'updated_at'],
       post_comments: [
         'content',
         'created_at',
@@ -313,7 +313,7 @@ const cases: ExpectedSchemaCase = {
         'updated_at',
       ],
       post_metas: ['content', 'created_at', 'key', 'post_id', 'post_meta_id', 'updated_at'],
-      post_tags: ['created_at', 'post_id', 'tag_id', 'updated_at'],
+      post_tags: ['created_at', 'post_id', 'post_tag_id', 'tag_id', 'updated_at'],
       tags: ['content', 'created_at', 'meta_title', 'slug', 'tag_id', 'title', 'updated_at'],
       users: [
         'created_at',

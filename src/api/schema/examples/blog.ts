@@ -29,7 +29,6 @@
  */
 import {
   belongsToType,
-  bigIntDataType,
   booleanDataType,
   dateTimeDataType,
   hasManyType,
@@ -275,16 +274,7 @@ const postCategory: Model = {
   name: 'post category',
   createdAt: time,
   updatedAt: time,
-  fields: [
-    {
-      id: uniqueId(),
-      name: 'category id',
-      type: bigIntDataType(),
-      primaryKey: true,
-      required: false,
-      unique: false,
-    },
-  ],
+  fields: [],
   associations: [
     {
       id: uniqueId(),
@@ -412,16 +402,7 @@ const postTag: Model = {
   name: 'post tag',
   createdAt: time,
   updatedAt: time,
-  fields: [
-    {
-      id: uniqueId(),
-      name: 'tag id',
-      type: bigIntDataType(),
-      primaryKey: true,
-      required: false,
-      unique: false,
-    },
-  ],
+  fields: [],
   associations: [
     {
       id: uniqueId(),
