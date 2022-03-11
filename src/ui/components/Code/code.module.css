@@ -59,16 +59,6 @@
   hyphens: none;
 }
 
-.code::-moz-selection,
-.code ::-moz-selection {
-  background: var(--color-background);
-}
-
-.code::selection,
-.code ::selection {
-  background: var(--color-background);
-}
-
 .code {
   @apply relative overflow-auto my-1 p-2;
 }
