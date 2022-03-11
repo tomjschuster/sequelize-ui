@@ -44,7 +44,7 @@ export const SqlLiteConnection: DbConnectionConstructor = class SqlLiteConnectio
     return Promise.resolve()
   }
 
-  static createDatabase(database: string): Promise<void> {
+  static async createDatabase(database: string): Promise<void> {
     return mkdirp(tmpDirPath(database, '.tmp'))
   }
 

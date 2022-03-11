@@ -307,14 +307,6 @@ module.exports = {
       updatedAt: {
         type: DataTypes.DATE,
         field: 'updated_at'
-      },
-      departmentsId: {
-        type: DataTypes.STRING,
-        field: 'departments_id'
-      },
-      employeeId: {
-        type: DataTypes.INTEGER,
-        field: 'employee_id'
       }
     })
   },
@@ -361,14 +353,6 @@ module.exports = {
       updatedAt: {
         type: DataTypes.DATE,
         field: 'updated_at'
-      },
-      departmentsId: {
-        type: DataTypes.STRING,
-        field: 'departments_id'
-      },
-      managerId: {
-        type: DataTypes.INTEGER,
-        field: 'manager_id'
       }
     })
   },
@@ -390,7 +374,6 @@ module.exports = {
         type: DataTypes.INTEGER,
         field: 'emp_no',
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false
       },
       title: {
@@ -437,7 +420,6 @@ module.exports = {
         type: DataTypes.INTEGER,
         field: 'emp_no',
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false
       },
       salary: {
@@ -498,26 +480,6 @@ module.exports = {
       }
     })
     
-    await queryInterface.addConstraint('dept_emps', {
-      fields: ['departments_id'],
-      type: 'foreign key',
-      name: 'dept_emps_departments_id_fkey',
-      references: {
-        table: 'departments',
-        field: 'dept_no'
-      }
-    })
-    
-    await queryInterface.addConstraint('dept_emps', {
-      fields: ['employee_id'],
-      type: 'foreign key',
-      name: 'dept_emps_employee_id_fkey',
-      references: {
-        table: 'employees',
-        field: 'emp_no'
-      }
-    })
-    
     await queryInterface.addConstraint('dept_managers', {
       fields: ['emp_no'],
       type: 'foreign key',
@@ -535,26 +497,6 @@ module.exports = {
       references: {
         table: 'departments',
         field: 'dept_no'
-      }
-    })
-    
-    await queryInterface.addConstraint('dept_managers', {
-      fields: ['departments_id'],
-      type: 'foreign key',
-      name: 'dept_managers_departments_id_fkey',
-      references: {
-        table: 'departments',
-        field: 'dept_no'
-      }
-    })
-    
-    await queryInterface.addConstraint('dept_managers', {
-      fields: ['manager_id'],
-      type: 'foreign key',
-      name: 'dept_managers_manager_id_fkey',
-      references: {
-        table: 'employees',
-        field: 'emp_no'
       }
     })
     
@@ -581,12 +523,8 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeConstraint('dept_emps', 'dept_emps_emp_no_fkey')
     await queryInterface.removeConstraint('dept_emps', 'dept_emps_dept_no_fkey')
-    await queryInterface.removeConstraint('dept_emps', 'dept_emps_departments_id_fkey')
-    await queryInterface.removeConstraint('dept_emps', 'dept_emps_employee_id_fkey')
     await queryInterface.removeConstraint('dept_managers', 'dept_managers_emp_no_fkey')
     await queryInterface.removeConstraint('dept_managers', 'dept_managers_dept_no_fkey')
-    await queryInterface.removeConstraint('dept_managers', 'dept_managers_departments_id_fkey')
-    await queryInterface.removeConstraint('dept_managers', 'dept_managers_manager_id_fkey')
     await queryInterface.removeConstraint('titles', 'titles_emp_no_fkey')
     await queryInterface.removeConstraint('salaries', 'salaries_emp_no_fkey')
   }
@@ -1105,15 +1043,15 @@ export function initModels(sequelize: Sequelize) {
   Department.belongsToMany(Employee, {
     as: 'employees',
     through: DeptEmp,
-    foreignKey: 'departments_id',
-    otherKey: 'employee_id',
+    foreignKey: 'emp_no',
+    otherKey: 'dept_no',
     onDelete: 'CASCADE'
   })
   Department.belongsToMany(Employee, {
     as: 'managers',
     through: DeptManager,
-    foreignKey: 'departments_id',
-    otherKey: 'manager_id',
+    foreignKey: 'emp_no',
+    otherKey: 'dept_no',
     onDelete: 'CASCADE'
   })
   Department.hasMany(DeptEmp, {
@@ -1207,7 +1145,6 @@ export class Salary extends Model<
       empNo: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false
       },
       salary: {
@@ -1284,7 +1221,6 @@ export class Title extends Model<
       empNo: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false
       },
       title: {
