@@ -3,7 +3,7 @@ const nextJest = require('next/jest')
 const createJestConfig = nextJest({ dir: './' })
 
 const jestConfig = {
-  roots: ['<rootDir>/src', '<rootDir>/e2e/frameworks'],
+  roots: ['<rootDir>/src', '<rootDir>/e2e'],
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
   coveragePathIgnorePatterns: [
     'src/test-utils',

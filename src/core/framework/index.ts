@@ -14,6 +14,7 @@ export enum ProjectType {
 }
 
 export interface Framework {
+  name: string
   displayName(): string
   generate(args: GenerateArgs): FileSystemItem
   projectType(): ProjectType

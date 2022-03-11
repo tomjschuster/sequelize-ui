@@ -1,6 +1,6 @@
 import sakilaSchema from '@src/api/schema/examples/sakila'
 import { SqlDialect } from '@src/core/database'
-import { ExpectedSchemaCase } from './cases'
+import { ExpectedSchemaCase } from '../cases'
 
 const cases: ExpectedSchemaCase = {
   schema: sakilaSchema,

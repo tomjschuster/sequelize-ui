@@ -1,5 +1,5 @@
 import employeesSchema from '@src/api/schema/examples/employees'
-import { ExpectedSchemaCase } from './cases'
+import { ExpectedSchemaCase } from '../cases'
 
 const cases: ExpectedSchemaCase = {
   schema: employeesSchema,

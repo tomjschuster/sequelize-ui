@@ -4,6 +4,7 @@ import { directory, isDirectory } from '@src/core/files/fileSystem'
 import { Framework, GenerateArgs, ProjectType } from '..'
 
 const MockFramework: Framework = {
+  name: 'mock',
   displayName() {
     return 'Mock Framework'
   },

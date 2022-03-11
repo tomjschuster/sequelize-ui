@@ -11,15 +11,13 @@ import {
   preinstall,
   validateDialect,
 } from '@src/test-utils'
-import blogCases from './__cases__/blog'
-import { cases, columnCaseToColumn, ExpectedSchemaCase } from './__cases__/cases'
-import employeesCase from './__cases__/employees'
-import sakilaCases from './__cases__/sakila'
+import { cases, columnCaseToColumn } from '../cases'
+import schemaCases from '../schemaCases'
 
 const SQL_DIALECT = process.env.SQL_DIALECT
 const KEEP_ASSETS: boolean = process.env.KEEP_ASSETS === 'true'
 
-const frameworks: [label: string, framework: Framework][] = [['Sequelize', SequelizeFramework]]
+const frameworks: Framework[] = [SequelizeFramework]
 
 const sqlDialects: SqlDialect[] =
   SQL_DIALECT === 'all'
@@ -32,15 +30,12 @@ const sqlDialects: SqlDialect[] =
       ]
     : [validateDialect(SQL_DIALECT || SqlDialect.Sqlite)]
 
-const schemas: ExpectedSchemaCase[] = [blogCases, employeesCase, sakilaCases]
-
-describe.each(frameworks)('%s Framework Migrations', (_label, framework: Framework) => {
+describe.each(frameworks)('$name migrations', (framework: Framework) => {
   const projectName = alpha(12)
   const projectType = framework.projectType()
 
   describe.each(sqlDialects)('%s', (sqlDialect) => {
-    const schemaCases = schemas.map<[string, ExpectedSchemaCase]>((x) => [x.schema.name, x])
-    describe.each(schemaCases)('%s', (_name, { schema, tableColumns }) => {
+    describe.each(schemaCases)('$schema.name', ({ schema, tableColumns }) => {
       afterAll(async () => {
         !KEEP_ASSETS && (await destroyProject(projectType, projectName))
         !KEEP_ASSETS && (await dropDatabase(projectName, sqlDialect))

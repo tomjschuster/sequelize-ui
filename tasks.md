@@ -4,16 +4,17 @@
 
 - [ ] **API**: Import swagger/json schema
 
-- [ ] **CI**: Run E2E SQL tests for all dialects before prod deploy
-
-- [ ] **Codegen**: Add warning when SQL dialect doesn't support data type
+- [ ] **Codegen**: JS support
 - [ ] **Codegen**: Support multiple Sequelize versions
 
 - [ ] **Documentation**: Document functions and modules
 
+- [ ] **Tests**: Add Sequelize framework tests
 - [ ] **Tests**: Add E2E browser tests
 - [ ] **Tests**: Increase unit test coverage
 
+- [ ] **UI**: Allow highlighting of code
+- [ ] **UI**: Add warning when SQL dialect doesn't support data type
 - [ ] **UI**: Refactor css into theme
   - [ ] Typeography
   - [ ] Colors
@@ -24,9 +25,9 @@
 
 ### In Progress
 
-- [ ] **Tests**: Run E2E SQL tests against all example schemas
-- [ ] **Codegen**: JS support
+- [ ] **CI**: Run E2E SQL tests for all dialects before prod deploy
 
 ### Done ✓
 
 - [x] **API**: Persist db options for user
+- [x] **Tests**: Run E2E SQL tests against all example schemas

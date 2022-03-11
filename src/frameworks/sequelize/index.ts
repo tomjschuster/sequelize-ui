@@ -5,6 +5,7 @@ import { generateSequelizeProject } from './generate'
 import { modelFileName } from './utils/model'
 
 export const SequelizeFramework: Framework = {
+  name: 'sequelize',
   displayName: (): string => 'Sequelize',
   projectType: (): ProjectType => ProjectType.Npm,
   generate: generateSequelizeProject,

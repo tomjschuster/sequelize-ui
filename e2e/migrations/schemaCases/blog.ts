@@ -1,5 +1,5 @@
 import blogSchema from '@src/api/schema/examples/blog'
-import { ExpectedSchemaCase } from './cases'
+import { ExpectedSchemaCase } from '../cases'
 
 const cases: ExpectedSchemaCase = {
   schema: blogSchema,
