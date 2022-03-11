@@ -312,10 +312,12 @@ const DataTypes = require('sequelize').DataTypes
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('post_categories', {
-      categoryId: {
-        type: DataTypes.BIGINT,
-        field: 'category_id',
-        primaryKey: true
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        field: 'id',
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -328,6 +330,10 @@ module.exports = {
       postId: {
         type: DataTypes.INTEGER.UNSIGNED,
         field: 'post_id'
+      },
+      categoryId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        field: 'category_id'
       }
     })
   },
@@ -447,10 +453,12 @@ const DataTypes = require('sequelize').DataTypes
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('post_tags', {
-      tagId: {
-        type: DataTypes.BIGINT,
-        field: 'tag_id',
-        primaryKey: true
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        field: 'id',
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -463,6 +471,10 @@ module.exports = {
       postId: {
         type: DataTypes.INTEGER.UNSIGNED,
         field: 'post_id'
+      },
+      tagId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        field: 'tag_id'
       }
     })
   },
@@ -633,21 +645,21 @@ module.exports = {
     })
     
     await queryInterface.addConstraint('post_categories', {
-      fields: ['category_id'],
-      type: 'foreign key',
-      name: 'post_categories_category_id_fkey',
-      references: {
-        table: 'categories',
-        field: 'id'
-      }
-    })
-    
-    await queryInterface.addConstraint('post_categories', {
       fields: ['post_id'],
       type: 'foreign key',
       name: 'post_categories_post_id_fkey',
       references: {
         table: 'posts',
+        field: 'id'
+      }
+    })
+    
+    await queryInterface.addConstraint('post_categories', {
+      fields: ['category_id'],
+      type: 'foreign key',
+      name: 'post_categories_category_id_fkey',
+      references: {
+        table: 'categories',
         field: 'id'
       }
     })
@@ -683,16 +695,6 @@ module.exports = {
     })
     
     await queryInterface.addConstraint('post_tags', {
-      fields: ['tag_id'],
-      type: 'foreign key',
-      name: 'post_tags_tag_id_fkey',
-      references: {
-        table: 'tags',
-        field: 'id'
-      }
-    })
-    
-    await queryInterface.addConstraint('post_tags', {
       fields: ['post_id'],
       type: 'foreign key',
       name: 'post_tags_post_id_fkey',
@@ -701,18 +703,28 @@ module.exports = {
         field: 'id'
       }
     })
+    
+    await queryInterface.addConstraint('post_tags', {
+      fields: ['tag_id'],
+      type: 'foreign key',
+      name: 'post_tags_tag_id_fkey',
+      references: {
+        table: 'tags',
+        field: 'id'
+      }
+    })
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeConstraint('categories', 'categories_parent_id_fkey')
     await queryInterface.removeConstraint('posts', 'posts_author_id_fkey')
     await queryInterface.removeConstraint('posts', 'posts_parent_id_fkey')
-    await queryInterface.removeConstraint('post_categories', 'post_categories_category_id_fkey')
     await queryInterface.removeConstraint('post_categories', 'post_categories_post_id_fkey')
+    await queryInterface.removeConstraint('post_categories', 'post_categories_category_id_fkey')
     await queryInterface.removeConstraint('post_comments', 'post_comments_post_id_fkey')
     await queryInterface.removeConstraint('post_comments', 'post_comments_parent_id_fkey')
     await queryInterface.removeConstraint('post_metas', 'post_metas_post_id_fkey')
-    await queryInterface.removeConstraint('post_tags', 'post_tags_tag_id_fkey')
     await queryInterface.removeConstraint('post_tags', 'post_tags_post_id_fkey')
+    await queryInterface.removeConstraint('post_tags', 'post_tags_tag_id_fkey')
   }
 };
 
@@ -795,7 +807,7 @@ export class Category extends Model<
   declare setPostCategories: HasManySetAssociationsMixin<PostCategory, number>
   declare addPostCategory: HasManyAddAssociationMixin<PostCategory, number>
   declare addPostCategories: HasManyAddAssociationsMixin<PostCategory, number>
-  declare createPostCategory: HasManyCreateAssociationMixin<PostCategory, 'categoryId'>
+  declare createPostCategory: HasManyCreateAssociationMixin<PostCategory>
   declare removePostCategory: HasManyRemoveAssociationMixin<PostCategory, number>
   declare removePostCategories: HasManyRemoveAssociationsMixin<PostCategory, number>
   declare hasPostCategory: HasManyHasAssociationMixin<PostCategory, number>
@@ -1268,7 +1280,7 @@ export class PostCategory extends Model<
   InferAttributes<PostCategory, {omit: PostCategoryAssociations}>,
   InferCreationAttributes<PostCategory, {omit: PostCategoryAssociations}>
 > {
-  declare categoryId: CreationOptional<number>
+  declare id: CreationOptional<number>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
@@ -1291,9 +1303,11 @@ export class PostCategory extends Model<
 
   static initModel(sequelize: Sequelize): typeof PostCategory {
     PostCategory.init({
-      categoryId: {
-        type: DataTypes.BIGINT,
-        primaryKey: true
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       createdAt: {
         type: DataTypes.DATE
@@ -1519,7 +1533,7 @@ export class PostTag extends Model<
   InferAttributes<PostTag, {omit: PostTagAssociations}>,
   InferCreationAttributes<PostTag, {omit: PostTagAssociations}>
 > {
-  declare tagId: CreationOptional<number>
+  declare id: CreationOptional<number>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
@@ -1542,9 +1556,11 @@ export class PostTag extends Model<
 
   static initModel(sequelize: Sequelize): typeof PostTag {
     PostTag.init({
-      tagId: {
-        type: DataTypes.BIGINT,
-        primaryKey: true
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
       },
       createdAt: {
         type: DataTypes.DATE
@@ -1618,7 +1634,7 @@ export class Tag extends Model<
   declare setPostTags: HasManySetAssociationsMixin<PostTag, number>
   declare addPostTag: HasManyAddAssociationMixin<PostTag, number>
   declare addPostTags: HasManyAddAssociationsMixin<PostTag, number>
-  declare createPostTag: HasManyCreateAssociationMixin<PostTag, 'tagId'>
+  declare createPostTag: HasManyCreateAssociationMixin<PostTag>
   declare removePostTag: HasManyRemoveAssociationMixin<PostTag, number>
   declare removePostTags: HasManyRemoveAssociationsMixin<PostTag, number>
   declare hasPostTag: HasManyHasAssociationMixin<PostTag, number>

@@ -33,6 +33,10 @@ export default db
   "main": "server.ts",
   "scripts": {
     "test": "echo \\"Error: no test specified\\" && exit 1",
+    "db:up": "echo creating && npm run db:create && echo created && npm run db:migrate && echo migrated",
+    "db:reset": "npm run db:drop && npm run db:up",
+    "db:create": "sequelize db:create",
+    "db:drop": "[[ $NODE_ENV == production ]] && exit 1 || sequelize db:drop",
     "db:migrate": "sequelize db:migrate",
     "db:rollback": "sequelize db:migrate:undo",
     "db:rollback:all": "sequelize db:migrate:undo:all",
@@ -229,11 +233,11 @@ export class Film extends Model<
         type: DataTypes.INTEGER
       },
       languageId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
       },
       originalLanguageId: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER.UNSIGNED
       },
       rentalDuration: {
         type: DataTypes.INTEGER,

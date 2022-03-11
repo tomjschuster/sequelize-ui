@@ -128,7 +128,7 @@ const film: Model = {
     {
       id: uniqueId(),
       name: 'language_id',
-      type: integerDataType(),
+      type: integerDataType({ unsigned: true }),
       primaryKey: false,
       required: true,
       unique: false,
@@ -136,7 +136,7 @@ const film: Model = {
     {
       id: uniqueId(),
       name: 'original_language_id',
-      type: integerDataType(),
+      type: integerDataType({ unsigned: true }),
       primaryKey: false,
       required: false,
       unique: false,

@@ -218,11 +218,11 @@ export class Film extends Model<
         type: DataTypes.INTEGER
       },
       languageId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
       },
       originalLanguageId: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER.UNSIGNED
       },
       rentalDuration: {
         type: DataTypes.INTEGER,
