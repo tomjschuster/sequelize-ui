@@ -90,7 +90,7 @@ jobs:
   #       env:
   #         SQL_DIALECT: postgres
 
-test-mysql:
+  test-mysql:
     runs-on: ubuntu-latest
     needs: install
 
