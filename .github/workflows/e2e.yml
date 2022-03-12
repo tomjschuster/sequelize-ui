@@ -52,3 +52,38 @@ jobs:
         run: npm run test:e2e:migrations
         env:
           SQL_DIALECT: sqlite
+
+  test-postgres:
+    runs-on: ubuntu-latest
+    needs: install
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+
+      - name: Check dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/package.json') }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Test
+        run: npm run test:e2e:migrations
+        env:
+          SQL_DIALECT: postgres
