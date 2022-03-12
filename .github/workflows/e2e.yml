@@ -96,11 +96,11 @@ jobs:
 
     services:
       mariadb:
-      image: mariadb:latest
-      env:
-        MYSQL_ROOT_PASSWORD: root
-      ports:
-        - '3306:3306'
+        image: mariadb:latest
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - '3306:3306'
 
     steps:
       - name: Checkout Repo
