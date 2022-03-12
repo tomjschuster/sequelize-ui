@@ -154,18 +154,18 @@ jobs:
   #       env:
   #         SQL_DIALECT: mariadb
 
-  test-mariadb:
+  test-mssql:
     runs-on: ubuntu-latest
     needs: install
 
     services:
       mssql:
         image: mcr.microsoft.com/mssql/server:2019-latest
-        ports:
-          - '1433:1433'
-        environment:
+        env:
           SA_PASSWORD: 'Password1'
           ACCEPT_EULA: 'Y'
+        ports:
+          - '1433:1433'
 
     steps:
       - name: Checkout Repo
