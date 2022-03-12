@@ -21,7 +21,8 @@
     "test:coverage": "npm run test:unit -- --coverage",
     "test:all": "cross-env SQL_DIALECT=all npm test -- src e2e --coverage",
     "test:e2e": "jest e2e",
-    "test:e2e:all": "cross-env SQL_DIALECT=all npm run test:e2e",
+    "test:e2e:migrations": "jest e2e/migrations",
+    "test:e2e:migrations:all": "cross-env SQL_DIALECT=all npm run test:e2e:migrations",
     "test:watch": "npm test -- --watch --"
   },
   "husky": {

@@ -13,7 +13,6 @@
 - [ ] **Tests**: Add E2E browser tests
 - [ ] **Tests**: Increase unit test coverage
 
-- [ ] **UI**: Allow highlighting of code
 - [ ] **UI**: Add warning when SQL dialect doesn't support data type
 - [ ] **UI**: Refactor css into theme
   - [ ] Typeography
@@ -31,3 +30,4 @@
 
 - [x] **API**: Persist db options for user
 - [x] **Tests**: Run E2E SQL tests against all example schemas
+- [x] **UI**: Allow highlighting of code
