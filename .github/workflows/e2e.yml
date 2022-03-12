@@ -55,6 +55,7 @@ jobs:
 
   test-postgres:
     runs-on: ubuntu-latest
+    container: 16-buster-slim
     needs: install
 
     services:
