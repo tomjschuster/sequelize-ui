@@ -8,7 +8,7 @@ export const PostgresConnection: DbConnectionConstructor = class PostgresConnect
     user: process.env.POSTGRES_DB_USER || 'postgres',
     password: process.env.POSTGRES_DB_PASSWORD || 'postgres',
     port: parseInt(process.env.POSTGRES_DB_PORT || '5432'),
-    host: process.env.POSTGRES_DB_USER_PORT || 'localhost',
+    host: process.env.POSTGRES_DB_HOST || 'localhost',
   }
 
   constructor(database: string) {
