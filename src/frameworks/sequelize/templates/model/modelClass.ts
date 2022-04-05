@@ -54,20 +54,20 @@ export function modelClassTemplate({
     ),
     associations.length
       ? lines(
-          [
-            'declare static associations: {',
-            lines(
-              associations.map((association) =>
-                staticAssociation({ sourceModel: model, association }),
-              ),
-              { depth: 2, separator: ',' },
+        [
+          'declare static associations: {',
+          lines(
+            associations.map((association) =>
+              staticAssociation({ sourceModel: model, association }),
             ),
-            '}',
-          ],
-          {
-            depth: 2,
-          },
-        )
+            { depth: 2, separator: ',' },
+          ),
+          '}',
+        ],
+        {
+          depth: 2,
+        },
+      )
       : null,
     associations.length ? blank() : null,
     lines(
@@ -113,12 +113,14 @@ const classFieldType = (
   const fieldType = creationOptional
     ? `CreationOptional<${tsType}>`
     : required
-    ? tsType
-    : `${tsType} | null`
+      ? tsType
+      : `${tsType} | null`
+
+  const isOptional = required ? '' : '?';
 
   return [
     noSupportedDetails(type, dbOptions.sqlDialect),
-    `${comment}declare ${camelCase(name)}: ${fieldType}`,
+    `${comment}declare ${camelCase(name)}${isOptional}: ${fieldType}`,
   ]
 }
 
@@ -153,8 +155,8 @@ function associationType({
     targetPks.length > 1
       ? 'never'
       : targetPks.length === 1
-      ? dataTypeToTypeScript(targetPks[0].type)
-      : dataTypeToTypeScript(integerDataType())
+        ? dataTypeToTypeScript(targetPks[0].type)
+        : dataTypeToTypeScript(integerDataType())
 
   switch (association.type.type) {
     case AssociationTypeType.BelongsTo: {
