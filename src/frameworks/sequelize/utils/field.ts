@@ -92,13 +92,29 @@ function autoincrementField(dataType: DataType): string | null {
     : null
 }
 
-function defaultField(dataType: DataType) {
+function defaultField(dataType: DataType, defaultValue?: string | Number | boolean | Date): string | null {
   if (isDateTimeType(dataType) && dataType.defaultNow) {
     return `defaultValue: DataTypes.NOW`
   }
 
   if (dataType.type === DataTypeType.Uuid && dataType.defaultVersion) {
     return `defaultValue: ${sequelizeUuidVersion(dataType.defaultVersion)}`
+  }
+
+  if (dataType.type === DataTypeType.String || dataType.type === DataTypeType.Text || dataType.type === DataTypeType.Enum) {
+    return `defaultValue: '${defaultValue || ''}'`
+  }
+
+  if (dataType.type === DataTypeType.Integer) {
+    return `defaultValue: ${defaultValue || 0}`
+  }
+
+  if (dataType.type === DataTypeType.Boolean) {
+    return `defaultValue: ${defaultValue || false}`
+  }
+
+  if (dataType.type === DataTypeType.DateTime) {
+    return `defaultValue: ${defaultValue || 'null'}`
   }
 
   return null
