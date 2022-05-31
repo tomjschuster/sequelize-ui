@@ -31,7 +31,7 @@ import SchemasError from './SchemasError'
 
 const SchemaStorageInfo = dynamic(() => import('./SchemaStorageInfo'))
 
-const CLEAER_DATA_SUCCESS_COPY = 'All schemas deleted.'
+const CLEAR_DATA_SUCCESS_COPY = 'All schemas deleted.'
 const CLEAR_DATA_ERROR_COPY = `Failed to delete schemas. Try clearing localStorage or site data through your browser's developer console.`
 
 export default function MySchemas(): React.ReactElement {
@@ -50,7 +50,7 @@ export default function MySchemas(): React.ReactElement {
     try {
       await Promise.all([schemaApi.deleteAllSchemas(), userPreferences.clearPreferences()])
       await refetch()
-      success(CLEAER_DATA_SUCCESS_COPY)
+      success(CLEAR_DATA_SUCCESS_COPY)
       closeInfoModal()
     } catch (e) {
       console.error(e)

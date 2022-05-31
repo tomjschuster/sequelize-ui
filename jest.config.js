@@ -2,7 +2,7 @@ const nextJest = require('next/jest')
 
 const createJestConfig = nextJest({ dir: './' })
 
-const jestConfig = {
+const customConfig = {
   roots: ['<rootDir>/src', '<rootDir>/e2e'],
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
   coveragePathIgnorePatterns: [
@@ -18,9 +18,22 @@ const jestConfig = {
   moduleNameMapper: { '@src/(.*)': '<rootDir>/src/$1' },
   testPathIgnorePatterns: ['src/typings', 'src/test-utils', '__fixtures__'],
   setupFiles: ['jest-localstorage-mock'],
+  setupFilesAfterEnv: ['<rootDir>/src/test-utils/jestSetup.ts'],
   resetMocks: false,
   moduleDirectories: ['node_modules', '<rootDir>/'],
   testEnvironment: 'jest-environment-jsdom',
 }
 
-module.exports = createJestConfig(jestConfig)
+const jestConfig = async () => {
+  const config = await createJestConfig(customConfig)()
+
+  const esModules = ['nanoid'].join('|')
+
+  const transformIgnorePatterns = config.transformIgnorePatterns.map((p) =>
+    p === '/node_modules/' ? `node_modules/(?!${esModules})` : p,
+  )
+
+  return { ...config, transformIgnorePatterns }
+}
+
+module.exports = jestConfig

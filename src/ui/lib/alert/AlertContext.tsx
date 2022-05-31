@@ -21,6 +21,8 @@ const AlertContext = React.createContext<AlertContext>({
   error: () => null,
 })
 
+const defaultOptions: AlertOptions = {}
+
 export function AlertProvider({ children }: { children: React.ReactNode }): React.ReactElement {
   // just render children when provider errors
   const ErrorWrapper: React.FC = React.useCallback(() => <>{children}</>, [children])
@@ -36,25 +38,25 @@ function AlertProvider_({ children }: { children: React.ReactNode }): React.Reac
   const { alerts, alert, dismissAlert } = useAlertState()
 
   const info = React.useCallback(
-    (message: AlertMessage, { level: _, ...options } = {}) =>
+    (message: AlertMessage, { level: _, ...options } = defaultOptions) =>
       alert(message, { level: AlertLevel.Info, ...options }),
     [alert],
   )
 
   const success = React.useCallback(
-    (message: AlertMessage, { level: _, ...options } = {}) =>
+    (message: AlertMessage, { level: _, ...options } = defaultOptions) =>
       alert(message, { level: AlertLevel.Success, ...options }),
     [alert],
   )
 
   const warning = React.useCallback(
-    (message: AlertMessage, { level: _, ...options }: AlertOptions = {}) =>
+    (message: AlertMessage, { level: _, ...options }: AlertOptions = defaultOptions) =>
       alert(message, { level: AlertLevel.Warning, ...options }),
     [alert],
   )
 
   const error = React.useCallback(
-    (message: AlertMessage, { level: _, ...options } = {}) =>
+    (message: AlertMessage, { level: _, ...options } = defaultOptions) =>
       alert(message, { level: AlertLevel.Error, ...options }),
     [alert],
   )
