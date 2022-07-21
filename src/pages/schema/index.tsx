@@ -91,7 +91,7 @@ function SchemaPage(): React.ReactElement {
 
 export default withLayout(() => ({
   compact: true,
-  title: 'Sequelize UI | Schema',
+  title: 'Schema - Sequelize UI',
   metaDescription:
     'A full Node.js project with TypeScript and Sequelize. Configure for MySQL, Postgres, SQLite or SQL Server.',
 }))(SchemaPage)

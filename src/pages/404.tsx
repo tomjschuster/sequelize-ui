@@ -46,5 +46,5 @@ function NotFound(): React.ReactElement {
 }
 
 export default withLayout(() => ({
-  title: 'Sequelize UI | Not Found',
+  title: 'Not Found - Sequelize UI',
 }))(NotFound)

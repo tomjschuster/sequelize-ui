@@ -10,7 +10,7 @@ export type FieldProps<T, P> = P extends React.HTMLAttributes<infer E>
 
 export type CommonFieldProps<E extends HTMLElement, T> = {
   value: T | null
-  onChange: (value: T, evt: React.ChangeEvent<E>) => void
+  onChange: (value: T, evt?: React.ChangeEvent<E>) => void
 }
 
 export type FieldWrapperProps = {

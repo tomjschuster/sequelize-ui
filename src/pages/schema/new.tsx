@@ -32,7 +32,7 @@ function SchemaPage(): React.ReactElement {
 
 export default withLayout(() => ({
   compact: true,
-  title: 'Sequelize UI | Create a Schema',
+  title: 'Create a Schema - Sequelize UI',
   metaDescription:
     'Generate a new Node.js project with TypeScript and Sequelize code for your data model. Configure for MySQL, Postgres, SQLite or SQL Server.',
 }))(SchemaPage)

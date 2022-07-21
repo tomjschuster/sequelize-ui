@@ -36,7 +36,9 @@ export function dataTypeToTypeScript(dataType: DataType): string {
     case DataTypeType.Boolean:
       return 'boolean'
     case DataTypeType.Enum:
-      return dataType.values.length > 0 ? dataType.values.map((x) => `'${x}'`).join(' | ') : 'never'
+      return dataType.values.length > 0
+        ? dataType.values.map((x) => `'${escapeUnion(x)}'`).join(' | ')
+        : 'never'
     case DataTypeType.Array:
       if (dataType.arrayType.type === DataTypeType.Enum) {
         return `Array<${dataTypeToTypeScript(dataType.arrayType)}>`
@@ -48,6 +50,10 @@ export function dataTypeToTypeScript(dataType: DataType): string {
     case DataTypeType.Blob:
       return 'Buffer'
   }
+}
+
+function escapeUnion(value: string): string {
+  return value.replace('\\', '\\\\').replace(`'`, `\\'`)
 }
 
 const postgresTypes: DataTypeType[] = [DataTypeType.Array, DataTypeType.JsonB, DataTypeType.CiText]

@@ -50,19 +50,34 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
     [field.id, onChange],
   )
 
-  const handleBlurEnumInput = React.useCallback(() => {
-    if (field.type.type === DataTypeType.Enum) {
-      const values =
-        enumInputValue
-          // clear leading/tracing non-word characters and any non-(word|space|-|;|,)
-          ?.replaceAll(/^\W+|[^\w\n -,;]|\W+$/g, '')
-          // split on , ; \n
-          .split(/[ ]*,[ ]*|[ ]*;[ ]*|[ ]*\n[ ]*/) || []
+  const handleChangeEnumInput = React.useCallback(
+    (value: string | undefined): string[] => {
+      setEnumInputValue(value || undefined)
 
-      handleChange({ type: { ...field.type, values } })
-      setEnumInputValue(values.join('\n'))
-    }
-  }, [field.type, enumInputValue, handleChange])
+      if (field.type.type === DataTypeType.Enum) {
+        const values = value
+          ? value
+              // clear leading/tracing non-word characters and any non-(word|space|-|;|,)
+              ?.replaceAll(/^\W+|[^\w\n -,;]|\W+$/g, '')
+              // split on , ; \n
+              .split(/[ ]*,[ ]*|[ ]*;[ ]*|[ ]*\n[ ]*/)
+              .filter((x) => x !== '')
+          : []
+
+        handleChange({ type: { ...field.type, values } })
+
+        return values
+      }
+
+      return []
+    },
+    [field, handleChange],
+  )
+
+  const handleBlurEnumInput = React.useCallback(() => {
+    const values = handleChangeEnumInput(enumInputValue)
+    setEnumInputValue(values.join('\n'))
+  }, [enumInputValue, handleChangeEnumInput])
 
   const handleChangeName = React.useCallback(
     (name?: string) => handleChange({ name: name || '' }),
@@ -226,7 +241,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
             label="Enum values"
             value={enumInputValue}
             rows={4}
-            onChange={setEnumInputValue}
+            onChange={handleChangeEnumInput}
             onBlur={handleBlurEnumInput}
           />
         )}

@@ -108,3 +108,33 @@ export function noop(): void {
 export function void_(_v: unknown): void {
   return undefined
 }
+
+export function debounce<T extends (...args: any[]) => any>(
+  f: T,
+  wait: number,
+  immediate: boolean = false,
+): ((...args: Parameters<T>) => void) & { cancel: () => boolean } {
+  let timeout: NodeJS.Timeout | undefined
+
+  function cancel(): boolean {
+    if (timeout) {
+      clearTimeout(timeout)
+      return true
+    }
+
+    return false
+  }
+
+  const debounced = function (...args: Parameters<T>): void {
+    cancel()
+    timeout = setTimeout(function () {
+      timeout = undefined
+      if (!immediate) return f(...args)
+    }, wait)
+    if (immediate && !timeout) return f(...args)
+  }
+
+  debounced.cancel = cancel
+
+  return debounced
+}

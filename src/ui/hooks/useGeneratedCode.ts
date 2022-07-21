@@ -11,6 +11,7 @@ export type UseGeneratedCodeArgs = {
   dbOptions: DbOptions
   initialFramework?: Framework
   skip?: boolean
+  filterNoNameFields?: boolean
 }
 
 export type UseGeneratedCodeResult = {
@@ -24,7 +25,8 @@ export default function useGeneratedCode({
   meta,
   dbOptions,
   initialFramework,
-  skip,
+  skip = false,
+  filterNoNameFields = false,
 }: UseGeneratedCodeArgs): UseGeneratedCodeResult {
   const [framework, setFramework] = React.useState<Framework | undefined>(initialFramework)
 
@@ -39,7 +41,15 @@ export default function useGeneratedCode({
 
   const root = React.useMemo<FileSystemItem | undefined>(() => {
     if (!schema || !framework) return
-    return framework.generate({ schema, meta, dbOptions })
+
+    const filtered = filterNoNameFields
+      ? {
+          ...schema,
+          models: schema.models.map((m) => ({ ...m, fields: m.fields.filter((f) => !!f.name) })),
+        }
+      : schema
+
+    return framework.generate({ schema: filtered, meta, dbOptions })
   }, [schema, meta, dbOptions, framework])
 
   const defaultPath = framework && root && framework.defaultFile && framework.defaultFile(root)
