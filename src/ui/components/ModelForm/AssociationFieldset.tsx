@@ -24,7 +24,9 @@ import React from 'react'
 import IconButton from '../form/IconButton'
 import TrashIcon from '../icons/Trash'
 
-type AssociationFieldsetProps = {
+type AssociationFieldsetProps = WithFreeFormTarget<AssociationFieldsetPropsBase>
+
+type AssociationFieldsetPropsBase = {
   association: Association
   schema: Schema
   model: Model
@@ -33,6 +35,15 @@ type AssociationFieldsetProps = {
   onDelete: (id: Association['id']) => void
 }
 
+export type WithFreeFormTarget<P> = P & AssociationFieldsetPropsVariant
+
+type AssociationFieldsetPropsVariant =
+  | { freeFormTarget?: false }
+  | {
+      freeFormTarget: true
+      onChangeTargetName: (id: Association['id'], name: string | undefined) => void
+    }
+
 function AssociationFieldset({
   association,
   schema,
@@ -40,6 +51,7 @@ function AssociationFieldset({
   errors,
   onChange,
   onDelete,
+  ...variantProps
 }: AssociationFieldsetProps): React.ReactElement {
   const modelOptions = React.useMemo(
     () => schema.models.map<[string, Model]>((m) => [m.id, m]),
@@ -169,15 +181,27 @@ function AssociationFieldset({
         value={association.type.type}
         onChange={handleChangeType}
       />
-      <Select
-        id={`association-target-model-${association.id}`}
-        className={classnames(gridColumn('col-span-6'))}
-        label="Target model"
-        options={modelOptions}
-        display={modelName}
-        value={targetModel}
-        onChange={handleChangeTarget}
-      />
+      {variantProps.freeFormTarget ? (
+        <TextInput
+          id={`association-target-model-${association.id}`}
+          className={classnames(gridColumn('col-span-6'))}
+          label="Target model"
+          value={association.alias || ''}
+          placeholder={aliasPlaceholder(association, targetModel)}
+          error={errors?.alias}
+          onChange={(name) => variantProps.onChangeTargetName(association.id, name)}
+        />
+      ) : (
+        <Select
+          id={`association-target-model-${association.id}`}
+          className={classnames(gridColumn('col-span-6'))}
+          label="Target model"
+          options={modelOptions}
+          display={modelName}
+          value={targetModel}
+          onChange={handleChangeTarget}
+        />
+      )}
       <TextInput
         id={`association-alias-${association.id}`}
         className={classnames(gridColumn('col-span-6'))}

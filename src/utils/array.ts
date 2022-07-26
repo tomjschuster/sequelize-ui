@@ -8,6 +8,18 @@ export function arrayToLookup<T>(array: T[], toKey: (value: T) => string): Map<s
   return lookup
 }
 
+export function dedup<T>(array: T[]): T[] {
+  const output: T[] = []
+  const lookup: Set<T> = new Set()
+  for (const v of array) {
+    if (!lookup.has(v)) {
+      lookup.add(v)
+      output.push(v)
+    }
+  }
+  return output
+}
+
 export function dedupBy<T>(array: T[], fn: (v: T) => string): T[] {
   const output: T[] = []
   const lookup: Record<string, boolean> = {}

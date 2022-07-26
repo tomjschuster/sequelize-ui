@@ -43,11 +43,11 @@ export function emptySchema(): Schema {
   }
 }
 
-export function emptyModel(): Model {
+export function emptyModel(name: string = ''): Model {
   const time = now()
   return {
     id: uniqueId(),
-    name: '',
+    name,
     fields: [],
     associations: [],
     createdAt: time,

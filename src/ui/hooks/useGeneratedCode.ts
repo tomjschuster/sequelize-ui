@@ -3,6 +3,8 @@ import { DbOptions } from '@src/core/database'
 import { FileSystemItem } from '@src/core/files/fileSystem'
 import { Framework } from '@src/core/framework'
 import { Schema } from '@src/core/schema'
+import { arrayToLookup } from '@src/utils/array'
+import { normalizeSingular } from '@src/utils/string'
 import React from 'react'
 
 export type UseGeneratedCodeArgs = {
@@ -42,10 +44,18 @@ export default function useGeneratedCode({
   const root = React.useMemo<FileSystemItem | undefined>(() => {
     if (!schema || !framework) return
 
+    const modelById = arrayToLookup(schema.models, (m) => m.id)
+
     const filtered = filterNoNameFields
       ? {
           ...schema,
-          models: schema.models.map((m) => ({ ...m, fields: m.fields.filter((f) => !!f.name) })),
+          models: schema.models.map((m) => ({
+            ...m,
+            fields: m.fields.filter((f) => !!normalizeSingular(f.name)),
+            associations: m.associations.filter(
+              (a) => !!modelById.get(a.targetModelId)?.name?.trim(),
+            ),
+          })),
         }
       : schema
 

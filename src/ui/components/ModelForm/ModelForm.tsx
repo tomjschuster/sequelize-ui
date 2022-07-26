@@ -17,11 +17,13 @@ import { InitialEditModelState, InitialEditModelStateType } from '../../layouts/
 import PanelButton from '../form/PanelButton'
 import { autofillDisable } from '../form/shared/utils'
 import PlusCircleIcon from '../icons/Plus'
-import AssociationFieldset, { associationTypeId } from './AssociationFieldset'
+import AssociationFieldset, { associationTypeId, WithFreeFormTarget } from './AssociationFieldset'
 import FieldFieldset, { fieldNameId } from './FieldFieldset'
 import ModelFieldset, { modelNameId } from './ModelFieldset'
 
-type ModelFormProps = {
+type ModelFormProps = WithFreeFormTarget<ModelFormPropsBase>
+
+type ModelFormPropsBase = {
   model: Model
   schema: Schema
   initialState?: InitialEditModelState
@@ -35,6 +37,7 @@ export default function ModelForm({
   initialState,
   errors,
   onChange,
+  ...variantProps
 }: ModelFormProps): React.ReactElement {
   const prevModel = usePrevious(model)
 
@@ -201,6 +204,7 @@ export default function ModelForm({
                 onChange={handleChangeAssociation}
                 onDelete={handleDeleteAssociation}
                 errors={errors.associations[association.id]}
+                {...variantProps}
               />
             </li>
           ))}
