@@ -92,7 +92,7 @@ jobs:
     needs: []
     steps:
       - name: Deploy preview
-        uses: tomjschuster/cloudflare-pages-deploy-action@v0
+        uses: tomjschuster/cloudflare-pages-deploy-action@websocket-deploy-events
         with:
           account-id: '${{ env.CF_ACCOUNT_ID }}'
           project-name: '${{ env.PAGES_PROJECT_NAME }}'
