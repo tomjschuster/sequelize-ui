@@ -2,11 +2,18 @@ import blogSchema from '@src/api/schema/examples/blog'
 import employee from '@src/api/schema/examples/employees'
 import sakila from '@src/api/schema/examples/sakila'
 import { AssociationTypeType, ThroughType } from '@src/core/schema'
-import * as DateTimeUtils from '@src/utils/dateTime'
 import LocalStorageSchemaApi from '..'
 import { SCHEMA_NOT_FOUND_ERROR } from '../../../api'
 
 const schemaApi = new LocalStorageSchemaApi()
+const mockDate = '2020-01-01T00:00:00Z'
+
+jest.mock('@src/utils/dateTime', () => {
+  return {
+    ...jest.requireActual('@src/utils/dateTime'),
+    now: jest.fn(() => mockDate),
+  }
+})
 
 describe('schema api', () => {
   beforeEach(() => {
@@ -61,9 +68,6 @@ describe('schema api', () => {
 
   describe('schemaApi.createSchema', () => {
     it('creates new storage with new schema when no storage', async () => {
-      const mockDate = '2020-01-01T00:00:00Z'
-
-      jest.spyOn(DateTimeUtils, 'now').mockReturnValueOnce(mockDate)
       const schema = await schemaApi.createSchema(sakila)
 
       const models = schema.models.map((m) => ({
