@@ -76,7 +76,8 @@ export const backgroundWhite = backgroundColor('bg-white', 'dark:bg-gray-900')
 export const title = classnames(fontColor, fontSize('text-2xl'), margin('mb-4'))
 export const subtitle = classnames(fontColor, fontSize('text-lg'), margin('mb-2'))
 
-export const text = classnames(fontColor, fontSize('text-sm'), margin('mb-2'))
+export const textNoColor = classnames(fontSize('text-sm'), margin('mb-2'))
+export const text = classnames(fontColor, textNoColor)
 
 export const link = classnames(fontColor, fontWeight('font-semibold'), textDecoration('underline'))
 export const linkBlue = classnames(

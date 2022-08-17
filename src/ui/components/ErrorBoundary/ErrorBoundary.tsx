@@ -12,8 +12,10 @@ import {
   maxHeight,
   overflow,
   padding,
+  TBackgroundColor,
+  textColor,
 } from '@src/ui/styles/classnames'
-import { inlineButton, link, list, section, text } from '@src/ui/styles/utils'
+import { inlineButton, link, list, section, textNoColor } from '@src/ui/styles/utils'
 import { clear } from '@src/utils/localStorage'
 import React from 'react'
 
@@ -51,6 +53,8 @@ class ErrorBoundary extends React.Component<Props, State> {
   }
 }
 
+const color = textColor('text-black', 'dark:text-gray-100')
+
 function ErrorView(): React.ReactElement {
   const isHome = isOnIndex()
   const handleReset = React.useCallback(async () => {
@@ -63,15 +67,18 @@ function ErrorView(): React.ReactElement {
       className={classnames(
         section,
         padding('p-4'),
-        backgroundColor('bg-red-50'),
+        color,
+        backgroundColor('bg-red-50', 'dark:bg-red-900'),
         maxHeight('max-h-full'),
         overflow('overflow-y-scroll'),
         borderRadius('rounded'),
         borderWidth('border'),
-        borderColor('border-red-900'),
+        borderColor('border-red-900', 'dark:border-black'),
       )}
     >
-      <p className={text}>Sorry, there was an unexpected error. Please try one of the following:</p>
+      <p className={textNoColor}>
+        Sorry, there was an unexpected error. Please try one of the following:
+      </p>
       <ul className={list}>
         {!isHome && (
           <li>
@@ -86,7 +93,10 @@ function ErrorView(): React.ReactElement {
           <button
             type="button"
             onClick={handleReset}
-            className={classnames(inlineButton(), backgroundColor('hover:bg-green-100'))}
+            className={classnames(
+              inlineButton(),
+              backgroundColor('hover:bg-blue-200', 'dark:hover:bg-blue-800' as TBackgroundColor),
+            )}
           >
             Reset your data
           </button>
