@@ -11,6 +11,11 @@ export function get<T>(key: string): T | null {
   return result
 }
 
+export function has(key: string): boolean {
+  if (!hasLocalStorage()) return false
+  return get(key) !== null
+}
+
 export function set<T>(key: string, value: T): void {
   if (!hasLocalStorage()) return
 

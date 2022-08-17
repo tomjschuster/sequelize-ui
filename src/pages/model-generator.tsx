@@ -9,19 +9,18 @@ import withLayout from '@src/ui/hocs/withLayout'
 import useGeneratedCode from '@src/ui/hooks/useGeneratedCode'
 import { classnames, display, height } from '@src/ui/styles/classnames'
 import { arrayToLookup, dedupBy } from '@src/utils/array'
-import { normalizeSingular } from '@src/utils/string'
+import { get, lsKey, set } from '@src/utils/localStorage'
+import { normalizeSingular, uniqueId } from '@src/utils/string'
 import { GetStaticPropsResult } from 'next'
 import React from 'react'
 import { flexDirection, overflow } from 'tailwindcss-classnames'
 
 type ModelGeneratorPageProps = {
   schema: Schema
-  model: Model
 }
 
 function ModelGeneratorPage({
   schema: initialSchema,
-  model: initialModel,
 }: ModelGeneratorPageProps): React.ReactElement {
   const [schema, setSchema] = React.useState(initialSchema)
   const assocNameById = React.useRef(new Map<string, Association['id']>())
@@ -30,10 +29,24 @@ function ModelGeneratorPage({
     (model: Model) =>
       setSchema((schema) => ({
         ...schema,
-        models: schema.models.map((m) => (m.id === initialModel.id ? model : m)),
+        id: schema.id || uniqueId(),
+        models: schema.models.map((m, i) => (i === 0 ? model : m)),
       })),
-    [initialModel.id],
+    [],
   )
+
+  React.useEffect(() => {
+    const LS_KEY = lsKey('model-generator-schema')
+    console.log(schema.id, initialSchema.id)
+    if (schema === initialSchema) {
+      const persistedSchema = get<Schema>(LS_KEY)
+      console.log('persisted', persistedSchema)
+      if (persistedSchema) setSchema(persistedSchema)
+    } else {
+      console.log('saving', schema)
+      set(lsKey('model-generator-schema'), schema)
+    }
+  }, [schema])
 
   const { root } = useGeneratedCode({
     schema,
@@ -43,7 +56,7 @@ function ModelGeneratorPage({
   })
 
   /* eslint-disable @typescript-eslint/no-non-null-assertion */
-  const model = schema.models.find((m) => m.id == initialModel.id)!
+  const model = schema.models[0]!
   const path = SequelizeFramework.defaultModelFile(model, root!)
   const file = path ? findFile(root!, path) : undefined
   /* eslint-enable @typescript-eslint/no-non-null-assertion */
@@ -59,7 +72,7 @@ function ModelGeneratorPage({
     const models = dedupBy(
       schema.models.concat([...assocNameById.current.values()].map(emptyModel)),
       (m) => normalizeSingular(m.name),
-    ).filter((m) => m.id === initialModel.id || targets.has(normalizeSingular(m.name)))
+    ).filter((m, i) => i === 0 || targets.has(normalizeSingular(m.name)))
 
     const modelByName = arrayToLookup(models, (m) => normalizeSingular(m.name))
 
@@ -71,7 +84,7 @@ function ModelGeneratorPage({
 
     setSchema((schema) => ({
       ...schema,
-      models: models.map((m) => (m.id === initialModel.id ? { ...m, associations } : m)),
+      models: models.map((m, i) => (i === 0 ? { ...m, associations } : m)),
     }))
   }
 
@@ -102,9 +115,9 @@ function ModelGeneratorPage({
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<ModelGeneratorPageProps>> {
   const model = { ...emptyModel(), name: 'My Model' }
-  const schema = { ...emptySchema(), name: 'My Project', models: [model] }
+  const schema = { ...emptySchema(), id: '', name: 'My Project', models: [model] }
 
-  return { props: { schema, model } }
+  return { props: { schema } }
 }
 
 export default withLayout<ModelGeneratorPageProps>(() => ({
