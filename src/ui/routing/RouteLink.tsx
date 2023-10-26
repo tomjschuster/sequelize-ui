@@ -23,6 +23,7 @@ export default function RouteLink({
 }: RouteLinkProps): React.ReactElement {
   return (
     <Link
+      legacyBehavior
       href={routeToUrl(route)}
       as={as}
       replace={replace}

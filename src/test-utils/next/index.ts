@@ -17,6 +17,7 @@ export const mockRouter: NextRouter = {
   isFallback: false,
   isReady: false,
   isPreview: false,
+  forward: jest.fn(),
   beforePopState: jest.fn(),
   events: mockRouterEvents,
   push: jest.fn(),
