@@ -72,7 +72,7 @@ export const SqlLiteConnection: DbConnectionConstructor = class SqlLiteConnectio
     const db = await SqlLiteConnection.connect(database)
 
     const rows: Promise<T[]> = new Promise((resolve, reject) => {
-      db.all(statement, (err, rows) => (err ? reject(err) : resolve(rows)))
+      db.all(statement, (err, rows) => (err ? reject(err) : resolve(rows as T[])))
     })
 
     await SqlLiteConnection.close(db)

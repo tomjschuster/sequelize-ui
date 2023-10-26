@@ -80,12 +80,12 @@ jobs:
           key: ${{ runner.os }}-deps-${{ hashFiles('**/package.json') }}-${{ hashFiles('**/package-lock.json') }}
 
       - name: Test
-        run: npm run test:coverage
-      - name: Report coverage
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          flag-name: unit
+        run: npm run test:unit
+      # - name: Report coverage
+      #   uses: coverallsapp/github-action@master
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     flag-name: unit
 
   deploy-preview:
     runs-on: ubuntu-latest
