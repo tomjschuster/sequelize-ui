@@ -1,3 +1,3 @@
 import LocalStorageSchemaApi from './implementations/localStorage'
-
-export default new LocalStorageSchemaApi()
+const api = new LocalStorageSchemaApi()
+export default api

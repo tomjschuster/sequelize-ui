@@ -209,6 +209,7 @@ function FileTreeListItem({
         outlineStyle('focus:outline-none'),
       )}
       tabIndex={pathFocused ? 0 : -1}
+      aria-selected={pathFocused}
       aria-level={depth}
       aria-setsize={parent?.files.length || 1}
       aria-posinset={index + 1}
