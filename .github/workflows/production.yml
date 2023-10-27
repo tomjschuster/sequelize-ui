@@ -18,7 +18,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '20.x'
 
       - name: Check dependencies cache
         uses: actions/cache@v2
@@ -45,7 +45,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '20.x'
 
       - name: Check dependencies cache
         uses: actions/cache@v2
@@ -72,7 +72,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '20.x'
 
       - name: Check dependencies cache
         uses: actions/cache@v2
@@ -81,12 +81,7 @@ jobs:
           key: ${{ runner.os }}-deps-${{ hashFiles('**/package.json') }}-${{ hashFiles('**/package-lock.json') }}
 
       - name: Test
-        run: npm run test:coverage
-      - name: Report coverage
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          flag-name: unit
+        run: npm run test:unit
 
   test-migrations-postgres:
     runs-on: ubuntu-latest
@@ -112,7 +107,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '20.x'
 
       - name: Check dependencies cache
         uses: actions/cache@v2
@@ -144,7 +139,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '20.x'
 
       - name: Check dependencies cache
         uses: actions/cache@v2
@@ -176,7 +171,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '20.x'
 
       - name: Check dependencies cache
         uses: actions/cache@v2
@@ -209,7 +204,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '20.x'
 
       - name: Check dependencies cache
         uses: actions/cache@v2

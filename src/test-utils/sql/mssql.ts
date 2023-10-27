@@ -1,6 +1,9 @@
 import { ColumnValue, Connection, ConnectionConfig, Request } from 'tedious'
 import { DbConnection, DbConnectionConstructor } from './connection'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Result = { [key: string]: any }
+
 export const MsSqlConnection: DbConnectionConstructor = class MsSqlConnection
   implements DbConnection
 {
@@ -60,7 +63,7 @@ export const MsSqlConnection: DbConnectionConstructor = class MsSqlConnection
     return MsSqlConnection.closeConnection(connection)
   }
 
-  private async query<T>(statement: string): Promise<T[]> {
+  private async query<T extends Result>(statement: string): Promise<T[]> {
     const connection = await this.connection
     return MsSqlConnection.query<T>(connection, statement)
   }
@@ -85,7 +88,7 @@ export const MsSqlConnection: DbConnectionConstructor = class MsSqlConnection
     })
   }
 
-  private static query<T>(connection: Connection, statement: string): Promise<T[]> {
+  private static query<T extends Result>(connection: Connection, statement: string): Promise<T[]> {
     return new Promise((resolve, reject) => {
       const rows: T[] = []
       const request = new Request(statement, (err) => (err ? reject(err) : resolve(rows)))
@@ -94,8 +97,7 @@ export const MsSqlConnection: DbConnectionConstructor = class MsSqlConnection
     })
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private static transformRow<T extends { [key: string]: any }>(row: ColumnValue[]): T {
+  private static transformRow<T extends Result>(row: ColumnValue[]): T {
     return row.reduce<T>(
       (acc, { value, metadata: { colName } }) => ({ ...acc, [colName]: value }),
       {} as T,
