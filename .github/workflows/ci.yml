@@ -81,11 +81,6 @@ jobs:
 
       - name: Test
         run: npm run test:unit
-      # - name: Report coverage
-      #   uses: coverallsapp/github-action@master
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     flag-name: unit
 
   deploy-preview:
     runs-on: ubuntu-latest
