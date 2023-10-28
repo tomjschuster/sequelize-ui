@@ -4,8 +4,8 @@ import { plural as plural_, singular } from 'pluralize'
 
 export {
   camelCase,
-  noCase,
   paramCase as kebabCase,
+  noCase,
   pascalCase,
   sentenceCase,
   snakeCase,
