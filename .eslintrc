@@ -6,7 +6,6 @@
     "eslint:recommended",
     "next",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@next/next/recommended",
     "plugin:prettier/recommended"
   ],
   "settings": {

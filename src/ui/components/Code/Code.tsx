@@ -1,6 +1,6 @@
 import { Language } from '@src/core/files/fileSystem'
 import { classnames, height, overflow, padding, toClassname } from '@src/ui/styles/classnames'
-import Highlight, { defaultProps, Language as PrismLanguage } from 'prism-react-renderer'
+import { Highlight, Language as PrismLanguage } from 'prism-react-renderer'
 import React from 'react'
 import Markdown from '../Markdown'
 import css from './code.module.css'
@@ -22,8 +22,8 @@ function Code({ content = '', language = Language.TypeScript }: CodeProps): Reac
 
   return (
     <Highlight
-      {...defaultProps}
-      theme={undefined}
+      // Use css
+      theme={{ plain: {}, styles: [] }}
       code={content}
       language={toPrismLanguage(language)}
     >
