@@ -132,10 +132,13 @@ function getAssociationTypes({
       const types = associationTypes({
         association,
         model,
-      }).reduce<AssociationTypeLookup>((acc, type) => {
-        acc[type] = true
-        return acc
-      }, acc[modelName(model)] || {})
+      }).reduce<AssociationTypeLookup>(
+        (acc, type) => {
+          acc[type] = true
+          return acc
+        },
+        acc[modelName(model)] || {},
+      )
 
       acc[modelName(model)] = types
 
