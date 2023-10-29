@@ -51,10 +51,9 @@ function toPrismLanguage(language?: Language): PrismLanguage {
   switch (language) {
     case Language.Git:
       return 'git'
+    case Language.Json:
     case Language.JavaScript:
       return 'javascript'
-    case Language.Json:
-      return 'json'
     case Language.TypeScript:
       return 'typescript'
     default:
