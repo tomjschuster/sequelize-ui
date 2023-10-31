@@ -80,6 +80,7 @@ export const text = classnames(fontColor, fontSize('text-sm'), margin('mb-2'))
 
 export const link = classnames(fontColor, fontWeight('font-semibold'), textDecoration('underline'))
 export const linkBlue = classnames(
+  fontWeight('font-semibold'),
   textColor('text-blue-700', 'dark:text-blue-300'),
   textDecoration('hover:underline'),
 )

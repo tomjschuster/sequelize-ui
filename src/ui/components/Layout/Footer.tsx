@@ -32,7 +32,7 @@ function Footer(): React.ReactElement {
       <span
         className={classnames(textColor('text-black', 'dark:text-gray-200'), fontSize('text-xs'))}
       >
-        Copyright &copy; 2022{' '}
+        Copyright &copy; 2023{' '}
         <ExternalLink
           className={classnames(fontSize('text-xs'))}
           href="https://github.com/tomjschuster"
