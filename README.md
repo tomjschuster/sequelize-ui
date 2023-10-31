@@ -21,7 +21,7 @@ To use Sequelize UI, either go to https://sequelizeui.app or run the project loc
 ```sh
 npm ci
 npm run build
-npm start
+npm npx serve@latest out
 ```
 
 Then go to http://localhost:3000
