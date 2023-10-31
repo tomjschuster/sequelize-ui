@@ -21,9 +21,9 @@ function isPageWithLayout<P>(Page: NextPage<P>): Page is PageWithLayout<P> {
 export function renderWithLayout<P>(Page: NextPage<P>, pageProps: P): React.ReactElement {
   return isPageWithLayout(Page) ? (
     <Layout {...Page.withLayout(pageProps)}>
-      <Page {...pageProps} />
+      <Page {...(pageProps as P & JSX.IntrinsicAttributes)} />
     </Layout>
   ) : (
-    <Page {...pageProps} />
+    <Page {...(pageProps as P & JSX.IntrinsicAttributes)} />
   )
 }

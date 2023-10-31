@@ -1,4 +1,4 @@
-import { Client, ClientConfig, QueryResult } from 'pg'
+import { Client, ClientConfig, QueryResult, QueryResultRow } from 'pg'
 import { DbConnection, DbConnectionConstructor } from './connection'
 
 export const PostgresConnection: DbConnectionConstructor = class PostgresConnection
@@ -51,7 +51,7 @@ export const PostgresConnection: DbConnectionConstructor = class PostgresConnect
     return
   }
 
-  private async query<T>(queryString: string): Promise<QueryResult<T>> {
+  private async query<T extends QueryResultRow>(queryString: string): Promise<QueryResult<T>> {
     const client = await this.client
     return client.query<T>(queryString)
   }
@@ -70,7 +70,10 @@ export const PostgresConnection: DbConnectionConstructor = class PostgresConnect
     return client.end()
   }
 
-  private static async query<T>(client: Client, statement: string): Promise<QueryResult<T>> {
+  private static async query<T extends QueryResult<T>>(
+    client: Client,
+    statement: string,
+  ): Promise<QueryResult<T>> {
     return client.query<T>(statement)
   }
 }
