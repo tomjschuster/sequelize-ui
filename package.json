@@ -8,7 +8,6 @@
     "dev": "next",
     "build": "next build",
     "build:sitemap": "next-sitemap",
-    "start": "next start",
     "lint": "eslint --cache --ignore-path .gitignore .",
     "format": "prettier --write {src/**/*.{ts,tsx} e2e/**/*.ts",
     "check:format": "prettier --check src/**/*.{ts,tsx} e2e/**/*.ts",
