@@ -188,14 +188,14 @@ function updateRootState(
     initialPath && items.has(initialPath)
       ? initialPath
       : state.activePath && items.has(state.activePath)
-      ? state.activePath
-      : itemsWithPaths.find(([_, item]) => isFile(item))?.[0]
+        ? state.activePath
+        : itemsWithPaths.find(([_, item]) => isFile(item))?.[0]
 
   const focusedPath = activePath
     ? activePath
     : items.has(state.focusedPath)
-    ? state.focusedPath
-    : rootPath
+      ? state.focusedPath
+      : rootPath
 
   const initialState = {
     ...state,

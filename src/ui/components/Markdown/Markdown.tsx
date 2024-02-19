@@ -31,7 +31,7 @@ async function renderMarkdown(content: string): Promise<string> {
     import('marked'),
     import('dompurify'),
   ])
-  return DOMPurify.sanitize(marked(content))
+  return DOMPurify.sanitize(await marked(content))
 }
 
 export default React.memo(Markdown)

@@ -2,11 +2,12 @@ import { Override } from '@src/utils/types'
 import React from 'react'
 import { Options } from './options'
 
-export type FieldProps<T, P> = P extends React.HTMLAttributes<infer E>
-  ? E extends HTMLElement
-    ? Override<P, FieldWrapperProps & CommonFieldProps<E, T>>
+export type FieldProps<T, P> =
+  P extends React.HTMLAttributes<infer E>
+    ? E extends HTMLElement
+      ? Override<P, FieldWrapperProps & CommonFieldProps<E, T>>
+      : never
     : never
-  : never
 
 export type CommonFieldProps<E extends HTMLElement, T> = {
   value: T | null

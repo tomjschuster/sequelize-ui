@@ -39,8 +39,8 @@ export function getForeignKey({
     association.alias && association.type.type === AssociationTypeType.BelongsTo
       ? association.alias
       : association.type.type === AssociationTypeType.BelongsTo && target
-      ? target.name
-      : model.name
+        ? target.name
+        : model.name
 
   return caseByDbCaseStyle(`${name} id`, dbOptions.caseStyle)
 }
