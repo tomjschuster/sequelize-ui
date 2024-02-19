@@ -1,10 +1,14 @@
 import {
+  association,
   belongsToType,
   bigIntDataType,
+  field,
   hasManyType,
   manyToManyModelType,
   manyToManyTableType,
+  model,
   Model,
+  schema,
   Schema,
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
@@ -20,208 +24,129 @@ const Id = {
   Tag: uniqueId(),
 } as const
 
-const category: Model = {
+const category: Model = model({
   id: Id.Category,
   name: 'category',
   createdAt: time,
   updatedAt: time,
-  fields: [],
   associations: [
-    {
-      id: uniqueId(),
+    association({
+      sourceModelId: Id.Category,
+      targetModelId: Id.Category,
       alias: 'parent',
-      foreignKey: null,
-      sourceModelId: Id.Category,
-      targetModelId: Id.Category,
       type: belongsToType(),
-    },
-    {
-      id: uniqueId(),
-      alias: 'children',
-      foreignKey: null,
+    }),
+    association({
       sourceModelId: Id.Category,
       targetModelId: Id.Category,
+      alias: 'children',
       type: hasManyType(),
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
+    }),
+    association({
       sourceModelId: Id.Category,
       targetModelId: Id.PostCategory,
       type: hasManyType(),
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
+    }),
+    association({
       sourceModelId: Id.Category,
       targetModelId: Id.Post,
       type: manyToManyModelType(Id.PostCategory),
-    },
+    }),
   ],
-}
+})
 
-const post: Model = {
+const post: Model = model({
   id: Id.Post,
   name: 'post',
   createdAt: time,
   updatedAt: time,
-  fields: [],
   associations: [
-    {
-      id: uniqueId(),
+    association({
+      sourceModelId: Id.Post,
+      targetModelId: Id.Post,
       alias: 'parent',
       foreignKey: 'parent id',
-      sourceModelId: Id.Post,
-      targetModelId: Id.Post,
       type: belongsToType(),
-    },
-    {
-      id: uniqueId(),
-      alias: 'children',
-      foreignKey: null,
+    }),
+    association({
       sourceModelId: Id.Post,
       targetModelId: Id.Post,
+      alias: 'children',
       type: hasManyType(),
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      sourceModelId: Id.Post,
-      targetModelId: Id.PostCategory,
-      type: hasManyType(),
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
+    }),
+    association({ sourceModelId: Id.Post, targetModelId: Id.PostCategory, type: hasManyType() }),
+    association({
       sourceModelId: Id.Post,
       targetModelId: Id.Category,
       type: manyToManyModelType(Id.PostCategory),
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      sourceModelId: Id.Post,
-      targetModelId: Id.PostTag,
-      type: hasManyType(),
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
+    }),
+    association({ sourceModelId: Id.Post, targetModelId: Id.PostTag, type: hasManyType() }),
+    association({
       sourceModelId: Id.Post,
       targetModelId: Id.Tag,
       type: manyToManyTableType('post_tag', 'tag_id'),
-    },
+    }),
   ],
-}
+})
 
-const postCategory: Model = {
+const postCategory: Model = model({
   id: Id.PostCategory,
   name: 'post category',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'post id',
       type: bigIntDataType(),
       primaryKey: true,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'category id',
       type: bigIntDataType(),
       primaryKey: true,
-      required: false,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      sourceModelId: Id.PostCategory,
-      targetModelId: Id.Post,
-      type: belongsToType(),
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
+    association({ sourceModelId: Id.PostCategory, targetModelId: Id.Post, type: belongsToType() }),
+    association({
       sourceModelId: Id.PostCategory,
       targetModelId: Id.Category,
       type: belongsToType(),
-    },
+    }),
   ],
-}
+})
 
-const postTag: Model = {
+const postTag: Model = model({
   id: Id.PostTag,
   name: 'post tag',
   createdAt: time,
   updatedAt: time,
-  fields: [],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      sourceModelId: Id.PostTag,
-      targetModelId: Id.Post,
-      type: belongsToType(),
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      sourceModelId: Id.PostTag,
-      targetModelId: Id.Tag,
-      type: belongsToType(),
-    },
+    association({ sourceModelId: Id.PostTag, targetModelId: Id.Post, type: belongsToType() }),
+    association({ sourceModelId: Id.PostTag, targetModelId: Id.Tag, type: belongsToType() }),
   ],
-}
+})
 
-const tag: Model = {
+const tag: Model = model({
   id: Id.Tag,
   name: 'tag',
   createdAt: time,
   updatedAt: time,
-  fields: [],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      sourceModelId: Id.Tag,
-      targetModelId: Id.PostTag,
-      type: hasManyType(),
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
+    association({ sourceModelId: Id.Tag, targetModelId: Id.PostTag, type: hasManyType() }),
+    association({
       sourceModelId: Id.Tag,
       targetModelId: Id.Post,
       type: manyToManyModelType(Id.PostTag),
-    },
+    }),
   ],
-}
+})
 
-const associationsSchema: Schema = {
-  id: uniqueId(),
+const associationsSchema: Schema = schema({
+  name: 'associations',
   createdAt: time,
   updatedAt: time,
-  name: 'associations',
-  forkedFrom: null,
   models: [category, post, postCategory, postTag, tag],
-}
+})
 
 export default associationsSchema

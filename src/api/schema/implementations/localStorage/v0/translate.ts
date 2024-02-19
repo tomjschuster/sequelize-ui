@@ -1,70 +1,66 @@
 import {
-  arrayDataType,
   Association,
   AssociationType,
+  DataType,
+  Field,
+  Model,
+  Schema,
+  arrayDataType,
+  association,
   belongsToType,
   blobDataType,
   booleanDataType,
-  DataType,
   dateDataType,
   dateTimeDataType,
   decimalDataType,
   doubleDataType,
-  Field,
+  field,
   floatDataType,
   hasManyType,
   hasOneType,
   integerDataType,
   jsonDataType,
   manyToManyTableType,
-  Model,
+  model,
   realDataType,
-  Schema,
+  schema,
   stringDataType,
   textDataType,
   uuidDataType,
 } from '@src/core/schema'
-import { now } from '@src/utils/dateTime'
-import { uniqueId } from '@src/utils/string'
 import {
   Association as AssociationV0,
-  Field as FieldV0,
   FieldType,
+  Field as FieldV0,
   Model as ModelV0,
   SchemaV0,
 } from '.'
 
-export function fromV0(schema: SchemaV0): Schema {
-  return {
-    id: uniqueId(),
-    name: schema.config.name,
-    createdAt: now(),
-    updatedAt: now(),
-    forkedFrom: null,
-    models: schema.models.map(fromV0Model),
-  }
+export function fromV0(schemaV0: SchemaV0): Schema {
+  return schema({
+    name: schemaV0.config.name,
+    models: schemaV0.models.map(fromV0Model),
+  })
 }
 
-function fromV0Model(model: ModelV0): Model {
-  return {
-    id: model.id,
-    name: model.name,
-    fields: model.fields.map(fromV0Field),
-    associations: model.assocs.map(fromV0Association),
-    createdAt: now(),
-    updatedAt: now(),
-  }
+function fromV0Model(modelV0: ModelV0): Model {
+  return model({
+    id: modelV0.id,
+    name: modelV0.name,
+    fields: modelV0.fields.map(fromV0Field),
+    associations: modelV0.assocs.map(fromV0Association),
+  })
 }
 
-function fromV0Field(field: FieldV0): Field {
-  return {
-    id: field.id,
-    name: field.name,
-    type: fromV0DataType(field),
-    primaryKey: field.primaryKey,
-    required: field.required,
-    unique: field.unique,
-  }
+function fromV0Field(fieldV0: FieldV0): Field {
+  return field({
+    id: fieldV0.id,
+    name: fieldV0.name,
+    type: fromV0DataType(fieldV0),
+    primaryKey: fieldV0.primaryKey,
+    required: fieldV0.required,
+    unique: fieldV0.unique,
+  })
 }
 
 function fromV0DataType(field: FieldV0): DataType {
@@ -100,15 +96,15 @@ function fromV0DataType(field: FieldV0): DataType {
   }
 }
 
-function fromV0Association(association: AssociationV0): Association {
-  return {
-    id: association.id,
-    type: fromV0AssociationType(association),
-    sourceModelId: association.sourceId,
-    targetModelId: association.targetId,
-    foreignKey: association.foreignKey || null,
-    alias: association.name || null,
-  }
+function fromV0Association(associationV0: AssociationV0): Association {
+  return association({
+    id: associationV0.id,
+    type: fromV0AssociationType(associationV0),
+    sourceModelId: associationV0.sourceId,
+    targetModelId: associationV0.targetId,
+    foreignKey: associationV0.foreignKey || null,
+    alias: associationV0.name || null,
+  })
 }
 
 function fromV0AssociationType(association: AssociationV0): AssociationType {

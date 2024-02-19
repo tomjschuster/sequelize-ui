@@ -8,6 +8,9 @@ import {
   Association,
   AssociationTypeType,
   belongsToType,
+  association as buildAssociation,
+  field as buildField,
+  model as buildModel,
   Field,
   ManyToManyAssociation,
   Model,
@@ -199,14 +202,11 @@ function getFieldWithReference({
   const columnField = prefixPk({ field: pk, model: model, dbOptions })
   const column = caseByDbCaseStyle(columnField.name, dbOptions.caseStyle)
 
-  const field: Field = {
-    id: uniqueId(),
+  const field: Field = buildField({
     name: fk,
     type: resetType(pk.type),
     primaryKey,
-    required: false,
-    unique: false,
-  }
+  })
 
   return { ...field, reference: { table, column } }
 }
@@ -252,36 +252,30 @@ function getJoinTableModel(
     primaryKey: true,
   })
 
-  const sourceAssoc: Association = {
-    id: uniqueId(),
-    alias: null,
-    foreignKey: null,
+  const sourceAssoc: Association = buildAssociation({
     sourceModelId: id,
     targetModelId: source.id,
     type: belongsToType(),
-  }
+  })
 
   const targetFk = getForeignKey({ model: target, association, modelById, dbOptions })
 
   const targetFkField = getFieldWithReference({ model: target, fk: targetFk, dbOptions })
 
-  const targetAssoc: Association = {
-    id: uniqueId(),
-    alias: null,
-    foreignKey: null,
+  const targetAssoc: Association = buildAssociation({
     sourceModelId: id,
     targetModelId: target.id,
     type: belongsToType(),
-  }
+  })
 
-  return {
+  return buildModel({
     id,
     name: tableName,
     createdAt: source.createdAt,
     updatedAt: source.updatedAt,
     fields: [sourceFkField, targetFkField],
     associations: [sourceAssoc, targetAssoc],
-  }
+  })
 }
 
 type MigrationTimestamps = Map<number, Model>

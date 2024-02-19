@@ -1,7 +1,8 @@
 import { now } from '@src/utils/dateTime'
 import { uniqueId } from '@src/utils/string'
+import { AtLeast } from '@src/utils/types'
 import { stringDataType } from '.'
-import { Association, AssociationTypeType } from './association'
+import { Association, AssociationType, belongsToType } from './association'
 import { DataType } from './dataType'
 
 export type Schema = {
@@ -11,6 +12,8 @@ export type Schema = {
   forkedFrom: string | null
   createdAt: string
   updatedAt: string
+  // TODO: remove after switching to use constructor everywhere
+  __throwaway__: false
 }
 
 export type Model = {
@@ -20,6 +23,8 @@ export type Model = {
   associations: Association[]
   createdAt: string
   updatedAt: string
+  // TODO: remove after switching to use constructor everywhere
+  __throwaway__: false
 }
 
 export type Field = {
@@ -29,6 +34,8 @@ export type Field = {
   primaryKey: boolean
   required: boolean
   unique: boolean
+  // TODO: remove after switching to use constructor everywhere
+  __throwaway__: false
 }
 
 export function emptySchema(): Schema {
@@ -40,7 +47,13 @@ export function emptySchema(): Schema {
     forkedFrom: null,
     createdAt: time,
     updatedAt: time,
+    // TODO: remove after switching to use constructor everywhere
+    __throwaway__: false,
   }
+}
+
+export function schema(attrs: AtLeast<Schema, 'name'>): Schema {
+  return { ...emptySchema(), ...attrs }
 }
 
 export function emptyModel(): Model {
@@ -52,7 +65,13 @@ export function emptyModel(): Model {
     associations: [],
     createdAt: time,
     updatedAt: time,
+    // TODO: remove after switching to use constructor everywhere
+    __throwaway__: false,
   }
+}
+
+export function model(attrs: AtLeast<Model, 'name'>): Model {
+  return { ...emptyModel(), ...attrs }
 }
 
 export function emptyField(): Field {
@@ -63,10 +82,11 @@ export function emptyField(): Field {
     primaryKey: false,
     required: false,
     unique: false,
+    __throwaway__: false,
   }
 }
 
-export function field(props: Partial<Field> = {}): Field {
+export function field(props: AtLeast<Field, 'name' | 'type'>): Field {
   return {
     ...emptyField(),
     ...props,
@@ -80,19 +100,18 @@ export function emptyAssociation(
   return {
     id: uniqueId(),
     sourceModelId,
-    type: { type: AssociationTypeType.BelongsTo },
+    type: belongsToType(),
     targetModelId,
     foreignKey: null,
     alias: null,
+    __throwaway__: false,
   }
 }
 
-export function association(
-  sourceModelId: Model['id'],
-  targetModelId: Model['id'],
-  props: Partial<Association>,
-): Association {
-  return { ...emptyAssociation(sourceModelId, targetModelId), ...props }
+export function association<T extends AssociationType>(
+  props: AtLeast<Association<T>, 'sourceModelId' | 'targetModelId' | 'type'>,
+): Association<T> {
+  return { ...emptyAssociation(props.sourceModelId, props.targetModelId), ...props }
 }
 
 export function isNewSchema(schema: Schema): boolean {

@@ -20,18 +20,21 @@
  *
  */
 import {
+  association,
   belongsToType,
   dateDataType,
   enumDataType,
+  field,
   hasManyType,
   integerDataType,
   manyToManyModelType,
+  model,
   Model,
+  schema,
   Schema,
   stringDataType,
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import { uniqueId } from '@src/utils/string'
 import { EMPLOYEES_ID } from './ids'
 
 const time = fromParts(2020, 10, 1)
@@ -45,383 +48,295 @@ enum Id {
   Salaries = 'Xq55KHZ19UT9ob31iT_D_',
 }
 
-const employee: Model = {
+const employee: Model = model({
   id: Id.Employees,
   name: 'employees',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'emp_no',
       type: integerDataType({ autoincrement: true }),
       primaryKey: true,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'birth_date',
       type: dateDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'first_name',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'last_name',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'gender',
       type: enumDataType({ values: ['M', 'F', 'O'] }),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'hire_date',
       type: dateDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
+    association({
       foreignKey: 'emp_no',
       type: hasManyType(),
       sourceModelId: Id.Employees,
       targetModelId: Id.Salaries,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
+    }),
+    association({
       foreignKey: 'emp_no',
       type: hasManyType(),
       sourceModelId: Id.Employees,
       targetModelId: Id.Titles,
-    },
-    {
-      id: uniqueId(),
+    }),
+    association({
       alias: 'employingDepartment',
       foreignKey: 'emp_no',
       sourceModelId: Id.Employees,
       targetModelId: Id.Departments,
       type: manyToManyModelType(Id.DepartmentEmployees, 'dept_no'),
-    },
-    {
-      id: uniqueId(),
+    }),
+    association({
       alias: 'managedDepartment',
       foreignKey: 'emp_no',
       sourceModelId: Id.Employees,
       targetModelId: Id.Departments,
       type: manyToManyModelType(Id.DepartmentManagers, 'dept_no'),
-    },
+    }),
   ],
-}
+})
 
-const department: Model = {
+const department: Model = model({
   id: Id.Departments,
   name: 'departments',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'dept_no',
       type: stringDataType(),
       primaryKey: true,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'dept_name',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
+    association({
       alias: 'employee',
       foreignKey: 'emp_no',
       sourceModelId: Id.Departments,
       targetModelId: Id.Employees,
       type: manyToManyModelType(Id.DepartmentEmployees, 'dept_no'),
-    },
-    {
-      id: uniqueId(),
+    }),
+    association({
       alias: 'manager',
       foreignKey: 'emp_no',
       sourceModelId: Id.Departments,
       targetModelId: Id.Employees,
       type: manyToManyModelType(Id.DepartmentManagers, 'dept_no'),
-    },
-    {
-      id: uniqueId(),
-      alias: null,
+    }),
+    association({
       foreignKey: 'dept_no',
       type: hasManyType(),
       sourceModelId: Id.Departments,
       targetModelId: Id.DepartmentEmployees,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
+    }),
+    association({
       foreignKey: 'dept_no',
       type: hasManyType(),
       sourceModelId: Id.Departments,
       targetModelId: Id.DepartmentManagers,
-    },
+    }),
   ],
-}
+})
 
-const departmentEmployee: Model = {
+const departmentEmployee: Model = model({
   id: Id.DepartmentEmployees,
   name: 'dept_emp',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'emp_no',
       type: integerDataType(),
       primaryKey: true,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'dept_no',
       type: stringDataType(),
       primaryKey: true,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'from_date',
       type: dateDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'to_date',
       type: dateDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
+    association({
       foreignKey: 'emp_no',
       type: belongsToType(),
       sourceModelId: Id.DepartmentEmployees,
       targetModelId: Id.Employees,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
+    }),
+    association({
       foreignKey: 'dept_no',
       type: belongsToType(),
       sourceModelId: Id.DepartmentEmployees,
       targetModelId: Id.Departments,
-    },
+    }),
   ],
-}
+})
 
-const departmentManager: Model = {
+const departmentManager: Model = model({
   id: Id.DepartmentManagers,
   name: 'dept_manager',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'emp_no',
       type: integerDataType(),
       primaryKey: true,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'dept_no',
       type: stringDataType(),
       primaryKey: true,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'from_date',
       type: dateDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'to_date',
       type: dateDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
+    association({
       foreignKey: 'emp_no',
       type: belongsToType(),
       sourceModelId: Id.DepartmentManagers,
       targetModelId: Id.Employees,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
+    }),
+    association({
       foreignKey: 'dept_no',
       type: belongsToType(),
       sourceModelId: Id.DepartmentManagers,
       targetModelId: Id.Departments,
-    },
+    }),
   ],
-}
+})
 
-const title: Model = {
+const title: Model = model({
   id: Id.Titles,
   name: 'titles',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'emp_no',
       type: integerDataType({ autoincrement: false }),
       primaryKey: true,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'title',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'from_date',
       type: dateDataType(),
       primaryKey: true,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'to_date',
       type: dateDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
+    association({
       foreignKey: 'emp_no',
       type: belongsToType(),
       sourceModelId: Id.Titles,
       targetModelId: Id.Employees,
-    },
+    }),
   ],
-}
+})
 
-const salary: Model = {
+const salary: Model = model({
   id: Id.Salaries,
   name: 'salaries',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'emp_no',
       type: integerDataType({ autoincrement: false }),
       primaryKey: true,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'salary',
       type: integerDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'from_date',
       type: dateDataType(),
       primaryKey: true,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'to_date',
       type: dateDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
+    association({
       foreignKey: 'emp_no',
       type: belongsToType(),
       sourceModelId: Id.Salaries,
       targetModelId: Id.Employees,
-    },
+    }),
   ],
-}
+})
 
-const employeeSchema: Schema = {
+const employeeSchema: Schema = schema({
   id: EMPLOYEES_ID,
   name: 'employee dataset',
   createdAt: time,
   updatedAt: time,
-  forkedFrom: null,
   models: [employee, department, departmentEmployee, departmentManager, title, salary],
-}
+})
 
 export default employeeSchema

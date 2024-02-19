@@ -21,6 +21,7 @@
 
 import {
   arrayDataType,
+  association,
   belongsToType,
   blobDataType,
   booleanDataType,
@@ -28,16 +29,18 @@ import {
   dateTimeDataType,
   decimalDataType,
   enumDataType,
+  field,
   hasManyType,
   hasOneType,
   integerDataType,
   manyToManyModelType,
+  model,
   Model,
+  schema,
   Schema,
   stringDataType,
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import { uniqueId } from '@src/utils/string'
 import { SAKILA_ID } from './ids'
 
 const time = fromParts(2020, 1, 1)
@@ -61,793 +64,427 @@ enum Id {
   Store = 'SKfg8yJLz5XTlCWRuQgMo',
 }
 
-const actor: Model = {
+const actor: Model = model({
   id: Id.Actor,
   name: 'actor',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'first_name',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'last_name',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: 'actor_id',
+    association({
+      type: manyToManyModelType(Id.FilmActor, 'film_id'),
       sourceModelId: Id.Actor,
       targetModelId: Id.Film,
-      type: manyToManyModelType(Id.FilmActor, 'film_id'),
-    },
+      foreignKey: 'actor_id',
+    }),
   ],
-}
+})
 
-const film: Model = {
+const film: Model = model({
   id: Id.Film,
   name: 'film',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'title',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'description',
       type: stringDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'release_year',
       type: integerDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'language_id',
       type: integerDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'original_language_id',
       type: integerDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'rental_duration',
       type: integerDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'rental_rate',
       type: decimalDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'length',
       type: integerDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'rating',
       type: enumDataType({ values: ['G', 'PG', 'PG-13', 'R', 'NC-17'] }),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'special_feature',
       type: arrayDataType({
         arrayType: enumDataType({
           values: ['Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes'],
         }),
       }),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
+    association({ type: belongsToType(), sourceModelId: Id.Film, targetModelId: Id.Language }),
+    association({
       type: belongsToType(),
       sourceModelId: Id.Film,
       targetModelId: Id.Language,
-    },
-    {
-      id: uniqueId(),
       alias: 'original_language',
       foreignKey: 'original_language_id',
-      type: belongsToType(),
-      sourceModelId: Id.Film,
-      targetModelId: Id.Language,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: 'film_id',
+    }),
+    association({
       type: hasManyType(),
       sourceModelId: Id.Film,
       targetModelId: Id.Inventory,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
       foreignKey: 'film_id',
+    }),
+    association({
+      type: manyToManyModelType(Id.FilmActor, 'actor_id'),
       sourceModelId: Id.Film,
       targetModelId: Id.Actor,
-      type: manyToManyModelType(Id.FilmActor, 'actor_id'),
-    },
-    {
-      id: uniqueId(),
-      alias: null,
       foreignKey: 'film_id',
+    }),
+    association({
+      type: manyToManyModelType(Id.FilmCategory, 'category_id'),
       sourceModelId: Id.Film,
       targetModelId: Id.Category,
-      type: manyToManyModelType(Id.FilmCategory, 'category_id'),
-    },
+      foreignKey: 'film_id',
+    }),
   ],
-}
+})
 
-const language: Model = {
+const language: Model = model({
   id: Id.Language,
   name: 'language',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'name',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
+    association({ type: hasManyType(), sourceModelId: Id.Language, targetModelId: Id.Film }),
+    association({
       type: hasManyType(),
       sourceModelId: Id.Language,
       targetModelId: Id.Film,
-    },
-    {
-      id: uniqueId(),
       alias: 'original_language_film',
       foreignKey: 'original_language_id',
-      type: hasManyType(),
-      sourceModelId: Id.Language,
-      targetModelId: Id.Film,
-    },
+    }),
   ],
-}
+})
 
-const category: Model = {
+const category: Model = model({
   id: Id.Category,
   name: 'category',
   createdAt: time,
   updatedAt: time,
-  fields: [],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: 'category_id',
+    association({
+      type: manyToManyModelType(Id.FilmCategory, 'film_id'),
       sourceModelId: Id.Category,
       targetModelId: Id.Film,
-      type: manyToManyModelType(Id.FilmCategory, 'film_id'),
-    },
+      foreignKey: 'category_id',
+    }),
   ],
-}
+})
 
-const inventory: Model = {
+const inventory: Model = model({
   id: Id.Inventory,
   name: 'inventory',
   createdAt: time,
   updatedAt: time,
-  fields: [],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      sourceModelId: Id.Inventory,
-      targetModelId: Id.Film,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      sourceModelId: Id.Inventory,
-      targetModelId: Id.Store,
-    },
+    association({ type: belongsToType(), sourceModelId: Id.Inventory, targetModelId: Id.Film }),
+    association({ type: belongsToType(), sourceModelId: Id.Inventory, targetModelId: Id.Store }),
   ],
-}
+})
 
-const store: Model = {
+const store: Model = model({
   id: Id.Store,
   name: 'store',
   createdAt: time,
   updatedAt: time,
-  fields: [],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: hasManyType(),
-      sourceModelId: Id.Store,
-      targetModelId: Id.Inventory,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: hasManyType(),
+    association({ type: hasManyType(), sourceModelId: Id.Store, targetModelId: Id.Inventory }),
+    association({ type: hasManyType(), sourceModelId: Id.Store, targetModelId: Id.Staff }),
+    association({ type: hasManyType(), sourceModelId: Id.Store, targetModelId: Id.Customer }),
+    association({
+      type: belongsToType(),
       sourceModelId: Id.Store,
       targetModelId: Id.Staff,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: hasManyType(),
-      sourceModelId: Id.Store,
-      targetModelId: Id.Customer,
-    },
-    {
-      id: uniqueId(),
       alias: 'manager',
       foreignKey: 'manager_staff_id',
-      type: belongsToType(),
-      sourceModelId: Id.Store,
-      targetModelId: Id.Staff,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      sourceModelId: Id.Store,
-      targetModelId: Id.Address,
-    },
+    }),
+    association({ type: belongsToType(), sourceModelId: Id.Store, targetModelId: Id.Address }),
   ],
-}
+})
 
-const staff: Model = {
+const staff: Model = model({
   id: Id.Staff,
   name: 'staff',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'first_name',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'last_name',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'picture',
       type: blobDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'email',
       type: stringDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'active',
       type: booleanDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'username',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'password',
       type: stringDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      targetModelId: Id.Store,
-      sourceModelId: Id.Staff,
-    },
-    {
-      id: uniqueId(),
+    association({ type: belongsToType(), sourceModelId: Id.Store, targetModelId: Id.Staff }),
+    association({
+      type: hasManyType(),
+      sourceModelId: Id.Store,
+      targetModelId: Id.Staff,
       alias: 'managed_store',
       foreignKey: 'manager_staff_id',
-      type: hasManyType(),
-      targetModelId: Id.Store,
-      sourceModelId: Id.Staff,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      targetModelId: Id.Address,
-      sourceModelId: Id.Staff,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: hasManyType(),
-      targetModelId: Id.Rental,
-      sourceModelId: Id.Staff,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: hasManyType(),
-      targetModelId: Id.Payment,
-      sourceModelId: Id.Staff,
-    },
+    }),
+    association({ type: belongsToType(), sourceModelId: Id.Address, targetModelId: Id.Staff }),
+    association({ type: hasManyType(), sourceModelId: Id.Rental, targetModelId: Id.Staff }),
+    association({ type: hasManyType(), sourceModelId: Id.Payment, targetModelId: Id.Staff }),
   ],
-}
+})
 
-const customer: Model = {
+const customer: Model = model({
   id: Id.Customer,
   name: 'customer',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'first_name',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'last_name',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'email',
       type: stringDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'active',
       type: booleanDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      targetModelId: Id.Store,
-      sourceModelId: Id.Customer,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      targetModelId: Id.Address,
-      sourceModelId: Id.Customer,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: hasManyType(),
-      targetModelId: Id.Rental,
-      sourceModelId: Id.Customer,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: hasManyType(),
-      targetModelId: Id.Payment,
-      sourceModelId: Id.Customer,
-    },
+    association({ type: belongsToType(), sourceModelId: Id.Store, targetModelId: Id.Customer }),
+    association({ type: belongsToType(), sourceModelId: Id.Address, targetModelId: Id.Customer }),
+    association({ type: hasManyType(), sourceModelId: Id.Rental, targetModelId: Id.Customer }),
+    association({ type: hasManyType(), sourceModelId: Id.Payment, targetModelId: Id.Customer }),
   ],
-}
+})
 
-const address: Model = {
+const address: Model = model({
   id: Id.Address,
   name: 'address',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'address',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'address2',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'postal_code',
       type: stringDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'phone',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      targetModelId: Id.City,
-      sourceModelId: Id.Address,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: hasOneType(),
-      targetModelId: Id.Customer,
-      sourceModelId: Id.Address,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: hasOneType(),
-      targetModelId: Id.Staff,
-      sourceModelId: Id.Address,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: hasOneType(),
-      targetModelId: Id.Store,
-      sourceModelId: Id.Address,
-    },
+    association({ type: belongsToType(), sourceModelId: Id.City, targetModelId: Id.Address }),
+    association({ type: hasOneType(), sourceModelId: Id.Customer, targetModelId: Id.Address }),
+    association({ type: hasOneType(), sourceModelId: Id.Staff, targetModelId: Id.Address }),
+    association({ type: hasOneType(), sourceModelId: Id.Store, targetModelId: Id.Address }),
   ],
-}
+})
 
-const rental: Model = {
+const rental: Model = model({
   id: Id.Rental,
   name: 'rental',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'rental_date',
       type: dateDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'return_date',
       type: stringDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      targetModelId: Id.Inventory,
-      sourceModelId: Id.Rental,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      targetModelId: Id.Customer,
-      sourceModelId: Id.Rental,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      targetModelId: Id.Staff,
-      sourceModelId: Id.Rental,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: hasManyType(),
-      targetModelId: Id.Payment,
-      sourceModelId: Id.Rental,
-    },
+    association({ type: belongsToType(), sourceModelId: Id.Inventory, targetModelId: Id.Rental }),
+    association({ type: belongsToType(), sourceModelId: Id.Customer, targetModelId: Id.Rental }),
+    association({ type: belongsToType(), sourceModelId: Id.Staff, targetModelId: Id.Rental }),
+    association({ type: hasManyType(), sourceModelId: Id.Payment, targetModelId: Id.Rental }),
   ],
-}
+})
 
-const payment: Model = {
+const payment: Model = model({
   id: Id.Payment,
   name: 'payment',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'amount',
       type: decimalDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'payment_date',
       type: dateTimeDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      targetModelId: Id.Customer,
-      sourceModelId: Id.Payment,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      targetModelId: Id.Staff,
-      sourceModelId: Id.Payment,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      targetModelId: Id.Rental,
-      sourceModelId: Id.Payment,
-    },
+    association({ type: belongsToType(), sourceModelId: Id.Customer, targetModelId: Id.Payment }),
+    association({ type: belongsToType(), sourceModelId: Id.Staff, targetModelId: Id.Payment }),
+    association({ type: belongsToType(), sourceModelId: Id.Rental, targetModelId: Id.Payment }),
   ],
-}
+})
 
-const city: Model = {
+const city: Model = model({
   id: Id.City,
   name: 'city',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'city',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      targetModelId: Id.Country,
-      sourceModelId: Id.City,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: hasManyType(),
-      targetModelId: Id.Address,
-      sourceModelId: Id.City,
-    },
+    association({ type: belongsToType(), sourceModelId: Id.Country, targetModelId: Id.City }),
+    association({ type: hasManyType(), sourceModelId: Id.Address, targetModelId: Id.City }),
   ],
-}
+})
 
-const country: Model = {
+const country: Model = model({
   id: Id.Country,
   name: 'country',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'country',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: hasManyType(),
-      targetModelId: Id.City,
-      sourceModelId: Id.Country,
-    },
+    association({ type: hasManyType(), sourceModelId: Id.City, targetModelId: Id.Country }),
   ],
-}
+})
 
-const film_actor: Model = {
+const film_actor: Model = model({
   id: Id.FilmActor,
   name: 'film_actor',
   createdAt: time,
   updatedAt: time,
-  fields: [],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      sourceModelId: Id.FilmActor,
-      targetModelId: Id.Film,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      sourceModelId: Id.FilmActor,
-      targetModelId: Id.Actor,
-    },
+    association({ type: belongsToType(), sourceModelId: Id.FilmActor, targetModelId: Id.Film }),
+    association({ type: belongsToType(), sourceModelId: Id.FilmActor, targetModelId: Id.Actor }),
   ],
-}
+})
 
-const film_category: Model = {
+const film_category: Model = model({
   id: Id.FilmCategory,
   name: 'film_category',
   createdAt: time,
   updatedAt: time,
-  fields: [],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
-      type: belongsToType(),
-      sourceModelId: Id.FilmCategory,
-      targetModelId: Id.Film,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
-      foreignKey: null,
+    association({ type: belongsToType(), sourceModelId: Id.FilmCategory, targetModelId: Id.Film }),
+    association({
       type: belongsToType(),
       sourceModelId: Id.FilmCategory,
       targetModelId: Id.Category,
-    },
+    }),
   ],
-}
+})
 
 // https://dev.mysql.com/doc/sakila/en/
-const sakilaSchema: Schema = {
+const sakilaSchema: Schema = schema({
   id: SAKILA_ID,
   name: 'sakila',
   createdAt: time,
   updatedAt: time,
-  forkedFrom: null,
   models: [
     actor,
     film,
@@ -865,6 +502,6 @@ const sakilaSchema: Schema = {
     film_actor,
     film_category,
   ],
-}
+})
 
 export default sakilaSchema

@@ -9,12 +9,15 @@ import {
   decimalDataType,
   doubleDataType,
   enumDataType,
+  field,
   floatDataType,
   integerDataType,
   jsonBDataType,
   jsonDataType,
+  model,
   Model,
   realDataType,
+  schema,
   Schema,
   smallIntDataType,
   stringDataType,
@@ -24,271 +27,142 @@ import {
   UuidType,
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import { uniqueId } from '@src/utils/string'
 
 const time = fromParts(2021, 1, 1)
 
-const Id = {
-  DataType: uniqueId(),
-} as const
-
-const dataTypes: Model = {
-  id: Id.DataType,
+const dataTypes: Model = model({
   name: 'category',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'string',
       type: stringDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'string with length',
       type: stringDataType({ length: 100 }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'text',
       type: textDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'ci text',
       type: ciTextDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'integer',
       type: integerDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'integer unsigned',
       type: integerDataType({ unsigned: true }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'integer autoincrement',
       type: integerDataType({ autoincrement: true }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'big int',
       type: bigIntDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'small int',
       type: smallIntDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'float',
       type: floatDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'real',
       type: realDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'double',
       type: doubleDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'decimal',
       type: decimalDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'decimal precision',
       type: decimalDataType({ precision: { precision: 14, scale: null } }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'decimal precision and scale',
       type: decimalDataType({ precision: { precision: 14, scale: 2 } }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'date time',
       type: dateTimeDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'date time default now',
       type: dateTimeDataType({ defaultNow: true }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'date',
       type: dateDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'date default now',
       type: dateDataType({ defaultNow: true }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'time',
       type: timeDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'time default now',
       type: timeDataType({ defaultNow: true }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'boolean',
       type: booleanDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'enum',
       type: enumDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'array',
       type: arrayDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'json',
       type: jsonDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'json b',
       type: jsonBDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'blob',
       type: blobDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'uuid',
       type: uuidDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'uuid default v4',
       type: uuidDataType({ defaultVersion: UuidType.V4 }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'uuid default v1',
       type: uuidDataType({ defaultVersion: UuidType.V1 }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
+    }),
   ],
-  associations: [],
-}
+})
 
-const dataTypesSchema: Schema = {
-  id: uniqueId(),
+const dataTypesSchema: Schema = schema({
   name: 'data types',
   createdAt: time,
   updatedAt: time,
-  forkedFrom: null,
   models: [dataTypes],
-}
+})
 
 export default dataTypesSchema
