@@ -1,31 +1,35 @@
 import {
+  association,
   Association,
   AssociationType,
   belongsToType,
   DataType,
   DataTypeType,
+  field,
   Field,
   hasManyType,
   hasOneType,
   manyToManyModelType,
   manyToManyTableType,
+  model,
   Model,
+  schema,
   Schema,
   UuidType,
 } from '@src/core/schema'
 import {
-  Association as AssociationV1,
   AssociationType as AssociationTypeV1,
-  DataType as DataTypeV1,
+  Association as AssociationV1,
   DataTypeUuidDefaultVersion,
+  DataType as DataTypeV1,
   Field as FieldV1,
   Model as ModelV1,
   SchemaV1,
 } from '.'
 
-export function fromV1(schema: SchemaV1): Schema {
-  const models = schema.models.map(fromV1Model)
-  return { ...schema, forkedFrom: schema.forkedFrom ?? null, models }
+export function fromV1(schemaV1: SchemaV1): Schema {
+  const models = schemaV1.models.map(fromV1Model)
+  return schema({ ...schemaV1, forkedFrom: schemaV1.forkedFrom ?? null, models })
 }
 
 export function toV1(schema: Schema): SchemaV1 {
@@ -35,10 +39,10 @@ export function toV1(schema: Schema): SchemaV1 {
   }
 }
 
-function fromV1Model(model: ModelV1): Model {
-  const fields = model.fields.map(fromV1Field)
-  const associations = model.associations.map(fromV1Association)
-  return { ...model, fields, associations }
+function fromV1Model(modelV1: ModelV1): Model {
+  const fields = modelV1.fields.map(fromV1Field)
+  const associations = modelV1.associations.map(fromV1Association)
+  return model({ ...modelV1, fields, associations })
 }
 
 function toV1Model(model: Model): ModelV1 {
@@ -49,11 +53,11 @@ function toV1Model(model: Model): ModelV1 {
   }
 }
 
-function fromV1Field(field: FieldV1): Field {
-  return {
-    ...field,
-    type: fromV1DataType(field.type),
-  }
+function fromV1Field(fieldV1: FieldV1): Field {
+  return field({
+    ...fieldV1,
+    type: fromV1DataType(fieldV1.type),
+  })
 }
 
 function toV1Field(field: Field): FieldV1 {
@@ -192,13 +196,13 @@ function toV1UuidVersion(version: UuidType | null): DataTypeUuidDefaultVersion |
   }
 }
 
-function fromV1Association(association: AssociationV1): Association {
-  return {
-    ...association,
-    alias: association.alias ?? null,
-    foreignKey: association.foreignKey ?? null,
-    type: fromV1AssociationType(association.type),
-  }
+function fromV1Association(associationV1: AssociationV1): Association {
+  return association({
+    ...associationV1,
+    alias: associationV1.alias ?? null,
+    foreignKey: associationV1.foreignKey ?? null,
+    type: fromV1AssociationType(associationV1.type),
+  })
 }
 
 function toV1Association(association: Association): AssociationV1 {

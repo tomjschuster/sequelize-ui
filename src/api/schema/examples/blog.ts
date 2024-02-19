@@ -28,18 +28,21 @@
  *
  */
 import {
+  association,
   belongsToType,
   booleanDataType,
   dateTimeDataType,
+  field,
   hasManyType,
   manyToManyModelType,
+  model,
   Model,
+  schema,
   Schema,
   stringDataType,
   textDataType,
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import { uniqueId } from '@src/utils/string'
 import { BLOG_ID } from './ids'
 
 const time = fromParts(2021, 4, 1)
@@ -55,539 +58,370 @@ enum Id {
   User = '6XfrfnVeY7KTKukt26dQZ',
 }
 
-const category: Model = {
+const category: Model = model({
   id: Id.Category,
   name: 'category',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'title',
       type: stringDataType({ length: 75 }),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'meta title',
       type: stringDataType({ length: 100 }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'slug',
       type: stringDataType({ length: 100 }),
-      primaryKey: false,
       required: true,
       unique: true,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'content',
       type: textDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
+    association({
       alias: 'parent',
       sourceModelId: Id.Category,
       targetModelId: Id.Category,
       type: belongsToType(),
-      foreignKey: null,
-    },
-    {
-      id: uniqueId(),
+    }),
+    association({
       alias: 'children',
       sourceModelId: Id.Category,
       targetModelId: Id.Category,
       type: hasManyType(),
       foreignKey: 'parent id',
-    },
-    {
-      id: uniqueId(),
-      alias: null,
+    }),
+    association({
       sourceModelId: Id.Category,
       targetModelId: Id.PostCategory,
       type: hasManyType(),
-      foreignKey: null,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
+    }),
+    association({
       sourceModelId: Id.Category,
       targetModelId: Id.Post,
       type: manyToManyModelType(Id.PostCategory),
-      foreignKey: null,
-    },
+    }),
   ],
-}
+})
 
-const post: Model = {
+const post: Model = model({
   id: Id.Post,
   name: 'post',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'title',
       type: stringDataType({ length: 75 }),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'meta title',
       type: stringDataType({ length: 100 }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'slug',
       type: stringDataType({ length: 100 }),
-      primaryKey: false,
       required: true,
       unique: true,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'summary',
       type: textDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'published',
       type: booleanDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'published at',
       type: dateTimeDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'content',
       type: textDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
+    association({
       alias: 'author',
       sourceModelId: Id.Post,
       targetModelId: Id.User,
       type: belongsToType(),
-      foreignKey: null,
-    },
-    {
-      id: uniqueId(),
+    }),
+    association({
       alias: 'parent',
       sourceModelId: Id.Post,
       targetModelId: Id.Post,
       type: belongsToType(),
-      foreignKey: null,
-    },
-    {
-      id: uniqueId(),
+    }),
+    association({
       alias: 'children',
       sourceModelId: Id.Post,
       targetModelId: Id.Post,
       type: hasManyType(),
       foreignKey: 'parent id',
-    },
-    {
-      id: uniqueId(),
-      alias: null,
+    }),
+    association({
       sourceModelId: Id.Post,
       targetModelId: Id.PostCategory,
       type: hasManyType(),
-      foreignKey: null,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
+    }),
+    association({
       sourceModelId: Id.Post,
       targetModelId: Id.Category,
       type: manyToManyModelType(Id.PostCategory),
-      foreignKey: null,
-    },
-    {
-      id: uniqueId(),
+    }),
+    association({
       alias: 'comments',
       sourceModelId: Id.Post,
       targetModelId: Id.PostComment,
       type: hasManyType(),
-      foreignKey: null,
-    },
-    {
-      id: uniqueId(),
+    }),
+    association({
       alias: 'meta',
       sourceModelId: Id.Post,
       targetModelId: Id.PostMeta,
       type: hasManyType(),
-      foreignKey: null,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
+    }),
+    association({
       sourceModelId: Id.Post,
       targetModelId: Id.PostTag,
       type: hasManyType(),
-      foreignKey: null,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
+    }),
+    association({
       sourceModelId: Id.Post,
       targetModelId: Id.Tag,
       type: manyToManyModelType(Id.PostTag),
-      foreignKey: null,
-    },
+    }),
   ],
-}
+})
 
-const postCategory: Model = {
+const postCategory: Model = model({
   id: Id.PostCategory,
   name: 'post category',
   createdAt: time,
   updatedAt: time,
   fields: [],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
+    association({
       sourceModelId: Id.PostCategory,
       targetModelId: Id.Post,
       type: belongsToType(),
-      foreignKey: null,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
+    }),
+    association({
       sourceModelId: Id.PostCategory,
       targetModelId: Id.Category,
       type: belongsToType(),
-      foreignKey: null,
-    },
+    }),
   ],
-}
+})
 
-const postComment: Model = {
+const postComment: Model = model({
   id: Id.PostComment,
   name: 'post comment',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'title',
       type: stringDataType({ length: 75 }),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'published',
       type: booleanDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'published at',
       type: dateTimeDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'content',
       type: textDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
+    association({
       sourceModelId: Id.PostComment,
       targetModelId: Id.Post,
       type: belongsToType(),
-      foreignKey: null,
-    },
-    {
-      id: uniqueId(),
+    }),
+    association({
       alias: 'parent',
       sourceModelId: Id.PostComment,
       targetModelId: Id.PostComment,
       type: belongsToType(),
-      foreignKey: null,
-    },
-    {
-      id: uniqueId(),
+    }),
+    association({
       alias: 'children',
       sourceModelId: Id.PostComment,
       targetModelId: Id.PostComment,
       type: hasManyType(),
       foreignKey: 'parent id',
-    },
+    }),
   ],
-}
+})
 
-const postMeta: Model = {
+const postMeta: Model = model({
   id: Id.PostMeta,
   name: 'post meta',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'key',
       type: stringDataType({ length: 50 }),
-      primaryKey: false,
       required: true,
       unique: true,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'content',
       type: textDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
+    association({
       sourceModelId: Id.PostMeta,
       targetModelId: Id.Post,
       type: belongsToType(),
-      foreignKey: null,
-    },
+    }),
   ],
-}
+})
 
-const postTag: Model = {
+const postTag: Model = model({
   id: Id.PostTag,
   name: 'post tag',
   createdAt: time,
   updatedAt: time,
   fields: [],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
+    association({
       sourceModelId: Id.PostTag,
       targetModelId: Id.Post,
       type: belongsToType(),
-      foreignKey: null,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
+    }),
+    association({
       sourceModelId: Id.PostTag,
       targetModelId: Id.Tag,
       type: belongsToType(),
-      foreignKey: null,
-    },
+    }),
   ],
-}
+})
 
-const tag: Model = {
+const tag: Model = model({
   id: Id.Tag,
   name: 'tag',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'title',
       type: stringDataType({ length: 75 }),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'meta title',
       type: stringDataType({ length: 100 }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'slug',
       type: stringDataType({ length: 100 }),
-      primaryKey: false,
       required: true,
       unique: true,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'content',
       type: textDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
+    association({
       sourceModelId: Id.Tag,
       targetModelId: Id.PostTag,
       type: hasManyType(),
-      foreignKey: null,
-    },
-    {
-      id: uniqueId(),
-      alias: null,
+    }),
+    association({
       sourceModelId: Id.Tag,
       targetModelId: Id.Post,
       type: manyToManyModelType(Id.PostTag),
-      foreignKey: null,
-    },
+    }),
   ],
-}
+})
 
-const user: Model = {
+const user: Model = model({
   id: Id.User,
   name: 'user',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'first name',
       type: stringDataType({ length: 50 }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'middle name',
       type: stringDataType({ length: 50 }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'last name',
       type: stringDataType({ length: 50 }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'mobile',
       type: stringDataType({ length: 15 }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'email',
       type: stringDataType({ length: 50 }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'password hash',
       type: stringDataType({ length: 32 }),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'registered at',
       type: dateTimeDataType({ defaultNow: true }),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'last login',
       type: dateTimeDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'intro',
       type: textDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'profile',
       type: textDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
+    }),
   ],
   associations: [
-    {
-      id: uniqueId(),
-      alias: null,
+    association({
       sourceModelId: Id.User,
       targetModelId: Id.Post,
       type: hasManyType(),
       foreignKey: 'author id',
-    },
+    }),
   ],
-}
+})
 
-const blogSchema: Schema = {
+const blogSchema: Schema = schema({
   id: BLOG_ID,
   name: 'blog',
   createdAt: time,
   updatedAt: time,
-  forkedFrom: null,
   models: [category, post, postCategory, postComment, postMeta, postTag, tag, user],
-}
+})
 
 export default blogSchema

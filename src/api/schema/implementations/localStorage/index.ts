@@ -1,9 +1,16 @@
-import { Association, AssociationTypeType, Model, Schema, ThroughType } from '@src/core/schema'
+import {
+  Association,
+  AssociationTypeType,
+  Model,
+  Schema,
+  ThroughType,
+  manyToManyTableType,
+} from '@src/core/schema'
 import { arrayToLookup } from '@src/utils/array'
 import { now } from '@src/utils/dateTime'
 import { get, lsKey, remove, set } from '@src/utils/localStorage'
 import { uniqueId, versionedName } from '@src/utils/string'
-import { SchemaApi, SCHEMA_NOT_FOUND_ERROR } from '../../api'
+import { SCHEMA_NOT_FOUND_ERROR, SchemaApi } from '../../api'
 import * as Ids from '../../examples/ids'
 import { parseSchema, parseV0Lazy } from './parse'
 import { toV1 } from './v1/translate'
@@ -198,10 +205,7 @@ function joinModelToTable(
 
   return {
     ...association,
-    type: {
-      ...association.type,
-      through: { type: ThroughType.ThroughTable, table: `${nameA} ${nameB}` },
-    },
+    type: manyToManyTableType(`${nameA} ${nameB}`),
   }
 }
 

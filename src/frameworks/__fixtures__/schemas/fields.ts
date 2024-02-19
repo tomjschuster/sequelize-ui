@@ -1,62 +1,41 @@
-import { Model, Schema, stringDataType } from '@src/core/schema'
+import { Model, Schema, field, model, schema, stringDataType } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import { uniqueId } from '@src/utils/string'
 
 const time = fromParts(2020, 7, 1)
 
-const Id = {
-  Field: uniqueId(),
-} as const
-
-const fields: Model = {
-  id: Id.Field,
+const fields: Model = model({
   name: 'category',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'field',
       type: stringDataType(),
-      primaryKey: false,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'pk field',
       type: stringDataType(),
       primaryKey: true,
-      required: false,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'required field',
       type: stringDataType(),
-      primaryKey: false,
       required: true,
-      unique: false,
-    },
-    {
-      id: uniqueId(),
+    }),
+    field({
       name: 'optional field',
       type: stringDataType(),
-      primaryKey: false,
-      required: false,
       unique: true,
-    },
+    }),
   ],
   associations: [],
-}
+})
 
-const fieldsSchema: Schema = {
-  id: uniqueId(),
+const fieldsSchema: Schema = schema({
   name: 'fields',
   createdAt: time,
   updatedAt: time,
-  forkedFrom: null,
   models: [fields],
-}
+})
 
 export default fieldsSchema

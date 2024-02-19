@@ -21,6 +21,7 @@ import {
   manyToManyTableType,
   ThroughType,
 } from '../association'
+import { association } from '../schema'
 import {
   belongsTo,
   belongsToType_,
@@ -169,86 +170,68 @@ describe('schema dataTypes', () => {
   })
 
   describe('associationIsCircular', () => {
-    const aBelongsToB: Association<BelongsToAssociation> = {
+    const aBelongsToB: Association<BelongsToAssociation> = association({
       id: 'aBelongsToB',
-      alias: null,
-      foreignKey: null,
       sourceModelId: 'a',
       targetModelId: 'b',
       type: belongsToType(),
-    }
+    })
 
-    const aHasManyB: Association<HasManyAssociation> = {
+    const aHasManyB: Association<HasManyAssociation> = association({
       id: 'aHasManyB',
-      alias: null,
-      foreignKey: null,
       sourceModelId: 'a',
       targetModelId: 'b',
       type: hasManyType(),
-    }
+    })
 
-    const aHasOneB: Association<HasOneAssociation> = {
+    const aHasOneB: Association<HasOneAssociation> = association({
       id: 'aHasOneB',
-      alias: null,
-      foreignKey: null,
       sourceModelId: 'a',
       targetModelId: 'b',
       type: hasOneType(),
-    }
+    })
 
-    const bBelongsToA: Association<BelongsToAssociation> = {
+    const bBelongsToA: Association<BelongsToAssociation> = association({
       id: 'bBelongsToA',
-      alias: null,
-      foreignKey: null,
       sourceModelId: 'b',
       targetModelId: 'a',
       type: belongsToType(),
-    }
+    })
 
-    const bHasManyA: Association<HasManyAssociation> = {
+    const bHasManyA: Association<HasManyAssociation> = association({
       id: 'bHasManyA',
-      alias: null,
-      foreignKey: null,
       sourceModelId: 'b',
       targetModelId: 'a',
       type: hasManyType(),
-    }
+    })
 
-    const bHasOneA: Association<HasManyAssociation> = {
+    const bHasOneA: Association<HasManyAssociation> = association({
       id: 'bHasOneA',
-      alias: null,
-      foreignKey: null,
       sourceModelId: 'b',
       targetModelId: 'a',
       type: hasManyType(),
-    }
+    })
 
-    const aBelongsToC: Association<BelongsToAssociation> = {
+    const aBelongsToC: Association<BelongsToAssociation> = association({
       id: 'aBelongsToC',
-      alias: null,
-      foreignKey: null,
       sourceModelId: 'a',
       targetModelId: 'c',
       type: belongsToType(),
-    }
+    })
 
-    const aManyToManyB: Association<ManyToManyAssociation> = {
+    const aManyToManyB: Association<ManyToManyAssociation> = association({
       id: 'aManyToManyB',
-      alias: null,
-      foreignKey: null,
       sourceModelId: 'a',
       targetModelId: 'b',
       type: manyToManyTableType('foo'),
-    }
+    })
 
-    const bManyToManyA: Association<ManyToManyAssociation> = {
+    const bManyToManyA: Association<ManyToManyAssociation> = association({
       id: 'bManyToManyA',
-      alias: null,
-      foreignKey: null,
       sourceModelId: 'b',
       targetModelId: 'a',
       type: manyToManyTableType('bar'),
-    }
+    })
 
     const commonAssociations = [aBelongsToC, aManyToManyB, bManyToManyA]
 

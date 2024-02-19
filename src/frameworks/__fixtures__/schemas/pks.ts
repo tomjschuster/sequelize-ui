@@ -1,86 +1,58 @@
-import { integerDataType, Model, Schema } from '@src/core/schema'
+import { field, integerDataType, model, Model, schema, Schema } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import { uniqueId } from '@src/utils/string'
 
 const time = fromParts(2020, 4, 1)
 
-const Id = {
-  Default: uniqueId(),
-  Id: uniqueId(),
-  Prefixed: uniqueId(),
-  NonStandard: uniqueId(),
-} as const
-
-const defaultPk: Model = {
-  id: Id.Default,
+const defaultPk: Model = model({
   name: 'default',
   createdAt: time,
   updatedAt: time,
-  fields: [],
-  associations: [],
-}
+})
 
-const id: Model = {
-  id: Id.Id,
+const id: Model = model({
   name: 'id',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'id',
       type: integerDataType(),
       primaryKey: true,
-      required: false,
-      unique: false,
-    },
+    }),
   ],
-  associations: [],
-}
+})
 
-const prefixed: Model = {
-  id: Id.Prefixed,
+const prefixed: Model = model({
   name: 'prefixed',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'prefixed_id',
       type: integerDataType(),
       primaryKey: true,
-      required: false,
-      unique: false,
-    },
+    }),
   ],
-  associations: [],
-}
+})
 
-const nonstandard: Model = {
-  id: Id.NonStandard,
+const nonstandard: Model = model({
   name: 'nonstandard',
   createdAt: time,
   updatedAt: time,
   fields: [
-    {
-      id: uniqueId(),
+    field({
       name: 'other_id',
       type: integerDataType(),
       primaryKey: true,
-      required: false,
-      unique: false,
-    },
+    }),
   ],
-  associations: [],
-}
+})
 
-const fieldsSchema: Schema = {
-  id: uniqueId(),
+const fieldsSchema: Schema = schema({
   name: 'fields',
   createdAt: time,
   updatedAt: time,
-  forkedFrom: null,
   models: [defaultPk, id, prefixed, nonstandard],
-}
+})
 
 export default fieldsSchema

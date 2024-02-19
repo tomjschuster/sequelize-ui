@@ -4,13 +4,14 @@ import {
   DataType,
   DataTypeType,
   dateTimeDataType,
+  field,
   Field,
   integerDataType,
   isDateTimeType,
   isIntegerType,
   Model,
 } from '@src/core/schema'
-import { camelCase, snakeCase, uniqueId } from '@src/utils/string'
+import { camelCase, snakeCase } from '@src/utils/string'
 import {
   displaySequelizeDataType,
   noSupportedDetails,
@@ -124,15 +125,14 @@ type IdFieldArgs = {
   dbOptions: DbOptions
 }
 export function idField({ model, dbOptions }: IdFieldArgs): SequelizeField {
-  return {
-    id: uniqueId(),
+  const fieldBase = field({
     name: getPkName({ model, dbOptions }),
     type: integerDataType({ autoincrement: true, unsigned: true }),
     primaryKey: true,
     required: true,
-    unique: false,
-    generated: true,
-  }
+  })
+
+  return { ...fieldBase, generated: true }
 }
 
 type GetPkNameArgs = {
@@ -149,23 +149,15 @@ type GetTimestampFieldsTemplateArgs = {
 }
 export function getTimestampFields({ dbOptions }: GetTimestampFieldsTemplateArgs): Field[] {
   if (!dbOptions.timestamps) return []
-  const createdAt: Field = {
-    id: uniqueId(),
+  const createdAt: Field = field({
     name: caseByDbCaseStyle('created at', dbOptions.caseStyle),
     type: dateTimeDataType(),
-    primaryKey: false,
-    required: false,
-    unique: false,
-  }
+  })
 
-  const updatedAt: Field = {
-    id: uniqueId(),
+  const updatedAt: Field = field({
     name: caseByDbCaseStyle('updated at', dbOptions.caseStyle),
     type: dateTimeDataType(),
-    primaryKey: false,
-    required: false,
-    unique: false,
-  }
+  })
 
   return [createdAt, updatedAt]
 }

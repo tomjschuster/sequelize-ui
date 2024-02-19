@@ -11,9 +11,15 @@ import {
   ThroughType,
 } from '../../association'
 
-export const belongsToType_: BelongsToAssociation = { type: AssociationTypeType.BelongsTo }
-export const hasManyType_: HasManyAssociation = { type: AssociationTypeType.HasMany }
-export const hasOneType_: HasOneAssociation = { type: AssociationTypeType.HasOne }
+export const belongsToType_: BelongsToAssociation = {
+  type: AssociationTypeType.BelongsTo,
+}
+export const hasManyType_: HasManyAssociation = {
+  type: AssociationTypeType.HasMany,
+}
+export const hasOneType_: HasOneAssociation = {
+  type: AssociationTypeType.HasOne,
+}
 export const throughTable_: ManyToManyThroughTable = {
   type: ThroughType.ThroughTable,
   table: 'foo',

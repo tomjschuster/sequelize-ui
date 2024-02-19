@@ -1,17 +1,22 @@
 import {
   Association,
-  associationTypeIsSingular,
   AssociationTypeType,
-  displayAssociationTypeType,
-  displayThroughType,
-  isManytoMany,
-  isThroughModel,
-  isThroughTable,
   ManyToManyAssociation,
-  manyToManyTableType,
   Model,
   Schema,
   ThroughType,
+  associationTypeIsSingular,
+  belongsToType,
+  throughModel as buildThroughModel,
+  displayAssociationTypeType,
+  displayThroughType,
+  hasManyType,
+  hasOneType,
+  isManytoMany,
+  isThroughModel,
+  isThroughTable,
+  manyToManyTableType,
+  throughTable,
 } from '@src/core/schema'
 import { AssociationErrors } from '@src/core/validation/schema'
 import Radio from '@src/ui/components/form/Radio'
@@ -79,14 +84,25 @@ function AssociationFieldset({
 
   const handleChangeType = React.useCallback(
     (typeType: AssociationTypeType) => {
-      if (typeType === AssociationTypeType.ManyToMany) {
-        handleChange({
-          type: manyToManyTableType(snakeCase(`${model.name} ${targetModel.name}`)),
-        })
-        return
-      }
+      switch (typeType) {
+        case AssociationTypeType.BelongsTo:
+          handleChange({ type: belongsToType() })
+          return
 
-      handleChange({ type: { type: typeType } })
+        case AssociationTypeType.HasOne:
+          handleChange({ type: hasOneType() })
+          return
+
+        case AssociationTypeType.HasMany:
+          handleChange({ type: hasManyType() })
+          return
+
+        case AssociationTypeType.ManyToMany:
+          handleChange({
+            type: manyToManyTableType(snakeCase(`${model.name} ${targetModel.name}`)),
+          })
+          return
+      }
     },
     [model.name, targetModel?.name, handleChange],
   )
@@ -113,7 +129,7 @@ function AssociationFieldset({
       const table = snakeCase(`${model.name} ${targetModel.name}`)
 
       if (type === ThroughType.ThroughTable) {
-        handleChangeManyToMany({ through: { type, table } })
+        handleChangeManyToMany({ through: throughTable(table) })
         return
       }
 
@@ -121,7 +137,7 @@ function AssociationFieldset({
         schema.models.find((m) => snakeCase(m.name) === table) || schema.models[0]
 
       if (throughModel) {
-        handleChangeManyToMany({ through: { type, modelId: throughModel.id } })
+        handleChangeManyToMany({ through: buildThroughModel(throughModel.id) })
       }
     },
     [association, model.name, targetModel, schema.models, handleChangeManyToMany],
@@ -130,7 +146,7 @@ function AssociationFieldset({
   const handleChangeThroughModel = React.useCallback(
     (model: Model) => {
       handleChangeManyToMany({
-        through: { type: ThroughType.ThroughModel, modelId: model.id },
+        through: buildThroughModel(model.id),
       })
     },
     [handleChangeManyToMany],
@@ -139,7 +155,7 @@ function AssociationFieldset({
   const handleChangeThroughTable = React.useCallback(
     (table?: string) =>
       handleChangeManyToMany({
-        through: { type: ThroughType.ThroughTable, table: table || '' },
+        through: throughTable(table || ''),
       }),
     [handleChangeManyToMany],
   )

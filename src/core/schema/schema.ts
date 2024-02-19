@@ -1,7 +1,8 @@
 import { now } from '@src/utils/dateTime'
 import { uniqueId } from '@src/utils/string'
+import { AtLeast } from '@src/utils/types'
 import { stringDataType } from '.'
-import { Association, AssociationTypeType } from './association'
+import { Association, AssociationType, belongsToType } from './association'
 import { DataType } from './dataType'
 
 export type Schema = {
@@ -43,6 +44,10 @@ export function emptySchema(): Schema {
   }
 }
 
+export function schema(attrs: AtLeast<Schema, 'name'>): Schema {
+  return { ...emptySchema(), ...attrs }
+}
+
 export function emptyModel(): Model {
   const time = now()
   return {
@@ -53,6 +58,10 @@ export function emptyModel(): Model {
     createdAt: time,
     updatedAt: time,
   }
+}
+
+export function model(attrs: AtLeast<Model, 'name'>): Model {
+  return { ...emptyModel(), ...attrs }
 }
 
 export function emptyField(): Field {
@@ -66,7 +75,7 @@ export function emptyField(): Field {
   }
 }
 
-export function field(props: Partial<Field> = {}): Field {
+export function field(props: AtLeast<Field, 'name' | 'type'>): Field {
   return {
     ...emptyField(),
     ...props,
@@ -80,19 +89,17 @@ export function emptyAssociation(
   return {
     id: uniqueId(),
     sourceModelId,
-    type: { type: AssociationTypeType.BelongsTo },
+    type: belongsToType(),
     targetModelId,
     foreignKey: null,
     alias: null,
   }
 }
 
-export function association(
-  sourceModelId: Model['id'],
-  targetModelId: Model['id'],
-  props: Partial<Association>,
-): Association {
-  return { ...emptyAssociation(sourceModelId, targetModelId), ...props }
+export function association<T extends AssociationType>(
+  props: AtLeast<Association<T>, 'sourceModelId' | 'targetModelId' | 'type'>,
+): Association<T> {
+  return { ...emptyAssociation(props.sourceModelId, props.targetModelId), ...props }
 }
 
 export function isNewSchema(schema: Schema): boolean {
