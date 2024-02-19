@@ -248,8 +248,8 @@ function aliasPlaceholder(association: Association, model: Model): string | unde
   return association.alias
     ? undefined
     : associationTypeIsSingular(association.type)
-    ? singular(model.name)
-    : plural(model.name)
+      ? singular(model.name)
+      : plural(model.name)
 }
 
 export function associationTypeId(association: Association): string {

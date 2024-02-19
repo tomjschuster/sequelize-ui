@@ -105,8 +105,8 @@ function FileTreeItem({
   const chevronDirection = !isDirectory(item)
     ? undefined
     : expanded
-    ? ChevronDirection.Down
-    : ChevronDirection.Right
+      ? ChevronDirection.Down
+      : ChevronDirection.Right
 
   return (
     <>

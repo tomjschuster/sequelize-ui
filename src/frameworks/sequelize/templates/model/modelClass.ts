@@ -1,6 +1,6 @@
 import { blank, lines } from '@src/core/codegen'
 import { DbCaseStyle, DbNounForm, DbOptions } from '@src/core/database'
-import { Association, AssociationTypeType, Field, integerDataType, Model } from '@src/core/schema'
+import { Association, AssociationTypeType, Field, Model, integerDataType } from '@src/core/schema'
 import { camelCase, pascalCase, plural, singular, snakeCase } from '@src/utils/string'
 import { associationName } from '../../utils/associations'
 import {
@@ -113,8 +113,8 @@ const classFieldType = (
   const fieldType = creationOptional
     ? `CreationOptional<${tsType}>`
     : required
-    ? tsType
-    : `${tsType} | null`
+      ? tsType
+      : `${tsType} | null`
 
   return [
     noSupportedDetails(type, dbOptions.sqlDialect),
@@ -153,8 +153,8 @@ function associationType({
     targetPks.length > 1
       ? 'never'
       : targetPks.length === 1
-      ? dataTypeToTypeScript(targetPks[0].type)
-      : dataTypeToTypeScript(integerDataType())
+        ? dataTypeToTypeScript(targetPks[0].type)
+        : dataTypeToTypeScript(integerDataType())
 
   switch (association.type.type) {
     case AssociationTypeType.BelongsTo: {
