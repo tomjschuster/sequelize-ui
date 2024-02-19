@@ -7,8 +7,6 @@ export type Association<T extends AssociationType = AssociationType> = {
   targetModelId: string
   foreignKey: string | null
   alias: string | null
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false
 }
 
 export enum AssociationTypeType {
@@ -24,28 +22,14 @@ export type AssociationType =
   | HasManyAssociation
   | ManyToManyAssociation
 
-export type BelongsToAssociation = {
-  type: AssociationTypeType.BelongsTo
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false
-}
-export type HasOneAssociation = {
-  type: AssociationTypeType.HasOne
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false
-}
-export type HasManyAssociation = {
-  type: AssociationTypeType.HasMany
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false
-}
+export type BelongsToAssociation = { type: AssociationTypeType.BelongsTo }
+export type HasOneAssociation = { type: AssociationTypeType.HasOne }
+export type HasManyAssociation = { type: AssociationTypeType.HasMany }
 
 export type ManyToManyAssociation = {
   type: AssociationTypeType.ManyToMany
   through: ManyToManyThrough
   targetFk: string | null
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false
 }
 
 export type ManyToManyThrough = ManyToManyThroughModel | ManyToManyThroughTable
@@ -53,15 +37,11 @@ export type ManyToManyThrough = ManyToManyThroughModel | ManyToManyThroughTable
 export type ManyToManyThroughModel = {
   type: ThroughType.ThroughModel
   modelId: string
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false
 }
 
 export type ManyToManyThroughTable = {
   type: ThroughType.ThroughTable
   table: string
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false
 }
 
 export enum ThroughType {
@@ -111,44 +91,25 @@ export function associationTypeIsPlural(type: AssociationType): boolean {
 }
 
 export function belongsToType(): BelongsToAssociation {
-  return {
-    type: AssociationTypeType.BelongsTo,
-    // TODO: remove after switching to use constructor everywhere
-    __throwaway__: false,
-  }
+  return { type: AssociationTypeType.BelongsTo }
 }
 
 export function hasManyType(): HasManyAssociation {
-  return {
-    type: AssociationTypeType.HasMany,
-    // TODO: remove after switching to use constructor everywhere
-    __throwaway__: false,
-  }
+  return { type: AssociationTypeType.HasMany }
 }
 
 export function hasOneType(): HasOneAssociation {
-  return {
-    type: AssociationTypeType.HasOne,
-    // TODO: remove after switching to use constructor everywhere
-    __throwaway__: false,
-  }
+  return { type: AssociationTypeType.HasOne }
 }
 
 export function throughTable(table: string): ManyToManyThrough {
-  return {
-    type: ThroughType.ThroughTable,
-    table,
-    // TODO: remove after switching to use constructor everywhere
-    __throwaway__: false,
-  }
+  return { type: ThroughType.ThroughTable, table }
 }
 
 export function throughModel(modelId: string): ManyToManyThrough {
   return {
     type: ThroughType.ThroughModel,
     modelId,
-    // TODO: remove after switching to use constructor everywhere
-    __throwaway__: false,
   }
 }
 
@@ -160,8 +121,6 @@ export function manyToManyTableType(
     type: AssociationTypeType.ManyToMany,
     through: throughTable(table),
     targetFk,
-    // TODO: remove after switching to use constructor everywhere
-    __throwaway__: false,
   }
 }
 
@@ -173,8 +132,6 @@ export function manyToManyModelType(
     type: AssociationTypeType.ManyToMany,
     through: throughModel(modelId),
     targetFk,
-    // TODO: remove after switching to use constructor everywhere
-    __throwaway__: false,
   }
 }
 

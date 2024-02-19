@@ -13,46 +13,32 @@ import {
 
 export const belongsToType_: BelongsToAssociation = {
   type: AssociationTypeType.BelongsTo,
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false,
 }
 export const hasManyType_: HasManyAssociation = {
   type: AssociationTypeType.HasMany,
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false,
 }
 export const hasOneType_: HasOneAssociation = {
   type: AssociationTypeType.HasOne,
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false,
 }
 export const throughTable_: ManyToManyThroughTable = {
   type: ThroughType.ThroughTable,
   table: 'foo',
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false,
 }
 
 export const throughModel_: ManyToManyThroughModel = {
   type: ThroughType.ThroughModel,
   modelId: uniqueId(),
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false,
 }
 
 export const manyToManyTableType_: ManyToManyAssociation = {
   type: AssociationTypeType.ManyToMany,
   through: throughTable_,
   targetFk: null,
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false,
 }
 export const manyToManyModelType_: ManyToManyAssociation = {
   type: AssociationTypeType.ManyToMany,
   through: throughModel_,
   targetFk: null,
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false,
 }
 
 export const baseAssociation: Omit<Association, 'type'> = {
@@ -61,8 +47,6 @@ export const baseAssociation: Omit<Association, 'type'> = {
   foreignKey: null,
   sourceModelId: uniqueId(),
   targetModelId: uniqueId(),
-  // TODO: remove after switching to use constructor everywhere
-  __throwaway__: false,
 }
 
 export const belongsTo: Association<BelongsToAssociation> = {
