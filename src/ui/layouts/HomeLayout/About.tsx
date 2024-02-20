@@ -33,6 +33,7 @@ export default function About(): React.ReactElement {
             Table name prefixed primary keys or plain <code>id</code> primary keys.
           </li>
           <li>Created/updated timestamps or no timestamps.</li>
+          <li>Paranoid models with deleted timestamps.</li>
         </ul>
         <p className={text}>
           Get started quickly by choosing one of the included{' '}

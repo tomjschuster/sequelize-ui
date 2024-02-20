@@ -156,7 +156,7 @@ export default function ModelForm({
     >
       <div className={classnames(sectionWide)}>
         <h2 className={classnames(title)}>Model</h2>
-        <ModelFieldset name={model.name} onChange={handleChangeModel} errors={errors} />
+        <ModelFieldset model={model} onChange={handleChangeModel} errors={errors} />
       </div>
       <div className={classnames(sectionWide, margin('mb-6'))}>
         <h3 className={classnames(title)}>Fields</h3>
