@@ -2,6 +2,7 @@ import {
   association,
   Association,
   AssociationType,
+  AssociationTypeType,
   belongsToType,
   DataType,
   DataTypeType,
@@ -15,6 +16,7 @@ import {
   Model,
   schema,
   Schema,
+  ThroughType,
   UuidType,
 } from '@src/core/schema'
 import {
@@ -34,7 +36,11 @@ export function fromV1(schemaV1: SchemaV1): Schema {
 
 export function toV1(schema: Schema): SchemaV1 {
   return {
-    ...schema,
+    id: schema.id,
+    name: schema.name,
+    forkedFrom: schema.forkedFrom,
+    createdAt: schema.createdAt,
+    updatedAt: schema.updatedAt,
     models: schema.models.map(toV1Model),
   }
 }
@@ -47,7 +53,10 @@ function fromV1Model(modelV1: ModelV1): Model {
 
 function toV1Model(model: Model): ModelV1 {
   return {
-    ...model,
+    id: model.id,
+    name: model.name,
+    createdAt: model.createdAt,
+    updatedAt: model.updatedAt,
     fields: model.fields.map(toV1Field),
     associations: model.associations.map(toV1Association),
   }
@@ -62,8 +71,12 @@ function fromV1Field(fieldV1: FieldV1): Field {
 
 function toV1Field(field: Field): FieldV1 {
   return {
-    ...field,
+    id: field.id,
+    name: field.name,
     type: toV1DataType(field.type),
+    primaryKey: field.primaryKey,
+    required: field.required,
+    unique: field.unique,
   }
 }
 
@@ -166,7 +179,6 @@ function toV1DataType(dataType: DataType): DataTypeV1 {
 
     case DataTypeType.Uuid: {
       return {
-        ...dataType,
         type: DataTypeType.Uuid,
         defaultVersion: toV1UuidVersion(dataType.defaultVersion),
       }
@@ -206,7 +218,14 @@ function fromV1Association(associationV1: AssociationV1): Association {
 }
 
 function toV1Association(association: Association): AssociationV1 {
-  return association
+  return {
+    id: association.id,
+    sourceModelId: association.sourceModelId,
+    targetModelId: association.targetModelId,
+    alias: association.alias,
+    foreignKey: association.foreignKey,
+    type: toV1AssociationType(association.type),
+  }
 }
 
 function fromV1AssociationType(associationType: AssociationTypeV1): AssociationType {
@@ -223,6 +242,32 @@ function fromV1AssociationType(associationType: AssociationTypeV1): AssociationT
           return manyToManyModelType(associationType.through.modelId, associationType.targetFk)
         case 'THROUGH_TABLE':
           return manyToManyTableType(associationType.through.table, associationType.targetFk)
+      }
+  }
+}
+
+function toV1AssociationType(associationType: AssociationType): AssociationTypeV1 {
+  switch (associationType.type) {
+    case AssociationTypeType.BelongsTo:
+      return { type: 'BELONGS_TO' }
+    case AssociationTypeType.HasOne:
+      return { type: 'HAS_ONE' }
+    case AssociationTypeType.HasMany:
+      return { type: 'HAS_MANY' }
+    case AssociationTypeType.ManyToMany:
+      switch (associationType.through.type) {
+        case ThroughType.ThroughModel:
+          return {
+            type: 'MANY_TO_MANY',
+            targetFk: associationType.targetFk,
+            through: { type: 'THROUGH_MODEL', modelId: associationType.through.modelId },
+          }
+        case ThroughType.ThroughTable:
+          return {
+            type: 'MANY_TO_MANY',
+            targetFk: associationType.targetFk,
+            through: { type: 'THROUGH_TABLE', table: associationType.through.table },
+          }
       }
   }
 }

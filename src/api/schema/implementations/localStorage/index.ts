@@ -10,10 +10,13 @@ import { arrayToLookup } from '@src/utils/array'
 import { now } from '@src/utils/dateTime'
 import { get, lsKey, remove, set } from '@src/utils/localStorage'
 import { uniqueId, versionedName } from '@src/utils/string'
+import { Schema as JtdSchema, validate } from 'jtd'
 import { SCHEMA_NOT_FOUND_ERROR, SchemaApi } from '../../api'
 import * as Ids from '../../examples/ids'
-import { parseSchema, parseV0Lazy } from './parse'
-import { toV1 } from './v1/translate'
+import { SchemaV0 } from './v0'
+import { SchemaV1 } from './v1'
+import v1JtdSchema from './v1/schema.jtd.json'
+import { fromV1, toV1 } from './v1/translate'
 
 export default class LocalStorageSchemaApi implements SchemaApi {
   async listSchemas(): Promise<Schema[]> {
@@ -231,12 +234,11 @@ async function migrateLegacy(): Promise<void> {
     if (legacySchema) {
       const schema = await parseV0Lazy(legacySchema)
       await createSchema(schema)
+      return await setHasMigratedLegacy()
     }
   } catch (e) {
     console.error(e)
   }
-
-  return await setHasMigratedLegacy()
 }
 
 const MIGRATED_FROM_LEGACY_KEY = 'migrated-from-legacy'
@@ -250,14 +252,13 @@ async function setHasMigratedLegacy(): Promise<void> {
 }
 
 async function setSchemas(schemas: Schema[]): Promise<void> {
-  const payload = schemas.map(toV1)
-  return set(schemasKey(), payload)
+  return set(schemasKey(), schemas.map(toV1))
 }
 
 async function getSchemas(): Promise<Schema[]> {
   const data = get(schemasKey()) || []
   if (Array.isArray(data)) {
-    const schemaResults = await Promise.all(data.map((schema) => parseSchema(schema)))
+    const schemaResults = await Promise.all(data.map(parseSchema))
     const schemas = schemaResults.map((result) => result.schema)
 
     if (schemaResults.some((result) => result.migrated)) {
@@ -268,4 +269,32 @@ async function getSchemas(): Promise<Schema[]> {
   }
 
   return Promise.reject(new Error(`Invalid Schema: ${typeof data}`))
+}
+
+type ParseSchemaResult = {
+  schema: Schema
+  migrated: boolean
+}
+
+function parseSchema(schema: unknown): Promise<ParseSchemaResult> {
+  return parseV1(schema)
+    .then((schema) => ({ schema, migrated: false }))
+    .catch(async () => ({ schema: await parseV0Lazy(schema), migrated: true }))
+}
+
+async function parseV1(schema: unknown): Promise<Schema> {
+  const errors = validate(v1JtdSchema as JtdSchema, schema)
+  if (errors.length > 0) return await Promise.reject(errors)
+  return fromV1(schema as SchemaV1)
+}
+
+/** Only fetch V0 schema if v1 parsing fails */
+async function parseV0Lazy(schema: unknown): Promise<Schema> {
+  const [jtdSchema, fromV0] = await Promise.all([
+    import('./v0/schema.jtd.json'),
+    (await import('./v0/translate')).fromV0,
+  ])
+  const errors = validate(jtdSchema as JtdSchema, schema)
+  if (errors.length > 0) return await Promise.reject(errors)
+  return fromV0(schema as SchemaV0)
 }
