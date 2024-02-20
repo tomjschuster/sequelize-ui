@@ -1,0 +1,210 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sequelize Framework generates the correct code for paranoid models with snakePlural 1`] = `
+
+/******************************************************************************
+ *                               /sakila/db.ts                                *
+ ******************************************************************************/
+
+import { Sequelize, Options } from 'sequelize'
+import configs from './config/config.js'
+
+const env = process.env.NODE_ENV || 'development'
+const config = (configs as {[key: string]: Options})[env]
+
+const db: Sequelize = new Sequelize({
+  ...config,
+  define: {
+    underscored: true
+  }
+})
+
+export default db
+
+
+/******************************************************************************
+ *                           /sakila/models/Film.ts                           *
+ ******************************************************************************/
+
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  BelongsToCreateAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManySetAssociationsMixin,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyAddAssociationsMixin,
+  BelongsToManyCreateAssociationMixin,
+  BelongsToManyRemoveAssociationMixin,
+  BelongsToManyRemoveAssociationsMixin,
+  BelongsToManyHasAssociationMixin,
+  BelongsToManyHasAssociationsMixin,
+  BelongsToManyCountAssociationsMixin,
+  CreationOptional,
+  DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  InferCreationAttributes,
+  InferAttributes,
+  Model,
+  NonAttribute,
+  Sequelize
+} from 'sequelize'
+import type { Actor } from './Actor'
+import type { Category } from './Category'
+import type { Inventory } from './Inventory'
+import type { Language } from './Language'
+
+type FilmAssociations = 'language' | 'originalLanguage' | 'inventories' | 'actors' | 'categories'
+
+export class Film extends Model<
+  InferAttributes<Film, {omit: FilmAssociations}>,
+  InferCreationAttributes<Film, {omit: FilmAssociations}>
+> {
+  declare id: CreationOptional<number>
+  declare title: string
+  declare description: string | null
+  declare releaseYear: number | null
+  declare languageId: number
+  declare originalLanguageId: number | null
+  declare rentalDuration: number
+  declare rentalRate: number
+  declare length: number | null
+  declare rating: 'G' | 'PG' | 'PG-13' | 'R' | 'NC-17'
+  declare specialFeature: Array<'Trailers' | 'Commentaries' | 'Deleted Scenes' | 'Behind the Scenes'>
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
+  declare deletedAt: CreationOptional<Date>
+
+  // Film belongsTo Language
+  declare language?: NonAttribute<Language>
+  declare getLanguage: BelongsToGetAssociationMixin<Language>
+  declare setLanguage: BelongsToSetAssociationMixin<Language, number>
+  declare createLanguage: BelongsToCreateAssociationMixin<Language>
+  
+  // Film belongsTo Language (as OriginalLanguage)
+  declare originalLanguage?: NonAttribute<Language>
+  declare getOriginalLanguage: BelongsToGetAssociationMixin<Language>
+  declare setOriginalLanguage: BelongsToSetAssociationMixin<Language, number>
+  declare createOriginalLanguage: BelongsToCreateAssociationMixin<Language>
+  
+  // Film hasMany Inventory
+  declare inventories?: NonAttribute<Inventory[]>
+  declare getInventories: HasManyGetAssociationsMixin<Inventory>
+  declare setInventories: HasManySetAssociationsMixin<Inventory, number>
+  declare addInventory: HasManyAddAssociationMixin<Inventory, number>
+  declare addInventories: HasManyAddAssociationsMixin<Inventory, number>
+  declare createInventory: HasManyCreateAssociationMixin<Inventory>
+  declare removeInventory: HasManyRemoveAssociationMixin<Inventory, number>
+  declare removeInventories: HasManyRemoveAssociationsMixin<Inventory, number>
+  declare hasInventory: HasManyHasAssociationMixin<Inventory, number>
+  declare hasInventories: HasManyHasAssociationsMixin<Inventory, number>
+  declare countInventories: HasManyCountAssociationsMixin
+  
+  // Film belongsToMany Actor
+  declare actors?: NonAttribute<Actor[]>
+  declare getActors: BelongsToManyGetAssociationsMixin<Actor>
+  declare setActors: BelongsToManySetAssociationsMixin<Actor, number>
+  declare addActor: BelongsToManyAddAssociationMixin<Actor, number>
+  declare addActors: BelongsToManyAddAssociationsMixin<Actor, number>
+  declare createActor: BelongsToManyCreateAssociationMixin<Actor>
+  declare removeActor: BelongsToManyRemoveAssociationMixin<Actor, number>
+  declare removeActors: BelongsToManyRemoveAssociationsMixin<Actor, number>
+  declare hasActor: BelongsToManyHasAssociationMixin<Actor, number>
+  declare hasActors: BelongsToManyHasAssociationsMixin<Actor, number>
+  declare countActors: BelongsToManyCountAssociationsMixin
+  
+  // Film belongsToMany Category
+  declare categories?: NonAttribute<Category[]>
+  declare getCategories: BelongsToManyGetAssociationsMixin<Category>
+  declare setCategories: BelongsToManySetAssociationsMixin<Category, number>
+  declare addCategory: BelongsToManyAddAssociationMixin<Category, number>
+  declare addCategories: BelongsToManyAddAssociationsMixin<Category, number>
+  declare createCategory: BelongsToManyCreateAssociationMixin<Category>
+  declare removeCategory: BelongsToManyRemoveAssociationMixin<Category, number>
+  declare removeCategories: BelongsToManyRemoveAssociationsMixin<Category, number>
+  declare hasCategory: BelongsToManyHasAssociationMixin<Category, number>
+  declare hasCategories: BelongsToManyHasAssociationsMixin<Category, number>
+  declare countCategories: BelongsToManyCountAssociationsMixin
+  
+  declare static associations: {
+    language: Association<Film, Language>,
+    originalLanguage: Association<Film, Language>,
+    inventories: Association<Film, Inventory>,
+    actors: Association<Film, Actor>,
+    categories: Association<Film, Category>
+  }
+
+  static initModel(sequelize: Sequelize): typeof Film {
+    Film.init({
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      description: {
+        type: DataTypes.STRING
+      },
+      releaseYear: {
+        type: DataTypes.INTEGER
+      },
+      languageId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+      },
+      originalLanguageId: {
+        type: DataTypes.INTEGER.UNSIGNED
+      },
+      rentalDuration: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      rentalRate: {
+        type: DataTypes.DECIMAL,
+        allowNull: false
+      },
+      length: {
+        type: DataTypes.INTEGER
+      },
+      rating: {
+        type: DataTypes.ENUM('G', 'PG', 'PG-13', 'R', 'NC-17'),
+        allowNull: false
+      },
+      specialFeature: {
+        type: DataTypes.ARRAY(DataTypes.ENUM('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes')),
+        allowNull: false
+      },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
+      },
+      deletedAt: {
+        type: DataTypes.DATE
+      }
+    }, {
+      sequelize,
+      paranoid: true
+    })
+    
+    return Film
+  }
+}
+
+
+`;

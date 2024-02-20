@@ -72,7 +72,7 @@ type AddTimestampFieldsArgs = {
   dbOptions: DbOptions
 }
 function addTimestampFields({ model, dbOptions }: AddTimestampFieldsArgs): Model {
-  const fields = model.fields.concat(getTimestampFields({ dbOptions }))
+  const fields = model.fields.concat(getTimestampFields({ model, dbOptions }))
   return { ...model, fields: dedupBy(fields, (f) => normalizeSingular(f.name)) }
 }
 

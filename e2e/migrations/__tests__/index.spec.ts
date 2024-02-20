@@ -3,10 +3,10 @@ import { DbOptions, SqlDialect } from '@src/core/database'
 import { Framework } from '@src/core/framework'
 import { SequelizeFramework } from '@src/frameworks/sequelize'
 import {
+  DbConnection,
   alpha,
   buildProject,
   createDatabase,
-  DbConnection,
   destroyProject,
   dropDatabase,
   preinstall,

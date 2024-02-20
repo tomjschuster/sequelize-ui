@@ -44,7 +44,9 @@ export function modelClassTemplate({
       depth: 2,
     }),
     lines(
-      getTimestampFields({ dbOptions }).map((field) => classFieldType(field, dbOptions, true)),
+      getTimestampFields({ model, dbOptions }).map((field) =>
+        classFieldType(field, dbOptions, true),
+      ),
       { depth: 2 },
     ),
     associations.length ? blank() : null,
@@ -78,15 +80,22 @@ export function modelClassTemplate({
             `${name}.init({`,
             lines(
               model.fields
-                .concat(getTimestampFields({ dbOptions }))
+                .concat(getTimestampFields({ model, dbOptions }))
                 .map((field) => fieldTemplate({ field, dbOptions })),
               { depth: 2, separator: ',' },
             ),
             '}, {',
-            lines(['sequelize', tableName({ model, dbOptions })], {
-              depth: 2,
-              separator: ',',
-            }),
+            lines(
+              [
+                'sequelize',
+                tableName({ model, dbOptions }),
+                model.softDelete ? 'paranoid: true' : null,
+              ],
+              {
+                depth: 2,
+                separator: ',',
+              },
+            ),
             '})',
             blank(),
             `return ${name}`,

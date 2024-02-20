@@ -145,19 +145,30 @@ export function getPkName({ model, dbOptions }: GetPkNameArgs): string {
 }
 
 type GetTimestampFieldsTemplateArgs = {
+  model: Model
   dbOptions: DbOptions
 }
-export function getTimestampFields({ dbOptions }: GetTimestampFieldsTemplateArgs): Field[] {
-  if (!dbOptions.timestamps) return []
-  const createdAt: Field = field({
-    name: caseByDbCaseStyle('created at', dbOptions.caseStyle),
-    type: dateTimeDataType(),
-  })
+export function getTimestampFields({ model, dbOptions }: GetTimestampFieldsTemplateArgs): Field[] {
+  const createdAt: Field | null = dbOptions.timestamps
+    ? field({
+        name: caseByDbCaseStyle('created at', dbOptions.caseStyle),
+        type: dateTimeDataType(),
+      })
+    : null
 
-  const updatedAt: Field = field({
-    name: caseByDbCaseStyle('updated at', dbOptions.caseStyle),
-    type: dateTimeDataType(),
-  })
+  const updatedAt: Field | null = dbOptions.timestamps
+    ? field({
+        name: caseByDbCaseStyle('updated at', dbOptions.caseStyle),
+        type: dateTimeDataType(),
+      })
+    : null
 
-  return [createdAt, updatedAt]
+  const deletedAt: Field | null = model.softDelete
+    ? field({
+        name: caseByDbCaseStyle('deleted at', dbOptions.caseStyle),
+        type: dateTimeDataType(),
+      })
+    : null
+
+  return [createdAt, updatedAt, deletedAt].filter((f): f is Field => !!f)
 }
