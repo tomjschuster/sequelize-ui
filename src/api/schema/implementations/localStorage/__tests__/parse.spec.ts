@@ -3,6 +3,7 @@ import { blogLegacy } from '../__fixtures__/blogLegacy'
 import { blogTranslatedFromLegacy } from '../__fixtures__/blogTranslatedFromLegacy'
 import { blogTranslatedFromV1 } from '../__fixtures__/blogTranslatedFromV1'
 import { blogV1 } from '../__fixtures__/blogV1'
+import { blogV1_0_1 } from '../__fixtures__/blogV1-0-1'
 import { fromV0 } from '../v0/translate'
 import { fromV1, toV1 } from '../v1/translate'
 
@@ -23,7 +24,12 @@ describe('translate (v1)', () => {
     expect(fromV1(blogV1)).toEqual(blogTranslatedFromV1)
   })
 
-  it('translates from', () => {
-    expect(toV1(blogTranslatedFromV1)).toEqual(blogV1)
+  it('translates from (1.0)', () => {
+    const result = deepDropKeys(toV1(blogTranslatedFromV1), ['softDelete'])
+    expect(result).toEqual(blogV1)
+  })
+
+  it('translates from (1.0.1)', () => {
+    expect(toV1(blogTranslatedFromV1)).toEqual(blogV1_0_1)
   })
 })

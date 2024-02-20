@@ -17,6 +17,7 @@ export type Schema = {
 export type Model = {
   id: string
   name: string
+  softDelete: boolean
   fields: Field[]
   associations: Association[]
   createdAt: string
@@ -53,6 +54,7 @@ export function emptyModel(): Model {
   return {
     id: uniqueId(),
     name: '',
+    softDelete: false,
     fields: [],
     associations: [],
     createdAt: time,

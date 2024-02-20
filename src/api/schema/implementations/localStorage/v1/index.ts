@@ -195,6 +195,7 @@ export interface Model {
   id: string
   name: string
   updatedAt: string
+  softDelete?: boolean
 }
 
 export interface Schema {

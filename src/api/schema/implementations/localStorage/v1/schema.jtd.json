@@ -1,7 +1,7 @@
 {
   "ref": "schema",
   "metadata": {
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "definitions": {
     "schema": {
@@ -26,6 +26,9 @@
         "createdAt": { "type": "timestamp" },
         "fields": { "elements": { "ref": "field" } },
         "associations": { "elements": { "ref": "association" } }
+      },
+      "optionalProperties": {
+        "softDelete": { "type": "boolean" }
       }
     },
     "field": {
