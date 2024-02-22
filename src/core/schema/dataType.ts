@@ -23,18 +23,26 @@ export type DataType =
 export type Precision = { precision: number; scale: number | null }
 
 type DataTypeBase<T extends DataTypeType> = { type: T }
-type StringOptions = { length: number | null }
+type TextOptions = { defaultValue: string | null }
+type StringOptions = TextOptions & { length: number | null }
 type DateTimeOptions = { defaultNow: boolean }
-type NumberOptions = { unsigned: boolean }
+type BooleanOptions = { defaultValue: boolean | null }
+type NumberOptions = { defaultValue: number | null; unsigned: boolean }
 type IntegerOptions = NumberOptions & { autoincrement: boolean }
 type NumericOptions = NumberOptions & { precision: Precision | null }
-type EnumOptions = { values: string[] }
-type ArrayOptions = { arrayType: DataType }
+type EnumOptions = { defaultValue: string | null; values: string[] }
+type ArrayOptions = { defaultEmptyArray: boolean; arrayType: DataType }
+type JsonOptions = { defaultValue: DefaultJsonValue | null }
 type UuidOptions = { defaultVersion: UuidType | null }
 
+export enum DefaultJsonValue {
+  EmptyObject = 'EMPTY_OBJECT',
+  EmptyArray = 'EMPTY_ARRAY',
+}
+
 export type StringDataType = DataTypeBase<DataTypeType.String> & StringOptions
-export type TextDataType = DataTypeBase<DataTypeType.Text>
-export type CiTextDataType = DataTypeBase<DataTypeType.CiText>
+export type TextDataType = DataTypeBase<DataTypeType.Text> & TextOptions
+export type CiTextDataType = DataTypeBase<DataTypeType.CiText> & TextOptions
 export type IntegerDataType = DataTypeBase<DataTypeType.Integer> & IntegerOptions
 export type SmallIntDataType = DataTypeBase<DataTypeType.SmallInt> & IntegerOptions
 export type BigIntDataType = DataTypeBase<DataTypeType.BigInt> & IntegerOptions
@@ -45,11 +53,11 @@ export type DecimalDataType = DataTypeBase<DataTypeType.Decimal> & NumericOption
 export type DateTimeDataType = DataTypeBase<DataTypeType.DateTime> & DateTimeOptions
 export type DateDataType = DataTypeBase<DataTypeType.Date> & DateTimeOptions
 export type TimeDataType = DataTypeBase<DataTypeType.Time> & DateTimeOptions
-export type BooleanDataType = DataTypeBase<DataTypeType.Boolean>
+export type BooleanDataType = DataTypeBase<DataTypeType.Boolean> & BooleanOptions
 export type EnumDataType = DataTypeBase<DataTypeType.Enum> & EnumOptions
 export type ArrayDataType = DataTypeBase<DataTypeType.Array> & ArrayOptions
-export type JsonDataType = DataTypeBase<DataTypeType.Json>
-export type JsonBDataType = DataTypeBase<DataTypeType.JsonB>
+export type JsonDataType = DataTypeBase<DataTypeType.Json> & JsonOptions
+export type JsonBDataType = DataTypeBase<DataTypeType.JsonB> & JsonOptions
 export type BlobDataType = DataTypeBase<DataTypeType.Blob>
 export type UuidDataType = DataTypeBase<DataTypeType.Uuid> & UuidOptions
 
@@ -250,23 +258,28 @@ export function isNumericType(dataType: DataType): dataType is NumericType {
   return numericTypes.includes(dataType.type)
 }
 
-const defaultStringOptions: StringOptions = { length: null }
-const defaultNumberOptions: NumberOptions = { unsigned: false }
+const defaultTextOptions: TextOptions = { defaultValue: null }
+const defaultStringOptions: StringOptions = { ...defaultTextOptions, length: null }
+const defaultNumberOptions: NumberOptions = { defaultValue: null, unsigned: false }
 const defaultIntegerOptions: IntegerOptions = { ...defaultNumberOptions, autoincrement: false }
 const defaultNumericOptions: NumericOptions = { ...defaultNumberOptions, precision: null }
 const defaultDateTimeOptions: DateTimeOptions = { defaultNow: false }
+const defaultBooleanOptions: BooleanOptions = { defaultValue: null }
+const defaultEnumOptions: EnumOptions = { defaultValue: null, values: [] }
 const defaultUuidOptions: UuidOptions = { defaultVersion: null }
+const defaultArrayOptions: ArrayOptions = { defaultEmptyArray: false, arrayType: stringDataType() }
+const defaultJsonOptions: JsonOptions = { defaultValue: null }
 
 export function stringDataType(opts: Partial<StringOptions> = {}): StringDataType {
   return { type: DataTypeType.String, ...defaultStringOptions, ...opts }
 }
 
-export function textDataType(): TextDataType {
-  return { type: DataTypeType.Text }
+export function textDataType(opts: Partial<TextOptions> = {}): TextDataType {
+  return { type: DataTypeType.Text, ...defaultTextOptions, ...opts }
 }
 
-export function ciTextDataType(): CiTextDataType {
-  return { type: DataTypeType.CiText }
+export function ciTextDataType(opts: Partial<TextOptions> = {}): CiTextDataType {
+  return { type: DataTypeType.CiText, ...defaultTextOptions, ...opts }
 }
 
 export function integerDataType(opts: Partial<IntegerOptions> = {}): IntegerDataType {
@@ -309,24 +322,24 @@ export function timeDataType(opts: Partial<DateTimeOptions> = {}): TimeDataType 
   return { type: DataTypeType.Time, ...defaultDateTimeOptions, ...opts }
 }
 
-export function booleanDataType(): BooleanDataType {
-  return { type: DataTypeType.Boolean }
+export function booleanDataType(opts: Partial<BooleanOptions> = {}): BooleanDataType {
+  return { type: DataTypeType.Boolean, ...defaultBooleanOptions, ...opts }
 }
 
-export function enumDataType(opts: EnumOptions = { values: [] }): EnumDataType {
-  return { type: DataTypeType.Enum, ...opts }
+export function enumDataType(opts: Partial<EnumOptions> = {}): EnumDataType {
+  return { type: DataTypeType.Enum, ...defaultEnumOptions, ...opts }
 }
 
-export function arrayDataType(opts: ArrayOptions = { arrayType: stringDataType() }): ArrayDataType {
-  return { type: DataTypeType.Array, ...opts }
+export function arrayDataType(opts: Partial<ArrayOptions> = {}): ArrayDataType {
+  return { type: DataTypeType.Array, ...defaultArrayOptions, ...opts }
 }
 
-export function jsonDataType(): JsonDataType {
-  return { type: DataTypeType.Json }
+export function jsonDataType(opts: Partial<JsonOptions> = {}): JsonDataType {
+  return { type: DataTypeType.Json, ...defaultJsonOptions, ...opts }
 }
 
-export function jsonBDataType(): JsonBDataType {
-  return { type: DataTypeType.JsonB }
+export function jsonBDataType(opts: Partial<JsonOptions> = {}): JsonBDataType {
+  return { type: DataTypeType.JsonB, ...defaultJsonOptions, ...opts }
 }
 
 export function blobDataType(): BlobDataType {
