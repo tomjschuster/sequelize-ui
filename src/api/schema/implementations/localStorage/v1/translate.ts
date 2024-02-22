@@ -22,6 +22,7 @@ import {
   hasManyType,
   hasOneType,
   integerDataType,
+  jsonBDataType,
   jsonDataType,
   manyToManyModelType,
   manyToManyTableType,
@@ -170,8 +171,8 @@ function fromV1DataType(dataType: DataTypeV1): DataType {
     }
 
     case 'BOOLEAN': {
-      const { type: _, ...opts } = dataType
-      return booleanDataType(opts)
+      const { type: _, defaultValue, ...opts } = dataType
+      return booleanDataType({ ...opts, defaultValue: defaultValue ?? null })
     }
 
     case 'ENUM': {
@@ -180,18 +181,22 @@ function fromV1DataType(dataType: DataTypeV1): DataType {
     }
 
     case 'ARRAY': {
-      const { type: _, arrayType, ...opts } = dataType
-      return arrayDataType({ ...opts, arrayType: fromV1DataType(arrayType) })
+      const { type: _, arrayType, defaultEmptyArray, ...opts } = dataType
+      return arrayDataType({
+        ...opts,
+        arrayType: fromV1DataType(arrayType),
+        defaultEmptyArray: defaultEmptyArray ?? false,
+      })
     }
 
     case 'JSON': {
-      const { type: _, ...opts } = dataType
-      return jsonDataType(opts)
+      const { type: _, defaultValue, ...opts } = dataType
+      return jsonDataType({ ...opts, defaultValue: defaultValue ?? null })
     }
 
     case 'JSONB': {
-      const { type: _, ...opts } = dataType
-      return jsonDataType(opts)
+      const { type: _, defaultValue, ...opts } = dataType
+      return jsonBDataType({ ...opts, defaultValue: defaultValue ?? null })
     }
 
     case 'BLOB': {
