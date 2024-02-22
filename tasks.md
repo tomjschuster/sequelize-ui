@@ -4,6 +4,7 @@
 
 - [ ] **API**: Import swagger/json schema
 
+- [ ] **Codegen**: Default values
 - [ ] **Codegen**: JS support
 - [ ] **Codegen**: Support multiple Sequelize versions
 
@@ -28,6 +29,7 @@
 
 ### Done ✓
 
+- [x] **Codegen**: Soft deletion
 - [x] **API**: Persist db options for user
 - [x] **Tests**: Run E2E SQL tests against all example schemas
 - [x] **UI**: Allow highlighting of code

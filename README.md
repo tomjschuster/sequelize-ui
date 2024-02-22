@@ -29,3 +29,9 @@ Then go to http://localhost:3000
 ### Plain JavaScript
 
 Sequelize UI currenly only generates TypeScript Sequelize code, however, an older version is still available at https://js.sequelizeui.app/ which generates plain JavaScript Sequelize code. Future support for JavaScript is planned and can be tracked in [tasks.md](./tasks.md).
+
+### TODO
+
+- [ ] generate default values in model
+- [ ] generate default values in migration
+- [ ] default values UI
