@@ -32,6 +32,8 @@ Sequelize UI currenly only generates TypeScript Sequelize code, however, an olde
 
 ### TODO
 
-- [ ] generate default values in model
-- [ ] generate default values in migration
+- [x] generate default values in model
+- [x] generate default values in migration
 - [ ] default values UI
+  - [x] form
+  - [ ] view

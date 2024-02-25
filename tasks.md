@@ -4,7 +4,6 @@
 
 - [ ] **API**: Import swagger/json schema
 
-- [ ] **Codegen**: Default values
 - [ ] **Codegen**: JS support
 - [ ] **Codegen**: Support multiple Sequelize versions
 
@@ -25,6 +24,7 @@
 
 ### In Progress
 
+- [ ] **Codegen**: Default values
 - [ ] **CI**: Run E2E SQL tests for all dialects before prod deploy
 
 ### Done ✓

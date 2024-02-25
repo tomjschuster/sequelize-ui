@@ -138,6 +138,15 @@ export function displayDataTypeType(type: DataTypeType): string {
   }
 }
 
+export function displayDefaultJsonValue(defaultType: DefaultJsonValue): string {
+  switch (defaultType) {
+    case DefaultJsonValue.EmptyArray:
+      return 'Empty Array'
+    case DefaultJsonValue.EmptyObject:
+      return 'Empty Object'
+  }
+}
+
 function displayDataTypeOptions(dataType: DataType): string {
   const options: string[] = [
     isStringType(dataType) && dataType.length !== null && `length: ${dataType.length}`,
@@ -192,6 +201,12 @@ export function resetType(dataType: DataType): DataType {
       return { ...dataType, autoincrement: false }
     }
   }
+}
+
+export type TextType = StringDataType | TextDataType | CiTextDataType
+
+export function isTextDataType(dataType: DataType): dataType is TextType {
+  return [DataTypeType.String, DataTypeType.Text, DataTypeType.CiText].includes(dataType.type)
 }
 
 export type StringType = StringDataType

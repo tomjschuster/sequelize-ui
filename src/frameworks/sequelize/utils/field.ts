@@ -1,22 +1,14 @@
 import { lines } from '@src/core/codegen'
-import {
-  caseByDbCaseStyle,
-  currentTimestamp,
-  DateTimeGranularity,
-  DbCaseStyle,
-  DbOptions,
-  SqlCurrentTimestampType,
-  SqlDialect,
-} from '@src/core/database'
+import { caseByDbCaseStyle, DateTimeGranularity, DbCaseStyle, DbOptions } from '@src/core/database'
 import {
   DataType,
   DataTypeType,
   dateTimeDataType,
   DateTimeTypes,
+  DefaultJsonValue,
   field,
   Field,
   integerDataType,
-  isDateTimeType,
   isIntegerType,
   Model,
 } from '@src/core/schema'
@@ -104,19 +96,52 @@ function autoincrementField(dataType: DataType): string | null {
     : null
 }
 
-function defaultField(dataType: DataType, dialect: SqlDialect, migration: boolean) {
-  if (isDateTimeType(dataType) && dataType.defaultNow) {
-    if (!migration) return `defaultValue: DataTypes.NOW`
-    const timestamp = currentTimestamp(dialect, dateTimeTypeToGranularity(dataType))
-    const fn = timestamp.type === SqlCurrentTimestampType.Literal ? 'literal' : 'fn'
-    return `defaultValue: Sequelize.${fn}('${timestamp.value}')`
-  }
+function defaultField(dataType: DataType): string | null {
+  const value = defaultValue(dataType)
+  return value ? `defaultValue: ${value}` : null
+}
 
-  if (dataType.type === DataTypeType.Uuid && dataType.defaultVersion) {
-    return `defaultValue: ${sequelizeUuidVersion(dataType.defaultVersion)}`
-  }
+function defaultValue(dataType: DataType): string | null {
+  switch (dataType.type) {
+    case DataTypeType.String:
+    case DataTypeType.Text:
+    case DataTypeType.CiText:
+    case DataTypeType.Enum:
+      return dataType.defaultValue != null ? `'${dataType.defaultValue}'` : null
+    case DataTypeType.Integer:
+    case DataTypeType.BigInt:
+    case DataTypeType.SmallInt:
+    case DataTypeType.Float:
+    case DataTypeType.Real:
+    case DataTypeType.Double:
+    case DataTypeType.Decimal:
+      return dataType.defaultValue != null ? `${dataType.defaultValue}` : null
+    case DataTypeType.Array:
+      return dataType.defaultEmptyArray ? '[]' : null
+    case DataTypeType.Date:
+    case DataTypeType.DateTime:
+    case DataTypeType.Time:
+      return dataType.defaultNow ? 'DataTypes.NOW' : null
+    case DataTypeType.Uuid:
+      return dataType.defaultVersion ? sequelizeUuidVersion(dataType.defaultVersion) : null
 
-  return null
+    case DataTypeType.Boolean:
+      return dataType.defaultValue != null ? `${dataType.defaultValue}` : null
+
+    case DataTypeType.Json:
+    case DataTypeType.JsonB:
+      switch (dataType.defaultValue) {
+        case DefaultJsonValue.EmptyArray:
+          return '[]'
+        case DefaultJsonValue.EmptyObject:
+          return '{}'
+        default:
+          return null
+      }
+
+    case DataTypeType.Blob:
+      return null
+  }
 }
 
 function dateTimeTypeToGranularity(dataType: DateTimeTypes): DateTimeGranularity {

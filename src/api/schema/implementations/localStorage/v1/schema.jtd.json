@@ -105,11 +105,13 @@
                 "precision": { "type": "int8" }
               },
               "optionalProperties": {
-                "defaultValue": { "nullable": true, "type": "float64" },
                 "scale": { "nullable": true, "type": "int8" }
               }
             },
             "unsigned": { "type": "boolean" }
+          },
+          "optionalProperties": {
+            "defaultValue": { "nullable": true, "type": "float64" }
           }
         },
         "DOUBLE": {
@@ -136,9 +138,11 @@
         "INTEGER": {
           "additionalProperties": true,
           "properties": {
-            "defaultValue": { "nullable": true, "type": "uint32" },
             "unsigned": { "type": "boolean" },
             "autoincrement": { "type": "boolean" }
+          },
+          "optionalProperties": {
+            "defaultValue": { "nullable": true, "type": "uint32" }
           }
         },
         "JSON": {

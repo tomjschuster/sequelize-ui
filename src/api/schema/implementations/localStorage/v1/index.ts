@@ -110,7 +110,6 @@ export interface DataTypeDateTime {
 
 export interface DataTypeDecimalPrecision {
   precision: number
-  defaultValue?: number | null
   scale?: number | null
 }
 
@@ -118,6 +117,7 @@ export interface DataTypeDecimal {
   type: 'DECIMAL'
   precision: DataTypeDecimalPrecision | null
   unsigned: boolean
+  defaultValue?: number | null
 }
 
 export interface DataTypeDouble {
@@ -141,8 +141,8 @@ export interface DataTypeFloat {
 export interface DataTypeInteger {
   type: 'INTEGER'
   autoincrement: boolean
-  defaultValue: number | null
   unsigned: boolean
+  defaultValue?: number | null
 }
 
 export interface DataTypeJson {

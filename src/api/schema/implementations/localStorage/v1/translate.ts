@@ -213,27 +213,117 @@ function fromV1DataType(dataType: DataTypeV1): DataType {
 function toV1DataType(dataType: DataType): DataTypeV1 {
   switch (dataType.type) {
     case DataTypeType.String:
+      return {
+        type: 'STRING',
+        length: dataType.length,
+        defaultValue: dataType.defaultValue,
+      }
     case DataTypeType.Text:
+      return {
+        type: 'TEXT',
+        defaultValue: dataType.defaultValue,
+      }
     case DataTypeType.CiText:
+      return {
+        type: 'CITEXT',
+        defaultValue: dataType.defaultValue,
+      }
     case DataTypeType.Integer:
+      return {
+        type: 'INTEGER',
+        autoincrement: dataType.autoincrement,
+        unsigned: dataType.unsigned,
+        defaultValue: dataType.defaultValue,
+      }
     case DataTypeType.BigInt:
+      return {
+        type: 'BIGINT',
+        unsigned: dataType.unsigned,
+        autoincrement: dataType.autoincrement,
+        defaultValue: dataType.defaultValue,
+      }
     case DataTypeType.SmallInt:
+      return {
+        type: 'SMALLINT',
+        unsigned: dataType.unsigned,
+        autoincrement: dataType.autoincrement,
+        defaultValue: dataType.defaultValue,
+      }
     case DataTypeType.Float:
+      return {
+        type: 'FLOAT',
+        unsigned: dataType.unsigned,
+        defaultValue: dataType.defaultValue,
+      }
     case DataTypeType.Real:
+      return {
+        type: 'REAL',
+        unsigned: dataType.unsigned,
+        defaultValue: dataType.defaultValue,
+      }
     case DataTypeType.Double:
+      return {
+        type: 'DOUBLE',
+        unsigned: dataType.unsigned,
+        defaultValue: dataType.defaultValue,
+      }
     case DataTypeType.Decimal:
+      return {
+        type: 'DECIMAL',
+        unsigned: dataType.unsigned,
+        precision: dataType.precision,
+        defaultValue: dataType.defaultValue,
+      }
     case DataTypeType.DateTime:
+      return {
+        type: 'DATE_TIME',
+        defaultNow: dataType.defaultNow,
+      }
     case DataTypeType.Date:
+      return {
+        type: 'DATE',
+        defaultNow: dataType.defaultNow,
+      }
     case DataTypeType.Time:
+      return {
+        type: 'TIME',
+        defaultNow: dataType.defaultNow,
+      }
+
     case DataTypeType.Boolean:
+      return {
+        type: 'BOOLEAN',
+        defaultValue: dataType.defaultValue,
+      }
+
     case DataTypeType.Enum:
+      return {
+        type: 'ENUM',
+        values: dataType.values,
+        defaultValue: dataType.defaultValue,
+      }
+
     case DataTypeType.Json:
+      return {
+        type: 'JSON',
+        defaultValue: dataType.defaultValue,
+      }
+
     case DataTypeType.JsonB:
+      return {
+        type: 'JSONB',
+        defaultValue: dataType.defaultValue,
+      }
+
     case DataTypeType.Blob:
       return dataType
 
     case DataTypeType.Array:
-      return { type: 'ARRAY', arrayType: toV1DataType(dataType.arrayType) }
+      return {
+        type: 'ARRAY',
+        arrayType: toV1DataType(dataType.arrayType),
+        defaultEmptyArray: dataType.defaultEmptyArray,
+      }
 
     case DataTypeType.Uuid: {
       return {
