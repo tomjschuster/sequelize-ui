@@ -24,11 +24,11 @@
 
 ### In Progress
 
-- [ ] **Codegen**: Default values
 - [ ] **CI**: Run E2E SQL tests for all dialects before prod deploy
 
 ### Done ✓
 
+- [x] **Codegen**: Default values
 - [x] **Codegen**: Soft deletion
 - [x] **API**: Persist db options for user
 - [x] **Tests**: Run E2E SQL tests against all example schemas

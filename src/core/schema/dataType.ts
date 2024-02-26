@@ -138,22 +138,52 @@ export function displayDataTypeType(type: DataTypeType): string {
   }
 }
 
+function displayDefaultValue(dataType: DataType): string | null {
+  switch (dataType.type) {
+    case DataTypeType.String:
+    case DataTypeType.Text:
+    case DataTypeType.CiText:
+      return dataType.defaultValue === null ? null : `'${dataType.defaultValue}'`
+    case DataTypeType.Enum:
+    case DataTypeType.Integer:
+    case DataTypeType.BigInt:
+    case DataTypeType.SmallInt:
+    case DataTypeType.Float:
+    case DataTypeType.Real:
+    case DataTypeType.Double:
+    case DataTypeType.Decimal:
+    case DataTypeType.Boolean:
+      return dataType.defaultValue === null ? null : dataType.defaultValue.toString()
+    case DataTypeType.Uuid:
+      return dataType.defaultVersion ? `${dataType.defaultVersion} UUID` : null
+    case DataTypeType.DateTime:
+    case DataTypeType.Time:
+    case DataTypeType.Date:
+      return dataType.defaultNow ? 'current time' : null
+    case DataTypeType.Array:
+      return dataType.defaultEmptyArray ? 'empty array' : null
+    case DataTypeType.Json:
+    case DataTypeType.JsonB:
+      return dataType.defaultValue ? displayDefaultJsonValue(dataType.defaultValue) : null
+    case DataTypeType.Blob:
+      return null
+  }
+}
+
 export function displayDefaultJsonValue(defaultType: DefaultJsonValue): string {
   switch (defaultType) {
     case DefaultJsonValue.EmptyArray:
-      return 'Empty Array'
+      return 'empty array'
     case DefaultJsonValue.EmptyObject:
-      return 'Empty Object'
+      return 'empty object'
   }
 }
 
 function displayDataTypeOptions(dataType: DataType): string {
+  const defaultValue = displayDefaultValue(dataType)
   const options: string[] = [
+    defaultValue ? `default: ${defaultValue}` : null,
     isStringType(dataType) && dataType.length !== null && `length: ${dataType.length}`,
-    dataType.type === DataTypeType.Uuid &&
-      !!dataType.defaultVersion &&
-      `${dataType.defaultVersion}`,
-    isDateTimeType(dataType) && dataType.defaultNow && 'default to now',
     isNumberType(dataType) && dataType.unsigned && 'unsigned',
     isIntegerType(dataType) && dataType.autoincrement && 'autoincrement',
     isNumericType(dataType) && dataType.precision && `p: ${dataType.precision.precision}`,
