@@ -1,13 +1,33 @@
-import sakilaSchema from '@src/api/schema/examples/sakila'
+import sakilaSchema, { Id as SakilId } from '@src/api/schema/examples/sakila'
 import { SqlDialect } from '@src/core/database'
 import { ExpectedSchemaCase } from '../cases'
 
+const softDeleteModelIds: string[] = [
+  SakilId.Actor,
+  SakilId.Customer,
+  SakilId.Film,
+  SakilId.Staff,
+  SakilId.Store,
+]
+
+const schema = {
+  ...sakilaSchema,
+  models: sakilaSchema.models.map((model) =>
+    softDeleteModelIds.includes(model.id)
+      ? {
+          ...model,
+          softDelete: true,
+        }
+      : model,
+  ),
+}
+
 const cases: ExpectedSchemaCase = {
-  schema: sakilaSchema,
+  schema,
   tableColumns: {
     snakePlural: {
       SequelizeMeta: ['name'],
-      actors: ['created_at', 'first_name', 'id', 'last_name', 'updated_at'],
+      actors: ['created_at', 'deleted_at', 'first_name', 'id', 'last_name', 'updated_at'],
       addresses: [
         'address',
         'address2',
@@ -25,6 +45,7 @@ const cases: ExpectedSchemaCase = {
         'active',
         'address_id',
         'created_at',
+        'deleted_at',
         'email',
         'first_name',
         'id',
@@ -37,6 +58,7 @@ const cases: ExpectedSchemaCase = {
       films: [
         'created_at',
         'description',
+        'deleted_at',
         'id',
         'language_id',
         'length',
@@ -75,6 +97,7 @@ const cases: ExpectedSchemaCase = {
         'active',
         'address_id',
         'created_at',
+        'deleted_at',
         'email',
         'first_name',
         'id',
@@ -85,11 +108,11 @@ const cases: ExpectedSchemaCase = {
         'updated_at',
         'username',
       ],
-      stores: ['address_id', 'created_at', 'id', 'manager_staff_id', 'updated_at'],
+      stores: ['address_id', 'created_at', 'deleted_at', 'id', 'manager_staff_id', 'updated_at'],
     },
     snakeSingular: {
       SequelizeMeta: ['name'],
-      actor: ['created_at', 'first_name', 'id', 'last_name', 'updated_at'],
+      actor: ['created_at', 'deleted_at', 'first_name', 'id', 'last_name', 'updated_at'],
       address: [
         'address',
         'address2',
@@ -107,6 +130,7 @@ const cases: ExpectedSchemaCase = {
         'active',
         'address_id',
         'created_at',
+        'deleted_at',
         'email',
         'first_name',
         'id',
@@ -118,6 +142,7 @@ const cases: ExpectedSchemaCase = {
       film_category: ['category_id', 'created_at', 'film_id', 'id', 'updated_at'],
       film: [
         'created_at',
+        'deleted_at',
         'description',
         'id',
         'language_id',
@@ -157,6 +182,7 @@ const cases: ExpectedSchemaCase = {
         'active',
         'address_id',
         'created_at',
+        'deleted_at',
         'email',
         'first_name',
         'id',
@@ -167,11 +193,11 @@ const cases: ExpectedSchemaCase = {
         'updated_at',
         'username',
       ],
-      store: ['address_id', 'created_at', 'id', 'manager_staff_id', 'updated_at'],
+      store: ['address_id', 'created_at', 'deleted_at', 'id', 'manager_staff_id', 'updated_at'],
     },
     camelPlural: {
       SequelizeMeta: ['name'],
-      Actors: ['createdAt', 'firstName', 'id', 'lastName', 'updatedAt'],
+      Actors: ['createdAt', 'deletedAt', 'firstName', 'id', 'lastName', 'updatedAt'],
       Addresses: [
         'address',
         'address2',
@@ -189,6 +215,7 @@ const cases: ExpectedSchemaCase = {
         'active',
         'addressId',
         'createdAt',
+        'deletedAt',
         'email',
         'firstName',
         'id',
@@ -200,6 +227,7 @@ const cases: ExpectedSchemaCase = {
       FilmCategories: ['categoryId', 'createdAt', 'filmId', 'id', 'updatedAt'],
       Films: [
         'createdAt',
+        'deletedAt',
         'description',
         'id',
         'languageId',
@@ -239,6 +267,7 @@ const cases: ExpectedSchemaCase = {
         'active',
         'addressId',
         'createdAt',
+        'deletedAt',
         'email',
         'firstName',
         'id',
@@ -249,11 +278,11 @@ const cases: ExpectedSchemaCase = {
         'updatedAt',
         'username',
       ],
-      Stores: ['addressId', 'createdAt', 'id', 'managerStaffId', 'updatedAt'],
+      Stores: ['addressId', 'createdAt', 'deletedAt', 'id', 'managerStaffId', 'updatedAt'],
     },
     camelSingular: {
       SequelizeMeta: ['name'],
-      Actor: ['createdAt', 'firstName', 'id', 'lastName', 'updatedAt'],
+      Actor: ['createdAt', 'deletedAt', 'firstName', 'id', 'lastName', 'updatedAt'],
       Address: [
         'address',
         'address2',
@@ -271,6 +300,7 @@ const cases: ExpectedSchemaCase = {
         'active',
         'addressId',
         'createdAt',
+        'deletedAt',
         'email',
         'firstName',
         'id',
@@ -282,6 +312,7 @@ const cases: ExpectedSchemaCase = {
       FilmCategory: ['categoryId', 'createdAt', 'filmId', 'id', 'updatedAt'],
       Film: [
         'createdAt',
+        'deletedAt',
         'description',
         'id',
         'languageId',
@@ -321,6 +352,7 @@ const cases: ExpectedSchemaCase = {
         'active',
         'addressId',
         'createdAt',
+        'deletedAt',
         'email',
         'firstName',
         'id',
@@ -331,19 +363,29 @@ const cases: ExpectedSchemaCase = {
         'updatedAt',
         'username',
       ],
-      Store: ['addressId', 'createdAt', 'id', 'managerStaffId', 'updatedAt'],
+      Store: ['addressId', 'createdAt', 'deletedAt', 'id', 'managerStaffId', 'updatedAt'],
     },
     noTimestamps: {
       SequelizeMeta: ['name'],
-      actors: ['first_name', 'id', 'last_name'],
+      actors: ['deleted_at', 'first_name', 'id', 'last_name'],
       addresses: ['address', 'address2', 'city_id', 'id', 'phone', 'postal_code'],
       categories: ['id', 'name'],
       cities: ['city', 'country_id', 'id'],
       countries: ['country', 'id'],
-      customers: ['active', 'address_id', 'email', 'first_name', 'id', 'last_name', 'store_id'],
+      customers: [
+        'active',
+        'address_id',
+        'deleted_at',
+        'email',
+        'first_name',
+        'id',
+        'last_name',
+        'store_id',
+      ],
       film_actors: ['actor_id', 'film_id', 'id'],
       film_categories: ['category_id', 'film_id', 'id'],
       films: [
+        'deleted_at',
         'description',
         'id',
         'language_id',
@@ -363,6 +405,7 @@ const cases: ExpectedSchemaCase = {
       staffs: [
         'active',
         'address_id',
+        'deleted_at',
         'email',
         'first_name',
         'id',
@@ -372,11 +415,11 @@ const cases: ExpectedSchemaCase = {
         'store_id',
         'username',
       ],
-      stores: ['address_id', 'id', 'manager_staff_id'],
+      stores: ['address_id', 'deleted_at', 'id', 'manager_staff_id'],
     },
     prefixPks: {
       SequelizeMeta: ['name'],
-      actors: ['created_at', 'first_name', 'actor_id', 'last_name', 'updated_at'],
+      actors: ['created_at', 'deleted_at', 'first_name', 'actor_id', 'last_name', 'updated_at'],
       addresses: [
         'address',
         'address2',
@@ -394,6 +437,7 @@ const cases: ExpectedSchemaCase = {
         'active',
         'address_id',
         'created_at',
+        'deleted_at',
         'email',
         'first_name',
         'customer_id',
@@ -405,6 +449,7 @@ const cases: ExpectedSchemaCase = {
       film_categories: ['category_id', 'created_at', 'film_id', 'film_category_id', 'updated_at'],
       films: [
         'created_at',
+        'deleted_at',
         'description',
         'film_id',
         'language_id',
@@ -444,6 +489,7 @@ const cases: ExpectedSchemaCase = {
         'active',
         'address_id',
         'created_at',
+        'deleted_at',
         'email',
         'first_name',
         'staff_id',
@@ -454,7 +500,14 @@ const cases: ExpectedSchemaCase = {
         'updated_at',
         'username',
       ],
-      stores: ['address_id', 'created_at', 'store_id', 'manager_staff_id', 'updated_at'],
+      stores: [
+        'address_id',
+        'created_at',
+        'deleted_at',
+        'store_id',
+        'manager_staff_id',
+        'updated_at',
+      ],
     },
   },
 }

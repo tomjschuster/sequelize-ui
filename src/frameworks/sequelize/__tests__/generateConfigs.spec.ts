@@ -63,4 +63,22 @@ describe('Sequelize Framework', () => {
     const code = SequelizeFramework.generate({ schema: sakila, dbOptions })
     expect(code).toMatchSpecificSnapshot(`./__snapshots__/config-${kebabCase(key)}.shot`)
   })
+
+  const paranoidCases: Record<string, DbOptions> = {
+    snakePlural,
+    noTimestamps,
+  }
+
+  const paranoidSchema = {
+    ...sakila,
+    models: sakila.models.map((model) => ({ ...model, softDelete: true })),
+  }
+
+  it.each(Object.entries(paranoidCases))(
+    'generates the correct code for paranoid models with %s',
+    (key, dbOptions) => {
+      const code = SequelizeFramework.generate({ schema: paranoidSchema, dbOptions })
+      expect(code).toMatchSpecificSnapshot(`./__snapshots__/config-paranoid-${kebabCase(key)}.shot`)
+    },
+  )
 })

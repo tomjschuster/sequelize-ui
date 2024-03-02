@@ -45,7 +45,7 @@ import { SAKILA_ID } from './ids'
 
 const time = fromParts(2020, 1, 1)
 
-enum Id {
+export enum Id {
   Actor = 'Cj2ryEukV8eC6pxPh0ImQ',
   Address = 'EaeyW54286H0LYMlL4yNC',
   Category = 'ghwqmtb04vVN1XjMCSfaC',
