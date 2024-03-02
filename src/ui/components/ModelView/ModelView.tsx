@@ -2,6 +2,7 @@ import { Association, Field, Model, Schema } from '@src/core/schema'
 import {
   backgroundColor,
   classnames,
+  display,
   fontSize,
   height,
   margin,
@@ -56,12 +57,15 @@ export default function ModelView({
         current={`${model && titleCase(model.name)} (model)`}
       />
       <div className={classnames(sectionWide)}>
-        <h2 className={classnames(title)}>Model</h2>
-        <div className={classnames(margin('mb-11'))}>
-          <p className={classnames(fontSize('text-lg'), breakWords)}>
-            Name: {titleCase(model.name)}
-          </p>
-        </div>
+        <h2 className={classnames(title)}>
+          <pre>{titleCase(model.name)}</pre>
+        </h2>
+        <ul className={classnames(margin('mb-11'))}>
+          <li className={classnames(fontSize('text-base'), breakWords, display('flex'))}>
+            <span className={classnames(margin('mr-2'))}>Soft Delete:</span>
+            <pre>{model.softDelete.toString()}</pre>
+          </li>
+        </ul>
       </div>
       <div className={classnames(sectionWide)}>
         <h3 className={classnames(title)}>Fields</h3>
