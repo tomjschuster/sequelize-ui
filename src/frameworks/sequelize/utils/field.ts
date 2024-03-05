@@ -64,7 +64,7 @@ type FieldOptionsArgs = {
 function fieldOptions({
   field: { name, type, required, primaryKey, unique },
   define,
-  dbOptions: { caseStyle, sqlDialect },
+  dbOptions: { sqlDialect, caseStyle },
   migration,
 }: FieldOptionsArgs): (string | null)[] {
   return [
@@ -132,13 +132,14 @@ function defaultValue(dataType: DataType, dialect: SqlDialect, migration: boolea
       if (!dataType.defaultNow) {
         return null
       }
+
       if (migration) {
         const timestamp = currentTimestamp(dialect, dateTimeTypeToGranularity(dataType))
         const fn = timestamp.type === SqlCurrentTimestampType.Literal ? 'literal' : 'fn'
         return `Sequelize.${fn}('${timestamp.value}')`
       }
 
-      return `DataTypes.NOW`
+      return 'DataTypes.NOW'
     }
 
     case DataTypeType.Uuid:

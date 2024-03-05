@@ -241,4 +241,5 @@ export function currentTimestamp(
       }
   }
 }
+
 export const MAX_IDENTIFIER_LENGTH = 63
