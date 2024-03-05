@@ -138,7 +138,7 @@ export function displayDataTypeType(type: DataTypeType): string {
   }
 }
 
-function displayDefaultValue(dataType: DataType): string | null {
+export function displayDefaultValue(dataType: DataType): string | null {
   switch (dataType.type) {
     case DataTypeType.String:
     case DataTypeType.Text:
@@ -180,9 +180,7 @@ export function displayDefaultJsonValue(defaultType: DefaultJsonValue): string {
 }
 
 function displayDataTypeOptions(dataType: DataType): string {
-  const defaultValue = displayDefaultValue(dataType)
   const options: string[] = [
-    defaultValue ? `default: ${defaultValue}` : null,
     isStringType(dataType) && dataType.length !== null && `length: ${dataType.length}`,
     isNumberType(dataType) && dataType.unsigned && 'unsigned',
     isIntegerType(dataType) && dataType.autoincrement && 'autoincrement',

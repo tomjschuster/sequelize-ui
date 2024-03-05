@@ -1,12 +1,14 @@
-import { displayDataType, Field } from '@src/core/schema'
+import { displayDataType, displayDefaultValue, Field } from '@src/core/schema'
 import {
   classnames,
   display,
   fontWeight,
   inset,
   justifyContent,
+  margin,
   padding,
   position,
+  toClassname,
 } from '@src/ui/styles/classnames'
 import { breakWordsMinus8, list, panelHeader } from '@src/ui/styles/utils'
 import { noCase } from '@src/utils/string'
@@ -21,6 +23,8 @@ type FieldViewProps = {
   onClickDelete: () => void
 }
 function FieldView({ field, onClickEdit, onClickDelete }: FieldViewProps) {
+  const defaultValue = displayDefaultValue(field.type)
+
   return (
     <>
       <div
@@ -47,6 +51,16 @@ function FieldView({ field, onClickEdit, onClickDelete }: FieldViewProps) {
         {field.primaryKey && <li>Primary key</li>}
         {field.required && <li>Required</li>}
         {field.unique && <li>Unique</li>}
+        {defaultValue && (
+          <li>
+            <span className={classnames(display('flex'))}>
+              Default:{' '}
+              <pre className={classnames(margin('ml-1'), toClassname('pt-[0.5px]'))}>
+                {defaultValue}
+              </pre>
+            </span>
+          </li>
+        )}
       </ul>
     </>
   )

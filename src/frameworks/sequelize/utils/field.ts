@@ -1,5 +1,13 @@
 import { lines } from '@src/core/codegen'
-import { caseByDbCaseStyle, DateTimeGranularity, DbCaseStyle, DbOptions } from '@src/core/database'
+import {
+  caseByDbCaseStyle,
+  currentTimestamp,
+  DateTimeGranularity,
+  DbCaseStyle,
+  DbOptions,
+  SqlCurrentTimestampType,
+  SqlDialect,
+} from '@src/core/database'
 import {
   DataType,
   DataTypeType,
@@ -96,12 +104,12 @@ function autoincrementField(dataType: DataType): string | null {
     : null
 }
 
-function defaultField(dataType: DataType): string | null {
-  const value = defaultValue(dataType)
+function defaultField(dataType: DataType, dialect: SqlDialect, migration: boolean): string | null {
+  const value = defaultValue(dataType, dialect, migration)
   return value ? `defaultValue: ${value}` : null
 }
 
-function defaultValue(dataType: DataType): string | null {
+function defaultValue(dataType: DataType, dialect: SqlDialect, migration: boolean): string | null {
   switch (dataType.type) {
     case DataTypeType.String:
     case DataTypeType.Text:
@@ -120,8 +128,19 @@ function defaultValue(dataType: DataType): string | null {
       return dataType.defaultEmptyArray ? '[]' : null
     case DataTypeType.Date:
     case DataTypeType.DateTime:
-    case DataTypeType.Time:
-      return dataType.defaultNow ? 'DataTypes.NOW' : null
+    case DataTypeType.Time: {
+      if (!dataType.defaultNow) {
+        return null
+      }
+      if (migration) {
+        const timestamp = currentTimestamp(dialect, dateTimeTypeToGranularity(dataType))
+        const fn = timestamp.type === SqlCurrentTimestampType.Literal ? 'literal' : 'fn'
+        return `Sequelize.${fn}('${timestamp.value}')`
+      }
+
+      return `DataTypes.NOW`
+    }
+
     case DataTypeType.Uuid:
       return dataType.defaultVersion ? sequelizeUuidVersion(dataType.defaultVersion) : null
 
