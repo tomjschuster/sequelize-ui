@@ -68,7 +68,7 @@
         "BIGINT": {
           "additionalProperties": true,
           "properties": {
-            "defaultValue": { "nullable": true, "type": "uint32" },
+            "defaultValue": { "nullable": true, "type": "int32" },
             "unsigned": { "type": "boolean" },
             "autoincrement": { "type": "boolean" }
           }
@@ -142,7 +142,7 @@
             "autoincrement": { "type": "boolean" }
           },
           "optionalProperties": {
-            "defaultValue": { "nullable": true, "type": "uint32" }
+            "defaultValue": { "nullable": true, "type": "int32" }
           }
         },
         "JSON": {
@@ -173,7 +173,7 @@
             "autoincrement": { "type": "boolean" }
           },
           "optionalProperties": {
-            "defaultValue": { "nullable": true, "type": "uint32" }
+            "defaultValue": { "nullable": true, "type": "int32" }
           }
         },
         "STRING": {
