@@ -199,6 +199,12 @@ export function isDateTimeType(dataType: DataType): dataType is DateTimeTypes {
   return dateTypeTypes.includes(dataType.type)
 }
 
+export type JsonType = JsonDataType | JsonBDataType
+
+export function isJsonDataType(dataType: DataType): dataType is JsonType {
+  return [DataTypeType.Json, DataTypeType.JsonB].includes(dataType.type)
+}
+
 export type NumberType =
   | IntegerDataType
   | BigIntDataType

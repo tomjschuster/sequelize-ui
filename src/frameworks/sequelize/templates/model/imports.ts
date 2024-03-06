@@ -1,6 +1,6 @@
 import { lines } from '@src/core/codegen'
 import { DbOptions } from '@src/core/database'
-import { AssociationTypeType, DataType, DataTypeType, Model } from '@src/core/schema'
+import { AssociationTypeType, DataType, Model, jsonDataType } from '@src/core/schema'
 import { hasJsonType, noSupportedDetails, notSupportedComment } from '../../utils/dataTypes'
 import { ModelAssociation, modelName } from '../../utils/model'
 
@@ -103,7 +103,7 @@ const belongsToManyMixins = lines([
 type TypeImportArgs = [filename: string, types: string[]]
 
 function importJsonType({ sqlDialect }: DbOptions): Array<string | null> {
-  const json: DataType = { type: DataTypeType.Json }
+  const json: DataType = jsonDataType()
   const comment = notSupportedComment(json, sqlDialect)
   return [noSupportedDetails(json, sqlDialect), `${comment}import { Json } from '../types'`]
 }
