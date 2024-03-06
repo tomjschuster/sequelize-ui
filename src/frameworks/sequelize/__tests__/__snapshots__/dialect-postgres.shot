@@ -47,16 +47,16 @@ export default db
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "pg": "^8.7.3",
+    "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.16.2"
+    "sequelize": "^6.37.1"
   },
   "devDependencies": {
-    "@types/node": "^16.11.7",
-    "@types/validator": "^13.7.1",
-    "sequelize-cli": "^6.4.1",
-    "tsc-watch": "^4.6.0",
-    "typescript": "^4.5.5"
+    "@types/node": "^20.11.24",
+    "@types/validator": "^13.11.9",
+    "sequelize-cli": "^6.6.2",
+    "tsc-watch": "^6.0.4",
+    "typescript": "^5.3.3"
   }
 }
 

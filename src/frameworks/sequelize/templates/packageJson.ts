@@ -55,34 +55,34 @@ function scripts({ sqlDialect, migrations }: DbOptions): string {
 
 type Dependency = [name: string, version: string]
 
-const commonDeps = (): Dependency[] => [['sequelize', '^6.16.2']]
+const commonDeps = (): Dependency[] => [['sequelize', '^6.37.1']]
 
 function dialectDeps({ sqlDialect }: DbOptions): Dependency[] {
   switch (sqlDialect) {
     case SqlDialect.MariaDb:
-      return [['mariadb', '^2.5.5']]
+      return [['mariadb', '^3.2.3']]
     case SqlDialect.MsSql:
-      return [['tedious', '^14.3.0']]
+      return [['tedious', '^17.0.0']]
     case SqlDialect.MySql:
-      return [['mysql2', '^2.3.3']]
+      return [['mysql2', '^3.9.2']]
     case SqlDialect.Postgres:
       return [
-        ['pg', '^8.7.3'],
+        ['pg', '^8.11.3'],
         ['pg-hstore', '^2.3.4'],
       ]
     case SqlDialect.Sqlite:
-      return [['sqlite3', '^5.0.2']]
+      return [['sqlite3', '^5.1.7']]
   }
 }
 
 function commonDevDeps(): Dependency[] {
   return [
-    ['@types/node', '^16.11.7'],
-    ['@types/validator', '^13.7.1'],
-    ['sequelize-cli', '^6.4.1'],
-    ['tsc-watch', '^4.6.0'],
-    ['typescript', '^4.5.5'],
-  ].filter((dep): dep is Dependency => !!dep)
+    ['@types/node', '^20.11.24'],
+    ['@types/validator', '^13.11.9'],
+    ['sequelize-cli', '^6.6.2'],
+    ['tsc-watch', '^6.0.4'],
+    ['typescript', '^5.3.3'],
+  ]
 }
 
 function dialectDevDeps({ sqlDialect }: DbOptions): Dependency[] {
@@ -90,13 +90,13 @@ function dialectDevDeps({ sqlDialect }: DbOptions): Dependency[] {
     case SqlDialect.MariaDb:
       return []
     case SqlDialect.MsSql:
-      return [['@types/tedious', '^4.0.3']]
+      return [['@types/tedious', '^4.0.14']]
     case SqlDialect.MySql:
       return []
     case SqlDialect.Postgres:
       return []
     case SqlDialect.Sqlite:
-      return [['@types/sqlite3', '^3.1.8']]
+      return [['@types/sqlite3', '^3.1.11']]
   }
 }
 
