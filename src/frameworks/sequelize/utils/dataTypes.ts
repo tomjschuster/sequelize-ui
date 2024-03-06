@@ -4,6 +4,7 @@ import {
   DataType,
   DataTypeType,
   EnumDataType,
+  isJsonDataType,
   isNumberType,
   isNumericType,
   isStringType,
@@ -171,10 +172,10 @@ function displayNumeric(dataType: NumericType): string {
   const { precision } = dataType
 
   const numeric = precision
-    ? `.PRECISION(${precision.precision}${precision.scale ? `, ${precision.scale}` : ''})`
+    ? `(${precision.precision}${precision.scale ? `, ${precision.scale}` : ''})`
     : ''
 
-  return `${displayNumber(dataType)}${numeric}`
+  return `${numeric}${displayNumber(dataType)}`
 }
 
 function displayEnum(dataType: EnumDataType): string {
@@ -186,7 +187,7 @@ function displayArray(dataType: ArrayDataType): string {
 }
 
 export function hasJsonType(model: Model): boolean {
-  return model.fields.some((f) => f.type.type === DataTypeType.Json)
+  return model.fields.some((f) => isJsonDataType(f.type))
 }
 
 export function notSupportedComment(type: DataType, dialect: SqlDialect): string {
