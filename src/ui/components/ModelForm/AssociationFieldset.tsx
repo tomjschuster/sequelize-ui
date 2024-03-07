@@ -201,6 +201,7 @@ function AssociationFieldset({
         value={association.alias || ''}
         placeholder={aliasPlaceholder(association, targetModel)}
         error={errors?.alias}
+        fixedErrorContainer
         onChange={handleChangeAlias}
       />
       <TextInput
@@ -209,6 +210,7 @@ function AssociationFieldset({
         label="Foreign key"
         value={association.foreignKey || ''}
         error={errors?.foreignKey}
+        fixedErrorContainer
         onChange={handleChangeForeignKey}
       />
       {isManytoMany(association) && schema.models.length > 0 && (
@@ -238,6 +240,7 @@ function AssociationFieldset({
               label="Through table"
               value={association.type.through.table}
               error={errors?.throughTable}
+              fixedErrorContainer
               onChange={handleChangeThroughTable}
             />
           )}
@@ -247,6 +250,7 @@ function AssociationFieldset({
             label="Target FK"
             value={association.type.targetFk || ''}
             error={errors?.targetForeignKey}
+            fixedErrorContainer
             onChange={handleChangeTargetForeignKey}
           />
         </>

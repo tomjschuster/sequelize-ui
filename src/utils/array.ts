@@ -8,6 +8,10 @@ export function arrayToLookup<T>(array: T[], toKey: (value: T) => string): Map<s
   return lookup
 }
 
+export function dedup<T extends string | number | boolean>(array: T[]): T[] {
+  return dedupBy(array, (x) => x.toString())
+}
+
 export function dedupBy<T>(array: T[], fn: (v: T) => string): T[] {
   const output: T[] = []
   const lookup: Record<string, boolean> = {}

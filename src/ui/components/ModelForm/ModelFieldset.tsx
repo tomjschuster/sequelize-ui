@@ -38,6 +38,7 @@ function ModelFieldset({ model, errors, onChange }: ModelFieldsetProps): React.R
           label="Name"
           value={model.name}
           error={errors.name}
+          fixedErrorContainer
           onChange={handleChangeName}
         />
       </div>

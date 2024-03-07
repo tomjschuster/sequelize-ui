@@ -14,6 +14,7 @@ function TextInput({
   className,
   label,
   error,
+  fixedErrorContainer,
   value,
   onChange,
   ...rest
@@ -24,7 +25,13 @@ function TextInput({
   )
 
   return (
-    <InputWrapper id={id} className={className} label={label} error={error}>
+    <InputWrapper
+      id={id}
+      className={className}
+      label={label}
+      error={error}
+      fixedErrorContainer={fixedErrorContainer}
+    >
       <Input
         id={id}
         className={classnames(width('w-full'), fontSize('text-sm'), padding('py-1', 'px-2'))}
