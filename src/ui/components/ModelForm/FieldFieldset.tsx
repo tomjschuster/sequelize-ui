@@ -24,21 +24,18 @@ import {
   classnames,
   display,
   flexDirection,
+  gap,
   gridColumn,
-  gridRow,
+  gridTemplateColumns,
   inset,
   margin,
   padding,
   position,
-  toClassname,
 } from '@src/ui/styles/classnames'
 import { fieldsetGrid } from '@src/ui/styles/utils'
 import { dedup } from '@src/utils/array'
 import React from 'react'
 import IconButton from '../form/IconButton'
-import TextArea from '../form/TextArea'
-
-const fieldSelectClassname = classnames(margin('mt-2', 'first:mt-0'))
 
 type FieldFieldsetProps = {
   field: Field
@@ -48,7 +45,7 @@ type FieldFieldsetProps = {
 }
 function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps) {
   const [enumInputValue, setEnumInputValue] = React.useState<string | undefined>(() =>
-    field.type.type === DataTypeType.Enum ? field.type.values.join('\n') : undefined,
+    field.type.type === DataTypeType.Enum ? field.type.values.join(', ') : undefined,
   )
 
   const handleChange = React.useCallback(
@@ -238,19 +235,153 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
       />
       <div
         className={classnames(
-          gridColumn('col-span-12', 'xs:col-span-6'),
-          toClassname('xs:row-start-3'),
-          toClassname('xs:col-start-7'),
-          gridRow('row-span-4'),
-          margin('mb-4', 'xs:mb-0'),
-          display('flex'),
-          flexDirection('flex-col'),
+          display('grid'),
+          gridTemplateColumns('grid-cols-12'),
+          gridColumn('col-span-12', 'xs:col-span-12'),
+          gap('gap-y-0', 'gap-x-1'),
+        )}
+      >
+        <div
+          className={classnames(
+            gridColumn('col-span-12', 'xs:col-span-6'),
+            display('flex'),
+            flexDirection('flex-col'),
+          )}
+        >
+          <Checkbox
+            id={`field-pk-${field.id}`}
+            label="Primary key"
+            checked={!!field.primaryKey}
+            onChange={handleChangePrimaryKey}
+          />
+          <Checkbox
+            id={`field-required-${field.id}`}
+            label="Required"
+            checked={!!field.required}
+            onChange={handleChangeRequired}
+          />
+          <Checkbox
+            id={`field-unique-${field.id}`}
+            label="Unique"
+            checked={!!field.unique}
+            onChange={handleChangeUnique}
+          />
+        </div>
+        <div
+          className={classnames(
+            margin('mt-2', 'xs:mt-0'),
+            gridColumn('col-span-12', 'xs:col-span-6'),
+            flexDirection('flex-col'),
+          )}
+        >
+          {isTextDataType(field.type) && (
+            <TextInput
+              id={`field-default-text-${field.id}`}
+              label="Default"
+              value={field.type.defaultValue}
+              onChange={handleChangeDefaultText}
+            />
+          )}
+          {isNumericType(field.type) && (
+            <NumberInput
+              id={`field-default-float-${field.id}`}
+              label="Default"
+              value={field.type.defaultValue}
+              min={field.type.unsigned ? 0 : undefined}
+              allowDecimals
+              onChange={handleChangeDefaultNumber}
+            />
+          )}
+          {isIntegerType(field.type) && (
+            <NumberInput
+              id={`field-default-integer-${field.id}`}
+              label="Default"
+              value={field.type.defaultValue}
+              min={field.type.unsigned ? 0 : undefined}
+              onChange={handleChangeDefaultNumber}
+            />
+          )}
+          {field.type.type == DataTypeType.Boolean && (
+            <Select<boolean | null>
+              id={`field-default-boolean-${field.id}`}
+              label="Default"
+              value={field.type.defaultValue}
+              options={[
+                ['none', null],
+                ['true', true],
+                ['false', false],
+              ]}
+              onChange={handleChangeDefaultBoolean}
+            />
+          )}
+          {isDateTimeType(field.type) && (
+            <Checkbox
+              id={`field-default-now-${field.id}`}
+              label="Default to now"
+              checked={!!field.type.defaultNow}
+              onChange={handleChangeDateTimeDefault}
+            />
+          )}
+          {field.type.type === DataTypeType.Enum && (
+            <Select<string | null>
+              id={`field-default-enum-${field.id}`}
+              label="Default"
+              options={[['none', null], ...field.type.values.map<[string, string]>((v) => [v, v])]}
+              value={field.type.defaultValue}
+              onChange={handleChangeDefaultEnum}
+            />
+          )}
+          {field.type.type === DataTypeType.Uuid && (
+            <Select<UuidType | null>
+              id={`field-default-uuid-${field.id}`}
+              label="Default"
+              options={[
+                ['none', null],
+                [UuidType.V1, UuidType.V1],
+                [UuidType.V4, UuidType.V4],
+              ]}
+              value={field.type.defaultVersion}
+              display={(v) => `${v ? `UUID ${v}` : 'none'}`}
+              onChange={handleChangeDefaultUuid}
+            />
+          )}
+          {isJsonDataType(field.type) && (
+            <Select<DefaultJsonValue | null>
+              id={`field-default-json-${field.id}`}
+              label="Default"
+              options={[
+                ['none', null],
+                ['empty-object', DefaultJsonValue.EmptyObject],
+                ['empty-array', DefaultJsonValue.EmptyArray],
+              ]}
+              value={field.type.defaultValue}
+              display={(v) => (v ? displayDefaultJsonValue(v) : 'none')}
+              onChange={handleChangeDefaultJson}
+            />
+          )}
+          {field.type.type == DataTypeType.Array && (
+            <Checkbox
+              id={`field-default-array-${field.id}`}
+              label="Default to empty"
+              checked={!!field.type.defaultEmptyArray}
+              onChange={handleChangeDefaultArray}
+            />
+          )}
+        </div>
+      </div>
+      <div
+        className={classnames(
+          gridColumn('col-span-12', 'xs:col-span-12'),
+          margin('mt-2', 'xs:mt-4'),
+          display('grid'),
+          gridTemplateColumns('grid-cols-12'),
+          gap('gap-y-0', 'gap-x-1'),
         )}
       >
         {field.type.type === DataTypeType.String && (
           <NumberInput
             id={`field-string-length-${field.id}`}
-            className={fieldSelectClassname}
+            className={classnames(gridColumn('col-span-12', 'xs:col-span-6'))}
             label="Length"
             value={field.type.length}
             min={1}
@@ -258,17 +389,11 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
             onChange={handleChangeStringLength}
           />
         )}
-        {isNumberType(field.type) && (
-          <Checkbox
-            id={`field-unsigned-${field.id}`}
-            label="Unsigned"
-            checked={!!field.type.unsigned}
-            onChange={handleChangeUnsigned}
-          />
-        )}
+
         {isIntegerType(field.type) && (
           <Checkbox
             id={`field-autoincrement-${field.id}`}
+            className={classnames(gridColumn('col-span-6'))}
             label="Autoincrement"
             checked={!!field.type.autoincrement}
             onChange={handleChangeAutoincrement}
@@ -278,7 +403,8 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
           <>
             <NumberInput
               id={`field-precision-${field.id}`}
-              className={fieldSelectClassname}
+              className={classnames(gridColumn('col-span-12', 'xs:col-span-6'), margin('mb-2'))}
+              disabled={field.type.precision?.precision === undefined}
               label="Precision"
               value={field.type.precision?.precision}
               min={1}
@@ -287,7 +413,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
             />
             <NumberInput
               id={`field-scale-${field.id}`}
-              className={fieldSelectClassname}
+              className={classnames(gridColumn('col-span-12', 'xs:col-span-6'), margin('mb-2'))}
               disabled={field.type.precision?.precision === undefined}
               label="Scale"
               value={field.type.precision?.scale}
@@ -297,13 +423,21 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
             />
           </>
         )}
+        {isNumberType(field.type) && (
+          <Checkbox
+            id={`field-unsigned-${field.id}`}
+            className={classnames(gridColumn('col-span-12', 'xs:col-span-6'))}
+            label="Unsigned"
+            checked={!!field.type.unsigned}
+            onChange={handleChangeUnsigned}
+          />
+        )}
         {field.type.type === DataTypeType.Enum && (
-          <TextArea
+          <TextInput
             id={`field-enum-values-${field.id}`}
             label="Enum values"
-            className={fieldSelectClassname}
+            className={classnames(gridColumn('col-span-12'))}
             value={enumInputValue}
-            rows={4}
             onChange={setEnumInputValue}
             onBlur={handleBlurEnumInput}
           />
@@ -311,140 +445,12 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         {field.type.type == DataTypeType.Array && (
           <Select<DataTypeType>
             id={`field-array-type-${field.id}`}
-            className={classnames(gridColumn('col-span-6'), fieldSelectClassname)}
+            className={classnames(gridColumn('col-span-6'))}
             label="Array type"
             options={DataTypeType}
             display={displayDataTypeType}
             value={field.type.arrayType.type}
             onChange={handleChangeArrayType}
-          />
-        )}
-      </div>
-      <div
-        className={classnames(
-          gridColumn('col-span-12', 'xs:col-span-6'),
-          toClassname('xs:col-start-1'),
-          toClassname('xs:row-start-3'),
-          display('flex'),
-          flexDirection('flex-col'),
-        )}
-      >
-        <Checkbox
-          id={`field-pk-${field.id}`}
-          label="Primary key"
-          checked={!!field.primaryKey}
-          onChange={handleChangePrimaryKey}
-        />
-        <Checkbox
-          id={`field-required-${field.id}`}
-          label="Required"
-          checked={!!field.required}
-          onChange={handleChangeRequired}
-        />
-        <Checkbox
-          id={`field-unique-${field.id}`}
-          label="Unique"
-          checked={!!field.unique}
-          onChange={handleChangeUnique}
-        />
-        {isTextDataType(field.type) && (
-          <TextInput
-            id={`field-default-text-${field.id}`}
-            className={fieldSelectClassname}
-            label="Default"
-            value={field.type.defaultValue}
-            onChange={handleChangeDefaultText}
-          />
-        )}
-        {isNumericType(field.type) && (
-          <NumberInput
-            id={`field-default-float-${field.id}`}
-            className={fieldSelectClassname}
-            label="Default"
-            value={field.type.defaultValue}
-            min={field.type.unsigned ? 0 : undefined}
-            allowDecimals
-            onChange={handleChangeDefaultNumber}
-          />
-        )}
-        {isIntegerType(field.type) && (
-          <NumberInput
-            id={`field-default-integer-${field.id}`}
-            className={fieldSelectClassname}
-            label="Default"
-            value={field.type.defaultValue}
-            min={field.type.unsigned ? 0 : undefined}
-            onChange={handleChangeDefaultNumber}
-          />
-        )}
-        {field.type.type == DataTypeType.Boolean && (
-          <Select<boolean | null>
-            id={`field-default-boolean-${field.id}`}
-            className={fieldSelectClassname}
-            label="Default"
-            value={field.type.defaultValue}
-            options={[
-              ['none', null],
-              ['true', true],
-              ['false', false],
-            ]}
-            onChange={handleChangeDefaultBoolean}
-          />
-        )}
-        {isDateTimeType(field.type) && (
-          <Checkbox
-            id={`field-default-now-${field.id}`}
-            label="Default to now"
-            checked={!!field.type.defaultNow}
-            onChange={handleChangeDateTimeDefault}
-          />
-        )}
-        {field.type.type === DataTypeType.Enum && (
-          <Select<string | null>
-            id={`field-default-enum-${field.id}`}
-            className={fieldSelectClassname}
-            label="Default"
-            options={[['none', null], ...field.type.values.map<[string, string]>((v) => [v, v])]}
-            value={field.type.defaultValue}
-            onChange={handleChangeDefaultEnum}
-          />
-        )}
-        {field.type.type === DataTypeType.Uuid && (
-          <Select<UuidType | null>
-            id={`field-default-uuid-${field.id}`}
-            className={fieldSelectClassname}
-            label="Default"
-            options={[
-              ['none', null],
-              [UuidType.V1, UuidType.V1],
-              [UuidType.V4, UuidType.V4],
-            ]}
-            value={field.type.defaultVersion}
-            display={(v) => `${v ? `UUID ${v}` : 'none'}`}
-            onChange={handleChangeDefaultUuid}
-          />
-        )}
-        {isJsonDataType(field.type) && (
-          <Select<DefaultJsonValue | null>
-            id={`field-default-json-${field.id}`}
-            className={fieldSelectClassname}
-            label="Default"
-            options={[
-              ['none', null],
-              ['empty-object', DefaultJsonValue.EmptyObject],
-              ['empty-array', DefaultJsonValue.EmptyArray],
-            ]}
-            value={field.type.defaultValue}
-            display={(v) => (v ? displayDefaultJsonValue(v) : 'none')}
-            onChange={handleChangeDefaultJson}
-          />
-        )}
-        {field.type.type == DataTypeType.Array && (
-          <Checkbox
-            id={`field-default-array-${field.id}`}
-            label="Default to empty"
-            checked={!!field.type.defaultEmptyArray}
-            onChange={handleChangeDefaultArray}
           />
         )}
       </div>
