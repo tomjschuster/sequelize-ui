@@ -18,6 +18,7 @@ export type FieldWrapperProps = {
   id: string
   label: string
   error?: string
+  fixedErrorContainer?: boolean
 }
 
 export type OptionsProps<T, P> = Override<

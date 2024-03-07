@@ -14,6 +14,7 @@ function TextArea({
   label,
   value,
   error,
+  fixedErrorContainer,
   onChange,
   ...rest
 }: TextAreaProps): React.ReactElement {
@@ -23,7 +24,7 @@ function TextArea({
   )
 
   return (
-    <InputWrapper id={id} label={label} error={error}>
+    <InputWrapper id={id} label={label} error={error} fixedErrorContainer={fixedErrorContainer}>
       <textarea
         id={id}
         className={classnames(width('w-full'), fontSize('text-sm'))}

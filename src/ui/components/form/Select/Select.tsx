@@ -19,6 +19,7 @@ function Select<T>({
   value,
   options,
   error,
+  fixedErrorContainer,
   display,
   onChange,
   disabled = () => false,
@@ -56,7 +57,13 @@ function Select<T>({
   )
 
   return id && label ? (
-    <InputWrapper id={id} label={label} error={error} className={className}>
+    <InputWrapper
+      id={id}
+      label={label}
+      error={error}
+      fixedErrorContainer={fixedErrorContainer}
+      className={className}
+    >
       {select}
     </InputWrapper>
   ) : (

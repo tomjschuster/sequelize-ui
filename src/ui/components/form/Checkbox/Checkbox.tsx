@@ -20,14 +20,24 @@ type CheckboxProps = Override<
   { checked: boolean }
 >
 
-function Checkbox({ id, label, checked, onChange, ...rest }: CheckboxProps): React.ReactElement {
+function Checkbox({
+  id,
+  label,
+  checked,
+  className,
+  onChange,
+  ...rest
+}: CheckboxProps): React.ReactElement {
   const handleChange = React.useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => onChange(evt.target.checked, evt),
     [onChange],
   )
 
   return (
-    <label className={classnames(display('flex'), alignItems('items-center'))} htmlFor={id}>
+    <label
+      className={classnames(display('flex'), alignItems('items-center'), toClassname(className))}
+      htmlFor={id}
+    >
       <input
         id={id}
         className={classnames(

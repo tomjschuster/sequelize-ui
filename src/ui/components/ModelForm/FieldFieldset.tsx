@@ -12,7 +12,7 @@ import {
 } from '@src/core/schema'
 import { FieldErrors } from '@src/core/validation/schema'
 import Checkbox from '@src/ui/components/form/Checkbox'
-import IntegerInput from '@src/ui/components/form/IntegerInput'
+import NumberInput from '@src/ui/components/form/NumberInput'
 import Select from '@src/ui/components/form/Select'
 import TextInput from '@src/ui/components/form/TextInput'
 import TrashIcon from '@src/ui/components/icons/Trash'
@@ -30,6 +30,7 @@ import {
   position,
 } from '@src/ui/styles/classnames'
 import { fieldsetGrid } from '@src/ui/styles/utils'
+import { dedup } from '@src/utils/array'
 import React from 'react'
 import IconButton from '../form/IconButton'
 import TextArea from '../form/TextArea'
@@ -52,12 +53,15 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
 
   const handleBlurEnumInput = React.useCallback(() => {
     if (field.type.type === DataTypeType.Enum) {
-      const values =
+      const values = dedup(
         enumInputValue
           // clear leading/tracing non-word characters and any non-(word|space|-|;|,)
           ?.replaceAll(/^\W+|[^\w\n -,;]|\W+$/g, '')
           // split on , ; \n
-          .split(/[ ]*,[ ]*|[ ]*;[ ]*|[ ]*\n[ ]*/) || []
+          .split(/[ ]*,[ ]*|[ ]*;[ ]*|[ ]*\n[ ]*/)
+          .map((v) => v.trim())
+          .filter((v) => !!v) || [],
+      )
 
       handleChange({ type: { ...field.type, values } })
       setEnumInputValue(values.join('\n'))
@@ -165,6 +169,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         label="Field name"
         value={field.name}
         error={errors?.name}
+        fixedErrorContainer
         onChange={handleChangeName}
       />
       <Select<DataTypeType>
@@ -185,7 +190,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
         )}
       >
         {isStringType(field.type) && (
-          <IntegerInput
+          <NumberInput
             id={`field-string-length-${field.id}`}
             label="Length"
             value={field.type.length}
@@ -263,7 +268,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
       </div>
       {isNumericType(field.type) && (
         <>
-          <IntegerInput
+          <NumberInput
             id={`field-precision-${field.id}`}
             className={classnames(gridColumn('col-span-12', 'xs:col-span-6'))}
             label="Precision"
@@ -272,7 +277,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
             max={1000}
             onChange={handleChangePrecision}
           />
-          <IntegerInput
+          <NumberInput
             id={`field-scale-${field.id}`}
             className={classnames(gridColumn('col-span-12', 'xs:col-span-6'))}
             disabled={field.type.precision?.precision === undefined}

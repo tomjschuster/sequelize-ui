@@ -98,6 +98,7 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
             label="Name"
             value={schema.name}
             error={errors.name}
+            fixedErrorContainer
             onChange={handleChangeName}
           />
         </div>
@@ -112,6 +113,7 @@ function SchemaForm({ schema, newModel, errors, onChange }: SchemaFormProps): Re
                 className={classnames(padding('pt-4'))}
                 label="Name"
                 error={errors.models[m.id]?.name}
+                fixedErrorContainer
                 value={m.name}
                 onChange={(value) => handleChangeModelName(m.id, value)}
               />

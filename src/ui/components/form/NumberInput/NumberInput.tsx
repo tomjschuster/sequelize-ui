@@ -6,24 +6,29 @@ import InputWrapper, { alertId } from '../shared/InputWrapper'
 import { FieldProps } from '../shared/types'
 import { autofillDisable } from '../shared/utils'
 
-type IntegerInputProps = WithClassname<
+type NumberInputProps = WithClassname<
   FieldProps<
     number | undefined,
-    Override<React.InputHTMLAttributes<HTMLInputElement>, { min?: number; max?: number }>
+    Override<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      { min?: number; max?: number; allowDecimals?: boolean }
+    >
   >
 >
 
-function IntegerInput({
+function NumberInput({
   id,
   className,
   label,
   value,
   min,
   max,
+  allowDecimals,
   error,
+  fixedErrorContainer,
   onChange,
   ...rest
-}: IntegerInputProps): React.ReactElement {
+}: NumberInputProps): React.ReactElement {
   const handleChange = React.useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {
       if (!evt.target.value) onChange(undefined, evt)
@@ -39,7 +44,13 @@ function IntegerInput({
   )
 
   return (
-    <InputWrapper id={id} className={className} label={label} error={error}>
+    <InputWrapper
+      id={id}
+      className={className}
+      label={label}
+      error={error}
+      fixedErrorContainer={fixedErrorContainer}
+    >
       <Input
         className={classnames(
           padding('py-1', 'px-2', 'p-0.5'),
@@ -50,6 +61,7 @@ function IntegerInput({
         type="number"
         min={min}
         max={max}
+        step={allowDecimals ? 'any' : undefined}
         value={value === null ? '' : value}
         onChange={handleChange}
         aria-invalid={!!error}
@@ -61,4 +73,4 @@ function IntegerInput({
   )
 }
 
-export default React.memo(IntegerInput)
+export default React.memo(NumberInput)

@@ -23,6 +23,7 @@ export default function InputWrapper({
   className,
   label,
   error,
+  fixedErrorContainer,
   children,
 }: InputWrapperProps): React.ReactElement {
   return (
@@ -33,7 +34,7 @@ export default function InputWrapper({
           display('flex'),
           flexDirection('flex-col'),
           alignItems('items-start'),
-          padding({ 'pb-6': !error }),
+          padding({ 'pb-6': fixedErrorContainer && !error }),
         )}
       >
         <span className={classnames(fontSize('text-sm'))}>{label}</span>
