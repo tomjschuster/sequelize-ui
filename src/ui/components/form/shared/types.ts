@@ -28,6 +28,6 @@ export type OptionsProps<T, P> = Override<
 
 export type CommonOptionsProps<T> = {
   options: Options<T>
-  display: (value: T) => React.ReactNode | string
+  display?: (value: T) => React.ReactNode | string
   disabled?: (value: T) => boolean
 }

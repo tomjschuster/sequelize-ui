@@ -50,7 +50,7 @@ function Select<T>({
     >
       {optionsToList(options).map(([k, v]) => (
         <option key={id + k} value={k} disabled={disabled(v)}>
-          {display(v)}
+          {display ? display(v) : k}
         </option>
       ))}
     </select>
