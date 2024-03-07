@@ -67,7 +67,7 @@ function ToggleButton<T>({
             disabled={disabled(v)}
             onClick={handleChange(k)}
           >
-            {displayValue(v)}
+            {displayValue ? displayValue(v) : k}
           </button>
         )
       })}

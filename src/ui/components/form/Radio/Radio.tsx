@@ -48,7 +48,7 @@ function Radio<T>({
             {...rest}
           />
           <span className={classnames(padding('pl-2'), fontSize('text-sm'))}>
-            {displayValue(v)}
+            {displayValue ? displayValue(v) : k}
           </span>
         </label>
       ))}

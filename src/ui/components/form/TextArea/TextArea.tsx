@@ -1,12 +1,12 @@
-import { classnames, fontSize, width } from '@src/ui/styles/classnames'
+import { WithClassname, classnames, fontSize, width } from '@src/ui/styles/classnames'
+import { backgroundWhite } from '@src/ui/styles/utils'
 import React from 'react'
 import InputWrapper, { alertId } from '../shared/InputWrapper'
 import { FieldProps } from '../shared/types'
 import { autofillDisable } from '../shared/utils'
 
-type TextAreaProps = FieldProps<
-  string | undefined,
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>
+type TextAreaProps = WithClassname<
+  FieldProps<string | undefined, React.TextareaHTMLAttributes<HTMLTextAreaElement>>
 >
 
 function TextArea({
@@ -15,6 +15,7 @@ function TextArea({
   value,
   error,
   fixedErrorContainer,
+  className,
   onChange,
   ...rest
 }: TextAreaProps): React.ReactElement {
@@ -24,10 +25,16 @@ function TextArea({
   )
 
   return (
-    <InputWrapper id={id} label={label} error={error} fixedErrorContainer={fixedErrorContainer}>
+    <InputWrapper
+      id={id}
+      label={label}
+      error={error}
+      fixedErrorContainer={fixedErrorContainer}
+      className={className}
+    >
       <textarea
         id={id}
-        className={classnames(width('w-full'), fontSize('text-sm'))}
+        className={classnames(width('w-full'), fontSize('text-sm'), backgroundWhite)}
         value={value || undefined}
         onChange={handleChange}
         aria-invalid={!!error}
