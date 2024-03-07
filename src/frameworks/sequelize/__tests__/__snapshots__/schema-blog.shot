@@ -577,7 +577,7 @@ module.exports = {
         type: DataTypes.DATE,
         field: 'registered_at',
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: Sequelize.fn('NOW')
       },
       lastLogin: {
         type: DataTypes.DATE,

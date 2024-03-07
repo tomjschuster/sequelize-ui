@@ -44,7 +44,9 @@ function up({ model, dbOptions }: CreateModelMigrationArgs): string {
         [
           `await queryInterface.createTable('${tableName}', {`,
           lines(
-            model.fields.map((field) => fieldTemplate({ field, dbOptions, define: true })),
+            model.fields.map((field) =>
+              fieldTemplate({ field, dbOptions, define: true, migration: true }),
+            ),
             { depth: 2, separator: ',' },
           ),
           `})`,
