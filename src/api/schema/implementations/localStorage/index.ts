@@ -277,9 +277,7 @@ type ParseSchemaResult = {
 }
 
 function parseSchema(schema: unknown): Promise<ParseSchemaResult> {
-  return parseV1(schema)
-    .then((schema) => ({ schema, migrated: false }))
-    .catch(async () => ({ schema: await parseV0Lazy(schema), migrated: true }))
+  return parseV1(schema).then((schema) => ({ schema, migrated: false }))
 }
 
 async function parseV1(schema: unknown): Promise<Schema> {

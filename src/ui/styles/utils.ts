@@ -144,7 +144,7 @@ export const panelGrid = classnames(
   display('grid'),
   gridTemplateColumns('lg:grid-cols-3', 'md:grid-cols-2', 'sm:grid-cols-2', 'grid-cols-1'),
   gap('gap-6'),
-  gridAutoRows('auto-rows-fr'),
+  gridAutoRows('sm:auto-rows-fr'),
   width('w-full'),
 )
 
