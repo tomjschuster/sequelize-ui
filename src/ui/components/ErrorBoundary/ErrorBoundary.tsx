@@ -12,6 +12,7 @@ import {
   maxHeight,
   overflow,
   padding,
+  toClassname,
 } from '@src/ui/styles/classnames'
 import { inlineButton, link, list, section, text } from '@src/ui/styles/utils'
 import { clear } from '@src/utils/localStorage'
@@ -66,9 +67,10 @@ function ErrorView(): React.ReactElement {
         backgroundColor('bg-red-50'),
         maxHeight('max-h-full'),
         overflow('overflow-y-scroll'),
+        backgroundColor('bg-red-50', 'dark:bg-red-900'),
         borderRadius('rounded'),
         borderWidth('border'),
-        borderColor('border-red-900'),
+        borderColor('border-red-900', 'dark:border-red-100'),
       )}
     >
       <p className={text}>Sorry, there was an unexpected error. Please try one of the following:</p>
@@ -86,7 +88,10 @@ function ErrorView(): React.ReactElement {
           <button
             type="button"
             onClick={handleReset}
-            className={classnames(inlineButton(), backgroundColor('hover:bg-green-100'))}
+            className={classnames(
+              inlineButton(),
+              backgroundColor('hover:bg-green-100', toClassname('hover:dark:bg-green-800')),
+            )}
           >
             Reset your data
           </button>

@@ -1,7 +1,6 @@
 import {
   association,
   belongsToType,
-  DataTypeType,
   field,
   hasManyType,
   manyToManyTableType,
@@ -9,6 +8,7 @@ import {
   schema,
   Schema,
   stringDataType,
+  textDataType,
 } from '@src/core/schema'
 
 export const blogTranslatedFromLegacy: Schema = schema({
@@ -27,7 +27,7 @@ export const blogTranslatedFromLegacy: Schema = schema({
         field({
           id: '4c299161-38de-48b2-bab8-ccf451188344',
           name: 'Content',
-          type: { type: DataTypeType.Text },
+          type: textDataType(),
         }),
       ],
       associations: [
@@ -120,7 +120,7 @@ export const blogTranslatedFromLegacy: Schema = schema({
         field({
           id: '60ee41cc-7d56-4835-8ea4-70274fab7c4d',
           name: 'Content',
-          type: { type: DataTypeType.Text },
+          type: textDataType(),
           required: true,
         }),
       ],

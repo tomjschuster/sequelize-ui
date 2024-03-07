@@ -22,7 +22,7 @@ import { AssociationErrors } from '@src/core/validation/schema'
 import Radio from '@src/ui/components/form/Radio'
 import Select from '@src/ui/components/form/Select'
 import TextInput from '@src/ui/components/form/TextInput'
-import { classnames, gridColumn, height, inset, padding, position } from '@src/ui/styles/classnames'
+import { classnames, gridColumn, inset, padding, position } from '@src/ui/styles/classnames'
 import { fieldsetGrid } from '@src/ui/styles/utils'
 import { plural, singular, snakeCase } from '@src/utils/string'
 import React from 'react'
@@ -211,7 +211,6 @@ function AssociationFieldset({
         error={errors?.foreignKey}
         onChange={handleChangeForeignKey}
       />
-      {!isManytoMany(association) && <div className={classnames(height('h-30'))} />}
       {isManytoMany(association) && schema.models.length > 0 && (
         <>
           <Radio
