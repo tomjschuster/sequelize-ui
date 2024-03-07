@@ -1,9 +1,18 @@
 import { lines } from '@src/core/codegen'
-import { caseByDbCaseStyle, DbCaseStyle, DbOptions } from '@src/core/database'
+import {
+  caseByDbCaseStyle,
+  currentTimestamp,
+  DateTimeGranularity,
+  DbCaseStyle,
+  DbOptions,
+  SqlCurrentTimestampType,
+  SqlDialect,
+} from '@src/core/database'
 import {
   DataType,
   DataTypeType,
   dateTimeDataType,
+  DateTimeTypes,
   field,
   Field,
   integerDataType,
@@ -29,18 +38,22 @@ type FieldTemplateArgs = {
   field: Field
   dbOptions: DbOptions
   define?: boolean
+  migration?: boolean
 }
-export function fieldTemplate({ field, dbOptions, define }: FieldTemplateArgs): string {
+export function fieldTemplate({ field, dbOptions, define, migration }: FieldTemplateArgs): string {
   const comment = notSupportedComment(field.type, dbOptions.sqlDialect)
 
   return lines([
     noSupportedDetails(field.type, dbOptions.sqlDialect),
     `${comment}${camelCase(field.name)}: {`,
-    lines(fieldOptions({ field, dbOptions, define }), {
-      depth: 2,
-      separator: ',',
-      prefix: comment,
-    }),
+    lines(
+      fieldOptions({ field, dbOptions, define: define ?? false, migration: migration ?? false }),
+      {
+        depth: 2,
+        separator: ',',
+        prefix: comment,
+      },
+    ),
     `${comment}}`,
   ])
 }
@@ -48,13 +61,15 @@ export function fieldTemplate({ field, dbOptions, define }: FieldTemplateArgs): 
 type FieldOptionsArgs = {
   field: Field
   dbOptions: DbOptions
-  define?: boolean
+  define: boolean
+  migration: boolean
 }
 
 function fieldOptions({
   field: { name, type, required, primaryKey, unique },
   define,
-  dbOptions: { caseStyle },
+  dbOptions: { caseStyle, sqlDialect },
+  migration,
 }: FieldOptionsArgs): (string | null)[] {
   return [
     typeField(type),
@@ -63,7 +78,7 @@ function fieldOptions({
     autoincrementField(type),
     allowNullField(required),
     uniqueField(unique),
-    defaultField(type),
+    defaultField(type, sqlDialect, migration),
   ]
 }
 
@@ -93,9 +108,12 @@ function autoincrementField(dataType: DataType): string | null {
     : null
 }
 
-function defaultField(dataType: DataType) {
+function defaultField(dataType: DataType, dialect: SqlDialect, migration: boolean) {
   if (isDateTimeType(dataType) && dataType.defaultNow) {
-    return `defaultValue: DataTypes.NOW`
+    if (!migration) return `defaultValue: DataTypes.NOW`
+    const timestamp = currentTimestamp(dialect, dateTimeTypeToGranularity(dataType))
+    const fn = timestamp.type === SqlCurrentTimestampType.Literal ? 'literal' : 'fn'
+    return `defaultValue: Sequelize.${fn}('${timestamp.value}')`
   }
 
   if (dataType.type === DataTypeType.Uuid && dataType.defaultVersion) {
@@ -103,6 +121,17 @@ function defaultField(dataType: DataType) {
   }
 
   return null
+}
+
+function dateTimeTypeToGranularity(dataType: DateTimeTypes): DateTimeGranularity {
+  switch (dataType.type) {
+    case DataTypeType.DateTime:
+      return DateTimeGranularity.DateTime
+    case DataTypeType.Date:
+      return DateTimeGranularity.Date
+    case DataTypeType.Time:
+      return DateTimeGranularity.Time
+  }
 }
 
 type PrefixPkArgs = {

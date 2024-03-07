@@ -203,4 +203,42 @@ export function nounFormByDbNounForm(value: string, nounForm: DbNounForm): strin
   return nounForm === DbNounForm.Singular ? singular(value) : plural(value)
 }
 
+export enum DateTimeGranularity {
+  DateTime = 'DATE_TIME',
+  Date = 'DATE',
+  Time = 'TIME',
+}
+
+export type SqlCurrentTimestamp = {
+  type: SqlCurrentTimestampType
+  value: string
+}
+
+export enum SqlCurrentTimestampType {
+  Function = 'FUNCTION',
+  Literal = 'LITERAL',
+}
+
+export function currentTimestamp(
+  dialect: SqlDialect,
+  granularity: DateTimeGranularity,
+): SqlCurrentTimestamp {
+  switch (dialect) {
+    case SqlDialect.MariaDb:
+    case SqlDialect.MySql:
+    case SqlDialect.Postgres:
+      return { type: SqlCurrentTimestampType.Function, value: 'NOW' }
+    case SqlDialect.MsSql:
+      return { type: SqlCurrentTimestampType.Function, value: 'GETDATE' }
+    case SqlDialect.Sqlite:
+      switch (granularity) {
+        case DateTimeGranularity.DateTime:
+          return { type: SqlCurrentTimestampType.Literal, value: 'CURRENT_TIMESTAMP' }
+        case DateTimeGranularity.Date:
+          return { type: SqlCurrentTimestampType.Literal, value: 'CURRENT_DATE' }
+        case DateTimeGranularity.Time:
+          return { type: SqlCurrentTimestampType.Literal, value: 'CURRENT_TIME' }
+      }
+  }
+}
 export const MAX_IDENTIFIER_LENGTH = 63
