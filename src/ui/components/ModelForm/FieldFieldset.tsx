@@ -66,7 +66,7 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
       )
 
       handleChange({ type: { ...field.type, values } })
-      setEnumInputValue(values.join('\n'))
+      setEnumInputValue(values.join(', '))
     }
   }, [field.type, enumInputValue, handleChange])
 
