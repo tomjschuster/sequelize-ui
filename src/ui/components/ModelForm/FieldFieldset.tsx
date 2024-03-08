@@ -282,22 +282,13 @@ function FieldFieldset({ field, errors, onChange, onDelete }: FieldFieldsetProps
               onChange={handleChangeDefaultText}
             />
           )}
-          {isNumericType(field.type) && (
+          {isNumberType(field.type) && (
             <NumberInput
-              id={`field-default-float-${field.id}`}
+              id={`field-default-number-${field.id}`}
               label="Default"
               value={field.type.defaultValue}
               min={field.type.unsigned ? 0 : undefined}
-              allowDecimals
-              onChange={handleChangeDefaultNumber}
-            />
-          )}
-          {isIntegerType(field.type) && (
-            <NumberInput
-              id={`field-default-integer-${field.id}`}
-              label="Default"
-              value={field.type.defaultValue}
-              min={field.type.unsigned ? 0 : undefined}
+              allowDecimals={!isIntegerType(field.type)}
               onChange={handleChangeDefaultNumber}
             />
           )}
