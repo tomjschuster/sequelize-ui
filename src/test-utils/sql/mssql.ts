@@ -1,4 +1,5 @@
-import { ColumnValue, Connection, ConnectionConfig, Request } from 'tedious'
+import { Connection, ConnectionConfiguration, Request } from 'tedious'
+import { ColumnMetadata } from 'tedious/lib/token/colmetadata-token-parser'
 import { DbConnection, DbConnectionConstructor } from './connection'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -7,7 +8,7 @@ type Result = { [key: string]: any }
 export const MsSqlConnection: DbConnectionConstructor = class MsSqlConnection
   implements DbConnection
 {
-  private static connectionConfig: ConnectionConfig = {
+  private static connectionConfig: ConnectionConfiguration = {
     server: process.env.MSSQL_DB_HOST || '127.0.0.1',
     options: {
       port: parseInt(process.env.MSSQL_DB_PORT || '1433'),
@@ -92,17 +93,22 @@ export const MsSqlConnection: DbConnectionConstructor = class MsSqlConnection
     return new Promise((resolve, reject) => {
       const rows: T[] = []
       const request = new Request(statement, (err) => (err ? reject(err) : resolve(rows)))
-      request.on('row', (row: ColumnValue[]) => rows.push(MsSqlConnection.transformRow<T>(row)))
+      request.on('row', (row: ColumnValue<T>[]) => rows.push(MsSqlConnection.transformRow<T>(row)))
       connection.execSql(request)
     })
   }
 
-  private static transformRow<T extends Result>(row: ColumnValue[]): T {
+  private static transformRow<T extends Result>(row: ColumnValue<T>[]): T {
     return row.reduce<T>(
       (acc, { value, metadata: { colName } }) => ({ ...acc, [colName]: value }),
       {} as T,
     )
   }
+}
+
+type ColumnValue<T extends Result> = {
+  metadata: ColumnMetadata
+  value: T[keyof T]
 }
 
 interface TablesResult {
