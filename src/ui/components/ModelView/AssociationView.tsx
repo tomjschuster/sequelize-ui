@@ -114,7 +114,7 @@ function ThroughView({
   onClickModel,
 }: ThroughViewProps): React.ReactElement | null {
   if (through.type === ThroughType.ThroughTable) {
-    return <>through.table</>
+    return <>{through.table}</>
   }
 
   const throughModel = schema.models.find((m) => m.id === through.modelId)
