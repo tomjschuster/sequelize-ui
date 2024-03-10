@@ -31,16 +31,18 @@ function NumberInput({
 }: NumberInputProps): React.ReactElement {
   const handleChange = React.useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {
-      if (!evt.target.value) onChange(undefined, evt)
+      const value = evt.target.value
 
-      const updatedValue = parseInt(evt.target.value)
+      if (!value) onChange(undefined, evt)
+
+      const updatedValue = allowDecimals ? parseFloat(value) : parseInt(value)
       if (isNaN(updatedValue)) return
       if (max !== undefined && updatedValue > max) return
       if (min !== undefined && updatedValue < min) return
 
       onChange(updatedValue, evt)
     },
-    [onChange, min, max],
+    [onChange, allowDecimals, min, max],
   )
 
   return (

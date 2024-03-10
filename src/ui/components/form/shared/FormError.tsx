@@ -10,7 +10,7 @@ function FormError({ id, error }: FormErrorProps): React.ReactElement {
   return (
     <span
       id={id}
-      className={classnames(textColor('text-red-700'), fontSize('text-xs'))}
+      className={classnames(textColor('text-red-700', 'dark:text-red-300'), fontSize('text-xs'))}
       role={error ? 'alert' : undefined}
       aria-hidden={!error}
     >
