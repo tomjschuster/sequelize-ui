@@ -97,19 +97,36 @@ function AssociationFieldset({
           handleChange({ type: hasManyType() })
           return
 
-        case AssociationTypeType.ManyToMany:
-          handleChange({
-            type: manyToManyTableType(snakeCase(`${model.name} ${targetModel.name}`)),
-          })
+        case AssociationTypeType.ManyToMany: {
+          const table_name = defaultThroughTableName(model.name, targetModel.name)
+          handleChange({ type: manyToManyTableType(table_name) })
           return
+        }
       }
     },
     [model.name, targetModel?.name, handleChange],
   )
 
   const handleChangeTarget = React.useCallback(
-    (model: Model) => handleChange({ targetModelId: model.id }),
-    [handleChange],
+    (newTargetModel: Model) => {
+      if (
+        isManytoMany(association) &&
+        isThroughTable(association.type.through) &&
+        snakeCase(association.type.through.table) ==
+          defaultThroughTableName(model.name, targetModel.name)
+      ) {
+        handleChange({
+          targetModelId: newTargetModel.id,
+          type: {
+            ...association.type,
+            through: throughTable(defaultThroughTableName(model.name, newTargetModel.name)),
+          },
+        })
+      } else {
+        handleChange({ targetModelId: newTargetModel.id })
+      }
+    },
+    [handleChange, association, targetModel, model],
   )
 
   const handleChangeAlias = React.useCallback(
@@ -126,7 +143,7 @@ function AssociationFieldset({
     (type: ThroughType) => {
       if (!isManytoMany(association)) return
 
-      const table = snakeCase(`${model.name} ${targetModel.name}`)
+      const table = defaultThroughTableName(model.name, targetModel.name)
 
       if (type === ThroughType.ThroughTable) {
         handleChangeManyToMany({ through: throughTable(table) })
@@ -269,6 +286,10 @@ function aliasPlaceholder(association: Association, model: Model): string | unde
     : associationTypeIsSingular(association.type)
       ? singular(model.name)
       : plural(model.name)
+}
+
+function defaultThroughTableName(modelName: string, targetModelName: string): string {
+  return snakeCase(`${modelName} ${targetModelName}`)
 }
 
 export function associationTypeId(association: Association): string {
