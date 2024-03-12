@@ -28,11 +28,7 @@ import {
   sequelizeUuidVersion,
 } from './dataTypes'
 
-export type SequelizeField = Field & { generated?: boolean }
-
-export function pkIsDefault(field: SequelizeField): boolean {
-  return !!field.primaryKey && snakeCase(field.name) === 'id' && !!field.generated
-}
+type SequelizeField = Field & { generated?: boolean }
 
 type FieldTemplateArgs = {
   field: Field

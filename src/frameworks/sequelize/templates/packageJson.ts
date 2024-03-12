@@ -2,7 +2,6 @@ import { lines } from '@src/core/codegen'
 import { DbOptions, SqlDialect } from '@src/core/database'
 import { Schema } from '@src/core/schema'
 import { kebabCase } from '@src/utils/string'
-import { dbCreateSupported } from '../utils/scripts'
 
 export type PackageJsonTemplateArgs = {
   schema: Schema
@@ -112,4 +111,15 @@ function formatDeps(...ds: Dependency[]): string {
 
 function depKv([name, version]: Dependency): string {
   return `"${name}": "${version}"`
+}
+
+const dbCreateDialects: SqlDialect[] = [
+  SqlDialect.MariaDb,
+  SqlDialect.MsSql,
+  SqlDialect.MySql,
+  SqlDialect.Postgres,
+]
+
+function dbCreateSupported(dialect: SqlDialect): boolean {
+  return dbCreateDialects.includes(dialect)
 }
