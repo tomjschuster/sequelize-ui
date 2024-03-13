@@ -1,8 +1,8 @@
-import studentInformationSystemSchema from '@src/api/schema/examples/studentInformationSystem'
+import studentInfoSystemSchema from '@src/api/schema/examples/studentInfoSystem'
 import { ExpectedSchemaCase } from '../cases'
 
 const cases: ExpectedSchemaCase = {
-  schema: studentInformationSystemSchema,
+  schema: studentInfoSystemSchema,
   tableColumns: {
     snakePlural: {
       SequelizeMeta: ['name'],

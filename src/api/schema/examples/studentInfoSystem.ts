@@ -14,7 +14,7 @@ import {
   stringDataType,
 } from '@src/core/schema'
 import { fromParts } from '@src/utils/dateTime'
-import { STUDENT_INFORMATION_SYSTEM_ID } from './ids'
+import { STUDENT_INFO_SYSTEM_ID } from './ids'
 
 const time = fromParts(2024, 3, 11)
 
@@ -230,8 +230,8 @@ const topic: Model = model({
 })
 
 const studentInformationSchema: Schema = schema({
-  id: STUDENT_INFORMATION_SYSTEM_ID,
-  name: 'student information system',
+  id: STUDENT_INFO_SYSTEM_ID,
+  name: 'student info system',
   createdAt: time,
   updatedAt: time,
   models: [

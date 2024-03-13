@@ -220,6 +220,8 @@ async function getExampleSchema(id: string): Promise<Schema | null> {
       return (await import('../../examples/employees')).default
     case Ids.SAKILA_ID:
       return (await import('../../examples/sakila')).default
+    case Ids.STUDENT_INFO_SYSTEM_ID:
+      return (await import('../../examples/studentInfoSystem')).default
     default:
       return await Promise.resolve(null)
   }

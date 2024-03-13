@@ -16,6 +16,7 @@ export enum SchemaIconType {
   Rss = 'rss',
   UserGroup = 'user-group',
   Film = 'film',
+  AcademicCap = 'academic-cap',
 }
 
 export function getSchemaMetaById(id: string): SchemaMeta | null {
@@ -40,6 +41,7 @@ enum ExampleSchemaType {
   Blog = 'blog',
   Employees = 'employee',
   Sakila = 'sakila',
+  StudentInfoSystem = 'sstudent information system',
 }
 
 function getExampleSchemaMetaByType(type: ExampleSchemaType): SchemaMeta {
@@ -63,6 +65,8 @@ function getExampleSchemaTypeById(id: string): ExampleSchemaType | undefined {
       return ExampleSchemaType.Employees
     case Ids.SAKILA_ID:
       return ExampleSchemaType.Sakila
+    case Ids.STUDENT_INFO_SYSTEM_ID:
+      return ExampleSchemaType.StudentInfoSystem
     default:
       return undefined
   }
@@ -76,12 +80,15 @@ function getExampleSchemaIdByType(type: ExampleSchemaType): string {
       return Ids.EMPLOYEES_ID
     case ExampleSchemaType.Sakila:
       return Ids.SAKILA_ID
+    case ExampleSchemaType.StudentInfoSystem:
+      return Ids.STUDENT_INFO_SYSTEM_ID
   }
 }
 
 const BLOG_SLUG = 'blog'
 const EMPLOYEES_SLUG = 'employees'
 const SAKILA_SLUG = 'sakila'
+const STUDENT_INFO_SYSTEM_SLUG = 'student-info-system'
 
 function getExampleSchemaTypeBySlug(slug: string): ExampleSchemaType | undefined {
   switch (slug) {
@@ -91,6 +98,8 @@ function getExampleSchemaTypeBySlug(slug: string): ExampleSchemaType | undefined
       return ExampleSchemaType.Employees
     case SAKILA_SLUG:
       return ExampleSchemaType.Sakila
+    case STUDENT_INFO_SYSTEM_SLUG:
+      return ExampleSchemaType.StudentInfoSystem
   }
 }
 
@@ -102,6 +111,8 @@ function displayExampleSchemaType(type: ExampleSchemaType): string {
       return 'Employees'
     case ExampleSchemaType.Sakila:
       return 'Sakila'
+    case ExampleSchemaType.StudentInfoSystem:
+      return 'Student Info System'
   }
 }
 
@@ -132,6 +143,11 @@ function exampleSchemaDescription(schemaType: ExampleSchemaType): string[] {
         `The schema and data were created by Mike Hillyer with the MySQL AB documentation team ${licenseCopy} and is available at <https://dev.mysql.com/doc/index-other.html>.`,
         sequelizeConversion,
       ]
+    case ExampleSchemaType.StudentInfoSystem:
+      return [
+        `The ${name} sample database is a simple schema for a student information system with students, teachers and courses.`,
+        `The schema was created by Tom Schuster ${licenseCopy}.`,
+      ]
   }
 }
 
@@ -147,6 +163,8 @@ function getExampleSchemaSlug(type: ExampleSchemaType): string {
       return EMPLOYEES_SLUG
     case ExampleSchemaType.Sakila:
       return SAKILA_SLUG
+    case ExampleSchemaType.StudentInfoSystem:
+      return STUDENT_INFO_SYSTEM_SLUG
   }
 }
 
@@ -157,6 +175,8 @@ function getExampleSchemaLicense(type: ExampleSchemaType): License {
     case ExampleSchemaType.Employees:
       return License.CcBySa3
     case ExampleSchemaType.Sakila:
+      return License.NewBsd
+    case ExampleSchemaType.StudentInfoSystem:
       return License.NewBsd
   }
 }
@@ -169,6 +189,8 @@ function getExampleSchemaSource(schemaType: ExampleSchemaType): string {
       return 'https://github.com/tomjschuster/sequelize-ui-ts/blob/main/src/api/schema/examples/employees.ts'
     case ExampleSchemaType.Sakila:
       return 'https://github.com/tomjschuster/sequelize-ui-ts/blob/main/src/api/schema/examples/sakila.ts'
+    case ExampleSchemaType.StudentInfoSystem:
+      return 'https://github.com/tomjschuster/sequelize-ui-ts/blob/main/src/api/schema/examples/studentInfoSystem.ts'
   }
 }
 
@@ -180,5 +202,7 @@ function getExampleSchemaIcon(schemaType: ExampleSchemaType): SchemaIconType {
       return SchemaIconType.UserGroup
     case ExampleSchemaType.Sakila:
       return SchemaIconType.Film
+    case ExampleSchemaType.StudentInfoSystem:
+      return SchemaIconType.AcademicCap
   }
 }
