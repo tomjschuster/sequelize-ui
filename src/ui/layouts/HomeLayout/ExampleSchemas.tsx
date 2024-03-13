@@ -1,11 +1,11 @@
 import { SchemaIconType, SchemaMeta } from '@src/api/meta'
-import IconButton from '@src/ui/components/form/IconButton'
-import InfoIcon from '@src/ui/components/icons/Info'
 import Markdown from '@src/ui/components/Markdown'
 import Modal from '@src/ui/components/Modal'
+import IconButton from '@src/ui/components/form/IconButton'
+import InfoIcon from '@src/ui/components/icons/Info'
 import useIsOpen from '@src/ui/hooks/useIsOpen'
-import { goTo } from '@src/ui/routing/navigation'
 import RouteLink from '@src/ui/routing/RouteLink'
+import { goTo } from '@src/ui/routing/navigation'
 import { exampleSchemaRoute } from '@src/ui/routing/routes'
 import {
   backgroundColor,
@@ -29,6 +29,7 @@ import {
   title,
 } from '@src/ui/styles/utils'
 import React from 'react'
+import AcademicCapIcon from '../../components/icons/AcademicCapIcon'
 import FilmIcon from '../../components/icons/Film'
 import RssIcon from '../../components/icons/Rss'
 import UserGroupIcon from '../../components/icons/UserGroup'
@@ -116,6 +117,8 @@ function ExampleSchemaIcon({ meta: { icon } }: ExampleSchemaLinkProps): React.Re
       return <UserGroupIcon size={6} />
     case SchemaIconType.Film:
       return <FilmIcon size={6} />
+    case SchemaIconType.AcademicCap:
+      return <AcademicCapIcon size={6} />
   }
 }
 

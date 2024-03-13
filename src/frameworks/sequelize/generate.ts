@@ -14,6 +14,7 @@ import {
   association as buildAssociation,
   field as buildField,
   model as buildModel,
+  isThroughTable,
   resetType,
 } from '@src/core/schema'
 import { arrayToLookup, dedupBy } from '@src/utils/array'
@@ -106,7 +107,7 @@ type GetMigrationModelsArgs = {
   schema: Schema
   dbOptions: DbOptions
 }
-function getMigrationModels({ schema, dbOptions }: GetMigrationModelsArgs): ModelWithReferences[] {
+function getMigrationModels({ schema, dbOptions }: GetMigrationModelsArgs): MigrationModel[] {
   const joinTables = getJoinTables(schema, dbOptions)
   const modelsWithReferences = schema.models.map((model) =>
     addDbColumnFields({ model, schema, dbOptions }),
@@ -119,7 +120,7 @@ type AddDbColumnFields = {
   schema: Schema
   dbOptions: DbOptions
 }
-function addDbColumnFields({ model, schema, dbOptions }: AddDbColumnFields): ModelWithReferences {
+function addDbColumnFields({ model, schema, dbOptions }: AddDbColumnFields): MigrationModel {
   const withTimestamps = addTimestampFields({ model, dbOptions })
   return addReferences({ model: withTimestamps, schema, dbOptions })
 }
@@ -138,12 +139,12 @@ type AddReferencesArgs = {
   schema: Schema
   dbOptions: DbOptions
 }
-function addReferences({ model, schema, dbOptions }: AddReferencesArgs): ModelWithReferences {
+function addReferences({ model, schema, dbOptions }: AddReferencesArgs): MigrationModel {
   const fkFields = getFkFields({ model, schema, dbOptions })
 
   const fields = dedupBy(
     model.fields
-      .map<FieldWithReference>((field) => {
+      .map<MigrationField>((field) => {
         const fr = fkFields.find((f) => namesEq(field.name, f.name))
         return { ...field, reference: fr?.reference }
       })
@@ -159,19 +160,19 @@ type GetFkFieldsArgs = {
   schema: Schema
   dbOptions: DbOptions
 }
-function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): FieldWithReference[] {
+function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): MigrationField[] {
   const modelById = arrayToLookup<Model>(schema.models, (m) => m.id)
   const sourceFields = model.associations
     .filter((a) => a.type.type === AssociationTypeType.BelongsTo)
-    .map<FieldWithReference | null>((association) => {
+    .map<MigrationField | null>((association) => {
       const fk = getForeignKey({ model, association, modelById, dbOptions })
       const target = modelById.get(association.targetModelId)
       return target
-        ? getFieldWithReference({ model: target, fk, dbOptions })
+        ? getMigrationField({ model: target, fk, dbOptions })
         : /* istanbul ignore next */
           null
     })
-    .filter((fr): fr is FieldWithReference => !!fr)
+    .filter((fr): fr is MigrationField => !!fr)
 
   const targetFields = schema.models
     .flatMap((m) => m.associations)
@@ -181,15 +182,15 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): FieldWithRe
           a.type.type === AssociationTypeType.HasMany) &&
         a.targetModelId === model.id,
     )
-    .map<FieldWithReference | null>((association) => {
+    .map<MigrationField | null>((association) => {
       const source = modelById.get(association.sourceModelId)
       const fk = source && getForeignKey({ model: source, association, modelById, dbOptions })
       return source && fk
-        ? getFieldWithReference({ model: source, fk, dbOptions })
+        ? getMigrationField({ model: source, fk, dbOptions })
         : /* istanbul ignore next */
           null
     })
-    .filter((fr): fr is FieldWithReference => !!fr)
+    .filter((fr): fr is MigrationField => !!fr)
 
   const hasPk = model.fields.some((f) => f.primaryKey)
   const joinFields = schema.models
@@ -200,7 +201,7 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): FieldWithRe
         a.type.through.type === ThroughType.ThroughModel &&
         a.type.through.modelId === model.id,
     )
-    .flatMap<FieldWithReference | null>((association) => {
+    .flatMap<MigrationField | null>((association) => {
       const primaryKey = hasPk ? undefined : /* istanbul ignore next */ true
 
       const source = modelById.get(association.sourceModelId)
@@ -209,7 +210,7 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): FieldWithRe
       const sourceField =
         source &&
         sourceFk &&
-        getFieldWithReference({
+        getMigrationField({
           model: source,
           fk: sourceFk,
           dbOptions,
@@ -222,35 +223,35 @@ function getFkFields({ model, schema, dbOptions }: GetFkFieldsArgs): FieldWithRe
       const targetField =
         target &&
         targetFk &&
-        getFieldWithReference({
+        getMigrationField({
           model: target,
           fk: targetFk,
           dbOptions,
           primaryKey,
         })
 
-      return [sourceField, targetField].filter((f): f is FieldWithReference => !!f)
+      return [sourceField, targetField].filter((f): f is MigrationField => !!f)
     })
-    .filter((fr): fr is FieldWithReference => !!fr)
+    .filter((fr): fr is MigrationField => !!fr)
 
-  return dedupBy<FieldWithReference>(
+  return dedupBy<MigrationField>(
     sourceFields.concat(targetFields).concat(joinFields),
     (field) => field.name,
   )
 }
 
-type GetFieldWithReferenceArgs = {
+type GetMigrationFieldArgs = {
   model: Model
   fk: string
   dbOptions: DbOptions
   primaryKey?: boolean
 }
-function getFieldWithReference({
+function getMigrationField({
   model,
   fk,
   dbOptions,
   primaryKey = false,
-}: GetFieldWithReferenceArgs): FieldWithReference {
+}: GetMigrationFieldArgs): MigrationField {
   const pk =
     model.fields.find((field) => field.primaryKey) ||
     /* istanbul ignore next */
@@ -280,14 +281,8 @@ function getJoinTableModel(
   modelById: Map<string, Model>,
   dbOptions: DbOptions,
 ): Model | null {
-  if (association.type.type !== AssociationTypeType.ManyToMany) return null
-
-  const tableName =
-    association.type.through.type === ThroughType.ThroughTable
-      ? association.type.through.table
-      : null
-
-  if (!tableName) return null
+  const { type } = association
+  if (type.type != AssociationTypeType.ManyToMany || !isThroughTable(type.through)) return null
 
   const source = modelById.get(association.sourceModelId)
   const target = modelById.get(association.targetModelId)
@@ -295,12 +290,12 @@ function getJoinTableModel(
   /* istanbul ignore next */
   if (!source || !target) return null
 
-  const sourceFk = getOtherKey({ association, modelById, dbOptions })
+  const sourceFk = getForeignKey({ model: source, association, modelById, dbOptions })
 
   /* istanbul ignore next */
   if (!sourceFk) return null
 
-  const sourceFkField = getFieldWithReference({
+  const sourceFkField = getMigrationField({
     model: source,
     fk: sourceFk,
     dbOptions,
@@ -315,9 +310,16 @@ function getJoinTableModel(
     type: belongsToType(),
   })
 
-  const targetFk = getForeignKey({ model: target, association, modelById, dbOptions })
+  const targetFk = getOtherKey({ association, modelById, dbOptions })
 
-  const targetFkField = getFieldWithReference({ model: target, fk: targetFk, dbOptions })
+  if (!targetFk) return null
+
+  const targetFkField = getMigrationField({
+    model: target,
+    fk: targetFk,
+    dbOptions,
+    primaryKey: true,
+  })
 
   const targetAssoc: Association = buildAssociation({
     sourceModelId: id,
@@ -327,7 +329,7 @@ function getJoinTableModel(
 
   return buildModel({
     id,
-    name: tableName,
+    name: type.through.table,
     createdAt: source.createdAt,
     updatedAt: source.updatedAt,
     fields: [sourceFkField, targetFkField],
@@ -438,7 +440,7 @@ type Constraint = {
 }
 
 type AddForeignKeysMigrationArgs = {
-  models: ModelWithReferences[]
+  models: MigrationModel[]
   dbOptions: DbOptions
 }
 function addForeignKeysMigration({ dbOptions, models }: AddForeignKeysMigrationArgs): string {
@@ -503,8 +505,8 @@ function down({ constraints }: DownArgs): string {
   )
 }
 
-type ModelWithReferences = Omit<Model, 'fields'> & { fields: FieldWithReference[] }
-type FieldWithReference = Field & { reference?: Reference }
+type MigrationModel = Omit<Model, 'fields'> & { fields: MigrationField[]; noPrimaryKey?: boolean }
+type MigrationField = Field & { reference?: Reference }
 
 type Reference = {
   table: string
@@ -512,7 +514,7 @@ type Reference = {
 }
 
 type GetModelConstraintsArgs = {
-  model: ModelWithReferences
+  model: MigrationModel
   dbOptions: DbOptions
 }
 function getModelConstraints({ model, dbOptions }: GetModelConstraintsArgs): Constraint[] {
