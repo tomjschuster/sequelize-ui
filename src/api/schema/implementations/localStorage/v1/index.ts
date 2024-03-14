@@ -74,11 +74,13 @@ export type DataType =
 export interface DataTypeArray {
   type: 'ARRAY'
   arrayType: DataType
+  defaultEmptyArray?: boolean
 }
 
 export interface DataTypeBigint {
   type: 'BIGINT'
   autoincrement: boolean
+  defaultValue: number | null
   unsigned: boolean
 }
 
@@ -88,10 +90,12 @@ export interface DataTypeBlob {
 
 export interface DataTypeBoolean {
   type: 'BOOLEAN'
+  defaultValue?: boolean | null
 }
 
 export interface DataTypeCitext {
   type: 'CITEXT'
+  defaultValue?: string | null
 }
 
 export interface DataTypeDate {
@@ -113,55 +117,66 @@ export interface DataTypeDecimal {
   type: 'DECIMAL'
   precision: DataTypeDecimalPrecision | null
   unsigned: boolean
+  defaultValue?: number | null
 }
 
 export interface DataTypeDouble {
   type: 'DOUBLE'
   unsigned: boolean
+  defaultValue?: number | null
 }
 
 export interface DataTypeEnum {
   type: 'ENUM'
   values: string[]
+  defaultValue?: string | null
 }
 
 export interface DataTypeFloat {
   type: 'FLOAT'
   unsigned: boolean
+  defaultValue?: number | null
 }
 
 export interface DataTypeInteger {
   type: 'INTEGER'
   autoincrement: boolean
   unsigned: boolean
+  defaultValue?: number | null
 }
 
 export interface DataTypeJson {
   type: 'JSON'
+  defaultValue?: DefaultJsonValue | null
 }
 
 export interface DataTypeJsonb {
   type: 'JSONB'
+  defaultValue?: DefaultJsonValue | null
 }
 
 export interface DataTypeReal {
   type: 'REAL'
   unsigned: boolean
+  defaultValue?: number | null
 }
 
 export interface DataTypeSmallint {
   type: 'SMALLINT'
   autoincrement: boolean
   unsigned: boolean
+  defaultValue?: number | null
 }
 
 export interface DataTypeString {
   type: 'STRING'
+  defaultValue?: string | null
   length?: number | null
 }
 
 export interface DataTypeText {
   type: 'TEXT'
+  defaultValue?: string | null
 }
 
 export interface DataTypeTime {
@@ -177,6 +192,11 @@ export enum DataTypeUuidDefaultVersion {
 export interface DataTypeUuid {
   type: 'UUID'
   defaultVersion?: DataTypeUuidDefaultVersion | null
+}
+
+export enum DefaultJsonValue {
+  EmptyArray = 'EMPTY_ARRAY',
+  EmptyObject = 'EMPTY_OBJECT',
 }
 
 export interface Field {

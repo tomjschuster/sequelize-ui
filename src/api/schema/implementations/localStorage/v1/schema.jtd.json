@@ -62,11 +62,13 @@
           "additionalProperties": true,
           "properties": {
             "arrayType": { "ref": "dataType" }
-          }
+          },
+          "optionalProperties": { "defaultEmptyArray": { "type": "boolean" } }
         },
         "BIGINT": {
           "additionalProperties": true,
           "properties": {
+            "defaultValue": { "nullable": true, "type": "int32" },
             "unsigned": { "type": "boolean" },
             "autoincrement": { "type": "boolean" }
           }
@@ -77,11 +79,13 @@
         },
         "BOOLEAN": {
           "additionalProperties": true,
-          "properties": {}
+          "properties": {},
+          "optionalProperties": { "defaultValue": { "nullable": true, "type": "boolean" } }
         },
         "CITEXT": {
           "additionalProperties": true,
-          "properties": {}
+          "properties": {},
+          "optionalProperties": { "defaultValue": { "nullable": true, "type": "string" } }
         },
         "DATE": {
           "additionalProperties": true,
@@ -105,54 +109,85 @@
               }
             },
             "unsigned": { "type": "boolean" }
+          },
+          "optionalProperties": {
+            "defaultValue": { "nullable": true, "type": "float64" }
           }
         },
         "DOUBLE": {
           "additionalProperties": true,
-          "properties": { "unsigned": { "type": "boolean" } }
+          "properties": { "unsigned": { "type": "boolean" } },
+          "optionalProperties": {
+            "defaultValue": { "nullable": true, "type": "float64" }
+          }
         },
         "ENUM": {
           "additionalProperties": true,
-          "properties": { "values": { "elements": { "type": "string" } } }
+          "properties": { "values": { "elements": { "type": "string" } } },
+          "optionalProperties": {
+            "defaultValue": { "nullable": true, "type": "string" }
+          }
         },
         "FLOAT": {
           "additionalProperties": true,
-          "properties": { "unsigned": { "type": "boolean" } }
+          "properties": { "unsigned": { "type": "boolean" } },
+          "optionalProperties": {
+            "defaultValue": { "nullable": true, "type": "float64" }
+          }
         },
         "INTEGER": {
           "additionalProperties": true,
           "properties": {
             "unsigned": { "type": "boolean" },
             "autoincrement": { "type": "boolean" }
+          },
+          "optionalProperties": {
+            "defaultValue": { "nullable": true, "type": "int32" }
           }
         },
         "JSON": {
           "additionalProperties": true,
-          "properties": {}
+          "properties": {},
+          "optionalProperties": {
+            "defaultValue": { "nullable": true, "ref": "defaultJsonValue" }
+          }
         },
         "JSONB": {
           "additionalProperties": true,
-          "properties": {}
+          "properties": {},
+          "optionalProperties": {
+            "defaultValue": { "nullable": true, "ref": "defaultJsonValue" }
+          }
         },
         "REAL": {
           "additionalProperties": true,
-          "properties": { "unsigned": { "type": "boolean" } }
+          "properties": { "unsigned": { "type": "boolean" } },
+          "optionalProperties": {
+            "defaultValue": { "nullable": true, "type": "float64" }
+          }
         },
         "SMALLINT": {
           "additionalProperties": true,
           "properties": {
             "unsigned": { "type": "boolean" },
             "autoincrement": { "type": "boolean" }
+          },
+          "optionalProperties": {
+            "defaultValue": { "nullable": true, "type": "int32" }
           }
         },
         "STRING": {
           "additionalProperties": true,
           "properties": {},
-          "optionalProperties": { "length": { "nullable": true, "type": "uint8" } }
+          "optionalProperties": {
+            "defaultValue": { "nullable": true, "type": "string" },
+            "length": { "nullable": true, "type": "uint8" }
+          }
         },
         "TEXT": {
           "additionalProperties": true,
-          "properties": {}
+          "properties": {},
+          "optionalProperties": { "defaultValue": { "nullable": true, "type": "string" } }
         },
         "TIME": {
           "additionalProperties": true,
@@ -166,6 +201,9 @@
           }
         }
       }
+    },
+    "defaultJsonValue": {
+      "enum": ["EMPTY_ARRAY", "EMPTY_OBJECT"]
     },
     "associationType": {
       "discriminator": "type",
