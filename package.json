@@ -92,7 +92,7 @@
     "jest-localstorage-mock": "^2.4.26",
     "jest-specific-snapshot": "^8.0.0",
     "lint-staged": "^15.2.2",
-    "mysql2": "^3.9.3",
+    "mysql2": "^3.9.7",
     "next-sitemap": "^4.2.3",
     "pg": "^8.11.4",
     "postcss": "^8.4.38",
