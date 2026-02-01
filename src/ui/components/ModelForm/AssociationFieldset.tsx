@@ -98,35 +98,37 @@ function AssociationFieldset({
           return
 
         case AssociationTypeType.ManyToMany: {
-          const table_name = defaultThroughTableName(model.name, targetModel.name)
+          const table_name = defaultThroughTableName(model, targetModel, schema)
           handleChange({ type: manyToManyTableType(table_name) })
           return
         }
       }
     },
-    [model.name, targetModel?.name, handleChange],
+    [model, targetModel, schema, handleChange],
   )
 
   const handleChangeTarget = React.useCallback(
     (newTargetModel: Model) => {
+      // if current through table name is default, update table name to match new target
       if (
         isManytoMany(association) &&
         isThroughTable(association.type.through) &&
-        snakeCase(association.type.through.table) ==
-          defaultThroughTableName(model.name, targetModel.name)
+        (snakeCase(association.type.through.table) ==
+          throughTableName(model.name, targetModel.name) ||
+          snakeCase(association.type.through.table) ==
+            throughTableName(targetModel.name, model.name))
       ) {
+        const tableName = defaultThroughTableName(model, newTargetModel, schema)
+
         handleChange({
           targetModelId: newTargetModel.id,
-          type: {
-            ...association.type,
-            through: throughTable(defaultThroughTableName(model.name, newTargetModel.name)),
-          },
+          type: { ...association.type, through: throughTable(tableName) },
         })
       } else {
         handleChange({ targetModelId: newTargetModel.id })
       }
     },
-    [handleChange, association, targetModel, model],
+    [handleChange, association, targetModel, model, schema],
   )
 
   const handleChangeAlias = React.useCallback(
@@ -143,12 +145,13 @@ function AssociationFieldset({
     (type: ThroughType) => {
       if (!isManytoMany(association)) return
 
-      const table = defaultThroughTableName(model.name, targetModel.name)
-
       if (type === ThroughType.ThroughTable) {
+        const table = defaultThroughTableName(model, targetModel, schema)
+
         handleChangeManyToMany({ through: throughTable(table) })
         return
       }
+      const table = throughTableName(model.name, targetModel.name)
 
       const throughModel =
         schema.models.find((m) => snakeCase(m.name) === table) || schema.models[0]
@@ -157,7 +160,7 @@ function AssociationFieldset({
         handleChangeManyToMany({ through: buildThroughModel(throughModel.id) })
       }
     },
-    [association, model.name, targetModel, schema.models, handleChangeManyToMany],
+    [association, model, targetModel, schema, handleChangeManyToMany],
   )
 
   const handleChangeThroughModel = React.useCallback(
@@ -286,8 +289,29 @@ function aliasPlaceholder(association: Association, model: Model): string | unde
       : plural(model.name)
 }
 
-function defaultThroughTableName(modelName: string, targetModelName: string): string {
+function throughTableName(modelName: string, targetModelName: string): string {
   return snakeCase(`${modelName} ${targetModelName}`)
+}
+
+function defaultThroughTableName(sourceModel: Model, targetModel: Model, schema: Schema): string {
+  const inverseThroughTable = schema.models.reduce<string | undefined>(
+    (acc, m) =>
+      acc ||
+      m.associations.reduce<string | undefined>(
+        (acc, assoc) =>
+          !acc &&
+          assoc.targetModelId === sourceModel.id &&
+          assoc.sourceModelId == targetModel.id &&
+          assoc.type.type == AssociationTypeType.ManyToMany &&
+          assoc.type.through.type === ThroughType.ThroughTable
+            ? assoc.type.through.table
+            : acc,
+        undefined,
+      ),
+    undefined,
+  )
+
+  return inverseThroughTable || throughTableName(sourceModel.name, targetModel.name)
 }
 
 export function associationTypeId(association: Association): string {
