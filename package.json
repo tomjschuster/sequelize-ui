@@ -101,7 +101,7 @@
     "prettier": "^3.8.1",
     "react-test-renderer": "^19.2.4",
     "source-map-support": "^0.5.21",
-    "sqlite3": "^5.1.7",
+    "sqlite3": "^5.0.2",
     "tedious": "^19.2.1",
     "typescript": "^5.9.3"
   }
