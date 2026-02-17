@@ -2,9 +2,10 @@ import React from 'react'
 import useTrapFocusState from './internal/useTrapFocusState'
 
 type FocusContext = {
-  trapFocus: (trap: React.RefObject<HTMLElement>, append?: boolean) => void
-  removeTrap: (trap: React.RefObject<HTMLElement>) => void
+  trapFocus: (trap: React.RefObject<HTMLElement | null>, append?: boolean) => void
+  removeTrap: (trap: React.RefObject<HTMLElement | null>) => void
 }
+
 const FocusContext = React.createContext<FocusContext>({
   trapFocus: () => null,
   removeTrap: () => null,
@@ -16,7 +17,7 @@ export function FocusProvider({ children }: { children: React.ReactNode }): Reac
 }
 
 type UseTrapFocusArgs = {
-  ref: React.RefObject<HTMLElement>
+  ref: React.RefObject<HTMLElement | null>
   skip?: boolean
   global?: boolean
 }

@@ -6,7 +6,6 @@ import {
   height,
   width,
 } from '@src/ui/styles/classnames'
-import React from 'react'
 
 export default function Dot() {
   return (

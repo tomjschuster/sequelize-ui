@@ -8,7 +8,7 @@ function empty(x: unknown): boolean {
   return x === null || x === undefined
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
 export function deepDropKeys<T extends Object>(x: T, omit: string[]): T {
   const keys = new Set(omit)
 

@@ -3,7 +3,7 @@ import React from 'react'
 type AnyEvent = MouseEvent | TouchEvent
 
 export default function useOnClickOutside(
-  refs: React.RefObject<HTMLElement> | React.RefObject<HTMLElement>[],
+  refs: React.RefObject<HTMLElement | null> | React.RefObject<HTMLElement | null>[],
   onClick: (event: AnyEvent) => void,
 ): void {
   React.useEffect(() => {

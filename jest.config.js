@@ -27,13 +27,12 @@ const customConfig = {
 const jestConfig = async () => {
   const config = await createJestConfig(customConfig)()
 
-  const esModules = ['nanoid'].join('|')
-
-  const transformIgnorePatterns = config.transformIgnorePatterns.map((p) =>
-    p === '/node_modules/' ? `node_modules/(?!${esModules})` : p,
-  )
-
-  return { ...config, transformIgnorePatterns }
+  return { 
+    ...config, 
+    transformIgnorePatterns: [
+      `node_modules/(?!(nanoid|change-case)/)`,
+    ] 
+  }
 }
 
 module.exports = jestConfig

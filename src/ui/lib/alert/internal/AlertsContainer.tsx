@@ -18,13 +18,10 @@ import React from 'react'
 import { Alert, isAlertVisible } from './alert'
 import AlertDisplay from './AlertDisplay'
 
-type AlertsContainerProps = {
-  alerts: Alert[]
-  onDismiss: (id: string) => void
-}
+type AlertsContainerProps = { alerts: Alert[]; onDismiss: (id: string) => void }
 
 function AlertsContainer({ alerts, onDismiss }: AlertsContainerProps): React.ReactElement {
-  const ref = React.useRef() as React.MutableRefObject<HTMLUListElement>
+  const ref = React.useRef(null) as React.RefObject<HTMLUListElement | null>
   const hidden = alerts.length === 0
 
   useTrapFocus({ ref, global: true, skip: hidden })
@@ -42,10 +39,7 @@ function AlertsContainer({ alerts, onDismiss }: AlertsContainerProps): React.Rea
   )
 }
 
-type AlertItemProps = {
-  alert: Alert
-  onDismiss: (id: string) => void
-}
+type AlertItemProps = { alert: Alert; onDismiss: (id: string) => void }
 function AlertItem({ alert, onDismiss }: AlertItemProps): React.ReactElement {
   return (
     <li
@@ -60,10 +54,7 @@ function AlertItem({ alert, onDismiss }: AlertItemProps): React.ReactElement {
         translate(toClassname('sm:-translate-x-1/2')),
         transitionProperty('transition-transform'),
         hardwareAcceleration('transform-gpu'),
-        scale({
-          'scale-0': !isAlertVisible(alert),
-          'scale-100': isAlertVisible(alert),
-        }),
+        scale({ 'scale-0': !isAlertVisible(alert), 'scale-100': isAlertVisible(alert) }),
       )}
     >
       <AlertDisplay alert={alert} onDismiss={onDismiss} />

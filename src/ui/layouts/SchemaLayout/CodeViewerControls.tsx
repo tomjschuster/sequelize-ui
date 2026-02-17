@@ -72,9 +72,9 @@ export default function CodeViewerControls({
     }
   }
 
-  const settingsRef = React.useRef() as React.MutableRefObject<HTMLButtonElement>
-  const settingsMenuRef = React.useRef() as React.MutableRefObject<HTMLDivElement>
-  const dbOptionsRef = React.useRef() as React.MutableRefObject<HTMLDivElement>
+  const settingsRef = React.useRef(null) as React.RefObject<HTMLButtonElement | null>
+  const settingsMenuRef = React.useRef(null) as React.RefObject<HTMLDivElement | null>
+  const dbOptionsRef = React.useRef(null) as React.RefObject<HTMLDivElement | null>
   useOnClickOutside([dbOptionsRef, settingsRef, settingsMenuRef], closeDbOptions)
 
   return (

@@ -11,8 +11,8 @@ import { Project } from './project'
 
 const exec = promisify(exec_)
 
-const execWithDebug = (...args: Parameters<typeof exec>) =>
-  exec(...args).catch((e) => {
+const execWithDebug = (arg: string) =>
+  exec(arg).catch((e) => {
     if ('stdout' in e) {
       e.message = `${e.message}\n${e.stdout}`
     }

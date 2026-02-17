@@ -1,3 +1,5 @@
+@reference "tailwindcss";
+
 .code {
   color-scheme: light;
   --color-background: #fafafa;
@@ -43,7 +45,9 @@
   color: var(--color-default);
   background: var(--color-background);
 
-  font-family: Roboto Mono, monospace;
+  font-family:
+    Roboto Mono,
+    monospace;
 
   word-spacing: normal;
   word-break: normal;

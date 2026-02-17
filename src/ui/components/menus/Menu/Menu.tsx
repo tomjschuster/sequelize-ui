@@ -16,7 +16,10 @@ import MenuButton from '../MenuButton'
 import MenuPanel, { MenuItem } from '../MenuPanel'
 
 export type MenuProps = WithClassname<
-  ButtonHTMLAttributes<HTMLButtonElement> & { buttonClassName?: Classname; items: MenuItem[] }
+  ButtonHTMLAttributes<HTMLButtonElement | null> & {
+    buttonClassName?: Classname
+    items: MenuItem[]
+  }
 >
 
 function Menu({
@@ -26,7 +29,7 @@ function Menu({
   items,
   ...props
 }: MenuProps): React.ReactElement {
-  const ref = React.useRef() as React.MutableRefObject<HTMLDivElement>
+  const ref = React.useRef(null) as React.RefObject<HTMLDivElement | null>
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
   const [activeIndex, setActiveIndex] = React.useState<number>()
 

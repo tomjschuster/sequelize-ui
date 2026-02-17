@@ -32,15 +32,20 @@ function Code({ content = '', language = Language.TypeScript }: CodeProps): Reac
           className={classnames(toClassname(css.code), toClassname(className), height('h-full'))}
           style={{ ...style, marginTop: 0 }}
         >
-          {tokens.map((line, i) => (
+          {tokens.map((line, i) => {
+            const { key, ...lineProps } = getLineProps({ line, key: i })
+
             // eslint-disable-next-line react/jsx-key
-            <div {...getLineProps({ line, key: i })}>
-              {line.map((token, key) => (
-                // eslint-disable-next-line react/jsx-key
-                <span {...getTokenProps({ token, key })} />
-              ))}
-            </div>
-          ))}
+            return (
+              <div key={key as string} {...lineProps}>
+                {line.map((token, i) => {
+                  const { key, ...tokenProps } = getTokenProps({ token, key: i })
+                  // eslint-disable-next-line react/jsx-key
+                  return <span key={key as string} {...tokenProps} />
+                })}
+              </div>
+            )
+          })}
         </pre>
       )}
     </Highlight>

@@ -1,10 +1,7 @@
 import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock'
 import React from 'react'
 
-type UseLockScrollArgs = {
-  ref: React.RefObject<HTMLElement>
-  skip?: boolean
-}
+type UseLockScrollArgs = { ref: React.RefObject<HTMLElement | null>; skip?: boolean }
 
 export default function useLockScroll({ ref, skip }: UseLockScrollArgs): void {
   React.useEffect(() => {
