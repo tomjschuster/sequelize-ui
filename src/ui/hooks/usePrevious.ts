@@ -5,5 +5,6 @@ export default function usePrevious<T>(value: T): T | undefined {
   React.useEffect(() => {
     ref.current = value
   })
+  // eslint-disable-next-line react-hooks/refs
   return ref.current
 }

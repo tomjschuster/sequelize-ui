@@ -38,12 +38,9 @@ function AssociationView({
   onClickModel,
   onClickEdit,
   onClickDelete,
-}: AssociationViewProps): React.ReactElement {
+}: AssociationViewProps): React.ReactElement | null {
   const targetModel: Model | null =
-    React.useMemo(
-      () => schema.models.find((m) => m.id === association.targetModelId) as Model,
-      [schema.models, association.targetModelId],
-    ) || null
+    schema.models.find((m) => m.id === association.targetModelId) || null
 
   return (
     // model might be missing briefly after deletion and before switching flyout state

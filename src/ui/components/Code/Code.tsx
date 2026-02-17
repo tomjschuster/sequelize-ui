@@ -35,12 +35,11 @@ function Code({ content = '', language = Language.TypeScript }: CodeProps): Reac
           {tokens.map((line, i) => {
             const { key, ...lineProps } = getLineProps({ line, key: i })
 
-            // eslint-disable-next-line react/jsx-key
             return (
               <div key={key as string} {...lineProps}>
                 {line.map((token, i) => {
                   const { key, ...tokenProps } = getTokenProps({ token, key: i })
-                  // eslint-disable-next-line react/jsx-key
+
                   return <span key={key as string} {...tokenProps} />
                 })}
               </div>

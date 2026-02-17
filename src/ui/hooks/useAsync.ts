@@ -33,7 +33,7 @@ export default function useAsync<Data, Variables = undefined>({
     const fromCache = cacheKey && cache.get(cacheKey)
 
     if (fromCache) {
-      onLoad && onLoad(fromCache)
+      if (onLoad) onLoad(fromCache)
       setData(fromCache)
       setLoading(false)
       setError(undefined)
@@ -44,7 +44,7 @@ export default function useAsync<Data, Variables = undefined>({
 
     return getData(variables)
       .then((newData) => {
-        onLoad && onLoad(newData)
+        if (onLoad) onLoad(newData)
         setData(newData)
         setLoading(false)
         setError(undefined)
@@ -54,7 +54,7 @@ export default function useAsync<Data, Variables = undefined>({
       })
       .catch((error) => {
         console.error(error)
-        onError && onError(error)
+        if (onError) onError(error)
         setLoading(false)
         setError(error)
 

@@ -27,11 +27,9 @@ const customConfig = {
 const jestConfig = async () => {
   const config = await createJestConfig(customConfig)()
 
-  return { 
-    ...config, 
-    transformIgnorePatterns: [
-      `node_modules/(?!(nanoid|change-case)/)`,
-    ] 
+  return {
+    ...config,
+    transformIgnorePatterns: [`node_modules/(?!(nanoid|change-case)/)`],
   }
 }
 

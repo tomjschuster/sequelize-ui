@@ -5,9 +5,7 @@ import { DbConnection, DbConnectionConstructor } from './connection'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Result = { [key: string]: any }
 
-export const MsSqlConnection: DbConnectionConstructor = class MsSqlConnection
-  implements DbConnection
-{
+export const MsSqlConnection: DbConnectionConstructor = class MsSqlConnection implements DbConnection {
   private static connectionConfig: ConnectionConfiguration = {
     server: process.env.MSSQL_DB_HOST || '127.0.0.1',
     options: {

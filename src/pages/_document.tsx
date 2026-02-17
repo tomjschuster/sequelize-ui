@@ -1,4 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
 import { MODAL_PORTAL_ID } from '@src/ui/components/Modal'
 import { syncDomDarkModeScriptSource } from '@src/ui/utils/darkMode'
 import Document, {

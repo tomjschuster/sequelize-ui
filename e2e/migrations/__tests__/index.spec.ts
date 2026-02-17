@@ -38,8 +38,8 @@ describe.each(frameworks)('$name migrations', (framework: Framework) => {
   describe.each(sqlDialects)('%s', (sqlDialect) => {
     describe.each(schemaCases)('$schema.name', ({ schema, tableColumns }) => {
       afterAll(async () => {
-        !KEEP_ASSETS && (await destroyProject(projectType, projectName))
-        !KEEP_ASSETS && (await dropDatabase(projectName, sqlDialect))
+        if (!KEEP_ASSETS) await destroyProject(projectType, projectName)
+        if (!KEEP_ASSETS) await dropDatabase(projectName, sqlDialect)
       }, 10000)
 
       describe.each(cases)(
