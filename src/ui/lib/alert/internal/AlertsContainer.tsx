@@ -21,7 +21,7 @@ import AlertDisplay from './AlertDisplay'
 type AlertsContainerProps = { alerts: Alert[]; onDismiss: (id: string) => void }
 
 function AlertsContainer({ alerts, onDismiss }: AlertsContainerProps): React.ReactElement {
-  const ref = React.useRef(null) as React.RefObject<HTMLUListElement | null>
+  const ref = React.useRef<HTMLUListElement | null>(null)
   const hidden = alerts.length === 0
 
   useTrapFocus({ ref, global: true, skip: hidden })

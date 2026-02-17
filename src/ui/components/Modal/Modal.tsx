@@ -135,7 +135,8 @@ function ModalBackdrop({ isOpen, children, onClose }: ModalBackdropProps): React
 type DialogProps = React.PropsWithChildren<{ id: string; isOpen: boolean }>
 
 function Dialog({ id, isOpen, children }: DialogProps): React.ReactElement {
-  const ref = React.useRef(null) as React.RefObject<HTMLDivElement | null>
+  const ref = React.useRef<HTMLDivElement | null>(null)
+
   useLockScroll({ ref, skip: !isOpen })
   useTrapFocus({ ref, skip: !isOpen })
 
@@ -167,7 +168,7 @@ function Dialog({ id, isOpen, children }: DialogProps): React.ReactElement {
 type TitleProps = React.PropsWithChildren<{ id: string; isOpen: boolean }>
 
 function Title({ id, isOpen, children }: TitleProps): React.ReactElement {
-  const ref = React.useRef(null) as React.RefObject<HTMLDivElement | null>
+  const ref = React.useRef<HTMLDivElement | null>(null)
   const [focusable, setFocusable] = React.useState<boolean>(false)
 
   const setUnfocusable = React.useCallback(() => setFocusable(false), [])

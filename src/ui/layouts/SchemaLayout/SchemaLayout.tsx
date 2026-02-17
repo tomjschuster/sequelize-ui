@@ -70,7 +70,7 @@ export default function SchemaLayout({
     onDelete,
   })
 
-  const flyoutContentRef = React.useRef(null) as React.RefObject<HTMLDivElement | null>
+  const flyoutContentRef = React.useRef<HTMLDivElement | null>(null)
 
   const handleViewSchema = React.useCallback(
     (model?: Model) => {

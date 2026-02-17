@@ -29,7 +29,7 @@ function Menu({
   items,
   ...props
 }: MenuProps): React.ReactElement {
-  const ref = React.useRef(null) as React.RefObject<HTMLDivElement | null>
+  const ref = React.useRef<HTMLDivElement | null>(null)
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
   const [activeIndex, setActiveIndex] = React.useState<number>()
 
