@@ -4,7 +4,6 @@
   "private": true,
   "license": "ISC",
   "scripts": {
-    "prepare": "husky install",
     "dev": "next dev --webpack",
     "build": "next build",
     "lint": "eslint --cache .",
@@ -23,17 +22,6 @@
     "test:e2e:migrations": "jest e2e/migrations",
     "test:e2e:migrations:all": "cross-env SQL_DIALECT=all npm run test:e2e:migrations",
     "test:watch": "npm test -- --watch --"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && npm run check:types"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.{ts,tsx,js}": [
-      "eslint --cache --fix",
-      "prettier --write"
-    ]
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.5.11",
@@ -88,12 +76,10 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "globals": "^17.3.0",
-    "husky": "^9.1.7",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "jest-localstorage-mock": "^2.4.26",
     "jest-specific-snapshot": "^8.0.0",
-    "lint-staged": "^16.2.7",
     "mysql2": "^3.17.2",
     "next-sitemap": "^4.2.3",
     "pg": "^8.18.0",
