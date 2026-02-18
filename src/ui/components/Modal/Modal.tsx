@@ -88,10 +88,7 @@ function Modal({
   )
 }
 
-type ModalBackdropProps = React.PropsWithChildren<{
-  isOpen: boolean
-  onClose: () => void
-}>
+type ModalBackdropProps = React.PropsWithChildren<{ isOpen: boolean; onClose: () => void }>
 
 function ModalBackdrop({ isOpen, children, onClose }: ModalBackdropProps): React.ReactElement {
   const handleKeyDown = React.useCallback(
@@ -135,13 +132,11 @@ function ModalBackdrop({ isOpen, children, onClose }: ModalBackdropProps): React
   )
 }
 
-type DialogProps = React.PropsWithChildren<{
-  id: string
-  isOpen: boolean
-}>
+type DialogProps = React.PropsWithChildren<{ id: string; isOpen: boolean }>
 
 function Dialog({ id, isOpen, children }: DialogProps): React.ReactElement {
-  const ref = React.useRef() as React.MutableRefObject<HTMLDivElement>
+  const ref = React.useRef<HTMLDivElement | null>(null)
+
   useLockScroll({ ref, skip: !isOpen })
   useTrapFocus({ ref, skip: !isOpen })
 
@@ -170,13 +165,10 @@ function Dialog({ id, isOpen, children }: DialogProps): React.ReactElement {
   )
 }
 
-type TitleProps = React.PropsWithChildren<{
-  id: string
-  isOpen: boolean
-}>
+type TitleProps = React.PropsWithChildren<{ id: string; isOpen: boolean }>
 
 function Title({ id, isOpen, children }: TitleProps): React.ReactElement {
-  const ref = React.useRef() as React.MutableRefObject<HTMLDivElement>
+  const ref = React.useRef<HTMLDivElement | null>(null)
   const [focusable, setFocusable] = React.useState<boolean>(false)
 
   const setUnfocusable = React.useCallback(() => setFocusable(false), [])
@@ -208,9 +200,7 @@ function Title({ id, isOpen, children }: TitleProps): React.ReactElement {
   )
 }
 
-type ContentProps = {
-  children: React.ReactNode
-}
+type ContentProps = { children: React.ReactNode }
 
 const modalButtonClass = classnames(
   minWidth('min-w-28'),
@@ -269,9 +259,7 @@ function Content({ children }: ContentProps): React.ReactElement {
   return <div className={classnames(margin('my-4'))}>{children}</div>
 }
 
-type CloseButtonProps = {
-  onClose: () => void
-}
+type CloseButtonProps = { onClose: () => void }
 function CloseButton({ onClose }: CloseButtonProps): React.ReactElement {
   return (
     <IconButton

@@ -29,7 +29,6 @@ function SchemaPage(): React.ReactElement {
     [schemaId],
   )
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const getData = React.useCallback(() => schemaApi.getSchema(schemaId!), [schemaId])
 
   const handleError = React.useCallback(
@@ -70,7 +69,7 @@ function SchemaPage(): React.ReactElement {
 
   const handleDelete = async () => {
     if (!schema || isNewSchema(schema)) return
-    schema && (await schemaApi.deleteSchema(schema.id))
+    if (schema) await schemaApi.deleteSchema(schema.id)
     goTo(indexRoute())
   }
 

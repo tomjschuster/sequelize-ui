@@ -1,5 +1,4 @@
 import { Classname, classnames } from '@src/ui/styles/classnames'
-import React from 'react'
 
 type SequelizeUiLogoProps = {
   className?: Classname

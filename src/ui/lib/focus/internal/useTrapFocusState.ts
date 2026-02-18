@@ -3,11 +3,11 @@ import { isBrowser } from '@src/utils/dom'
 import { createFocusTrap, FocusTrap } from 'focus-trap'
 import React from 'react'
 
-type TrapElements = [trap: React.RefObject<HTMLElement>, activeElement: Element | null]
+type TrapElements = [trap: React.RefObject<HTMLElement | null>, activeElement: Element | null]
 
 type UseTrapFocusStateResult = {
-  trapFocus: (trap: React.RefObject<HTMLElement>, global?: boolean) => void
-  removeTrap: (trap: React.RefObject<HTMLElement>) => void
+  trapFocus: (trap: React.RefObject<HTMLElement | null>, global?: boolean) => void
+  removeTrap: (trap: React.RefObject<HTMLElement | null>) => void
 }
 
 export default function useTrapFocusState(): UseTrapFocusStateResult {
@@ -15,11 +15,11 @@ export default function useTrapFocusState(): UseTrapFocusStateResult {
   const [traps, setTraps] = React.useState<TrapElements[]>([])
   const prevGlobalTraps = usePrevious(globalTraps)
   const prevTraps = usePrevious(traps)
-  const focusTrap = React.useRef<FocusTrap>()
+  const focusTrap = React.useRef<FocusTrap>(null)
 
   const cleanup = React.useCallback(() => {
     focusTrap.current?.deactivate()
-    focusTrap.current = undefined
+    focusTrap.current = null
   }, [])
 
   React.useEffect(() => {
@@ -43,8 +43,8 @@ export default function useTrapFocusState(): UseTrapFocusStateResult {
   }, [prevTraps, traps, prevGlobalTraps, globalTraps, cleanup])
 
   const trapFocus = React.useCallback(
-    (ref: React.RefObject<HTMLElement>, global: boolean = false) => {
-      if (global && !globalTraps.some((trap) => trap === ref)) {
+    (ref: React.RefObject<HTMLElement | null>, global: boolean = false) => {
+      if (global && refIsPresent(ref) && !globalTraps.some((trap) => trap === ref)) {
         setGlobalTraps((traps) => traps.concat(ref))
         return
       }
@@ -59,7 +59,7 @@ export default function useTrapFocusState(): UseTrapFocusStateResult {
   )
 
   const removeTrap = React.useCallback(
-    (ref: React.RefObject<HTMLElement>) => {
+    (ref: React.RefObject<HTMLElement | null>) => {
       // If removing current trap, revert focus to previously focused element
       const currentTrap = traps[traps.length - 1]
       if (currentTrap && ref === currentTrap[0] && currentTrap[1] instanceof HTMLElement) {
@@ -76,6 +76,10 @@ export default function useTrapFocusState(): UseTrapFocusStateResult {
   React.useEffect(() => cleanup, [])
 
   return { trapFocus, removeTrap }
+}
+
+function refIsPresent<T>(ref: React.RefObject<T | null>): ref is React.RefObject<T> {
+  return ref.current !== null
 }
 
 function getCurrentTrapElements(

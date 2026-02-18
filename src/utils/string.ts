@@ -2,14 +2,7 @@ import { noCase, sentenceCase } from 'change-case'
 import { nanoid } from 'nanoid'
 import { plural as plural_, singular } from 'pluralize'
 
-export {
-  camelCase,
-  paramCase as kebabCase,
-  noCase,
-  pascalCase,
-  sentenceCase,
-  snakeCase,
-} from 'change-case'
+export { camelCase, kebabCase, noCase, pascalCase, sentenceCase, snakeCase } from 'change-case'
 export { singular } from 'pluralize'
 
 export function plural(value: string): string {

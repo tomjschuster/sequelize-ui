@@ -14,7 +14,7 @@ import React from 'react'
 import { SvgProps } from '../../icons/Svg'
 
 export type MenuItem = {
-  ref?: React.RefObject<HTMLDivElement>
+  ref?: React.RefObject<HTMLDivElement | null>
   icon?: React.ComponentType<SvgProps>
   iconProps?: SvgProps
   label: string

@@ -23,7 +23,6 @@ export default function RouteLink({
 }: RouteLinkProps): React.ReactElement {
   return (
     <Link
-      legacyBehavior
       href={routeToUrl(route)}
       as={as}
       replace={replace}
@@ -32,8 +31,8 @@ export default function RouteLink({
       passHref={passHref}
       prefetch={prefetch}
       locale={locale}
-    >
-      <a className={classnames(className)} {...props} />
-    </Link>
+      className={classnames(className)}
+      {...props}
+    />
   )
 }

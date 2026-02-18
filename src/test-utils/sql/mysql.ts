@@ -1,9 +1,7 @@
 import mysql, { Connection, ConnectionOptions, FieldPacket, RowDataPacket } from 'mysql2/promise'
 import { DbConnection, DbConnectionConstructor } from './connection'
 
-export const MySqlConnection: DbConnectionConstructor = class MySqlConnection
-  implements DbConnection
-{
+export const MySqlConnection: DbConnectionConstructor = class MySqlConnection implements DbConnection {
   private static connectionOptions: ConnectionOptions = {
     user: process.env.MYSQL_DB_USER || 'root',
     password: process.env.MYSQL_DB_PASSWORD || 'root',

@@ -4,10 +4,6 @@ import { get, remove, set } from '@src/utils/localStorage'
 const LOCAL_STORAGE_KEY = 'dark-mode-enabled'
 const CLASS_NAME = 'dark'
 
-export function prefersDarkMode(): boolean {
-  return prefersDarkModeExplicit() ?? prefersDarkModeSystem()
-}
-
 export function prefersDarkModeExplicit(): boolean | null {
   return get(LOCAL_STORAGE_KEY)
 }
@@ -18,10 +14,6 @@ export function setPrefersDarkModeExplicit(darkMode: boolean | null): void {
   } else {
     set(LOCAL_STORAGE_KEY, darkMode)
   }
-}
-
-export function prefersDarkModeSystem(): boolean {
-  return !!getPrefersDarkModeMql()?.matches
 }
 
 export function getPrefersDarkModeMql(): MediaQueryList | undefined {

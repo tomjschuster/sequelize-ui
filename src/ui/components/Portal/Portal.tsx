@@ -12,6 +12,7 @@ function Portal({ id, children }: PortalProps): React.ReactPortal | null {
   const node = React.useMemo(() => isBrowser() && document.getElementById(id), [id])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
 
     return () => setMounted(false)
