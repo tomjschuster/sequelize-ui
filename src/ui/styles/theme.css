@@ -1,0 +1,44 @@
+@import 'tailwindcss';
+@plugin "@tailwindcss/forms";
+
+/* 1. THEME CONFIGURATION */
+@theme {
+  /* Breakpoints (Screens) */
+  --breakpoint-2xs: 350px;
+  --breakpoint-xs: 475px;
+  /* sm, md, lg, xl, 2xl are standard and inferred automatically */
+
+  /* Spacing Extensions (Filling gaps in the default scale) */
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+  --spacing-26: 6.5rem;
+  --spacing-30: 8.5rem;
+
+  /* Flex Utilities */
+  --flex-2: 2 2 0%;
+
+  /* Grid Row Spans */
+  --grid-row-span-7: span 7 / span 7;
+  --grid-row-span-8: span 8 / span 8;
+  --grid-row-span-9: span 9 / span 9;
+  --grid-row-span-10: span 10 / span 10;
+  --grid-row-span-11: span 11 / span 11;
+  --grid-row-span-12: span 12 / span 12;
+
+  /* Grid Template Rows */
+  --grid-rows-9: repeat(9, minmax(0, 1fr));
+  --grid-rows-12: repeat(12, minmax(0, 1fr));
+
+  /* Transition Properties */
+  --transition-property-size: height, width, margin, padding, font-size;
+}
+
+/* 3. DARK MODE OVERRIDE */
+@variant dark (&:where(.dark, .dark *));
+
+/* 4. CUSTOM UTILITIES (Replacing 'capitalizeFirst' plugin) */
+@utility capitalize-first {
+  &:first-letter {
+    text-transform: uppercase;
+  }
+}

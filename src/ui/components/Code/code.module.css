@@ -1,4 +1,4 @@
-@reference "tailwindcss";
+@reference "../../styles/theme.css";
 
 .code {
   color-scheme: light;

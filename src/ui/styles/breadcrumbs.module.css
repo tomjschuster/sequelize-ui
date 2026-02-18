@@ -1,4 +1,4 @@
-@reference "tailwindcss";
+@reference "./theme.css";
 
 .breadcrumb::after {
   content: '>';

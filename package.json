@@ -45,7 +45,6 @@
     "react-dom": "~19.2.4",
     "scroll-into-view-if-needed": "^3.1.0",
     "tailwindcss": "^4.1.18",
-    "tailwindcss-children": "^2.1.0",
     "tailwindcss-classnames": "~3.2.0",
     "tar": "^7.5.9"
   },
